@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -32,10 +32,7 @@ public class MessageSyncFluidLevel extends MessageBase<IMessage> {
     protected void processMessage(MessageContext ctx) {
         World world = AgriCraft.proxy.getClientWorld();
         if(world != null) {
-            TileEntity tile = world.getTileEntity(this.pos);
-            if(tile!=null && (tile instanceof IIrrigationComponent)) {
-                ((IIrrigationComponent) tile).setFluidLevel(this.lvl);
-            }
+            AgriWorldHelper.getTile(world, pos, IIrrigationComponent.class).ifPresent(c -> c.setFluidLevel(this.lvl));
         }
     }
 

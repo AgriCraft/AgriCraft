@@ -7,11 +7,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import net.minecraft.item.Item;
-
 
 public class OreDictHelper {
 
@@ -28,16 +30,15 @@ public class OreDictHelper {
 
     //checks if an itemstack has this ore dictionary entry
     public static boolean hasOreId(ItemStack stack, String tag) {
-        if(stack==null || stack.getItem()==null) {
-            return false;
-        }
-        int[] ids = OreDictionary.getOreIDs(stack);
-        for(int id:ids) {
-            if(OreDictionary.getOreName(id).equals(tag)) {
-                return true;
-            }
-        }
-        return false;
+        return StackHelper.isValid(stack) && getOreNames(stack).anyMatch(tag::equals);
+    }
+
+    public static IntStream getOreIds(ItemStack stack) {
+        return Arrays.stream(OreDictionary.getOreIDs(stack));
+    }
+
+    public static Stream<String> getOreNames(ItemStack stack) {
+        return getOreIds(stack).mapToObj(OreDictionary::getOreName);
     }
 
     public static boolean hasOreId(Block block, String tag) {
@@ -46,17 +47,17 @@ public class OreDictHelper {
 
     //checks if two blocks have the same ore dictionary entry
     public static boolean isSameOre(Block block1, int meta1, Block block2, int meta2) {
-        if(block1==block2 && meta1==meta2) {
+        if (block1 == block2 && meta1 == meta2) {
             return true;
         }
-        if(block1==null || block2==null) {
+        if (block1 == null || block2 == null) {
             return false;
         }
         int[] ids1 = OreDictionary.getOreIDs(new ItemStack(block1, 1, meta1));
         int[] ids2 = OreDictionary.getOreIDs(new ItemStack(block2, 1, meta2));
-        for (int id1:ids1) {
-            for (int id2:ids2) {
-                if (id1==id2) {
+        for (int id1 : ids1) {
+            for (int id2 : ids2) {
+                if (id1 == id2) {
                     return true;
                 }
             }
@@ -66,12 +67,7 @@ public class OreDictHelper {
 
     //finds the ingot for a nugget ore dictionary entry
     public static ItemStack getIngot(String ingotName) {
-        ItemStack ingot = null;
-        List<ItemStack> entries = OreDictionary.getOres(ingotName);
-        if (entries.size() > 0 && entries.get(0).getItem() != null) {
-            ingot = entries.get(0);
-        }
-        return ingot;
+        return OreDictionary.getOres(ingotName).stream().findAny().orElse(null);
     }
 
     private static void getOreBlock(AgriNuggetType type) {
@@ -80,7 +76,7 @@ public class OreDictHelper {
                 ItemBlock block = (ItemBlock) itemStack.getItem();
                 oreBlocks.put(type.name(), block.block);
                 oreBlockMeta.put(type.name(), itemStack.getItemDamage());
-                break;
+                return;
             }
         }
     }
@@ -93,17 +89,16 @@ public class OreDictHelper {
         String seedModId = getModId(seed);
         ArrayList<ItemStack> fruits = new ArrayList<>();
 
-        for(int id:OreDictionary.getOreIDs(seed)) {
-            if(OreDictionary.getOreName(id).substring(0,4).equalsIgnoreCase("seed")) {
+        for (int id : OreDictionary.getOreIDs(seed)) {
+            if (OreDictionary.getOreName(id).substring(0, 4).equalsIgnoreCase("seed")) {
                 String name = OreDictionary.getOreName(id).substring(4);
-                List<ItemStack> fromOredict = OreDictionary.getOres("crop"+name);
-                for(ItemStack stack:fromOredict) {
-                    if(stack==null || stack.getItem()==null) {
-                        continue;
-                    }
-                    String stackModId = getModId(stack);
-                    if((!sameMod) || stackModId.equals(seedModId)) {
-                        fruits.add(stack);
+                List<ItemStack> fromOredict = OreDictionary.getOres("crop" + name);
+                for (ItemStack stack : fromOredict) {
+                    if (StackHelper.isValid(stack)) {
+                        String stackModId = getModId(stack);
+                        if ((!sameMod) || stackModId.equals(seedModId)) {
+                            fruits.add(stack);
+                        }
                     }
                 }
             }
@@ -111,14 +106,14 @@ public class OreDictHelper {
 
         return fruits;
     }
-	
-	private static String getModId(ItemStack stack) {
+
+    private static String getModId(ItemStack stack) {
         String name = Item.REGISTRY.getNameForObject(stack.getItem()).getResourcePath();
         int split = name.indexOf(':');
-        if(split>=0) {
+        if (split >= 0) {
             name = name.substring(0, split);
         }
         return name;
     }
-	
+
 }

@@ -21,12 +21,22 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+/**
+ * Class representing possible custom wood types.
+ * 
+ * This class is candidate for a rewrite/cleaning.
+ */
 public class CustomWoodType {
-    /** The default MATERIAL to use. Currently is WOOD planks. */
+
+    /**
+     * The default MATERIAL to use. Currently is WOOD planks.
+     */
     @Nonnull
     public static final Block DEFAULT_MATERIAL = Blocks.PLANKS;
 
-    /** The default metadata to use. Currently is set to Oak(0) for Planks. */
+    /**
+     * The default metadata to use. Currently is set to Oak(0) for Planks.
+     */
     @Nonnull
     public static final int DEFAULT_META = 0;
 
@@ -52,7 +62,6 @@ public class CustomWoodType {
     private CustomWoodType(Block block, int meta) {
         this.block = block;
         this.meta = meta;
-        woodTypes.put(this.getState(), this);
     }
 
     @SideOnly(Side.CLIENT)
@@ -90,27 +99,19 @@ public class CustomWoodType {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this) {
+        if (obj == this) {
             return true;
-        }
-        if(!(obj instanceof CustomWoodType)) {
+        } else if (obj instanceof CustomWoodType) {
+            CustomWoodType other = (CustomWoodType) obj;
+            return other.getBlock() == this.getBlock() && other.getMeta() == this.getMeta();
+        } else {
             return false;
         }
-        CustomWoodType other = (CustomWoodType) obj;
-        return other.getBlock() == this.getBlock() && other.getMeta() == this.getMeta();
     }
 
     public static CustomWoodType readFromNBT(NBTTagCompound tag) {
-        if (tag == null) {
-            AgriCore.getLogger("AgriCraft").debug("TECW: Passed Null Tag!");
-            return getDefault();
-        }
-        if (!tag.hasKey(AgriNBT.MATERIAL)) {
-            AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing material!");
-            return getDefault();
-        }
-        if (!tag.hasKey(AgriNBT.MATERIAL_META)) {
-            AgriCore.getLogger("AgriCraft").debug("TECW: Tag missing meta!");
+        // The old code was much too annoying, in terms of log spam.
+        if (!NBTHelper.hasKey(tag, AgriNBT.MATERIAL_META, AgriNBT.MATERIAL)) {
             return getDefault();
         }
         return getFromNameAndMeta(tag.getString(AgriNBT.MATERIAL), tag.getInteger(AgriNBT.MATERIAL_META));
@@ -127,19 +128,20 @@ public class CustomWoodType {
     }
 
     public static void init() {
-        if(!woodTypes.isEmpty()) {
-            return;
-        }
-        for (ItemStack plank : OreDictionary.getOres("plankWood")) {
-            if (plank.getItem() instanceof ItemBlock) {
-                ItemBlock block = ((ItemBlock) plank.getItem());
-                if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                    for (int i = 0; i < 16; i++) {
-                        //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
-                        new CustomWoodType(block.block, i);
+        if (woodTypes.isEmpty()) {
+            for (ItemStack plank : OreDictionary.getOres("plankWood")) {
+                if (plank.getItem() instanceof ItemBlock) {
+                    ItemBlock block = ((ItemBlock) plank.getItem());
+                    if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                        for (int i = 0; i < 16; i++) {
+                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+                            CustomWoodType type = new CustomWoodType(block.block, i);
+                            woodTypes.put(type.getState(), type);
+                        }
+                    } else {
+                        CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage());
+                        woodTypes.put(type.getState(), type);
                     }
-                } else {
-                    new CustomWoodType(block.block, plank.getItemDamage());
                 }
             }
         }
@@ -147,7 +149,7 @@ public class CustomWoodType {
 
     @SideOnly(Side.CLIENT)
     public static void initClient() {
-        if(!woodTypes.isEmpty()) {
+        if (!woodTypes.isEmpty()) {
             return;
         }
         OreDictionary.getOres("plankWood").stream().filter(plank -> plank.getItem() instanceof ItemBlock).forEach(plank -> {
@@ -156,10 +158,12 @@ public class CustomWoodType {
                 List<ItemStack> subItems = new ArrayList<>();
                 block.getSubItems(block, block.getCreativeTab(), subItems);
                 for (ItemStack subItem : subItems) {
-                    new CustomWoodType(block.block, subItem.getItemDamage(), getTextureForBlockAndMeta(block.block, subItem.getItemDamage()));
+                    CustomWoodType type = new CustomWoodType(block.block, subItem.getItemDamage(), getTextureForBlockAndMeta(block.block, subItem.getItemDamage()));
+                    woodTypes.put(type.getState(), type);
                 }
             } else {
-                new CustomWoodType(block.block, plank.getItemDamage(), getTextureForBlockAndMeta(block.block, plank.getItemDamage()));
+                CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage(), getTextureForBlockAndMeta(block.block, plank.getItemDamage()));
+                woodTypes.put(type.getState(), type);
             }
         });
     }
@@ -168,12 +172,12 @@ public class CustomWoodType {
     private static ResourceLocation getTextureForBlockAndMeta(Block block, int meta) {
         try {
             IBlockState state = block.getStateFromMeta(meta);
-            ResourceLocation modelResourceLocation =
-                    Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper().getVariants(block).get(state);
+            ResourceLocation modelResourceLocation
+                    = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper().getVariants(block).get(state);
             IModel model = ModelLoaderRegistry.getModel(modelResourceLocation);
             Collection<ResourceLocation> locations = model.getTextures();
             return (locations.size() > 0) ? locations.iterator().next() : null;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LogHelper.printStackTrace(e);
             return null;
         }

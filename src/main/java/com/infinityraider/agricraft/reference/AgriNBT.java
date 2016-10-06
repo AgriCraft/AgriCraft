@@ -16,33 +16,24 @@ package com.infinityraider.agricraft.reference;
 @Deprecated
 public interface AgriNBT {
 
-	String CROSS_CROP = "crossCrop";
-	String WEED = "weed";
-	String DISCOVERED_SEEDS = "discoveredSeeds";
-	String CURRENT_PAGE = "currentPage";
-	String WOOD = "wood";
-	String CONNECTED = "nrTanks";
-	String LEVEL = "level";
-	String ID = "id";
-	String META = "meta";
-	String MATERIAL = "material";
-	String MATERIAL_META = "matMeta";
-	String IS_SPRINKLED = "isSprinkled";
-	String POWER = "powerrrr";
-	String INVENTORY = "agricraftInv";
-	String SIZE = "size";
-	String COUNT = "count";
-	String SEED = "seed";
-	String TAG = "tag";
-	String X1 = "agricraftX";
-	String Y1 = "agricraftY";
-	String Z1 = "agricraftZ";
-	String X2 = "agricraftX2";
-	String Y2 = "agricraftY2";
-	String Z2 = "agricraftZ2";
-	String OVERRIDE = "override";
-	String FLAG = "ac_Flag";
-	String DIRECTION = "direction";
-	String MULTI_BLOCK = "agricraft_MultiBlock";
+	String CROSS_CROP = "agri_cross_crop";
+	String VINE = "agri_vine";
+	String DISCOVERED_SEEDS = "agri_discovered";
+	String LEVEL = "agri_level";
+	String ID = "agri_id";
+	String META = "agri_meta";
+	String MATERIAL = "agri_material";
+	String MATERIAL_META = "agri_material_meta";
+	String IS_SPRINKLED = "agri_sprinkled";
+	String POWER = "agri_power";
+	String INVENTORY = "agri_inventory";
+	String COUNT = "agri_count";
+	String SEED = "agri_seed";
+	String X = "agri_X";
+	String Y = "agri_Y";
+	String Z = "agri_Z";
+	String FLAG = "agri_flag";
+	String DIRECTION = "agri_direction";
+	String MULTI_BLOCK = "agri_multiblock";
 	
 }

@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.infinitylib.network.MessageBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -37,9 +36,8 @@ public class MessageContainerSeedStorage extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        Container container = player.openContainer;
-        if(container!=null && container instanceof ContainerSeedStorageBase) {
-            ContainerSeedStorageBase storage = (ContainerSeedStorageBase) container;
+        if(player.openContainer instanceof ContainerSeedStorageBase) {
+            ContainerSeedStorageBase storage = (ContainerSeedStorageBase) player.openContainer;
             storage.moveStackFromTileEntityToPlayer(slotId, new ItemStack(item, amount, meta));
         }
     }

@@ -46,7 +46,7 @@ public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 	@Override
 	protected void processMessage(MessageContext ctx) {
 		TileEntity te = FMLClientHandler.instance().getClient().theWorld.getTileEntity(this.pos);
-		if (te != null && te instanceof TileEntitySeedStorage) {
+		if (te instanceof TileEntitySeedStorage) {
 			TileEntitySeedStorage storage = (TileEntitySeedStorage) te;
 			ItemStack stack = storage.getLockedSeed();
 			stack.stackSize = this.amount;

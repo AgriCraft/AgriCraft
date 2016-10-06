@@ -96,7 +96,6 @@ public class AgriCraft extends InfinityMod {
 		wrapper.registerMessage(MessageFertilizerApplied.class);
 		wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
 		wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
-		wrapper.registerMessage(MessageSendNEISetting.class);
 		wrapper.registerMessage(MessageSyncFluidLevel.class);
 		wrapper.registerMessage(MessageTileEntitySeedStorage.class);
         wrapper.registerMessage(MessageSyncSoilJson.class);

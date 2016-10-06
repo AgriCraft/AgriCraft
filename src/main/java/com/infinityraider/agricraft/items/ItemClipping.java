@@ -62,7 +62,8 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 	public String getItemStackDisplayName(ItemStack stack) {
 		String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
 		Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
-        return seed.map(s -> s.getPlant().getPlantName()) + " " + text;
+        // lol... This would have been a NPE, had it not been for the Optional class!
+        return seed.map(s -> s.getPlant().getPlantName()).orElse("Generic") + " " + text;
 	}
 
 	public static ItemStack getClipping(AgriSeed seed, int amount) {

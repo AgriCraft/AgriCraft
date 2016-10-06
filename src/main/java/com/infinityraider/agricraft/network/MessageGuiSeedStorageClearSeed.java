@@ -28,11 +28,11 @@ public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        Container container = this.player.openContainer;
-        if(container!=null && container instanceof ContainerSeedStorageBase) {
-            ContainerSeedStorageBase storage = (ContainerSeedStorageBase) container;
-            TileEntity tileEntity = storage.getTileEntity();
-            if(tileEntity != null && (tileEntity instanceof ISeedStorageControllable)) {
+        final Container container = this.player.openContainer;
+        if(container instanceof ContainerSeedStorageBase) {
+            final ContainerSeedStorageBase storage = ((ContainerSeedStorageBase) container);
+            final TileEntity tileEntity = storage.getTileEntity();
+            if(tileEntity instanceof ISeedStorageControllable) {
                 ((ISeedStorageControllable) tileEntity).clearLockedSeed();
             }
         }
