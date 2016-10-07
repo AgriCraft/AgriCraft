@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class FertilizerRegistry {
 

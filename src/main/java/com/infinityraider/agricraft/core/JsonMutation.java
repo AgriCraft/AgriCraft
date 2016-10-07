@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.farming.mutation.Mutation;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class JsonMutation extends Mutation {
 	

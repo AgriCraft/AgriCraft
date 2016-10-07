@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class BasicComponents {
 

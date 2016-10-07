@@ -11,7 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class SeedRegistry {
 	

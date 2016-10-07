@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
  * A simple class for representing seeds. Seeds are immutable objects, for
  * safety reasons.
  *
- * @author RlonRyan
+ * 
  */
 public class AgriSeed {
 

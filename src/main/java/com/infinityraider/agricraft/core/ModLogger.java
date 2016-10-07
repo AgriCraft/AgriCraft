@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Level;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ModLogger implements AgriLogAdapter {
 

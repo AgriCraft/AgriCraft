@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 /**
  * A basic AdapterRegistry implementation.
  *
- * @author RlonRyan
+ * 
  * @param <T> the type being adapted to.
  */
 public class AdapterRegistry<T> implements IAgriAdapterRegistry<T> {

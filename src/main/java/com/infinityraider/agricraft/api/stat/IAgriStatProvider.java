@@ -5,7 +5,7 @@ package com.infinityraider.agricraft.api.stat;
 /**
  * Interface for objects that have AgriStats.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriStatProvider {
 

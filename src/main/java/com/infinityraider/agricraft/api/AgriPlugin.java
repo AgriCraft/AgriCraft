@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  *
  * This system is loosely based off of JEI's plugin system.
  *
- * @author RlonRyan
+ * 
  */
 @Target(ElementType.TYPE)
 public @interface AgriPlugin {

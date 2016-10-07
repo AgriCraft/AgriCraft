@@ -5,7 +5,7 @@ package com.infinityraider.agricraft.api.plant;
 /**
  * Interface for objects that have plants.
  * 
- * @author RlonRyan
+ * 
  */
 public interface IAgriPlantProvider {
 	

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ModConverter implements AgriConverter {
 

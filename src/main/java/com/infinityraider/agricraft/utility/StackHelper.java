@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public final class StackHelper {
 

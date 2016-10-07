@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public final class PluginHandler {
 

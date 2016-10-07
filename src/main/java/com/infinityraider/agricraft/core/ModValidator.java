@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ModValidator implements AgriValidator {
 

@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class DebugModeSpawnFarmer extends DebugMode {
 

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class DebugModeCheckSoil extends DebugMode {
 

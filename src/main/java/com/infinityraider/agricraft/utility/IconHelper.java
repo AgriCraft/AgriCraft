@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * These methods hopefully should not return null.
  *
- * @author RlonRyan
+ * 
  */
 @SideOnly(Side.CLIENT)
 public final class IconHelper {

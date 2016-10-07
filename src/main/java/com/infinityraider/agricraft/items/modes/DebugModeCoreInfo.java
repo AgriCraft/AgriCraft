@@ -16,7 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class DebugModeCoreInfo extends DebugMode {
     

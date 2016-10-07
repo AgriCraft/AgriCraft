@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
  * All classes implementing this interface must have a valid no-args
  * constructor, with which AgriCraft may create the plugin instance.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriPlugin {
 

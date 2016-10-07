@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class DebugModeClearGrass extends DebugMode {
 	

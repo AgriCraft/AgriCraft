@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextFormatting;
 /**
  * AgriCraft Configuration File.
  *
- * @author RlonRyan
+ * 
  */
 public class AgriCraftConfig {
 

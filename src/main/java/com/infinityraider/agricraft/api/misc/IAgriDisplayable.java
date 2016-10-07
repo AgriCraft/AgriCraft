@@ -8,7 +8,7 @@ import java.util.List;
  * Interface for providing players information from AgriCraft.
  * This will be used to display information in Waila for crops.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriDisplayable {
 	

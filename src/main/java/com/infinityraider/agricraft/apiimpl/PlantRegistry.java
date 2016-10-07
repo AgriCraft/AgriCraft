@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class PlantRegistry implements IAgriPlantRegistry {
 	

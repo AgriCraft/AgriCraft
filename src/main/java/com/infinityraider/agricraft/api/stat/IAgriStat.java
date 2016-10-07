@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * Interface for representing stats. Stats are immutable objects, to aid in
  * overall safety.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriStat {
 

@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.api.stat.IAgriStatCalculatorRegistry;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class StatCalculatorRegistry extends AdapterRegistry<IAgriStatCalculator> implements IAgriStatCalculatorRegistry {
 

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriAdapterRegistry<T> {
 	

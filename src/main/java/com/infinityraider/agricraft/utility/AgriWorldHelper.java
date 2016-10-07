@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 /**
  * A class for helping interactions with the world.
  *
- * @author RlonRyan
+ * 
  */
 public class AgriWorldHelper {
 	
