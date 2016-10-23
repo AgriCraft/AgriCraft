@@ -34,7 +34,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 	@Override
 	protected void writeNBT(NBTTagCompound tag) {
 		tag.setShort(AgriNBT.META, (short) offset);
-		tag.setShort(AgriNBT.WEED, (short) vines);
+		tag.setShort(AgriNBT.VINE, (short) vines);
 	}
 
 	//this loads the saved data for the tile entity
@@ -42,7 +42,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 	protected void readNBT(NBTTagCompound tag) {
 		this.offset = tag.getShort(AgriNBT.META);
 		calculateBounds();
-		this.vines = tag.getShort(AgriNBT.WEED);
+		this.vines = tag.getShort(AgriNBT.VINE);
 	}
 
 	public void calculateBounds() {

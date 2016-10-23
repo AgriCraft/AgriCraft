@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 @AgriPlugin
 public class ComputerPlugin implements IAgriPlugin {

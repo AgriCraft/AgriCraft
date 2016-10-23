@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.blocks.tiles;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.farming.mutation.MutationEngine;
+import com.infinityraider.agricraft.apiimpl.MutationEngine;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.AgriWorldHelper;
@@ -378,7 +378,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * the code that makes the crop cross with neighboring crops
      */
     public void crossOver() {
-        MutationEngine.getInstance().executeCrossOver(this, this.worldObj.rand);
+        MutationEngine.getInstance().attemptCross(this, this.worldObj.rand);
     }
 
     /**

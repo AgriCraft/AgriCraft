@@ -5,7 +5,7 @@ package com.infinityraider.agricraft.api.misc;
 /**
  * An interface for weedable objects.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriWeedable {
 	

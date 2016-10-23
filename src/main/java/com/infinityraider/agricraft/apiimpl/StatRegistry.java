@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.stat.IAgriStat;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class StatRegistry {
 	

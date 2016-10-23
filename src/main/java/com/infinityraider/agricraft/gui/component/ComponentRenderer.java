@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public final class ComponentRenderer {
 	

@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.farming.PlantStats;
 /**
  * A helper class for working with generation.
  *
- * @author RlonRyan
+ * 
  */
 public class WorldGenerationHelper {
 

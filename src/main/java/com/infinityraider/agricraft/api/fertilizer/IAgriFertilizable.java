@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * An interface for fertilizable things.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriFertilizable {
 

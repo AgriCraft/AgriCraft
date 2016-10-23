@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class MutationRecipeCategory implements IRecipeCategory {
 

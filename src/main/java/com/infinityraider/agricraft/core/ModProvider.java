@@ -11,7 +11,7 @@ import com.agricraft.agricore.config.AgriConfigAdapter;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ModProvider implements AgriConfigAdapter {
 	

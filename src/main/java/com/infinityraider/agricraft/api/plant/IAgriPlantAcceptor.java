@@ -4,7 +4,7 @@ package com.infinityraider.agricraft.api.plant;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriPlantAcceptor {
 	

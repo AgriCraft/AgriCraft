@@ -15,7 +15,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ProduceRecipeWrapper implements IRecipeWrapper {
 

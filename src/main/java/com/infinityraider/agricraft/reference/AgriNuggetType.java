@@ -4,7 +4,7 @@ package com.infinityraider.agricraft.reference;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public enum AgriNuggetType {
 

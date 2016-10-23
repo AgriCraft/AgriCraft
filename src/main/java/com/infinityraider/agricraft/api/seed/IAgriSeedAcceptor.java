@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.api.stat.IAgriStatAcceptor;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriSeedAcceptor extends IAgriPlantAcceptor, IAgriStatAcceptor {
 	

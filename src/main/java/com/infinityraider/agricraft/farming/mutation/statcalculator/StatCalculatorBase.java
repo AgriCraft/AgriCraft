@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
+import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 
@@ -8,9 +9,10 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 
-public abstract class StatCalculatorBase extends StatCalculator {
+public abstract class StatCalculatorBase implements IAgriStatCalculator, IAgriAdapter<IAgriStatCalculator> {
 
     @Override
     public IAgriStat calculateStats(IAgriPlant child, List<? extends IAgriCrop> parents, boolean mutation) {

@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.api.stat.IAgriStatProvider;
 /**
  * A class for objects containing seeds.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriSeedProvider extends IAgriPlantProvider, IAgriStatProvider {
 

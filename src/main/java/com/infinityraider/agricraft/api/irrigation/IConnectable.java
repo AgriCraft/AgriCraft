@@ -7,7 +7,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * Root interface for all connectable blocks.
  * 
- * @author RlonRyan
+ * 
  */
 public interface IConnectable {
 	

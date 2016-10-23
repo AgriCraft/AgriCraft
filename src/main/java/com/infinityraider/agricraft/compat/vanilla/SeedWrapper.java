@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class SeedWrapper implements IAgriAdapter<AgriSeed> {
 

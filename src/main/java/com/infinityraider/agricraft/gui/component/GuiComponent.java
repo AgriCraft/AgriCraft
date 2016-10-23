@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 @SideOnly(Side.CLIENT)
 public class GuiComponent<C> {

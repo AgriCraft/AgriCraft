@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.RenderItem;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public abstract class GuiBase extends GuiScreen {
 	

@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Interface for harvestable objects.
  *
- * @author RlonRyan
+ * 
  */
 public interface IAgriHarvestable {
 	

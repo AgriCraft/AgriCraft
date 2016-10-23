@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class ProduceRecipeHandler implements IRecipeHandler<IAgriPlant> {
 

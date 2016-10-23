@@ -16,7 +16,7 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class MutationRecipeWrapper implements IRecipeWrapper {
 

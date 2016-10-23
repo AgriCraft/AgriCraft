@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  *
- * @author RlonRyan
+ * 
  */
 public class SoilRegistry implements IAgriSoilRegistry {
 	
