@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -118,7 +117,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 	@Override
 	public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
 		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getWorldTypeID(), pos.getX(), pos.getY(), pos.getZ(), 32);
-		NetworkWrapper.getInstance().sendToAllAround(new MessagePeripheralCheckNeighbours(pos), point);
+		AgriCraft.instance.getNetworkWrapper().sendToAllAround(new MessagePeripheralCheckNeighbours(pos), point);
 	}
 
 	@Override

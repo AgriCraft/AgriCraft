@@ -11,6 +11,7 @@ import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.AgriCraft;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -258,7 +259,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 			if (newDiscreteLvl != lastDiscreteLvl) {
 				lastDiscreteLvl = newDiscreteLvl;
 				NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
-				NetworkWrapper.getInstance().sendToAllAround(new MessageSyncFluidLevel(this.lvl, this.getPos()), point);
+				AgriCraft.instance.getNetworkWrapper().sendToAllAround(new MessageSyncFluidLevel(this.lvl, this.getPos()), point);
 			}
 		}
 	}

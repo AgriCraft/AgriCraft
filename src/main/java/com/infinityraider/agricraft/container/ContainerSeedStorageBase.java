@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.container;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
@@ -7,7 +8,6 @@ import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllabl
 import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageController;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import com.infinityraider.infinitylib.container.ContainerBase;
-import com.infinityraider.infinitylib.network.NetworkWrapper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -87,7 +87,7 @@ public abstract class ContainerSeedStorageBase extends ContainerBase {
 		if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 				//this method is only called form the gui client side, so we need to manually tell the server to execute it there
-				NetworkWrapper.getInstance().sendToServer(new MessageContainerSeedStorage(stack, slotId));
+				AgriCraft.instance.getNetworkWrapper().sendToServer(new MessageContainerSeedStorage(stack, slotId));
 			} else {
 				//on the server decrease the size of the stack, where it is synced to the client
 				controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);

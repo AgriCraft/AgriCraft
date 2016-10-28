@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
-import com.infinityraider.infinitylib.network.NetworkWrapper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -18,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.AgriCraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -117,7 +117,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	}
 
 	public void syncSlotToClient(SeedStorageSlot slot) {
-		NetworkWrapper.getInstance().sendToDimension(new MessageTileEntitySeedStorage(this.getPos(), slot), this.worldObj.provider.getDimension());
+		AgriCraft.instance.getNetworkWrapper().sendToDimension(new MessageTileEntitySeedStorage(this.getPos(), slot), this.worldObj.provider.getDimension());
 		this.worldObj.getChunkFromBlockCoords(this.getPos()).setChunkModified();
 	}
 

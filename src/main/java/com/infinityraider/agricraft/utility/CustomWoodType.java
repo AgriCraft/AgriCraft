@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.utility;
 import com.agricraft.agricore.core.AgriCore;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.infinitylib.utility.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -178,7 +177,7 @@ public class CustomWoodType {
             Collection<ResourceLocation> locations = model.getTextures();
             return (locations.size() > 0) ? locations.iterator().next() : null;
         } catch (Exception e) {
-            LogHelper.printStackTrace(e);
+            AgriCore.getLogger("AgriCraft").trace(e);
             return null;
         }
     }
