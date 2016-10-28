@@ -1,29 +1,7 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.agricraft.agricore.util.MathHelper;
-import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemDebugger;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
-
 import java.util.*;
 
-import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -50,6 +28,28 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.agricraft.agricore.util.MathHelper;
+import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.items.ItemDebugger;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
+import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 
 /**
  * The most important block in the mod.
@@ -355,7 +355,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /*
-	 * Handles changes in the crop's neighbors.
+     * Handles changes in the crop's neighbors.
      */
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {

@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.blocks.properties;
 
-import com.infinityraider.agricraft.utility.CustomWoodType;
 import net.minecraftforge.common.property.IUnlistedProperty;
+
+import com.infinityraider.agricraft.utility.CustomWoodType;
 
 public class PropertyCustomWood implements IUnlistedProperty<CustomWoodType> {
     private final String name;

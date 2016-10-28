@@ -1,38 +1,39 @@
 package com.infinityraider.agricraft.utility;
 
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RenderLogger {
 
-	@AgriConfigurable(
-			category = AgriConfigCategory.CORE,
-			key = "Log Render Calls",
-			comment = "Set to true if render calls should be logged."
-	)
-	public static boolean LOG_RENDER_CALLS = false;
-	
-	static {
-		AgriCore.getConfig().addConfigurable(RenderLogger.class);
-	}
+    @AgriConfigurable(
+            category = AgriConfigCategory.CORE,
+            key = "Log Render Calls",
+            comment = "Set to true if render calls should be logged."
+    )
+    public static boolean LOG_RENDER_CALLS = false;
 
-	private long timer = 0;
+    static {
+        AgriCore.getConfig().addConfigurable(RenderLogger.class);
+    }
 
-	@SubscribeEvent
-	public void onTick(TickEvent.ServerTickEvent event) {
-		if (LOG_RENDER_CALLS) {
-			timer++;
-			if (timer % 40 == 0) {
-				timer = 0;
+    private long timer = 0;
 
-				int callsPerSecond = RenderChannel.renderCallCounter.getAndSet(0);
-				AgriCore.getLogger("AgriRender").debug("Calls since previous output: " + callsPerSecond);
-			}
-		}
-	}
+    @SubscribeEvent
+    public void onTick(TickEvent.ServerTickEvent event) {
+        if (LOG_RENDER_CALLS) {
+            timer++;
+            if (timer % 40 == 0) {
+                timer = 0;
+
+                int callsPerSecond = RenderChannel.renderCallCounter.getAndSet(0);
+                AgriCore.getLogger("AgriRender").debug("Calls since previous output: " + callsPerSecond);
+            }
+        }
+    }
 
 }

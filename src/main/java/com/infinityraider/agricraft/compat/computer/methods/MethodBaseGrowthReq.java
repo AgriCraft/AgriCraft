@@ -1,14 +1,15 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import static com.infinityraider.agricraft.compat.computer.methods.MethodUtilities.*;
 
 import java.util.ArrayList;
+
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
-	
+
     public MethodBaseGrowthReq(String name) {
         super(name, true, true, true);
     }

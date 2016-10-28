@@ -1,12 +1,9 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
-import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -15,8 +12,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.BaseIcons;
-import net.minecraft.client.renderer.vertex.VertexFormat;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 
 @SideOnly(Side.CLIENT)
 public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, TileEntitySeedStorage> {

@@ -1,10 +1,9 @@
 package com.infinityraider.agricraft.gui;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.gui.journal.GuiJournal;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import java.io.IOException;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,9 +13,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.gui.journal.GuiJournal;
+import com.infinityraider.agricraft.reference.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedAnalyzer extends GuiContainer {

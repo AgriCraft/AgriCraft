@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.renderers.particles;
 
-import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -11,6 +9,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 
 @SideOnly(Side.CLIENT)
 public class RuneFX extends AgriCraftFX {

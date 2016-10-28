@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.compat.computer.methods;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 
 public class MethodIsFertile extends MethodBaseCrop {
-	
+
     public MethodIsFertile() {
         super("isFertile");
     }

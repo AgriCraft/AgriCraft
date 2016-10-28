@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import net.minecraft.item.ItemStack;
+
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 
 public class MethodGetSpecimen extends MethodBasePeripheral {
     public MethodGetSpecimen() {

@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
-import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.network.MessageBase;
+import io.netty.buffer.ByteBuf;
 
 public class MessageSyncFluidLevel extends MessageBase<IMessage> {
     private int lvl;

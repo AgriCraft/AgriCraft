@@ -1,14 +1,12 @@
 package com.infinityraider.agricraft.blocks.tiles;
 
-import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.apiimpl.MutationEngine;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
-import com.infinityraider.infinitylib.block.tile.TileEntityBase;
-import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,28 +15,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
-import javax.annotation.Nonnull;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.MathHelper;
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.MutationEngine;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import java.util.Optional;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
 
@@ -173,7 +175,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     /*
-	 * check if the crop is fertile
+     * check if the crop is fertile
      */
     @Override
     public boolean isFertile(AgriSeed seed) {
@@ -182,7 +184,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     /*
-	 * gets the height of the crop
+     * gets the height of the crop
      */
     @SideOnly(Side.CLIENT)
     public float getCropHeight() {
@@ -437,10 +439,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void addDisplayInfo(List information) {
-        
+
         // Add Soil Information
         information.add("Soil: " + this.getSoil().map(s -> s.getName()).orElse("Unknown"));
-        
+
         if (this.hasPlant()) {
             //Add the SEED name.
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
@@ -463,6 +465,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         } else {
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
         }
-        
+
     }
 }

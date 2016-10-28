@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.api.stat;
 
+import java.util.List;
+
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import java.util.List;
 
 /**
  * Interface to create custom Stat Calculator logic use
@@ -11,7 +12,7 @@ import java.util.List;
  * calculator
  */
 public interface IAgriStatCalculator {
-    
+
     default IAgriStat calculateStats(IAgriPlant plant, List<? extends IAgriCrop> matureNeighbors) {
         return calculateStats(plant, matureNeighbors, false);
     }

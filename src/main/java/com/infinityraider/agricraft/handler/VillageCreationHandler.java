@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.world.StructureGreenhouse;
-import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
-import java.util.List;
-import java.util.Random;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.world.StructureGreenhouse;
+import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
 
 public class VillageCreationHandler {
     public static class GreenhouseHandler implements VillagerRegistry.IVillageCreationHandler {

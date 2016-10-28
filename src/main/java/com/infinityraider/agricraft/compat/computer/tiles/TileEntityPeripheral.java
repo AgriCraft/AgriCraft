@@ -1,27 +1,7 @@
 package com.infinityraider.agricraft.compat.computer.tiles;
 
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetStats;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetCurrentSoil;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightness;
-import com.infinityraider.agricraft.compat.computer.methods.MethodHasJournal;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetGrowthStage;
-import com.infinityraider.agricraft.compat.computer.methods.MethodIsCrossCrop;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetNeededSoil;
-import com.infinityraider.agricraft.compat.computer.methods.MethodNeedsBaseBlock;
-import com.infinityraider.agricraft.compat.computer.methods.MethodHasWeeds;
-import com.infinityraider.agricraft.compat.computer.methods.MethodException;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetSpecimen;
-import com.infinityraider.agricraft.compat.computer.methods.IMethod;
-import com.infinityraider.agricraft.compat.computer.methods.MethodHasPlant;
-import com.infinityraider.agricraft.compat.computer.methods.MethodIsMature;
-import com.infinityraider.agricraft.compat.computer.methods.MethodAnalyze;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetPlant;
-import com.infinityraider.agricraft.compat.computer.methods.MethodIsAnalyzed;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightnessRange;
-import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlock;
-import com.infinityraider.agricraft.compat.computer.methods.MethodIsFertile;
-import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import java.util.HashMap;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +9,28 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.HashMap;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.compat.computer.methods.IMethod;
+import com.infinityraider.agricraft.compat.computer.methods.MethodAnalyze;
+import com.infinityraider.agricraft.compat.computer.methods.MethodException;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlock;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightness;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightnessRange;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetCurrentSoil;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetGrowthStage;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetNeededSoil;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetPlant;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetSpecimen;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetStats;
+import com.infinityraider.agricraft.compat.computer.methods.MethodHasJournal;
+import com.infinityraider.agricraft.compat.computer.methods.MethodHasPlant;
+import com.infinityraider.agricraft.compat.computer.methods.MethodHasWeeds;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsAnalyzed;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsCrossCrop;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsFertile;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsMature;
+import com.infinityraider.agricraft.compat.computer.methods.MethodNeedsBaseBlock;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 @Optional.InterfaceList( value = {
@@ -161,7 +162,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
         }
     }
 
-	@Override
+    @Override
     public String getName() {
         return "agricraft_peripheral";
     }

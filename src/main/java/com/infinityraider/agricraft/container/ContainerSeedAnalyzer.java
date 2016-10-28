@@ -1,8 +1,5 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.utility.StackHelper;
-import com.infinityraider.infinitylib.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -10,6 +7,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.utility.StackHelper;
+import com.infinityraider.infinitylib.container.ContainerBase;
 
 public class ContainerSeedAnalyzer extends ContainerBase {
 
@@ -53,7 +54,7 @@ public class ContainerSeedAnalyzer extends ContainerBase {
             this.seedAnalyzer.setProgress(newValue);
         }
     }
-    
+
     public final boolean hasItem(Slot slot) {
         return slot != null && StackHelper.isValid(slot.getStack());
     }
@@ -103,18 +104,18 @@ public class ContainerSeedAnalyzer extends ContainerBase {
     //gets called when you try to merge an itemstack
     @Override
     protected final boolean mergeItemStack(ItemStack stack, int start, int stop, boolean backwards) {
-        
+
         // Ensure Proper Range.
         if (start < 0 || start >= stop) {
             //throw new IndexOutOfBoundsException("The specified slot range is impossible!");
             return false;
         }
-        
+
         // Test if Valid
         if (!StackHelper.isValid(stack)) {
             return false;
         }
-        
+
         final int delta = backwards ? -1 : 1;
         int slotIndex = backwards ? stop - 1 : start;
         boolean foundSlot = false;
@@ -146,7 +147,7 @@ public class ContainerSeedAnalyzer extends ContainerBase {
     }
 
     public final boolean addToEmptySlot(ItemStack stack, int start, int stop, boolean backwards) {
-        
+
         // Ensure Proper Range
         if (start < 0 || start >= stop) {
             //throw new IndexOutOfBoundsException("The specified slot range is impossible!");

@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
-import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
-import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+
+import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
+import com.infinityraider.infinitylib.network.MessageBase;
+import io.netty.buffer.ByteBuf;
 
 public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
     private EntityPlayer player;

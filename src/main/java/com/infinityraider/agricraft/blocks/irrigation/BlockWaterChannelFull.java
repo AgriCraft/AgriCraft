@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.renderers.blocks.RenderChannelFull;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -10,7 +10,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
+import com.infinityraider.agricraft.renderers.blocks.RenderChannelFull;
 
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> {
     public BlockWaterChannelFull() {

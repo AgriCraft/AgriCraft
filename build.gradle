@@ -15,6 +15,7 @@ buildscript {
 // Plugins
 plugins {
 	id 'com.rlonryan.quikmod' version '1.0.16'
+    id 'com.diffplug.gradle.spotless' version '2.3.0'
 }
 
 // Tweak MineCraft Task
@@ -44,7 +45,7 @@ repositories {
 		name "JEI"
 		url "http://dvs1.progwml6.com/files/maven"
 	}
-	 maven { 
+    maven { 
 		name "OpenComputers"
 		url  "http://maven.cil.li/"
 	}
@@ -101,3 +102,15 @@ task apiJar(type: Jar) {
 
 // Tell build that it needs the API compiled first.
 build.dependsOn apiJar
+
+// Code Formatter
+spotless {
+    java {
+        // Have to explicitly state project.
+        target 'src/main/com/agricraft/**/*.java'
+        importOrder(['java', 'javax', 'org', 'net', 'com'])
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+    }
+}

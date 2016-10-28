@@ -6,7 +6,7 @@ import java.util.Optional;
 
 /**
  *
- * 
+ *
  */
 public interface IAgriAdapter<T> {
 

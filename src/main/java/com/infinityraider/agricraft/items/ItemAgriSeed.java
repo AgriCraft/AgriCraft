@@ -1,35 +1,35 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.infinitylib.item.ItemBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.List;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
-import net.minecraft.nbt.NBTTagCompound;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.infinitylib.item.IAutoRenderedItem;
-import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.agricraft.utility.NBTHelper;
-import java.util.ArrayList;
-import java.util.Optional;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.infinitylib.item.IAutoRenderedItem;
+import com.infinityraider.infinitylib.item.ItemBase;
 
 public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IAutoRenderedItem {
 

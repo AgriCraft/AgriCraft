@@ -1,17 +1,18 @@
 package com.infinityraider.agricraft.blocks.pad;
 
-import net.minecraft.block.material.Material;
+import java.util.Collections;
+import java.util.List;
 
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -19,12 +20,11 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.Collections;
-import java.util.List;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 
 public class BlockWaterPad extends AbstractBlockWaterPad {
-	
-	public BlockWaterPad() {
+
+    public BlockWaterPad() {
         this(Material.GROUND);
     }
 

@@ -3,16 +3,18 @@
  */
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import java.util.Optional;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import java.util.Optional;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 
 public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> extends BlockCustomWood<T> {
     @SuppressWarnings("unchecked")
@@ -23,9 +25,9 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
             AgriProperties.CHANNEL_EAST
     };
 
-	public AbstractBlockWaterChannel(String internalName) {
-		super("water_channel_" + internalName);
-	}
+    public AbstractBlockWaterChannel(String internalName) {
+        super("water_channel_" + internalName);
+    }
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
@@ -48,5 +50,5 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
     public int getMetaFromState(IBlockState state) {
         return 0;
     }
-	
+
 }

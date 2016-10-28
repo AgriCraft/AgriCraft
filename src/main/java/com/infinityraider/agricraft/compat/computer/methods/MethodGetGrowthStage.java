@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 
 public class MethodGetGrowthStage extends MethodBaseCrop {
     public MethodGetGrowthStage() {

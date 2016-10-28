@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.entity;
 
-import com.infinityraider.agricraft.init.WorldGen;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.world.World;
+
+import com.infinityraider.agricraft.init.WorldGen;
 
 public class EntityVillagerFarmer extends EntityVillager {
     @SuppressWarnings("unused")

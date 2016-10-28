@@ -2,13 +2,14 @@
  */
 package com.infinityraider.agricraft.farming.growthrequirement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.requirement.ICondition;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class GrowthReqBuilder implements IGrowthReqBuilder {
@@ -28,13 +29,13 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
         this.soils.add(soil);
         return this;
     }
-    
+
     @Override
     public IGrowthReqBuilder addCondition(ICondition condition) {
         this.conditions.add(condition);
         return this;
     }
-    
+
     @Override
     public IGrowthReqBuilder setMinLight(int minLight) {
         this.minLight = MathHelper.inRange(minLight, 0, 16);
@@ -51,5 +52,5 @@ public class GrowthReqBuilder implements IGrowthReqBuilder {
     public IGrowthRequirement build() {
         return new GrowthRequirement(soils, conditions, minLight, maxLight);
     }
-	
+
 }

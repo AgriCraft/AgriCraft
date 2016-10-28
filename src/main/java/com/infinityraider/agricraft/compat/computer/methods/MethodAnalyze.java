@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-
 import java.util.ArrayList;
+
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
 public class MethodAnalyze extends MethodBasePeripheral {
     public MethodAnalyze() {

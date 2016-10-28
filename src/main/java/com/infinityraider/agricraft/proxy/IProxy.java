@@ -1,5 +1,11 @@
 package com.infinityraider.agricraft.proxy;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
@@ -15,11 +21,6 @@ import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public interface IProxy extends IProxyBase {
     @Override

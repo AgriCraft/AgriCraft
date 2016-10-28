@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.infinityraider.agricraft.api.requirement.ICondition;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Encodes all requirements a plant needs to mutate and grow Uses the Builder

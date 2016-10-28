@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
+import java.util.Optional;
+
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.requirement.BlockCondition;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
-import java.util.Optional;
 
 public class MethodGetBaseBlock extends MethodBaseGrowthReq {
     public MethodGetBaseBlock() {

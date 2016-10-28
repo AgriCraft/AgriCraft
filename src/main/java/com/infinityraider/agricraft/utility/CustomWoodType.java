@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.utility;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.infinitylib.utility.LogHelper;
+import java.util.*;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,12 +18,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
-import java.util.*;
+import com.agricraft.agricore.core.AgriCore;
+import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.infinitylib.utility.LogHelper;
 
 /**
  * Class representing possible custom wood types.
- * 
+ *
  * This class is candidate for a rewrite/cleaning.
  */
 public class CustomWoodType {
