@@ -54,6 +54,9 @@ public interface IProxy extends IProxyBase {
     }
 
     @Override
+    default void registerCapabilities() {}
+
+    @Override
     default void registerEventHandlers() {
         registerEventHandler(new PlayerInteractEventHandler());
         if (AgriCraftConfig.debug) {

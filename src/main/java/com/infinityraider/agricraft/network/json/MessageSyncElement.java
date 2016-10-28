@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class MessageSyncElement<T> extends MessageBase {
+public abstract class MessageSyncElement<T> extends MessageBase<IMessage> {
 
 	protected T element;
 	protected int index;

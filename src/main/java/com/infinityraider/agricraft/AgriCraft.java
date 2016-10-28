@@ -105,24 +105,6 @@ public class AgriCraft extends InfinityMod {
 
 	@Mod.EventHandler
 	@SuppressWarnings("unused")
-	public void onPreInit(FMLPreInitializationEvent event) {
-		super.preInit(event);
-	}
-
-	@Mod.EventHandler
-	@SuppressWarnings("unused")
-	public void onInit(FMLInitializationEvent event) {
-		super.init(event);
-	}
-
-	@Mod.EventHandler
-	@SuppressWarnings("unused")
-	public void onPostInit(FMLPostInitializationEvent event) {
-		super.postInit(event);
-	}
-
-	@Mod.EventHandler
-	@SuppressWarnings("unused")
 	public void onMissingMappings(FMLMissingMappingsEvent event) {
 		ArrayList<String> removedIds = new ArrayList<>();
 		removedIds.add("AgriCraft:cropMelon");
@@ -137,6 +119,7 @@ public class AgriCraft extends InfinityMod {
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings("unused")
 	public void onTextureStitch(TextureStitchEvent e) {
 		CoreHandler.loadTextures(e.getMap()::registerSprite);
 		PluginHandler.loadTextures(e.getMap()::registerSprite);
