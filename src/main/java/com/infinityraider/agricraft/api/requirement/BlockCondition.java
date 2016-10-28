@@ -2,17 +2,19 @@
  */
 package com.infinityraider.agricraft.api.requirement;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.utility.BlockRange;
 import java.util.List;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.utility.BlockRange;
 
 /**
  * Simple Condition that requires a block to be within a certain range.
  */
 public class BlockCondition implements ICondition {
-    
+
     private final BlockRange range;
     private final FuzzyStack stack;
     private final int amount;
@@ -55,5 +57,5 @@ public class BlockCondition implements ICondition {
     public int getComplexity() {
         return volume;
     }
-    
+
 }

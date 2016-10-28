@@ -3,15 +3,16 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import java.util.Deque;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
+
+import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 
 /**
  * A basic AdapterRegistry implementation.
  *
- * 
+ *
  * @param <T> the type being adapted to.
  */
 public class AdapterRegistry<T> implements IAgriAdapterRegistry<T> {

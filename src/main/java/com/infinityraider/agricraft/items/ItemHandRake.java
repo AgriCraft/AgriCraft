@@ -1,13 +1,10 @@
 package com.infinityraider.agricraft.items;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
+import java.util.List;
+import java.util.Random;
+
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.agricraft.utility.WeightedRandom;
-import com.infinityraider.infinitylib.item.IItemWithModel;
-import com.infinityraider.infinitylib.item.ItemBase;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -15,148 +12,154 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
-import java.util.Random;
-import net.minecraft.tileentity.TileEntity;
 import com.infinityraider.agricraft.api.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.misc.IAgriWeedable;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.agricraft.utility.WeightedRandom;
+import com.infinityraider.infinitylib.item.IItemWithModel;
+import com.infinityraider.infinitylib.item.ItemBase;
+
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
+import com.agricraft.agricore.core.AgriCore;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
 public class ItemHandRake extends ItemBase implements IAgriRakeItem, IItemWithModel {
-	
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Hand Rake",
-			comment = "Set to false to disable the Hand Rake."
-	)
-	public static boolean enableHandRake = true;
 
-	private static final int WOOD_VARIANT_META = 0;
-	private static final int IRON_VARIANT_META = 1;
-	private static final int[] dropChance = new int[]{10, 25};
+    @AgriConfigurable(
+            category = AgriConfigCategory.TOOLS,
+            key = "Enable Hand Rake",
+            comment = "Set to false to disable the Hand Rake."
+    )
+    public static boolean enableHandRake = true;
 
-	public ItemHandRake() {
-		super("hand_rake");
-		this.setMaxStackSize(1);
-		this.setHasSubtypes(true);
-		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-	}
+    private static final int WOOD_VARIANT_META = 0;
+    private static final int IRON_VARIANT_META = 1;
+    private static final int[] dropChance = new int[]{10, 25};
 
-	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof IAgriWeedable) {
-			IAgriWeedable tile = (IAgriWeedable) te;
-			if (tile.canWeed()) {
-				tile.clearWeed();
-				if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {
-					ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
-					if (drop != null && drop.getItem() != null) {
-						float f = 0.7F;
-						double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-						double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-						double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-						EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drop);
-						entityitem.setPickupDelay(10);
-						world.spawnEntityInWorld(entityitem);
-					}
-				}
-				return EnumActionResult.SUCCESS;
-			}
-			return EnumActionResult.FAIL;
-		}
-		return EnumActionResult.PASS;
-	}
+    public ItemHandRake() {
+        super("hand_rake");
+        this.setMaxStackSize(1);
+        this.setHasSubtypes(true);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-		list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
-		list.add(new ItemStack(item, 1, IRON_VARIANT_META));
-	}
+    @Override
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof IAgriWeedable) {
+            IAgriWeedable tile = (IAgriWeedable) te;
+            if (tile.canWeed()) {
+                tile.clearWeed();
+                if (AgriCraftConfig.rakingDrops && world.rand.nextInt(100) < dropChance[stack.getItemDamage() % dropChance.length]) {
+                    ItemStack drop = ItemDropRegistry.instance().getDrop(world.rand);
+                    if (drop != null && drop.getItem() != null) {
+                        float f = 0.7F;
+                        double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                        EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, drop);
+                        entityitem.setPickupDelay(10);
+                        world.spawnEntityInWorld(entityitem);
+                    }
+                }
+                return EnumActionResult.SUCCESS;
+            }
+            return EnumActionResult.FAIL;
+        }
+        return EnumActionResult.PASS;
+    }
 
-	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		String base = super.getUnlocalizedName(itemStack);
-		switch (itemStack.getItemDamage()) {
-			case WOOD_VARIANT_META:
-				return base + ".wood";
-			case IRON_VARIANT_META:
-				return base + ".iron";
-			default:
-				throw new IllegalArgumentException("Unsupported meta value of " + itemStack.getItemDamage() + " for ItemHandRake.");
-		}
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
+        list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
+        list.add(new ItemStack(item, 1, IRON_VARIANT_META));
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-		list.add(AgriCore.getTranslator().translate("agricraft_tooltip.handRake"));
-	}
+    @Override
+    public String getUnlocalizedName(ItemStack itemStack) {
+        String base = super.getUnlocalizedName(itemStack);
+        switch (itemStack.getItemDamage()) {
+            case WOOD_VARIANT_META:
+                return base + ".wood";
+            case IRON_VARIANT_META:
+                return base + ".iron";
+            default:
+                throw new IllegalArgumentException("Unsupported meta value of " + itemStack.getItemDamage() + " for ItemHandRake.");
+        }
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return enableHandRake;
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
+        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.handRake"));
+    }
 
-	@Override
-	public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-		return ImmutableList.of(
-				new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
-				new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_iron"))
-		);
-	}
+    @Override
+    public boolean isEnabled() {
+        return enableHandRake;
+    }
 
-	public static final class ItemDropRegistry {
+    @Override
+    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+        return ImmutableList.of(
+                new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
+                new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_iron"))
+        );
+    }
 
-		private static ItemDropRegistry INSTANCE;
+    public static final class ItemDropRegistry {
 
-		private final WeightedRandom<ItemStack> registry;
+        private static ItemDropRegistry INSTANCE;
 
-		static {
-			instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 1), 20);
-			instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 2), 10);
-			instance().registerDrop(new ItemStack(Blocks.DOUBLE_PLANT, 1, 2), 10);
-		}
+        private final WeightedRandom<ItemStack> registry;
 
-		private ItemDropRegistry() {
-			registry = new WeightedRandom<>();
-		}
+        static {
+            instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 1), 20);
+            instance().registerDrop(new ItemStack(Blocks.TALLGRASS, 1, 2), 10);
+            instance().registerDrop(new ItemStack(Blocks.DOUBLE_PLANT, 1, 2), 10);
+        }
 
-		public static ItemDropRegistry instance() {
-			if (INSTANCE == null) {
-				INSTANCE = new ItemDropRegistry();
-			}
-			return INSTANCE;
-		}
+        private ItemDropRegistry() {
+            registry = new WeightedRandom<>();
+        }
 
-		public void registerDrop(ItemStack stack, int weight) {
-			registry.addEntry(stack, weight);
-		}
+        public static ItemDropRegistry instance() {
+            if (INSTANCE == null) {
+                INSTANCE = new ItemDropRegistry();
+            }
+            return INSTANCE;
+        }
 
-		public void removeDrop(ItemStack stack) {
-			registry.removeEntry(stack);
-		}
+        public void registerDrop(ItemStack stack, int weight) {
+            registry.addEntry(stack, weight);
+        }
 
-		public ItemStack getDrop(Random rand) {
-			return registry.getRandomEntry(rand).copy();
-		}
+        public void removeDrop(ItemStack stack) {
+            registry.removeEntry(stack);
+        }
 
-		public int getWeight(ItemStack stack) {
-			return registry.getWeight(stack);
-		}
-	}
+        public ItemStack getDrop(Random rand) {
+            return registry.getRandomEntry(rand).copy();
+        }
+
+        public int getWeight(ItemStack stack) {
+            return registry.getWeight(stack);
+        }
+    }
 
 }

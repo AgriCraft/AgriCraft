@@ -1,13 +1,14 @@
 package com.infinityraider.agricraft.init;
 
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.handler.VillageCreationHandler;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.handler.VillageCreationHandler;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.world.StructureGreenhouse;
 import com.infinityraider.agricraft.world.StructureGreenhouseIrrigated;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 
 public class WorldGen {

@@ -1,16 +1,11 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
-import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -18,150 +13,156 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-import net.minecraft.block.Block;
-
-import java.util.Collections;
-import java.util.List;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
+import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 
 public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> {
 
-	public static final AxisAlignedBB BOX = new AxisAlignedBB(
-			Constants.UNIT * Constants.QUARTER,
-			Constants.UNIT * Constants.THREE_QUARTER,
-			Constants.UNIT * Constants.QUARTER,
-			Constants.UNIT * Constants.THREE_QUARTER,
-			Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
-			Constants.UNIT * Constants.THREE_QUARTER
-	);
+    public static final AxisAlignedBB BOX = new AxisAlignedBB(
+            Constants.UNIT * Constants.QUARTER,
+            Constants.UNIT * Constants.THREE_QUARTER,
+            Constants.UNIT * Constants.QUARTER,
+            Constants.UNIT * Constants.THREE_QUARTER,
+            Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
+            Constants.UNIT * Constants.THREE_QUARTER
+    );
 
-	public BlockSprinkler() {
-		super("sprinkler", Material.IRON);
-		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-		this.setHardness(2.0F);
-		this.setResistance(5.0F);
-		setHarvestLevel("axe", 0);
-	}
+    public BlockSprinkler() {
+        super("sprinkler", Material.IRON);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+        this.setHardness(2.0F);
+        this.setResistance(5.0F);
+        setHarvestLevel("axe", 0);
+    }
 
-	@Override
-	public TileEntitySprinkler createNewTileEntity(World world, int meta) {
-		return new TileEntitySprinkler();
-	}
+    @Override
+    public TileEntitySprinkler createNewTileEntity(World world, int meta) {
+        return new TileEntitySprinkler();
+    }
 
-	@Override
-	public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
-		return false;
-	}
+    @Override
+    public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
+        return false;
+    }
 
-	//prevent block from being removed by leaves
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return false;
-	}
+    //prevent block from being removed by leaves
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return false;
+    }
 
-	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
-		if ((!world.isRemote) && (!player.isSneaking())) {
-			if (!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-				this.dropBlockAsItem(world, pos, state, 0);
-			}
-			world.setBlockToAir(pos);
-			world.removeTileEntity(pos);
-		}
-	}
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+        if ((!world.isRemote) && (!player.isSneaking())) {
+            if (!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+                this.dropBlockAsItem(world, pos, state, 0);
+            }
+            world.setBlockToAir(pos);
+            world.removeTileEntity(pos);
+        }
+    }
 
-	@Override
-	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float f, int i) {
-		if (!world.isRemote) {
-			ItemStack drop = new ItemStack(this, 1);
-			spawnAsEntity(world, pos, drop);
-		}
-	}
+    @Override
+    public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float f, int i) {
+        if (!world.isRemote) {
+            ItemStack drop = new ItemStack(this, 1);
+            spawnAsEntity(world, pos, drop);
+        }
+    }
 
-	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
-		if (!this.canBlockStay(world, pos)) {
-			this.dropBlockAsItem(world, pos, state, 0);
-			world.removeTileEntity(pos);
-			world.setBlockToAir(pos);
-		}
-	}
+    @Override
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+        if (!this.canBlockStay(world, pos)) {
+            this.dropBlockAsItem(world, pos, state, 0);
+            world.removeTileEntity(pos);
+            world.setBlockToAir(pos);
+        }
+    }
 
-	//see if the block can stay
-	public boolean canBlockStay(World world, BlockPos pos) {
-		return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel);
-	}
+    //see if the block can stay
+    public boolean canBlockStay(World world, BlockPos pos) {
+        return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel);
+    }
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
 
-	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-		return false;
-	}
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return false;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public RenderSprinkler getRenderer() {
-		return new RenderSprinkler(this);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderSprinkler getRenderer() {
+        return new RenderSprinkler(this);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation getBlockModelResourceLocation() {
-		return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelResourceLocation getBlockModelResourceLocation() {
+        return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
+    }
 
-	@Override
-	public boolean canPlaceBlockAt(World world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.AIR;
-	}
+    @Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel && state.getBlock().getMaterial(state) == Material.AIR;
+    }
 
-	@Override
-	public Class<? extends ItemBlock> getItemBlockClass() {
-		return null;
-	}
+    @Override
+    public Class<? extends ItemBlock> getItemBlockClass() {
+        return null;
+    }
 
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
-		TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
-		if (channel != null && channel instanceof TileEntityChannel) {
-			return ((TileEntityChannel) channel).getTexture();
-		}
-		return null;
-	}
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
+        TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
+        if (channel != null && channel instanceof TileEntityChannel) {
+            return ((TileEntityChannel) channel).getTexture();
+        }
+        return null;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return !AgriCraftConfig.disableIrrigation;
-	}
+    @Override
+    public boolean isEnabled() {
+        return !AgriCraftConfig.disableIrrigation;
+    }
 
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	protected InfinityProperty[] getPropertyArray() {
-		return new InfinityProperty[0];
-	}
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[0];
+    }
 
 }

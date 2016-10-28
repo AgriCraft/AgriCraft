@@ -1,17 +1,20 @@
 package com.infinityraider.agricraft.farming;
 
-import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 import com.google.common.base.Function;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.renderers.PlantRenderer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -21,18 +24,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriProperties;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import net.minecraft.item.Item;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.renderers.PlantRenderer;
 
 /**
  * The main class used by TileEntityCrop.
@@ -40,7 +42,7 @@ import net.minecraft.item.Item;
  * ICropPlant is implemented to be able to read data from this class from the API
  */
 public abstract class CropPlant implements IAgriPlant {
-	
+
     private IGrowthRequirement growthRequirement;
     private boolean blackListed;
     private boolean ignoreVanillaPlantingRule;
@@ -61,23 +63,23 @@ public abstract class CropPlant implements IAgriPlant {
      * @return the growth rate
      */
     public final int getGrowthRate() {
-    	int tier = getTier();
-    	
-    	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
-    		return Constants.GROWTH_TIER[tier];
-    	} else {
-    		return Constants.GROWTH_TIER[0];
-    	}
+        int tier = getTier();
+
+        if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
+            return Constants.GROWTH_TIER[tier];
+        } else {
+            return Constants.GROWTH_TIER[0];
+        }
     }
 
     /**
      * Returns the tier of the seed as represented as an integer value, or the overriding value.
      * The overriding value may be set in the configuration files.
-     * 
+     *
      * Does not always have same output as {@link #getTier()}.
-     * 
+     *
      * Should fall within the range of {@link Constants#GROWTH_TIER}.
-     * 
+     *
      * @return the tier of the seed.
      */
     @Override
@@ -141,15 +143,15 @@ public abstract class CropPlant implements IAgriPlant {
         return Arrays.asList(AgriItems.getInstance().AGRI_SEED);
     }
 
-	@Override
-	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(this.getSeedItems().stream().findFirst().orElse(AgriItems.getInstance().AGRI_SEED));
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriNBT.SEED, this.getId());
-		new PlantStats().writeToNBT(tag);
-		stack.setTagCompound(tag);
-		return stack;
-	}
+    @Override
+    public final ItemStack getSeed() {
+        ItemStack stack = new ItemStack(this.getSeedItems().stream().findFirst().orElse(AgriItems.getInstance().AGRI_SEED));
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString(AgriNBT.SEED, this.getId());
+        new PlantStats().writeToNBT(tag);
+        stack.setTagCompound(tag);
+        return stack;
+    }
 
     @Override
     public IBlockState getBlockStateForGrowthStage(int growthStage) {
@@ -158,7 +160,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Gets a list of all possible fruit drops from this plant.
-     * 
+     *
      * @return a list containing of all possible fruit drops.
      */
     @Override
@@ -196,7 +198,7 @@ public abstract class CropPlant implements IAgriPlant {
      * Gets called right before a harvest attempt, player may be null if harvested by automation.
      * Should return false to prevent further processing.
      * World object and coordinates are passed in the case you would want to keep track of all planted crops and their status
-     * 
+     *
      * @param world the current world of the plant being harvested.
      * @param pos the block position.
      * @param player the player attempting to harvest the plant.
@@ -209,7 +211,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Called right after the plant is added to a crop through planting, mutation, or spreading.
-     * 
+     *
      * @param world the world the plant is in.
   * @param pos the block position.
      */
@@ -218,7 +220,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Called right after the plant is removed from a crop, or a crop holding the plant is broken.
-     * 
+     *
      * @param world the world the plant is in.
   * @param pos the block position.
      */
@@ -227,7 +229,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Determines if the plant may be grown with Bonemeal.
-     * 
+     *
      * @return if the plant may be bonemealed.
      */
     @Override
@@ -266,7 +268,7 @@ public abstract class CropPlant implements IAgriPlant {
     /**
      * Attempts to apply a growth tick to the plant, if allowed.
      * Should return true to re-render the crop clientside.
-     * 
+     *
      * @param world the world the plant is in.
      * @param pos the block position.
      * @param oldGrowthStage the current/old growth stage of the plant.
@@ -276,7 +278,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.
-     * 
+     *
      * @param world the world the plant is in.
   * @param pos the block position.
      * @return if the plant is mature.
@@ -289,7 +291,7 @@ public abstract class CropPlant implements IAgriPlant {
     /**
      * Determines the height of the crop in float precision, as a function of the plant's metadata(growth stage).
      * Used to render and define the height of the selection bounding box
-     * 
+     *
      * @param meta the growth stage of the plant (may range from 0 to {@link Constants#MATURE}).
      * @return the current height of the plant.
      */
@@ -299,7 +301,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Determines how the plant is rendered.
-     * 
+     *
      * @return false to render the plant as wheat (#), true to render as a flower (X).
      */
     @Override
@@ -325,7 +327,7 @@ public abstract class CropPlant implements IAgriPlant {
     /**
      * Retrieves information about the plant for the seed journal.
      * It's possible to pass an unlocalized String, the returned value will be localized if possible.
-     * 
+     *
      * @return a string describing the plant for use by the seed journal.
      */
     @Override
@@ -334,7 +336,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * A function to render the crop. Called when the plant is rendered.
-     * 
+     *
      * @param world the world the plant is in.
      * @param pos the block position.
      */

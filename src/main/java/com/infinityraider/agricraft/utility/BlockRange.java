@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.utility;
 import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -14,7 +15,7 @@ public class BlockRange implements Iterable<BlockPos> {
 
     private final BlockPos min;
     private final BlockPos max;
-    
+
     public BlockRange(BlockRange range, BlockPos pos) {
         this(range.getMin().add(pos), range.getMax().add(pos));
     }
@@ -64,7 +65,7 @@ public class BlockRange implements Iterable<BlockPos> {
     public BlockPos getMax() {
         return this.max;
     }
-    
+
     public int getVolume() {
         return (max.getX() - min.getX() + 1)
                 * (max.getY() - min.getY() + 1)

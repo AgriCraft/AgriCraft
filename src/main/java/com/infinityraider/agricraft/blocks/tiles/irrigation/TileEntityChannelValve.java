@@ -1,19 +1,20 @@
 package com.infinityraider.agricraft.blocks.tiles.irrigation;
 
 
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
-
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+
+import com.agricraft.agricore.core.AgriCore;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
-	
+
     private boolean powered = false;
 
     @Override
@@ -47,12 +48,12 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     public boolean isPowered() {
-    	return powered;
+        return powered;
     }
-    
-	@Override
+
+    @Override
     public boolean canAcceptFluid(int y, int amount, boolean partial) {
-    	return !powered && super.canAcceptFluid(y, amount, partial);
+        return !powered && super.canAcceptFluid(y, amount, partial);
     }
 
     @Override
@@ -63,14 +64,14 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         list.add("  - FluidHeight: " + this.getFluidHeight());
         list.add("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addDisplayInfo(List information) {
-    	//Required super call
-    	super.addDisplayInfo(information);
-    	//show status
+        //Required super call
+        super.addDisplayInfo(information);
+        //show status
         String status = AgriCore.getTranslator().translate(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
         information.add(AgriCore.getTranslator().translate("agricraft_tooltip.state")+": "+status);
     }

@@ -1,33 +1,35 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+
+import com.agricraft.agricore.core.AgriCore;
 
 /**
  * The item form of the Grate block.
  */
 public class ItemBlockGrate extends ItemBlockCustomWood {
-	
+
     /**
      * The default constructor for the Grate Item.
-     * 
+     *
      * @param block the block that the item is associated with.
      */
     public ItemBlockGrate(Block block) {
         super(block);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
@@ -57,7 +59,7 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
 
     /**
      * Sets the freshly placed TileEntityGrate's orientation.
-     * 
+     *
      * @param grate the grate in question.
      * @param hit the hit location, on the axis matching the orientation.
      * @param orientation the orientation.

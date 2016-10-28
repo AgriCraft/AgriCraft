@@ -1,5 +1,11 @@
 package com.infinityraider.agricraft.compat.jei;
 
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
+
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
@@ -9,14 +15,12 @@ import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeHandler;
 import com.infinityraider.agricraft.init.AgriItems;
-import java.util.Optional;
-import javax.annotation.Nonnull;
+
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.IJeiHelpers;
-import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class AgriCraftJEIPlugin implements IModPlugin {

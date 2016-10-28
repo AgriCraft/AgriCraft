@@ -1,16 +1,17 @@
 package com.infinityraider.agricraft.apiimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import net.minecraft.util.Tuple;
+
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.farming.mutation.MutateStrategy;
 import com.infinityraider.agricraft.farming.mutation.SpreadStrategy;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import java.util.Random;
-import java.util.stream.Collectors;
-import net.minecraft.util.Tuple;
 
 /**
  * This class decides whether a plant is spreading or mutating and also
@@ -18,18 +19,18 @@ import net.minecraft.util.Tuple;
  * the 4 neighbours.
  */
 public final class MutationEngine implements IAgriMutationEngine {
-    
+
     private static final MutationEngine INSTANCE = new MutationEngine();
-    
+
     private final List<Tuple<Double, IAgriCrossStrategy>> strategies = new ArrayList<>();
-    
+
     private double sigma = 0;
 
     private MutationEngine() {
         registerStrategy(new MutateStrategy());
         registerStrategy(new SpreadStrategy());
     }
-    
+
     public static MutationEngine getInstance() {
         return INSTANCE;
     }

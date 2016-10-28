@@ -1,17 +1,19 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+import java.util.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.*;
 import net.minecraft.world.IBlockAccess;
+
+import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+
+import com.agricraft.agricore.core.AgriCore;
 
 /**
  * Holds all the default soils and soil. Also holds all GrowthRequirements.

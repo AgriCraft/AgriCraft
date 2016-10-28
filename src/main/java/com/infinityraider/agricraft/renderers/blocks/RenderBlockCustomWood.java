@@ -1,12 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.IconHelper;
+import java.util.Collections;
+import java.util.List;
 
-import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
-import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,8 +14,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
-import java.util.List;
+import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.agricraft.utility.IconHelper;
+import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 
 @SideOnly(Side.CLIENT)
 public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T extends TileEntityCustomWood> extends RenderBlockWithTileBase<B, T> {

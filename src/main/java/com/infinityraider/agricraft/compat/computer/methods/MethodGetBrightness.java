@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import net.minecraft.world.EnumSkyBlock;
+
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 
 public class MethodGetBrightness extends MethodBaseCrop {
     public MethodGetBrightness() {

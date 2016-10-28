@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.blocks.tiles.decoration;
 
-import com.infinityraider.agricraft.blocks.decoration.BlockFence;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
+
+import com.infinityraider.agricraft.blocks.decoration.BlockFence;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 
 public class TileEntityFence extends TileEntityCustomWood {
     public TileEntityFence() {

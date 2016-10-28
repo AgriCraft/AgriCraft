@@ -2,9 +2,6 @@
  */
 package com.infinityraider.agricraft.items.modes;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
-import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,9 +11,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+import com.infinityraider.infinitylib.utility.debug.DebugMode;
+
 /**
  *
- * 
+ *
  */
 public class DebugModeCheckSoil extends DebugMode {
 

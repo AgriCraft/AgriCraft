@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
 
 public class SlotSeedAnalyzerSeed extends Slot{
     public SlotSeedAnalyzerSeed(IInventory inventory, int id, int x, int y) {

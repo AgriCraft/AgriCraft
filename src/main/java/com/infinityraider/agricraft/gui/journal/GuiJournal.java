@@ -1,21 +1,23 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.items.ItemJournal;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.client.renderer.GlStateManager;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.GuiBase;
 import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
+import com.infinityraider.agricraft.items.ItemJournal;
+
+import com.agricraft.agricore.util.MathHelper;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends GuiBase {

@@ -6,14 +6,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityChannelFull extends TileEntityChannel {
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean hasNeighbourCheck(EnumFacing direction) {
-		if (this.worldObj == null) {
-			return true;
-		} else {
-			return super.hasNeighbourCheck(direction);
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean hasNeighbourCheck(EnumFacing direction) {
+        if (this.worldObj == null) {
+            return true;
+        } else {
+            return super.hasNeighbourCheck(direction);
+        }
+    }
 
 }

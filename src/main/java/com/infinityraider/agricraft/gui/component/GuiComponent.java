@@ -2,20 +2,22 @@
  */
 package com.infinityraider.agricraft.gui.component;
 
-import com.infinityraider.agricraft.gui.GuiBase;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.infinityraider.agricraft.gui.GuiBase;
+
 /**
  *
- * 
+ *
  */
 @SideOnly(Side.CLIENT)
 public class GuiComponent<C> {

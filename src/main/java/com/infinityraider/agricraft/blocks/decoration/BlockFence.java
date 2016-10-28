@@ -1,33 +1,34 @@
 package com.infinityraider.agricraft.blocks.decoration;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
-import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
+import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityFence;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
+import com.infinityraider.agricraft.renderers.blocks.RenderBlockFence;
 
 public class BlockFence extends BlockCustomWood<TileEntityFence> {
 
-	public BlockFence() {
-		super("fence");
-	}
+    public BlockFence() {
+        super("fence");
+    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -109,10 +110,10 @@ public class BlockFence extends BlockCustomWood<TileEntityFence> {
     public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side == EnumFacing.UP || side == EnumFacing.DOWN;
     }
-	
-	@Override
-	public boolean isEnabled() {
-		return AgriCraftConfig.enableFences;
-	}
+
+    @Override
+    public boolean isEnabled() {
+        return AgriCraftConfig.enableFences;
+    }
 
 }

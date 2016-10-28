@@ -2,13 +2,14 @@
  */
 package com.infinityraider.agricraft.utility;
 
-import com.agricraft.agricore.util.TypeHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.agricraft.agricore.util.TypeHelper;
+
 /**
  *
- * 
+ *
  */
 public final class StackHelper {
 

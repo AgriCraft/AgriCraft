@@ -1,15 +1,17 @@
 package com.infinityraider.agricraft.entity;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 
 public class EntityAIClearWeeds extends EntityAIBase {
 
@@ -40,7 +42,7 @@ public class EntityAIClearWeeds extends EntityAIBase {
 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing.
-     * 
+     *
      * @return If this should continue.
      */
     @Override
@@ -55,7 +57,7 @@ public class EntityAIClearWeeds extends EntityAIBase {
     /**
      * Determine if this AI Task is interruptible by a higher (= lower value)
      * priority task.
-     * 
+     *
      * @return if this task may be interrupted.
      */
     @Override

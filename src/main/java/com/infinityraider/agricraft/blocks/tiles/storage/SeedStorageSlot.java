@@ -1,12 +1,13 @@
 package com.infinityraider.agricraft.blocks.tiles.storage;
 
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import java.util.Comparator;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.Comparator;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 
 public class SeedStorageSlot {
     private NBTTagCompound tag;
@@ -33,7 +34,7 @@ public class SeedStorageSlot {
     }
 
     private int getTotalStat() {
-		IAgriStat stats = StatRegistry.getInstance().valueOf(this.tag).get();
+        IAgriStat stats = StatRegistry.getInstance().valueOf(this.tag).get();
         return stats.getGrowth() + stats.getGain() + stats.getStrength();
     }
 

@@ -1,15 +1,15 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-
 import java.util.ArrayList;
+
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.StackHelper;
 
 public class MethodGetStats extends MethodBase {
-	
+
     public MethodGetStats() {
         super("getSpecimenStats", false, true, true);
     }
@@ -35,5 +35,5 @@ public class MethodGetStats extends MethodBase {
         pars.add(MethodParameter.DIRECTION_OPTIONAL);
         return pars;
     }
-	
+
 }
