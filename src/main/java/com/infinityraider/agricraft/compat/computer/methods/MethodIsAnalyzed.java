@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
+import java.util.ArrayList;
+
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
-import java.util.ArrayList;
-
 public class MethodIsAnalyzed extends MethodBase {
-	
+
     public MethodIsAnalyzed() {
         super("isAnalyzed", false, true, true);
     }

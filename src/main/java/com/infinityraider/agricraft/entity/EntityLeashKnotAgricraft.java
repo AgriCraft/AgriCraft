@@ -1,12 +1,13 @@
 package com.infinityraider.agricraft.entity;
 
-import com.infinityraider.agricraft.blocks.decoration.BlockFence;
+import java.util.List;
+
 import net.minecraft.entity.EntityLeashKnot;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.List;
+import com.infinityraider.agricraft.blocks.decoration.BlockFence;
 
 public class EntityLeashKnotAgricraft extends EntityLeashKnot {
 

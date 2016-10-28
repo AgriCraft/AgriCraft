@@ -15,6 +15,7 @@ buildscript {
 // Plugins
 plugins {
 	id 'com.rlonryan.quikmod' version '1.0.16'
+    id 'com.diffplug.gradle.spotless' version '2.3.0'
 }
 
 // Tweak MineCraft Task
@@ -101,3 +102,30 @@ task apiJar(type: Jar) {
 
 // Tell build that it needs the API compiled first.
 build.dependsOn apiJar
+
+// Code Formatting
+spotless {
+    java {
+        // Ensure ~only~ AgriCraft code is formatted.
+        target 'src/main/java/com/infinityraider/agricraft/**/*.java'
+        
+        // Import Ordering
+        importOrder([
+            'java',
+            'javax',
+            'org',
+            'com',
+            'net',
+            'com.infinityraider',
+            'com.agricraft',
+            ''
+        ])
+        
+        // Initiate Flamewar
+        indentWithSpaces(4)
+        
+        // Sanitize Whitespace
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

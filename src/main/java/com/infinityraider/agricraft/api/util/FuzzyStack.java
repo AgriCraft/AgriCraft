@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.api.util;
 
 import java.util.Optional;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,11 +22,11 @@ public class FuzzyStack {
     private final boolean ignoreMeta;
     private final boolean ignoreTags;
     private final boolean useOreDict;
-    
+
     public FuzzyStack(IBlockAccess world, BlockPos pos) {
         this(world.getBlockState(pos));
     }
-    
+
     public FuzzyStack(IBlockState state) {
         this(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
     }
@@ -38,7 +39,7 @@ public class FuzzyStack {
         if (stack == null || stack.getItem() == null) {
             throw new NullPointerException();
         }
-        
+
         this.stack = stack;
         this.ignoreMeta = ignoreMeta;
         this.ignoreTags = ignoreTags;
@@ -48,31 +49,31 @@ public class FuzzyStack {
     public ItemStack toStack() {
         return this.stack.copy();
     }
-    
+
     public Item getItem() {
         return this.stack.getItem();
     }
-    
+
     public int getMeta() {
         return this.stack.getMetadata();
     }
-    
+
     public Optional<NBTTagCompound> getTags() {
         return Optional.ofNullable(this.stack.getTagCompound()).map(t -> t.copy());
     }
-    
+
     public boolean matches(ItemStack stack) {
         return stack != null && this.equals(new FuzzyStack(stack));
     }
-    
+
     public boolean areMetaEqual(FuzzyStack other) {
         return other != null && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
     }
-    
+
     public boolean areTagsEqual(FuzzyStack other) {
         return other != null && (this.ignoreTags || other.ignoreTags || this.getTags().equals(other.getTags()));
     }
-    
+
     public boolean areItemEqual(FuzzyStack other) {
         return other != null && this.stack.getItem().equals(other.stack.getItem());
     }

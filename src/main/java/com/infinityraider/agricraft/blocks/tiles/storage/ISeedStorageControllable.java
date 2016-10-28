@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.blocks.tiles.storage;
 
+import java.util.List;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public interface ISeedStorageControllable {
     /**

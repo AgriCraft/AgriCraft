@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
+import java.util.Optional;
+
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import java.util.Optional;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {
     /**
      * calculates the new stats based on an input stat, the nr of neighbours and a divisor
      */
-	@Override
+    @Override
     protected int calculateStats(int input, int neighbours, int divisor) {
         /*
         1 parent: 3/4 decrement, 1/4 nothing
@@ -75,5 +76,5 @@ public class StatCalculatorHardcore extends StatCalculatorBase {
     public Optional<IAgriStatCalculator> valueOf(Object obj) {
         return accepts(obj) ? Optional.of(this) : Optional.empty();
     }
-    
+
 }

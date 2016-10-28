@@ -1,8 +1,5 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +9,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.blocks.BlockCrop;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
 
 @SideOnly(Side.CLIENT)
 public class SoundHandler {

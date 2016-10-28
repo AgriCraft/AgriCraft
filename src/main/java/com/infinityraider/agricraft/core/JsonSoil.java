@@ -2,18 +2,20 @@
  */
 package com.infinityraider.agricraft.core;
 
-import com.agricraft.agricore.plant.AgriSoil;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+
+import com.agricraft.agricore.plant.AgriSoil;
 
 /**
  * Class wrapping the AgriCore AgriSoil.
  */
 public class JsonSoil implements IAgriSoil {
-    
+
     private final AgriSoil soil;
     private List<FuzzyStack> varients;
 
@@ -41,5 +43,5 @@ public class JsonSoil implements IAgriSoil {
         }
         return this.varients;
     }
-    
+
 }

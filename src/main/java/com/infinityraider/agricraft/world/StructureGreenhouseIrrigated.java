@@ -1,24 +1,26 @@
 package com.infinityraider.agricraft.world;
 
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
-import com.agricraft.agricore.core.AgriCore;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import java.util.List;
-import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.init.AgriBlocks;
+
+import com.agricraft.agricore.core.AgriCore;
 public class StructureGreenhouseIrrigated extends StructureGreenhouse {
     //structure dimensions
     private static final int xSize = 17;
@@ -255,7 +257,7 @@ public class StructureGreenhouseIrrigated extends StructureGreenhouse {
         this.setBlockState(world, Blocks.TORCH.getDefaultState(), 13, 4, 7, boundingBox);
         //place crops
         List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
-		plants.removeIf((p) -> { return p.getTier() > AgriCraftConfig.greenHouseMaxTier; });
+        plants.removeIf((p) -> { return p.getTier() > AgriCraftConfig.greenHouseMaxTier; });
         for(int x=3;x<=7;x++) {
             for(int z=8;z<=12;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10), plants);

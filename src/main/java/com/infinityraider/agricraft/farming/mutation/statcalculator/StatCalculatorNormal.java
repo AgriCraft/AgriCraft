@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
+import java.util.Optional;
+
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import java.util.Optional;
 
 public class StatCalculatorNormal extends StatCalculatorBase {
 
@@ -19,7 +20,7 @@ public class StatCalculatorNormal extends StatCalculatorBase {
         int newStat = Math.max(1, (input + (int) Math.round(Math.abs(neighbours - 1) * Math.random())) / divisor);
         return Math.min(newStat, AgriCraftConfig.cropStatCap);
     }
-    
+
     @Override
     public boolean accepts(Object obj) {
         return (!AgriCraftConfig.hardCoreStats) && (obj instanceof IAgriPlant);

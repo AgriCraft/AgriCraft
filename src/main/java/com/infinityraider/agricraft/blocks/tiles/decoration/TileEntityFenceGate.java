@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.blocks.tiles.decoration;
 
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityFenceGate extends TileEntityCustomWood {

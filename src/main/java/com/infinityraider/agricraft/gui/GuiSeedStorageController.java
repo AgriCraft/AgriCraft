@@ -1,14 +1,16 @@
 package com.infinityraider.agricraft.gui;
 
-import com.infinityraider.agricraft.container.ContainerSeedStorageController;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorageController;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
+
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorageController;
+import com.infinityraider.agricraft.container.ContainerSeedStorageController;
+import com.infinityraider.agricraft.reference.Reference;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorageController extends GuiSeedStorageBase {

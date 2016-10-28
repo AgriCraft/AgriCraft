@@ -8,7 +8,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
  *
  */
 public class PropertyString implements IUnlistedProperty<String> {
-    
+
     final String name;
 
     public PropertyString(String name) {
@@ -34,7 +34,7 @@ public class PropertyString implements IUnlistedProperty<String> {
     public String valueToString(String value) {
         return value;
     }
-    
-    
-    
+
+
+
 }

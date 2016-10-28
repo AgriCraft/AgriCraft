@@ -1,8 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
-import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -12,6 +9,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelFull;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 
 @SideOnly(Side.CLIENT)
 public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, TileEntityChannelFull> {

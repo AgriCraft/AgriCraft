@@ -1,10 +1,11 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class SlotSeedAnalyzerJournal extends Slot {
 

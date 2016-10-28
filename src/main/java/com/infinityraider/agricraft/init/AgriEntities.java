@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.init;
 
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.entity.EntityLeashKnotAgricraft;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class AgriEntities {
     public static void init() {

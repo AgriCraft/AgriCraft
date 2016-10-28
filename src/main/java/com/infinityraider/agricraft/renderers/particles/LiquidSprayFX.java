@@ -2,12 +2,13 @@ package com.infinityraider.agricraft.renderers.particles;
 
 //heavily inspired by the OpenBlocks sprinkler
 
-import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.agricraft.utility.BaseIcons;
 
 @SideOnly(Side.CLIENT)
 public class LiquidSprayFX extends AgriCraftFX {

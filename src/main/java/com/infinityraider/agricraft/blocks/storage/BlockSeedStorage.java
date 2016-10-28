@@ -1,30 +1,31 @@
 package com.infinityraider.agricraft.blocks.storage;
 
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 
 public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
-	public BlockSeedStorage() {
-		super("seed_storage");
-	}
-	
+    public BlockSeedStorage() {
+        super("seed_storage");
+    }
+
     @Override
     public TileEntitySeedStorage createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorage();
@@ -77,8 +78,8 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     }
 
     @Override
-	public boolean isEnabled() {
-		return !AgriCraftConfig.disableSeedStorage;
-	}
-    
+    public boolean isEnabled() {
+        return !AgriCraftConfig.disableSeedStorage;
+    }
+
 }

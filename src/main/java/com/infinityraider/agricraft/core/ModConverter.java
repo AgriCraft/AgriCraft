@@ -2,14 +2,16 @@
  */
 package com.infinityraider.agricraft.core;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import com.agricraft.agricore.util.AgriConverter;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+
+import com.agricraft.agricore.util.AgriConverter;
 
 /**
  *
- * 
+ *
  */
 public class ModConverter implements AgriConverter {
 

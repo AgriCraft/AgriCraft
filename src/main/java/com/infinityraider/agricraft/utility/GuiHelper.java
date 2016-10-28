@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.utility;
 
-import net.minecraft.client.gui.FontRenderer;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.gui.FontRenderer;
 
 //helper class to read, write and parse data to and from the config files
 /**
@@ -62,9 +63,9 @@ public abstract class GuiHelper {
                 unprocessed = unprocessed.substring(unprocessed.indexOf('\n')+1);
             }
         }
-        
+
         unprocessed = unprocessed.trim();
-        
+
         if (unprocessed.length()>0 && unprocessed.charAt(0)!='#') {
             data.add(unprocessed);
         }

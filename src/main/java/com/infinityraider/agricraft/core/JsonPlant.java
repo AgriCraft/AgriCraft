@@ -3,21 +3,11 @@
  */
 package com.infinityraider.agricraft.core;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.farming.CropPlant;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +16,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.farming.CropPlant;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.IconHelper;
+
+import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.util.TypeHelper;
 
 public class JsonPlant extends CropPlant {
 
@@ -138,7 +141,7 @@ public class JsonPlant extends CropPlant {
                 builder.addRequiredBlock(stack, dist);
             }
         });
-        
+
         builder.setMinLight(this.plant.getRequirement().getMinLight());
         builder.setMaxLight(this.plant.getRequirement().getMaxLight());
 

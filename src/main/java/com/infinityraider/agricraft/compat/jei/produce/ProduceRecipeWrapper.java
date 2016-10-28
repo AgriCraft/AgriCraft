@@ -3,19 +3,24 @@
  */
 package com.infinityraider.agricraft.compat.jei.produce;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
+
 import javax.annotation.Nonnull;
-import mezz.jei.api.recipe.IRecipeWrapper;
+
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+
+import mezz.jei.api.recipe.IRecipeWrapper;
 
 /**
  *
- * 
+ *
  */
 public class ProduceRecipeWrapper implements IRecipeWrapper {
 
@@ -26,7 +31,7 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
         ImmutableList.Builder builder = ImmutableList.builder();
 
         builder.add(recipe.getSeed());
-        
+
         builder.add(recipe.getGrowthRequirement().getSoils().stream()
                 .flatMap(s -> s.getVarients().stream())
                 .findFirst()

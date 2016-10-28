@@ -1,12 +1,13 @@
 package com.infinityraider.agricraft.crafting;
 
-import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.utility.StackHelper;
 
 public class RecipeJournal implements IRecipe {
 

@@ -1,15 +1,17 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
-import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
+import com.infinityraider.infinitylib.network.MessageBase;
+
+import io.netty.buffer.ByteBuf;
 
 public class MessageContainerSeedStorage extends MessageBase<IMessage> {
     private Item item;
