@@ -5,7 +5,6 @@ import com.agricraft.agricore.log.AgriLogger;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
@@ -13,12 +12,8 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.SERVER)
 public class PlayerConnectToServerHandler {
-	
 	private static final AgriLogger log = AgriCore.getLogger("Agri-Net");
 
 	@SubscribeEvent
@@ -35,10 +30,7 @@ public class PlayerConnectToServerHandler {
 		List<AgriSoil> soils = AgriCore.getSoils().getAll();
 		for (int i = 0; i < soils.size(); i++) {
 			log.info("Sending Soil: {0} ({1} of {2})", soils.get(i).getName(), i + 1, soils.size());
-			AgriCraft.instance.getNetworkWrapper().sendTo(
-					new MessageSyncSoilJson(soils.get(i), i, soils.size()),
-					player
-			);
+			new MessageSyncSoilJson(soils.get(i), i, soils.size()).sendTo(player);
 		}
 		log.info("Finished sending soils to player: " + player.getDisplayNameString());
 	}
@@ -48,10 +40,7 @@ public class PlayerConnectToServerHandler {
 		List<AgriPlant> plants = AgriCore.getPlants().getAll();
 		for (int i = 0; i < plants.size(); i++) {
 			log.info("Sending plant: {0} ({1} of {2})", plants.get(i).getPlantName(), i + 1, plants.size());
-			AgriCraft.instance.getNetworkWrapper().sendTo(
-					new MessageSyncPlantJson(plants.get(i), i, plants.size()),
-					player
-			);
+            new MessageSyncPlantJson(plants.get(i), i, plants.size()).sendTo(player);
 		}
 		log.info("Finished sending plants to player: " + player.getDisplayNameString());
 	}
@@ -61,10 +50,7 @@ public class PlayerConnectToServerHandler {
 		List<AgriMutation> mutations = AgriCore.getMutations().getAll();
 		for (int i = 0; i < mutations.size(); i++) {
 			log.info("Sending mutation: ({0} of {1})", i + 1, mutations.size());
-			AgriCraft.instance.getNetworkWrapper().sendTo(
-					new MessageSyncMutationJson(mutations.get(i), i, mutations.size()),
-					player
-			);
+            new MessageSyncMutationJson(mutations.get(i), i, mutations.size()).sendTo(player);
 		}
 		log.info("Finished sending mutations to player: " + player.getDisplayNameString());
 	}

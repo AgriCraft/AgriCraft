@@ -117,7 +117,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 	@Override
 	public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
 		NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getWorldTypeID(), pos.getX(), pos.getY(), pos.getZ(), 32);
-		AgriCraft.instance.getNetworkWrapper().sendToAllAround(new MessagePeripheralCheckNeighbours(pos), point);
+		new MessagePeripheralCheckNeighbours(pos).sendToAllAround(point);
 	}
 
 	@Override

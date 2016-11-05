@@ -14,8 +14,8 @@ public class MessageSyncPlantJson extends MessageSyncElement<AgriPlant> {
 
 	private static final Gson gson = new Gson();
 
-	public MessageSyncPlantJson() {
-	}
+	@SuppressWarnings("unused")
+	public MessageSyncPlantJson() {}
 	
 	public MessageSyncPlantJson(AgriPlant plant, int index, int count) {
 		super(plant, index, count);

@@ -14,8 +14,8 @@ public class MessageSyncMutationJson extends MessageSyncElement<AgriMutation> {
 
 	private static final Gson gson = new Gson();
 
-	public MessageSyncMutationJson() {
-	}
+	@SuppressWarnings("unused")
+	public MessageSyncMutationJson() {}
 	
 	public MessageSyncMutationJson(AgriMutation mutation, int index, int count) {
 		super(mutation, index, count);

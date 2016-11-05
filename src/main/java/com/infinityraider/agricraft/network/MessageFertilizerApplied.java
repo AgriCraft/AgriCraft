@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.network;
 
 import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,10 +15,10 @@ public class MessageFertilizerApplied extends MessageBase<IMessage> {
     private Item fertilizer;
     private int meta;
 
-    @SuppressWarnings("unused")
     public MessageFertilizerApplied() {}
 
     public MessageFertilizerApplied(ItemStack fertilizer, BlockPos pos) {
+        this();
         this.pos = pos;
         this.fertilizer = fertilizer.getItem();
         this.meta = fertilizer.getItemDamage();
@@ -41,19 +40,5 @@ public class MessageFertilizerApplied extends MessageBase<IMessage> {
     @Override
     protected IMessage getReply(MessageContext ctx) {
         return null;
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.pos = readBlockPosFromByteBuf(buf);
-        this.fertilizer = this.readItemFromByteBuf(buf);
-        this.meta = buf.readInt();
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        this.writeBlockPosToByteBuf(buf, pos);
-        this.writeItemToByteBuf(this.fertilizer, buf);
-        buf.writeInt(this.meta);
     }
 }

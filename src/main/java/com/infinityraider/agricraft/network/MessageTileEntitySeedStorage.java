@@ -1,20 +1,25 @@
 package com.infinityraider.agricraft.network;
 
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
+import com.infinityraider.infinitylib.network.serialization.ByteBufUtil;
+import com.infinityraider.infinitylib.network.serialization.IMessageReader;
+import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
+import com.infinityraider.infinitylib.network.serialization.IMessageWriter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.List;
 
 public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 
@@ -23,11 +28,10 @@ public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 	private int amount;
 	private IAgriStat stats;
 
-	@SuppressWarnings("unused")
-	public MessageTileEntitySeedStorage() {
-	}
+	public MessageTileEntitySeedStorage() {}
 
 	public MessageTileEntitySeedStorage(BlockPos pos, SeedStorageSlot slot) {
+        this();
 		this.pos = pos;
 		if (slot != null) {
 			this.slotId = slot.getId();
@@ -62,26 +66,27 @@ public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 		return null;
 	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.pos = readBlockPosFromByteBuf(buf);
-		this.slotId = buf.readInt();
-		if (this.slotId >= 0) {
-			this.amount = buf.readInt();
-			NBTTagCompound tag = ByteBufUtils.readTag(buf);
-			this.stats = StatRegistry.getInstance().valueOf(tag).get();
-		}
-	}
+    @Override
+    protected List<IMessageSerializer> getNecessarySerializers() {
+        return ImmutableList.of(new IMessageSerializer<IAgriStat>() {
+            @Override
+            public boolean accepts(Class<IAgriStat> clazz) {
+                return IAgriStat.class.isAssignableFrom(clazz);
+            }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		this.writeBlockPosToByteBuf(buf, pos);
-		buf.writeInt(this.slotId);
-		if (this.slotId >= 0) {
-			buf.writeInt(this.amount);
-			NBTTagCompound tag = new NBTTagCompound();
-			stats.writeToNBT(tag);
-			ByteBufUtils.writeTag(buf, tag);
-		}
-	}
+            @Override
+            public IMessageWriter<IAgriStat> getWriter(Class<IAgriStat> clazz) {
+                return (buf, data) -> {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    data.writeToNBT(tag);
+                    ByteBufUtil.writeNBT(buf, tag);
+                };
+            }
+
+            @Override
+            public IMessageReader<IAgriStat> getReader(Class<IAgriStat> clazz) {
+                return buf -> StatRegistry.getInstance().valueOf(ByteBufUtil.readNBT(buf)).get();
+            }
+        });
+    }
 }

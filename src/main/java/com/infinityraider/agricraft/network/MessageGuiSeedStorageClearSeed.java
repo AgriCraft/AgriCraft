@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.network;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
@@ -14,10 +13,10 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
     private EntityPlayer player;
 
-    @SuppressWarnings("unused")
     public MessageGuiSeedStorageClearSeed() {}
 
     public MessageGuiSeedStorageClearSeed(EntityPlayer player) {
+        this();
         this.player = player;
     }
 
@@ -41,15 +40,5 @@ public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
     @Override
     protected IMessage getReply(MessageContext ctx) {
         return null;
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.player = this.readPlayerFromByteBuf(buf);
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        this.writePlayerToByteBuf(buf, player);
     }
 }

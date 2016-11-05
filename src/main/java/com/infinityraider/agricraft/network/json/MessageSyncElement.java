@@ -1,15 +1,21 @@
 package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.json.AgriSerializable;
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.infinitylib.network.MessageBase;
-import io.netty.buffer.ByteBuf;
+import com.infinityraider.infinitylib.network.serialization.ByteBufUtil;
+import com.infinityraider.infinitylib.network.serialization.IMessageReader;
+import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
+import com.infinityraider.infinitylib.network.serialization.IMessageWriter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public abstract class MessageSyncElement<T> extends MessageBase<IMessage> {
 
@@ -49,18 +55,25 @@ public abstract class MessageSyncElement<T> extends MessageBase<IMessage> {
 	}
 
 	@Override
-	public final void fromBytes(ByteBuf buf) {
-		this.index = buf.readInt();
-		this.count = buf.readInt();
-		this.element = fromString(ByteBufUtils.readUTF8String(buf));
-	}
+    protected List<IMessageSerializer> getNecessarySerializers() {
+        MessageSyncElement<T> msg = this;
+        return ImmutableList.of(new IMessageSerializer <T> () {
+            @Override
+            public boolean accepts (Class <T>  clazz) {
+                return AgriSerializable.class.isAssignableFrom(clazz);
+            }
 
-	@Override
-	public final void toBytes(ByteBuf buf) {
-		buf.writeInt(index);
-		buf.writeInt(count);
-		ByteBufUtils.writeUTF8String(buf, toString(element));
-	}
+            @Override
+            public IMessageWriter<T> getWriter (Class <T> clazz) {
+                return (buf, data) -> ByteBufUtil.writeString(buf, msg.toString(data));
+            }
+
+            @Override
+            public IMessageReader<T> getReader (Class <T> clazz) {
+                return (buf) -> msg.fromString(ByteBufUtil.readString(buf));
+            }
+        });
+    }
 	
 	@SideOnly(Side.CLIENT)
 	public final String getServerId() {

@@ -17,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.AgriCraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -117,7 +116,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 	}
 
 	public void syncSlotToClient(SeedStorageSlot slot) {
-		AgriCraft.instance.getNetworkWrapper().sendToDimension(new MessageTileEntitySeedStorage(this.getPos(), slot), this.worldObj.provider.getDimension());
+		new MessageTileEntitySeedStorage(this.getPos(), slot).sendToDimension(this.worldObj.provider.getDimension());
 		this.worldObj.getChunkFromBlockCoords(this.getPos()).setChunkModified();
 	}
 

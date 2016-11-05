@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.gui;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
 import com.infinityraider.agricraft.reference.Reference;
@@ -55,7 +54,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
     @Override
     protected void actionPerformed(GuiButton button) {
         if(button.id == buttonIdScrollRight+1){
-            AgriCraft.instance.getNetworkWrapper().sendToServer(new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer));
+            new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
             this.updateScreen();
         } else {
             super.actionPerformed(button);

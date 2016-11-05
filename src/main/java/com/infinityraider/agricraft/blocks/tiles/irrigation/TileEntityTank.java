@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.AgriCraft;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.*;
@@ -91,7 +90,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	public void syncFluidLevel() {
 		if (needsSync()) {
 			NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
-			AgriCraft.instance.getNetworkWrapper().sendToAllAround(new MessageSyncFluidLevel(this.fluidLevel, this.getPos()), point);
+			new MessageSyncFluidLevel(this.fluidLevel, this.getPos()).sendToAllAround(point);
 		}
 	}
 

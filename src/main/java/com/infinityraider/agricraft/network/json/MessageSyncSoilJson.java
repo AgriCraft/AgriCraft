@@ -14,8 +14,8 @@ public class MessageSyncSoilJson extends MessageSyncElement<AgriSoil> {
 
 	private static final Gson gson = new Gson();
 
-	public MessageSyncSoilJson() {
-	}
+	@SuppressWarnings("unused")
+	public MessageSyncSoilJson() {}
 	
 	public MessageSyncSoilJson(AgriSoil soil, int index, int count) {
 		super(soil, index, count);
