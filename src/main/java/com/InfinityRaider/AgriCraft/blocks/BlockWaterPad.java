@@ -76,17 +76,15 @@ public class BlockWaterPad extends BlockAgriCraft {
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, FluidContainerRegistry.drainFluidContainer(copy));
                     } else {
                         ItemStack drained = FluidContainerRegistry.drainFluidContainer(copy);
-                        if (!player.inventory.addItemStackToInventory(FluidContainerRegistry.fillFluidContainer(waterBucket, copy))) {
-                            if (!player.inventory.addItemStackToInventory(drained)) {
-                                if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
-                                    float f = 0.7F;
-                                    double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                                    double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                                    double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                                    EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drained);
-                                    entityitem.delayBeforeCanPickup = 10;
-                                    world.spawnEntityInWorld(entityitem);
-                                }
+                        if (!player.inventory.addItemStackToInventory(drained)) {
+                            if (world.getGameRules().getGameRuleBooleanValue("doTileDrops") && !world.restoringBlockSnapshots) {
+                                float f = 0.7F;
+                                double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                                EntityItem entityitem = new EntityItem(world, (double) x + d0, (double) y + d1, (double) z + d2, drained);
+                                entityitem.delayBeforeCanPickup = 10;
+                                world.spawnEntityInWorld(entityitem);
                             }
                         }
                     }

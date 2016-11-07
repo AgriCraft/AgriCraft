@@ -22,6 +22,7 @@ public class CropPlantMagicalCropsBeta extends CropPlantGeneric {
         this.highTier = highTier;
         getDropMeta();
         getDrop();
+        setTier(tier());
     }
 
     private void getDropMeta() {

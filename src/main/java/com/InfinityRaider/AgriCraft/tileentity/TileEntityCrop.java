@@ -148,7 +148,7 @@ public class TileEntityCrop extends TileEntityAgricraft implements ICrop, IDebug
     /** check if the crop is fertile */
     @Override
     public boolean isFertile() {
-        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && plant.getGrowthRequirement().canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        return this.weed || worldObj.isAirBlock(xCoord, yCoord +1, zCoord) && hasPlant() && plant.getGrowthRequirement().canGrow(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     /** gets the height of the crop */
