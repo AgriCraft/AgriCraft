@@ -16,14 +16,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * Class representing possible custom wood types.
- * 
+ *
  * This class is candidate for a rewrite/cleaning.
  */
 public class CustomWoodType {
@@ -37,7 +40,6 @@ public class CustomWoodType {
     /**
      * The default metadata to use. Currently is set to Oak(0) for Planks.
      */
-    @Nonnull
     public static final int DEFAULT_META = 0;
 
     private static Map<IBlockState, CustomWoodType> woodTypes = new IdentityHashMap<>();
@@ -81,17 +83,18 @@ public class CustomWoodType {
     }
 
     @SideOnly(Side.CLIENT)
+    @Nonnull
     public TextureAtlasSprite getIcon() {
-        try {
-            if (texture == null) {
+        if (texture == null) {
+            try {
                 IBlockState state = block.getStateFromMeta(meta);
                 texture = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+            } catch (Exception e) {
+                AgriCore.getLogger("AgriCraft").trace(e);
+                texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
             }
-            return texture;
-        } catch (Exception e) {
-            AgriCore.getLogger("AgriCraft").trace(e);
-            return null;
         }
+        return texture;
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {

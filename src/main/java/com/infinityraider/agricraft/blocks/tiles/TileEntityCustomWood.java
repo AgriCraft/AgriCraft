@@ -30,6 +30,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nonnull
 	public TextureAtlasSprite getIcon() {
 		return woodType.getIcon();
 	}

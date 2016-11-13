@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
         return getIcon(getTileEntity());
     }
 
+    @Nonnull
     public TextureAtlasSprite getIcon(TileEntityCustomWood tile) {
         if (tile == null) {
             return BaseIcons.OAK_PLANKS.getIcon();
