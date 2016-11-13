@@ -17,6 +17,9 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Class representing possible custom wood types.
@@ -128,43 +131,35 @@ public class CustomWoodType {
     }
 
     public static void init() {
-        if (woodTypes.isEmpty()) {
-            for (ItemStack plank : OreDictionary.getOres("plankWood")) {
-                if (plank.getItem() instanceof ItemBlock) {
-                    ItemBlock block = ((ItemBlock) plank.getItem());
-                    if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                        for (int i = 0; i < 16; i++) {
-                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
-                            CustomWoodType type = new CustomWoodType(block.block, i);
-                            woodTypes.put(type.getState(), type);
-                        }
-                    } else {
-                        CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage());
-                        woodTypes.put(type.getState(), type);
-                    }
-                }
-            }
-        }
+        //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+        init(block -> IntStream.range(0, 16));
     }
 
     @SideOnly(Side.CLIENT)
     public static void initClient() {
+        init(block -> {
+            List<ItemStack> subItems = new ArrayList<>();
+            block.getSubItems(block, block.getCreativeTab(), subItems);
+            return subItems.stream().mapToInt(ItemStack::getItemDamage);
+        });
+    }
+
+    private static void init(Function<ItemBlock, IntStream> getItemDamages) {
         if (!woodTypes.isEmpty()) {
             return;
         }
-        OreDictionary.getOres("plankWood").stream().filter(plank -> plank.getItem() instanceof ItemBlock).forEach(plank -> {
-            ItemBlock block = ((ItemBlock) plank.getItem());
-            if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                List<ItemStack> subItems = new ArrayList<>();
-                block.getSubItems(block, block.getCreativeTab(), subItems);
-                for (ItemStack subItem : subItems) {
-                    CustomWoodType type = new CustomWoodType(block.block, subItem.getItemDamage());
-                    woodTypes.put(type.getState(), type);
-                }
-            } else {
-                CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage());
-                woodTypes.put(type.getState(), type);
-            }
-        });
+        OreDictionary.getOres("plankWood").stream()
+                .filter(plank -> plank.getItem() instanceof ItemBlock)
+                .flatMap(plank -> {
+                    ItemBlock block = ((ItemBlock) plank.getItem());
+                    if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                        List<ItemStack> subItems = new ArrayList<>();
+                        block.getSubItems(block, block.getCreativeTab(), subItems);
+                        return getItemDamages.apply(block).mapToObj(meta -> new CustomWoodType(block.block, meta));
+                    } else {
+                        return Stream.of(new CustomWoodType(block.block, plank.getItemDamage()));
+                    }
+                })
+                .forEach(type -> woodTypes.put(type.getState(), type));
     }
 }
