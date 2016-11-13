@@ -6,23 +6,27 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Class representing possible custom wood types.
- * 
+ *
  * This class is candidate for a rewrite/cleaning.
  */
 public class CustomWoodType {
@@ -36,7 +40,6 @@ public class CustomWoodType {
     /**
      * The default metadata to use. Currently is set to Oak(0) for Planks.
      */
-    @Nonnull
     public static final int DEFAULT_META = 0;
 
     private static Map<IBlockState, CustomWoodType> woodTypes = new IdentityHashMap<>();
@@ -56,17 +59,11 @@ public class CustomWoodType {
     private final Block block;
     private final int meta;
     @SideOnly(Side.CLIENT)
-    private ResourceLocation texture;
+    private TextureAtlasSprite texture;
 
     private CustomWoodType(Block block, int meta) {
         this.block = block;
         this.meta = meta;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private CustomWoodType(Block block, int meta, ResourceLocation texture) {
-        this(block, meta);
-        this.texture = texture;
     }
 
     public Block getBlock() {
@@ -86,7 +83,17 @@ public class CustomWoodType {
     }
 
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getTexture() {
+    @Nonnull
+    public TextureAtlasSprite getIcon() {
+        if (texture == null) {
+            try {
+                IBlockState state = block.getStateFromMeta(meta);
+                texture = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+            } catch (Exception e) {
+                AgriCore.getLogger("AgriCraft").trace(e);
+                texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+            }
+        }
         return texture;
     }
 
@@ -127,58 +134,35 @@ public class CustomWoodType {
     }
 
     public static void init() {
-        if (woodTypes.isEmpty()) {
-            for (ItemStack plank : OreDictionary.getOres("plankWood")) {
-                if (plank.getItem() instanceof ItemBlock) {
-                    ItemBlock block = ((ItemBlock) plank.getItem());
-                    if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                        for (int i = 0; i < 16; i++) {
-                            //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
-                            CustomWoodType type = new CustomWoodType(block.block, i);
-                            woodTypes.put(type.getState(), type);
-                        }
-                    } else {
-                        CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage());
-                        woodTypes.put(type.getState(), type);
-                    }
-                }
-            }
-        }
+        //on the server register every meta as a recipe. The client won't know of this, so it's perfectly ok (don't tell anyone)
+        init(block -> IntStream.range(0, 16));
     }
 
     @SideOnly(Side.CLIENT)
     public static void initClient() {
-        if (!woodTypes.isEmpty()) {
-            return;
-        }
-        OreDictionary.getOres("plankWood").stream().filter(plank -> plank.getItem() instanceof ItemBlock).forEach(plank -> {
-            ItemBlock block = ((ItemBlock) plank.getItem());
-            if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                List<ItemStack> subItems = new ArrayList<>();
-                block.getSubItems(block, block.getCreativeTab(), subItems);
-                for (ItemStack subItem : subItems) {
-                    CustomWoodType type = new CustomWoodType(block.block, subItem.getItemDamage(), getTextureForBlockAndMeta(block.block, subItem.getItemDamage()));
-                    woodTypes.put(type.getState(), type);
-                }
-            } else {
-                CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage(), getTextureForBlockAndMeta(block.block, plank.getItemDamage()));
-                woodTypes.put(type.getState(), type);
-            }
+        init(block -> {
+            List<ItemStack> subItems = new ArrayList<>();
+            block.getSubItems(block, block.getCreativeTab(), subItems);
+            return subItems.stream().mapToInt(ItemStack::getItemDamage);
         });
     }
 
-    @SideOnly(Side.CLIENT)
-    private static ResourceLocation getTextureForBlockAndMeta(Block block, int meta) {
-        try {
-            IBlockState state = block.getStateFromMeta(meta);
-            ResourceLocation modelResourceLocation
-                    = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper().getVariants(block).get(state);
-            IModel model = ModelLoaderRegistry.getModel(modelResourceLocation);
-            Collection<ResourceLocation> locations = model.getTextures();
-            return (locations.size() > 0) ? locations.iterator().next() : null;
-        } catch (Exception e) {
-            AgriCore.getLogger("AgriCraft").trace(e);
-            return null;
+    private static void init(Function<ItemBlock, IntStream> getItemDamages) {
+        if (!woodTypes.isEmpty()) {
+            return;
         }
+        OreDictionary.getOres("plankWood").stream()
+                .filter(plank -> plank.getItem() instanceof ItemBlock)
+                .flatMap(plank -> {
+                    ItemBlock block = ((ItemBlock) plank.getItem());
+                    if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                        List<ItemStack> subItems = new ArrayList<>();
+                        block.getSubItems(block, block.getCreativeTab(), subItems);
+                        return getItemDamages.apply(block).mapToObj(meta -> new CustomWoodType(block.block, meta));
+                    } else {
+                        return Stream.of(new CustomWoodType(block.block, plank.getItemDamage()));
+                    }
+                })
+                .forEach(type -> woodTypes.put(type.getState(), type));
     }
 }
