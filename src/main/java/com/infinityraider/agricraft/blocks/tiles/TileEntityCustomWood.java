@@ -5,9 +5,9 @@ import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,8 +30,8 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
 	@SideOnly(Side.CLIENT)
-	public ResourceLocation getTexture() {
-		return woodType.getTexture();
+	public TextureAtlasSprite getIcon() {
+		return woodType.getIcon();
 	}
 
     @Override

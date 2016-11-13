@@ -6,13 +6,11 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -56,17 +54,11 @@ public class CustomWoodType {
     private final Block block;
     private final int meta;
     @SideOnly(Side.CLIENT)
-    private ResourceLocation texture;
+    private TextureAtlasSprite texture;
 
     private CustomWoodType(Block block, int meta) {
         this.block = block;
         this.meta = meta;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private CustomWoodType(Block block, int meta, ResourceLocation texture) {
-        this(block, meta);
-        this.texture = texture;
     }
 
     public Block getBlock() {
@@ -86,8 +78,17 @@ public class CustomWoodType {
     }
 
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getTexture() {
-        return texture;
+    public TextureAtlasSprite getIcon() {
+        try {
+            if (texture == null) {
+                IBlockState state = block.getStateFromMeta(meta);
+                texture = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+            }
+            return texture;
+        } catch (Exception e) {
+            AgriCore.getLogger("AgriCraft").trace(e);
+            return null;
+        }
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
@@ -157,28 +158,13 @@ public class CustomWoodType {
                 List<ItemStack> subItems = new ArrayList<>();
                 block.getSubItems(block, block.getCreativeTab(), subItems);
                 for (ItemStack subItem : subItems) {
-                    CustomWoodType type = new CustomWoodType(block.block, subItem.getItemDamage(), getTextureForBlockAndMeta(block.block, subItem.getItemDamage()));
+                    CustomWoodType type = new CustomWoodType(block.block, subItem.getItemDamage());
                     woodTypes.put(type.getState(), type);
                 }
             } else {
-                CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage(), getTextureForBlockAndMeta(block.block, plank.getItemDamage()));
+                CustomWoodType type = new CustomWoodType(block.block, plank.getItemDamage());
                 woodTypes.put(type.getState(), type);
             }
         });
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static ResourceLocation getTextureForBlockAndMeta(Block block, int meta) {
-        try {
-            IBlockState state = block.getStateFromMeta(meta);
-            ResourceLocation modelResourceLocation
-                    = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getBlockStateMapper().getVariants(block).get(state);
-            IModel model = ModelLoaderRegistry.getModel(modelResourceLocation);
-            Collection<ResourceLocation> locations = model.getTextures();
-            return (locations.size() > 0) ? locations.iterator().next() : null;
-        } catch (Exception e) {
-            AgriCore.getLogger("AgriCraft").trace(e);
-            return null;
-        }
     }
 }

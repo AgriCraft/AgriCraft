@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.renderers.blocks;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.IconHelper;
 
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -61,7 +60,7 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
         if (tile == null) {
             return BaseIcons.OAK_PLANKS.getIcon();
         }
-        return IconHelper.getIcon(tile.getTexture().toString());
+        return tile.getIcon();
     }
 
 }
