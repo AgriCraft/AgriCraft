@@ -34,14 +34,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 		return new TileEntityChannel();
 	}
 
-	@Override
-	public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
-		TileEntity te = iba.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityChannel) {
-			((TileEntityChannel) te).findNeighbours();
-		}
-	}
-
 	/**
 	 * Adds all intersecting collision boxes to a list. (Be sure to only add
 	 * boxes to the list if they intersect the mask.) Parameters: World, pos,

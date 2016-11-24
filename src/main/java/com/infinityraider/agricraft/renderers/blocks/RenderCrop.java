@@ -42,7 +42,7 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
 	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockCrop block,
 								 TileEntityCrop crop, boolean dynamicRender, float partialTick, int destroyStage) {
 
-		TextureAtlasSprite sprite = this.getIcon(TEXTURE);
+		TextureAtlasSprite sprite = RenderCrop.getIcon(TEXTURE);
 		tessellator.translate(0, -3 * Constants.UNIT, 0);
 		tessellator.drawScaledPrism(2, 0, 2, 3, 16, 3, sprite);
 		tessellator.drawScaledPrism(13, 0, 2, 14, 16, 3, sprite);

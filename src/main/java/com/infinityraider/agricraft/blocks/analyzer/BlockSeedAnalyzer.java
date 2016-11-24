@@ -111,8 +111,13 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	//rendering stuff
 	@Override
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.CUTOUT;
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
@@ -121,8 +126,13 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
+		return true;
 	}
+
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
 
 	@Override
 	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {

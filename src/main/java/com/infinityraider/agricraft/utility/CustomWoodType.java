@@ -90,6 +90,7 @@ public class CustomWoodType {
                 IBlockState state = block.getStateFromMeta(meta);
                 texture = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
             } catch (Exception e) {
+                AgriCore.getLogger("AgriCraft").debug("Unable to load texture for custom wood block {0}!", block.getLocalizedName());
                 AgriCore.getLogger("AgriCraft").trace(e);
                 texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
             }

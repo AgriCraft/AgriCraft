@@ -49,6 +49,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	private int lastFluidLevel = 0;
 	private int lastDiscreteFluidLevel = 0;
 	private MultiBlockPartData multiBlockData;
+    
 	/**
 	 * Main component cache is only used in the server thread because it's
 	 * accessed there very often
@@ -57,6 +58,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
 	@Override
 	protected void writeNBT(NBTTagCompound tag) {
+        this.getMultiBlockData().writeToNBT(tag);
 		if (this.fluidLevel > 0) {
 			tag.setInteger(AgriNBT.LEVEL, this.fluidLevel);
 		}
@@ -65,6 +67,9 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	@Override
 	protected void readNBT(NBTTagCompound tag) {
 		this.fluidLevel = tag.hasKey(AgriNBT.LEVEL) ? tag.getInteger(AgriNBT.LEVEL) : 0;
+        this.multiBlockData = new MultiBlockPartData(0, 0, 0, 1, 1, 1);
+        this.multiBlockData.readFromNBT(tag);
+        this.mainComponent = null;
 	}
 
 	//updates the tile entity every tick
@@ -154,6 +159,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	/**
 	 * Maps the current fluid LEVEL into the interval [0,
 	 * {@value #DISCRETE_MAX}]
+     * 
+     * @return The discrete fluid level.
 	 */
 	public int getDiscreteFluidLevel() {
 		IMultiBlockPartData data = getMultiBlockData();
@@ -209,14 +216,13 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	}
 
     public Connection getConnectionType(EnumFacing facing) {
-        if(this.hasNeighbour(facing)) {
-            return Connection.TANK;
-        }
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             return Connection.NONE;
+        } else if (this.hasNeighbour(facing)) {
+            return Connection.TANK;
         }
         TileEntity te = worldObj.getTileEntity(getPos().offset(facing));
-        if(te instanceof TileEntityChannel) {
+        if (te instanceof TileEntityChannel) {
             return ((TileEntityChannel) te).isSameMaterial(this) ? Connection.CHANNEL : Connection.NONE;
         }
         return Connection.NONE;
@@ -231,10 +237,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		return this.getFluidAmount(0) == 0;
 	}
 
-	/**
+	/*
 	 * IFluidHandler methods
-	 */
-	/**
 	 * ---------------------
 	 */
 	//try to fill the tank
@@ -288,18 +292,12 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		return info;
 	}
 
-	/**
+	/*
 	 * MultiBlock methods
-	 */
-	/**
 	 * ------------------
 	 */
 	@Override
 	public TileEntityTank getMainComponent() {
-		if (worldObj.isRemote) {
-			IMultiBlockPartData data = this.getMultiBlockData();
-			return (TileEntityTank) worldObj.getTileEntity(getPos().add(-data.posX(), -data.posY(), -data.posZ()));
-		}
 		if (this.mainComponent == null) {
 			IMultiBlockPartData data = this.getMultiBlockData();
 			this.mainComponent = (TileEntityTank) worldObj.getTileEntity(getPos().add(-data.posX(), -data.posY(), -data.posZ()));
@@ -395,10 +393,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		this.syncFluidLevel();
 	}
 
-	/**
+	/*
 	 * IDebuggable methods
-	 */
-	/**
 	 * -------------------
 	 */
 	//debug info
@@ -428,28 +424,15 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		list.add("  - MultiBlock Size: " + data.sizeX() + "x" + data.sizeY() + "x" + data.sizeZ());
 	}
 
-	/**
+	/*
 	 * Waila methods
-	 */
-	/**
 	 * -------------
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("unchecked")
 	public void addDisplayInfo(List information) {
 		super.addDisplayInfo(information);
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
-	}
-
-	public int getCode(EnumFacing dir) {
-		if(this.isConnectedToChannel(dir)) {
-			return 1;
-		} else if(this.hasNeighbour(dir)) {
-			return 2;
-		} else {
-			return 0;
-		}
 	}
 
 	public enum Connection implements IStringSerializable {
