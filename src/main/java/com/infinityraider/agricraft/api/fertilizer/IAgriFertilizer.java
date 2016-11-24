@@ -11,29 +11,50 @@ import net.minecraft.item.ItemStack;
 
 public interface IAgriFertilizer {
 
-	/**
-	 * return true if this fertilizer is allowed to speed up growth of a crop of
-	 * this tier
-	 */
-	boolean isFertilizerAllowed(int tier);
+    /**
+     * Returns true if this fertilizer is allowed to speed up growth of a crop
+     * of this tier.
+     *
+     * @param tier The tier of the plant for the fertilizer to be applied to.
+     *
+     * @return If the fertilizer is applicable to this tier of plants.
+     */
+    boolean isFertilizerAllowed(int tier);
 
-	/**
-	 * wether or not this mod can be used on a cross crop to trigger a mutation
-	 * (does not override configuration option)
-	 */
-	boolean canTriggerMutation();
+    /**
+     * Whether or not this mod can be used on a cross crop to trigger a mutation
+     * (does not override configuration option).
+     *
+     * @return If the fertilizer can trigger a mutation event.
+     */
+    boolean canTriggerMutation();
 
-	/**
-	 * this is called when the fertilizer is used on a crop, this only is called
-	 * if true is returned from hasSpecialBehaviour
-	 */
-	boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random);
+    /**
+     * This is called when the fertilizer is used on a crop, this only is called
+     * if true is returned from hasSpecialBehaviour.
+     *
+     * @param player The player that applied the fertilizer.
+     * @param world The world that the fertilizer was applied in.
+     * @param pos The location that the fertilizer was applied.
+     * @param target The fertilizable object to which the fertilizer was
+     * applied.
+     * @param stack The stack that the player was holding that triggered the
+     * fertilizer to be applied.
+     * @param random A random for use in generating probabilities.
+     *
+     * @return
+     */
+    boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random);
 
-	/**
-	 * this is called on the client when the fertilizer is applied, can be used
-	 * for particles or other visual effects
-	 */
-	@SideOnly(Side.CLIENT)
-	void performClientAnimations(int meta, World world, BlockPos pos);
+    /**
+     * Called on the client when the fertilizer is applied, can be used
+     * for particles or other visual effects.
+     *
+     * @param meta UNKNOWN!
+     * @param world The world that the fertilizer was applied in.
+     * @param pos The location at which the fertilizer was applied in the world.
+     */
+    @SideOnly(Side.CLIENT)
+    void performClientAnimations(int meta, World world, BlockPos pos);
 
 }

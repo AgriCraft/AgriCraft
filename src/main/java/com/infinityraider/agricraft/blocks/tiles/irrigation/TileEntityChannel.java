@@ -151,6 +151,9 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     /**
      * Only used for rendering
+     * 
+     * @param direction The direction to check for a neighbor in.
+     * @return If a neighbor is present in the given direction.
      */
     @SideOnly(Side.CLIENT)
     public boolean hasNeighbourCheck(EnumFacing direction) {
