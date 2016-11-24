@@ -19,14 +19,16 @@ import net.minecraft.world.World;
 public class AgriWorldHelper {
 	
 	public static final <T> Optional<T> getBlock(IBlockAccess world, BlockPos pos, Class<T> type) {
-        return Optional.ofNullable(world.getBlockState(pos))
+        return Optional.ofNullable(world)
+                .map(w -> w.getBlockState(pos))
                 .map(s -> s.getBlock())
                 .filter(b -> type.isAssignableFrom(b.getClass()))
                 .map(b -> type.cast(b));
 	}
 	
 	public static final <T> Optional<T> getTile(IBlockAccess world, BlockPos pos, Class<T> type) {
-        return Optional.ofNullable(world.getTileEntity(pos))
+        return Optional.ofNullable(world)
+                .map(w -> w.getTileEntity(pos))
                 .filter(te -> type.isAssignableFrom(te.getClass()))
                 .map(te -> type.cast(te));
 	}

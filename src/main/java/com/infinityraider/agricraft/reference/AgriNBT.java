@@ -24,7 +24,7 @@ public interface AgriNBT {
 	String META = "agri_meta";
 	String MATERIAL = "agri_material";
 	String MATERIAL_META = "agri_material_meta";
-	String IS_SPRINKLED = "agri_sprinkled";
+	String ACTIVE = "agri_sprinkled";
 	String POWER = "agri_power";
 	String INVENTORY = "agri_inventory";
 	String COUNT = "agri_count";

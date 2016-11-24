@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
@@ -50,7 +49,7 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
     public void renderDynamic(ITessellator tess, TileEntitySprinkler te) {
         tess.pushMatrix();
         tess.translate(0.5F, 0, 0.5F);
-        tess.rotate(te.angle, 0, 1, 0);
+        tess.rotate(te.getAngle(), 0, 1, 0);
         tess.translate(-0.5F, 0, -0.5F);
 
         final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
