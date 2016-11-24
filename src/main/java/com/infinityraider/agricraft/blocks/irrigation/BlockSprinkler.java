@@ -110,7 +110,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return false;
+		return true;
 	}
 
 	@Override

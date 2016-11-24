@@ -21,10 +21,10 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
 
@@ -182,18 +182,15 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getChannelIcon() {
 
+        // This would be odd...
 		if (this.getWorld() == null) {
 			return BaseIcons.OAK_PLANKS.getIcon();
 		}
-
-		TileEntity te = getWorld().getTileEntity(getPos().add(0, 1, 0));
-
-		if (te instanceof TileEntityChannel) {
-			//TODO: get channel icon
-			return null;
-		}
-
-		return BaseIcons.OAK_PLANKS.getIcon();
+        
+        return AgriWorldHelper
+                .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
+                .map(c -> c.getIcon())
+                .orElse(BaseIcons.OAK_PLANKS.getIcon());
 
 	}
 

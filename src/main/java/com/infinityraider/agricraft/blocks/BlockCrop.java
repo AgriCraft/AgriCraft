@@ -521,11 +521,25 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * Determines if a side of the block should be rendered, such as one flush
      * with a wall that wouldn't need rendering.
      *
+     * @param state
+     * @param world
+     * @param pos
+     * @param side
      * @return false - all of the crop's sides need to be rendered.
      */
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
+    }
+
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
     }
 
     /**
@@ -611,7 +625,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
     @Override
     public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
