@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.blocks.tiles.storage;
 
-import net.minecraft.item.Item;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ISeedStorageControllable {
     /**
@@ -64,7 +65,7 @@ public interface ISeedStorageControllable {
     /**
      * Sets the locked seed
      */
-    void setLockedSeed(Item seed, int meta);
+    boolean setLockedSeed(AgriSeed seed);
 
     /**
      * Clears the locked seed
@@ -74,7 +75,7 @@ public interface ISeedStorageControllable {
     /**
      * Returns the type of seed stored in this controllable
      */
-    ItemStack getLockedSeed();
+    Optional<AgriSeed> getLockedSeed();
 
     /**
      * Returns the id of this controllable in the controller, returns -1 if this doesn't have a controller

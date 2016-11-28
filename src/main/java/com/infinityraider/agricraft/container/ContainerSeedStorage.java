@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.container;
 
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -31,7 +32,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     }
 
     @Override
-    public List<SeedStorageSlot> getSeedSlots(Item seed, int meta) {
+    public List<SeedStorageSlot> getSeedSlots(AgriSeed seed) {
         return this.te.getSlots();
     }
 

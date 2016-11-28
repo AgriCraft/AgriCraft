@@ -46,8 +46,15 @@ public class AgriSeed {
 	}
 
 	public ItemStack toStack() {
-		ItemStack stack = this.plant.getSeed();
+		ItemStack stack = this.plant.getSeed().copy();
 		this.stat.writeToNBT(stack.getTagCompound());
+		return stack;
+	}
+    
+    public ItemStack toStack(int size) {
+		ItemStack stack = this.plant.getSeed().copy();
+		this.stat.writeToNBT(stack.getTagCompound());
+        stack.stackSize = size;
 		return stack;
 	}
 

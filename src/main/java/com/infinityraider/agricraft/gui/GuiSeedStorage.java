@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorage extends GuiSeedStorageBase {
+
     private static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiSeedStorage.png");
     private static final int sizeX = 237;
     private static final int sizeY = 131;
@@ -22,9 +23,8 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
         super(new ContainerSeedStorage(inventory, te), 0, 14, 170, 48, -1, -1, 5, 7);
         this.xSize = sizeX;
         this.ySize = sizeY;
-        if(te.hasLockedSeed()) {
-            this.activeSeed = te.getLockedSeed().getItem();
-            this.activeMeta = te.getLockedSeed().getItemDamage();
+        if (te.hasLockedSeed()) {
+            this.activeSeed = te.getLockedSeed().get();
         }
     }
 
@@ -40,7 +40,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        if(this.activeSeed!=null) {
+        if (this.activeSeed != null) {
             this.drawActiveEntries(texture, 6, 35);
         }
         drawScrollBarHorizontal(texture);
@@ -53,7 +53,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if(button.id == buttonIdScrollRight+1){
+        if (button.id == buttonIdScrollRight + 1) {
             new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
             this.updateScreen();
         } else {
