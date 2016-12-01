@@ -1,11 +1,14 @@
-package com.infinityraider.agricraft.gui;
+package com.infinityraider.agricraft.gui.storage;
 
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
+import com.infinityraider.agricraft.gui.component.BasicComponents;
+import java.util.Optional;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,45 +22,36 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
     private static final int sizeX = 237;
     private static final int sizeY = 131;
 
+    private final Optional<AgriSeed> activeSeed;
+
     public GuiSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
         super(new ContainerSeedStorage(inventory, te), 0, 14, 170, 48, -1, -1, 5, 7);
-        this.xSize = sizeX;
-        this.ySize = sizeY;
-        if (te.hasLockedSeed()) {
-            this.activeSeed = te.getLockedSeed().get();
-        }
+        this.activeSeed = te.getLockedSeed();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected void loadButtons() {
-        super.loadButtons();
-        this.buttonList.add(new GuiButton(buttonIdScrollRight + 1, this.guiLeft + 211, this.guiTop + 105, 18, 18, "X"));
+    protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
+        this.clearComponents();
+        this.clearBackgrounds();
+        this.addComponent(BasicComponents.getButtonComponent("X", 211, 105, 18, 18, (c, p) -> clearSeed()));
+        this.addBackground(texture);
     }
 
+    /*
     @Override
-    protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
+    public void onRenderBackground(AgriGuiWrapper wrapper, float f, int relMouseX, int relMouseY) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+        wrapper.drawTexturedModalRect(0, 0, 0, 0, this.getWidth(), this.getHeight());
         if (this.activeSeed != null) {
-            this.drawActiveEntries(texture, 6, 35);
+            this.drawActiveEntries(wrapper, texture, 6, 35);
         }
-        drawScrollBarHorizontal(texture);
+        this.drawScrollBarHorizontal(wrapper, texture);
     }
-
-    @Override
-    public void drawGuiContainerForegroundLayer(int x, int y) {
-        this.drawTooltip(x, y);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == buttonIdScrollRight + 1) {
-            new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
-            this.updateScreen();
-        } else {
-            super.actionPerformed(button);
-        }
+     */
+    private final boolean clearSeed() {
+        new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
+        //this.updateScreen();
+        return true;
     }
 }

@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.gui.component;
 
-import com.infinityraider.agricraft.gui.GuiBase;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
- * 
+ *
  */
 @SideOnly(Side.CLIENT)
 public class GuiComponent<C> {
@@ -30,13 +30,13 @@ public class GuiComponent<C> {
     private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction;
     private BiConsumer<GuiComponent<C>, Point> mouseEnterAction;
     private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction;
-    private BiConsumer<GuiBase, GuiComponent<C>> renderAction;
+    private BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction;
 
     private boolean isVisible;
     private boolean isEnabled;
     private boolean isHovered = false;
 
-    public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centered, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+    public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centered, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
         this.component = component;
         this.bounds = bounds;
         this.uv = uv;
@@ -107,7 +107,7 @@ public class GuiComponent<C> {
         this.mouseLeaveAction = mouseLeaveAction;
     }
 
-    public void setRenderAction(BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+    public void setRenderAction(BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
         this.renderAction = renderAction;
     }
 
@@ -115,19 +115,18 @@ public class GuiComponent<C> {
         return this.getBounds().contains(x, y);
     }
 
-    public final boolean onClick(int x, int y) {
+    public final boolean onClick(int x, int y, int mouseButton) {
         return this.isEnabled && this.mouseClickAction != null && this.mouseClickAction.apply(this, relativize(x, y));
     }
 
     public final void onMouseMove(int x, int y) {
         if (this.isEnabled) {
-            final boolean over = contains(x, y);
-            if (over) {
-                if (!isHovered()) {
+            if (contains(x, y)) {
+                if (!this.isHovered) {
                     this.isHovered = true;
                     this.onMouseEnter(x, y);
                 }
-            } else if (isHovered()) {
+            } else if (this.isHovered) {
                 this.isHovered = false;
                 this.onMouseLeave(x, y);
             }
@@ -152,7 +151,7 @@ public class GuiComponent<C> {
         }
     }
 
-    public final void renderComponent(GuiBase gui) {
+    public final void renderComponent(AgriGuiWrapper gui) {
         if (this.isVisible && this.renderAction != null) {
             GlStateManager.pushAttrib();
             GlStateManager.pushMatrix();

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.gui.journal;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.items.ItemJournal;
 import net.minecraft.client.Minecraft;
@@ -10,15 +11,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.renderer.GlStateManager;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.gui.GuiBase;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
+import com.infinityraider.agricraft.gui.ComponentGui;
 import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
 
 @SideOnly(Side.CLIENT)
-public class GuiJournal extends GuiBase {
+public class GuiJournal extends ComponentGui {
+
+    public static final int PAGE_WIDTH = 256;
+    public static final int PAGE_HEIGHT = 192;
 
     public static final ResourceLocation LEFT_ARROW = new ResourceLocation("agricraft:textures/gui/journal/arrow_left.png");
     public static final ResourceLocation RIGHT_ARROW = new ResourceLocation("agricraft:textures/gui/journal/arrow_right.png");
@@ -27,12 +31,6 @@ public class GuiJournal extends GuiBase {
      * Some dimensions and constants
      */
     private static final int MINIMUM_PAGES = 2;
-
-    private final int xSize;
-    private final int ySize;
-
-    private int guiLeft;
-    private int guiTop;
 
     /**
      * Current page
@@ -43,74 +41,22 @@ public class GuiJournal extends GuiBase {
     /**
      * Stuff to render
      */
-    List<GuiComponent> components = new ArrayList<>();
-
     private final ItemStack journal;
 
     public GuiJournal(ItemStack journal) {
-        super();
+        super(PAGE_WIDTH, PAGE_HEIGHT, FAKE_CONTAINER);
         this.journal = journal;
-        int pageWidth = 128;
-        this.xSize = pageWidth * 2;
-        this.ySize = pageWidth * 3 / 2;
     }
 
     @Override
-    public void initGui() {
-        //half of the screen size minus the gui size to centre the gui, the -16 is to ignore the players item bar
-        this.guiLeft = (this.width - this.xSize) / 2;
-        this.guiTop = (this.height - 16 - this.ySize) / 2;
-        currentPage = getCurrentPage();
-        this.components = new ArrayList<>();
-        addNavArrows(components);
-        currentPage.addComponents(components);
-    }
-
-    @Override
-    public int getAnchorX() {
-        return this.guiLeft;
-    }
-
-    @Override
-    public int getAnchorY() {
-        return this.guiTop;
-    }
-
-    @Override
-    public void drawScreen(int x, int y, float opacity) {
-        //draw background
-        drawBackground(0);
-        //draw foreground
-        drawTexture(currentPage.getForeground());
-        //draw tooltip
-        final int mouseX = x - this.guiLeft;
-        final int mouseY = y - this.guiTop;
-        // Update Mouse
-        this.components.forEach(c -> c.onMouseMove(mouseX, mouseY));
-        List<String> toolTip = new ArrayList<>();
-        GlStateManager.pushAttrib();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(this.guiLeft, this.guiTop, 0);
-        components.stream()
-                // Render Components
-                .peek(c -> c.renderComponent(this))
-                // Filter ToolTips
-                .filter(c -> c.contains(mouseX, mouseY))
-                // Add ToolTips
-                .forEach(c -> c.addToolTip(toolTip, Minecraft.getMinecraft().thePlayer));
-        currentPage.addTooltip(mouseX, mouseY, toolTip);
-        drawHoveringText(toolTip, mouseX, mouseY, fontRendererObj);
-        GlStateManager.popMatrix();
-        GlStateManager.popAttrib();
-    }
-
-    @Override
-    public void mouseClicked(int x, int y, int rightClick) {
-        final int mouseX = x - this.guiLeft;
-        final int mouseY = y - this.guiTop;
-        this.components.stream()
-                .filter(c -> c.contains(mouseX, mouseY))
-                .anyMatch(c -> c.onClick(mouseX, mouseY));
+    protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
+        this.clearComponents();
+        this.clearBackgrounds();
+        this.currentPage = getCurrentPage();
+        this.addBackground(JournalPage.BACKGROUND);
+        this.addBackground(this.currentPage.getForeground());
+        this.addComponents(this.currentPage.getComponents());
+        this.addNavArrows();
     }
 
     private JournalPage getCurrentPage() {
@@ -135,20 +81,7 @@ public class GuiJournal extends GuiBase {
         return MINIMUM_PAGES + getDiscoveredSeeds().size();
     }
 
-    @Override
-    public void drawBackground(int i) {
-        this.drawTexture(JournalPage.getBackground());
-    }
-
-    private void drawTexture(ResourceLocation texture) {
-        GlStateManager.pushAttrib();
-        GlStateManager.color(1, 1, 1, 1);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        GlStateManager.popAttrib();
-    }
-
-    private void addNavArrows(List<GuiComponent> components) {
+    private void addNavArrows() {
         GuiComponent leftArrow = new GuiComponentBuilder<>(LEFT_ARROW, 1, 170, 32, 32)
                 .setRenderAction(ComponentRenderer::renderIconComponent)
                 .setMouseEnterAction((c, p) -> c.setVisable(this.currentPageNumber > 0))
@@ -163,8 +96,8 @@ public class GuiJournal extends GuiBase {
                 .setMouseClickAction((c, p) -> incPage(1))
                 .setVisable(false)
                 .build();
-        components.add(leftArrow);
-        components.add(rightArrow);
+        this.addComponent(leftArrow);
+        this.addComponent(rightArrow);
     }
 
     public boolean switchPage(IAgriPlant plant) {
@@ -178,13 +111,8 @@ public class GuiJournal extends GuiBase {
 
     public boolean setPage(int page) {
         this.currentPageNumber = MathHelper.inRange(page, 0, this.getNumberOfPages() - 1);
-        this.initGui();
+        this.onComponentGuiInit(null);
         return true;
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 
 }

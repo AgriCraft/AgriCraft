@@ -2,7 +2,10 @@
  */
 package com.infinityraider.agricraft.gui.component;
 
+import com.agricraft.agricore.core.AgriCore;
+import java.awt.Point;
 import java.util.List;
+import java.util.function.BiFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +28,13 @@ public class BasicComponents {
 				.setScale(scale)
 				.setCentered(centered)
 				.setRenderAction(ComponentRenderer::renderComponentText)
+				.build();
+	}
+    
+    public static GuiComponent<String> getButtonComponent(String string, int x, int y, int u, int v, BiFunction<GuiComponent<String>, Point, Boolean> onClick) {
+		return new GuiComponentBuilder<>(AgriCore.getTranslator().translate(string), x, y, u, v)
+				.setRenderAction(ComponentRenderer::renderComponentButton)
+                .setMouseClickAction(onClick)
 				.build();
 	}
 

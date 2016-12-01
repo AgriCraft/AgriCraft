@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 

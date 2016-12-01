@@ -24,7 +24,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     public TileEntitySeedAnalyzer seedAnalyzer;
 
     private boolean journalOpen;
-    private GuiJournal guiJournal;
+    private AgriGuiWrapper guiJournal;
 
     public GuiSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
         super(new ContainerSeedAnalyzer(inventory, seedAnalyzer));
@@ -81,7 +81,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
         ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
         if(journal != null) {
             journalOpen = true;
-            guiJournal = new GuiJournal(journal);
+            guiJournal = new AgriGuiWrapper(new GuiJournal(journal));
             guiJournal.setWorldAndResolution(this.mc, this.width, this.height);
         }
     }

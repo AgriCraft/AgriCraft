@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.gui.component;
 
-import com.infinityraider.agricraft.gui.GuiBase;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
@@ -23,7 +23,7 @@ public class GuiComponentBuilder<C> {
 	private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction = null;
 	private BiConsumer<GuiComponent<C>, Point> mouseEnterAction = null;
 	private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction = null;
-	private BiConsumer<GuiBase, GuiComponent<C>> renderAction = null;
+	private BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction = null;
 
 	public GuiComponentBuilder(C component, int x, int y, int width, int height) {
 		this.component = component;
@@ -75,7 +75,7 @@ public class GuiComponentBuilder<C> {
 		return this;
 	}
 
-	public GuiComponentBuilder<C> setRenderAction(BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+	public GuiComponentBuilder<C> setRenderAction(BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
 		this.renderAction = renderAction;
 		return this;
 	}
