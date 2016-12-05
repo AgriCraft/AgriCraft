@@ -30,6 +30,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
     protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
         super.onComponentGuiInit(wrapper);
         this.addComponent(BasicComponents.getButtonComponent("X", 211, 105, 18, 18, (c, p) -> clearSeed()));
+        this.addComponent(BasicComponents.getProgressBarComponent(50, 10, 10, 50, 5));
         this.clearBackgrounds();
         this.addBackground(texture);
     }

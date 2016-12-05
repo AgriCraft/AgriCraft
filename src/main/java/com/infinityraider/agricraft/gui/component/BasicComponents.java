@@ -31,12 +31,18 @@ public class BasicComponents {
 				.build();
 	}
     
-    public static GuiComponent<String> getButtonComponent(String string, int x, int y, int u, int v, BiFunction<GuiComponent<String>, Point, Boolean> onClick) {
-		return new GuiComponentBuilder<>(AgriCore.getTranslator().translate(string), x, y, u, v)
+    public static GuiComponent<String> getButtonComponent(String string, int x, int y, int width, int height, BiFunction<GuiComponent<String>, Point, Boolean> onClick) {
+		return new GuiComponentBuilder<>(AgriCore.getTranslator().translate(string), x, y, width, height)
 				.setRenderAction(ComponentRenderer::renderComponentButton)
                 .setMouseClickAction(onClick)
                 .setCenteredHorizontally(true)
                 .setCenteredVertically(true)
+				.build();
+	}
+    
+    public static GuiComponent<Integer> getProgressBarComponent(int progress, int x, int y, int width, int height) {
+		return new GuiComponentBuilder<>(progress, x, y, width, height)
+				.setRenderAction(ComponentRenderer::renderComponentProgressBar)
 				.build();
 	}
 

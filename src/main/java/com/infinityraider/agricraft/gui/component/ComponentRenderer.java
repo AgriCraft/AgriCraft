@@ -41,6 +41,14 @@ public final class ComponentRenderer {
 		);
 	}
     
+    public static void renderComponentProgressBar(AgriGuiWrapper gui, GuiComponent<Integer> component) {
+        final int width = component.getBounds().width;
+        final int height = component.getBounds().height;
+        final double progress = component.getComponent();
+        GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 100, 25, width, height, 16, 16, 2, 0);
+        GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 125, 25, (int) ((width * progress) / 100), height, 16, 16, 2, 0);
+    }
+    
     public static void renderComponentButton(AgriGuiWrapper gui, GuiComponent<String> component) {
         GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 0, 46 + getButtonNumber(component) * 20, component.getBounds().width, component.getBounds().height, 200, 20, 2, 3, 2, 2, 0);
         ComponentRenderer.renderComponentText(gui, component, getTextColor(component), true);
