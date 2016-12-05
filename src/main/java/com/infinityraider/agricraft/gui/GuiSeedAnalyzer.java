@@ -66,8 +66,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
     @Override
     public void drawScreen(int x, int y, float opacity) {
         if(journalOpen) {
-            guiJournal.initGui();
-            guiJournal.drawScreen(x, y, 0);
+            guiJournal.drawScreen(x, y, opacity);
         } else {
             super.drawScreen(x, y, opacity);
         }
@@ -83,6 +82,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
             journalOpen = true;
             guiJournal = new AgriGuiWrapper(new GuiJournal(journal));
             guiJournal.setWorldAndResolution(this.mc, this.width, this.height);
+            guiJournal.initGui();
         }
     }
 
@@ -92,6 +92,7 @@ public class GuiSeedAnalyzer extends GuiContainer {
             if (number == 1 || number == this.mc.gameSettings.keyBindInventory.getKeyCode())  {
                 this.journalOpen = false;
                 this.guiJournal = null;
+                this.initGui();
             }
             else {
                 super.keyTyped(key, number);

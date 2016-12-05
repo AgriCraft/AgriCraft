@@ -22,6 +22,8 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
     private List<GuiComponent> components;
     private List<ResourceLocation> backgrounds;
     private final T container;
+    private int lastMouseX;
+    private int lastMouseY;
 
     public ComponentGui(int width, int height, T container) {
         this.width = width;
@@ -29,6 +31,8 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
         this.components = new ArrayList<>();
         this.backgrounds = new ArrayList<>();
         this.container = container;
+        this.lastMouseX = -1;
+        this.lastMouseY = -1;
     }
 
     @Override
@@ -44,6 +48,11 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
     @Override
     public final T getContainer() {
         return this.container;
+    }
+
+    public final void resetMouse() {
+        this.lastMouseX = -1;
+        this.lastMouseY = -1;
     }
 
     public final synchronized List<GuiComponent> getComponents() {
@@ -96,7 +105,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
 
     @Override
     public final synchronized void onGuiInit(AgriGuiWrapper wrapper) {
-        wrapper.resetPrevMousePos();
+        this.resetMouse();
         this.onComponentGuiInit(wrapper);
     }
 
@@ -135,17 +144,21 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
     public final synchronized void onMouseClicked(AgriGuiWrapper wrapper, int relMouseX, int relMouseY, int mouseButton) {
         this.components
                 .stream()
-                //.filter(c -> c.isEnabled())
+                .filter(c -> c.isEnabled())
                 .filter(c -> c.contains(relMouseX, relMouseY))
                 .anyMatch(c -> c.onClick(relMouseX, relMouseY, mouseButton));
     }
 
     @Override
-    public final synchronized void onMouseMoved(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY, int prevMouseX, int prevMouseY) {
-        this.components
-                .stream()
-                //.filter(c -> c.isEnabled())
-                .forEach(c -> c.onMouseMove(relMouseX, relMouseY));
+    public final synchronized void onUpdateMouse(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
+        if (this.lastMouseX != relMouseX || this.lastMouseY != relMouseY) {
+            this.components
+                    .stream()
+                    .filter(c -> c.isEnabled())
+                    .forEach(c -> c.onMouseMove(relMouseX, relMouseY));
+            this.lastMouseX = relMouseX;
+            this.lastMouseY = relMouseY;
+        }
     }
 
 }

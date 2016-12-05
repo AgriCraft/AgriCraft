@@ -1,9 +1,7 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.items.ItemJournal;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -111,7 +109,7 @@ public class GuiJournal extends ComponentGui {
 
     public boolean setPage(int page) {
         this.currentPageNumber = MathHelper.inRange(page, 0, this.getNumberOfPages() - 1);
-        this.onComponentGuiInit(null);
+        this.onGuiInit(null);
         return true;
     }
 

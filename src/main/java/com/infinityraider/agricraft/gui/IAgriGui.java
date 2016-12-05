@@ -31,10 +31,13 @@ public interface IAgriGui<T extends Container> {
     default void onGuiInit(AgriGuiWrapper wrapper) {
     }
 
-    default void onMouseMoved(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY, int prevMouseX, int prevMouseY) {
+    default void onUpdateMouse(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
     }
     
     default void onMouseClicked(AgriGuiWrapper wrapper, int relMouseX, int relMouseY, int mouseButton) {
+    }
+    
+    default void onMouseClickMove(AgriGuiWrapper wrapper, int relMouseX, int relMouseY, int mouseButton) {
     }
 
     default void onRenderForeground(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {

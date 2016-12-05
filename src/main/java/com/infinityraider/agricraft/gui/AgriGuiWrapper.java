@@ -17,15 +17,11 @@ public final class AgriGuiWrapper extends GuiContainer {
 
     private final IAgriGui gui;
 
-    private int prevMouseX;
-    private int prevMouseY;
-
     public AgriGuiWrapper(IAgriGui gui) {
         super(gui.getContainer());
         this.gui = gui;
-        this.setGuiSize(gui.getWidth(), gui.getHeight());
-        this.prevMouseX = -1;
-        this.prevMouseY = -1;
+        this.xSize = gui.getWidth();
+        this.ySize = gui.getHeight();
     }
 
     public IAgriGui getGui() {
@@ -38,11 +34,6 @@ public final class AgriGuiWrapper extends GuiContainer {
 
     public final RenderItem getItemRender() {
         return itemRender;
-    }
-    
-    public final void resetPrevMousePos() {
-        this.prevMouseX = -1;
-        this.prevMouseY = -1;
     }
 
     @Override
@@ -60,13 +51,8 @@ public final class AgriGuiWrapper extends GuiContainer {
         // Setup tooltip list.
         final List<String> toolTips = new ArrayList<>();
 
-        // If mouse has moved notify components, and update last mouse position.
-        if (this.prevMouseX != relMouseX || this.prevMouseY != relMouseY) {
-            // Call Mouse Moved Hook.
-            this.gui.onMouseMoved(this, toolTips, relMouseX, relMouseY, prevMouseX, prevMouseY);
-            this.prevMouseX = relMouseX;
-            this.prevMouseY = relMouseY;
-        }
+        // Call Mouse Moved Hook.
+        this.gui.onUpdateMouse(this, toolTips, relMouseX, relMouseY);
 
         // Save renderer state.
         GlStateManager.pushAttrib();
@@ -125,10 +111,16 @@ public final class AgriGuiWrapper extends GuiContainer {
     }
 
     @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        // Call mouse drag hook
+        this.gui.onMouseClickMove(this, mouseX, mouseY, mouseY);
+    }
+
+    @Override
     public void drawHoveringText(List<String> lines, int x, int y) {
         super.drawHoveringText(lines, x, y);
     }
-    
+
     public void drawRectangle(int x, int y, int width, int height, int color) {
         this.drawVerticalLine(x, y, y + height, color);
         this.drawHorizontalLine(x, x + width, y, color);

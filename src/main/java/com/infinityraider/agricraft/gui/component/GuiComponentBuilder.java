@@ -16,7 +16,8 @@ public class GuiComponentBuilder<C> {
 	private final Rectangle bounds;
 	private Rectangle uv = new Rectangle(0, 0, 16, 16);
 	private double scale = 1;
-	private boolean centered = false;
+	private boolean centeredHorizontally = false;
+	private boolean centeredVertically = false;
 	private boolean visible = true;
 	private boolean enabled = true;
 	private BiConsumer<GuiComponent<C>, List<String>> tootipAdder = null;
@@ -40,8 +41,13 @@ public class GuiComponentBuilder<C> {
 		return this;
 	}
 
-	public GuiComponentBuilder<C> setCentered(boolean centered) {
-		this.centered = centered;
+	public GuiComponentBuilder<C> setCenteredHorizontally(boolean centeredHorizontally) {
+		this.centeredHorizontally = centeredHorizontally;
+		return this;
+	}
+    
+    public GuiComponentBuilder<C> setCenteredVertically(boolean centeredVertically) {
+		this.centeredVertically = centeredVertically;
 		return this;
 	}
 	
@@ -81,7 +87,7 @@ public class GuiComponentBuilder<C> {
 	}
 
 	public GuiComponent<C> build() {
-		return new GuiComponent<>(component, bounds, uv, scale, centered, visible, enabled, tootipAdder, mouseClickAction, mouseEnterAction, mouseLeaveAction, renderAction);
+		return new GuiComponent<>(component, bounds, uv, scale, centeredHorizontally, centeredVertically, visible, enabled, tootipAdder, mouseClickAction, mouseEnterAction, mouseLeaveAction, renderAction);
 	}
 	
 }

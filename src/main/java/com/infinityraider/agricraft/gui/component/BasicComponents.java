@@ -26,7 +26,7 @@ public class BasicComponents {
 	public static GuiComponent<String> getTextComponent(String string, int x, int y, double scale, boolean centered) {
 		return new GuiComponentBuilder<>(string, x, y, 0, 0)
 				.setScale(scale)
-				.setCentered(centered)
+				.setCenteredHorizontally(centered)
 				.setRenderAction(ComponentRenderer::renderComponentText)
 				.build();
 	}
@@ -35,6 +35,8 @@ public class BasicComponents {
 		return new GuiComponentBuilder<>(AgriCore.getTranslator().translate(string), x, y, u, v)
 				.setRenderAction(ComponentRenderer::renderComponentButton)
                 .setMouseClickAction(onClick)
+                .setCenteredHorizontally(true)
+                .setCenteredVertically(true)
 				.build();
 	}
 

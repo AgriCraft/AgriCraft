@@ -24,7 +24,8 @@ public class GuiComponent<C> {
     private final Rectangle bounds;
     private final Rectangle uv;
     private final double scale;
-    private final boolean centered;
+    private final boolean centeredHorizontally;
+    private final boolean centeredVertically;
 
     private BiConsumer<GuiComponent<C>, List<String>> tootipAdder;
     private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction;
@@ -32,16 +33,17 @@ public class GuiComponent<C> {
     private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction;
     private BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction;
 
-    private boolean isVisible;
-    private boolean isEnabled;
+    private boolean isVisible = true;
+    private boolean isEnabled = true;
     private boolean isHovered = false;
 
-    public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centered, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
+    public GuiComponent(C component, Rectangle bounds, Rectangle uv, double scale, boolean centeredHorizontally, boolean centeredVertically, boolean visable, boolean enabled, BiConsumer<GuiComponent<C>, List<String>> tootipAdder, BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction, BiConsumer<GuiComponent<C>, Point> mouseEnterAction, BiConsumer<GuiComponent<C>, Point> mouseLeaveAction, BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
         this.component = component;
         this.bounds = bounds;
         this.uv = uv;
         this.scale = scale;
-        this.centered = centered;
+        this.centeredHorizontally = centeredHorizontally;
+        this.centeredVertically = centeredVertically;
         this.isVisible = visable;
         this.isEnabled = enabled;
         this.tootipAdder = tootipAdder;
@@ -67,8 +69,12 @@ public class GuiComponent<C> {
         return scale;
     }
 
-    public final boolean isCentered() {
-        return centered;
+    public final boolean isCenteredHorizontally() {
+        return centeredHorizontally;
+    }
+
+    public boolean isCenteredVertically() {
+        return centeredVertically;
     }
 
     public final boolean isHovered() {

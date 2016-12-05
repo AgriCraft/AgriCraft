@@ -13,14 +13,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeedStorage extends GuiSeedStorageBase {
 
     private static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiSeedStorage.png");
-    private static final int sizeX = 237;
-    private static final int sizeY = 131;
 
     private final Optional<AgriSeed> activeSeed;
 
@@ -31,9 +28,9 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
 
     @Override
     protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
-        this.clearComponents();
-        this.clearBackgrounds();
+        super.onComponentGuiInit(wrapper);
         this.addComponent(BasicComponents.getButtonComponent("X", 211, 105, 18, 18, (c, p) -> clearSeed()));
+        this.clearBackgrounds();
         this.addBackground(texture);
     }
 

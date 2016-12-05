@@ -5,9 +5,6 @@ import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +30,7 @@ import javax.annotation.Nonnull;
 @SideOnly(Side.CLIENT)
 public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStorageBase> {
 
-    // Button Dimensions
+    // Button Dimensionss
     public static final int BUTTON_WIDTH = 60;
     public static final int BUTTON_HEIGHT = 12;
 
@@ -58,7 +55,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     private String sortMethod = "growth";
 
     public GuiSeedStorageBase(ContainerSeedStorageBase container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
-        super(176, 166, container);
+        super(237, 131, container);
         this.maxVertSlots = maxVertSlots;
         this.maxHorSlots = maxHorSlots;
         this.sortButtonX = sortButtonX;
@@ -95,7 +92,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     }
 
     private int calcSortY(int index) {
-        return sortButtonY + index + index * BUTTON_WIDTH;
+        return sortButtonY + index + (index * BUTTON_HEIGHT);
     }
     
     private boolean setSortMethod(String method) {
