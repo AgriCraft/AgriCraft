@@ -46,7 +46,7 @@ repositories {
 		name "JEI"
 		url "http://dvs1.progwml6.com/files/maven"
 	}
-	 maven { 
+	 maven {
 		name "OpenComputers"
 		url  "http://maven.cil.li/"
 	}
@@ -73,6 +73,15 @@ task mainJavadoc(type: Javadoc) {
 	title = "AgriCraft ${mod.version} Documentation"
 	destinationDir = file("${project.docsDir}/mainJavadoc")
 	failOnError = false
+}
+
+// Jar Task
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
 }
 
 task apiJavadoc(type: Javadoc) {
