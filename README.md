@@ -10,7 +10,7 @@ AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 
 | Version  | Notes
 |----------|:----------
-|![1.7.10] | One more release to end the 1.7.10 chapter will be done, fixing all bugs from the previous version.
+|![1.7.10] | No more work will be done on 1.7.10 by me ([InfinityRaider](https://github.com/InfinityRaider)) or [RlonRyan](https://github.com/InfinityRaider/AgriCraft/commits/master?author=RlonRyan), if you want to maintain 1.7.10, contact us on Discord
 |![1.8.9]   | The 1.8.9 branch was highly experimental and the rendering is one big hack. Don't expect anything.
 |![1.9]    | Skipped 1.9, as it was an incredibly short-lived release.
 |![1.10]   | Port in progress.
