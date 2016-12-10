@@ -80,6 +80,11 @@ jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)){
             exclude 'META-INF', 'META-INF/**'
+            exclude 'com/google', 'com/google/**'
+            exclude 'net/jcip', 'net/jcip/**'
+            exclude 'edu/umd', 'edu/umd/**'
+            exclude 'javassist', 'javassist/**'
+            exclude 'javax/annotation', 'javax/annotation/**'
         }
     }
 }

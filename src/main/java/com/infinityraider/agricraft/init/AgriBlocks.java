@@ -32,7 +32,7 @@ public class AgriBlocks {
 		CHANNEL_FULL = new BlockWaterChannelFull();
 		CHANNEL_VALVE = new BlockWaterChannelValve();
 		SPRINKLER = new BlockSprinkler();
-		SEED_STORAGE = new BlockSeedStorage();
+		//SEED_STORAGE = new BlockSeedStorage();
 		FENCE = new BlockFence();
 		FENCE_GATE= new BlockFenceGate();
 		GRATE = new BlockGrate();
@@ -56,7 +56,7 @@ public class AgriBlocks {
 	public final BlockBase SPRINKLER;
 	
 	// Seed Storage
-	public final BlockBase SEED_STORAGE;
+	//public final BlockBase SEED_STORAGE;
 	//public static final BlockBase SEED_STORAGE_CONTROLLER = new BlockSeedStorageController();
 	
 	// Decoration

@@ -118,9 +118,9 @@ public class AgriRecipes {
 			registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL, 4, false, channelFull);
 			registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL_VALVE, 1, false, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Blocks.LEVER, 1), channel);
 		}
-		if (!AgriCraftConfig.disableSeedStorage) {
+		/*if (!AgriCraftConfig.disableSeedStorage) {
 			registerCustomWoodRecipe(AgriBlocks.getInstance().SEED_STORAGE, 1, true, "wiw", "wcw", "wcw", 'w', REFERENCE, 'i', Items.IRON_INGOT, 'c', Blocks.CHEST);
-		}
+		}*/
 		if (AgriCraftConfig.enableFences) {
 			ItemStack fence = new ItemStack(AgriBlocks.getInstance().FENCE, 1);
 			registerCustomWoodRecipe(AgriBlocks.getInstance().FENCE, 8, true, "fff", "fwf", "fff", 'w', REFERENCE, 'f', Blocks.OAK_FENCE);
