@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
 /**
  * Class representing possible custom wood types.
@@ -157,8 +159,6 @@ public class CustomWoodType {
                 .flatMap(plank -> {
                     ItemBlock block = ((ItemBlock) plank.getItem());
                     if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                        List<ItemStack> subItems = new ArrayList<>();
-                        block.getSubItems(block, block.getCreativeTab(), subItems);
                         return getItemDamages.apply(block).mapToObj(meta -> new CustomWoodType(block.block, meta));
                     } else {
                         return Stream.of(new CustomWoodType(block.block, plank.getItemDamage()));

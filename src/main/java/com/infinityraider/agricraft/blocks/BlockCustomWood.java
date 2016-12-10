@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
@@ -32,147 +33,142 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends BlockTileCustomRenderedBase<T> {
-	public BlockCustomWood(String internalName) {
-		super(internalName, Material.WOOD);
-		this.setHardness(2.0F);
-		this.setResistance(5.0F);
-		setHarvestLevel("axe", 0);
-		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-		this.setSoundType(SoundType.WOOD);
-	}
 
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityCustomWood) {
-			TileEntityCustomWood tileEntity = (TileEntityCustomWood) te;
-			tileEntity.setMaterial(stack);
-		}
-		super.onBlockPlacedBy(world, pos, state, placer, stack);
-	}
+    public BlockCustomWood(String internalName) {
+        super(internalName, Material.WOOD);
+        this.setHardness(2.0F);
+        this.setResistance(5.0F);
+        setHarvestLevel("axe", 0);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+        this.setSoundType(SoundType.WOOD);
+    }
 
-	//override this to delay the removal of the tile entity until after harvestBlock() has been called
-	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
-	}
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && te instanceof TileEntityCustomWood) {
+            TileEntityCustomWood tileEntity = (TileEntityCustomWood) te;
+            tileEntity.setMaterial(stack);
+        }
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+    }
 
-	//when the block is harvested
-	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
-		if ((!world.isRemote) && (!player.isSneaking())) {
-			if (!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
-				this.dropBlockAsItem(world, pos, state, 0);
-			}
-			world.setBlockToAir(pos);
-		}
-	}
+    //override this to delay the removal of the tile entity until after harvestBlock() has been called
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        return !player.capabilities.isCreativeMode || super.removedByPlayer(state, world, pos, player, willHarvest);
+    }
 
-	@Override
-	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
-		if (!world.isRemote) {
-			List<ItemStack> drops = this.getDrops(world, pos, state, fortune);
-			for (ItemStack drop : drops) {
-				spawnAsEntity(world, pos, drop);
-			}
-		}
-	}
+    //when the block is harvested
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+        if ((!world.isRemote) && (!player.isSneaking())) {
+            if (!player.capabilities.isCreativeMode) {       //drop items if the player is not in creative
+                this.dropBlockAsItem(world, pos, state, 0);
+            }
+            world.setBlockToAir(pos);
+        }
+    }
 
-	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<>();
-		ItemStack drop = new ItemStack(this, 1);
-		this.setTag(world, pos, drop);
-		drops.add(drop);
-		return drops;
-	}
+    @Override
+    public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
+        if (!world.isRemote) {
+            List<ItemStack> drops = this.getDrops(world, pos, state, fortune);
+            for (ItemStack drop : drops) {
+                spawnAsEntity(world, pos, drop);
+            }
+        }
+    }
 
-	//creative item picking
-	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		ItemStack stack = new ItemStack(this, 1, state.getBlock().getMetaFromState(state));
-		this.setTag(world, pos, stack);
-		return stack;
-	}
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        ArrayList<ItemStack> drops = new ArrayList<>();
+        ItemStack drop = new ItemStack(this, 1);
+        this.setTag(world, pos, drop);
+        drops.add(drop);
+        return drops;
+    }
 
-	//prevent block from being removed by leaves
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return false;
-	}
+    //creative item picking
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        ItemStack stack = new ItemStack(this, 1, state.getBlock().getMetaFromState(state));
+        this.setTag(world, pos, stack);
+        return stack;
+    }
 
-	protected void setTag(IBlockAccess world, BlockPos pos, ItemStack stack) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityCustomWood) {
-			TileEntityCustomWood tile = (TileEntityCustomWood) te;
-			stack.setTagCompound(tile.getMaterialTag());
-		}
-	}
+    //prevent block from being removed by leaves
+    @Override
+    public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return false;
+    }
+
+    protected void setTag(IBlockAccess world, BlockPos pos, ItemStack stack) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && te instanceof TileEntityCustomWood) {
+            TileEntityCustomWood tile = (TileEntityCustomWood) te;
+            stack.setTagCompound(tile.getMaterialTag());
+        }
+    }
 
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }           //tells minecraft that this is not a block (no levers can be placed on it, it's transparent, ...)
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return true;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return true;
+    }
 
-	@Override
-	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-		return ItemBlockCustomWood.class;
-	}
+    @Override
+    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
+        return ItemBlockCustomWood.class;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelResourceLocation getBlockModelResourceLocation() {
-		return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelResourceLocation getBlockModelResourceLocation() {
+        return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
+    }
 
-	@Override
-	public List<String> getOreTags() {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	protected InfinityProperty[] getPropertyArray() {
-		return new InfinityProperty[0];
-	}
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[0];
+    }
 
-	@Override
-	protected final IBlockState extendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		Optional<TileEntityCustomWood> tile = getCustomWoodTile(world, pos);
-		return ((IExtendedBlockState) extendedCustomWoodState(state, world, pos))
-				.withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
-	}
+    @Override
+    protected final IBlockState extendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        Optional<TileEntityCustomWood> tile = AgriWorldHelper.getTile(world, pos, TileEntityCustomWood.class);
+        return ((IExtendedBlockState) extendedCustomWoodState(state, world, pos))
+                .withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
+    }
 
-	protected IBlockState extendedCustomWoodState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    protected IBlockState extendedCustomWoodState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state;
     }
 
-	@Override
-	public final IUnlistedProperty[] getUnlistedPropertyArray() {
+    @Override
+    public final IUnlistedProperty[] getUnlistedPropertyArray() {
         List<IUnlistedProperty> list = getUnlistedProperties();
         IUnlistedProperty[] props = list.toArray(new IUnlistedProperty[list.size() + 1]);
-        props[props.length - 1 ] = AgriProperties.CUSTOM_WOOD_TYPE;
-		return props;
-	}
+        props[props.length - 1] = AgriProperties.CUSTOM_WOOD_TYPE;
+        return props;
+    }
 
     protected List<IUnlistedProperty> getUnlistedProperties() {
         return Collections.emptyList();
     }
-
-	public Optional<TileEntityCustomWood> getCustomWoodTile(IBlockAccess world, BlockPos pos) {
-		return Optional.of(world.getTileEntity(pos))
-				.filter(t -> t instanceof TileEntityCustomWood)
-				.map(t -> (TileEntityCustomWood) t);
-	}
 
 }
