@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.world;
 
-import com.infinityraider.agricraft.entity.EntityVillagerFarmer;
+import com.infinityraider.agricraft.entity.villager.EntityVillagerFarmer;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
@@ -25,6 +25,7 @@ import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -205,7 +206,11 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 				if (crosscrop) {
 					crop.setCrossCrop(true);
 				} else {
-					crop.setSeed(WorldGenerationHelper.getRandomSeed(world.rand, false, plants));
+                    if(plants.size() > 0) {
+                        crop.setSeed(WorldGenerationHelper.getRandomSeed(world.rand, false, plants));
+                    } else {
+                        AgriCore.getLogger("AgriCraft").debug("no registered plants were find, skipping plant generation");
+                    }
 				}
 			}
 			return true;
@@ -235,11 +240,6 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	}
 
 	@Override
-	protected int chooseProfession(int villagersSpawnedIn, int currentVillagerProfession) {
-		return AgriCraftConfig.villagerEnabled ? WorldGen.getVillagerId() : 0;
-	}
-
-	@Override
 	protected void spawnVillagers(World world, StructureBoundingBox boundingBox, int x, int y, int z, int limit) {
 		if (AgriCraftConfig.villagerEnabled) {
 			int nrVillagersSpawned = getNumberOfSpawnedVillagers(world);
@@ -253,9 +253,9 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 						break;
 					}
 					++nrVillagersSpawned;
-					EntityVillager entityvillager = new EntityVillagerFarmer(world, this.chooseProfession(nrVillagersSpawned, i1));
-					entityvillager.setLocationAndAngles((double) j1 + 0.5D, (double) k1 + 1, (double) l1 + 0.5D, 0.0F, 0.0F);
-					world.spawnEntityInWorld(entityvillager);
+					EntityVillager villager = new EntityVillagerFarmer(world);
+					villager.setLocationAndAngles((double) j1 + 0.5D, (double) k1 + 1, (double) l1 + 0.5D, 0.0F, 0.0F);
+					world.spawnEntityInWorld(villager);
 				}
 			}
 			setNumberOfSpawnedVillagers(world, nrVillagersSpawned);

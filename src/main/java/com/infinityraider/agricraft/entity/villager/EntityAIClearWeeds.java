@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.entity;
+package com.infinityraider.agricraft.entity.villager;
 
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import net.minecraft.entity.ai.EntityAIBase;
