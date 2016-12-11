@@ -33,7 +33,7 @@ this kind of information is, most of the time, only needed by pack creators and 
 [branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
 [minecraft]:https://agricraft.github.io/versions/1.10/minecraft.svg "Minecraft Version"
 [curse-link]:http://agricraft.github.io/curse
-[curse]:https://agricraft.github.io/images/curse.svg "CurseForge"
+[curse]:http://cf.way2muchnoise.eu/full_agricraft_downloads.svg "CurseForge"
 [contact-link]:https://agricraft.github.io/contact
 [contact]:https://agricraft.github.io/images/contact.svg "InfinityRaider Contact"
 
