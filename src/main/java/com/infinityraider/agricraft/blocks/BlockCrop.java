@@ -51,6 +51,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * The most important block in the mod.
  */
@@ -79,6 +81,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return AgriProperties.GROWTHSTAGE.applyToBlockState(getDefaultState(), MathHelper.inRange(meta, 0, Constants.MATURE));
     }
@@ -306,11 +309,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
                         }
                     }
                 }
-                for (ItemStack drop : drops) {
-                    if (drop != null && drop.getItem() != null) {
-                        spawnAsEntity(world, pos, drop);
-                    }
-                }
+                drops.stream().filter(drop -> drop != null && drop.getItem() != null).forEach(drop -> spawnAsEntity(world, pos, drop));
             }
         }
     }
@@ -354,10 +353,11 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
     }
 
-    /*
+    /**
 	 * Handles changes in the crop's neighbors.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
         if (!this.canBlockStay(worldIn, pos)) {
             this.dropBlockAsItem(worldIn, pos, state, 0);
@@ -505,6 +505,29 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         return new ItemStack(AgriItems.getInstance().CROPS);
     }
 
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BOX;
+    }
+
+    @Override
+    @Nullable
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+        return Block.NULL_AABB;
+    }
+
+    @Override
+    @Deprecated
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        return BOX.offset(pos);
+    }
+
     /**
      * Determines if the block is a normal block, such as cobblestone. This
      * tells Minecraft if crops are not a normal block (meaning no levers can be
@@ -513,6 +536,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * @return false - the block is not a normal block.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -521,13 +545,10 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * Determines if a side of the block should be rendered, such as one flush
      * with a wall that wouldn't need rendering.
      *
-     * @param state
-     * @param world
-     * @param pos
-     * @param side
      * @return false - all of the crop's sides need to be rendered.
      */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
@@ -538,6 +559,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
@@ -632,14 +654,15 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     protected IBlockState extendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return ((IExtendedBlockState) state)
-                .withProperty(AgriProperties.PLANT_ID, tile.map(t -> t.getPlant()).map(p -> p.getId()).orElse("None"));
+                .withProperty(AgriProperties.PLANT_ID, tile.map(TileEntityCrop::getPlant).map(IAgriPlant::getId).orElse("None"));
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return state
-                .withProperty(AgriProperties.CROSSCROP.getProperty(), tile.map(t -> t.isCrossCrop()).orElse(false));
+                .withProperty(AgriProperties.CROSSCROP.getProperty(), tile.map(TileEntityCrop::isCrossCrop).orElse(false));
     }
 
     @Override
