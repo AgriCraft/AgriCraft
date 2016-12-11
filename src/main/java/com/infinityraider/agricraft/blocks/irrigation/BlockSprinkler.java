@@ -153,7 +153,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 
 	@Override
 	public boolean isEnabled() {
-		return !AgriCraftConfig.disableIrrigation;
+		return AgriCraftConfig.enableIrrigation;
 	}
 
 	@Override

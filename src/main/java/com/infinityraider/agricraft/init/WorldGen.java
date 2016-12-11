@@ -33,7 +33,7 @@ public class WorldGen {
             VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseHandler());
 
             //add irrigated greenhouses to villages
-            if (!AgriCraftConfig.disableIrrigation) {
+            if (AgriCraftConfig.enableIrrigation) {
                 MapGenStructureIO.registerStructureComponent(StructureGreenhouseIrrigated.class, Reference.MOD_ID + ":GreenhouseIrrigated");
                 VillagerRegistry.instance().registerVillageCreationHandler(new VillageCreationHandler.GreenhouseIrrigatedHandler());
             }

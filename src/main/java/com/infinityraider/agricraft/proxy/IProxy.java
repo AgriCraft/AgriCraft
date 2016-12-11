@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public interface IProxy extends IProxyBase {
+
     @Override
     default void preInitStart(FMLPreInitializationEvent event) {
         CoreHandler.preinit(event);
@@ -47,14 +49,16 @@ public interface IProxy extends IProxyBase {
         WorldGen.init();
     }
 
-    default void registerVillagerSkin(int id, String resource) {}
+    default void registerVillagerSkin(int id, String resource) {
+    }
 
     default void initCustomWoodTypes() {
         CustomWoodType.init();
     }
 
     @Override
-    default void registerCapabilities() {}
+    default void registerCapabilities() {
+    }
 
     @Override
     default void registerEventHandlers() {
@@ -65,8 +69,10 @@ public interface IProxy extends IProxyBase {
     }
 
     @Override
-    default void activateRequiredModules() {}
+    default void activateRequiredModules() {
+    }
 
     @Override
-    default void initConfiguration(FMLPreInitializationEvent event) {}
+    default void initConfiguration(FMLPreInitializationEvent event) {
+    }
 }

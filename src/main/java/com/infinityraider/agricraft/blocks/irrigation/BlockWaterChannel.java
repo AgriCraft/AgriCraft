@@ -106,7 +106,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	//--------------
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("unchecked")
 	public RenderChannel getRenderer() {
 		return new RenderChannel(this, new TileEntityChannel());
 	}
@@ -114,11 +113,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return !AgriCraftConfig.disableIrrigation;
 	}
 
 }
