@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,12 +32,12 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         super(block, channel, true, true, true);
     }
 
-    protected void renderWoodChannel(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
+    protected void renderWoodChannel(ITessellator tessellator, IBlockState state, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, channel, EnumFacing.NORTH, channel.hasNeighbourCheck(EnumFacing.NORTH), icon);
-        this.renderSide(tessellator, channel, EnumFacing.EAST, channel.hasNeighbourCheck(EnumFacing.EAST), icon);
-        this.renderSide(tessellator, channel, EnumFacing.SOUTH, channel.hasNeighbourCheck(EnumFacing.SOUTH), icon);
-        this.renderSide(tessellator, channel, EnumFacing.WEST, channel.hasNeighbourCheck(EnumFacing.WEST), icon);
+        this.renderSide(tessellator, state, EnumFacing.NORTH, AgriProperties.CHANNEL_NORTH.getValue(state), icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, AgriProperties.CHANNEL_EAST.getValue(state), icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, AgriProperties.CHANNEL_SOUTH.getValue(state), icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, AgriProperties.CHANNEL_WEST.getValue(state), icon);
     }
 
     protected void renderBottom(ITessellator tessellator, TextureAtlasSprite matIcon) {
@@ -48,7 +50,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         tessellator.drawScaledPrism(11, 5, 11, 12, 12, 12, matIcon);
     }
 
-    protected void renderSide(ITessellator tessellator, T channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
         switch (dir) {
             case EAST:
                 //positive x
@@ -130,23 +132,24 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
     }
 
     @Override
-    protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, B block,
-            T tile, TextureAtlasSprite icon, boolean dynamic) {
-        if (dynamic) {
-            this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
-        } else {
-            this.renderWoodChannel(tess, tile, icon);
-        }
+    protected void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, B block,
+                                               T tile, TextureAtlasSprite icon) {
+        this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
+    }
+
+    @Override
+    protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, B block, EnumFacing side, TextureAtlasSprite icon) {
+        this.renderWoodChannel(tess, state, icon);
     }
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, B block, T channel, ItemStack stack,
-            EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+                                            EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, channel, EnumFacing.NORTH, false, icon);
-        this.renderSide(tessellator, channel, EnumFacing.EAST, false, icon);
-        this.renderSide(tessellator, channel, EnumFacing.SOUTH, false, icon);
-        this.renderSide(tessellator, channel, EnumFacing.WEST, false, icon);
+        this.renderSide(tessellator, state, EnumFacing.NORTH, false, icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, false, icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, false, icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, false, icon);
 
     }
 

@@ -2,26 +2,15 @@ package com.infinityraider.agricraft.renderers;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {
-
-	public static void renderPlant(IAgriPlant plant, int growthStage) {
-		ITessellator tessellator = TessellatorVertexBuffer.getInstance();
-		tessellator.setColorRGBA(255, 255, 255, 255);
-		tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-		renderPlant(tessellator, plant, growthStage);
-		tessellator.draw();
-	}
-
 	public static void renderPlant(ITessellator tessellator, IAgriPlant plant, int growthStage) {
 		TextureAtlasSprite iconA = tessellator.getIcon(plant.getPrimaryPlantTexture(growthStage));
 		TextureAtlasSprite iconB = tessellator.getIcon(plant.getSecondaryPlantTexture(growthStage));

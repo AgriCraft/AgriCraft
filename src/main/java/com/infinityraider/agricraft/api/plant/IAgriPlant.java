@@ -1,28 +1,30 @@
 package com.infinityraider.agricraft.api.plant;
 
-import com.google.common.base.Function;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.render.RenderMethod;
-import java.util.Collection;
+import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.item.Item;
+import java.util.function.Function;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well
@@ -252,7 +254,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
 	 * BakedQuads representing the plant to be rendered on the crop model
 	 */
 	@SideOnly(Side.CLIENT)
-	List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon);
+	List<BakedQuad> getPlantQuads(IExtendedBlockState state, int growthStage, EnumFacing direction, Function<ResourceLocation, TextureAtlasSprite> textureToIcon);
 
 	@Override
 	default int compareTo(IAgriPlant plant) {

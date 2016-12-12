@@ -1,20 +1,21 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -24,15 +25,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> {
 
@@ -56,6 +58,13 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	@Override
 	public TileEntitySprinkler createNewTileEntity(World world, int meta) {
 		return new TileEntitySprinkler();
+	}
+
+	@Override
+	public final IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		Optional<TileEntityChannel> tile = AgriWorldHelper.getTile(world, pos.up(), TileEntityChannel.class);
+        return ((IExtendedBlockState) state).withProperty(AgriProperties.CUSTOM_WOOD_TYPE,
+                tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
 	}
 
 	@Override
@@ -140,17 +149,6 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return null;
 	}
-
-	@SideOnly(Side.CLIENT)
-	@Nonnull
-	public TextureAtlasSprite getIcon(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side, @Nullable TileEntityBase te) {
-		TileEntity channel = world.getTileEntity(pos.add(0, 1, 0));
-		if (channel != null && channel instanceof TileEntityChannel) {
-			return ((TileEntityChannel) channel).getIcon();
-		}
-		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-	}
-
 	@Override
 	public boolean isEnabled() {
 		return AgriCraftConfig.enableIrrigation;
@@ -164,6 +162,11 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	@Override
 	protected InfinityProperty[] getPropertyArray() {
 		return new InfinityProperty[0];
+	}
+
+	@Override
+	public final IUnlistedProperty[] getUnlistedPropertyArray() {
+		return new IUnlistedProperty[] {AgriProperties.CUSTOM_WOOD_TYPE};
 	}
 
 }

@@ -35,7 +35,7 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     }
 
     @Override
-    protected void renderSide(ITessellator tessellator, TileEntityChannelFull channel, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
         if(connect) {
             return;
         }
@@ -63,11 +63,10 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
                                             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, channel, EnumFacing.NORTH, true, icon);
-        this.renderSide(tessellator, channel, EnumFacing.EAST, true, icon);
-        this.renderSide(tessellator, channel, EnumFacing.SOUTH, true, icon);
-        this.renderSide(tessellator, channel, EnumFacing.WEST, true, icon);
-
+        this.renderSide(tessellator, state, EnumFacing.NORTH, true, icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, true, icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, true, icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, true, icon);
     }
 
     @Override

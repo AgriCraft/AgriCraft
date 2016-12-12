@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -75,22 +77,26 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
     }
 
     @Override
-    protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockSeedStorage block,
-            TileEntitySeedStorage tile, TextureAtlasSprite icon, boolean dynamic) {
+    protected void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, BlockSeedStorage block,
+                                               TileEntitySeedStorage tile, TextureAtlasSprite icon) {
         tess.pushMatrix();
         rotateBlock(tess, tile.getOrientation().getOpposite());
-        if (dynamic) {
-            drawSeed(tess, tile.getLockedSeed());
-            tess.pushMatrix();
-        } else {
-            renderSides(tess, icon);
-        }
+        drawSeed(tess, tile.getLockedSeed());
         tess.popMatrix();
     }
 
     @Override
+    protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, BlockSeedStorage block, EnumFacing side, TextureAtlasSprite icon) {
+        tess.pushMatrix();
+        rotateBlock(tess, AgriProperties.FACING.getValue(state));
+        renderSides(tess, icon);
+        tess.popMatrix();
+
+    }
+
+    @Override
     protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockSeedStorage block, TileEntitySeedStorage tile,
-            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+                                            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         renderSides(tess, icon);
     }
 

@@ -1,10 +1,16 @@
 package com.infinityraider.agricraft.blocks.tiles.irrigation;
 
 
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,6 +21,7 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
 	
     private boolean powered = false;
+    private SidedConnection levers = new SidedConnection();
 
     @Override
     protected final void writeChannelNBT(NBTTagCompound tag) {
@@ -44,6 +51,17 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         if (powered != wasPowered) {
             markForUpdate();
         }
+    }
+
+    public void updateLevers() {
+        for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+            IBlockState neighbour = this.getWorld().getBlockState(this.getPos().add(dir.getFrontOffsetX(), 0, dir.getFrontOffsetZ()));
+            this.levers.setConnected(dir, neighbour.getBlock() instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir);
+        }
+    }
+
+    public IBlockState addLeversToState(IExtendedBlockState state) {
+        return state.withProperty(AgriProperties.CONNECTIONS, this.levers);
     }
 
     public boolean isPowered() {

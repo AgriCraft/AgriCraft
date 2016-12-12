@@ -4,10 +4,7 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
-import com.infinityraider.agricraft.blocks.storage.BlockSeedStorage;
-import com.infinityraider.agricraft.blocks.decoration.BlockFenceGate;
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
-import com.infinityraider.agricraft.blocks.decoration.BlockFence;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
@@ -33,8 +30,6 @@ public class AgriBlocks {
 		CHANNEL_VALVE = new BlockWaterChannelValve();
 		SPRINKLER = new BlockSprinkler();
 		//SEED_STORAGE = new BlockSeedStorage();
-		FENCE = new BlockFence();
-		FENCE_GATE= new BlockFenceGate();
 		GRATE = new BlockGrate();
 	}
 
@@ -60,8 +55,6 @@ public class AgriBlocks {
 	//public static final BlockBase SEED_STORAGE_CONTROLLER = new BlockSeedStorageController();
 	
 	// Decoration
-	public final BlockBase FENCE;
-	public final BlockBase FENCE_GATE;
 	public final BlockBase GRATE;
 	
 }

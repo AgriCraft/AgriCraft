@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -14,10 +15,11 @@ import com.infinityraider.agricraft.utility.BaseIcons;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEntityGrate> {
 	public RenderBlockGrate(BlockGrate block) {
-		super(block, new TileEntityGrate(), true, true, false);
+		super(block, new TileEntityGrate(), true, true, true);
 	}
 
 	@Override
@@ -34,24 +36,8 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 	}
 
 	@Override
-	protected void renderWorldBlockWood(ITessellator tess, World world, BlockPos pos, IBlockState state, BlockGrate block,
-										TileEntityGrate grate, TextureAtlasSprite sprite, boolean dynamic) {
-		// Setup
-		final float offset = ((float) grate.getOffset() * 7) / 16.0F;
-
-		// Offset
-		tess.translate(0, 0, offset);
-
-		// Draw Grate
-		tess.drawScaledPrism(1, 0, 0, 3, 16, 2, sprite);
-		tess.drawScaledPrism(5, 0, 0, 7, 16, 2, sprite);
-		tess.drawScaledPrism(9, 0, 0, 11, 16, 2, sprite);
-		tess.drawScaledPrism(13, 0, 0, 15, 16, 2, sprite);
-		tess.drawScaledPrism(0, 1, 0, 16, 3, 2, sprite);
-		tess.drawScaledPrism(0, 5, 0, 16, 7, 2, sprite);
-		tess.drawScaledPrism(0, 9, 0, 16, 11, 2, sprite);
-		tess.drawScaledPrism(0, 13, 0, 16, 15, 2, sprite);
-
+	protected void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, BlockGrate block,
+											   TileEntityGrate grate, TextureAtlasSprite sprite) {
 		//vines
 		final TextureAtlasSprite vinesIcon = BaseIcons.VINE.getIcon();
 		int l = this.getMixedBrightness(grate.getWorld(), grate.getPos(), Blocks.VINE.getDefaultState());
@@ -66,6 +52,26 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 		if (grate.hasVines(false)) {
 			tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, vinesIcon, 1.999f);
 		}
+	}
+
+	@Override
+	protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, BlockGrate block, EnumFacing side, TextureAtlasSprite sprite) {
+		// Setup
+		final float offset = AgriProperties.OFFSET.getValue(state).getOffset();
+
+		// Offset
+		tess.translate(0, 0, offset);
+
+		// Draw Grate
+		tess.drawScaledPrism(1, 0, 0, 3, 16, 2, sprite);
+		tess.drawScaledPrism(5, 0, 0, 7, 16, 2, sprite);
+		tess.drawScaledPrism(9, 0, 0, 11, 16, 2, sprite);
+		tess.drawScaledPrism(13, 0, 0, 15, 16, 2, sprite);
+		tess.drawScaledPrism(0, 1, 0, 16, 3, 2, sprite);
+		tess.drawScaledPrism(0, 5, 0, 16, 7, 2, sprite);
+		tess.drawScaledPrism(0, 9, 0, 16, 11, 2, sprite);
+		tess.drawScaledPrism(0, 13, 0, 16, 15, 2, sprite);
+
 	}
 
 	@Override

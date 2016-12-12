@@ -1,38 +1,36 @@
 package com.infinityraider.agricraft.farming;
 
+import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
-import com.google.common.base.Function;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import net.minecraft.item.Item;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * The main class used by TileEntityCrop.
@@ -334,17 +332,15 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * A function to render the crop. Called when the plant is rendered.
-     * 
-     * @param world the world the plant is in.
-     * @param pos the block position.
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public List<BakedQuad> renderPlantInCrop(IBlockAccess world, BlockPos pos, int growthStage, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
+    public List<BakedQuad> getPlantQuads(IExtendedBlockState state, int growthStage, EnumFacing direction, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
         //The quads returned from this method are added to the tessellator,
         // however the plant renderer directly adds them to the tessellator, so an empty list is returned
-        PlantRenderer.renderPlant(this, growthStage);
+        if(textureToIcon instanceof ITessellator) {
+            PlantRenderer.renderPlant((ITessellator) textureToIcon, this, growthStage);
+        }
         return Collections.emptyList();
     }
-
 }

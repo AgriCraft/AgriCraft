@@ -35,6 +35,7 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         Optional<TileEntityChannel> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannel.class);
         if (tile.isPresent()) {

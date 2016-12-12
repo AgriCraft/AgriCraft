@@ -9,15 +9,14 @@ package com.infinityraider.agricraft.reference;
  * Class for tracking AgriCraftNBT names.
  * 
  * <s>This is fine, as these are never supposed to change, across all classes.</s>
- * Edit: This class leads to too much confusion, and classes loading the wrong things, without permission.
  * 
  * @since 2.0.0
  */
-@Deprecated
 public interface AgriNBT {
 
 	String CROSS_CROP = "agri_cross_crop";
 	String VINE = "agri_vine";
+	String AXIS = "agri_axis";
 	String DISCOVERED_SEEDS = "agri_discovered";
 	String LEVEL = "agri_level";
 	String ID = "agri_id";

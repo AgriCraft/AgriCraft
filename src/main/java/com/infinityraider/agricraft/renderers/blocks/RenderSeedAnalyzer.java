@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzerBook;
@@ -85,15 +86,16 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
     }
 
     @Override
-    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSeedAnalyzer block,
-            TileEntitySeedAnalyzer tile, boolean dynamicRender, float partialTick, int destroyStage) {
-        if (dynamicRender) {
-            tessellator.draw();
-            this.renderSeed(tile, 0, 0, 0);
-            tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-        } else {
-            this.renderModel(tessellator, tile.getOrientation(), tile.hasJournal());
-        }
+    public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockSeedAnalyzer block, EnumFacing side) {
+        this.renderModel(tessellator, AgriProperties.FACING.getValue(state), AgriProperties.JOURNAL.getValue(state));
+    }
+
+    @Override
+    public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, BlockSeedAnalyzer block,
+                                        TileEntitySeedAnalyzer tile, float partialTick, int destroyStage) {
+        tessellator.draw();
+        this.renderSeed(tile, 0, 0, 0);
+        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
     }
 
     @Override

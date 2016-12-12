@@ -1,13 +1,12 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.pad.AbstractBlockWaterPad;
-import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
+import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,9 +14,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,6 +26,8 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
+    private static final SidedConnection DEFAULT = new SidedConnection();
+
 	public RenderWaterPad(AbstractBlockWaterPad block) {
 		super(block, true);
 	}
@@ -38,15 +38,16 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 	}
 
 	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, AbstractBlockWaterPad block) {
+	public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, AbstractBlockWaterPad block, EnumFacing side) {
 		// Check Full
 		final boolean full = block instanceof BlockWaterPadFull;
+		SidedConnection connection = state instanceof IExtendedBlockState ? ((IExtendedBlockState) state).getValue(AgriProperties.CONNECTIONS) : DEFAULT;
 		// Render
-		this.renderBase(tessellator, world, pos, full);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.NORTH);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.EAST);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.SOUTH);
-		this.renderSide(tessellator, world, pos, full, EnumFacing.WEST);
+		this.renderBase(tessellator, connection, full);
+		this.renderSide(tessellator, connection, full, EnumFacing.NORTH);
+		this.renderSide(tessellator, connection, full, EnumFacing.EAST);
+		this.renderSide(tessellator, connection, full, EnumFacing.SOUTH);
+		this.renderSide(tessellator, connection, full, EnumFacing.WEST);
 	}
 
 	@Override
@@ -69,13 +70,14 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 		}
 	}
 
-	private void renderBase(ITessellator tess, IBlockAccess world, BlockPos pos, boolean full) {
+    //TODO: render water
+	private void renderBase(ITessellator tess, SidedConnection connection, boolean full) {
 		// Get Icon
 		final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
 
 		//tess.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
 		tess.setColorRGBA(1, 1, 1, 1);
-		if (shouldRenderCorner(world, pos, full, EnumFacing.WEST, EnumFacing.NORTH)) {
+		if (shouldRenderCorner(connection, full, EnumFacing.WEST, EnumFacing.NORTH)) {
 			//renderer.setRenderBounds(0, 8 * u, 0, u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -87,13 +89,13 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 			float f4 = 1.0F;
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-			*/
 			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(0, 0, 1, 1, EnumFacing.UP, waterIcon, 14);
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+			*/
 		}
 
-		if (shouldRenderCorner(world, pos, full, EnumFacing.NORTH, EnumFacing.EAST)) {
+		if (shouldRenderCorner(connection, full, EnumFacing.NORTH, EnumFacing.EAST)) {
 			//renderer.setRenderBounds(15 * u, 8 * u, 0, 16 * u, 15 * u, 1 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -105,13 +107,13 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 			float f4 = 1.0F;
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-			*/
 			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(15, 0, 16, 1, EnumFacing.UP, waterIcon, 14);
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+			*/
 		}
 
-		if (shouldRenderCorner(world, pos, full, EnumFacing.EAST, EnumFacing.SOUTH)) {
+		if (shouldRenderCorner(connection, full, EnumFacing.EAST, EnumFacing.SOUTH)) {
 			//renderer.setRenderBounds(15 * u, 8 * u, 15 * u, 16 * u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -123,13 +125,13 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 			float f4 = 1.0F;
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-			*/
 			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(15, 15, 16, 16, EnumFacing.UP, waterIcon, 14);
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+			*/
 		}
 
-		if (shouldRenderCorner(world, pos, full, EnumFacing.SOUTH, EnumFacing.WEST)) {
+		if (shouldRenderCorner(connection, full, EnumFacing.SOUTH, EnumFacing.WEST)) {
 			//renderer.setRenderBounds(0, 8 * u, 15 * u, u, 15 * u, 16 * u);
 			//renderer.renderStandardBlock(Blocks.farmland, pos);
 		} else if (full) {
@@ -141,10 +143,10 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 			float f4 = 1.0F;
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-			*/
 			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(0, 15, 1, 16, EnumFacing.UP, waterIcon, 14);
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+			*/
 		}
 		//renderer.renderAllFaces = renderAllFaces;
 		if (full) {
@@ -156,67 +158,29 @@ public class RenderWaterPad extends RenderBlockBase<AbstractBlockWaterPad> {
 			float f4 = 1.0F;
 			tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
 			tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-			*/
 			tess.translate(pos.getX(), pos.getY(), pos.getZ());
 			tess.drawScaledFace(1, 1, 15, 15, EnumFacing.UP, waterIcon, 14);
 			tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+			*/
 		}
 	}
 
-	private boolean shouldRenderCorner(IBlockAccess world, BlockPos pos, boolean full, EnumFacing dir1, EnumFacing dir2) {
-		Block block = world.getBlockState(pos.add(dir1.getFrontOffsetX(), 0, dir1.getFrontOffsetZ())).getBlock();
-		boolean flag1 = block instanceof BlockWaterPad;
-		boolean flag2 = block instanceof BlockWaterPadFull;
-		if (!flag1 || (full != flag2)) {
-			return true;
-		}
-		block = world.getBlockState(pos.add(dir2.getFrontOffsetX(), 0, dir2.getFrontOffsetZ())).getBlock();
-		flag1 = block instanceof BlockWaterPad;
-		flag2 = block instanceof BlockWaterPadFull;
-		if (!flag1 || (full != flag2)) {
-			return true;
-		}
-		block = world.getBlockState(pos.add(dir1.getFrontOffsetX() + dir2.getFrontOffsetX(), 0, dir1.getFrontOffsetZ() + dir2.getFrontOffsetZ())).getBlock();
-		flag1 = block instanceof BlockWaterPad;
-		flag2 = block instanceof BlockWaterPadFull;
-		return !flag1 || (full != flag2);
+	private boolean shouldRenderCorner(SidedConnection connection, boolean full, EnumFacing dir1, EnumFacing dir2) {
+        return connection.isConnected(dir1) && connection.isConnected(dir2);
 	}
 
-	private void renderSide(ITessellator tess, IBlockAccess world, BlockPos pos, boolean full, EnumFacing side) {
+	private void renderSide(ITessellator tess, SidedConnection connection, boolean full, EnumFacing side) {
 		int xLower = Math.max(0, 1 + 14 * side.getFrontOffsetX());
 		int xUpper = Math.min(16, 15 + 14 * side.getFrontOffsetX());
 		int zLower = Math.max(0, 1 + 14 * side.getFrontOffsetZ());
 		int zUpper = Math.min(16, 15 + 14 * side.getFrontOffsetZ());
-		Block block = world.getBlockState(pos.add(side.getFrontOffsetX(), 0, side.getFrontOffsetZ())).getBlock();
-		if (block != null && block instanceof BlockWaterPad) {
-			boolean flag = block instanceof BlockWaterPadFull;
-			if (full) {
-				TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite(); //TODO: get water icon
-				/*
-				int l = Blocks.water.colorMultiplier(world, pos);
-				float f = (float) (l >> 16 & 255) / 255.0F;
-				float f1 = (float) (l >> 8 & 255) / 255.0F;
-				float f2 = (float) (l & 255) / 255.0F;
-				float f4 = 1.0F;
-				tess.setBrightness(Blocks.water.getMixedBrightnessForBlock(world, pos));
-				tess.setColorRGBA(f4 * f, f4 * f1, f4 * f2, 0.8F);
-				tess.translate(pos.getX(), pos.getY(), pos.getZ());
-				*/
-
-				tess.drawScaledFace(xLower, zLower, xUpper, zUpper, EnumFacing.UP, icon, 14);
-				tess.translate(-pos.getX(), -pos.getY(), -pos.getZ());
-			}
-			if (flag == full) {
-				return;
-			}
-		}
-		//tess.setBrightness(Blocks.farmland.getMixedBrightnessForBlock(world, pos));
-		tess.setColorRGBA(1, 1, 1, 1);
-		//boolean renderAllFaces = renderer.renderAllFaces;
-		//renderer.renderAllFaces = true;
-		//renderer.setRenderBounds(xLower * u, 8 * u, zLower * u, xUpper * u, 15 * u, zUpper * u);
-		//renderer.renderStandardBlock(Blocks.farmland, pos);
-		//renderer.renderAllFaces = renderAllFaces;
+        if(connection.isConnected(side)) {
+            if(full) {
+                //TODO: render water
+            }
+        } else {
+            //TODO: render side
+        }
 	}
 
 	@Override

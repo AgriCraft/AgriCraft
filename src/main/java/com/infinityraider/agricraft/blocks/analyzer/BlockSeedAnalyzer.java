@@ -115,16 +115,19 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	}
 
     @Override
+	@SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
@@ -175,6 +178,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof TileEntitySeedAnalyzer) {

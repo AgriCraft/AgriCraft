@@ -63,13 +63,13 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
      * @param orientation the orientation.
      */
     private static void setOffsetAndOrientation(TileEntityGrate grate, float hit, EnumFacing orientation) {
-        grate.setOrientation(orientation);
+        grate.setAxis(orientation);
         if (hit <= 0.3333F) {
-            grate.setOffSet((short) 0);
+            grate.setOffSet(TileEntityGrate.EnumOffset.NEAR);
         } else if (hit <= 0.6666F) {
-            grate.setOffSet((short) 1);
+            grate.setOffSet(TileEntityGrate.EnumOffset.CENTER);
         } else {
-            grate.setOffSet((short) 2);
+            grate.setOffSet(TileEntityGrate.EnumOffset.FAR);
         }
         grate.calculateBounds();
     }

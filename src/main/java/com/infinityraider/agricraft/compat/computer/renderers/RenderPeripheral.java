@@ -42,6 +42,18 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
 	}
 
     @Override
+    public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockPeripheral block, EnumFacing side) {
+        this.renderBase(tessellator);
+    }
+
+    @Override
+    public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, BlockPeripheral block,
+                                        @Nullable TileEntityPeripheral tile, float partialTick, int destroyStage) {
+        drawSeed(tessellator, tile);
+        performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
+    }
+
+    @Override
 	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockPeripheral block, @Nullable TileEntityPeripheral tile,
 									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 		renderBase(tessellator);
@@ -132,35 +144,35 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
 	}
 
 	private void renderBase(ITessellator tessellator) {
-		final TextureAtlasSprite iconTop = this.getIcon(TEXTURE_TOP);
-		final TextureAtlasSprite iconSide = this.getIcon(TEXTURE_SIDE);
-		final TextureAtlasSprite iconBottom = this.getIcon(TEXTURE_BOTTOM);
-		final TextureAtlasSprite iconInside = this.getIcon(TEXTURE_INNER);
-		float unit = Constants.UNIT;
+        final TextureAtlasSprite iconTop = this.getIcon(TEXTURE_TOP);
+        final TextureAtlasSprite iconSide = this.getIcon(TEXTURE_SIDE);
+        final TextureAtlasSprite iconBottom = this.getIcon(TEXTURE_BOTTOM);
+        final TextureAtlasSprite iconInside = this.getIcon(TEXTURE_INNER);
+        float unit = Constants.UNIT;
 
-		//top
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, iconTop, 1);
-		//bottom
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.DOWN, iconBottom, 0);
-		//front
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconSide, 0);
-		//right
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconSide, 1);
-		//left
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconSide, 0);
-		//back
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconSide, 1);
-		//inside top
-		tessellator.drawScaledFace(4, 4, 12, 12, EnumFacing.UP, iconBottom, 12 * unit);
-		//inside front
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconInside, 4 * unit);
-		//inside right
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconInside, 12 * unit);
-		//inside left
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconInside, 4 * unit);
-		//inside back
-		tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconInside, 12 * unit);
-	}
+        //top
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, iconTop, 1);
+        //bottom
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.DOWN, iconBottom, 0);
+        //front
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconSide, 0);
+        //right
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconSide, 1);
+        //left
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconSide, 0);
+        //back
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconSide, 1);
+        //inside top
+        tessellator.drawScaledFace(4, 4, 12, 12, EnumFacing.UP, iconBottom, 12 * unit);
+        //inside front
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, iconInside, 4 * unit);
+        //inside right
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.EAST, iconInside, 12 * unit);
+        //inside left
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.WEST, iconInside, 4 * unit);
+        //inside back
+        tessellator.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.SOUTH, iconInside, 12 * unit);
+    }
 
 	@Override
 	public List<ResourceLocation> getAllTextures() {
@@ -170,17 +182,6 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
 		list.add(TEXTURE_BOTTOM);
 		list.add(TEXTURE_INNER);
 		return list;
-	}
-
-	@Override
-	public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockPeripheral block,
-								 @Nullable TileEntityPeripheral tile, boolean dynamicRender, float partialTick, int destroyStage) {
-		if(dynamicRender) {
-			drawSeed(tessellator, tile);
-			performAnimations(tessellator, tile, BaseIcons.DEBUG.getIcon());
-		} else {
-			this.renderBase(tessellator);
-		}
 	}
 
 	@Override

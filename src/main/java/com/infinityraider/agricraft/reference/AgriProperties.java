@@ -1,9 +1,13 @@
 package com.infinityraider.agricraft.reference;
 
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.blocks.properties.PropertyCropPlant;
 import com.infinityraider.agricraft.blocks.properties.PropertyCustomWood;
+import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 
@@ -20,10 +24,14 @@ public interface AgriProperties {
     InfinityProperty<Boolean> JOURNAL = new InfinityProperty<>(PropertyBool.create("journal"), true);
     InfinityProperty<EnumFacing> FACING = new InfinityProperty<>(PropertyDirection.create("facing"), EnumFacing.NORTH);
 
+    IUnlistedProperty<IAgriPlant> CROP_PLANT = PropertyCropPlant.PROPERTY;
     InfinityProperty<Boolean> CROSSCROP = new InfinityProperty<>(PropertyBool.create("crosscrop"), false);
     InfinityProperty<Integer> GROWTHSTAGE = new InfinityProperty<>(PropertyInteger.create("age", 0, 7), 0);
 
-    InfinityProperty<Integer> VINES = new InfinityProperty<>(PropertyInteger.create("age", 0, 3), 0);
+    InfinityProperty<TileEntityGrate.EnumVines> VINES = new InfinityProperty<>(PropertyEnum.create("vines", TileEntityGrate.EnumVines.class), TileEntityGrate.EnumVines.NONE);
+    InfinityProperty<EnumFacing.Axis> AXIS = new InfinityProperty<>(PropertyEnum.create("axis", EnumFacing.Axis.class), EnumFacing.Axis.X);
+    InfinityProperty<TileEntityGrate.EnumOffset> OFFSET = new InfinityProperty<>(PropertyEnum.create("offset", TileEntityGrate.EnumOffset.class), TileEntityGrate.EnumOffset.NEAR);
+
     InfinityProperty<Boolean> POWERED = new InfinityProperty<>(PropertyBool.create("powered"), false);
     
     InfinityProperty<Boolean> CHANNEL_NORTH = new InfinityProperty<>(PropertyBool.create("channel_north"), false);
@@ -38,7 +46,7 @@ public interface AgriProperties {
     InfinityProperty<TileEntityTank.Connection> TANK_UP = new InfinityProperty<>(PropertyEnum.create("tank_up", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
     InfinityProperty<TileEntityTank.Connection> TANK_DOWN = new InfinityProperty<>(PropertyEnum.create("tank_down", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
 
-    IUnlistedProperty<String> PLANT_ID = new PropertyString("plant_id");
     IUnlistedProperty<CustomWoodType> CUSTOM_WOOD_TYPE = new PropertyCustomWood("wood_type");
 
+    IUnlistedProperty<SidedConnection> CONNECTIONS = new SidedConnection.Property("connections");
 }

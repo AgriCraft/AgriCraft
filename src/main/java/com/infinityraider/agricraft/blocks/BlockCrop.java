@@ -635,7 +635,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
         // TODO: Fix propertycropplant
-        // TileEntity tileEntity = world.getTileEntity(pos);
+        // TileEntity tile = world.getTileEntity(pos);
         return world.getBlockState(pos);
     }
 
@@ -651,10 +651,10 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     @Override
-    protected IBlockState extendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return ((IExtendedBlockState) state)
-                .withProperty(AgriProperties.PLANT_ID, tile.map(TileEntityCrop::getPlant).map(IAgriPlant::getId).orElse("None"));
+                .withProperty(AgriProperties.CROP_PLANT, tile.map(TileEntityCrop::getPlant).orElse(null));
     }
 
     @Override
@@ -668,7 +668,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public IUnlistedProperty[] getUnlistedPropertyArray() {
         return new IUnlistedProperty[]{
-            AgriProperties.PLANT_ID
+            AgriProperties.CROP_PLANT
         };
     }
 

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
@@ -41,6 +40,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings("deprecation")
 	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
 		//adjacent boxes
 		TileEntity te = world.getTileEntity(pos);
@@ -70,11 +70,13 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
 	@Override
 	@SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return getSelectedBoundingBox(state, world, pos);
 	}
 
 	@Override
+    @SuppressWarnings("deprecation")
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 		AxisAlignedBB minBB = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
 		TileEntity te = world.getTileEntity(pos);

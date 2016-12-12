@@ -1,18 +1,22 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,26 +45,6 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
         super(block, new TileEntitySprinkler(), true, true, true);
     }
 
-    public void renderStatic(ITessellator tess, TileEntitySprinkler te) {
-        tess.translate(0, 4 * Constants.UNIT, 0);
-        tess.drawScaledPrism(4, 8, 4, 12, 16, 12, te.getChannelIcon());
-    }
-
-    public void renderDynamic(ITessellator tess, TileEntitySprinkler te) {
-        tess.pushMatrix();
-        tess.translate(0.5F, 0, 0.5F);
-        tess.rotate(te.getAngle(), 0, 1, 0);
-        tess.translate(-0.5F, 0, -0.5F);
-
-        final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
-        // Draw Core
-        tess.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
-        // Draw Blades
-        tess.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
-        tess.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
-        tess.popMatrix();
-    }
-
     @Override
     public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSprinkler block, TileEntitySprinkler tile,
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
@@ -82,13 +66,32 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
     }
 
     @Override
-    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, BlockSprinkler block,
-            TileEntitySprinkler tile, boolean dynamicRender, float partialTick, int destroyStage) {
-        if (dynamicRender) {
-            this.renderDynamic(tessellator, tile);
+    public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockSprinkler block, EnumFacing side) {
+        tessellator.translate(0, 4 * Constants.UNIT, 0);
+        CustomWoodType type;
+        if(state instanceof IExtendedBlockState) {
+            type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
         } else {
-            this.renderStatic(tessellator, tile);
+            type = CustomWoodType.getDefault();
         }
+        tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, type.getIcon());
+    }
+
+    @Override
+    public void renderWorldBlockDynamic(ITessellator tess, World world, BlockPos pos, double x, double y, double z, BlockSprinkler block,
+                                        TileEntitySprinkler te, float partialTick, int destroyStage) {
+        tess.pushMatrix();
+        tess.translate(0.5F, 0, 0.5F);
+        tess.rotate(te.getAngle(), 0, 1, 0);
+        tess.translate(-0.5F, 0, -0.5F);
+
+        final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
+        // Draw Core
+        tess.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
+        // Draw Blades
+        tess.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
+        tess.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
+        tess.popMatrix();
     }
 
     @Override

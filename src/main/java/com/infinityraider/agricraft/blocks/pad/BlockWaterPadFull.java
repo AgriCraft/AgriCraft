@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.pad;
 
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -77,11 +76,6 @@ public class BlockWaterPadFull extends AbstractBlockWaterPad {
     @Override
     public List<String> getOreTags() {
         return Collections.emptyList();
-    }
-
-    @Override
-    protected InfinityProperty[] getPropertyArray() {
-        return new InfinityProperty[0];
     }
 
     @Override

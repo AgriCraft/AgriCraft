@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -19,6 +20,8 @@ import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,31 +44,47 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
         return properties;
 	}
 
+    @Override
+    protected List<IUnlistedProperty> getUnlistedProperties() {
+        return ImmutableList.of(AgriProperties.CONNECTIONS);
+    }
+
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         Optional<TileEntityChannelValve> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannelValve.class);
 		return AgriProperties.POWERED.applyToBlockState(super.getActualState(state, worldIn, pos), tile.isPresent() && tile.get().isPowered());
 	}
 
+	@Override
+    protected IExtendedBlockState extendedCustomWoodState(IExtendedBlockState state, IBlockAccess world, BlockPos pos) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && te instanceof TileEntityChannelValve) {
+            TileEntityChannelValve valve = (TileEntityChannelValve) te;
+            valve.addLeversToState(state);
+        }
+        return state;
+    }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
 		super.neighborChanged(state, world, pos, block);
-		updatePowerStatus(world, pos);
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && te instanceof TileEntityChannelValve) {
+            TileEntityChannelValve valve = (TileEntityChannelValve) te;
+            valve.updatePowerStatus();
+            valve.updateLevers();
+        }
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
 		if (!world.isRemote) {
-			updatePowerStatus(world, pos);
-		}
-	}
-
-	private void updatePowerStatus(IBlockAccess iba, BlockPos pos) {
-		TileEntity te = iba.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityChannelValve) {
-			TileEntityChannelValve valve = (TileEntityChannelValve) te;
-			valve.updatePowerStatus();
+            TileEntity te = world.getTileEntity(pos);
+            if (te != null && te instanceof TileEntityChannelValve) {
+                ((TileEntityChannelValve) te).updatePowerStatus();
+            }
 		}
 	}
 

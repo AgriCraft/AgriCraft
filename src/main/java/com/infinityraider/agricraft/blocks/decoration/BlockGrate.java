@@ -4,8 +4,11 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -19,13 +22,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
+import java.util.Optional;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
-
 	public BlockGrate() {
 		super("grate");
 		this.fullBlock = false;
 	}
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[]{AgriProperties.AXIS, AgriProperties.OFFSET, AgriProperties.VINES};
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        Optional<TileEntityGrate> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityGrate.class);
+        state = AgriProperties.VINES.applyToBlockState(state, tile.map(TileEntityGrate::getVines).orElse(TileEntityGrate.EnumVines.NONE));
+        state = AgriProperties.OFFSET.applyToBlockState(state, tile.map(TileEntityGrate::getOffset).orElse(TileEntityGrate.EnumOffset.NEAR));
+        state = AgriProperties.AXIS.applyToBlockState(state, tile.map(TileEntityGrate::getAxis).orElse(EnumFacing.Axis.X));
+        return state;
+    }
 
 	@Override
 	public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
