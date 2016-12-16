@@ -27,7 +27,8 @@ public class MutateStrategy implements IAgriCrossStrategy {
         List<IAgriMutation> crossOvers = MutationRegistry.getInstance().getPossibleMutations(
                 matureNeighbors.stream()
                 .map(IAgriCrop::getPlant)
-                .filter(TypeHelper::isNonNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList())
         );
         if (!crossOvers.isEmpty()) {

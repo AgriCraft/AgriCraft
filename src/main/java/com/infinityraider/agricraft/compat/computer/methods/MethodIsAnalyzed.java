@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
+import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
@@ -13,7 +14,7 @@ public class MethodIsAnalyzed extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return new Object[] {crop.getStat().isAnalyzed()};
+        return new Object[] {crop.getStat().filter(IAgriStat::isAnalyzed).isPresent()};
     }
 
     @Override

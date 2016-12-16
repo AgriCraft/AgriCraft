@@ -19,6 +19,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.utility.AgriWorldHelper;
 
 import java.util.*;
 
@@ -91,7 +92,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         return AgriProperties.GROWTHSTAGE.getValue(state);
     }
 
-    /**
+    /*
      * Creates a new tile entity every time the block is placed.
      */
     @Override
@@ -99,7 +100,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         return new TileEntityCrop();
     }
 
-    /**
+    /*
      * Randomly called to apply GROWTH ticks
      */
     @Override
@@ -110,7 +111,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
                 crop.spread(rand);
             } else if (crop.isFertile()) {
                 //multiplier from GROWTH stat
-                double growthBonus = 1.0 + crop.getStat().getGrowth() / 10.0;
+                double growthBonus = 1.0 + crop.getStat().map(c -> c.getGrowth()).orElse((byte)0) / 10.0;
                 //multiplier defined in the config
                 float global = AgriCraftConfig.growthMultiplier;
                 //crop dependent base GROWTH rate
@@ -171,6 +172,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      *
      * @param world the World object for this block
      * @param pos the block position
+     * @param state the blockstate
      * @param player the player applying the cross crop
      * @param cropStack stack containing crop sticks
      */
@@ -211,7 +213,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         return false;
     }
 
-    /**
+    /*
      * Handles right-clicks from the player. Allows the player to 'use' the
      * block.
      *
@@ -261,14 +263,14 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      */
     @Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-        if (!world.isRemote) {
-            IAgriPlant plant = ((TileEntityCrop) world.getTileEntity(pos)).getPlant();
+        Optional<TileEntityCrop> crop = AgriWorldHelper.getTile(world, pos, TileEntityCrop.class);
+        if (crop != null && !world.isRemote) {
             if (!player.capabilities.isCreativeMode) {
                 //drop items if the player is not in creative
                 this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
             }
-            if (plant != null) {
-                plant.onPlantRemoved(world, pos);
+            if (crop.get().hasPlant()) {
+                crop.get().getPlant().ifPresent(p -> p.onPlantRemoved(world, pos));
             }
             world.removeTileEntity(pos);
             world.setBlockToAir(pos);
@@ -300,12 +302,12 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
                     if (!(crop.canWeed() && AgriCraftConfig.weedsDestroyCropSticks)) {
                         drops.add(new ItemStack(AgriItems.getInstance().CROPS, 1));
                     }
-                    if (crop.hasPlant()) {
+                    if (crop.hasSeed()) {
                         if (crop.isMature()) {
                             drops.addAll(crop.getFruits());
-                            drops.add(crop.getSeed().toStack());
+                            drops.add(crop.getSeed().get().toStack());
                         } else if (!AgriCraftConfig.onlyMatureDropSeeds) {
-                            drops.add(crop.getSeed().toStack());
+                            drops.add(crop.getSeed().get().toStack());
                         }
                     }
                 }
@@ -354,7 +356,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-	 * Handles changes in the crop's neighbors.
+     * Handles changes in the crop's neighbors.
      */
     @Override
     @SuppressWarnings("deprecation")
@@ -448,8 +450,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             } else {
                 items.add(new ItemStack(AgriItems.getInstance().CROPS, 1));
             }
-            if (crop.hasPlant()) {
-                items.add(crop.getSeed().toStack());
+            if (crop.hasSeed()) {
+                items.add(crop.getSeed().get().toStack());
                 if (crop.isMature()) {
                     items.addAll(crop.getFruits());
                 }
@@ -478,12 +480,12 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             TileEntity te = world.getTileEntity(pos);
             if (te != null && te instanceof TileEntityCrop) {
                 TileEntityCrop crop = (TileEntityCrop) te;
-                if (crop.hasPlant()) {
+                if (crop.hasSeed()) {
                     ArrayList<ItemStack> drops = new ArrayList<>();
                     if (crop.isMature()) {
                         drops.addAll(crop.getFruits());
                     }
-                    drops.add(crop.getSeed().toStack());
+                    drops.add(crop.getSeed().get().toStack());
                     for (ItemStack drop : drops) {
                         spawnAsEntity(world, pos, drop);
                     }
@@ -654,7 +656,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return ((IExtendedBlockState) state)
-                .withProperty(AgriProperties.CROP_PLANT, tile.map(TileEntityCrop::getPlant).orElse(null));
+                .withProperty(AgriProperties.CROP_PLANT, tile.flatMap(TileEntityCrop::getPlant).orElse(null));
     }
 
     @Override
@@ -662,6 +664,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return state
+                .withProperty(AgriProperties.GROWTHSTAGE.getProperty(), tile.map(TileEntityCrop::getGrowthStage).orElse(0))
                 .withProperty(AgriProperties.CROSSCROP.getProperty(), tile.map(TileEntityCrop::isCrossCrop).orElse(false));
     }
 

@@ -28,11 +28,11 @@ public abstract class StatCalculatorBase implements IAgriStatCalculator, IAgriAd
         
         // Sum values
         for (IAgriCrop parent : parents) {
-            if (canInheritStats(child, parent.getPlant())) {
+            if (canInheritStats(child, parent.getPlant().get())) {
                 validParents++;
-                growth += parent.getStat().getGrowth();
-                gain += parent.getStat().getGain();
-                strength += parent.getStat().getStrength();
+                growth += parent.getStat().get().getGrowth();
+                gain += parent.getStat().get().getGain();
+                strength += parent.getStat().get().getStrength();
             }
         }
         

@@ -57,7 +57,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
      * @return if this crop is fertile and thus can grow
      */
     default boolean isFertile() {
-        return this.isFertile(this.getSeed());
+        return this.getSeed().filter(this::isFertile).isPresent();
     }
 
     boolean isFertile(AgriSeed seed);
@@ -77,7 +77,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 
     @Override
     default boolean canWeed() {
-        return this.hasPlant() && this.getPlant().isWeedable();
+        return this.getPlant().filter(p -> p.isWeedable()).isPresent();
     }
 
     @Override
