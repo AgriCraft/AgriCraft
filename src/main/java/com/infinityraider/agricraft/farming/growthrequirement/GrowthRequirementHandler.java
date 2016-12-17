@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -32,8 +33,9 @@ public class GrowthRequirementHandler {
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
-        FuzzyStack soil = new FuzzyStack(world.getBlockState(pos));
-        return SoilRegistry.getInstance().isSoil(soil) || defaultSoils.contains(soil);
+        return FuzzyStack.fromBlockState(world.getBlockState(pos))
+                .filter(soil -> SoilRegistry.getInstance().isSoil(soil) || defaultSoils.contains(soil))
+                .isPresent();
     }
 
     public static void init() {

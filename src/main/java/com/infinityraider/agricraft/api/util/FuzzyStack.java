@@ -7,8 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -21,28 +19,29 @@ public class FuzzyStack {
     private final boolean ignoreMeta;
     private final boolean ignoreTags;
     private final boolean useOreDict;
-    
-    public FuzzyStack(IBlockAccess world, BlockPos pos) {
-        this(world.getBlockState(pos));
-    }
-    
-    public FuzzyStack(IBlockState state) {
-        this(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
-    }
 
     public FuzzyStack(ItemStack stack) {
         this(stack, false, false, false);
     }
 
     public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean ignoreTags, boolean useOreDict) {
-        if (stack == null || stack.getItem() == null) {
-            throw new NullPointerException();
+        if (stack == null) {
+            throw new NullPointerException("The Itemstack must not be null for FuzzyStacks!");
+        } else if (stack.getItem() == null) {
+            throw new NullPointerException("The Item must not be null for FuzzyStacks!");
         }
         
         this.stack = stack;
         this.ignoreMeta = ignoreMeta;
         this.ignoreTags = ignoreTags;
         this.useOreDict = useOreDict;
+    }
+    
+    public static final Optional<FuzzyStack> fromBlockState(IBlockState state) {
+        return Optional.ofNullable(state)
+                .map(s -> new ItemStack(s.getBlock(), 1, s.getBlock().getMetaFromState(s)))
+                .filter(i -> i.getItem() != null)
+                .map(FuzzyStack::new);
     }
 
     public ItemStack toStack() {
