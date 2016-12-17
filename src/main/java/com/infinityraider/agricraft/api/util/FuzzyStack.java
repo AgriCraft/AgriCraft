@@ -30,13 +30,13 @@ public class FuzzyStack {
         } else if (stack.getItem() == null) {
             throw new NullPointerException("The Item must not be null for FuzzyStacks!");
         }
-        
+
         this.stack = stack;
         this.ignoreMeta = ignoreMeta;
         this.ignoreTags = ignoreTags;
         this.useOreDict = useOreDict;
     }
-    
+
     public static final Optional<FuzzyStack> fromBlockState(IBlockState state) {
         return Optional.ofNullable(state)
                 .map(s -> new ItemStack(s.getBlock(), 1, s.getBlock().getMetaFromState(s)))
@@ -47,38 +47,41 @@ public class FuzzyStack {
     public ItemStack toStack() {
         return this.stack.copy();
     }
-    
+
     public Item getItem() {
         return this.stack.getItem();
     }
-    
+
     public int getMeta() {
         return this.stack.getMetadata();
     }
-    
+
     public Optional<NBTTagCompound> getTags() {
         return Optional.ofNullable(this.stack.getTagCompound()).map(t -> t.copy());
     }
-    
-    public boolean matches(ItemStack stack) {
-        return stack != null && this.equals(new FuzzyStack(stack));
-    }
-    
+
     public boolean areMetaEqual(FuzzyStack other) {
         return other != null && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
     }
-    
+
     public boolean areTagsEqual(FuzzyStack other) {
         return other != null && (this.ignoreTags || other.ignoreTags || this.getTags().equals(other.getTags()));
     }
-    
+
     public boolean areItemEqual(FuzzyStack other) {
         return other != null && this.stack.getItem().equals(other.stack.getItem());
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof FuzzyStack) {
+        if (obj instanceof ItemStack) {
+            ItemStack other = (ItemStack) obj;
+            if (other.getItem() != null) {
+                return this.equals(new FuzzyStack(other));
+            } else {
+                return false;
+            }
+        } else if (obj instanceof FuzzyStack) {
             FuzzyStack other = (FuzzyStack) obj;
 
             if (this.areItemEqual(other) && this.areMetaEqual(other) && this.areTagsEqual(other)) {

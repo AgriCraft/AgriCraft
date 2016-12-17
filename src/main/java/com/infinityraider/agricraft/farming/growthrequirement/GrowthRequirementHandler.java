@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.IBlockAccess;
 
 /**

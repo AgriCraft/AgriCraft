@@ -21,6 +21,9 @@ public class BlockCondition implements ICondition {
     public BlockCondition(FuzzyStack stack, BlockRange range) {
         this.amount = stack.toStack().stackSize;
         this.volume = range.getVolume();
+        if(this.amount > 1) {
+            throw new IndexOutOfBoundsException("The required amount of blocks must be greater than zero!");
+        }
         if(this.amount > this.volume) {
             throw new IndexOutOfBoundsException("Required amount of blocks exceeds volume of range!");
         }
@@ -40,7 +43,7 @@ public class BlockCondition implements ICondition {
     public boolean isMet(IBlockAccess world, BlockPos pos) {
         return new BlockRange(this.range, pos).stream()
                 .map(loc -> FuzzyStack.fromBlockState(world.getBlockState(loc)).orElse(null))
-                .filter(this.stack::equals)
+                //.filter(this.stack::equals)
                 .skip(this.amount - 1)
                 .findAny()
                 .isPresent();

@@ -107,7 +107,7 @@ public class BlockRange implements Iterable<BlockPos> {
 
         @Override
         public boolean hasNext() {
-            return this.pos.getZ() < this.range.getMax().getZ();
+            return this.pos.getX() <= this.range.getMax().getX() || this.pos.getY() <= this.range.getMax().getY() || this.pos.getZ() <= this.range.getMax().getZ();
         }
 
         @Override
