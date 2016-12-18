@@ -20,7 +20,7 @@ public interface IAgriSoilRegistry {
 	Optional<IAgriSoil> getSoil(String id);
     
     default Optional<IAgriSoil> getSoil(IBlockState state) {
-        return this.getSoil(new FuzzyStack(state));
+        return FuzzyStack.fromBlockState(state).flatMap(this::getSoil);
     }
     
     default Optional<IAgriSoil> getSoil(ItemStack stack) {

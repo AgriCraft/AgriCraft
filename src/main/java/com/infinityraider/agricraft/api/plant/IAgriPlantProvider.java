@@ -2,6 +2,8 @@
  */
 package com.infinityraider.agricraft.api.plant;
 
+import java.util.Optional;
+
 /**
  * Interface for objects that have plants.
  * 
@@ -21,6 +23,6 @@ public interface IAgriPlantProvider {
 	 *
 	 * @return the plant associated with the instance or null.
 	 */
-	IAgriPlant getPlant();
+	   Optional<IAgriPlant> getPlant();
 	
 }

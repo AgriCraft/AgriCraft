@@ -23,7 +23,7 @@ public class SpreadStrategy implements IAgriCrossStrategy {
         List<IAgriCrop> matureNeighbours = crop.getMatureNeighbours();
         if (!matureNeighbours.isEmpty()) {
             int index = rand.nextInt(matureNeighbours.size());
-            IAgriPlant plant = matureNeighbours.get(index).getPlant();
+            IAgriPlant plant = matureNeighbours.get(index).getPlant().get();
             if (plant != null && rand.nextDouble() < plant.getSpreadChance()) {
                 return StatCalculatorRegistry.getInstance()
                         .calculateStats(plant, matureNeighbours, false)

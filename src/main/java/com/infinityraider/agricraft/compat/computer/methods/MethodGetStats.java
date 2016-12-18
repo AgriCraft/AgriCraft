@@ -16,11 +16,10 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        if(!crop.hasPlant() || !crop.getStat().isAnalyzed()) {
-            return null;
-        }
-        IAgriStat stats = crop.getStat();
-        return new Object[] {stats.getGrowth(), stats.getGain(), stats.getStrength()};
+        return crop.getStat()
+                .filter(IAgriStat::isAnalyzed)
+                .map(s -> new Object[] {s.getGrowth(), s.getGain(), s.getStrength()})
+                .orElse(null);
     }
 
     @Override

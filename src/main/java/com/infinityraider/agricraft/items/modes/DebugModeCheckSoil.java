@@ -27,7 +27,7 @@ public class DebugModeCheckSoil extends DebugMode {
 
     @Override
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        FuzzyStack soil = new FuzzyStack(world.getBlockState(pos));
+        FuzzyStack soil = FuzzyStack.fromBlockState(world.getBlockState(pos)).orElse(null);
         String type = SoilRegistry.getInstance().getSoils().stream()
                 .filter(s -> s.isVarient(soil))
                 .map(s -> s.getName())

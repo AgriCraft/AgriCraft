@@ -38,6 +38,7 @@ import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import java.util.Optional;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
@@ -46,8 +47,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     private boolean crossCrop = false;
 
-    @Nonnull
-    private IAgriStat stats = new PlantStats();
+    // Just in case...
+    @Nullable
+    private IAgriStat stats;
     private IAgriPlant plant;
     private IAdditionalCropData data;
 
@@ -55,27 +57,28 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IPlantProvider Methods
     // =========================================================================
     @Override
-    public boolean hasPlant() {
+    public final boolean hasPlant() {
         return this.plant != null;
     }
 
+    @Nonnull
     @Override
-    public IAgriPlant getPlant() {
-        return this.plant;
+    public final Optional<IAgriPlant> getPlant() {
+        return Optional.ofNullable(this.plant);
     }
 
     // =========================================================================
     // IStatProvider Methods
     // =========================================================================
     @Override
-    public boolean hasStat() {
-        return true;//this.stats != null;
+    public final boolean hasStat() {
+        return this.stats != null;
     }
 
     @Nonnull
     @Override
-    public IAgriStat getStat() {
-        return this.stats;
+    public final Optional<IAgriStat> getStat() {
+        return Optional.ofNullable(this.stats);
     }
 
     // =========================================================================
@@ -90,11 +93,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void setCrossCrop(boolean status) {
         if (status != this.crossCrop) {
             this.crossCrop = status;
-            if (!worldObj.isRemote && crossCrop) {
-                SoundType type = Blocks.PLANKS.getSoundType();
-                worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-                this.markForUpdate();
-            }
+            SoundType type = Blocks.PLANKS.getSoundType();
+            worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+            this.worldObj.setBlockState(pos, AgriProperties.CROSSCROP.applyToBlockState(this.getState(), status), 2);
+            this.markForUpdate();
         }
     }
 
@@ -110,9 +112,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void setGrowthStage(int stage) {
-        if (this.hasPlant()) {
+        if (this.hasPlant() && this.stats != null) {
             stage = MathHelper.inRange(stage, 0, Constants.MATURE);
             this.stats = this.stats.withMeta(stage);
+            this.worldObj.setBlockState(pos, AgriProperties.GROWTHSTAGE.applyToBlockState(this.getState(), stage), 2);
             this.markForUpdate();
         }
     }
@@ -139,15 +142,15 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public IAgriPlant removePlant() {
-        IAgriPlant oldPlant = getPlant();
-        this.removeStat();
+    public Optional<IAgriPlant> removePlant() {
+        final IAgriPlant oldPlant = this.plant;
         this.plant = null;
+        this.data = null;
         if (oldPlant != null) {
             oldPlant.onPlantRemoved(worldObj, pos);
         }
-        this.data = null;
-        return oldPlant;
+        this.markForUpdate();
+        return Optional.ofNullable(oldPlant);
     }
 
     @Override
@@ -157,8 +160,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean setStat(IAgriStat stat) {
+        this.stats = stat;
         if (stat != null) {
-            this.stats = stat;
+            this.setGrowthStage(stat.getMeta());
             return true;
         } else {
             return false;
@@ -166,10 +170,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public IAgriStat removeStat() {
-        IAgriStat old = this.stats;
+    public Optional<IAgriStat> removeStat() {
+        final IAgriStat old = this.stats;
         this.stats = new PlantStats();
-        return old;
+        this.markForUpdate();
+        return Optional.ofNullable(old);
     }
 
     /*
@@ -224,11 +229,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public boolean spread(Random rand) {
         if (this.hasPlant() && this.plant.getSpreadChance() > rand.nextDouble()) {
             for (IAgriCrop crop : this.getNeighbours()) {
-                if (!this.plant.equals(crop.getPlant())) {
+                if (!this.getPlant().equals(crop.getPlant())) {
                     if (!crop.hasPlant() && !crop.isCrossCrop()) {
                         crop.setPlant(plant);
                         return true;
-                    } else if (this.plant.isAgressive() && crop.getStat().getStrength() >= rand.nextDouble() * this.getStat().getStrength()) {
+                    } else if (this.plant.isAgressive() && this.stats != null && this.stats.getStrength() >= rand.nextDouble() * this.stats.getStrength()) {
                         crop.setCrossCrop(false);
                         crop.setPlant(plant);
                         return true;
@@ -350,7 +355,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        this.stats = StatRegistry.getInstance().valueOf(tag).get();
+        this.stats = StatRegistry.getInstance().valueOf(tag).orElse(null);
         this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
         this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
         if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {
@@ -406,7 +411,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         list.add("CROP:");
         if (this.crossCrop) {
             list.add(" - This is a crosscrop");
-        } else if (this.hasPlant()) {
+        } else if (this.hasSeed()) {
             if (this.plant.isWeedable()) {
                 list.add(" - This crop has weeds");
             } else {
@@ -437,10 +442,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void addDisplayInfo(List information) {
-        
+
         // Add Soil Information
         information.add("Soil: " + this.getSoil().map(s -> s.getName()).orElse("Unknown"));
-        
+
         if (this.hasPlant()) {
             //Add the SEED name.
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + this.plant.getSeedName());
@@ -463,6 +468,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         } else {
             information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
         }
-        
+
     }
 }

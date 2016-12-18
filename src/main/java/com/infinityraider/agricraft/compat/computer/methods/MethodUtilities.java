@@ -26,11 +26,11 @@ public final class MethodUtilities {
         return s.isPresent() && ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, s.get().getPlant());
     }
 
-    public static IAgriPlant getCropPlant(ItemStack specimen) {
-        return SeedRegistry.getInstance().valueOf(specimen).map(seed -> seed.getPlant()).orElse(null);
+    public static Optional<IAgriPlant> getCropPlant(ItemStack specimen) {
+        return SeedRegistry.getInstance().valueOf(specimen).map(seed -> seed.getPlant());
     }
 
-    public static IAgriPlant getCropPlant(TileEntityCrop crop) {
+    public static Optional<IAgriPlant> getCropPlant(TileEntityCrop crop) {
         return crop.getPlant();
     }
 

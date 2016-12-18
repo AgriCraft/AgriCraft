@@ -2,6 +2,8 @@
  */
 package com.infinityraider.agricraft.api.stat;
 
+import java.util.Optional;
+
 /**
  * Interface for objects that have AgriStats.
  *
@@ -21,6 +23,6 @@ public interface IAgriStatProvider {
 	 *
 	 * @return the stat associated with the instance or null.
 	 */
-	IAgriStat getStat();
+	   Optional<IAgriStat> getStat();
 
 }

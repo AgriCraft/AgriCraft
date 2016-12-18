@@ -36,7 +36,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return "item.agricraft:" + AgriNuggetType.values()[stack.getMetadata()].nugget;
+		return AgriNuggetType.values()[stack.getMetadata()].getUnlocalizedName();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 	public List<ResourceLocation> getAllTextures() {
 		List<ResourceLocation> textures = new ArrayList<>(AgriNuggetType.values().length);
 		for (AgriNuggetType type : AgriNuggetType.values()) {
-			textures.add(new ResourceLocation("agricraft:items/" + type.nugget));
+			textures.add(new ResourceLocation(type.texture));
 		}
 		return textures;
 	}

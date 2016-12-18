@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -128,17 +129,28 @@ public class JsonPlant extends CropPlant {
             return builder.build();
         }
 
+        if (this.plant.getRequirement().getSoils().isEmpty()) {
+            AgriCore.getLogger("AgriCraft").warn("{0} has no valid soils to plant on!", this.plant.getPlantName());
+        }
+
         this.plant.getRequirement().getSoils().stream()
                 .map(JsonSoil::new)
                 .forEach(builder::addSoil);
 
+        this.plant.getRequirement().getBases().forEach(obj -> {
+            if (obj instanceof FuzzyStack) {
+                FuzzyStack stack = (FuzzyStack) obj;
+                builder.addRequiredBlock(stack, new BlockPos(0, -2, 0));
+            }
+        });
+        
         this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
             if (obj instanceof FuzzyStack) {
                 FuzzyStack stack = (FuzzyStack) obj;
                 builder.addRequiredBlock(stack, dist);
             }
         });
-        
+
         builder.setMinLight(this.plant.getRequirement().getMinLight());
         builder.setMaxLight(this.plant.getRequirement().getMaxLight());
 
