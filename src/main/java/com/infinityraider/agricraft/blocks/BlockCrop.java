@@ -111,7 +111,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
                 crop.spread(rand);
             } else if (crop.isFertile()) {
                 //multiplier from GROWTH stat
-                double growthBonus = 1.0 + crop.getStat().map(c -> c.getGrowth()).orElse((byte)0) / 10.0;
+                double growthBonus = 1.0 + crop.getStat().map(c -> c.getGrowth()).orElse((byte) 0) / 10.0;
                 //multiplier defined in the config
                 float global = AgriCraftConfig.growthMultiplier;
                 //crop dependent base GROWTH rate
@@ -191,26 +191,30 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     /**
      * Attempts to plant a SEED contained in the provided ItemStack.
      *
+     * @param player the player planting the seed.
      * @param stack the SEED(s) to plant.
-     * @param world the World object for this block
-     * @param pos the block position
+     * @param world the World object for this block.
+     * @param pos the block position.
      * @return if the planting operation was successful.
      */
-    public boolean plantSeed(ItemStack stack, World world, BlockPos pos) {
+    public boolean plantSeed(EntityPlayer player, ItemStack stack, World world, BlockPos pos) {
+        boolean success = false;
         TileEntity te = world.getTileEntity(pos);
         if (!world.isRemote && te instanceof TileEntityCrop) {
             TileEntityCrop crop = (TileEntityCrop) te;
             //is the cropEmpty a crosscrop or does it already have a plant
-            if (crop.isCrossCrop() || crop.hasPlant()) {
-                return false;
+            if (!crop.isCrossCrop() && !crop.hasPlant()) {
+                //the SEED can be planted here
+                Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+                success = seed.isPresent()
+                        && seed.get().getPlant().getGrowthRequirement().isMet(world, pos)
+                        && crop.setSeed(seed.get());
             }
-            //the SEED can be planted here
-            Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
-            return seed.isPresent()
-                    && seed.get().getPlant().getGrowthRequirement().isMet(world, pos)
-                    && crop.setSeed(seed.get());
         }
-        return false;
+        if (success && !player.isCreative()) {
+            stack.stackSize--;
+        }
+        return success;
     }
 
     /*
@@ -242,7 +246,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             } else if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
                 Optional<IAgriFertilizer> fert = FertilizerRegistry.getInstance().valueOf(heldItem);
                 return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, RANDOM);
-            } else if (plantSeed(heldItem, world, pos)) {
+            } else if (plantSeed(player, heldItem, world, pos)) {
                 return true;
             } //check to see if the player clicked with crops (crosscrop attempt)
             else if (heldItem.getItem() == AgriItems.getInstance().CROPS) {
@@ -305,9 +309,9 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
                     if (crop.hasSeed()) {
                         if (crop.isMature()) {
                             drops.addAll(crop.getFruits());
-                            drops.add(crop.getSeed().get().toStack());
-                        } else if (!AgriCraftConfig.onlyMatureDropSeeds) {
-                            drops.add(crop.getSeed().get().toStack());
+                        }
+                        if (crop.isMature() || !AgriCraftConfig.onlyMatureDropSeeds) {
+                            drops.add(crop.getSeed().map(s -> s.withStat(s.getStat().withMeta(0))).get().toStack());
                         }
                     }
                 }
