@@ -2,7 +2,11 @@
  */
 package com.infinityraider.agricraft.api.util;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,24 +21,31 @@ public class FuzzyStack {
     private final ItemStack stack;
 
     private final boolean ignoreMeta;
-    private final boolean ignoreTags;
     private final boolean useOreDict;
+    private final List<String> ignoreTags;
 
     public FuzzyStack(ItemStack stack) {
-        this(stack, false, false, false);
+        this(stack, false, false);
+    }
+    
+    public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean useOreDict, String... ignoreTags) {
+        this(stack, ignoreMeta, useOreDict, Arrays.asList(ignoreTags));
     }
 
-    public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean ignoreTags, boolean useOreDict) {
+    public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean useOreDict, List<String> ignoreTags) {
         if (stack == null) {
             throw new NullPointerException("The Itemstack must not be null for FuzzyStacks!");
         } else if (stack.getItem() == null) {
             throw new NullPointerException("The Item must not be null for FuzzyStacks!");
         }
 
-        this.stack = stack;
+        this.stack = stack.copy();
+        this.ignoreTags = (ignoreTags != null) ? ignoreTags : Collections.EMPTY_LIST;
         this.ignoreMeta = ignoreMeta;
-        this.ignoreTags = ignoreTags;
         this.useOreDict = useOreDict;
+        
+        this.stack.setTagCompound(stripTags(this.stack.getTagCompound()));
+        
     }
 
     public static final Optional<FuzzyStack> fromBlockState(IBlockState state) {
@@ -56,20 +67,47 @@ public class FuzzyStack {
         return this.stack.getMetadata();
     }
 
-    public Optional<NBTTagCompound> getTags() {
-        return Optional.ofNullable(this.stack.getTagCompound()).map(t -> t.copy());
+    @SuppressWarnings("null")
+    public NBTTagCompound getTagCompound() {
+        return this.stack.getTagCompound().copy();
     }
 
-    public boolean areMetaEqual(FuzzyStack other) {
+    public boolean isMetaEqual(ItemStack other) {
+        return other != null && (this.ignoreMeta || this.getMeta() == other.getMetadata());
+    }
+
+    public boolean isMetaEqual(FuzzyStack other) {
         return other != null && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
     }
-
-    public boolean areTagsEqual(FuzzyStack other) {
-        return other != null && (this.ignoreTags || other.ignoreTags || this.getTags().equals(other.getTags()));
+    
+    public boolean isTagsEqual(ItemStack other) {
+        return other != null && this.getTagCompound().equals(stripTags(other.getTagCompound()));
     }
 
-    public boolean areItemEqual(FuzzyStack other) {
+    public boolean isTagsEqual(FuzzyStack other) {
+        return other != null && other.stripTags(this.getTagCompound()).equals(this.stripTags(other.getTagCompound()));
+    }
+
+    public boolean isItemEqual(Item other) {
+        return other != null && this.stack.getItem().equals(other);
+    }
+
+    public boolean isItemEqual(ItemStack other) {
+        return other != null && this.stack.getItem().equals(other.getItem());
+    }
+
+    public boolean isItemEqual(FuzzyStack other) {
         return other != null && this.stack.getItem().equals(other.stack.getItem());
+    }
+    
+    private NBTTagCompound stripTags(NBTTagCompound tag) {
+        if (tag == null || this.ignoreTags.contains("*")) {
+            return new NBTTagCompound();
+        } else {
+            final NBTTagCompound stripped = tag.copy();
+            this.ignoreTags.forEach(stripped::removeTag);
+            return stripped;
+        }
     }
 
     @Override
@@ -84,7 +122,7 @@ public class FuzzyStack {
         } else if (obj instanceof FuzzyStack) {
             FuzzyStack other = (FuzzyStack) obj;
 
-            if (this.areItemEqual(other) && this.areMetaEqual(other) && this.areTagsEqual(other)) {
+            if (this.isItemEqual(other) && this.isMetaEqual(other) && this.isTagsEqual(other)) {
                 return true;
             }
 

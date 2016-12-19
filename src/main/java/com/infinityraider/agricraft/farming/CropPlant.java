@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -33,12 +34,12 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * The main class used by TileEntityCrop.
- * Only make one object of this per seed object, and register using the plant registry.
- * ICropPlant is implemented to be able to read data from this class from the API
+ * The main class used by TileEntityCrop. Only make one object of this per seed
+ * object, and register using the plant registry. ICropPlant is implemented to
+ * be able to read data from this class from the API
  */
 public abstract class CropPlant implements IAgriPlant {
-	
+
     private IGrowthRequirement growthRequirement;
     private boolean blackListed;
     private boolean ignoreVanillaPlantingRule;
@@ -53,29 +54,31 @@ public abstract class CropPlant implements IAgriPlant {
     /**
      * GLOBAL CROPPLANT METHODS
      */
-
     /**
-     * Gets the growth rate for this CropPlant, used in calculations on growth tick
+     * Gets the growth rate for this CropPlant, used in calculations on growth
+     * tick
+     *
      * @return the growth rate
      */
     public final int getGrowthRate() {
-    	int tier = getTier();
-    	
-    	if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
-    		return Constants.GROWTH_TIER[tier];
-    	} else {
-    		return Constants.GROWTH_TIER[0];
-    	}
+        int tier = getTier();
+
+        if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
+            return Constants.GROWTH_TIER[tier];
+        } else {
+            return Constants.GROWTH_TIER[0];
+        }
     }
 
     /**
-     * Returns the tier of the seed as represented as an integer value, or the overriding value.
-     * The overriding value may be set in the configuration files.
-     * 
+     * Returns the tier of the seed as represented as an integer value, or the
+     * overriding value. The overriding value may be set in the configuration
+     * files.
+     *
      * Does not always have same output as {@link #getTier()}.
-     * 
+     *
      * Should fall within the range of {@link Constants#GROWTH_TIER}.
-     * 
+     *
      * @return the tier of the seed.
      */
     @Override
@@ -83,7 +86,9 @@ public abstract class CropPlant implements IAgriPlant {
         return 1;
     }
 
-    /** Gets the spread chance in percent for this plant */
+    /**
+     * Gets the spread chance in percent for this plant
+     */
     @Override
     public double getSpreadChance() {
         return 1 / getTier();
@@ -98,6 +103,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Sets the blacklist status for this plant
+     *
      * @param status true if it should be blacklisted, false if not
      */
     public final void setBlackListStatus(boolean status) {
@@ -105,8 +111,10 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     /**
-     * Checks if this plant ignores the rule to disabled vanilla planting
-     * true means that the seed for this plant can still be planted even though vanilla planting is disabled
+     * Checks if this plant ignores the rule to disabled vanilla planting true
+     * means that the seed for this plant can still be planted even though
+     * vanilla planting is disabled
+     *
      * @return if this ignores the vanilla planting rule or not
      */
     public final boolean ingoresVanillaPlantingRule() {
@@ -115,7 +123,9 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Sets if this plant should ignore the rule to disabled vanilla planting
-     * true means that the seed for this plant can still be planted even though vanilla planting is disabled
+     * true means that the seed for this plant can still be planted even though
+     * vanilla planting is disabled
+     *
      * @param value if this ignores the vanilla planting rule or not
      */
     public final void setIgnoreVanillaPlantingRule(boolean value) {
@@ -125,7 +135,6 @@ public abstract class CropPlant implements IAgriPlant {
     /**
      * ICROPPLANT METHODS
      */
-
     /**
      * Gets the block instance for this plant.
      *
@@ -135,19 +144,22 @@ public abstract class CropPlant implements IAgriPlant {
     public abstract Block getBlock();
 
     @Override
-    public Collection<Item> getSeedItems() {
-        return Arrays.asList(AgriItems.getInstance().AGRI_SEED);
+    public Collection<FuzzyStack> getSeedItems() {
+        return Arrays.asList(new FuzzyStack(new ItemStack(AgriItems.getInstance().AGRI_SEED)));
     }
 
-	@Override
-	public final ItemStack getSeed() {
-		ItemStack stack = new ItemStack(this.getSeedItems().stream().findFirst().orElse(AgriItems.getInstance().AGRI_SEED));
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriNBT.SEED, this.getId());
-		new PlantStats().writeToNBT(tag);
-		stack.setTagCompound(tag);
-		return stack;
-	}
+    @Override
+    public final ItemStack getSeed() {
+        ItemStack stack = this.getSeedItems().stream()
+                .map(s -> s.toStack())
+                .findFirst()
+                .orElse(new ItemStack(AgriItems.getInstance().AGRI_SEED));
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString(AgriNBT.SEED, this.getId());
+        new PlantStats().writeToNBT(tag);
+        stack.setTagCompound(tag);
+        return stack;
+    }
 
     @Override
     public IBlockState getBlockStateForGrowthStage(int growthStage) {
@@ -156,7 +168,7 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Gets a list of all possible fruit drops from this plant.
-     * 
+     *
      * @return a list containing of all possible fruit drops.
      */
     @Override
@@ -191,10 +203,11 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     /**
-     * Gets called right before a harvest attempt, player may be null if harvested by automation.
-     * Should return false to prevent further processing.
-     * World object and coordinates are passed in the case you would want to keep track of all planted crops and their status
-     * 
+     * Gets called right before a harvest attempt, player may be null if
+     * harvested by automation. Should return false to prevent further
+     * processing. World object and coordinates are passed in the case you would
+     * want to keep track of all planted crops and their status
+     *
      * @param world the current world of the plant being harvested.
      * @param pos the block position.
      * @param player the player attempting to harvest the plant.
@@ -206,26 +219,30 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     /**
-     * Called right after the plant is added to a crop through planting, mutation, or spreading.
-     * 
+     * Called right after the plant is added to a crop through planting,
+     * mutation, or spreading.
+     *
      * @param world the world the plant is in.
-  * @param pos the block position.
+     * @param pos the block position.
      */
     @Override
-    public void onSeedPlanted(World world, BlockPos pos) {}
+    public void onSeedPlanted(World world, BlockPos pos) {
+    }
 
     /**
-     * Called right after the plant is removed from a crop, or a crop holding the plant is broken.
-     * 
+     * Called right after the plant is removed from a crop, or a crop holding
+     * the plant is broken.
+     *
      * @param world the world the plant is in.
-  * @param pos the block position.
+     * @param pos the block position.
      */
     @Override
-    public void onPlantRemoved(World world, BlockPos pos) {}
+    public void onPlantRemoved(World world, BlockPos pos) {
+    }
 
     /**
      * Determines if the plant may be grown with Bonemeal.
-     * 
+     *
      * @return if the plant may be bonemealed.
      */
     @Override
@@ -242,13 +259,16 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     @Override
-    public void onValidate(World world, BlockPos pos, IAgriCrop crop) {}
+    public void onValidate(World world, BlockPos pos, IAgriCrop crop) {
+    }
 
     @Override
-    public void onInvalidate(World world, BlockPos pos, IAgriCrop crop) {}
+    public void onInvalidate(World world, BlockPos pos, IAgriCrop crop) {
+    }
 
     @Override
-    public void onChunkUnload(World world, BlockPos pos, IAgriCrop crop) {}
+    public void onChunkUnload(World world, BlockPos pos, IAgriCrop crop) {
+    }
 
     public final void setGrowthRequirement(IGrowthRequirement growthRequirement) {
         this.growthRequirement = growthRequirement;
@@ -262,9 +282,9 @@ public abstract class CropPlant implements IAgriPlant {
     protected abstract IGrowthRequirement initGrowthRequirement();
 
     /**
-     * Attempts to apply a growth tick to the plant, if allowed.
-     * Should return true to re-render the crop clientside.
-     * 
+     * Attempts to apply a growth tick to the plant, if allowed. Should return
+     * true to re-render the crop clientside.
+     *
      * @param world the world the plant is in.
      * @param pos the block position.
      * @param oldGrowthStage the current/old growth stage of the plant.
@@ -273,10 +293,11 @@ public abstract class CropPlant implements IAgriPlant {
     public abstract void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
 
     /**
-     * Determines if the plant is mature. That is, the plant's metadata matches {@link Constants#MATURE}.
-     * 
+     * Determines if the plant is mature. That is, the plant's metadata matches
+     * {@link Constants#MATURE}.
+     *
      * @param world the world the plant is in.
-  * @param pos the block position.
+     * @param pos the block position.
      * @return if the plant is mature.
      */
     @Override
@@ -285,10 +306,12 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     /**
-     * Determines the height of the crop in float precision, as a function of the plant's metadata(growth stage).
-     * Used to render and define the height of the selection bounding box
-     * 
-     * @param meta the growth stage of the plant (may range from 0 to {@link Constants#MATURE}).
+     * Determines the height of the crop in float precision, as a function of
+     * the plant's metadata(growth stage). Used to render and define the height
+     * of the selection bounding box
+     *
+     * @param meta the growth stage of the plant (may range from 0 to
+     * {@link Constants#MATURE}).
      * @return the current height of the plant.
      */
     @Override
@@ -297,33 +320,39 @@ public abstract class CropPlant implements IAgriPlant {
 
     /**
      * Determines how the plant is rendered.
-     * 
-     * @return false to render the plant as wheat (#), true to render as a flower (X).
+     *
+     * @return false to render the plant as wheat (#), true to render as a
+     * flower (X).
      */
     @Override
     @SideOnly(Side.CLIENT)
     public abstract RenderMethod getRenderMethod();
 
     /**
-     * Gets the primary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
-     * See RenderMethod for what primary texture should be returned
+     * Gets the primary texture to render this plant with as a
+     * TextureAtlasSprite, note that this must be on the
+     * locationBlocksTextureMap See RenderMethod for what primary texture should
+     * be returned
      */
     @Override
     @SideOnly(Side.CLIENT)
     public abstract ResourceLocation getPrimaryPlantTexture(int growthStage);
 
     /**
-     * Gets the secondary texture to render this plant with as a TextureAtlasSprite, note that this must be on the locationBlocksTextureMap
-     * See RenderMethod for what secondary texture should be returned
+     * Gets the secondary texture to render this plant with as a
+     * TextureAtlasSprite, note that this must be on the
+     * locationBlocksTextureMap See RenderMethod for what secondary texture
+     * should be returned
      */
     @Override
     @SideOnly(Side.CLIENT)
     public abstract ResourceLocation getSecondaryPlantTexture(int growthStage);
 
     /**
-     * Retrieves information about the plant for the seed journal.
-     * It's possible to pass an unlocalized String, the returned value will be localized if possible.
-     * 
+     * Retrieves information about the plant for the seed journal. It's possible
+     * to pass an unlocalized String, the returned value will be localized if
+     * possible.
+     *
      * @return a string describing the plant for use by the seed journal.
      */
     @Override
@@ -338,7 +367,7 @@ public abstract class CropPlant implements IAgriPlant {
     public List<BakedQuad> getPlantQuads(IExtendedBlockState state, int growthStage, EnumFacing direction, Function<ResourceLocation, TextureAtlasSprite> textureToIcon) {
         //The quads returned from this method are added to the tessellator,
         // however the plant renderer directly adds them to the tessellator, so an empty list is returned
-        if(textureToIcon instanceof ITessellator) {
+        if (textureToIcon instanceof ITessellator) {
             PlantRenderer.renderPlant((ITessellator) textureToIcon, this, growthStage);
         }
         return Collections.emptyList();

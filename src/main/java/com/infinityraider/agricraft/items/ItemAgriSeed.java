@@ -47,7 +47,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         final PlantStats baseStat = new PlantStats();
         for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
-            if (plant.getSeedItems().isEmpty() || plant.getSeedItems().contains(this)) {
+            if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
                 ItemStack stack = new ItemStack(item);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setString(AgriNBT.SEED, plant.getId());

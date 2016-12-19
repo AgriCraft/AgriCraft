@@ -12,6 +12,7 @@ import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.Collection;
@@ -19,8 +20,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +31,7 @@ public class JsonPlant extends CropPlant {
 
     public final AgriPlant plant;
 
-    private List<Item> seedItems;
+    private List<FuzzyStack> seedItems;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = plant;
@@ -55,12 +54,15 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public Collection<Item> getSeedItems() {
+    public Collection<FuzzyStack> getSeedItems() {
         if (this.seedItems == null) {
             this.seedItems = this.plant.getSeedItems().stream()
-                    .map(i -> Item.getByNameOrId(i))
+                    .map(i -> (FuzzyStack) i.toStack())
                     .filter(TypeHelper::isNonNull)
                     .collect(Collectors.toList());
+            if (this.seedItems.isEmpty()) {
+                this.seedItems.add(new FuzzyStack(new ItemStack(AgriItems.getInstance().AGRI_SEED)));
+            }
         }
         return this.seedItems;
     }
@@ -143,7 +145,7 @@ public class JsonPlant extends CropPlant {
                 builder.addRequiredBlock(stack, new BlockPos(0, -2, 0));
             }
         });
-        
+
         this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
             if (obj instanceof FuzzyStack) {
                 FuzzyStack stack = (FuzzyStack) obj;

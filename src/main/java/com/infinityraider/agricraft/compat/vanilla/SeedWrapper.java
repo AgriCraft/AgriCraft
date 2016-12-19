@@ -6,9 +6,11 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.utility.StackHelper;
 import java.util.Optional;
 import net.minecraft.item.ItemStack;
 
@@ -33,8 +35,12 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
     }
 
     private AgriSeed resolve(ItemStack stack) {
+        if (!StackHelper.isValid(stack)) {
+            return null;
+        }
+        final FuzzyStack toResolve = new FuzzyStack(stack);
         Optional<IAgriPlant> plant = PlantRegistry.getInstance().getPlants().stream()
-                .filter(p -> p.getSeedItems().contains(stack.getItem()))
+                .filter(p -> p.getSeedItems().contains(toResolve))
                 .findFirst();
         if (plant.isPresent()) {
             Optional<IAgriStat> stats = StatRegistry.getInstance().valueOf(stack.getTagCompound());
