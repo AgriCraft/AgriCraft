@@ -20,20 +20,10 @@ import net.minecraft.util.text.TextFormatting;
 public class AgriCraftConfig {
 
     // Core
-    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Register crop products in the ore dict", comment = "Set to false to not register crop products to the ore dictionary if you are experiencing issues with GregTech (note that disabling this will have the side effect that seeds will no longer work with the Phytogenic Insulator).")
-    public static boolean registerCropProductsToOreDict = true;
-    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Enable Resource Crops", comment = "Set to true if you wish to enable resource crops.")
-    public static boolean resourcePlants = true;
-    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Clear Tall Grass Drops", comment = "Set to true to clear the list of items dropping from tall grass (Will run before adding seeds defined in the grass drops config).")
-    public static boolean wipeTallGrassDrops = false;
-    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Render Book in Anaylzer", comment = "Set to false to not render the journal on the analyzer.")
-    public static boolean renderBookInAnalyzer = true;
     @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Crops per Craft", min = "1", max = "4", comment = "The number of crops you get per crafting operation.")
     public static int cropsPerCraft = 4;
     @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Crop Stat Cap", min = "1", max = "10", comment = "The maximum attainable value of the stats on a crop.")
     public static int cropStatCap = 10;
-    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Enable Custom Crops", comment = "Set to true if you wish to create your own crops.")
-    public static boolean customCrops = false;
 
     // Debug
     @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "debug", comment = "Set to true to enable debug mode.")
@@ -73,8 +63,6 @@ public class AgriCraftConfig {
     public static int cropStatDivisor = 2;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Only mature crops drop seeds", comment = "Set this to true to make only mature crops drop seeds (to encourage trowel usage).")
     public static boolean onlyMatureDropSeeds = false;
-    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Mod specific drops", comment = "Set to false to disable mod specific drops, this will (for instance) cause Natura berries to drop from Harvestcraft berry crops.")
-    public static boolean modSpecificDrops = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Non parent crops affect stats negatively", comment = "True means any crop that is not considered a valid parent will affect stat gain negatively.")
     public static boolean otherCropsAffectStatsNegatively = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Mutation Chance", min = "0", max = "1", comment = "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading.")
@@ -111,10 +99,11 @@ public class AgriCraftConfig {
     public static int greenHouseMaxTier = 3;
 
     // Client
-    @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
-    public static boolean condenseCustomWoodInNei = true;
+    //@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
+    //public static boolean condenseCustomWoodInNei = true;
     @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Stat Display", comment = "This defines how to display the stats of plants.")
     public static String STAT_FORMAT = TextFormatting.GREEN + "- {0}: [{1}/{2}]";
+    // TODO: Instead follow the reduce particles setting from minecraft.
     @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable particles", comment = "Set to true to disable particles for the sprinklers.")
     public static boolean disableParticles = false;
     @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable sounds", comment = "Set to true to disable sounds.")
@@ -127,8 +116,6 @@ public class AgriCraftConfig {
     public static boolean disableSeedWarehouse = false;
 
     // Decoration
-    @AgriConfigurable(category = AgriConfigCategory.DECORATION, key = "Enable Fences", comment = "Set to false to disable the decorative custom wood fences.")
-    public static boolean enableFences = true;
     @AgriConfigurable(category = AgriConfigCategory.DECORATION, key = "Enable Grates", comment = "Set to false to disable the decorative custom wood grates.")
     public static boolean enableGrates = true;
 
