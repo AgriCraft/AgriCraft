@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +37,7 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntityChannel> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannel.class);
+        Optional<TileEntityChannel> tile = WorldHelper.getTile(worldIn, pos, TileEntityChannel.class);
         if (tile.isPresent()) {
             TileEntityChannel channel = tile.get();
             for (EnumFacing facing : EnumFacing.HORIZONTALS) {

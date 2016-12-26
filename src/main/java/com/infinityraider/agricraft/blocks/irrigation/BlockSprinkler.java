@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntitySprinkler;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
@@ -62,7 +62,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 
 	@Override
 	public final IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		Optional<TileEntityChannel> tile = AgriWorldHelper.getTile(world, pos.up(), TileEntityChannel.class);
+		Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos.up(), TileEntityChannel.class);
         return ((IExtendedBlockState) state).withProperty(AgriProperties.CUSTOM_WOOD_TYPE,
                 tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
 	}

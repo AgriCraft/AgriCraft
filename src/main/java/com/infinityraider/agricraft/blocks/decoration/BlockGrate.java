@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,7 +43,7 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntityGrate> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityGrate.class);
+        Optional<TileEntityGrate> tile = WorldHelper.getTile(worldIn, pos, TileEntityGrate.class);
         state = AgriProperties.VINES.applyToBlockState(state, tile.map(TileEntityGrate::getVines).orElse(TileEntityGrate.EnumVines.NONE));
         state = AgriProperties.OFFSET.applyToBlockState(state, tile.map(TileEntityGrate::getOffset).orElse(TileEntityGrate.EnumOffset.NEAR));
         state = AgriProperties.AXIS.applyToBlockState(state, tile.map(TileEntityGrate::getAxis).orElse(EnumFacing.Axis.X));

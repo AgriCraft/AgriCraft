@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -18,7 +19,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -84,6 +84,11 @@ public abstract class CropPlant implements IAgriPlant {
     @Override
     public int getTier() {
         return 1;
+    }
+
+    @Override
+    public int maxGrowthStage() {
+        return 8;
     }
 
     /**
@@ -161,11 +166,6 @@ public abstract class CropPlant implements IAgriPlant {
         return stack;
     }
 
-    @Override
-    public IBlockState getBlockStateForGrowthStage(int growthStage) {
-        return getBlock().getStateFromMeta(growthStage);
-    }
-
     /**
      * Gets a list of all possible fruit drops from this plant.
      *
@@ -187,13 +187,13 @@ public abstract class CropPlant implements IAgriPlant {
      * Returns an ArrayList with amount of random fruit stacks for this plant.
      * Gain is passed to allow for different fruits for higher gain levels
      *
-     * @param gain the gain, as in number of drops.
+     * @param stats the gain, as in number of drops.
      * @param rand a random for choosing the drop.
      * @return a list containing random fruit drops from this plant.
      */
     @Override
-    public List<ItemStack> getFruitsOnHarvest(int gain, Random rand) {
-        int amount = (int) (Math.ceil((gain + 0.00) / 3));
+    public List<ItemStack> getFruitsOnHarvest(IAgriStat stats, Random rand) {
+        int amount = (int) (Math.ceil((stats.getGain() + 0.00) / 3));
         ArrayList<ItemStack> list = new ArrayList<>();
         while (amount > 0) {
             list.add(getRandomFruit(rand));

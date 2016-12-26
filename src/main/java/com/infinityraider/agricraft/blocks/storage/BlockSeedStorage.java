@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +70,7 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntitySeedStorage> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntitySeedStorage.class);
+        Optional<TileEntitySeedStorage> tile = WorldHelper.getTile(worldIn, pos, TileEntitySeedStorage.class);
         if (tile.isPresent()) {
             TileEntitySeedStorage storage = tile.get();
             state = AgriProperties.FACING.applyToBlockState(state, storage.getOrientation());

@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 
 import java.util.Optional;
@@ -121,7 +121,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntityTank> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityTank.class);
+        Optional<TileEntityTank> tile = WorldHelper.getTile(worldIn, pos, TileEntityTank.class);
         if (tile.isPresent()) {
             TileEntityTank tank = tile.get();
             for (EnumFacing facing : EnumFacing.values()) {

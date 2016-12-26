@@ -4,13 +4,13 @@ import com.infinityraider.agricraft.api.crop.IAdditionalCropData;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -77,6 +77,11 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     int getTier();
 
     /**
+     * gets the number of growth stages
+     */
+    int maxGrowthStage();
+
+    /**
      * Gets a stack of the seed for this plant.
      *
      * @return the plant's seed.
@@ -87,13 +92,6 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      * Gets a block instance of the crop
      */
     Block getBlock();
-
-    /**
-     * Gets the blockstate for the block with the current growthstage
-     * (growtstage goes from 0 for sprout to 7 for mature)
-     *
-     */
-    IBlockState getBlockStateForGrowthStage(int growthstage);
 
     /**
      * Gets a List of all possible fruit drops from this plant
@@ -108,7 +106,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * Returns an ArrayList with random fruit stacks for this plant
      */
-    List<ItemStack> getFruitsOnHarvest(int gain, Random rand);
+    List<ItemStack> getFruitsOnHarvest(IAgriStat stats, Random rand);
 
     /**
      * Gets called right before a harvest attempt, return false to prevent

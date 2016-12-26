@@ -67,11 +67,11 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
      */
     boolean isMature();
 
-    default boolean spawn(Random rand) {
+    default boolean spawn() {
         return false;
     }
 
-    default boolean spread(Random rand) {
+    default boolean spread() {
         return false;
     }
 
