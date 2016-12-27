@@ -83,7 +83,7 @@ public class AgriCraft extends InfinityMod {
 
 	@Override
 	public Object getModEntityRegistry() {
-		return AgriEntities.class;
+		return AgriEntities.getInstance();
 	}
 
 	@Override

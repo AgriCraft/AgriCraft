@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
-import com.infinityraider.agricraft.init.AgriEntities;
 import com.infinityraider.agricraft.init.AgriRecipes;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.CustomWoodType;
@@ -34,7 +33,6 @@ public interface IProxy extends IProxyBase {
     @Override
     default void initStart(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(AgriCraft.instance, new GuiHandler());
-        AgriEntities.init();
         PluginHandler.init();
         initCustomWoodTypes();
     }
