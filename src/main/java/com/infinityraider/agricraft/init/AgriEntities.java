@@ -18,6 +18,7 @@ public class AgriEntities {
                 .setTrackingDistance(64)
                 .setVelocityUpdates(true)
                 .setUpdateFrequency(1)
-                .onRegisterCallBack(() ->  VillagerRegistry.instance().register(EntityVillagerFarmer.PROFESSION));
+                .onRegisterCallBack(() ->  VillagerRegistry.instance().register(EntityVillagerFarmer.PROFESSION))
+                .setRenderFactory(EntityVillagerFarmer.RenderFactory.getInstance());
     }
 }
