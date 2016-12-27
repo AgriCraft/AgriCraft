@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriStack;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
@@ -14,7 +15,6 @@ import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -95,7 +95,7 @@ public class JsonPlant extends CropPlant {
     @Override
     public List<ItemStack> getAllFruits() {
         return this.plant.getProducts().getAll().stream()
-                .map(p -> p.toStack())
+                .map(AgriStack::toStack)
                 .filter(p -> p instanceof FuzzyStack)
                 .map(p -> ((FuzzyStack) p).toStack())
                 .collect(Collectors.toList());
@@ -104,7 +104,7 @@ public class JsonPlant extends CropPlant {
     @Override
     public ItemStack getRandomFruit(Random rand) {
         return this.plant.getProducts().getRandom(rand).stream()
-                .map(p -> p.toStack())
+                .map(AgriStack::toStack)
                 .filter(p -> p instanceof FuzzyStack)
                 .map(p -> ((FuzzyStack) p).toStack())
                 .findFirst()
@@ -196,7 +196,7 @@ public class JsonPlant extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public ResourceLocation getPrimaryPlantTexture(int growthStage) {
-        return new ResourceLocation(plant.getTexture().getPlantTexture(growthStage));
+        return plant.getTexture().getPlantTexture(growthStage);
     }
 
     @Override
@@ -207,15 +207,6 @@ public class JsonPlant extends CropPlant {
 
     @Override
     public ResourceLocation getSeedTexture() {
-        return new ResourceLocation(plant.getTexture().getSeedTexture());
+        return plant.getTexture().getSeedTexture();
     }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons() {
-        for (String tex : this.plant.getTexture().getPlantTextures()) {
-            //AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
-            IconHelper.registerIcon(tex);
-        }
-    }
-
 }

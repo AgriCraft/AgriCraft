@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.SoundHandler;
+import com.infinityraider.agricraft.handler.TextureStitchHandler;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
@@ -16,8 +17,9 @@ public class ClientProxy implements IClientProxyBase, IProxy {
 	@Override
 	public void registerEventHandlers() {
 		IProxy.super.registerEventHandlers();
-		registerEventHandler(new ItemToolTipHandler());
-		registerEventHandler(new SoundHandler());
+		registerEventHandler(ItemToolTipHandler.getInstance());
+		registerEventHandler(SoundHandler.getInstance());
+		registerEventHandler(TextureStitchHandler.getInstance());
 	}
 
 	@Override

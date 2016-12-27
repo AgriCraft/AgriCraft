@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
@@ -26,7 +25,7 @@ public interface IProxy extends IProxyBase {
 
     @Override
     default void preInitStart(FMLPreInitializationEvent event) {
-        CoreHandler.preinit(event);
+        CoreHandler.preInit(event);
         registerEventHandler(AgriCraft.instance);
         StatRegistry.getInstance().registerAdapter(new PlantStats());
         PluginHandler.preInit(event);
@@ -41,8 +40,12 @@ public interface IProxy extends IProxyBase {
     }
 
     @Override
+    default void initEnd(FMLInitializationEvent event) {
+        CoreHandler.init();
+    }
+
+    @Override
     default void postInitStart(FMLPostInitializationEvent event) {
-        CoreHandler.postInit(event);
         PluginHandler.postInit();
         AgriRecipes.init();
         GrowthRequirementHandler.init();

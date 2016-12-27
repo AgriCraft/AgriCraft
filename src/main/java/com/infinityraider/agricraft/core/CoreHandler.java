@@ -4,22 +4,20 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.agricraft.agricore.config.AgriConfigAdapter;
-import com.agricraft.agricore.registry.AgriPlants;
 import com.agricraft.agricore.util.ResourceHelper;
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,8 +46,7 @@ public final class CoreHandler {
 		return jsonDir;
 	}
 
-	@EventHandler
-	public static void preinit(FMLPreInitializationEvent event) {
+	public static void preInit(FMLPreInitializationEvent event) {
 
 		// Setup Config.
 		configDir = event.getSuggestedConfigurationFile().getParentFile().toPath().resolve(Reference.MOD_ID);
@@ -73,8 +70,7 @@ public final class CoreHandler {
 				);
 	}
 
-	@EventHandler
-	public static void postInit(FMLPostInitializationEvent event) {
+	public static void init() {
 
 		// Load the core!
 		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
@@ -141,14 +137,7 @@ public final class CoreHandler {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void loadTextures(Consumer<ResourceLocation> register) {
-		final AgriPlants preloaded = new AgriPlants();
-		AgriLoader.loadDirectory(jsonDir, preloaded);
-		preloaded.getAll().stream()
-				.flatMap(p -> p.getTexture().getAllTextures().stream())
-				.filter(TypeHelper::isNonNull)
-				.map(ResourceLocation::new)
-				.forEach(register);
+	public static void loadTextures(Consumer<ResourceLocation> consumer) {
+		AgriCore.getPlants().getAll().forEach(plant -> plant.getTexture().getAllTextures().forEach(consumer));
 	}
-
 }
