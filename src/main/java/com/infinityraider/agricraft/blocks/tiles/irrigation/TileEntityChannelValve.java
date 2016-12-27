@@ -26,12 +26,14 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     @Override
     protected final void writeChannelNBT(NBTTagCompound tag) {
         tag.setBoolean(AgriNBT.POWER, powered);
+        this.levers.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity
     @Override
     protected final void readChannelNBT(NBTTagCompound tag) {
         this.powered = tag.getBoolean(AgriNBT.POWER);
+        this.levers.readFromNBT(tag);
     }
 
     @Override
@@ -58,9 +60,10 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
             IBlockState neighbour = this.getWorld().getBlockState(this.getPos().add(dir.getFrontOffsetX(), 0, dir.getFrontOffsetZ()));
             this.levers.setConnected(dir, neighbour.getBlock() instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir);
         }
+        this.markForUpdate();
     }
 
-    public IBlockState addLeversToState(IExtendedBlockState state) {
+    public IExtendedBlockState addLeversToState(IExtendedBlockState state) {
         return state.withProperty(AgriProperties.CONNECTIONS, this.levers);
     }
 

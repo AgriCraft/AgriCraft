@@ -60,7 +60,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
         if(state instanceof IExtendedBlockState) {
             IExtendedBlockState extendedState = (IExtendedBlockState) state;
             SidedConnection levers = extendedState.getValue(AgriProperties.CONNECTIONS);
-            if (levers.isConnected(dir)) {
+            if (levers != null && levers.isConnected(dir)) {
                 renderConnector(tessellator, dir, matIcon);
             }
             if (connect) {

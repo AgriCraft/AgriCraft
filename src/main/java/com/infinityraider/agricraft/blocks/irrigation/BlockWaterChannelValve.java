@@ -60,7 +60,7 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof TileEntityChannelValve) {
             TileEntityChannelValve valve = (TileEntityChannelValve) te;
-            valve.addLeversToState(state);
+            state = valve.addLeversToState(state);
         }
         return state;
     }
