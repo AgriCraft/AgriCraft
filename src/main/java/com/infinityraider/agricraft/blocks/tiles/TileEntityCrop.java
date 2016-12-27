@@ -40,7 +40,6 @@ import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriProperties;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
 
@@ -168,14 +167,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void applyBoneMeal() {
         if(!this.isRemote()) {
             if (this.hasPlant() || this.canWeed()) {
-                int newStage = this.growthStage + 2 + this.getRandom().nextInt(3);
-                if (newStage > this.plant.maxGrowthStage()) {
-                    newStage = this.plant.maxGrowthStage();
-                }
-                if(newStage != this.growthStage) {
-                    this.growthStage = newStage;
-                    this.markForUpdate();
-                }
+                this.setGrowthStage(this.growthStage + 2 + this.getRandom().nextInt(3));
             } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
                 this.crossOver();
             }
@@ -220,11 +212,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void setCrossCrop(boolean status) {
-        if (status != this.crossCrop) {
+        if (!this.isRemote() && status != this.crossCrop) {
             this.crossCrop = status;
             SoundType type = Blocks.PLANKS.getSoundType(null, null, null, null);
             worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
-            this.worldObj.setBlockState(pos, AgriProperties.CROSSCROP.applyToBlockState(this.getState(), status), 2);
             this.markForUpdate();
         }
     }
@@ -476,13 +467,13 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void writeTileNBT(NBTTagCompound tag) {
         if (this.stats != null) {
             this.stats.writeToNBT(tag);
-            tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
-            if (plant != null) {
-                tag.setString(AgriNBT.SEED, plant.getId());
-            }
-            if (getAdditionalCropData() != null) {
-                tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
-            }
+        }
+        tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
+        if (plant != null) {
+            tag.setString(AgriNBT.SEED, plant.getId());
+        }
+        if (getAdditionalCropData() != null) {
+            tag.setTag(AgriNBT.INVENTORY, getAdditionalCropData().writeToNBT());
         }
         //AgriCore.getLogger("Plant-Tag").debug("Write Tag: {0}", tag);
     }
