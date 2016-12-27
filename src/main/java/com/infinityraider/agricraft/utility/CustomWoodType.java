@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 
 /**
  * Class representing possible custom wood types.

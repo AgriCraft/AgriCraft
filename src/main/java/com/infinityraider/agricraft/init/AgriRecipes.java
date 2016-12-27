@@ -19,6 +19,7 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -56,6 +57,7 @@ public class AgriRecipes {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.getInstance().SEED_ANALYZER, 1), "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
         //journal
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriItems.getInstance().JOURNAL, 1), "csc", "sbs", "csc", 'c', AgriItems.getInstance().CROPS, 's', "listAllseed", 'b', Items.WRITABLE_BOOK));
+        RecipeSorter.register("recipe.copy_journal", RecipeJournal.class, RecipeSorter.Category.SHAPELESS, "");
         GameRegistry.addRecipe(new RecipeJournal());
         //trowel
         if (AgriItems.getInstance().TROWEL.isEnabled()) {
@@ -106,6 +108,7 @@ public class AgriRecipes {
 
     private static void registerCustomWoodRecipes() {
         initWoodList();
+        RecipeSorter.register("recipe.custom_wood_shapeless", RecipeShapelessCustomWood.class, RecipeSorter.Category.SHAPELESS, "");
         if (AgriCraftConfig.enableIrrigation) {
             ItemStack channel = new ItemStack(AgriBlocks.getInstance().CHANNEL, 1);
             ItemStack channelFull = new ItemStack(AgriBlocks.getInstance().CHANNEL_FULL, 1);
