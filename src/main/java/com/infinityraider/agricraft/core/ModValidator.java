@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.core;
 import com.agricraft.agricore.util.AgriValidator;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -39,8 +40,12 @@ public class ModValidator implements AgriValidator {
 
 	@Override
 	public boolean isValidTexture(String texture) {
-		//AgriCore.getLogger("AgriCraft").warn("Faking texture result for: " + texture);
-		return true;
+        try {
+            ResourceLocation temp = new ResourceLocation(texture);
+            return true;
+        } catch (NullPointerException e) {
+            return false;
+        }
 	}
 	
 }

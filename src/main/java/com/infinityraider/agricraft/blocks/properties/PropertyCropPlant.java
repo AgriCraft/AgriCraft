@@ -4,9 +4,11 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class PropertyCropPlant implements IUnlistedProperty<IAgriPlant> {
+
     public static final PropertyCropPlant PROPERTY = new PropertyCropPlant();
 
-    private PropertyCropPlant() {}
+    private PropertyCropPlant() {
+    }
 
     @Override
     public String getName() {

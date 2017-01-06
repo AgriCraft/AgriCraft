@@ -54,7 +54,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWith
 			if (crop.hasPlant() && crop.getGrowthStage() > 1) {
 				crop.setGrowthStage(crop.getGrowthStage() - 1);
 				AgriSeed seed = crop.getSeed().get();
-				seed = seed.withStat(seed.getStat().withMeta(1));
+				seed = seed.withStat(seed.getStat());
 				world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), ItemClipping.getClipping(seed, 1)));
 				return EnumActionResult.SUCCESS;
 			}

@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
@@ -150,7 +150,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 
     @Override
     public final IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        Optional<TileEntityCustomWood> tile = AgriWorldHelper.getTile(world, pos, TileEntityCustomWood.class);
+        Optional<TileEntityCustomWood> tile = WorldHelper.getTile(world, pos, TileEntityCustomWood.class);
         return extendedCustomWoodState((IExtendedBlockState) state, world, pos)
                 .withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
     }

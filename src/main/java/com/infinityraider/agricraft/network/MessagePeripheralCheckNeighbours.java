@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -29,7 +29,7 @@ public class MessagePeripheralCheckNeighbours extends MessageBase<IMessage> {
     protected void processMessage(MessageContext ctx) {
         World world = AgriCraft.proxy.getClientWorld();
         if(world != null) {
-            AgriWorldHelper.getTile(world, pos, TileEntityPeripheral.class).ifPresent(TileEntityPeripheral::checkSides);
+            WorldHelper.getTile(world, pos, TileEntityPeripheral.class).ifPresent(TileEntityPeripheral::checkSides);
         }
     }
 

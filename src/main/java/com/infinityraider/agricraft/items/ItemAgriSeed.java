@@ -88,7 +88,6 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
         tags.add(PlantStats.NBT_GROWTH);
         tags.add(PlantStats.NBT_GAIN);
         tags.add(PlantStats.NBT_STRENGTH);
-        tags.add(PlantStats.NBT_META);
         return tags;
     }
 

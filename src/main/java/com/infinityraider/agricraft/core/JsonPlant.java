@@ -5,7 +5,9 @@ package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriStack;
 import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
@@ -14,7 +16,6 @@ import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.agricraft.utility.IconHelper;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -93,9 +94,14 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
+    public int getGrowthStages() {
+        return this.plant.getGrowthStages();
+    }
+
+    @Override
     public List<ItemStack> getAllFruits() {
         return this.plant.getProducts().getAll().stream()
-                .map(p -> p.toStack())
+                .map(AgriStack::toStack)
                 .filter(p -> p instanceof FuzzyStack)
                 .map(p -> ((FuzzyStack) p).toStack())
                 .collect(Collectors.toList());
@@ -104,7 +110,7 @@ public class JsonPlant extends CropPlant {
     @Override
     public ItemStack getRandomFruit(Random rand) {
         return this.plant.getProducts().getRandom(rand).stream()
-                .map(p -> p.toStack())
+                .map(AgriStack::toStack)
                 .filter(p -> p instanceof FuzzyStack)
                 .map(p -> ((FuzzyStack) p).toStack())
                 .findFirst()
@@ -112,7 +118,7 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
+    public void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage) {
         // Holder
     }
 
@@ -209,13 +215,4 @@ public class JsonPlant extends CropPlant {
     public ResourceLocation getSeedTexture() {
         return new ResourceLocation(plant.getTexture().getSeedTexture());
     }
-
-    @SideOnly(Side.CLIENT)
-    public void registerIcons() {
-        for (String tex : this.plant.getTexture().getPlantTextures()) {
-            //AgriCore.getLogger("AgriCraft").debug("Registering: " + tex);
-            IconHelper.registerIcon(tex);
-        }
-    }
-
 }

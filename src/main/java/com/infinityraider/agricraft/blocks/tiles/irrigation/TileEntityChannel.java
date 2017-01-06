@@ -18,7 +18,8 @@ import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
@@ -57,8 +58,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     void writeChannelNBT(NBTTagCompound tag) {
     }
 
-	//this loads the saved data for the tile entity
-	@Override
+    //this loads the saved data for the tile entity
+    @Override
     protected final void readNBT(NBTTagCompound tag) {
         if (tag.hasKey(AgriNBT.LEVEL)) {
             this.lvl = tag.getInteger(AgriNBT.LEVEL);
@@ -71,7 +72,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     void readChannelNBT(NBTTagCompound tag) {
     }
 
-	@Override
+    @Override
     public int getFluidAmount(int y) {
         return this.lvl;
     }
@@ -151,17 +152,19 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     /**
      * Only used for rendering
-     * 
+     *
      * @param direction The direction to check for a neighbor in.
      * @return If a neighbor is present in the given direction.
      */
     @SideOnly(Side.CLIENT)
     public boolean hasNeighbourCheck(EnumFacing direction) {
-        if (this.worldObj == null) {
-            return false;
+        if (this.worldObj != null) {
+            TileEntity tile = this.worldObj.getTileEntity(pos.offset(direction));
+            return (tile instanceof IIrrigationComponent)
+                    && (tile instanceof TileEntityCustomWood)
+                    && (this.isSameMaterial((TileEntityCustomWood) tile));
         }
-        TileEntity tileEntityAt = this.worldObj.getTileEntity(pos.offset(direction));
-        return (tileEntityAt != null) && (tileEntityAt instanceof IIrrigationComponent) && (this.isSameMaterial((TileEntityCustomWood) tileEntityAt));
+        return false;
     }
 
     public IIrrigationComponent getNeighbor(EnumFacing direction) {
@@ -224,7 +227,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                 }
             }
             // Handle Sprinklers
-            TileEntitySprinkler spr = AgriWorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class).orElse(null);
+            TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class).orElse(null);
             if (spr != null) {
                 updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
             }
@@ -264,7 +267,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     /**
      * Maps the current fluid LEVEL into the integer interval [0, 16]
-     * 
+     *
      * @return The discrete fluid level.
      */
     public int getDiscreteFluidLevel() {

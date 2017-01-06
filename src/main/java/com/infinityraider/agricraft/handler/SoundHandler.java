@@ -15,6 +15,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SoundHandler {
+    private static final SoundHandler INSTANCE = new SoundHandler();
+
+    public static SoundHandler getInstance() {
+        return INSTANCE;
+    }
+
+    private SoundHandler() {}
+
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onSoundPlayed(SoundEvent.SoundSourceEvent event) {

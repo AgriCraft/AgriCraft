@@ -18,9 +18,9 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 	private static final double WIDTH = 2 * Constants.UNIT;
 	private static final double LENGTH = 1;
 
-	private EnumOffset offset;
-	private EnumVines vines;
-    private EnumFacing.Axis axis;
+	private EnumOffset offset = EnumOffset.NEAR;
+	private EnumVines vines = EnumVines.NONE;
+    private EnumFacing.Axis axis = EnumFacing.Axis.X;
 	private double[] bounds;
 
 	public TileEntityGrate() {

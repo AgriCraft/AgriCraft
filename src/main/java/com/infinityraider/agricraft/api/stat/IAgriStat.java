@@ -27,14 +27,6 @@ public interface IAgriStat {
 	boolean isAnalyzed();
 
 	/**
-	 * The meta value for the object. Placed here so that seeds may store an
-	 * initial growth amount.
-	 *
-	 * @return
-	 */
-	byte getMeta();
-
-	/**
 	 * @return The growth value of the seed.
 	 */
 	byte getGrowth();
@@ -71,14 +63,6 @@ public interface IAgriStat {
 	 * @return the new stat.
 	 */
 	IAgriStat withAnalyzed(boolean analyzed);
-
-	/**
-	 * Sets the meta value.
-	 *
-	 * @param meta the meta value.
-	 * @return the new stat.
-	 */
-	IAgriStat withMeta(int meta);
 
 	/**
 	 * Sets the growth stat.

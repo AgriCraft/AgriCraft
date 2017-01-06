@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannelValve;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -51,7 +51,7 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntityChannelValve> tile = AgriWorldHelper.getTile(worldIn, pos, TileEntityChannelValve.class);
+        Optional<TileEntityChannelValve> tile = WorldHelper.getTile(worldIn, pos, TileEntityChannelValve.class);
 		return AgriProperties.POWERED.applyToBlockState(super.getActualState(state, worldIn, pos), tile.isPresent() && tile.get().isPowered());
 	}
 
@@ -60,7 +60,7 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof TileEntityChannelValve) {
             TileEntityChannelValve valve = (TileEntityChannelValve) te;
-            valve.addLeversToState(state);
+            state = valve.addLeversToState(state);
         }
         return state;
     }

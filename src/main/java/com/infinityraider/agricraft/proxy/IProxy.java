@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
@@ -10,7 +9,6 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
-import com.infinityraider.agricraft.init.AgriEntities;
 import com.infinityraider.agricraft.init.AgriRecipes;
 import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.CustomWoodType;
@@ -26,7 +24,7 @@ public interface IProxy extends IProxyBase {
 
     @Override
     default void preInitStart(FMLPreInitializationEvent event) {
-        CoreHandler.preinit(event);
+        CoreHandler.preInit(event);
         registerEventHandler(AgriCraft.instance);
         StatRegistry.getInstance().registerAdapter(new PlantStats());
         PluginHandler.preInit(event);
@@ -35,14 +33,17 @@ public interface IProxy extends IProxyBase {
     @Override
     default void initStart(FMLInitializationEvent event) {
         NetworkRegistry.INSTANCE.registerGuiHandler(AgriCraft.instance, new GuiHandler());
-        AgriEntities.init();
         PluginHandler.init();
         initCustomWoodTypes();
     }
 
     @Override
+    default void initEnd(FMLInitializationEvent event) {
+        CoreHandler.init();
+    }
+
+    @Override
     default void postInitStart(FMLPostInitializationEvent event) {
-        CoreHandler.postInit(event);
         PluginHandler.postInit();
         AgriRecipes.init();
         GrowthRequirementHandler.init();

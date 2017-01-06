@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.utility.AgriWorldHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.agricraft.utility.BlockRange;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
@@ -153,7 +153,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     }
 
     public boolean canSprinkle() {
-        return AgriWorldHelper
+        return WorldHelper
                 .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
                 .filter(c -> c.getFluidAmount(0) > AgriCraftConfig.sprinklerRatePerHalfSecond)
                 .isPresent();
@@ -190,7 +190,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getChannelIcon() {
         // Fetch the Icon using the handy world helper class.
-        return AgriWorldHelper
+        return WorldHelper
                 .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
                 .map(c -> c.getIcon())
                 .orElse(BaseIcons.OAK_PLANKS.getIcon());

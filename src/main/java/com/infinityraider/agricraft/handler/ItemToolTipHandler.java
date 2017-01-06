@@ -15,6 +15,13 @@ import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class ItemToolTipHandler {
+	private static final ItemToolTipHandler INSTANCE = new ItemToolTipHandler();
+
+    public static ItemToolTipHandler getInstance() {
+        return INSTANCE;
+    }
+
+    private ItemToolTipHandler() {}
 
 	/**
 	 * Adds tooltips for SEED stats.

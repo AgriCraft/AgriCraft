@@ -1,12 +1,10 @@
 package com.infinityraider.agricraft;
 
-import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.init.AgriEntities;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
@@ -15,13 +13,6 @@ import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-
-import java.util.ArrayList;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * <p>
@@ -91,6 +82,11 @@ public class AgriCraft extends InfinityMod {
 	}
 
 	@Override
+	public Object getModEntityRegistry() {
+		return AgriEntities.getInstance();
+	}
+
+	@Override
 	public void registerMessages(INetworkWrapper wrapper) {
 		wrapper.registerMessage(MessageContainerSeedStorage.class);
 		wrapper.registerMessage(MessageFertilizerApplied.class);
@@ -102,32 +98,4 @@ public class AgriCraft extends InfinityMod {
         wrapper.registerMessage(MessageSyncPlantJson.class);
         wrapper.registerMessage(MessageSyncMutationJson.class);
 	}
-
-	@Mod.EventHandler
-	@SuppressWarnings("unused")
-	public void onMissingMappings(FMLMissingMappingsEvent event) {
-		ArrayList<String> removedIds = new ArrayList<>();
-		removedIds.add("AgriCraft:cropMelon");
-		removedIds.add("AgriCraft:cropPumpkin");
-		removedIds.add("AgriCraft:sprinklerItem");
-		for (FMLMissingMappingsEvent.MissingMapping missingMapping : event.get()) {
-			if (removedIds.contains(missingMapping.name)) {
-				missingMapping.ignore();
-			}
-		}
-	}
-
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("unused")
-	public void onTextureStitch(TextureStitchEvent e) {
-		CoreHandler.loadTextures(e.getMap()::registerSprite);
-		PluginHandler.loadTextures(e.getMap()::registerSprite);
-	}
-
-    @Override
-    public Object getModEntityRegistry() {
-        return AgriEntities.class;
-    }
-
 }
