@@ -16,7 +16,6 @@ import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -63,7 +62,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // Crop in world logic
     // =========================================================================
     public void growthTick() {
-        if(!this.isRemote()) {
+        if (!this.isRemote()) {
             if (this.hasPlant()) {
                 if (this.isMature()) {
                     this.spread();
@@ -165,7 +164,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     public void applyBoneMeal() {
-        if(!this.isRemote()) {
+        if (!this.isRemote()) {
             if (this.hasPlant() || this.canWeed()) {
                 this.setGrowthStage(this.growthStage + 2 + this.getRandom().nextInt(3));
             } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
@@ -233,8 +232,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public void setGrowthStage(int stage) {
         if (!this.isRemote() && this.hasPlant() && this.stats != null) {
-            stage = MathHelper.inRange(stage, 0, this.getPlant().map(IAgriPlant::maxGrowthStage).orElse(0));
-            if(stage != this.growthStage) {
+            if (stage < 0) {
+                stage = 0;
+            } else if (stage >= this.plant.getGrowthStages()) {
+                stage = this.plant.getGrowthStages() - 1;
+            }
+            if (stage != this.growthStage) {
                 this.growthStage = stage;
                 this.markForUpdate();
             }
@@ -281,7 +284,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean setStat(IAgriStat stat) {
-        if(!this.isRemote()) {
+        if (!this.isRemote()) {
             this.stats = stat;
             return stat != null;
         }
@@ -290,7 +293,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriStat> removeStat() {
-        if(!this.isRemote()) {
+        if (!this.isRemote()) {
             final IAgriStat old = this.stats;
             this.stats = new PlantStats();
             this.markForUpdate();
@@ -312,7 +315,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean isMature() {
-        return getPlant().map(plant -> this.getGrowthRate() >= plant.maxGrowthStage()).orElse(false);
+        return getPlant().map(plant -> this.growthStage + 1 >= plant.getGrowthStages()).orElse(false);
     }
 
     @Override
@@ -420,9 +423,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public List<ItemStack> getFruits() {
-        return this.getStat().map(stat ->
-                this.getPlant().map(plant -> plant.getFruitsOnHarvest(stat, this.getRandom()))
-                        .orElse(Collections.emptyList()))
+        return this.getStat().map(stat
+                -> this.getPlant().map(plant -> plant.getFruitsOnHarvest(stat, this.getRandom()))
+                .orElse(Collections.emptyList()))
                 .orElse(Collections.emptyList());
     }
 
@@ -467,6 +470,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void writeTileNBT(NBTTagCompound tag) {
         if (this.stats != null) {
             this.stats.writeToNBT(tag);
+            tag.setInteger(AgriNBT.META, growthStage);
         }
         tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
         if (plant != null) {
@@ -481,6 +485,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public void readTileNBT(NBTTagCompound tag) {
         this.stats = StatRegistry.getInstance().valueOf(tag).orElse(null);
+        if (tag.hasKey(AgriNBT.META)) {
+            this.growthStage = tag.getInteger(AgriNBT.META);
+        }
         this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
         this.plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
         if (tag.hasKey(AgriNBT.INVENTORY) && this.plant != null) {
@@ -495,12 +502,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void applyGrowthTick() {
         int meta = getGrowthStage();
         if (hasPlant()) {
-            plant.onAllowedGrowthTick(worldObj, pos, meta);
-        }
-        IBlockState state = getWorld().getBlockState(getPos());
-        if (canWeed() || !plant.isMature(getWorld(), pos, state)) {
-            setGrowthStage(meta + 1);
-            /* TODO: Announce Growth Tick Via API! */
+            plant.onAllowedGrowthTick(worldObj, pos, this, meta);
+            if (growthStage < plant.getGrowthStages()) {
+                setGrowthStage(meta + 1);
+                /* TODO: Announce Growth Tick Via API! */
+            }
         }
     }
 
@@ -547,7 +553,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             list.add(" - Id: " + this.plant.getId());
             list.add(" - Tier: " + plant.getTier());
             list.add(" - Stage: " + this.getGrowthStage());
-            list.add(" - Meta: " + this.getBlockMetadata());
+            list.add(" - Stages: " + this.plant.getGrowthStages());
+            list.add(" - Meta: " + this.getGrowthStage());
             list.add(" - Growth: " + stats.map(IAgriStat::getGrowth).orElse((byte) 1));
             list.add(" - Gain: " + stats.map(IAgriStat::getGain).orElse((byte) 1));
             list.add(" - Strength: " + stats.map(IAgriStat::getStrength).orElse((byte) 1));
@@ -579,11 +586,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             if (this.isMature()) {
                 information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + AgriCore.getTranslator().translate("agricraft_tooltip.mature"));
             } else {
-                information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + ((int) (100.0 * this.getBlockMetadata() / Constants.MATURE) + "%"));
+                information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growthStage") + ": " + ((int) 100 * (this.getGrowthStage() + 1.0) / this.plant.getGrowthStages()) + "%");
             }
             //Add the ANALYZED data.
             this.getStat().map(stat -> {
-                if(stat.isAnalyzed()) {
+                if (stat.isAnalyzed()) {
                     stat.addStats(information);
                 } else {
                     AgriCore.getTranslator().translate("agricraft_tooltip.analyzed");

@@ -7,6 +7,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriStack;
 import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
@@ -93,6 +94,11 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
+    public int getGrowthStages() {
+        return this.plant.getGrowthStages();
+    }
+
+    @Override
     public List<ItemStack> getAllFruits() {
         return this.plant.getProducts().getAll().stream()
                 .map(AgriStack::toStack)
@@ -112,7 +118,7 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage) {
+    public void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage) {
         // Holder
     }
 
@@ -196,7 +202,7 @@ public class JsonPlant extends CropPlant {
     @Override
     @SideOnly(Side.CLIENT)
     public ResourceLocation getPrimaryPlantTexture(int growthStage) {
-        return plant.getTexture().getPlantTexture(growthStage);
+        return new ResourceLocation(plant.getTexture().getPlantTexture(growthStage));
     }
 
     @Override
@@ -207,6 +213,6 @@ public class JsonPlant extends CropPlant {
 
     @Override
     public ResourceLocation getSeedTexture() {
-        return plant.getTexture().getSeedTexture();
+        return new ResourceLocation(plant.getTexture().getSeedTexture());
     }
 }

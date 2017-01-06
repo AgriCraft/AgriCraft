@@ -42,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 
 public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
+
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
     public BlockCrop() {
@@ -82,11 +83,12 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     /**
      * Handles right-clicks from the player (a.k.a usage).
      * <br>
-     * When the block is right clicked, the behaviour depends on the crop, and what item it was clicked with.
+     * When the block is right clicked, the behaviour depends on the crop, and
+     * what item it was clicked with.
      */
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-                                    ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+            ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         return this.getCrop(world, pos).map(crop -> crop.onCropRightClicked(player, heldItem)).orElse(false);
     }
 
@@ -115,9 +117,9 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      */
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
-        if(!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(crop ->
-                crop.getDrops().stream().forEach(drop -> spawnAsEntity(world, pos, drop))
+        if (!world.isRemote) {
+            this.getCrop(world, pos).ifPresent(crop
+                    -> crop.getDrops().stream().forEach(drop -> spawnAsEntity(world, pos, drop))
             );
         }
     }
@@ -340,10 +342,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
-        return new InfinityProperty[]{
-            AgriProperties.GROWTHSTAGE,
-            AgriProperties.CROSSCROP
-        };
+        return new InfinityProperty[]{};
     }
 
     @Override
@@ -383,22 +382,17 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return ((IExtendedBlockState) state)
-                .withProperty(AgriProperties.CROP_PLANT, tile.flatMap(TileEntityCrop::getPlant).orElse(null));
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        Optional<TileEntityCrop> tile = getCropTile(world, pos);
-        return state
-                .withProperty(AgriProperties.GROWTHSTAGE.getProperty(), tile.map(TileEntityCrop::getGrowthStage).orElse(0))
-                .withProperty(AgriProperties.CROSSCROP.getProperty(), tile.map(TileEntityCrop::isCrossCrop).orElse(false));
+                .withProperty(AgriProperties.CROP_PLANT, tile.flatMap(TileEntityCrop::getPlant).orElse(null))
+                .withProperty(AgriProperties.GROWTH_STAGE, tile.map(TileEntityCrop::getGrowthStage).orElse(0))
+                .withProperty(AgriProperties.CROSS_CROP, tile.map(TileEntityCrop::isCrossCrop).orElse(false));
     }
 
     @Override
     public IUnlistedProperty[] getUnlistedPropertyArray() {
         return new IUnlistedProperty[]{
-            AgriProperties.CROP_PLANT
+            AgriProperties.CROP_PLANT,
+            AgriProperties.GROWTH_STAGE,
+            AgriProperties.CROSS_CROP
         };
     }
 

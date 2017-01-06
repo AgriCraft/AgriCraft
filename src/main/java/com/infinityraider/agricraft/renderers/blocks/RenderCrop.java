@@ -30,61 +30,62 @@ import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCrop> {
-	public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
+
+    public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
 
     private Map<VertexFormat, List<BakedQuad>[]> cropQuads;
 
-	public RenderCrop(BlockCrop block) {
-		super(block, new TileEntityCrop(), false, true, false);
+    public RenderCrop(BlockCrop block) {
+        super(block, new TileEntityCrop(), false, true, false);
         this.cropQuads = Maps.newIdentityHashMap();
     }
 
-	static {
-		AgriCore.getConfig().addConfigurable(RenderCrop.class);
-	}
+    static {
+        AgriCore.getConfig().addConfigurable(RenderCrop.class);
+    }
 
-	@Override
-	public List<ResourceLocation> getAllTextures() {
-		return TypeHelper.asList(TEXTURE);
-	}
+    @Override
+    public List<ResourceLocation> getAllTextures() {
+        return TypeHelper.asList(TEXTURE);
+    }
 
-	@Override
-	public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
-										BlockCrop block, TileEntityCrop tile, float partialTick, int destroyStage) {}
+    @Override
+    public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
+            BlockCrop block, TileEntityCrop tile, float partialTick, int destroyStage) {
+    }
 
-	@Override
-	public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockCrop block, EnumFacing side) {
+    @Override
+    public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockCrop block, EnumFacing side) {
         TextureAtlasSprite sprite = RenderCrop.getIcon(TEXTURE);
         this.renderBaseQuads(tessellator, side, sprite);
-		if (AgriProperties.CROSSCROP.getValue(state)) {
-			tessellator.drawScaledPrism(0, 10, 2, 16, 11, 3, sprite);
-			tessellator.drawScaledPrism(0, 10, 13, 16, 11, 14, sprite);
-			tessellator.drawScaledPrism(2, 10, 0, 3, 11, 16, sprite);
-			tessellator.drawScaledPrism(13, 10, 0, 14, 11, 16, sprite);
-		}
-        if(state instanceof IExtendedBlockState) {
+        if (state instanceof IExtendedBlockState) {
             IExtendedBlockState extendedState = (IExtendedBlockState) state;
             IAgriPlant plant = extendedState.getValue(AgriProperties.CROP_PLANT);
-            if(plant != null) {
-                tessellator.addQuads(plant.getPlantQuads(extendedState, AgriProperties.GROWTHSTAGE.getValue(state), side, tessellator));
+            int growthstage = extendedState.getValue(AgriProperties.GROWTH_STAGE);
+            if (extendedState.getValue(AgriProperties.CROSS_CROP)) {
+                tessellator.drawScaledPrism(0, 10, 2, 16, 11, 3, sprite);
+                tessellator.drawScaledPrism(0, 10, 13, 16, 11, 14, sprite);
+                tessellator.drawScaledPrism(2, 10, 0, 3, 11, 16, sprite);
+                tessellator.drawScaledPrism(13, 10, 0, 14, 11, 16, sprite);
+            }
+            if (plant != null) {
+                tessellator.addQuads(plant.getPlantQuads(extendedState, growthstage, side, tessellator));
             }
         }
-	}
+    }
 
     @SuppressWarnings("unchecked")
     private void renderBaseQuads(ITessellator tessellator, EnumFacing side, TextureAtlasSprite sprite) {
         int index = side == null ? EnumFacing.values().length : side.ordinal();
         boolean createQuads = false;
-        if(!cropQuads.containsKey(tessellator.getVertexFormat())) {
+        if (!cropQuads.containsKey(tessellator.getVertexFormat())) {
             List<BakedQuad>[] lists = new List[EnumFacing.values().length + 1];
             cropQuads.put(tessellator.getVertexFormat(), lists);
             createQuads = true;
-        } else {
-            if(cropQuads.get(tessellator.getVertexFormat())[index] == null) {
-                createQuads = true;
-            }
+        } else if (cropQuads.get(tessellator.getVertexFormat())[index] == null) {
+            createQuads = true;
         }
-        if(createQuads) {
+        if (createQuads) {
             tessellator.translate(0, -3 * Constants.UNIT, 0);
             tessellator.drawScaledPrism(2, 0, 2, 3, 16, 3, sprite);
             tessellator.drawScaledPrism(13, 0, 2, 14, 16, 3, sprite);
@@ -96,19 +97,19 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
         }
     }
 
-	@Override
-	public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockCrop block, TileEntityCrop tile,
-									 ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+    @Override
+    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockCrop block, TileEntityCrop tile,
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
 
-	}
+    }
 
-	@Override
-	public TextureAtlasSprite getIcon() {
-		return getIcon(TEXTURE);
-	}
+    @Override
+    public TextureAtlasSprite getIcon() {
+        return getIcon(TEXTURE);
+    }
 
-	@Override
-	public boolean applyAmbientOcclusion() {
-		return true;
-	}
+    @Override
+    public boolean applyAmbientOcclusion() {
+        return true;
+    }
 }

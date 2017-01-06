@@ -77,9 +77,9 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     int getTier();
 
     /**
-     * gets the number of growth stages
+     * Gets the number of growth stages that the plant has.
      */
-    int maxGrowthStage();
+    int getGrowthStages();
 
     /**
      * Gets a stack of the seed for this plant.
@@ -202,12 +202,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * When a growth thick is allowed for this plant
      */
-    void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
-
-    /**
-     * Checks if the plant is mature
-     */
-    boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state);
+    void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage);
 
     /**
      * Gets the height of the crop

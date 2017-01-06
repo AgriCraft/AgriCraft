@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.reference;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.blocks.properties.PropertyCropPlant;
 import com.infinityraider.agricraft.blocks.properties.PropertyCustomWood;
+import com.infinityraider.agricraft.blocks.properties.UnlistedPropertyBoolean;
+import com.infinityraider.agricraft.blocks.properties.UnlistedPropertyInteger;
 import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.CustomWoodType;
@@ -25,8 +27,8 @@ public interface AgriProperties {
     InfinityProperty<EnumFacing> FACING = new InfinityProperty<>(PropertyDirection.create("facing"), EnumFacing.NORTH);
 
     IUnlistedProperty<IAgriPlant> CROP_PLANT = PropertyCropPlant.PROPERTY;
-    InfinityProperty<Boolean> CROSSCROP = new InfinityProperty<>(PropertyBool.create("crosscrop"), false);
-    InfinityProperty<Integer> GROWTHSTAGE = new InfinityProperty<>(PropertyInteger.create("age", 0, 7), 0);
+    IUnlistedProperty<Integer> GROWTH_STAGE = new UnlistedPropertyInteger("agri_growth_stage");
+    IUnlistedProperty<Boolean> CROSS_CROP = new UnlistedPropertyBoolean("agri_cross_crop");
 
     InfinityProperty<TileEntityGrate.EnumVines> VINES = new InfinityProperty<>(PropertyEnum.create("vines", TileEntityGrate.EnumVines.class), TileEntityGrate.EnumVines.NONE);
     InfinityProperty<EnumFacing.Axis> AXIS = new InfinityProperty<>(PropertyEnum.create("axis", EnumFacing.Axis.class), EnumFacing.Axis.X);

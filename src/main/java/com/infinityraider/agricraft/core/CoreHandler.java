@@ -138,6 +138,10 @@ public final class CoreHandler {
 	
 	@SideOnly(Side.CLIENT)
 	public static void loadTextures(Consumer<ResourceLocation> consumer) {
-		AgriCore.getPlants().getAll().forEach(plant -> plant.getTexture().getAllTextures().forEach(consumer));
+		AgriCore.getPlants().getAll().stream()
+                .flatMap(plant -> plant.getTexture().getAllTextures().stream())
+                .distinct()
+                .map(t -> new ResourceLocation(t))
+                .forEach(consumer);
 	}
 }

@@ -87,7 +87,7 @@ public abstract class CropPlant implements IAgriPlant {
     }
 
     @Override
-    public int maxGrowthStage() {
+    public int getGrowthStages() {
         return 8;
     }
 
@@ -290,20 +290,7 @@ public abstract class CropPlant implements IAgriPlant {
      * @param oldGrowthStage the current/old growth stage of the plant.
      */
     @Override
-    public abstract void onAllowedGrowthTick(World world, BlockPos pos, int oldGrowthStage);
-
-    /**
-     * Determines if the plant is mature. That is, the plant's metadata matches
-     * {@link Constants#MATURE}.
-     *
-     * @param world the world the plant is in.
-     * @param pos the block position.
-     * @return if the plant is mature.
-     */
-    @Override
-    public boolean isMature(IBlockAccess world, BlockPos pos, IBlockState state) {
-        return AgriProperties.GROWTHSTAGE.getValue(state) >= Constants.MATURE;
-    }
+    public abstract void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage);
 
     /**
      * Determines the height of the crop in float precision, as a function of
