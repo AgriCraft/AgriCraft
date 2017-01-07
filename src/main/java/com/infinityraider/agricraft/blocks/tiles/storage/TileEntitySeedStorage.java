@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,9 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import java.util.Optional;
 import javax.annotation.Nullable;
