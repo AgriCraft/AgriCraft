@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;

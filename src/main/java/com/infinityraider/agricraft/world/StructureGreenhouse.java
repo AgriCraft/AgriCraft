@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.entity.villager.EntityVillagerFarmer;
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import com.infinityraider.agricraft.config.AgriCraftConfig;
-import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.agricraft.agricore.core.AgriCore;
@@ -24,8 +22,6 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions

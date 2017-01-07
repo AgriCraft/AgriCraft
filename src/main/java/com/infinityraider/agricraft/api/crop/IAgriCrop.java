@@ -12,7 +12,6 @@ import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * Interface to interact with AgriCraft's crops.

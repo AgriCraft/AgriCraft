@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.farming.mutation;
 
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.seed.AgriSeed;

@@ -109,23 +109,24 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         final int l = RenderUtilBase.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER);
         tessellator.setBrightness(l);
         tessellator.setColorRGBA(tessellator.getRedValueInt(), tessellator.getRedValueInt(), tessellator.getBlueValueInt(), 100);
-        
+
         // Calculate y to avoid plane rendering conflicts
         final float y = channel.getFluidHeight() - 0.001f;
 
         //draw central water levels
         tessellator.drawScaledFaceDouble(5, 5, 11, 11, EnumFacing.UP, icon, y);
+
         //connect to edges
-        if (channel.hasNeighbourCheck(EnumFacing.NORTH)) {
+        if (channel.hasNeighbor(EnumFacing.NORTH)) {
             tessellator.drawScaledFaceDouble(5, 0, 11, 5, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbourCheck(EnumFacing.EAST)) {
+        if (channel.hasNeighbor(EnumFacing.EAST)) {
             tessellator.drawScaledFaceDouble(11, 5, 16, 11, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbourCheck(EnumFacing.SOUTH)) {
+        if (channel.hasNeighbor(EnumFacing.SOUTH)) {
             tessellator.drawScaledFaceDouble(5, 11, 11, 16, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbourCheck(EnumFacing.WEST)) {
+        if (channel.hasNeighbor(EnumFacing.WEST)) {
             tessellator.drawScaledFaceDouble(0, 5, 5, 11, EnumFacing.UP, icon, y);
         }
 
@@ -133,7 +134,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 
     @Override
     protected void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, B block,
-                                               T tile, TextureAtlasSprite icon) {
+            T tile, TextureAtlasSprite icon) {
         this.drawWater(tess, tile, BaseIcons.WATER_STILL.getIcon());
     }
 
@@ -144,7 +145,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, B block, T channel, ItemStack stack,
-                                            EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+            EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
         this.renderSide(tessellator, state, EnumFacing.NORTH, false, icon);
         this.renderSide(tessellator, state, EnumFacing.EAST, false, icon);

@@ -56,13 +56,8 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 	}
 
 	@Override
-    protected IExtendedBlockState extendedCustomWoodState(IExtendedBlockState state, IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof TileEntityChannelValve) {
-            TileEntityChannelValve valve = (TileEntityChannelValve) te;
-            state = valve.addLeversToState(state);
-        }
-        return state;
+    protected IExtendedBlockState getExtendedCustomWoodState(IExtendedBlockState state, Optional<TileEntityChannelValve> tile) {
+        return tile.map(t -> t.addLeversToState(state)).orElse(state);
     }
 
     @Override

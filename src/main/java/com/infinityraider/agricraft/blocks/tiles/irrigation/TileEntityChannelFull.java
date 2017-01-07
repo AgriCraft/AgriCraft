@@ -8,11 +8,11 @@ public class TileEntityChannelFull extends TileEntityChannel {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean hasNeighbourCheck(EnumFacing direction) {
+	public boolean hasNeighbor(EnumFacing direction) {
 		if (this.worldObj == null) {
 			return true;
 		} else {
-			return super.hasNeighbourCheck(direction);
+			return super.hasNeighbor(direction);
 		}
 	}
 

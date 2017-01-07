@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.tiles.irrigation;
 
-
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
@@ -19,7 +18,7 @@ import java.util.List;
 import com.infinityraider.agricraft.reference.AgriNBT;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
-	
+
     private boolean powered = false;
     private SidedConnection levers = new SidedConnection();
 
@@ -38,11 +37,12 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     @Override
     public void update() {
-        if(!this.worldObj.isRemote) {
-            if(!this.powered) {
+        if (!this.worldObj.isRemote) {
+            if (!this.powered) {
                 super.update();
-            } else {
-                updateNeighbours();
+            } else if (++ticksSinceNeighbourCheck > NEIGHBOUR_CHECK_DELAY) {
+                checkConnections();
+                ticksSinceNeighbourCheck = 0;
             }
         }
     }
@@ -56,7 +56,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     public void updateLevers() {
-        for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+        for (EnumFacing dir : EnumFacing.HORIZONTALS) {
             IBlockState neighbour = this.getWorld().getBlockState(this.getPos().add(dir.getFrontOffsetX(), 0, dir.getFrontOffsetZ()));
             this.levers.setConnected(dir, neighbour.getBlock() instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir);
         }
@@ -68,31 +68,31 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     public boolean isPowered() {
-    	return powered;
+        return powered;
     }
-    
-	@Override
+
+    @Override
     public boolean canAcceptFluid(int y, int amount, boolean partial) {
-    	return !powered && super.canAcceptFluid(y, amount, partial);
+        return !powered && super.canAcceptFluid(y, amount, partial);
     }
 
     @Override
     public void addServerDebugInfo(List<String> list) {
         list.add("VALVE");
-        list.add("  - State: "+(this.isPowered()?"closed":"open"));
+        list.add("  - State: " + (this.isPowered() ? "closed" : "open"));
         list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
         list.add("  - FluidHeight: " + this.getFluidHeight());
         list.add("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
     public void addDisplayInfo(List information) {
-    	//Required super call
-    	super.addDisplayInfo(information);
-    	//show status
-        String status = AgriCore.getTranslator().translate(powered?"agricraft_tooltip.closed":"agricraft_tooltip.open");
-        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.state")+": "+status);
+        //Required super call
+        super.addDisplayInfo(information);
+        //show status
+        String status = AgriCore.getTranslator().translate(powered ? "agricraft_tooltip.closed" : "agricraft_tooltip.open");
+        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.state") + ": " + status);
     }
 }

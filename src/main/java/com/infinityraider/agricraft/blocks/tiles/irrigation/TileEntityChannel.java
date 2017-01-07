@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,21 +18,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
 
-    public static final EnumFacing[] VALID_DIRECTIONS = new EnumFacing[]{
-        EnumFacing.NORTH,
-        EnumFacing.SOUTH,
-        EnumFacing.WEST,
-        EnumFacing.EAST
-    };
-
     private final IIrrigationComponent[] neighbours = new IIrrigationComponent[4];
-    protected int ticksSinceNeighbourCheck = 0;
     protected static final int NEIGHBOUR_CHECK_DELAY = 1024;
+    protected int ticksSinceNeighbourCheck = NEIGHBOUR_CHECK_DELAY;
 
     // Might want to move this to a static import class...
     protected static final int MIN = 5;
@@ -119,11 +110,14 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         }
     }
 
-    public final void updateNeighbours() {
-        if (ticksSinceNeighbourCheck == 0) {
-            findNeighbours();
+    @Override
+    public final void checkConnections() {
+        for (int i = 0; i < EnumFacing.HORIZONTALS.length; i++) {
+            final EnumFacing dir = EnumFacing.HORIZONTALS[i];
+            neighbours[i] = WorldHelper.getTile(worldObj, pos.offset(dir), IIrrigationComponent.class)
+                    .filter(n -> n.canConnectTo(dir.getOpposite(), this) || this.canConnectTo(dir, n))
+                    .orElse(null);
         }
-        ticksSinceNeighbourCheck = (ticksSinceNeighbourCheck + 1) % NEIGHBOUR_CHECK_DELAY;
     }
 
     @Override
@@ -136,46 +130,24 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         return MIN + HEIGHT * ((float) lvl) / (ABSOLUTE_MAX);
     }
 
-    public final void findNeighbours() {
-        for (int i = 0; i < VALID_DIRECTIONS.length; i++) {
-            EnumFacing dir = VALID_DIRECTIONS[i];
-            TileEntity te = worldObj.getTileEntity(pos.offset(dir));
-            if (!(te instanceof IIrrigationComponent)) {
-                neighbours[i] = null;
-            } else {
-                IIrrigationComponent neighbour = (IIrrigationComponent) te;
-                neighbours[i] = (neighbour.canConnectTo(dir.getOpposite(), this) || this.canConnectTo(dir.getOpposite(), neighbour)) ? neighbour : null;
-            }
-        }
-        ticksSinceNeighbourCheck = 0;
-    }
-
-    /**
-     * Only used for rendering
-     *
-     * @param direction The direction to check for a neighbor in.
-     * @return If a neighbor is present in the given direction.
-     */
-    @SideOnly(Side.CLIENT)
-    public boolean hasNeighbourCheck(EnumFacing direction) {
-        if (this.worldObj != null) {
-            TileEntity tile = this.worldObj.getTileEntity(pos.offset(direction));
-            return (tile instanceof IIrrigationComponent)
-                    && (tile instanceof TileEntityCustomWood)
-                    && (this.isSameMaterial((TileEntityCustomWood) tile));
-        }
-        return false;
+    public boolean hasNeighbor(EnumFacing direction) {
+        final int dir = direction.getHorizontalIndex();
+        return dir >= 0 && neighbours[dir] != null;
     }
 
     public IIrrigationComponent getNeighbor(EnumFacing direction) {
-        return neighbours[direction.getHorizontalIndex()];
+        final int dir = direction.getHorizontalIndex();
+        return dir >= 0 ? neighbours[dir] : null;
     }
 
     //updates the tile entity every tick
     @Override
     public void update() {
+        if (++ticksSinceNeighbourCheck > NEIGHBOUR_CHECK_DELAY) {
+            checkConnections();
+            ticksSinceNeighbourCheck = 0;
+        }
         if (!this.worldObj.isRemote) {
-            updateNeighbours();
             //calculate total fluid lvl and capacity
             int totalLvl = 0;
             int nr = 1;
@@ -279,7 +251,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addServerDebugInfo(List<String> list) {
         list.add("CHANNEL:");
         super.addServerDebugInfo(list);
@@ -287,7 +258,21 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         list.add("  - FluidHeight: " + this.getFluidHeight());
         list.add("  - Connections: ");
         for (EnumFacing dir : EnumFacing.values()) {
-            if (this.hasNeighbourCheck(dir)) {
+            if (this.hasNeighbor(dir)) {
+                list.add("      - " + dir.name());
+            }
+        }
+    }
+
+    @Override
+    public void addClientDebugInfo(List<String> list) {
+        list.add("CHANNEL:");
+        super.addClientDebugInfo(list);
+        list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
+        list.add("  - FluidHeight: " + this.getFluidHeight());
+        list.add("  - Connections: ");
+        for (EnumFacing dir : EnumFacing.values()) {
+            if (this.hasNeighbor(dir)) {
                 list.add("      - " + dir.name());
             }
         }
