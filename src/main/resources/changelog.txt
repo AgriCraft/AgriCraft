@@ -1,4 +1,35 @@
 Changelog
 ---------
-2.3.0
-- 1.10.2 port
+2.0.0a6
+- ADDED: Seed item configurability, allows for meta-sensitive seeds. 
+- FIXED: Default melon texture is wheat.
+- FIXED: Growth & Gain stats randomly switching places.
+- FIXED: Crash caused by sprinklers and class casting.
+- FIXED: Channel valve ignoring redstone control.
+- FIXED: Villager bound null pointer exception.
+- FIXED: Seeds not dropping from crops.
+- UNKNOWN: Rendering null pointer exception Heisenbug.
+
+2.0.0a5:
+- REMOVED: Custom Wood Fences.
+- FIXED: Seed Duplication.
+- FIXED: Nugget OreDict Registration.
+- FIXED: Custom crops with base blocks not placing.
+- FIXED: Crash caused by breaking soil under crops.
+- FIXED: Crops fail to grow.
+- FIXED: Crops fail to update properly.
+
+2.0.0a4:
+- INFO: 2.0.0a5 alpha pre-release to select users.
+
+2.0.0a3:
+- FIXED: Custom Wood Recipes!
+
+2.0.0a2:
+- FIXED: Server initialization crash!
+- FIXED: Jar naming scheme.
+- FIXED: Excessive Jar size.
+
+2.0.0a1:
+- ADDED: 1.10.2 Port
+- ADDED: JSON Crops!
