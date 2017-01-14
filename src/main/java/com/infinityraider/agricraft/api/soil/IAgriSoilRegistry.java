@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
  */
 public interface IAgriSoilRegistry {
 	
-	boolean isSoil(IAgriSoil plant);
+	boolean isSoil(IAgriSoil soil);
 	
 	Optional<IAgriSoil> getSoil(String id);
     
@@ -33,9 +33,9 @@ public interface IAgriSoilRegistry {
                 .findFirst();
     }
 
-	boolean addSoil(IAgriSoil plant);
+	boolean addSoil(IAgriSoil soil);
 	
-	boolean removeSoil(IAgriSoil plant);
+	boolean removeSoil(IAgriSoil soil);
 	
 	List<IAgriSoil> getSoils();
 	

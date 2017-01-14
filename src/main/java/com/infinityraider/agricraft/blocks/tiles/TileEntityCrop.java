@@ -302,9 +302,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public boolean isFertile(AgriSeed seed) {
+    public boolean isFertile(IAgriPlant plant) {
         return worldObj.isAirBlock(this.getPos().add(0, 1, 0))
-                && seed.getPlant().getGrowthRequirement().isMet(this.worldObj, pos);
+                && plant.getGrowthRequirement().isMet(this.worldObj, pos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -329,7 +329,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public boolean spawn() {
         if (!hasPlant()) {
             for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
-                if (p.getSpawnChance() > this.getRandom().nextDouble()) {
+                if (p.getSpawnChance() > this.getRandom().nextDouble() && this.isFertile(p)) {
                     this.setCrossCrop(false);
                     this.setStat(new PlantStats());
                     this.setPlant(p);
@@ -560,7 +560,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             list.add(" - Fertile: " + this.isFertile());
             list.add(" - Mature: " + this.isMature());
             list.add(" - AgriSoil: " + this.plant.getGrowthRequirement().getSoils().stream()
-                    .findFirst().map(IAgriSoil::getId).orElse("Any")
+                    .findFirst().map(IAgriSoil::getId).orElse("None")
             );
         } else {
             list.add(" - This crop has no plant");

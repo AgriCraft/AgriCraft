@@ -138,7 +138,7 @@ public class JsonPlant extends CropPlant {
         }
 
         if (this.plant.getRequirement().getSoils().isEmpty()) {
-            AgriCore.getLogger("AgriCraft").warn("{0} has no valid soils to plant on!", this.plant.getPlantName());
+            AgriCore.getLogger("AgriCraft").warn("Plant: \"{0}\" has no valid soils to plant on!", this.plant.getPlantName());
         }
 
         this.plant.getRequirement().getSoils().stream()

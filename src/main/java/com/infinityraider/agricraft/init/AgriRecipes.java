@@ -138,7 +138,7 @@ public class AgriRecipes {
 
     private static void initWoodList() {
         if (woodList.isEmpty()) {
-            ReflectionHelper.forEachIn(AgriBlocks.getInstance(), BlockCustomWood.class, (BlockCustomWood b) -> {
+            ReflectionHelper.forEachValueIn(AgriBlocks.getInstance(), BlockCustomWood.class, (BlockCustomWood b) -> {
                 AgriCore.getLogger("AgriCraft").debug("Block: {0} Item: {1}", b, Item.getItemFromBlock(b));
                 Optional.ofNullable(Item.getItemFromBlock(b))
                         .filter(i -> i instanceof ItemBlockCustomWood)

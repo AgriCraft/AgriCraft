@@ -51,17 +51,17 @@ public abstract class PlantRenderer {
 		tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.EAST, icon, 12);
 	}
 
+    // TODO: Find way to do without translations.
 	public static void renderCrossPattern(ITessellator tessellator, TextureAtlasSprite icon, int layer) {
-		int minY = 12 * layer;
-		int maxY = 12 * (layer + 1);
-		tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.NORTH, icon, 3.999F);
-		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 4.001F);
-		tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 3.999F);
-		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.EAST, icon, 4.001F);
-		tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.NORTH, icon, 11.999F);
-		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.NORTH, icon, 12.001F);
-		tessellator.drawScaledFaceDouble(-2, minY, 10, maxY, EnumFacing.EAST, icon, 11.999F);
-		tessellator.drawScaledFaceDouble(6, minY, 18, maxY, EnumFacing.EAST, icon, 12.001F);
+		int minY = 16 * layer;
+		int maxY = 16 * (layer + 1);
+        tessellator.pushMatrix();
+        tessellator.translate(0.5, 0, 0.5);
+        tessellator.rotate(45, 0, 1, 0);
+        tessellator.translate(-0.5, 0, -0.5);
+		tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.NORTH, icon, 8);
+		tessellator.drawScaledFaceDouble(0, minY, 16, maxY, EnumFacing.EAST, icon, 8);
+        tessellator.popMatrix();
 	}
 
 	public static void renderStemPlant(ITessellator tessellator, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int stage, Block vine) {

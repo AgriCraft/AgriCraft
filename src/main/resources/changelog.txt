@@ -1,7 +1,10 @@
 Changelog
 ---------
 2.0.0a6
-- ADDED: Seed item configurability, allows for meta-sensitive seeds. 
+- ADDED: Seed item configurability, allows for meta-sensitive seeds.
+- FIXED: Plants spawning on infertile soil.
+- FIXED: Invalid texture message displaying {0} instead of invalid texture entry.
+- FIXED: Render type 'cross' rendering as 'hash' instead.
 - FIXED: Default melon texture is wheat.
 - FIXED: Growth & Gain stats randomly switching places.
 - FIXED: Crash caused by sprinklers and class casting.
