@@ -368,9 +368,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     public Optional<TileEntityCrop> getCropTile(IBlockAccess world, BlockPos pos) {
-        return Optional.of(world.getTileEntity(pos))
-                .filter(t -> t instanceof TileEntityCrop)
-                .map(t -> (TileEntityCrop) t);
+        return WorldHelper.getTile(world, pos, TileEntityCrop.class);
     }
 
     @Override

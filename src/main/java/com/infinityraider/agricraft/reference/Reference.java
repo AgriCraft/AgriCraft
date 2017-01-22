@@ -15,6 +15,9 @@ public interface Reference {
 	String VER_PATCH = /*^${mod.version_patch}^*/ "0";
 	String MOD_VERSION = /*^${mod.version}^*/ "0.0.0";
 	String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "0.0-0.0.0";
+    
+	String VERSION_INFLIB = /*^${mod.version_inflib}^*/ "0.0-0.0.0";
+    String VERSION_FORGE = /*^${mod.version_forge}^*/ "0.0-0.0.0";
 
 	String CLIENT_PROXY_CLASS = "com.infinityraider.agricraft.proxy.ClientProxy";
 	String SERVER_PROXY_CLASS = "com.infinityraider.agricraft.proxy.ServerProxy";

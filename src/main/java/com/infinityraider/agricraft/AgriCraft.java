@@ -51,7 +51,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 		version = Reference.MOD_VERSION,
 		guiFactory = Reference.GUI_FACTORY_CLASS,
 		updateJSON = Reference.UPDATE_URL,
-		dependencies = "required-after:infinitylib"
+		dependencies = 
+                "required-after:Forge@[" + Reference.VERSION_FORGE + ",);" +
+                "required-after:infinitylib@[" + Reference.VERSION_INFLIB + ",);"
 )
 public class AgriCraft extends InfinityMod {
 

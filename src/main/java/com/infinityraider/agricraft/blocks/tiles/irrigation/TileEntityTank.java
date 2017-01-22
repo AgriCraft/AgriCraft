@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 
@@ -300,7 +301,9 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	public TileEntityTank getMainComponent() {
 		if (this.mainComponent == null) {
 			IMultiBlockPartData data = this.getMultiBlockData();
-			this.mainComponent = (TileEntityTank) worldObj.getTileEntity(getPos().add(-data.posX(), -data.posY(), -data.posZ()));
+            this.mainComponent = WorldHelper
+                    .getTile(worldObj, getPos().add(-data.posX(), -data.posY(), -data.posZ()), TileEntityTank.class)
+                    .orElse(this);
 		}
 		return mainComponent;
 	}
