@@ -50,7 +50,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
         if (world.isRemote) {
             return true;
         }
-        TileEntityTank tank = (TileEntityTank) world.getTileEntity(pos);
+        TileEntityTank tank = WorldHelper.getTile(world, pos, TileEntityTank.class).orElse(null);
         if (stack != null && stack.getItem() != null && tank != null) {
             FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(stack);
             // put water from liquid container in tank

@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.0a8
+- ADDED: Better mod JSON file loading, will not try to load files for missing mods.
+
 2.0.0a7
 - FIXED: InfinityLib dependency version insensitivity. (#799)
 - FIXED: Tank rendering crash. (#809)

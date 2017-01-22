@@ -46,7 +46,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof TileEntityCustomWood) {
+        if (te instanceof TileEntityCustomWood) {
             TileEntityCustomWood tileEntity = (TileEntityCustomWood) te;
             tileEntity.setMaterial(stack);
         }
