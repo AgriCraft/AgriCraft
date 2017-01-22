@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.0a9
+- FIXED: Multiplayer JSON transfer. Json files will now transfer correctly from the server to the client.
+
 2.0.0a8
 - ADDED: Better mod JSON file loading, will not try to load files for missing mods.
 

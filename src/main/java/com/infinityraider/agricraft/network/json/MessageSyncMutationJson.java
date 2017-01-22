@@ -3,51 +3,76 @@ package com.infinityraider.agricraft.network.json;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
 import com.agricraft.agricore.plant.AgriMutation;
-import com.google.gson.Gson;
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.core.JsonMutation;
+import com.infinityraider.infinitylib.network.MessageBase;
+import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
 import java.nio.file.Path;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MessageSyncMutationJson extends MessageSyncElement<AgriMutation> {
+public class MessageSyncMutationJson extends MessageBase<IMessage> {
 
-	private static final Gson gson = new Gson();
+    private AgriMutation plant;
+    private int index;
+    private int count;
 
-	@SuppressWarnings("unused")
-	public MessageSyncMutationJson() {}
-	
-	public MessageSyncMutationJson(AgriMutation mutation, int index, int count) {
-		super(mutation, index, count);
-	}
+    @SuppressWarnings("unused")
+    public MessageSyncMutationJson() {
+    }
 
-	@Override
-	protected String toString(AgriMutation element) {
-		return gson.toJson(element);
-	}
+    public MessageSyncMutationJson(AgriMutation plant, int index, int count) {
+        this.plant = plant;
+        this.index = index;
+        this.count = count;
+    }
 
-	@Override
-	protected AgriMutation fromString(String element) {
-		return gson.fromJson(element, AgriMutation.class);
-	}
-	
-	@Override
-	public void onSyncStart(MessageContext ctx) {
-		AgriCore.getMutations().clearElements();
-	}
+    @Override
+    public Side getMessageHandlerSide() {
+        return Side.CLIENT;
+    }
 
-	@Override
-	protected void onMessage(MessageContext ctx) {
-		AgriCore.getMutations().addMutation(this.element);
-	}
-	
-	@Override
-	public void onFinishSync(MessageContext ctx) {
-		final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
-		AgriSaver.saveElements(worldDir, AgriCore.getMutations().getAll());
-		AgriCore.getMutations().getAll().stream()
-				.map(JsonMutation::new)
-				.forEach(MutationRegistry.getInstance()::addMutation);
+    @Override
+    protected IMessage getReply(MessageContext ctx) {
+        return null;
+    }
+
+    @Override
+    protected void processMessage(MessageContext ctx) {
+        
+        if (this.index == 0) {
+            AgriCore.getMutations().clearElements();
+        }
+
+        // Add the soil
+        AgriCore.getMutations().addMutation(plant);
+        AgriCore.getLogger("Agri-Net").debug("Recieved Mutation ({0} of {1}).", index + 1, count);
+
+        if (this.index == this.count - 1) {
+            final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
+            AgriSaver.saveElements(worldDir, AgriCore.getMutations().getAll());
+            AgriCore.getMutations().getAll().stream()
+                    .map(JsonMutation::new)
+                    .forEach(MutationRegistry.getInstance()::addMutation);
+        }
+    }
+
+    @Override
+    protected List<IMessageSerializer> getNecessarySerializers() {
+        return ImmutableList.of(new JsonSerializer<AgriMutation>());
+    }
+    
+    @SideOnly(Side.CLIENT)
+	public final String getServerId() {
+		final ServerData data = Minecraft.getMinecraft().getCurrentServerData();
+		return "server_" + data.serverIP.replaceAll("\\.", "-").replaceAll(":", "_");
 	}
 
 }
