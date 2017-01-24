@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.compat.vanilla.BonemealWrapper;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
 import java.util.*;
@@ -138,11 +139,11 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     /**
      * Determines if bonemeal speeds up the GROWTH of the contained plant.
      *
-     * @return true, bonemeal may speed up any contained plant.
+     * @return false, so that we have full control over fertilizers.
      */
     @Override
     public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
-        return true;
+        return false;
     }
 
     /**

@@ -377,12 +377,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (this.crossCrop) {
             return AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation();
         }
-        return this.hasPlant() && fertilizer.isFertilizerAllowed(plant.getTier());
+        return this.hasPlant() && this.plant.canBonemeal() && fertilizer.isFertilizerAllowed(plant.getTier());
     }
 
     @Override
     public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-        if (this.hasPlant() && this.getGrowthStage() < Constants.MATURE) {
+        if (this.hasPlant() && this.plant.canBonemeal() && this.getGrowthStage() < Constants.MATURE) {
             ((BlockCrop) AgriBlocks.getInstance().CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
             return true;
         } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation()) {
@@ -422,9 +422,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public List<ItemStack> getFruits() {
-        return this.getStat().map(stat
-                -> this.getPlant().map(plant -> plant.getFruitsOnHarvest(stat, this.getRandom()))
-                .orElse(Collections.emptyList()))
+        return this.getStat()
+                .map(stat
+                        -> this.getPlant()
+                        .map(plant -> plant.getFruitsOnHarvest(stat, this.getRandom()))
+                        .orElse(Collections.emptyList()))
                 .orElse(Collections.emptyList());
     }
 

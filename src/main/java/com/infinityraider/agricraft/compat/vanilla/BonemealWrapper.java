@@ -18,8 +18,13 @@ import net.minecraft.world.World;
  * 
  */
 public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFertilizer> {
+    
+    public static final BonemealWrapper INSTANCE = new BonemealWrapper();
 	
 	private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
+
+    private BonemealWrapper() {
+    }
 
 	@Override
 	public boolean isFertilizerAllowed(int tier) {

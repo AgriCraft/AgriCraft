@@ -21,8 +21,8 @@ public class RecipeShapelessCustomWood extends ShapelessRecipes {
     @SuppressWarnings("unchecked")
     public boolean matches(InventoryCrafting inventoryCrafting, World world) {
         List recipeItems = new ArrayList(this.recipeItems);
-        for(int column = 0; column < 3; ++column) {
-            for(int row = 0; row < 3; ++row) {
+        for(int column = 0; column < 3; column++) {
+            for(int row = 0; row < 3; row++) {
                 ItemStack itemStackToMatch = inventoryCrafting.getStackInRowAndColumn(row, column);
                 if(itemStackToMatch != null) {
                     boolean match = false;

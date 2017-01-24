@@ -15,7 +15,7 @@ public class FertilizerRegistry {
 	private static final IAgriAdapterRegistry<IAgriFertilizer> INSTANCE = new AdapterRegistry<>();
 
 	static {
-		INSTANCE.registerAdapter(new BonemealWrapper());
+		INSTANCE.registerAdapter(BonemealWrapper.INSTANCE);
 	}
 
 	public static IAgriAdapterRegistry<IAgriFertilizer> getInstance() {

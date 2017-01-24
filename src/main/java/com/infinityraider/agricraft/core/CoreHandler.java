@@ -10,8 +10,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.agricraft.agricore.config.AgriConfigAdapter;
+import com.agricraft.agricore.plant.AgriMutation;
+import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
@@ -73,29 +78,14 @@ public final class CoreHandler {
 	public static void init() {
 
 		// Load the core!
-		AgriCore.getLogger("AgriCraft").info("Attempting to load plants!");
+		AgriCore.getLogger("AgriCraft").info("Attempting to read AgriCraft JSONs!");
 		AgriLoader.loadDirectory(
 				defaultDir,
                 AgriCore.getSoils(),
 				AgriCore.getPlants(),
 				AgriCore.getMutations()
 		);
-		AgriCore.getLogger("AgriCraft").info("Finished trying to load plants!");
-        
-        // See if plants are valid...
-		AgriCore.getCoreLogger().debug("Unvalidated Soils: {0}", AgriCore.getSoils().getAll().size());
-		AgriCore.getSoils().validate();
-		AgriCore.getCoreLogger().debug("Validated Soils: {0}", AgriCore.getSoils().getAll().size());
-
-		// See if plants are valid...
-		AgriCore.getCoreLogger().debug("Unvalidated Plants: {0}", AgriCore.getPlants().getAll().size());
-		AgriCore.getPlants().validate();
-		AgriCore.getCoreLogger().debug("Validated Plants: {0}", AgriCore.getPlants().getAll().size());
-
-		// See if mutations are valid...
-		AgriCore.getCoreLogger().debug("Unvalidated Mutations: {0}", AgriCore.getMutations().getAll().size());
-		AgriCore.getMutations().validate();
-		AgriCore.getCoreLogger().debug("Validated Mutations: {0}", AgriCore.getMutations().getAll().size());
+		AgriCore.getLogger("AgriCraft").info("Finished trying to read AgriCraft JSONs!");
 
 		// Save settings!
 		AgriCore.getConfig().save();
@@ -108,29 +98,67 @@ public final class CoreHandler {
 	}
     
     public static void initSoils() {
-		AgriCore.getLogger("AgriCraft").info("Registering Custom Soils!");
+        // Announce Progress
+        AgriCore.getLogger("AgriCraft").info("Registering Soils!");
+        
+        // See if soils are valid...
+        final int raw = AgriCore.getSoils().getAll().size();
 		AgriCore.getSoils().validate();
-		AgriCore.getSoils().getAll().stream()
+        final int count = AgriCore.getSoils().getAll().size();
+		
+        // Transfer
+        AgriCore.getSoils().getAll().stream()
+                .filter(AgriSoil::isEnabled)
 				.map(JsonSoil::new)
 				.forEach(SoilRegistry.getInstance()::addSoil);
-		AgriCore.getLogger("AgriCraft").info("Custom Soils registered!");
+		
+        // Display Soils
+		AgriCore.getLogger("AgriCraft").info("Registered Soils ({0}/{1}):", count, raw);
+        for (IAgriSoil soil : SoilRegistry.getInstance().getSoils()) {
+            AgriCore.getLogger("AgriCraft").info(" - {0}", soil.getName());
+        }
 	}
 
 	public static void initPlants() {
-		AgriCore.getLogger("AgriCraft").info("Registering Custom Plants!");
+        // Announce Progress
+		AgriCore.getLogger("AgriCraft").info("Registering Plants!");
+        
+        // See if plants are valid...
+		final int raw = AgriCore.getPlants().getAll().size();
+		AgriCore.getPlants().validate();
+		final int count = AgriCore.getPlants().getAll().size();
+        
+        // Transfer
 		AgriCore.getPlants().validate();
 		AgriCore.getPlants().getAll().stream()
+                .filter(AgriPlant::isEnabled)
 				.map(JsonPlant::new)
 				.forEach(PlantRegistry.getInstance()::addPlant);
-		AgriCore.getLogger("AgriCraft").info("Custom Plants registered!");
+        
+        // Display Plants
+		AgriCore.getLogger("AgriCraft").info("Registered Plants ({0}/{1}):", count, raw);
+        for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
+            AgriCore.getLogger("AgriCraft").info(" - {0}", plant.getPlantName());
+        }
 	}
 
 	public static void initMutations() {
+        // Announce Progress
+		AgriCore.getLogger("AgriCraft").info("Registering Mutations!");
+        
+        // See if mutations are valid...
+		final int raw = AgriCore.getMutations().getAll().size();
+		AgriCore.getMutations().validate();
+		final int count = AgriCore.getMutations().getAll().size();
+        
+        // Transfer
 		AgriCore.getMutations().getAll().stream()
+                .filter(AgriMutation::isEnabled)
 				.map(JsonMutation::new)
 				.forEach(MutationRegistry.getInstance()::addMutation);
-		//print registered mutations to the log
-		AgriCore.getLogger("AgriCraft").info("Registered Mutations:");
+        
+		// Display Mutations
+		AgriCore.getLogger("AgriCraft").info("Registered Mutations ({0}/{1}):", count, raw);
 		for (IAgriMutation mutation : MutationRegistry.getInstance().getMutations()) {
 			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
 		}
