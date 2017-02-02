@@ -23,57 +23,70 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.EnumSkyBlock;
 
 public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
-	
-	@AgriConfigurable(
-			category = AgriConfigCategory.TOOLS,
-			key = "Enable Magnifying Glass",
-			comment = "Set to false to disable the Magnifying Glass."
-	)
-	public static boolean enableMagnifyingGlass = true;
 
-	public ItemMagnifyingGlass() {
-		super("magnifying_glass");
-		this.setMaxStackSize(1);
-		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-	}
+    @AgriConfigurable(
+            category = AgriConfigCategory.TOOLS,
+            key = "Enable Magnifying Glass",
+            comment = "Set to false to disable the Magnifying Glass."
+    )
+    public static boolean enableMagnifyingGlass = true;
 
-	//I'm overriding this just to be sure
-	@Override
-	public boolean canItemEditBlocks() {
-		return false;
-	}
+    public ItemMagnifyingGlass() {
+        super("magnifying_glass");
+        this.setMaxStackSize(1);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+    }
 
-	//this is called when you right click with this item in hand
-	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		if (world.isRemote) {
-			List<String> list = new ArrayList<>();
-			IBlockState state = world.getBlockState(pos);
-			Block block = state.getBlock();
-			TileEntity te = world.getTileEntity(pos);
-			if (block instanceof IAgriDisplayable) {
-				((IAgriDisplayable) block).addDisplayInfo(list);
-			}
-			if (te instanceof IAgriDisplayable) {
-				((IAgriDisplayable) te).addDisplayInfo(list);
-			}
-			for (String msg : list) {
-				player.addChatComponentMessage(new TextComponentString(msg));
-			}
-		}
-		return EnumActionResult.SUCCESS;
-	}
+    //I'm overriding this just to be sure
+    @Override
+    public boolean canItemEditBlocks() {
+        return false;
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-		list.add(AgriCore.getTranslator().translate("agricraft_tooltip.magnifyingGlass"));
-	}
+    //this is called when you right click with this item in hand
+    @Override
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        if (world.isRemote) {
+            List<String> list = new ArrayList<>();
+            IBlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
+            TileEntity te = world.getTileEntity(pos);
 
-	@Override
-	public boolean isEnabled() {
-		return enableMagnifyingGlass;
-	}
+            // Add a separator.
+            list.add("========== " + AgriCore.getTranslator().translate("item.agricraft:magnifying_glass.name") + " ==========");
+
+            // Add lighting information.
+            list.add("Brightness: (" + world.getLightFor(EnumSkyBlock.SKY, pos.add(0,1,0)) + "/16)");
+
+            // Add block information.
+            if (block instanceof IAgriDisplayable) {
+                ((IAgriDisplayable) block).addDisplayInfo(list);
+            }
+
+            // Add tile information.
+            if (te instanceof IAgriDisplayable) {
+                ((IAgriDisplayable) te).addDisplayInfo(list);
+            }
+
+            // Display information.
+            for (String msg : list) {
+                player.addChatComponentMessage(new TextComponentString(msg));
+            }
+        }
+        return EnumActionResult.SUCCESS;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
+        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.magnifyingGlass"));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enableMagnifyingGlass;
+    }
 }

@@ -1,6 +1,11 @@
 Changelog
 ---------
 2.0.0a10
+- ADDED: Light level feature for magnifying glass.
+- FIXED: Crops not consuming additional item to form cross-crops.
+- ADDED: Null pointer check to try to root out the infernal issue #770.
+- FIXED: Journal displaying seed name instead of plant name.
+- FIXED: Default Potato plant unattainable.
 - ADDED: Default Nether Wart & Beet plant JSON files.
 - FIXED: Crash caused by spawning AgriCraft nuggets with invalid meta values.
 

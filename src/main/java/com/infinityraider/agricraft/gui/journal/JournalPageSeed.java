@@ -79,7 +79,7 @@ public class JournalPageSeed extends JournalPage {
 	}
 
 	private GuiComponent<String> getTitle() {
-		final String text = plant.getSeedName();
+		final String text = plant.getPlantName();
 		double scale = 0.8F;
 		while (Minecraft.getMinecraft().fontRendererObj.getStringWidth(text) * scale > 74) {
 			scale = scale - 0.1F;
