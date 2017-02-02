@@ -25,6 +25,7 @@ item.agricraft:nugget_nickel.name=Nickel Nugget
 item.agricraft:nugget_platinum.name=Platinum Nugget
 item.agricraft:nugget_osmium.name=Osmium Nugget
 item.agricraft:nugget_quartz.name=Quartz Shard
+item.agricraft:nugget_unknown.name=Unknown Fragment
 
 item.agricraft:seedPotato.name=Potato Seeds
 item.agricraft:seedCarrot.name=Carrot Seeds

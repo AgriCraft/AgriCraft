@@ -19,7 +19,8 @@ public enum AgriNuggetType {
     Aluminum,
     Nickel,
     Platinum,
-    Osmium;
+    Osmium,
+    Unknown;
 
     public final String texture;
     public final String nugget;
@@ -39,13 +40,24 @@ public enum AgriNuggetType {
         this.ore = ore;
         this.texture = "agricraft:items/nugget_" + this.name().toLowerCase();
     }
-    
+
     public String getUnlocalizedName() {
         return "item.agricraft:nugget_" + this.name().toLowerCase();
     }
 
+    /**
+     * Retrieves the nugget type corresponding to a meta. This method is
+     * index-safe, and will return the unknown type for bad indices.
+     *
+     * @param i the meta of the nugget.
+     * @return the nugget type corresponding to the given index.
+     */
     public static AgriNuggetType getNugget(int i) {
-        return values()[i % values().length];
+        if (i >= 0 && i < values().length) {
+            return values()[i % values().length];
+        } else {
+            return Unknown;
+        }
     }
 
 }

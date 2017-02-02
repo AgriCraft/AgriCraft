@@ -36,7 +36,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return AgriNuggetType.values()[stack.getMetadata()].getUnlocalizedName();
+		return AgriNuggetType.getNugget(stack.getMetadata()).getUnlocalizedName();
 	}
 
 	@Override
