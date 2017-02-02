@@ -1,5 +1,9 @@
 Changelog
 ---------
+2.0.0a10
+- ADDED: Default Nether Wart & Beet plant JSON files.
+- FIXED: Crash caused by spawning AgriCraft nuggets with invalid meta values.
+
 2.0.0a9
 - FIXED: Multiplayer JSON transfer. Json files will now transfer correctly from the server to the client.
 
