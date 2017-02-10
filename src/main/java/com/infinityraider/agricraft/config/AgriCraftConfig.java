@@ -71,6 +71,8 @@ public class AgriCraftConfig {
     public static int validParents = 2;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Single spread stat increase", comment = "Set to true to allow crops that spread from one single crop to increase stats.")
     public static boolean singleSpreadsIncrement = false;
+    @AgriConfigurable(key = "Wipe Grass Drops", category = AgriConfigCategory.FARMING, comment = "Determines if AgriCraft should completeley override grass drops with those confiured in the JSON files.")
+    public static boolean wipeGrassDrops = false;
 
     // Weeds
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weeds destroy crop sticks", comment = "Set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage).")

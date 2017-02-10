@@ -94,6 +94,11 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
+    public double getGrassDropChance() {
+        return this.plant.getGrassDropChance();
+    }
+
+    @Override
     public int getGrowthStages() {
         return this.plant.getGrowthStages();
     }

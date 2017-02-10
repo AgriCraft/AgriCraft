@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.init.AgriRecipes;
@@ -64,6 +65,7 @@ public interface IProxy extends IProxyBase {
     @Override
     default void registerEventHandlers() {
         registerEventHandler(new PlayerInteractEventHandler());
+        registerEventHandler(new GrassDropHandler());
         if (AgriCraftConfig.debug) {
             FMLCommonHandler.instance().bus().register(new RenderLogger());
         }

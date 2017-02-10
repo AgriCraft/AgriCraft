@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +27,8 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	}
 
 	@Override
-	public List<IAgriMutation> getMutations() {
-		return new ArrayList<>(this.mutations);
+	public Collection<IAgriMutation> getMutations() {
+        return Collections.unmodifiableCollection(this.mutations);
 	}
 
 	@Override

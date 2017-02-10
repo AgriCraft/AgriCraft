@@ -2,12 +2,13 @@
  */
 package com.infinityraider.agricraft.apiimpl;
 
-import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  *
@@ -48,13 +49,13 @@ public class PlantRegistry implements IAgriPlantRegistry {
 	}
 
 	@Override
-	public List<IAgriPlant> getPlants() {
-		return new ArrayList<>(this.plants.values());
+	public Collection<IAgriPlant> getPlants() {
+        return Collections.unmodifiableCollection(this.plants.values());
 	}
 
 	@Override
-	public List<String> getPlantIds() {
-		return new ArrayList<>(this.plants.keySet());
+	public Set<String> getPlantIds() {
+        return Collections.unmodifiableSet(this.plants.keySet());
 	}
 	
 }

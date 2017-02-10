@@ -19,7 +19,7 @@ public interface IAgriMutationRegistry {
 	 * Gets a list of all mutations currently registered Mutations are populated
 	 * onServerAboutToStartEvent, so any calls before that will return null
 	 */
-	List<IAgriMutation> getMutations();
+	Collection<IAgriMutation> getMutations();
 	
 	/**
 	 * Gets a list of all mutations that have this stack as a parent Mutations

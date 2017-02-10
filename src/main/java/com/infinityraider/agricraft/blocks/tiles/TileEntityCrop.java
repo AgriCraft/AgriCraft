@@ -505,12 +505,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      */
     public void applyGrowthTick() {
         int meta = getGrowthStage();
-        if (hasPlant()) {
+        if (hasPlant() && growthStage < plant.getGrowthStages()) {
             plant.onAllowedGrowthTick(worldObj, pos, this, meta);
-            if (growthStage < plant.getGrowthStages()) {
-                setGrowthStage(meta + 1);
-                /* TODO: Announce Growth Tick Via API! */
-            }
+            setGrowthStage(meta + 1);
+            /* TODO: Announce Growth Tick Via API! */
         }
     }
 

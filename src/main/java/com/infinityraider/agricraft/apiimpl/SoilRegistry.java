@@ -8,7 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  *
@@ -49,13 +52,13 @@ public class SoilRegistry implements IAgriSoilRegistry {
     }
 
     @Override
-    public List<IAgriSoil> getSoils() {
-        return new ArrayList<>(this.soils.values());
+    public Collection<IAgriSoil> getSoils() {
+        return Collections.unmodifiableCollection(this.soils.values());
     }
 
     @Override
-    public List<String> getSoilIds() {
-        return new ArrayList<>(this.soils.keySet());
+    public Set<String> getSoilIds() {
+        return Collections.unmodifiableSet(this.soils.keySet());
     }
 
 }

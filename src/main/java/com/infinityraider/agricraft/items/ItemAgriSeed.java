@@ -26,6 +26,7 @@ import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -129,7 +130,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     @SideOnly(Side.CLIENT)
     public List<ResourceLocation> getAllTextures() {
-        final List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+        final Collection<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
         final List<ResourceLocation> textures = new ArrayList<>(plants.size());
         textures.add(new ResourceLocation("agricraft:items/seed_unknown"));
         for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {

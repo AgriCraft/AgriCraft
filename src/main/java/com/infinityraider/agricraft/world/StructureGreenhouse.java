@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import java.util.ArrayList;
 
 public class StructureGreenhouse extends StructureVillagePieces.House1 {
 	//structure dimensions
@@ -172,7 +173,7 @@ public class StructureGreenhouse extends StructureVillagePieces.House1 {
 		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 15, 4, 10, boundingBox);
 		this.setBlockState(world, Blocks.TORCH.getDefaultState(), 8, 4, 2, boundingBox);
 		//place crops
-		List<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+		List<IAgriPlant> plants = new ArrayList<>(PlantRegistry.getInstance().getPlants());
 		plants.removeIf((p) -> p.getTier() > AgriCraftConfig.greenHouseMaxTier);
 		for (int x = 3; x <= 7; x++) {
 			for (int z = 3; z <= 7; z++) {
