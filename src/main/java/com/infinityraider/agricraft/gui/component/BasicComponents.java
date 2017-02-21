@@ -6,14 +6,18 @@ import com.agricraft.agricore.core.AgriCore;
 import java.awt.Point;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * 
  */
+@SideOnly(Side.CLIENT)
 public class BasicComponents {
 
 	public static GuiComponent<String> getTextComponent(String string, int x, int y, double scale) {
@@ -40,7 +44,7 @@ public class BasicComponents {
 				.build();
 	}
     
-    public static GuiComponent<Integer> getProgressBarComponent(int progress, int x, int y, int width, int height) {
+    public static GuiComponent<Supplier<Integer>> getProgressBarComponent(Supplier<Integer> progress, int x, int y, int width, int height) {
 		return new GuiComponentBuilder<>(progress, x, y, width, height)
 				.setRenderAction(ComponentRenderer::renderComponentProgressBar)
 				.build();

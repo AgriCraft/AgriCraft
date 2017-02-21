@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.List;
 
 public class ContainerSeedStorage extends ContainerSeedStorageBase {
+
     private static final int invOffsetX = 6;
     private static final int invOffsetY = 49;
     private TileEntitySeedStorage te;
@@ -19,7 +20,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
         this.te = te;
     }
 
-	@Override
+    @Override
     public boolean addSeedToStorage(ItemStack seedStack) {
         return this.te.addStackToInventory(seedStack);
     }
@@ -39,4 +40,5 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     public TileEntity getTileEntity() {
         return this.te;
     }
+
 }

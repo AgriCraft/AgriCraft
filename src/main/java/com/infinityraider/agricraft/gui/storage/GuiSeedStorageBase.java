@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.gui.storage;
 
-import com.infinityraider.agricraft.gui.component.Component;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
@@ -49,7 +48,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     private final int setActiveSeedButtonOffset_Y;
     private final int seedSlotButtonOffset_X;
     private final int seedSlotButtonOffset_Y;
-    protected final List<Component<StorageElement>> activeSeeds = new ArrayList<>();
+    protected final List<GuiComponent<StorageElement>> activeSeeds = new ArrayList<>();
     protected List<GuiComponent<ItemStack>> setActiveSeedButtons;
     
     private String sortMethod = "growth";
@@ -124,7 +123,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
             for (int i = scrollPositionHorizontal; i < Math.min(list.size(), scrollPositionHorizontal + maxHorSlots); i++) {
                 SeedStorageSlot slot = list.get(i);
                 StorageElement stats = new StorageElement(slot.getId(), slot.count, slot.getSeed());
-                activeSeeds.add(new Component<>(stats, seedSlotButtonOffset_X + (i - scrollPositionHorizontal) * 16, seedSlotButtonOffset_Y, 16, 16));
+                //activeSeeds.add(new GuiComponent<>(stats, seedSlotButtonOffset_X + (i - scrollPositionHorizontal) * 16, seedSlotButtonOffset_Y, 16, 16));
             }
         }
     }
@@ -186,7 +185,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
         int textureSize = 256;
         GL11.glColor4f(1F, 1F, 1F, 1F);
         for (int i = 0; i < this.activeSeeds.size(); i++) {
-            Component<StorageElement> component = activeSeeds.get(i);
+            GuiComponent<StorageElement> component = activeSeeds.get(i);
             if (component != null && component.getComponent() != null) {
                 StorageElement element = component.getComponent();
                 //draw the SEED icon
@@ -194,8 +193,8 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
                 NBTTagCompound tag = new NBTTagCompound();
                 element.getStat().writeToNBT(tag);
                 stack.setTagCompound(tag);
-                wrapper.getItemRender().renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
-                wrapper.getItemRender().renderItemOverlayIntoGUI(wrapper.getFontRenderer(), stack, component.xOffset(), component.yOffset(), "" + stack.stackSize);
+                //wrapper.getItemRender().renderItemIntoGUI(stack, component.xOffset(), component.yOffset());
+                //wrapper.getItemRender().renderItemOverlayIntoGUI(wrapper.getFontRenderer(), stack, component.xOffset(), component.yOffset(), "" + stack.stackSize);
                 //draw the stat bars
                 Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
                 GL11.glDisable(GL11.GL_LIGHTING);

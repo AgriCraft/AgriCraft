@@ -8,8 +8,10 @@ import java.awt.Rectangle;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-
+@SideOnly(Side.CLIENT)
 public class GuiComponentBuilder<C> {
 
 	private final C component;

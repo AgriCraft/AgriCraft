@@ -7,17 +7,21 @@ import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.utility.GuiHelper;
 import java.awt.Color;
 import java.util.List;
+import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * 
  */
+@SideOnly(Side.CLIENT)
 public final class ComponentRenderer {
 	
     public static final Color NORMAL_TEXT = new Color(14737632);
@@ -40,10 +44,10 @@ public final class ComponentRenderer {
 		);
 	}
     
-    public static void renderComponentProgressBar(AgriGuiWrapper gui, GuiComponent<Integer> component) {
+    public static void renderComponentProgressBar(AgriGuiWrapper gui, GuiComponent<Supplier<Integer>> component) {
         final int width = component.getBounds().width;
         final int height = component.getBounds().height;
-        final double progress = component.getComponent();
+        final double progress = component.getComponent().get();
         GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 100, 25, width, height, 16, 16, 2, 0);
         GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 125, 25, (int) ((width * progress) / 100), height, 16, 16, 2, 0);
     }

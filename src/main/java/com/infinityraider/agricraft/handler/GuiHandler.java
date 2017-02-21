@@ -22,6 +22,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -56,12 +58,13 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
+    @SideOnly(Side.CLIENT)
 	public Gui getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		switch (ID) {
 			case (ANALYZER_GUI_ID):
 				if (te instanceof TileEntitySeedAnalyzer) {
-					return new GuiSeedAnalyzer(player.inventory, (TileEntitySeedAnalyzer) te);
+                    return new AgriGuiWrapper(new GuiSeedAnalyzer(player.inventory, (TileEntitySeedAnalyzer) te));
 				}
 			case (JOURNAL_GUI_ID):
 				if (StackHelper.isValid(player.getHeldItemMainhand(), ItemJournal.class)) {

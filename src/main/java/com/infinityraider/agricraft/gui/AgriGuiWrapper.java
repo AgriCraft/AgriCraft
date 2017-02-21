@@ -2,30 +2,37 @@
  */
 package com.infinityraider.agricraft.gui;
 
+import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  *
  * @author Ryan
  */
+@SideOnly(Side.CLIENT)
 public final class AgriGuiWrapper extends GuiContainer {
 
-    private final IAgriGui gui;
+    private final Deque<IAgriGui> guis;
 
     public AgriGuiWrapper(IAgriGui gui) {
         super(gui.getContainer());
-        this.gui = gui;
+        this.guis = new ArrayDeque<>();
+        this.guis.add(gui);
         this.xSize = gui.getWidth();
         this.ySize = gui.getHeight();
     }
 
     public IAgriGui getGui() {
-        return gui;
+        return this.guis.getFirst();
     }
 
     public final FontRenderer getFontRenderer() {
@@ -36,10 +43,28 @@ public final class AgriGuiWrapper extends GuiContainer {
         return itemRender;
     }
 
+    public void pushGui(IAgriGui gui) {
+        this.guis.add(gui);
+        this.xSize = gui.getWidth();
+        this.ySize = gui.getHeight();
+        this.inventorySlots = gui.getContainer();
+        this.initGui();
+    }
+
+    public void popGui() {
+        if (this.guis.size() > 1) {
+            this.guis.removeLast();
+            this.xSize = guis.getLast().getWidth();
+            this.ySize = guis.getLast().getHeight();
+            this.inventorySlots = guis.getLast().getContainer();
+            this.initGui();
+        }
+    }
+
     @Override
     public void initGui() {
         super.initGui();
-        this.gui.onGuiInit(this);
+        this.guis.getLast().onGuiInit(this);
     }
 
     @Override
@@ -52,7 +77,7 @@ public final class AgriGuiWrapper extends GuiContainer {
         final List<String> toolTips = new ArrayList<>();
 
         // Call Mouse Moved Hook.
-        this.gui.onUpdateMouse(this, toolTips, relMouseX, relMouseY);
+        this.guis.getLast().onUpdateMouse(this, toolTips, relMouseX, relMouseY);
 
         // Save renderer state.
         GlStateManager.pushAttrib();
@@ -63,7 +88,7 @@ public final class AgriGuiWrapper extends GuiContainer {
         GlStateManager.pushMatrix();
 
         // Call render hook.
-        gui.onRenderForeground(this, toolTips, relMouseX, relMouseY);
+        this.guis.getLast().onRenderForeground(this, toolTips, relMouseX, relMouseY);
 
         // Restore renderer state.
         GlStateManager.popMatrix();
@@ -93,7 +118,7 @@ public final class AgriGuiWrapper extends GuiContainer {
         GlStateManager.translate(this.guiLeft, this.guiTop, 0);
 
         // Call render hook.
-        gui.onRenderBackground(this, f, relMouseX, relMouseY);
+        this.guis.getLast().onRenderBackground(this, f, relMouseX, relMouseY);
 
         // Restore renderer state.
         GlStateManager.popMatrix();
@@ -101,19 +126,40 @@ public final class AgriGuiWrapper extends GuiContainer {
     }
 
     @Override
-    public final void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    public final void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         // Calculate relative mouse position.
         final int relMouseX = mouseX - this.guiLeft;
         final int relMouseY = mouseY - this.guiTop;
 
         // Call mouse click hook.
-        this.gui.onMouseClicked(this, relMouseX, relMouseY, mouseButton);
+        this.guis.getLast().onMouseClicked(this, relMouseX, relMouseY, mouseButton);
+
+        // Backpropagate
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
-    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+    protected void mouseClickMove(int mouseX, int mouseY, int mouseButton, long timeSinceLastClick) {
         // Call mouse drag hook
-        this.gui.onMouseClickMove(this, mouseX, mouseY, mouseY);
+        this.guis.getLast().onMouseClickMove(this, mouseX, mouseY, mouseButton);
+
+        // Backpropagate
+        super.mouseClickMove(mouseX, mouseY, mouseButton, timeSinceLastClick);
+    }
+
+    @Override
+    protected void keyTyped(char character, int keycode) throws IOException {
+        // Intercept Escape
+        if (keycode == 1 && this.guis.size() > 1) {
+            this.popGui();
+            return;
+        }
+        
+        // Call Hook
+        this.guis.getLast().onKeyTyped(this, character, keycode);
+
+        // Backpropagate
+        super.keyTyped(character, keycode);
     }
 
     @Override
