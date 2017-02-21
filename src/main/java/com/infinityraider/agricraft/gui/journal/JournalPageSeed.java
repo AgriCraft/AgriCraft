@@ -19,7 +19,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @SideOnly(Side.CLIENT)
-public class JournalPageSeed extends JournalPage {
+public class JournalPageSeed implements JournalPage {
+    
+    public static final int MUTATION_ROW_HEIGHT = 20;
 
 	private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalMutationTemplate.png");
 	private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalQuestionMark.png");
@@ -57,7 +59,9 @@ public class JournalPageSeed extends JournalPage {
 	// TEXT TO RENDER ON THIS PAGE //
 	// *************************** //
 	@Override
-	public void addComponents(List<GuiComponent> components) {
+	public List<GuiComponent> getComponents() {
+        final List<GuiComponent> components = new ArrayList<>();
+        
 		components.add(getTitle());
 		components.add(getDescriptionHead());
 		components.add(getSeedInformation());
@@ -76,6 +80,8 @@ public class JournalPageSeed extends JournalPage {
 		addBrightnessTextures(components);
 		addMutationTemplates(components);
 		addGrowthStageIcons(components);
+        
+        return components;
 	}
 
 	private GuiComponent<String> getTitle() {
@@ -142,25 +148,45 @@ public class JournalPageSeed extends JournalPage {
 		int y = 1;
 		int x = 132;
 		for (IAgriMutation mutation : completedMutations) {
-			y = y + 20;
-			ItemStack resultStack = mutation.getChild().getSeed();
-			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
-			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
-			components.add(BasicComponents.getStackComponent(parent1Stack, x, y));
-			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
-			components.add(BasicComponents.getStackComponent(parent2Stack, x + 35, y));
-			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
-			components.add(BasicComponents.getStackComponent(resultStack, x + 69, y));
-			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getChild()));
+			
+            // Increment Row.
+            y = y + MUTATION_ROW_HEIGHT;
+            
+            // Child Component
+			final ItemStack resultStack = mutation.getChild().getSeed();
+            final GuiComponent child = BasicComponents.getStackComponent(resultStack, x + 69, y);
+            child.setMouseClickAction((c, p) -> journal.switchPage(mutation.getChild()));
+            components.add(child);
+            
+            // Parent 1 Component
+			final ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+            final GuiComponent parent1 = BasicComponents.getStackComponent(parent1Stack, x, y);
+            parent1.setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
+            components.add(parent1);
+            
+            // Parent 2 Component
+            final ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
+			final GuiComponent parent2 = BasicComponents.getStackComponent(parent2Stack, x + 35, y);
+			parent2.setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
+            components.add(parent2);
+            
 		}
 		for (IAgriMutation mutation : uncompletedMutations) {
-			y = y + 20;
-			ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
-			ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
-			components.add(BasicComponents.getStackComponent(parent1Stack, x, y));
-			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
-			components.add(BasicComponents.getStackComponent(parent2Stack, x + 35, y));
-			components.get(components.size() - 1).setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
+            
+            // Increment Row.
+			y = y + MUTATION_ROW_HEIGHT;
+            
+			// Parent 1 Component
+			final ItemStack parent1Stack = mutation.getParents().get(0).getSeed();
+            final GuiComponent parent1 = BasicComponents.getStackComponent(parent1Stack, x, y);
+            parent1.setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(0)));
+            components.add(parent1);
+            
+            // Parent 2 Component
+            final ItemStack parent2Stack = mutation.getParents().get(1).getSeed();
+			final GuiComponent parent2 = BasicComponents.getStackComponent(parent2Stack, x + 35, y);
+			parent2.setMouseClickAction((c, p) -> journal.switchPage(mutation.getParents().get(1)));
+            components.add(parent2);
 		}
 	}
 

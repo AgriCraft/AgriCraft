@@ -3,8 +3,8 @@ package com.infinityraider.agricraft.blocks.tiles.storage;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface ISeedStorageController {
     /**
@@ -35,7 +35,7 @@ public interface ISeedStorageController {
     /**
      * Returns the coordinates of all the controllables under this controller
      */
-    ArrayList<int[]> getControlledCoordinates();
+    List<int[]> getControlledCoordinates();
 
     /**
      * Returns the coordinates of the controller
@@ -50,5 +50,5 @@ public interface ISeedStorageController {
     /**
      * Returns the controllable with this active stack
      */
-    ISeedStorageControllable getControllable(ItemStack stack);
+    Optional<ISeedStorageControllable> getControllable(ItemStack stack);
 }

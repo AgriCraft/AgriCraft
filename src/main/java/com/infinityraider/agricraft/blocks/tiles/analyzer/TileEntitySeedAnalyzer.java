@@ -328,7 +328,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             if (stack != null && stack.stackSize > getInventoryStackLimit()) {
                 stack.stackSize = getInventoryStackLimit();
             }
-            progress = 0;
+            progress = isSpecimenAnalyzed() ? maxProgress() : 0;
         } else if (slot == 1) {
             this.journal = stack;
         }

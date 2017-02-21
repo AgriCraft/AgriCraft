@@ -3,12 +3,14 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.util.TypeHelper;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *
- * 
+ *
  */
 public final class StackHelper {
 
@@ -52,6 +54,19 @@ public final class StackHelper {
             stack.setTagCompound(tag);
             return tag;
         }
+    }
+
+    public static List<ItemStack> fitToMaxSize(ItemStack stack) {
+        final List<ItemStack> items = new ArrayList<>();
+        final int max = stack.getMaxStackSize();        
+        int total = stack.stackSize;
+        while (total > 0) {
+            ItemStack newStack = stack.copy();
+            newStack.stackSize = Math.min(total, max);
+            total = total - newStack.stackSize;
+            items.add(newStack);
+        }
+        return items;
     }
 
 }

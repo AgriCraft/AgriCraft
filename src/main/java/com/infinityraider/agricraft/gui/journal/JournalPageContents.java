@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 @SideOnly(Side.CLIENT)
-public class JournalPageContents extends JournalPage {
+public class JournalPageContents implements JournalPage {
 
 	@Override
 	public ResourceLocation getForeground() {

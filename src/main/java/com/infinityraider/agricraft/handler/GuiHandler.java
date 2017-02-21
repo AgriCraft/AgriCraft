@@ -6,20 +6,24 @@ import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.container.ContainerSeedStorageController;
 import com.infinityraider.agricraft.gui.GuiPeripheral;
 import com.infinityraider.agricraft.gui.GuiSeedAnalyzer;
-import com.infinityraider.agricraft.gui.GuiSeedStorage;
-import com.infinityraider.agricraft.gui.GuiSeedStorageController;
+import com.infinityraider.agricraft.gui.storage.GuiSeedStorage;
+import com.infinityraider.agricraft.gui.storage.GuiSeedStorageController;
 import com.infinityraider.agricraft.gui.journal.GuiJournal;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorageController;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.utility.StackHelper;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -54,24 +58,25 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    @SideOnly(Side.CLIENT)
+	public Gui getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		switch (ID) {
 			case (ANALYZER_GUI_ID):
 				if (te instanceof TileEntitySeedAnalyzer) {
-					return new GuiSeedAnalyzer(player.inventory, (TileEntitySeedAnalyzer) te);
+                    return new AgriGuiWrapper(new GuiSeedAnalyzer(player.inventory, (TileEntitySeedAnalyzer) te));
 				}
 			case (JOURNAL_GUI_ID):
 				if (StackHelper.isValid(player.getHeldItemMainhand(), ItemJournal.class)) {
-					return new GuiJournal(player.getHeldItemMainhand());
+                    return new AgriGuiWrapper(new GuiJournal(player.getHeldItemMainhand()));
 				}
 			case (SEED_STORAGE_GUI_ID):
 				if (te instanceof TileEntitySeedStorage) {
-					return new GuiSeedStorage(player.inventory, (TileEntitySeedStorage) te);
+					return new AgriGuiWrapper(new GuiSeedStorage(player.inventory, (TileEntitySeedStorage) te));
 				}
 			case (SEED_CONTROLLER_GUI_ID):
 				if (te instanceof TileEntitySeedStorageController) {
-					return new GuiSeedStorageController(player.inventory, (TileEntitySeedStorageController) te);
+					return new AgriGuiWrapper(new GuiSeedStorageController(player.inventory, (TileEntitySeedStorageController) te));
 				}
 			case (PERIPHERAL_GUI_ID):
 				if (te instanceof TileEntityPeripheral) {

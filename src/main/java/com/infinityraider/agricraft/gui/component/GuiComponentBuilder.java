@@ -2,28 +2,31 @@
  */
 package com.infinityraider.agricraft.gui.component;
 
-import com.infinityraider.agricraft.gui.GuiBase;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-
+@SideOnly(Side.CLIENT)
 public class GuiComponentBuilder<C> {
 
 	private final C component;
 	private final Rectangle bounds;
 	private Rectangle uv = new Rectangle(0, 0, 16, 16);
 	private double scale = 1;
-	private boolean centered = false;
+	private boolean centeredHorizontally = false;
+	private boolean centeredVertically = false;
 	private boolean visible = true;
 	private boolean enabled = true;
 	private BiConsumer<GuiComponent<C>, List<String>> tootipAdder = null;
 	private BiFunction<GuiComponent<C>, Point, Boolean> mouseClickAction = null;
 	private BiConsumer<GuiComponent<C>, Point> mouseEnterAction = null;
 	private BiConsumer<GuiComponent<C>, Point> mouseLeaveAction = null;
-	private BiConsumer<GuiBase, GuiComponent<C>> renderAction = null;
+	private BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction = null;
 
 	public GuiComponentBuilder(C component, int x, int y, int width, int height) {
 		this.component = component;
@@ -40,8 +43,13 @@ public class GuiComponentBuilder<C> {
 		return this;
 	}
 
-	public GuiComponentBuilder<C> setCentered(boolean centered) {
-		this.centered = centered;
+	public GuiComponentBuilder<C> setCenteredHorizontally(boolean centeredHorizontally) {
+		this.centeredHorizontally = centeredHorizontally;
+		return this;
+	}
+    
+    public GuiComponentBuilder<C> setCenteredVertically(boolean centeredVertically) {
+		this.centeredVertically = centeredVertically;
 		return this;
 	}
 	
@@ -75,13 +83,13 @@ public class GuiComponentBuilder<C> {
 		return this;
 	}
 
-	public GuiComponentBuilder<C> setRenderAction(BiConsumer<GuiBase, GuiComponent<C>> renderAction) {
+	public GuiComponentBuilder<C> setRenderAction(BiConsumer<AgriGuiWrapper, GuiComponent<C>> renderAction) {
 		this.renderAction = renderAction;
 		return this;
 	}
 
 	public GuiComponent<C> build() {
-		return new GuiComponent<>(component, bounds, uv, scale, centered, visible, enabled, tootipAdder, mouseClickAction, mouseEnterAction, mouseLeaveAction, renderAction);
+		return new GuiComponent<>(component, bounds, uv, scale, centeredHorizontally, centeredVertically, visible, enabled, tootipAdder, mouseClickAction, mouseEnterAction, mouseLeaveAction, renderAction);
 	}
 	
 }

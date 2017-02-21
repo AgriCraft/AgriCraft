@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.container;
 
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.List;
 
 public class ContainerSeedStorage extends ContainerSeedStorageBase {
+
     private static final int invOffsetX = 6;
     private static final int invOffsetY = 49;
     private TileEntitySeedStorage te;
@@ -19,7 +20,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
         this.te = te;
     }
 
-	@Override
+    @Override
     public boolean addSeedToStorage(ItemStack seedStack) {
         return this.te.addStackToInventory(seedStack);
     }
@@ -31,7 +32,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     }
 
     @Override
-    public List<SeedStorageSlot> getSeedSlots(Item seed, int meta) {
+    public List<SeedStorageSlot> getSeedSlots(AgriSeed seed) {
         return this.te.getSlots();
     }
 
@@ -39,4 +40,5 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase {
     public TileEntity getTileEntity() {
         return this.te;
     }
+
 }

@@ -1,14 +1,20 @@
 package com.infinityraider.agricraft.blocks.tiles.storage;
 
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.blocks.tiles.TileEntityCustomWood;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class TileEntitySeedStorageController extends TileEntityCustomWood implements  ISeedStorageController{
-    private ArrayList<ISeedStorageControllable> controllables = new ArrayList<>();
+public class TileEntitySeedStorageController extends TileEntityCustomWood implements ISeedStorageController {
+
+    private final List<ISeedStorageControllable> controllables = new ArrayList<>();
     public boolean isControlling;
 
     public TileEntitySeedStorageController() {
@@ -17,33 +23,31 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
 
     @Override
     public boolean addStackToInventory(ItemStack stack) {
-        boolean success = false;
-        ISeedStorageControllable controllable = this.getControllable(stack);
-        if(controllable!=null) {
-            success = controllable.addStackToInventory(stack);
-        }
-        return success;
+        return getControllable(stack)
+                .map(c -> c.addStackToInventory(stack))
+                .orElse(false);
     }
 
     @Override
     public List<ItemStack> getControlledSeeds() {
-        ArrayList<ItemStack> stacks = new ArrayList<>();
-        for(ISeedStorageControllable controllable:controllables) {
-            if(controllable.hasLockedSeed()) {
-                stacks.add(controllable.getLockedSeed());
-            }
-        }
-        return stacks;
+        return controllables
+                .stream()
+                .map(c -> c.getLockedSeed())
+                .filter(s -> s.isPresent())
+                .map(c -> c.get().toStack())
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<SeedStorageSlot> getSlots(Item seed, int meta) {
-        return this.getControllable(new ItemStack(seed, 1, meta)).getSlots();
+        return this.getControllable(new ItemStack(seed, 1, meta))
+                .map(c -> c.getSlots())
+                .orElse(Collections.EMPTY_LIST);
     }
 
     @Override
     public void addControllable(ISeedStorageControllable controllable) {
-        if(!controllable.hasController()) {
+        if (!controllable.hasController()) {
             this.controllables.add(controllable);
         }
     }
@@ -56,7 +60,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
     @Override
     public ArrayList<int[]> getControlledCoordinates() {
         ArrayList<int[]> coords = new ArrayList<>();
-        for(ISeedStorageControllable controllable:this.controllables) {
+        for (ISeedStorageControllable controllable : this.controllables) {
             coords.add(controllable.getCoords());
         }
         return coords;
@@ -64,15 +68,15 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
 
     @Override
     public int[] getCoordinates() {
-        return new int[] {this.xCoord(), this.yCoord(), this.zCoord()};
+        return new int[]{this.xCoord(), this.yCoord(), this.zCoord()};
     }
 
     @Override
     public int getControllableID(ISeedStorageControllable controllable) {
-        int id=-1;
-        for(int i=0;i<this.controllables.size() && id<0;i++) {
+        int id = -1;
+        for (int i = 0; i < this.controllables.size() && id < 0; i++) {
             ISeedStorageControllable currentControllable = this.controllables.get(i);
-            if(currentControllable==controllable) {
+            if (currentControllable == controllable) {
                 id = i;
             }
         }
@@ -80,17 +84,14 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
     }
 
     @Override
-    public ISeedStorageControllable getControllable(ItemStack stack) {
-        ISeedStorageControllable controllable = null;
-        for(ISeedStorageControllable controlled:this.controllables) {
-            if(controlled!=null && controlled.hasLockedSeed()) {
-                ItemStack controlledStack = controlled.getLockedSeed();
-                if(controlledStack.isItemEqual(stack)) {
-                    controllable = controlled;
-                    break;
-                }
-            }
+    public Optional<ISeedStorageControllable> getControllable(ItemStack stack) {
+        final IAgriPlant plant = SeedRegistry.getInstance().valueOf(stack).map(s -> s.getPlant()).orElse(null);
+        if (plant == null) {
+            return Optional.empty();
         }
-        return controllable;
+        return controllables
+                .stream()
+                .filter(c -> c.getLockedSeed().filter(s -> s.getPlant() == plant).isPresent())
+                .findAny();
     }
 }

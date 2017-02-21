@@ -40,7 +40,7 @@ public class PlayerConnectToServerHandler {
 
     private void syncPlants(EntityPlayerMP player) {
         log.info("Sending plants to player: " + player.getDisplayNameString());
-        final int count = AgriCore.getSoils().getAll().size();
+        final int count = AgriCore.getPlants().getAll().size();
         Iterator<AgriPlant> it = AgriCore.getPlants().getAll().iterator();
         for (int i = 0; it.hasNext(); i++) {
             AgriPlant plant = it.next();
