@@ -78,7 +78,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                         this.applyGrowthTick();
                     }
                 }
-            } else if (this.isCrossCrop() && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
+            } else if (this.isCrossCrop() && (Math.random() >= AgriCraftConfig.weedSpawnChance)) {
                 this.crossOver();
             } else {
                 this.spawn();
