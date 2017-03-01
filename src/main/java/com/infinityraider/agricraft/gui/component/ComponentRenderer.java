@@ -28,7 +28,6 @@ public final class ComponentRenderer {
     public static final Color ACTIVE_TEXT = new Color(16777120);
     public static final Color DISABLED_TEXT = new Color(10526880);
     public static final ResourceLocation WIDGETS = new ResourceLocation("agricraft:textures/gui/widgets.png");
-	public static final ResourceLocation FRAME_ICON = new ResourceLocation("agricraft:textures/gui/journal/GuiJournalSeedFrame.png");
 
 	public static void renderIconComponent(AgriGuiWrapper gui, GuiComponent<ResourceLocation> component) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(component.getComponent());
@@ -88,8 +87,7 @@ public final class ComponentRenderer {
 	}
 
 	public static void renderStackFrame(AgriGuiWrapper gui, GuiComponent<ItemStack> component) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(FRAME_ICON);
-		AgriGuiWrapper.drawModalRectWithCustomSizedTexture(-1, -1, 0, 0, 18, 18, 18, 18);
+		GuiUtils.drawContinuousTexturedBox(WIDGETS, -1, -1, 142, 25, 18, 18, 18, 18, 2, 0);
 	}
 	
 	public static void renderComponentText(AgriGuiWrapper gui, GuiComponent<String> component) {
