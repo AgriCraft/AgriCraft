@@ -73,12 +73,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                     //crop dependent base GROWTH rate
                     float growthRate = (float) this.getGrowthRate();
                     //determine if GROWTH tick should be applied or skipped
-                    boolean shouldGrow = (this.getRandom().nextDouble() <= (growthRate * growthBonus * global) / 100);
+                    boolean shouldGrow = (growthRate * growthBonus * global) > (this.getRandom().nextDouble() * 100);
                     if (shouldGrow) {
                         this.applyGrowthTick();
                     }
                 }
-            } else if (this.isCrossCrop() && (Math.random() < AgriCraftConfig.weedSpawnChance)) {
+            } else if (this.isCrossCrop() && AgriCraftConfig.weedSpawnChance > this.getRandom().nextDouble()) {
                 this.crossOver();
             } else {
                 this.spawn();
@@ -351,7 +351,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                     if (!crop.hasPlant() && !crop.isCrossCrop()) {
                         crop.setPlant(plant);
                         return true;
-                    } else if (this.plant.isAgressive() && this.stats != null && this.stats.getStrength() >= this.getRandom().nextDouble() * this.stats.getStrength()) {
+                    } else if (this.plant.isAgressive() && crop.getStat().map(s -> s.getStrength()).orElse((byte) 0) > this.getStat().map(s -> s.getStrength()).orElse((byte) 0) * this.getRandom().nextDouble()) {
                         crop.setCrossCrop(false);
                         crop.setPlant(plant);
                         return true;
