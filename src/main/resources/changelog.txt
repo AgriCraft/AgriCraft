@@ -8,6 +8,7 @@ Changelog
 - ADDED: Missing default JSON files for vanilla plants.
 - FIXED: JSON synchronization system premature loading issue.
 - FIXED: JEI duplicate seed interpreter registration.
+- FIXED: Base blocks not supporting meta values (notice format is WIP).
 
 2.0.0a10
 - ADDED: Light level feature for magnifying glass.

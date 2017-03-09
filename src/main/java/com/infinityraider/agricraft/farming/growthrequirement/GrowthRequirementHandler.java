@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.plant.AgriStack;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
@@ -54,7 +55,7 @@ public class GrowthRequirementHandler {
         String total = " of " + data.length + ".";
         for (String line : data) {
             AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
-            ItemStack stack = ((FuzzyStack) AgriCore.getConverter().toStack(line)).toStack();
+            ItemStack stack = ((FuzzyStack) AgriStack.fromString(line).toStack()).toStack();
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
 
             if (block != null) {
