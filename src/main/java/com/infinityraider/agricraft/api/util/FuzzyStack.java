@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,10 +18,15 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class FuzzyStack {
 
+    @Nonnull
     private final ItemStack stack;
+    @Nonnull
+    private final NBTTagCompound tags;
 
     private final boolean ignoreMeta;
     private final boolean useOreDict;
+    
+    @Nonnull
     private final List<String> ignoreTags;
 
     public FuzzyStack(ItemStack stack) {
@@ -39,6 +45,7 @@ public class FuzzyStack {
         }
 
         this.stack = stack.copy();
+        this.tags = Optional.ofNullable(stack.getTagCompound()).orElseGet(NBTTagCompound::new);
         this.ignoreTags = (ignoreTags != null) ? ignoreTags : Collections.EMPTY_LIST;
         this.ignoreMeta = ignoreMeta;
         this.useOreDict = useOreDict;
@@ -47,6 +54,7 @@ public class FuzzyStack {
         
     }
 
+    @Nonnull
     public static final Optional<FuzzyStack> fromBlockState(IBlockState state) {
         return Optional.ofNullable(state)
                 .map(s -> new ItemStack(s.getBlock(), 1, s.getBlock().getMetaFromState(s)))
@@ -54,21 +62,26 @@ public class FuzzyStack {
                 .map(FuzzyStack::new);
     }
 
+    @Nonnull
     public ItemStack toStack() {
-        return this.stack.copy();
+        final ItemStack copy = this.stack.copy();
+        copy.setTagCompound(tags.getKeySet().isEmpty() ? null : tags.copy());
+        return copy;
     }
 
+    @Nonnull
     public Item getItem() {
         return this.stack.getItem();
     }
 
+    @Nonnull
     public int getMeta() {
         return this.stack.getMetadata();
     }
 
-    @SuppressWarnings("null")
+    @Nonnull
     public NBTTagCompound getTagCompound() {
-        return this.stack.getTagCompound().copy();
+        return this.tags.copy();
     }
 
     public boolean isMetaEqual(ItemStack other) {
@@ -99,6 +112,7 @@ public class FuzzyStack {
         return other != null && this.stack.getItem().equals(other.stack.getItem());
     }
     
+    @Nonnull
     private NBTTagCompound stripTags(NBTTagCompound tag) {
         if (tag == null || this.ignoreTags.contains("*")) {
             return new NBTTagCompound();

@@ -1,5 +1,14 @@
 Changelog
 ---------
+2.0.0a11
+- FIXED: GUI glitches when highlighting items.
+- FIXED: GUI's not being as optimal as possible.
+- FIXED: Empty NBTTagCompounds being added to items with no tags.
+- FIXED: Products not stacking.
+- ADDED: Missing default JSON files for vanilla plants.
+- FIXED: JSON synchronization system premature loading issue.
+- FIXED: JEI duplicate seed interpreter registration.
+
 2.0.0a10
 - ADDED: Light level feature for magnifying glass.
 - FIXED: Crops not consuming additional item to form cross-crops.
