@@ -7,7 +7,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriStack;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
@@ -18,13 +17,12 @@ import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,8 +33,8 @@ public class JsonPlant extends CropPlant {
     private List<FuzzyStack> seedItems;
 
     public JsonPlant(AgriPlant plant) {
-        this.plant = plant;
-        this.setGrowthRequirement(this.initGrowthRequirementJSON());
+        super(initGrowthRequirementJSON(plant));
+        this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
     }
 
     @Override
@@ -74,12 +72,12 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public boolean isWeedable() {
+    public boolean isWeed() {
         return this.plant.isWeedable();
     }
 
     @Override
-    public boolean isAgressive() {
+    public boolean isAggressive() {
         return this.plant.isAgressive();
     }
 
@@ -96,6 +94,16 @@ public class JsonPlant extends CropPlant {
     @Override
     public double getGrassDropChance() {
         return this.plant.getGrassDropChance();
+    }
+
+    @Override
+    public double getGrowthChance() {
+        return plant.getGrowthChance();
+    }
+
+    @Override
+    public double getGrowthBonus() {
+        return plant.getGrowthBonus();
     }
 
     @Override
@@ -123,67 +131,13 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage) {
-        // Holder
-    }
-
-    @Override
-    protected IGrowthRequirement initGrowthRequirement() {
-        // Hack to avert annoying auto-call.
-        return GrowthRequirementHandler.getNewBuilder().build();
-    }
-
-    protected final IGrowthRequirement initGrowthRequirementJSON() {
-
-        IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
-
-        if (this.plant == null) {
-            AgriCore.getLogger("AgriCraft").warn("Null plant!");
-            return builder.build();
-        }
-
-        if (this.plant.getRequirement().getSoils().isEmpty()) {
-            AgriCore.getLogger("AgriCraft").warn("Plant: \"{0}\" has no valid soils to plant on!", this.plant.getPlantName());
-        }
-
-        this.plant.getRequirement().getSoils().stream()
-                .map(JsonSoil::new)
-                .forEach(builder::addSoil);
-
-        this.plant.getRequirement().getBases().forEach(obj -> {
-            if (obj instanceof FuzzyStack) {
-                FuzzyStack stack = (FuzzyStack) obj;
-                builder.addRequiredBlock(stack, new BlockPos(0, -2, 0));
-            }
-        });
-
-        this.plant.getRequirement().getNearby().forEach((obj, dist) -> {
-            if (obj instanceof FuzzyStack) {
-                FuzzyStack stack = (FuzzyStack) obj;
-                builder.addRequiredBlock(stack, dist);
-            }
-        });
-
-        builder.setMinLight(this.plant.getRequirement().getMinLight());
-        builder.setMaxLight(this.plant.getRequirement().getMaxLight());
-
-        return builder.build();
-
-    }
-
-    @Override
-    public boolean canBonemeal() {
+    public boolean isFertilizable() {
         return this.plant.canBonemeal();
     }
 
     @Override
-    public Block getBlock() {
-        return null;
-    }
-
-    @Override
     public int getTier() {
-        return this.plant == null ? 1 : this.plant.getTier();
+        return this.plant.getTier();
     }
 
     @Override
@@ -220,4 +174,42 @@ public class JsonPlant extends CropPlant {
     public ResourceLocation getSeedTexture() {
         return new ResourceLocation(plant.getTexture().getSeedTexture());
     }
+    
+    public static final IGrowthRequirement initGrowthRequirementJSON(AgriPlant plant) {
+
+        IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
+
+        if (plant == null) {
+            return builder.build();
+        }
+
+        if (plant.getRequirement().getSoils().isEmpty()) {
+            AgriCore.getLogger("AgriCraft").warn("Plant: \"{0}\" has no valid soils to plant on!", plant.getPlantName());
+        }
+
+        plant.getRequirement().getSoils().stream()
+                .map(JsonSoil::new)
+                .forEach(builder::addSoil);
+
+        plant.getRequirement().getBases().forEach(obj -> {
+            if (obj instanceof FuzzyStack) {
+                FuzzyStack stack = (FuzzyStack) obj;
+                builder.addRequiredBlock(stack, new BlockPos(0, -2, 0));
+            }
+        });
+
+        plant.getRequirement().getNearby().forEach((obj, dist) -> {
+            if (obj instanceof FuzzyStack) {
+                FuzzyStack stack = (FuzzyStack) obj;
+                builder.addRequiredBlock(stack, dist);
+            }
+        });
+
+        builder.setMinLight(plant.getRequirement().getMinLight());
+        builder.setMaxLight(plant.getRequirement().getMaxLight());
+
+        return builder.build();
+
+    }
+    
 }

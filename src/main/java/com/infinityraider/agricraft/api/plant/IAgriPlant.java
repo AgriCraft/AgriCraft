@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
+import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -34,30 +35,125 @@ import java.util.function.Function;
  */
 public interface IAgriPlant extends Comparable<IAgriPlant> {
 
+    /**
+     * Determines the unique id of the plant. The id should be lowercase, with
+     * no special characters, uses underscores instead of whitespace, and ends
+     * in '_plant'.
+     *
+     * @return The unique id of the plant.
+     */
     String getId();
 
+    /**
+     * Determines the user-friendly name of the plant. This does not have to be
+     * unique (although it might be confusing to players) and has no special
+     * restrictions on contained characters. It is up to the implementer to
+     * localize the plant name prior to passing here.
+     *
+     * @return The user-friendly plant name.
+     */
     String getPlantName();
 
+    /**
+     * Determines the name of seeds that are auto-generated for the plant. Only
+     * used when no other valid seed items are provided.
+     *
+     * @return The default seed name for the plant's seeds.
+     */
     default String getSeedName() {
         return getPlantName() + " Seeds";
     }
 
+    /**
+     * Fetches a list of all the items that are considered seeds for this
+     * specific plant.
+     *
+     * @return A list of all the seeds for this plant.
+     */
     Collection<FuzzyStack> getSeedItems();
 
-    default boolean isWeedable() {
+    /**
+     * Determines if the plant is to be considered a weed. Specifically, weed
+     * plants are plants that cannot be harvested without de-weeding tools.
+     *
+     * The default is false.
+     *
+     * @return If the plant is considered to be a weed.
+     */
+    default boolean isWeed() {
         return false;
     }
 
-    default boolean isAgressive() {
+    /**
+     * Determines if the plant is aggressive. A plant is considered aggressive
+     * if it has the propensity to overtake any neighboring plant that is not of
+     * the same type. In this manner, weeds are traditionally considered
+     * aggressive.
+     *
+     * The default is false.
+     *
+     * @return If the plant is aggressive.
+     */
+    default boolean isAggressive() {
         return false;
     }
 
+    /**
+     * Determines if the plant is affected by fertilizers. If false, this
+     * setting will prevent any fertilizer from being used on the plant.
+     *
+     * The default is true.
+     *
+     * @return If the plant can be fertilized.
+     */
+    default boolean isFertilizable() {
+        return true;
+    }
+
+    /**
+     * Retrieves the spread chance for a given plant. The spread chance is a
+     * normalized p-value that represents the chance of the plant to overtake a
+     * neighboring crop each tick.
+     *
+     * The default is half of the inverse of the tier of the plant.
+     *
+     * @return The spread chance of the plant.
+     */
     default double getSpreadChance() {
-        return 0.5;
+        return 0.5 / getTier();
     }
 
+    /**
+     * Retrieves the spawn chance for a given plant. The spawn chance is a
+     * normalized p-value. Defaults to 0, meaning that the plant has no chance
+     * of spawning naturally.
+     *
+     * @return The spawn chance of the plant.
+     */
     default double getSpawnChance() {
         return 0;
+    }
+
+    /**
+     * Retrieves the base growth chance of the given plant. The growth bonus
+     * (from {@link getGrowthBonus()}) is then multiplied by the plant's growth
+     * stat (from {@link IAgriStat#getGrowth()}) and added to this value as to
+     * get the actual growth chance of the plant.
+     *
+     * @return The base growth chance of the plant.
+     */
+    default double getGrowthChance() {
+        return 0.1;
+    }
+
+    /**
+     * Retrieves the growth bonus, or the added p-value for the plant to grow
+     * per growth stat level.
+     *
+     * @return The growth bonus of the plant.
+     */
+    default double getGrowthBonus() {
+        return 0.025;
     }
 
     /**
@@ -71,69 +167,244 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     }
 
     /**
-     * Gets the tier of this plant, can be overridden trough the configs
-     */
-    int getTier();
-
-    /**
-     * Gets the number of growth stages that the plant has.
-     */
-    int getGrowthStages();
-
-    /**
-     * Gets a stack of the seed for this plant.
+     * Determines the tier of the plant. This property, as far as I know is not
+     * actually used in any meaningful capacity currently.
      *
-     * @return the plant's seed.
+     * The default tier is tier 1.
+     *
+     * @return The tier of the plant.
+     */
+    default int getTier() {
+        return 1;
+    }
+
+    /**
+     * Determines the total number of growth stages that the plant has. Notice,
+     * that the number of growth stages that a plant may have is traditionally
+     * less than 16, as the max meta-value of a block is 15. For AgriCraft
+     * specifically, the conventional number of growth stages is 8.
+     *
+     * The default number of growth stages is 8.
+     *
+     * @return the total number of growth stages that the plant has.
+     */
+    default int getGrowthStages() {
+        return 8;
+    }
+    
+    /**
+     * Fetches the user-friendly plant description for use in the Seed Journal.
+     * Notice, any localization of this information is left for the implementer
+     * to handle.
+     *
+     * @return Information about the plant to be displayed in the Seed Journal.
+     */
+    String getInformation();
+
+    /**
+     * Creates a stack of the plant's primary seed item. The plant's primary
+     * seed item is the seed item that was registered first for the plant.
+     *
+     * @return A stack of the plant's seeds.
      */
     ItemStack getSeed();
 
     /**
-     * Gets a block instance of the crop
+     * Links a plant to a physical block. Currently not used, as all AgriCraft
+     * plants have to grow in crops at the moment.
+     *
+     * The default implementation returns null.
+     *
+     * @return The block representation of the plant.
      */
-    Block getBlock();
+    default Block getBlock() {
+        return null;
+    }
 
     /**
-     * Gets a List of all possible fruit drops from this plant
+     * Gets the growth requirement for this plant, this is used to check if the
+     * plant can be planted or grow in certain locations.
+     *
+     * If you don't want to create your own class for this, you can use
+     * APIv2.getGrowthRequirementBuilder() to get a Builder object to build
+     * IGrowthRequirements If you just want to have vanilla crop behaviour, you
+     * can use APIv2.getDefaultGrowthRequirement() to get a growth requirement
+     * with default behaviour
+     *
+     * @return
+     */
+    IGrowthRequirement getGrowthRequirement();
+
+    /**
+     * Retrieves a list of all possible drops from the mature plant (ie fruits).
+     * Theoretically this might be a unmodifiable view of a constant list, but
+     * for the current state of the internals of AgriCraft it is best that this
+     * is a modifiable ArrayList that doesn't have to be reused elsewhere.
+     * Notice that this is used primarily for the Seed Journal and JEI
+     * integration, so that if you wish to include a rare hidden easter-egg
+     * fruit, it would be best not to list it here.
+     *
+     * @return A list containing all the possible fruits of the plant.
      */
     List<ItemStack> getAllFruits();
 
     /**
-     * Returns a random fruit for this plant
+     * Returns a randomly-chosen fruit of the plant. This method can be
+     * implemented in any way that the modder likes, using arbitrary
+     * distributions (including
+     * <a href="http://dilbert.com/strip/2001-10-25">Dilbert's Accounting
+     * RNG</a>).
+     *
+     * For JSON crops, AgriCraft maps all possible drops to sub-ranges of the
+     * 0.0 to 1.0 range, using the drop p-value to determine the size of the
+     * sub-range. The passed random number generator is then used to generate a
+     * double value in the same 0.0 to 1.0 range as to select a single random
+     * fruit.
+     *
+     * @param rand A random to select a fruit with.
+     * @return A randomly chosen fruit for the plant.
      */
     ItemStack getRandomFruit(Random rand);
 
     /**
-     * Returns an ArrayList with random fruit stacks for this plant
+     * Returns a list containing all the fruits to be dropped when the plant is
+     * harvested. This is traditionally implemented by calling the
+     * {@link getRandomFruit()} function with the given random some arbitrary
+     * number of times based off of the value of the plant's gain stat. The
+     * default implementation obeys this logic, using the function
+     * {@code f(x) = ceil(x / 3)} for the number of times to call the
+     * {@link getRandomFruit()} function.
+     *
+     * @param stats The plant's stats, when it is harvested.
+     * @param rand A random for use in selecting the fruits.
+     * @return A list containing the fruits to be dropped as a result of the
+     * harvesting of the plant.
      */
-    List<ItemStack> getFruitsOnHarvest(IAgriStat stats, Random rand);
+    default List<ItemStack> getFruitsOnHarvest(IAgriStat stats, Random rand) {
+        int amount = (stats.getGain() + 3) / 3;
+        final List<ItemStack> fruits = new ArrayList<>(amount);
+        while (amount > 0) {
+            fruits.add(getRandomFruit(rand));
+            amount--;
+        }
+        return fruits;
+    }
 
     /**
-     * Gets called right before a harvest attempt, return false to prevent
-     * further processing, player may be null if harvested by automation
+     * Called whenever the plant is harvested. This occurs only when the plant
+     * is mature when broken (unlike {@link onPlantRemoved()}). Note, the player
+     * instance may be null, in the case of harvesting by some automaton.
+     *
+     * The default implementation does nothing.
+     *
+     * @param world The world the plant is harvested in.
+     * @param pos The position of the plant in the world.
+     * @param state The state of the block container, this will likely be
+     * removed.
+     * @param player The player harvesting the plant, or possibly null if being
+     * harvested by an automaton.
      */
-    boolean onHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player);
+    default void onHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        // Nothing to do here.
+    }
 
     /**
-     * This is called right after this plant is planted on a crop, either trough
-     * planting, mutation or spreading
+     * Called whenever a plant is removed from the world (not harvested). This
+     * only occurs when a plant is immature when broken (unlike
+     * {@link onPlantHarvested()}).
+     *
+     * The default implementation does nothing.
+     *
+     * @param world The world from which the plant was removed.
+     * @param pos The position in the world where the plant was removed.
      */
-    void onSeedPlanted(World world, BlockPos pos);
+    default void onRemove(World world, BlockPos pos) {
+        // Nothing to do here.
+    }
 
     /**
-     * This is called right after this plant is removed from a crop or a crop
-     * holding this plant is broken
+     * Called whenever the plant is planted be it either through mutation,
+     * spawning, spreading, or manual planting.
+     *
+     * The default implementation does nothing.
+     *
+     * @param world The world in which the plant was planted.
+     * @param pos The position at which the plant was planted.
      */
-    void onPlantRemoved(World world, BlockPos pos);
+    default void onPlanted(World world, BlockPos pos) {
+        // Nothing to do here.
+    }
 
     /**
-     * Allow this plant to be bonemealed or not
+     * Called when the TileEntity with this plant has its validate() method
+     * called.
+     *
+     * The default implementation does nothing. In the future this should likely
+     * return a boolean, for determining if the plant is actually valid.
+     *
+     * The default implementation does nothing.
+     *
+     * TODO: Investigate return type.
+     *
+     * @param world the World object for the TileEntity
+     * @param pos the block position
+     * @param crop the ICrop instance of the TileEntity (is the same object as
+     * the TileEntity, but is for convenience)
      */
-    boolean canBonemeal();
+    default void onValidate(World world, BlockPos pos, IAgriCrop crop) {
+        // Nothing to do here.
+    }
+
+    /**
+     * Called when the TileEntity with this plant has its invalidate() method
+     * called.
+     *
+     * The default implementation does nothing.
+     *
+     * @param world the World object for the TileEntity
+     * @param pos the block position
+     * @param crop the ICrop instance of the TileEntity (is the same object as
+     * the TileEntity, but is for convenience)
+     */
+    default void onInvalidate(World world, BlockPos pos, IAgriCrop crop) {
+        // Nothing to do here.
+    }
+
+    /**
+     * Called when the TileEntity with this plant has its onChunkUnload() method
+     * called.
+     *
+     * The default implementation does nothing.
+     *
+     * @param world the World object for the TileEntity
+     * @param pos the block position
+     * @param crop the ICrop instance of the TileEntity (is the same object as
+     * the TileEntity, but is for convenience)
+     */
+    default void onChunkUnload(World world, BlockPos pos, IAgriCrop crop) {
+        // Nothing to do here.
+    }
+
+    /**
+     * Called whenever a growth tick for the plant occurs.
+     *
+     * The default implementation does nothing.
+     *
+     * @param world
+     * @param pos
+     * @param crop
+     * @param oldGrowthStage
+     */
+    default void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage) {
+        // Nothing to do here.
+    }
 
     /**
      * If you want your crop to have additional data, this is called when the
-     * plant is first applied to crop sticks, either trough planting, spreading
-     * or mutation
+     * plant is first applied to crop sticks, either through planting, spreading
+     * or mutation.
+     *
+     * The default implementation returns {@literal null}.
      *
      * @param world the world object for the crop
      * @param pos the block position
@@ -141,76 +412,47 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      * @return initial IAdditionalCropData object (can be null if you don't need
      * additional data)
      */
-    IAdditionalCropData getInitialCropData(World world, BlockPos pos, IAgriCrop crop);
+    default IAdditionalCropData getInitialCropData(World world, BlockPos pos, IAgriCrop crop) {
+        return null;
+    }
 
     /**
      * If this CropPlant should track additional data, this method will be
-     * called when the crop containing such a CropPlant is reading from NBT
+     * called when the crop containing such a CropPlant is reading from NBT.
+     *
+     * The default implementation returns {@literal null}.
      *
      * @param tag the same tag returned from the
      * IAdditionalCropData.writeToNBT() method
      * @return an object holding the data
      */
-    IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag);
-
+    default IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
+        return null;
+    }
+    
     /**
-     * Called when the TileEntity with this plant has its validate() method
-     * called
+     * Gets the texture that should be used for the AgriCraft auto-generated
+     * seed, in the case that no other seed item is already set.
      *
-     * @param world the World object for the TileEntity
-     * @param pos the block position
-     * @param crop the ICrop instance of the TileEntity (is the same object as
-     * the TileEntity, but is for convenience)
+     * @return The texture for use in rendering the auto-generated seed.
      */
-    void onValidate(World world, BlockPos pos, IAgriCrop crop);
+    @SideOnly(Side.CLIENT)
+    ResourceLocation getSeedTexture();
 
     /**
-     * Called when the TileEntity with this plant has its invalidate() method
-     * called
+     * Gets the rendering height of the plant. This will likely be moved to a
+     * separate interface in a future release.
      *
-     * @param world the World object for the TileEntity
-     * @param pos the block position
-     * @param crop the ICrop instance of the TileEntity (is the same object as
-     * the TileEntity, but is for convenience)
-     */
-    void onInvalidate(World world, BlockPos pos, IAgriCrop crop);
-
-    /**
-     * Called when the TileEntity with this plant has its onChunkUnload() method
-     * called
-     *
-     * @param world the World object for the TileEntity
-     * @param pos the block position
-     * @param crop the ICrop instance of the TileEntity (is the same object as
-     * the TileEntity, but is for convenience)
-     */
-    void onChunkUnload(World world, BlockPos pos, IAgriCrop crop);
-
-    /**
-     * Gets the growth requirement for this plant, this is used to check if the
-     * plant can be planted or grow in certain locations
-     *
-     * If you don't want to create your own class for this, you can use
-     * APIv2.getGrowthRequirementBuilder() to get a Builder object to build
-     * IGrowthRequirements If you just want to have vanilla crop behaviour, you
-     * can use APIv2.getDefaultGrowthRequirement() to get a growth requirement
-     * with default behaviour
-     */
-    IGrowthRequirement getGrowthRequirement();
-
-    /**
-     * When a growth thick is allowed for this plant
-     */
-    void onAllowedGrowthTick(World world, BlockPos pos, IAgriCrop crop, int oldGrowthStage);
-
-    /**
-     * Gets the height of the crop
+     * @param meta The growth stage of the crop.
+     * @return The height of the crop.
      */
     float getHeight(int meta);
 
     /**
-     * Determines how the plant is rendered, return false to render as wheat
-     * (#), true to render as a flower (X)
+     * Determines the method by which the plant should be rendered. This will
+     * likely be moved to a separate interface in a future release.
+     *
+     * @return The method to use to render the plant.
      */
     @SideOnly(Side.CLIENT)
     RenderMethod getRenderMethod();
@@ -218,33 +460,39 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * Gets the primary texture to render this plant with as a ResourceLocation,
      * note that this texture must be stitched on the locationBlocksTextureMap
-     * See {@link RenderMethod} for what primary texture should be returned
+     * See {@link RenderMethod} for what primary texture should be returned.
+     * This will likely be moved to a separate interface in a future release.
+     *
+     * @param meta The growth stage of the crop.
+     * @return The plant's primary texture.
      */
     @SideOnly(Side.CLIENT)
-    ResourceLocation getPrimaryPlantTexture(int growthStage);
+    ResourceLocation getPrimaryPlantTexture(int meta);
 
     /**
      * Gets the secondary texture to render this plant with as a
      * TextureAtlasSprite, note that texture this must stitched be on the
      * locationBlocksTextureMap See {@link RenderMethod} for what secondary
-     * texture should be returned
+     * texture should be returned. This will likely be moved to a separate
+     * interface in a future release.
+     *
+     * @param meta The growth stage of the crop.
+     * @return The plant's secondary texture.
      */
     @SideOnly(Side.CLIENT)
-    ResourceLocation getSecondaryPlantTexture(int growthStage);
-
-    @SideOnly(Side.CLIENT)
-    ResourceLocation getSeedTexture();
-
-    /**
-     * Gets some information about the plant for the journal
-     */
-    @SideOnly(Side.CLIENT)
-    String getInformation();
+    ResourceLocation getSecondaryPlantTexture(int meta);
 
     /**
      * This is called when the plant is rendered, this is never called if
      * returned false on overrideRendering Should return a non null list of
-     * BakedQuads representing the plant to be rendered on the crop model
+     * BakedQuads representing the plant to be rendered on the crop model. This will likely be moved to a separate
+     * interface in a future release.
+     *
+     * @param state
+     * @param growthStage
+     * @param direction
+     * @param textureToIcon
+     * @return
      */
     @SideOnly(Side.CLIENT)
     List<BakedQuad> getPlantQuads(IExtendedBlockState state, int growthStage, EnumFacing direction, Function<ResourceLocation, TextureAtlasSprite> textureToIcon);

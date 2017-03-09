@@ -52,7 +52,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     private boolean crossCrop = false;
 
     // Just in case...
-    @Nullable
     private IAgriStat stats;
     private IAgriPlant plant;
     private IAdditionalCropData data;
@@ -62,23 +61,13 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // =========================================================================
     public void growthTick() {
         if (!this.isRemote()) {
-            if (this.hasPlant()) {
+            if (this.plant != null && this.stats != null) {
                 if (this.isMature()) {
                     this.spread();
-                } else if (this.isFertile()) {
-                    //multiplier from GROWTH stat
-                    double growthBonus = 1.0 + this.getStat().map(IAgriStat::getGrowth).orElse((byte) 0) / 10.0;
-                    //multiplier defined in the config
-                    float global = AgriCraftConfig.growthMultiplier;
-                    //crop dependent base GROWTH rate
-                    float growthRate = (float) this.getGrowthRate();
-                    //determine if GROWTH tick should be applied or skipped
-                    boolean shouldGrow = (growthRate * growthBonus * global) > (this.getRandom().nextDouble() * 100);
-                    if (shouldGrow) {
-                        this.applyGrowthTick();
-                    }
+                } else if (this.stats.getGrowth() * this.plant.getGrowthBonus() * AgriCraftConfig.growthMultiplier > this.getRandom().nextDouble() && this.isFertile()) {
+                    this.applyGrowthTick();
                 }
-            } else if (this.isCrossCrop() && AgriCraftConfig.weedSpawnChance > this.getRandom().nextDouble()) {
+            } else if (this.isCrossCrop() && AgriCraftConfig.crossOverChance > this.getRandom().nextDouble()) {
                 this.crossOver();
             } else {
                 this.spawn();
@@ -142,7 +131,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                 this.spawnAsEntity(this.getDrops());
             }
             if (this.hasPlant()) {
-                this.getPlant().ifPresent(p -> p.onPlantRemoved(this.getWorld(), pos));
+                this.getPlant().ifPresent(p -> p.onRemove(this.getWorld(), pos));
             }
             this.getWorld().removeTileEntity(pos);
             this.getWorld().setBlockToAir(pos);
@@ -169,7 +158,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (!this.isRemote()) {
             if (this.hasPlant() || this.canWeed()) {
                 this.setGrowthStage(this.growthStage + 2 + this.getRandom().nextInt(3));
-            } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation) {
+            } else if (this.isCrossCrop() && AgriCraftConfig.fertilizerMutation) {
                 this.crossOver();
             }
         }
@@ -221,11 +210,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
     }
 
-    public int getGrowthRate() {
-        // TODO: update!
-        return AgriCraftConfig.weedGrowthRate;
-    }
-
     @Override
     public int getGrowthStage() {
         return this.growthStage;
@@ -255,7 +239,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public boolean setPlant(IAgriPlant plant) {
         if ((!this.crossCrop) && (!this.hasPlant()) && (plant != null)) {
             this.plant = plant;
-            plant.onSeedPlanted(worldObj, pos);
+            plant.onPlanted(worldObj, pos);
             IAdditionalCropData new_data = plant.getInitialCropData(worldObj, getPos(), this);
             if (new_data != null) {
                 this.data = new_data;
@@ -273,7 +257,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         this.plant = null;
         this.data = null;
         if (oldPlant != null) {
-            oldPlant.onPlantRemoved(worldObj, pos);
+            oldPlant.onRemove(worldObj, pos);
         }
         this.markForUpdate();
         return Optional.ofNullable(oldPlant);
@@ -351,7 +335,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                     if (!crop.hasPlant() && !crop.isCrossCrop()) {
                         crop.setPlant(plant);
                         return true;
-                    } else if (this.plant.isAgressive() && crop.getStat().map(s -> s.getStrength()).orElse((byte) 0) > this.getStat().map(s -> s.getStrength()).orElse((byte) 0) * this.getRandom().nextDouble()) {
+                    } else if (this.plant.isAggressive() && crop.getStat().map(s -> s.getStrength()).orElse((byte) 0) > this.getStat().map(s -> s.getStrength()).orElse((byte) 0) * this.getRandom().nextDouble()) {
                         crop.setCrossCrop(false);
                         crop.setPlant(plant);
                         return true;
@@ -364,7 +348,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean clearWeed() {
-        if (this.plant != null && this.plant.isWeedable()) {
+        if (this.plant != null && this.plant.isWeed()) {
             this.removePlant();
             return true;
         } else {
@@ -378,17 +362,17 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean acceptsFertilizer(IAgriFertilizer fertilizer) {
         if (this.crossCrop) {
-            return AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation();
+            return AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation();
         }
-        return this.hasPlant() && this.plant.canBonemeal() && fertilizer.isFertilizerAllowed(plant.getTier());
+        return this.hasPlant() && this.plant.isFertilizable() && fertilizer.isFertilizerAllowed(plant.getTier());
     }
 
     @Override
     public boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-        if (this.hasPlant() && this.plant.canBonemeal() && this.getGrowthStage() < Constants.MATURE) {
+        if (this.hasPlant() && this.plant.isFertilizable() && this.getGrowthStage() < Constants.MATURE) {
             ((BlockCrop) AgriBlocks.getInstance().CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
             return true;
-        } else if (this.isCrossCrop() && AgriCraftConfig.bonemealMutation && fertilizer.canTriggerMutation()) {
+        } else if (this.isCrossCrop() && AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation()) {
             this.crossOver();
             return true;
         }
@@ -545,7 +529,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (this.crossCrop) {
             list.add(" - This is a crosscrop");
         } else if (this.hasSeed()) {
-            if (this.plant.isWeedable()) {
+            if (this.plant.isWeed()) {
                 list.add(" - This crop has weeds");
             } else {
                 list.add(" - This crop has a plant");

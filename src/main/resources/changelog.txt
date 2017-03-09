@@ -9,6 +9,9 @@ Changelog
 - FIXED: JSON synchronization system premature loading issue.
 - FIXED: JEI duplicate seed interpreter registration.
 - FIXED: Base blocks not supporting meta values (notice format is WIP).
+- FIXED: Messy code in important classes.
+- FIXED: Missing JavaDocs in certain classes.
+- ADDED: Control over growth stat bonus on per-plant level.
 
 2.0.0a10
 - ADDED: Light level feature for magnifying glass.

@@ -51,8 +51,8 @@ public class AgriCraftConfig {
     public static int sprinklerGrowthIntervalTicks = 100;
 
     // Farming
-    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Bonemeal Mutations", comment = "Set to false if you wish to disable using bonemeal on a cross crop to force a mutation.")
-    public static boolean bonemealMutation = false;
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Fertilizer Mutations", comment = "Set to false if you wish to disable using fertilizers on a cross crop to force a mutation.")
+    public static boolean fertilizerMutation = false;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Disable Vanilla Farming", comment = "set to true to disable vanilla farming, meaning you can only grow plants on crops.")
     public static boolean disableVanillaFarming = false;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Hardcore stats", comment = "Set to true to enable hardcore mode for stat increasing: 1 parent: 3/4 decrement, 1/4 nothing.\n 2 parents: 2/4 decrement, 1/4 nothing, 1/4 increment.\n 3 parents: 1/4 decrement, 1/2 nothing, 1/4 increment.\n 4 parents: 1/4 decrement, 1/4 nothing, 1/2 increment.")
@@ -77,10 +77,10 @@ public class AgriCraftConfig {
     // Weeds
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weeds destroy crop sticks", comment = "Set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage).")
     public static boolean weedsDestroyCropSticks = false;
-    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Spawn Chance", min = "0.05", max = "0.95", comment = "The percent chance of weeds to spawn or spread. At 95% abandon all hope of farming.")
-    public static float weedSpawnChance = 0.15f;
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Crossover Chance", min = "0.05", max = "0.95", comment = "The base chance for a crossover to occur during any given tick. Setting this 95% is of questionable morality.")
+    public static float crossOverChance = 0.15f;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Growth Rate", min = "10", max = "50", comment = "The average number of growth ticks for the weed to grow.")
-    public static int weedGrowthRate = 50;
+    public static int defaultGrowthChance = 50;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops items", comment = "Set to false if you wish to disable drops from raking weeds.")
     public static boolean rakingDrops = true;
 

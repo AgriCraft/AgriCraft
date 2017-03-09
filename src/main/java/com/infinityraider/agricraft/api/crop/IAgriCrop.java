@@ -81,7 +81,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
 
     @Override
     default boolean canWeed() {
-        return this.getPlant().filter(p -> p.isWeedable()).isPresent();
+        return this.getPlant().filter(p -> p.isWeed()).isPresent();
     }
 
     @Override
