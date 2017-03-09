@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.gui.storage;
 
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
-import com.infinityraider.agricraft.blocks.tiles.storage.ISeedStorageControllable;
-import com.infinityraider.agricraft.blocks.tiles.storage.SeedStorageSlot;
+import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

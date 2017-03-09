@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.vanilla.BonemealWrapper;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 

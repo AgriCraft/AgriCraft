@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.blocks.tiles.storage;
+package com.infinityraider.agricraft.tiles.storage;
 
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import net.minecraft.item.ItemStack;

@@ -21,7 +21,7 @@ import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightnessR
 import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlock;
 import com.infinityraider.agricraft.compat.computer.methods.MethodIsFertile;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.blocks.tiles;
+package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.blocks.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
 
 public class MethodGetPlant extends MethodBaseCrop {
     public MethodGetPlant() {

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;

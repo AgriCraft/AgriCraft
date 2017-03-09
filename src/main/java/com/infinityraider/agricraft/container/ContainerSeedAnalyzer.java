@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.blocks.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;

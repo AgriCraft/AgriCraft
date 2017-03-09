@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.blocks.tiles.storage.TileEntitySeedStorage;
+import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.gui.component.BasicComponents;
 import java.util.Optional;

@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
-import com.infinityraider.agricraft.blocks.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.state.IBlockState;

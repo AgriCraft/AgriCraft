@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;

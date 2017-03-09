@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.world;
 
 import com.infinityraider.agricraft.config.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.blocks.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
