@@ -29,6 +29,7 @@ import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.function.Consumer;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 
@@ -402,17 +403,17 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	 */
 	//debug info
 	@Override
-	public void addServerDebugInfo(List<String> list) {
-		super.addServerDebugInfo(list);
+	public void addServerDebugInfo(Consumer<String> consumer) {
+		super.addServerDebugInfo(consumer);
 		IMultiBlockPartData data = this.getMultiBlockData();
 		TileEntityTank root = getMainComponent();
-		list.add("TANK:");
-		list.add("coordinates: (" + xCoord() + ", " + yCoord() + ", " + zCoord() + ")");
-		list.add("root coords: (" + root.xCoord() + ", " + root.yCoord() + ", " + root.zCoord() + ")");
-		list.add("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
-		list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + this.getCapacity());
-		list.add("  - Water level is on layer " + (int) Math.floor((this.getFluidAmount(0) - 0.1F) / (this.getCapacity() * data.sizeX() * data.sizeZ())) + ".");
-		list.add("  - Water height is " + this.getFluidHeight());
+		consumer.accept("TANK:");
+		consumer.accept("coordinates: (" + xCoord() + ", " + yCoord() + ", " + zCoord() + ")");
+		consumer.accept("root coords: (" + root.xCoord() + ", " + root.yCoord() + ", " + root.zCoord() + ")");
+		consumer.accept("Tank: (single capacity: " + SINGLE_CAPACITY + ")");
+		consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + this.getCapacity());
+		consumer.accept("  - Water level is on layer " + (int) Math.floor((this.getFluidAmount(0) - 0.1F) / (this.getCapacity() * data.sizeX() * data.sizeZ())) + ".");
+		consumer.accept("  - Water height is " + this.getFluidHeight());
 		StringBuilder neighbours = new StringBuilder();
 		for (EnumFacing dir : EnumFacing.values()) {
 			if (dir == null) {
@@ -422,9 +423,9 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 				neighbours.append(dir.name()).append(", ");
 			}
 		}
-		list.add("  - Neighbours: " + neighbours.toString());
-		list.add("  - MultiBlock data: " + data.toString());
-		list.add("  - MultiBlock Size: " + data.sizeX() + "x" + data.sizeY() + "x" + data.sizeZ());
+		consumer.accept("  - Neighbours: " + neighbours.toString());
+		consumer.accept("  - MultiBlock data: " + data.toString());
+		consumer.accept("  - MultiBlock Size: " + data.sizeX() + "x" + data.sizeY() + "x" + data.sizeZ());
 	}
 
 	/*

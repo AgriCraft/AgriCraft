@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 /**
@@ -135,8 +136,8 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
 	@Override
-	public void addServerDebugInfo(List<String> list) {
-		list.add("this material is: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta());
+	public void addServerDebugInfo(Consumer<String> consumer) {
+		consumer.accept("this material is: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta());
 	}
 
     @Override

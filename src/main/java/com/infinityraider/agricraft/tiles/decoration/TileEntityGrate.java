@@ -12,6 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import java.util.List;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
+import java.util.function.Consumer;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable {
 
@@ -153,15 +154,15 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
 	//debug info
 	@Override
-	public void addServerDebugInfo(List<String> list) {
-		list.add("GRATE:");
-		super.addServerDebugInfo(list);
-		list.add("Offset: " + offset);
-		list.add("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
-		list.add("Bounds: ");
-		list.add(" - x: " + bounds[0] + " - " + bounds[3]);
-		list.add(" - y: " + bounds[1] + " - " + bounds[4]);
-		list.add(" - z: " + bounds[2] + " - " + bounds[5]);
+	public void addServerDebugInfo(Consumer<String> consumer) {
+		consumer.accept("GRATE:");
+		super.addServerDebugInfo(consumer);
+		consumer.accept("Offset: " + offset);
+		consumer.accept("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
+		consumer.accept("Bounds: ");
+		consumer.accept(" - x: " + bounds[0] + " - " + bounds[3]);
+		consumer.accept(" - y: " + bounds[1] + " - " + bounds[4]);
+		consumer.accept(" - z: " + bounds[2] + " - " + bounds[5]);
 	}
 
     public enum EnumVines implements IStringSerializable {

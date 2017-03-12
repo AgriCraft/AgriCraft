@@ -18,6 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.function.Consumer;
 import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
@@ -251,29 +252,29 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    public void addServerDebugInfo(List<String> list) {
-        list.add("CHANNEL:");
-        super.addServerDebugInfo(list);
-        list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
-        list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("  - Connections: ");
+    public void addServerDebugInfo(Consumer<String> consumer) {
+        consumer.accept("CHANNEL:");
+        super.addServerDebugInfo(consumer);
+        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
+        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
+        consumer.accept("  - Connections: ");
         for (EnumFacing dir : EnumFacing.values()) {
             if (this.hasNeighbor(dir)) {
-                list.add("      - " + dir.name());
+                consumer.accept("      - " + dir.name());
             }
         }
     }
 
     @Override
-    public void addClientDebugInfo(List<String> list) {
-        list.add("CHANNEL:");
-        super.addClientDebugInfo(list);
-        list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
-        list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("  - Connections: ");
+    public void addClientDebugInfo(Consumer<String> consumer) {
+        consumer.accept("CHANNEL:");
+        super.addClientDebugInfo(consumer);
+        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
+        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
+        consumer.accept("  - Connections: ");
         for (EnumFacing dir : EnumFacing.values()) {
             if (this.hasNeighbor(dir)) {
-                list.add("      - " + dir.name());
+                consumer.accept("      - " + dir.name());
             }
         }
     }

@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -191,7 +192,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     default int getGrowthStages() {
         return 8;
     }
-    
+
     /**
      * Fetches the user-friendly plant description for use in the Seed Journal.
      * Notice, any localization of this information is left for the implementer
@@ -267,27 +268,22 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     ItemStack getRandomFruit(Random rand);
 
     /**
-     * Returns a list containing all the fruits to be dropped when the plant is
-     * harvested. This is traditionally implemented by calling the
-     * {@link getRandomFruit()} function with the given random some arbitrary
-     * number of times based off of the value of the plant's gain stat. The
-     * default implementation obeys this logic, using the function
-     * {@code f(x) = ceil(x / 3)} for the number of times to call the
+     * Generates an assortment of the fruits to be dropped when the plant is
+     * harvested and passes them to the provided consumer. This is traditionally
+     * implemented by calling the {@link getRandomFruit()} function with the
+     * given random some arbitrary number of times based off of the value of the
+     * plant's gain stat. The default implementation obeys this logic, using the
+     * function {@code f(x) = ceil(x / 3)} for the number of times to call the
      * {@link getRandomFruit()} function.
      *
      * @param stats The plant's stats, when it is harvested.
+     * @param consumer The consumer to take the dropped fruits.
      * @param rand A random for use in selecting the fruits.
-     * @return A list containing the fruits to be dropped as a result of the
-     * harvesting of the plant.
      */
-    default List<ItemStack> getFruitsOnHarvest(IAgriStat stats, Random rand) {
-        int amount = (stats.getGain() + 3) / 3;
-        final List<ItemStack> fruits = new ArrayList<>(amount);
-        while (amount > 0) {
-            fruits.add(getRandomFruit(rand));
-            amount--;
+    default void getFruitsOnHarvest(IAgriStat stats, Consumer<ItemStack> consumer, Random rand) {
+        for (int amount = (stats.getGain() + 3) / 3; amount > 0; amount--) {
+            consumer.accept(getRandomFruit(rand));
         }
-        return fruits;
     }
 
     /**
@@ -429,7 +425,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     default IAdditionalCropData readCropDataFromNBT(NBTTagCompound tag) {
         return null;
     }
-    
+
     /**
      * Gets the texture that should be used for the AgriCraft auto-generated
      * seed, in the case that no other seed item is already set.
@@ -485,8 +481,8 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * This is called when the plant is rendered, this is never called if
      * returned false on overrideRendering Should return a non null list of
-     * BakedQuads representing the plant to be rendered on the crop model. This will likely be moved to a separate
-     * interface in a future release.
+     * BakedQuads representing the plant to be rendered on the crop model. This
+     * will likely be moved to a separate interface in a future release.
      *
      * @param state
      * @param growthStage

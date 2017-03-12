@@ -26,6 +26,7 @@ import java.util.Map;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
@@ -105,13 +106,13 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     //Debug method
     @Override
-    public void addServerDebugInfo(List<String> list) {
+    public void addServerDebugInfo(Consumer<String> consumer) {
         final String info = this.getLockedSeed().map(s -> s.getPlant().getPlantName()).orElse("null");
         final int mapSize = this.slots == null ? 0 : this.slots.size();
         final int listSize = this.slotsList == null ? 0 : this.slotsList.size();
-        list.add("Locked Seed: " + info);
-        list.add("Nr of map entries: " + mapSize);
-        list.add("Nr of list entries: " + listSize);
+        consumer.accept("Locked Seed: " + info);
+        consumer.accept("Nr of map entries: " + mapSize);
+        consumer.accept("Nr of list entries: " + listSize);
     }
 
     @Override

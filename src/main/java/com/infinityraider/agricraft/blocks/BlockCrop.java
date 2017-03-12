@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
-import com.infinityraider.agricraft.compat.vanilla.BonemealWrapper;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
 import java.util.*;
@@ -78,7 +77,9 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        this.getCrop(world, pos).ifPresent(TileEntityCrop::growthTick);
+        if (!world.isRemote) {
+            this.getCrop(world, pos).ifPresent(TileEntityCrop::growthTick);
+        }
     }
 
     /**
@@ -119,8 +120,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(crop
-                    -> crop.getDrops().stream().forEach(drop -> spawnAsEntity(world, pos, drop))
+            this.getCrop(world, pos).ifPresent(
+                    crop -> crop.getDrops(drop -> spawnAsEntity(world, pos, drop))
             );
         }
     }
@@ -174,7 +175,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * @return if the crop is placed in a valid location.
      */
     public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
-        return GrowthRequirementHandler.isSoilValid(world, pos.add(0, -1, 0));
+        return GrowthRequirementHandler.isSoilValid(world, pos.down());
     }
 
     /**
@@ -214,7 +215,9 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      */
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return this.getCrop(world, pos).map(TileEntityCrop::getDrops).orElse(Collections.emptyList());
+        List<ItemStack> drops = new ArrayList<>();
+        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add));
+        return drops;
     }
 
     /**

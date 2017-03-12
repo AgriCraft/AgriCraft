@@ -38,6 +38,7 @@ import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import java.util.function.Consumer;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
 
@@ -128,7 +129,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (!this.isRemote()) {
             if (!player.capabilities.isCreativeMode) {
                 //drop items if the player is not in creative
-                this.spawnAsEntity(this.getDrops());
+                this.getDrops(this::spawnAsEntity);
             }
             if (this.hasPlant()) {
                 this.getPlant().ifPresent(p -> p.onRemove(this.getWorld(), pos));
@@ -138,20 +139,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
     }
 
-    public List<ItemStack> getDrops() {
-        ArrayList<ItemStack> items = new ArrayList<>();
-        if (this.isCrossCrop()) {
-            items.add(new ItemStack(AgriItems.getInstance().CROPS, 2));
-        } else {
-            items.add(new ItemStack(AgriItems.getInstance().CROPS, 1));
+    public void getDrops(Consumer<ItemStack> consumer) {
+        consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
+        this.getSeed().ifPresent(seed -> consumer.accept(seed.toStack()));
+        if (this.isMature()) {
+            this.getFruits(consumer);
         }
-        if (this.hasSeed()) {
-            this.getSeed().ifPresent(seed -> items.add(seed.toStack()));
-            if (this.isMature()) {
-                items.addAll(this.getFruits());
-            }
-        }
-        return items;
     }
 
     public void applyBoneMeal() {
@@ -202,7 +195,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void setCrossCrop(boolean status) {
-        if (!this.isRemote() && status != this.crossCrop) {
+        if (!this.isRemote() && !this.hasPlant()) {
             this.crossCrop = status;
             SoundType type = Blocks.PLANKS.getSoundType(null, null, null, null);
             worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
@@ -237,7 +230,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean setPlant(IAgriPlant plant) {
-        if ((!this.crossCrop) && (!this.hasPlant()) && (plant != null)) {
+        if (!this.isRemote() && !this.crossCrop && !this.hasPlant() && plant != null) {
             this.plant = plant;
             plant.onPlanted(worldObj, pos);
             IAdditionalCropData new_data = plant.getInitialCropData(worldObj, getPos(), this);
@@ -253,14 +246,18 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriPlant> removePlant() {
-        final IAgriPlant oldPlant = this.plant;
-        this.plant = null;
-        this.data = null;
-        if (oldPlant != null) {
-            oldPlant.onRemove(worldObj, pos);
+        if (!this.isRemote()) {
+            final IAgriPlant oldPlant = this.plant;
+            this.plant = null;
+            this.data = null;
+            if (oldPlant != null) {
+                oldPlant.onRemove(worldObj, pos);
+            }
+            this.markForUpdate();
+            return Optional.ofNullable(oldPlant);
+        } else {
+            return Optional.empty();
         }
-        this.markForUpdate();
-        return Optional.ofNullable(oldPlant);
     }
 
     @Override
@@ -290,7 +287,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean isFertile(IAgriPlant plant) {
-        return worldObj.isAirBlock(this.getPos().add(0, 1, 0))
+        return worldObj.isAirBlock(this.pos.up())
                 && plant.getGrowthRequirement().isMet(this.worldObj, pos);
     }
 
@@ -306,7 +303,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriSoil> getSoil() {
-        return SoilRegistry.getInstance().getSoil(this.worldObj.getBlockState(this.pos.add(0, -1, 0)));
+        return SoilRegistry.getInstance().getSoil(this.worldObj.getBlockState(this.pos.down()));
     }
 
     // =========================================================================
@@ -314,7 +311,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // =========================================================================
     @Override
     public boolean spawn() {
-        if (!hasPlant()) {
+        if (!this.isRemote() && !hasPlant()) {
             for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
                 if (p.getSpawnChance() > this.getRandom().nextDouble() && this.isFertile(p)) {
                     this.setCrossCrop(false);
@@ -329,7 +326,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean spread() {
-        if (this.hasPlant() && this.plant.getSpreadChance() > this.getRandom().nextDouble()) {
+        if (!this.isRemote() && this.hasPlant() && this.plant.getSpreadChance() > this.getRandom().nextDouble()) {
             for (IAgriCrop crop : this.getNeighbours()) {
                 if (!this.getPlant().equals(crop.getPlant())) {
                     if (!crop.hasPlant() && !crop.isCrossCrop()) {
@@ -348,7 +345,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean clearWeed() {
-        if (this.plant != null && this.plant.isWeed()) {
+        if (!this.isRemote() && this.plant != null && this.plant.isWeed()) {
             this.removePlant();
             return true;
         } else {
@@ -398,9 +395,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                 this.spawnAsEntity(new ItemStack(AgriItems.getInstance().CROPS, 1));
                 return false;
             } else if (this.canHarvest()) {
-                this.setGrowthStage(2);
-                List<ItemStack> drops = this.getFruits();
-                drops.forEach(this::spawnAsEntity);
+                this.setGrowthStage(0);
+                this.getFruits(this::spawnAsEntity);
                 return true;
             }
         }
@@ -408,13 +404,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public List<ItemStack> getFruits() {
-        return this.getStat()
-                .map(stat
-                        -> this.getPlant()
-                        .map(plant -> plant.getFruitsOnHarvest(stat, this.getRandom()))
-                        .orElse(Collections.emptyList()))
-                .orElse(Collections.emptyList());
+    public void getFruits(Consumer<ItemStack> consumer) {
+        if (this.plant != null && this.stats != null) {
+            this.plant.getFruitsOnHarvest(stats, consumer, this.getRandom());
+        }
     }
 
     // =========================================================================
@@ -489,7 +482,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      */
     public void applyGrowthTick() {
         int meta = getGrowthStage();
-        if (hasPlant() && growthStage < plant.getGrowthStages()) {
+        if (!this.isRemote() && hasPlant() && growthStage < plant.getGrowthStages()) {
             plant.onAllowedGrowthTick(worldObj, pos, this, meta);
             setGrowthStage(meta + 1);
             /* TODO: Announce Growth Tick Via API! */
@@ -524,39 +517,39 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void addServerDebugInfo(List<String> list) {
-        list.add("CROP:");
+    public void addServerDebugInfo(Consumer<String> consumer) {
+        consumer.accept("CROP:");
         if (this.crossCrop) {
-            list.add(" - This is a crosscrop");
+            consumer.accept(" - This is a crosscrop");
         } else if (this.hasSeed()) {
             if (this.plant.isWeed()) {
-                list.add(" - This crop has weeds");
+                consumer.accept(" - This crop has weeds");
             } else {
-                list.add(" - This crop has a plant");
+                consumer.accept(" - This crop has a plant");
             }
             Optional<IAgriStat> stats = this.getStat();
-            list.add(" - Plant: " + this.plant.getPlantName());
-            list.add(" - Id: " + this.plant.getId());
-            list.add(" - Tier: " + plant.getTier());
-            list.add(" - Stage: " + this.getGrowthStage());
-            list.add(" - Stages: " + this.plant.getGrowthStages());
-            list.add(" - Meta: " + this.getGrowthStage());
-            list.add(" - Growth: " + stats.map(IAgriStat::getGrowth).orElse((byte) 1));
-            list.add(" - Gain: " + stats.map(IAgriStat::getGain).orElse((byte) 1));
-            list.add(" - Strength: " + stats.map(IAgriStat::getStrength).orElse((byte) 1));
-            list.add(" - Fertile: " + this.isFertile());
-            list.add(" - Mature: " + this.isMature());
-            list.add(" - AgriSoil: " + this.plant.getGrowthRequirement().getSoils().stream()
+            consumer.accept(" - Plant: " + this.plant.getPlantName());
+            consumer.accept(" - Id: " + this.plant.getId());
+            consumer.accept(" - Tier: " + plant.getTier());
+            consumer.accept(" - Stage: " + this.getGrowthStage());
+            consumer.accept(" - Stages: " + this.plant.getGrowthStages());
+            consumer.accept(" - Meta: " + this.getGrowthStage());
+            consumer.accept(" - Growth: " + stats.map(IAgriStat::getGrowth).orElse((byte) 1));
+            consumer.accept(" - Gain: " + stats.map(IAgriStat::getGain).orElse((byte) 1));
+            consumer.accept(" - Strength: " + stats.map(IAgriStat::getStrength).orElse((byte) 1));
+            consumer.accept(" - Fertile: " + this.isFertile());
+            consumer.accept(" - Mature: " + this.isMature());
+            consumer.accept(" - AgriSoil: " + this.plant.getGrowthRequirement().getSoils().stream()
                     .findFirst().map(IAgriSoil::getId).orElse("None")
             );
         } else {
-            list.add(" - This crop has no plant");
+            consumer.accept(" - This crop has no plant");
         }
     }
 
     @Override
-    public void addClientDebugInfo(List<String> lines) {
-        lines.add(" - Texture: " + this.plant.getPrimaryPlantTexture(this.getGrowthStage()).toString());
+    public void addClientDebugInfo(Consumer<String> consumer) {
+        consumer.accept(" - Texture: " + this.plant.getPrimaryPlantTexture(this.getGrowthStage()).toString());
     }
 
     @Override

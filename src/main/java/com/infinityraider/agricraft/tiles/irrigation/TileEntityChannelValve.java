@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
+import java.util.function.Consumer;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
 
@@ -77,12 +78,12 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     @Override
-    public void addServerDebugInfo(List<String> list) {
-        list.add("VALVE");
-        list.add("  - State: " + (this.isPowered() ? "closed" : "open"));
-        list.add("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
-        list.add("  - FluidHeight: " + this.getFluidHeight());
-        list.add("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
+    public void addServerDebugInfo(Consumer<String> consumer) {
+        consumer.accept("VALVE");
+        consumer.accept("  - State: " + (this.isPowered() ? "closed" : "open"));
+        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
+        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
+        consumer.accept("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
 
     @Override

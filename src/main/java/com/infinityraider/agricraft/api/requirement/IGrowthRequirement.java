@@ -21,7 +21,7 @@ public interface IGrowthRequirement {
      * @return true, if the given crop has a valid soil below it.
      */
     default boolean hasValidSoil(IBlockAccess world, BlockPos pos) {
-        return FuzzyStack.fromBlockState(world.getBlockState(pos.add(0, -1, 0)))
+        return FuzzyStack.fromBlockState(world.getBlockState(pos.down()))
                 .filter(soil -> this.getSoils().stream().anyMatch(e -> e.isVarient(soil)))
                 .isPresent();
     }
@@ -33,7 +33,7 @@ public interface IGrowthRequirement {
     }
 
     default boolean hasValidLight(World world, BlockPos pos) {
-        BlockPos above = pos.add(0, 1, 0);
+        BlockPos above = pos.up();
         int lvl = Math.max(world.getLightFor(EnumSkyBlock.BLOCK, above), world.getLightFor(EnumSkyBlock.SKY, above));
         return this.getMinLight() <= lvl && lvl < this.getMaxLight();
     }

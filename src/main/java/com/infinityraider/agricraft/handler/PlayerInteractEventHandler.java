@@ -36,28 +36,15 @@ public class PlayerInteractEventHandler {
 		ItemStack stack = player.getActiveItemStack();
 		if (stack != null && stack.stackSize > 0 && stack.getItem() != null && stack.getItem() instanceof IPlantable) {
 			if (GrowthRequirementHandler.isSoilValid(event.getWorld(), event.getPos())) {
-				if (AgriCraftConfig.disableVanillaFarming) {
-					if (!allowVanillaPlanting(stack)) {
+				if (AgriCraftConfig.disableVanillaFarming && !SeedRegistry.getInstance().hasAdapter(stack)) {
 						this.denyEvent(event, false);
-						return;
-					}
-				}
-				if (stack.hasTagCompound()) {
+				} else if (stack.hasTagCompound()) {
 					NBTTagCompound tag = (NBTTagCompound) stack.getTagCompound().copy();
-					if (true) {
 						//TODO: place a tile entity storing the SEED's data
 						this.denyEvent(event, false);
-					}
 				}
 			}
 		}
-	}
-
-	private static boolean allowVanillaPlanting(ItemStack seed) {
-		return !(
-                AgriCraftConfig.disableVanillaFarming
-                && SeedRegistry.getInstance().hasAdapter(seed)
-                );
 	}
 
 	/**

@@ -1,5 +1,13 @@
 Changelog
 ---------
+2.0.0a12
+- FIXED: Quad caching issue causing massive memory leak.
+- FIXED: Plants could be made to grow in cross-crops.
+- FIXED: Grass seed drops.
+- FIXED: Debug log spam showing up in non-debug log.
+- ADDED: More lambda usage.
+- FIXED: Possible areas of de-synchronization.
+
 2.0.0a11
 - FIXED: GUI glitches when highlighting items.
 - FIXED: GUI's not being as optimal as possible.

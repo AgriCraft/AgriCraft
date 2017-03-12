@@ -32,10 +32,10 @@ public class ItemCrop extends ItemBase implements IItemWithModel {
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		if (!world.isRemote) {
-			BlockPos cropPos = pos.add(0, 1, 0);
+			BlockPos cropPos = pos.up();
 			IBlockState state = world.getBlockState(cropPos);
 			if (state.getBlock().getMaterial(state) == Material.AIR && GrowthRequirementHandler.isSoilValid(world, pos) && side == EnumFacing.UP) {
-				world.setBlockState(pos.add(0, 1, 0), AgriBlocks.getInstance().CROP.getDefaultState());
+				world.setBlockState(pos.up(), AgriBlocks.getInstance().CROP.getDefaultState());
 				int use = 1;
 				SoundType type = Blocks.LEAVES.getSoundType();
 				world.playSound(null, (double) ((float) cropPos.getX() + 0.5F), (double) ((float) cropPos.getY() + 0.5F), (double) ((float) cropPos.getZ() + 0.5F), type.getPlaceSound(), SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
