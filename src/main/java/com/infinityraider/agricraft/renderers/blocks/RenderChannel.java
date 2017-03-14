@@ -108,7 +108,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         // Calculate water brightness.
         final int l = RenderUtilBase.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER);
         tessellator.setBrightness(l);
-        tessellator.setColorRGBA(tessellator.getRedValueInt(), tessellator.getRedValueInt(), tessellator.getBlueValueInt(), 100);
+        tessellator.setAlpha(0.39f);
 
         // Calculate y to avoid plane rendering conflicts
         final float y = channel.getFluidHeight() - 0.001f;

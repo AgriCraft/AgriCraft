@@ -59,7 +59,7 @@ public abstract  class AgriCraftFX extends Particle {
             float f12 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) f0 - interpPosY);
             float f13 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) f0 - interpPosZ);
             Minecraft.getMinecraft().renderEngine.bindTexture(this.texture);
-            tessellator.setColorRGBA_F(1, 1, 1, 0.5F);
+            tessellator.setColorRGBA(1, 1, 1, 0.5F);
             tessellator.addVertexWithUV((f11 - f1 * f10 - f4 * f10), (f12 - f2 * f10), (f13 - f3 * f10 - f6 * f10), f7, f9);
             tessellator.addVertexWithUV((f11 - f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 - f3 * f10 + f6 * f10), f7, f8);
             tessellator.addVertexWithUV((f11 + f1 * f10 + f4 * f10), (f12 + f2 * f10), (f13 + f3 * f10 + f6 * f10), f6, f8);

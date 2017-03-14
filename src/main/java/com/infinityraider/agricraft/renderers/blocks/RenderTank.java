@@ -94,7 +94,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
             // Calculate water brightness.
             final int l = RenderUtilBase.getMixedBrightness(tank.getWorld(), tank.getPos(), Blocks.WATER);
             tessellator.setBrightness(l);
-            tessellator.setColorRGBA(tessellator.getRedValueInt(), tessellator.getRedValueInt(), tessellator.getBlueValueInt(), 100);
+            tessellator.setAlpha(0.39f);
 
             //draw surface
             final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();

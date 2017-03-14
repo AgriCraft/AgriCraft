@@ -44,7 +44,7 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
 		float f0 = (float) (l >> 16 & 255) / 255.0F;
 		float f1 = (float) (l >> 8 & 255) / 255.0F;
 		float f2 = (float) (l & 255) / 255.0F;
-		tess.setColorRGB_F(f0, f1, f2);
+		tess.setColorRGB(f0, f1, f2);
 
 		if (grate.hasVines(true)) {
 			tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.NORTH, vinesIcon, 0.001f);
