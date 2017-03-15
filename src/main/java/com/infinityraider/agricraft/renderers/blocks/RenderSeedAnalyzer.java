@@ -47,12 +47,12 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
         tessellator.pushMatrix();
         rotateBlock(tessellator, direction);
         if (analyzerQuads == null) {
-            analyzerQuads = MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_ANALYZER), 1);
+            analyzerQuads = MODEL_ANALYZER.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_ANALYZER));
         }
         tessellator.addQuads(analyzerQuads);
         if (journal) {
             if (bookQuads == null) {
-                bookQuads = MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_ANALYZER), 1);
+                bookQuads = MODEL_BOOK.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_ANALYZER));
             }
             tessellator.addQuads(bookQuads);
         }
