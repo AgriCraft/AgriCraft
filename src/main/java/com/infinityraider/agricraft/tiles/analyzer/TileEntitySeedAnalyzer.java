@@ -344,7 +344,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //if this is usable by a player
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return true;
+        return worldObj.getTileEntity(pos) == this
+				&& player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64.0;
     }
 
     /**

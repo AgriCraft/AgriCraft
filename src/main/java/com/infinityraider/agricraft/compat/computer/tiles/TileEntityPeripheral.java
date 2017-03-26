@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.compat.computer.methods.MethodGetGrowthStage
 import com.infinityraider.agricraft.compat.computer.methods.MethodIsCrossCrop;
 import com.infinityraider.agricraft.compat.computer.methods.MethodGetNeededSoil;
 import com.infinityraider.agricraft.compat.computer.methods.MethodNeedsBaseBlock;
-import com.infinityraider.agricraft.compat.computer.methods.MethodHasWeeds;
 import com.infinityraider.agricraft.compat.computer.methods.MethodException;
 import com.infinityraider.agricraft.compat.computer.methods.MethodGetSpecimen;
 import com.infinityraider.agricraft.compat.computer.methods.IMethod;
@@ -192,7 +191,6 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
                 new MethodGetStats(),
                 new MethodHasJournal(),
                 new MethodHasPlant(),
-                new MethodHasWeeds(),
                 new MethodIsAnalyzed(),
                 new MethodIsCrossCrop(),
                 new MethodIsFertile(),

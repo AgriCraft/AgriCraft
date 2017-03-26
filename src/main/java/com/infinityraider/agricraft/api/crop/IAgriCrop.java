@@ -6,13 +6,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestable;
-import com.infinityraider.agricraft.api.misc.IAgriWeedable;
+import com.infinityraider.agricraft.api.misc.IAgriRakeable;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import java.util.Optional;
+import java.util.Random;
+import java.util.function.Consumer;
+import net.minecraft.item.ItemStack;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -20,7 +23,7 @@ import java.util.Optional;
  * To retrieve the ICrop instance use:
  * {@code API.getCrop(World world, int x, int y, int z)}
  */
-public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWeedable, IAgriFertilizable, IAgriHarvestable {
+public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFertilizable, IAgriHarvestable, IAgriRakeable {
 
     /**
      * Retrieves the location of the crop instance.
@@ -79,21 +82,6 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
         return false;
     }
 
-    @Override
-    default boolean canWeed() {
-        return this.getPlant().filter(p -> p.isWeed()).isPresent();
-    }
-
-    @Override
-    default boolean clearWeed() {
-        if (this.canWeed()) {
-            this.removePlant();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     Optional<IAgriSoil> getSoil();
 
     /**
@@ -112,5 +100,46 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriWe
     List<IAgriCrop> getNeighbours();
 
     List<IAgriCrop> getMatureNeighbours();
+
+	// =========================================================================
+    // IHarvestable Defaults
+    // =========================================================================
+	
+	@Override
+	default boolean canBeHarvested() {
+		return hasPlant() && isMature();
+	}
+	
+	@Override
+	default void getFruits(Consumer<ItemStack> consumer, Random random) {
+		getSeed().ifPresent(s -> s.getPlant().getFruitsOnHarvest(s.getStat(), consumer, random));
+    }
+	
+	@Override
+	default void getAllFruits(Consumer<ItemStack> consumer) {
+		getPlant().ifPresent(p -> p.getAllFruits().forEach(consumer));
+    }
+	
+	// =========================================================================
+    // IRakeable Defaults
+    // =========================================================================
+	@Override
+	default boolean canBeRaked() {
+		return hasPlant();
+	}
+
+	@Override
+	default void getRakeProducts(Consumer<ItemStack> consumer, Random random) {
+		getSeed().map(s -> s.toStack()).ifPresent(consumer);
+		if (isMature()) {
+			getFruits(consumer, random);
+		}
+	}
+
+	@Override
+	default void getAllRakeProducts(Consumer<ItemStack> consumer) {
+		getSeed().map(s -> s.toStack()).ifPresent(consumer);
+		getAllFruits(consumer);
+	}
 
 }

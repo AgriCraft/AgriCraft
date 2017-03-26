@@ -16,7 +16,7 @@ public class AgriItems {
 		JOURNAL = new ItemJournal();
 		TROWEL = new ItemTrowel();
 		DEBUGGER= new ItemDebugger();
-		HAND_RAKE = new ItemHandRake();
+		HAND_RAKE = new ItemRake();
 		CLIPPER = new ItemClipper();
 		AGRI_CLIPPING = new ItemClipping();
 		AGRI_SEED = new ItemAgriSeed();

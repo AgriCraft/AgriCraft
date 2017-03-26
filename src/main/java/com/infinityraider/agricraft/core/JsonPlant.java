@@ -97,12 +97,12 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public double getGrowthChance() {
+    public double getGrowthChanceBase() {
         return plant.getGrowthChance();
     }
 
     @Override
-    public double getGrowthBonus() {
+    public double getGrowthChanceBonus() {
         return plant.getGrowthBonus();
     }
 

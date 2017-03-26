@@ -93,7 +93,7 @@ public class EntityAIClearWeeds extends EntityAIBase {
             if (dist < 0) {
                 getNextCrop();
             } else if (dist <= 1) {
-                nextCrop.clearWeed();
+                //nextCrop.clearWeed();
                 getNextCrop();
             } else if (!villager.getNavigator().tryMoveToXYZ(nextCrop.xCoord() + 0.5D, nextCrop.yCoord(), nextCrop.zCoord() + 0.5D, 1)) {
                 getNextCrop();
@@ -136,9 +136,11 @@ public class EntityAIClearWeeds extends EntityAIBase {
                     TileEntity te = villager.worldObj.getTileEntity(new BlockPos(x, y, z));
                     if (te != null && te instanceof TileEntityCrop) {
                         TileEntityCrop crop = (TileEntityCrop) te;
+						/* TODO!
                         if (crop.canWeed()) {
                             weedsToClear.add(crop);
                         }
+						*/
                     }
                 }
             }
