@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.init.AgriEntities;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
@@ -85,7 +84,7 @@ public class AgriCraft extends InfinityMod {
 
 	@Override
 	public Object getModEntityRegistry() {
-		return AgriEntities.getInstance();
+		return 0;
 	}
 
 	@Override

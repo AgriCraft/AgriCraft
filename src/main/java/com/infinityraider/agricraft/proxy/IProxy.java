@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.init.AgriRecipes;
-import com.infinityraider.agricraft.init.WorldGen;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -48,7 +47,6 @@ public interface IProxy extends IProxyBase {
         PluginHandler.postInit();
         AgriRecipes.init();
         GrowthRequirementHandler.init();
-        WorldGen.init();
     }
 
     default void registerVillagerSkin(int id, String resource) {

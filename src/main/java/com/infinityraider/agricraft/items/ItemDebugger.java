@@ -26,7 +26,6 @@ public class ItemDebugger extends ItemDebuggerBase implements IItemWithModel {
         list.add(new DebugModeCheckSoil());
 		list.add(new DebugModeClearGrass());
 		list.add(new DebugModeCoreInfo());
-		list.add(new DebugModeSpawnFarmer());
 		return list;
 	}
 }
