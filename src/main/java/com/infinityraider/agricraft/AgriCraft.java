@@ -8,10 +8,16 @@ import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
+import com.infinityraider.agricraft.reference.AgriAlphaWarnings;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * <p>
@@ -45,58 +51,64 @@ import net.minecraftforge.fml.common.SidedProxy;
  * @author InfinityRaider
  */
 @Mod(
-		modid = Reference.MOD_ID,
-		name = Reference.MOD_NAME,
-		version = Reference.MOD_VERSION,
-		guiFactory = Reference.GUI_FACTORY_CLASS,
-		updateJSON = Reference.UPDATE_URL,
-		dependencies = 
-                "required-after:Forge@[" + Reference.VERSION_FORGE + ",);" +
-                "required-after:infinitylib@[" + Reference.VERSION_INFLIB + ",);"
+        modid = Reference.MOD_ID,
+        name = Reference.MOD_NAME,
+        version = Reference.MOD_VERSION,
+        guiFactory = Reference.GUI_FACTORY_CLASS,
+        updateJSON = Reference.UPDATE_URL,
+        dependencies
+        = "required-after:Forge@[" + Reference.VERSION_FORGE + ",);"
+        + "required-after:infinitylib@[" + Reference.VERSION_INFLIB + ",);"
 )
 public class AgriCraft extends InfinityMod {
 
-	@Mod.Instance(Reference.MOD_ID)
-	public static AgriCraft instance;
+    @Mod.Instance(Reference.MOD_ID)
+    public static AgriCraft instance;
 
-	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-	public static IProxy proxy;
+    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
+    public static IProxy proxy;
 
-	@Override
-	public IProxy proxy() {
-		return proxy;
-	}
+    @Override
+    public IProxy proxy() {
+        return proxy;
+    }
 
-	@Override
-	public String getModId() {
-		return Reference.MOD_ID;
-	}
+    @Override
+    public String getModId() {
+        return Reference.MOD_ID;
+    }
 
-	@Override
-	public Object getModBlockRegistry() {
-		return AgriBlocks.getInstance();
-	}
+    @Override
+    public Object getModBlockRegistry() {
+        return AgriBlocks.getInstance();
+    }
 
-	@Override
-	public Object getModItemRegistry() {
-		return AgriItems.getInstance();
-	}
+    @Override
+    public Object getModItemRegistry() {
+        return AgriItems.getInstance();
+    }
 
-	@Override
-	public Object getModEntityRegistry() {
-		return 0;
-	}
+    @Override
+    public Object getModEntityRegistry() {
+        return 0;
+    }
 
-	@Override
-	public void registerMessages(INetworkWrapper wrapper) {
-		wrapper.registerMessage(MessageContainerSeedStorage.class);
-		wrapper.registerMessage(MessageFertilizerApplied.class);
-		wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
-		wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
-		wrapper.registerMessage(MessageSyncFluidLevel.class);
-		wrapper.registerMessage(MessageTileEntitySeedStorage.class);
+    @Override
+    public void registerMessages(INetworkWrapper wrapper) {
+        wrapper.registerMessage(MessageContainerSeedStorage.class);
+        wrapper.registerMessage(MessageFertilizerApplied.class);
+        wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
+        wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
+        wrapper.registerMessage(MessageSyncFluidLevel.class);
+        wrapper.registerMessage(MessageTileEntitySeedStorage.class);
         wrapper.registerMessage(MessageSyncSoilJson.class);
         wrapper.registerMessage(MessageSyncPlantJson.class);
         wrapper.registerMessage(MessageSyncMutationJson.class);
-	}
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
+        AgriAlphaWarnings.chooseMessage(l -> e.player.addChatComponentMessage(ForgeHooks.newChatWithLinks(l)));
+    }
 }
