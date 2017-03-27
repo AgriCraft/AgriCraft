@@ -47,7 +47,9 @@ import java.util.ArrayList;
  * </p>
  * @author InfinityRaider
  */
+
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
+@SuppressWarnings("unused") //So Less @SupressWarnings in some Cases its more efficient.
 public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
@@ -56,7 +58,6 @@ public class AgriCraft {
     public static IProxy proxy;
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
     public static void preInit(FMLPreInitializationEvent event) {
         LogHelper.debug("Starting Pre-Initialization");
         NetworkWrapperAgriCraft.init();
@@ -72,7 +73,6 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
     public static void init(FMLInitializationEvent event) {
         LogHelper.debug("Starting Initialization");
         proxy.registerEventHandlers();
@@ -84,7 +84,6 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
     public static void postInit(FMLPostInitializationEvent event) {
         LogHelper.debug("Starting Post-Initialization");
         //Have to do this in postInit because some mods don't register their items/blocks until init
@@ -101,19 +100,11 @@ public class AgriCraft {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         MutationHandler.getInstance().init();
         NEIHelper.setServerConfigs();
     }
-
     @Mod.EventHandler
-    @SuppressWarnings("unused")
-    public void onServerStart(FMLServerStartingEvent event) {
-    }
-
-    @Mod.EventHandler
-    @SuppressWarnings("unused")
     public void onMissingMappings(FMLMissingMappingsEvent event) {
         ArrayList<String> removedIds = new ArrayList<String>();
         removedIds.add("AgriCraft:cropMelon");

@@ -4,6 +4,11 @@ language: java
 # Tell Travis we want container-based builds.
 sudo: false
 
+#So only the 1.7.10 branch
+branches:
+  only:
+    - 1.7.10
+
 # Use the gradle wrapper for 2.7 instead of default 2.2
 before_install:
   - chmod +x gradlew
@@ -15,10 +20,6 @@ install:
 # Build the Project.
 script:
   - ./gradlew build -S
-
-# Push success to CurseForge for release.
-after_success:
-  - ./gradlew curse -S
 
 # Clean up after Gradle
 env:
