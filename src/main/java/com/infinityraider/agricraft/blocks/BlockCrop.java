@@ -56,12 +56,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
     }

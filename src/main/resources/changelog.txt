@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.0a14
+- ADDED: Default Botania Files thanks to Alexandro Lara de Camargo!
+
 2.0.0a13
 - FIXED: Raking dropping fake items.
 - FIXED: Raking lacking appropriate interface.
