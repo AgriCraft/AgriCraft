@@ -49,7 +49,7 @@ import java.util.ArrayList;
  */
 
 @Mod(modid = Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS)
-@SuppressWarnings("unused") //So Less @SupressWarnings in some Cases its more efficient.
+@SuppressWarnings("unused") //So Less @SupressWarnings in the AgriCraft Class,
 public class AgriCraft {
     @Mod.Instance(Reference.MOD_ID)
     public static AgriCraft instance;
