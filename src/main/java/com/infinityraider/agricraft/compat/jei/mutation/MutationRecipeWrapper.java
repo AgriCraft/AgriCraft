@@ -3,82 +3,75 @@
  */
 package com.infinityraider.agricraft.compat.jei.mutation;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
+import net.minecraft.client.Minecraft;
 
 /**
  *
- * 
+ *
  */
-public class MutationRecipeWrapper implements IRecipeWrapper {
+public class MutationRecipeWrapper extends BlankRecipeWrapper {
 
-    private final List input;
+    private final String chance;
+    private final List<List<ItemStack>> input;
     private final ItemStack output;
 
     public MutationRecipeWrapper(IAgriMutation recipe) {
-        ImmutableList.Builder builder = ImmutableList.builder();
-        for (IAgriPlant p : recipe.getParents()) {
-            builder.add(p.getSeed());
+        // Setup lists.
+        chance = (int)(recipe.getChance() * 100) + "%";
+        input = new ArrayList<>();
+        output = recipe.getChild().getSeed();
+        
+        // Add Parents
+        recipe.getParents().stream()
+                .map(p -> p.getSeed())
+                .map(Arrays::asList)
+                .forEach(input::add);
+
+        // Setup Soil List
+        final List<ItemStack> soils = new ArrayList<>();
+        
+        // Add Soils to List
+        recipe.getChild().getGrowthRequirement().getSoils().stream()
+                .flatMap(s -> s.getVarients().stream())
+                .map(s -> s.toStack())
+                .forEach(soils::add);
+        
+        // Add Farmland if no Soils
+        if (soils.isEmpty()) {
+            soils.add(new ItemStack(Blocks.FARMLAND));
         }
         
-        builder.add(recipe.getChild().getGrowthRequirement().getSoils().stream()
-                .flatMap(s -> s.getVarients().stream())
-                .findFirst()
-                .map(s -> s.toStack())
-                .orElse(new ItemStack(Blocks.FARMLAND))
-        );
+        // Add Soil List to Master List
+        input.add(soils);
+        
+        // Add Condition to List
         recipe.getChild().getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())
-                .ifPresent(builder::add);
-
-        input = builder.build();
-        output = recipe.getChild().getSeed();
+                .map(Arrays::asList)
+                .ifPresent(input::add);
     }
 
     @Override
-    public List getInputs() {
-        return input;
+    public void getIngredients(IIngredients ingredients) {
+        // Add Inputs
+        ingredients.setInputLists(ItemStack.class, input);
+
+        // Add Outputs
+        ingredients.setOutput(ItemStack.class, output);
     }
 
     @Override
-    public List<ItemStack> getOutputs() {
-        return ImmutableList.of(output);
-    }
-
-    @Override
-    public List<FluidStack> getFluidInputs() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public List<FluidStack> getFluidOutputs() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    }
-
-    @Override
-    public void drawAnimations(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-        return false;
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        minecraft.fontRendererObj.drawString(chance, 56, 14, Color.GRAY.getRGB(), false);
     }
 
 }

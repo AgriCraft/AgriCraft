@@ -3,31 +3,30 @@
  */
 package com.infinityraider.agricraft.compat.jei.produce;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import java.util.ArrayList;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 
 /**
  *
  * 
  */
-public class ProduceRecipeWrapper implements IRecipeWrapper {
+public class ProduceRecipeWrapper extends BlankRecipeWrapper {
 
-    private final List input;
+    private final List<ItemStack> input;
     private final List<ItemStack> output;
 
     public ProduceRecipeWrapper(IAgriPlant recipe) {
-        ImmutableList.Builder builder = ImmutableList.builder();
+        input = new ArrayList();
+        output = recipe.getAllFruits();
 
-        builder.add(recipe.getSeed());
+        input.add(recipe.getSeed());
         
-        builder.add(recipe.getGrowthRequirement().getSoils().stream()
+        input.add(recipe.getGrowthRequirement().getSoils().stream()
                 .flatMap(s -> s.getVarients().stream())
                 .findFirst()
                 .map(s -> s.toStack())
@@ -35,48 +34,16 @@ public class ProduceRecipeWrapper implements IRecipeWrapper {
         );
         recipe.getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())
-                .ifPresent(builder::add);
-
-        input = builder.build();
-        output = recipe.getAllFruits();
+                .ifPresent(input::add);
     }
 
     @Override
-    public List getInputs() {
-        return input;
-    }
-
-    @Override
-    public List<ItemStack> getOutputs() {
-        return output;
-    }
-
-    @Override
-    public List<FluidStack> getFluidInputs() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public List<FluidStack> getFluidOutputs() {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    }
-
-    @Override
-    public void drawAnimations(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return ImmutableList.of();
-    }
-
-    @Override
-    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-        return false;
+    public void getIngredients(IIngredients ingredients) {
+        // Set Inputs
+        ingredients.setInputs(ItemStack.class, input);
+        
+        // Set Outputs
+        ingredients.setOutputs(ItemStack.class, output);
     }
 
 }
