@@ -4,12 +4,11 @@
  * This might not be *strictly* cleaner, but it is nicer.
  *
  */
-package com.infinityraider.agricraft.config;
+package com.infinityraider.agricraft.reference;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.util.text.TextFormatting;
 
 /**

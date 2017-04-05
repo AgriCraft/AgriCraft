@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.apiimpl.*;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.Constants;

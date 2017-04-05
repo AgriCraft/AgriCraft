@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.Optional;
 
 public class StatCalculatorHardcore extends StatCalculatorBase {

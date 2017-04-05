@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;

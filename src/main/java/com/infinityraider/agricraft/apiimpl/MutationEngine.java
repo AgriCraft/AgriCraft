@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.apiimpl;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.farming.mutation.MutateStrategy;
@@ -18,32 +19,39 @@ import net.minecraft.util.Tuple;
  * the 4 neighbours.
  */
 public final class MutationEngine implements IAgriMutationEngine {
-    
+
     private static final MutationEngine INSTANCE = new MutationEngine();
-    
+
     private final List<Tuple<Double, IAgriCrossStrategy>> strategies = new ArrayList<>();
-    
+
     private double sigma = 0;
 
     private MutationEngine() {
         registerStrategy(new MutateStrategy());
         registerStrategy(new SpreadStrategy());
     }
-    
+
     public static MutationEngine getInstance() {
         return INSTANCE;
     }
 
     @Override
     public boolean registerStrategy(IAgriCrossStrategy strategy) {
-        if (strategy.getRollChance() >= 1 || strategy.getRollChance() <= 0) {
-            throw new IndexOutOfBoundsException("Invalid roll chance!");
-        } else if (!hasStrategy(strategy)) {
+        if (strategy.getRollChance() >= 1 || strategy.getRollChance() < 0) {
+            throw new IndexOutOfBoundsException(
+                    "Invalid roll chance of " + strategy.getRollChance() + "!\n"
+                    + "The roll chance must be in the range 0.0 (inclusive) to 1.0 (exclusive)!"
+            );
+        } else if (strategy.getRollChance() == 0) {
+            AgriCore.getLogger("AgriCraft").debug("Skipping mutation strategy with zero chance!");
+            return false;
+        } else if (hasStrategy(strategy)) {
+            AgriCore.getLogger("AgriCraft").debug("Skipping duplicate mutation strategy!");
+            return false;
+        } else {
             this.sigma += strategy.getRollChance();
             this.strategies.add(new Tuple<>(sigma, strategy));
             return true;
-        } else {
-            return false;
         }
     }
 

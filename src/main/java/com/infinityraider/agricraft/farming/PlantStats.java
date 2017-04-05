@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.farming;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
-import static com.infinityraider.agricraft.config.AgriCraftConfig.STAT_FORMAT;
-import static com.infinityraider.agricraft.config.AgriCraftConfig.cropStatCap;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import static com.infinityraider.agricraft.reference.AgriCraftConfig.STAT_FORMAT;
+import static com.infinityraider.agricraft.reference.AgriCraftConfig.cropStatCap;
 import java.text.MessageFormat;
 import java.util.List;
 import com.agricraft.agricore.util.MathHelper;

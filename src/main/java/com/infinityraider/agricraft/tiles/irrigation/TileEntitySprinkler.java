@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.tiles.irrigation;
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
 import com.infinityraider.agricraft.utility.BaseIcons;

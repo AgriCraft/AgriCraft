@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;

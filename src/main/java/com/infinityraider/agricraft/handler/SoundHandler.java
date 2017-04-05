@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.math.BlockPos;

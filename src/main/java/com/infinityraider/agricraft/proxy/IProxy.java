@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.apiimpl.PluginHandler;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;

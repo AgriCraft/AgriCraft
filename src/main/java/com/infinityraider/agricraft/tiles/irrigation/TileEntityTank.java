@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;

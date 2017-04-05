@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.blocks.storage;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;

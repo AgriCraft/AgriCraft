@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 
 import java.util.*;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;

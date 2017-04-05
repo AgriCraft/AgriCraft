@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.crafting.RecipeJournal;
 import com.infinityraider.agricraft.crafting.RecipeShapelessCustomWood;

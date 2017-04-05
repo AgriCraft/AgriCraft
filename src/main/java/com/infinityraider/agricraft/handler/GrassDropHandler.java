@@ -6,7 +6,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.config.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.block.BlockBush;
