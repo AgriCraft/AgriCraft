@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
@@ -75,8 +76,8 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 *
 	 * @param type: the type to set the block's MATERIAL to.
 	 */
-	public final void setMaterial(CustomWoodType type) {
-        this.woodType = type;
+	public final void setMaterial(@Nonnull CustomWoodType type) {
+        this.woodType = Objects.requireNonNull(type, "The wood type of a custom wood block may not be null!");
 	}
 
     public final void setMaterial(ItemStack stack) {
