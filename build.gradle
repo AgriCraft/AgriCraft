@@ -19,6 +19,7 @@ buildscript {
 
 // Apply QuikMod
 apply plugin: 'com.rlonryan.quikmod'
+apply plugin: 'maven-publish'
 
 // Tweak MineCraft Task
 minecraft {
@@ -26,6 +27,7 @@ minecraft {
 	useDepAts = true
 }
 
+// Setup Remotes
 repositories {
     maven {
         name "chickenbones"
@@ -53,6 +55,7 @@ repositories {
 	}
 }
 
+// List Deps.
 dependencies {
     // Mods (For auto-import)
 	compile project(':lib/InfinityLib')
@@ -61,6 +64,7 @@ dependencies {
 	deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
 }
 
+// Add AgriPlants
 processResources {
 	from('lib/AgriPlants') {
 		include '**/*.json'
@@ -74,20 +78,6 @@ task mainJavadoc(type: Javadoc) {
 	title = "AgriCraft ${mod.version} Documentation"
 	destinationDir = file("${project.docsDir}/mainJavadoc")
 	failOnError = false
-}
-
-// Jar Task
-jar {
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
-            exclude 'com/google', 'com/google/**'
-            exclude 'net/jcip', 'net/jcip/**'
-            exclude 'edu/umd', 'edu/umd/**'
-            exclude 'javassist', 'javassist/**'
-            exclude 'javax/annotation', 'javax/annotation/**'
-        }
-    }
 }
 
 task apiJavadoc(type: Javadoc) {
@@ -118,3 +108,37 @@ task apiJar(type: Jar) {
 
 // Tell build that it needs the API compiled first.
 build.dependsOn apiJar
+
+// Setup Maven Publishing
+publishing {
+    tasks.publish.dependsOn 'build'
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact javadocJar
+            artifact sourceJar
+            artifact apiJar
+        }
+    }
+    repositories {
+        if (project.hasProperty('maven_repo')) {
+            maven { url maven_repo }
+        } else {
+            mavenLocal()
+        }
+    }
+}
+
+// Fix Shading
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+            exclude 'com/google', 'com/google/**'
+            exclude 'net/jcip', 'net/jcip/**'
+            exclude 'edu/umd', 'edu/umd/**'
+            exclude 'javassist', 'javassist/**'
+            exclude 'javax/annotation', 'javax/annotation/**'
+        }
+    }
+}
