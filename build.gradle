@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath 'gradle.plugin.com.rlonryan:QuikMod:1.0.18'
+        classpath 'gradle.plugin.com.rlonryan:QuikMod:1.0.21'
     }
 }
 
@@ -92,11 +92,6 @@ task apiJavadoc(type: Javadoc) {
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: mainJavadoc) {
-    classifier = 'javadoc'
-    from "${project.docsDir}/mainJavadoc"
 }
 
 task apiJar(type: Jar) {
