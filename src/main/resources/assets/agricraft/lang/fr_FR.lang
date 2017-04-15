@@ -2,6 +2,7 @@
 // Creative Tabs
 // ========================================
 itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=Graines AgriCraft
 
 // ========================================
 // Items
@@ -31,6 +32,7 @@ item.agricraft:nugget_nickel.name=Pépite de nickel
 item.agricraft:nugget_platinum.name=Pépite de platine
 item.agricraft:nugget_osmium.name=Pépite d'osmium 
 item.agricraft:nugget_quartz.name=Éclat de quartz
+item.agricraft:nugget_unknown.name=Fragment Inconnu
 
 // ========================================
 // Blocks
