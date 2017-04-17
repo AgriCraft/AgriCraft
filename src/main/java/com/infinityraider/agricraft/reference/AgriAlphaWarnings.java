@@ -11,8 +11,10 @@ import java.util.function.Consumer;
  * @author Ryan
  */
 public final class AgriAlphaWarnings {
-    
+
     private static final Random rand = new Random();
+    
+    private static final String BORING_WARNING = "AgriCraft is still in alpha. Bugs are to be expected.";
 
     private static final String[][] WARNINGS = new String[][]{
         new String[]{
@@ -48,16 +50,19 @@ public final class AgriAlphaWarnings {
             "AgriCraft Alpha release missing something?",
             "We need your help making JSON files for all the plants!",
             "Submit your JSON files at: https://github.com/AgriCraft/AgriPlants"
-        },
-    };
-    
+        },};
+
     public static int chooseMessageNumber() {
         return rand.nextInt(WARNINGS.length);
     }
-    
+
     public static void chooseMessage(Consumer<String> consumer) {
-        for (String line : WARNINGS[chooseMessageNumber()]) {
-            consumer.accept(ChatFormatting.DARK_AQUA + line);
+        if (AgriCraftConfig.disableLinks) {
+            consumer.accept(ChatFormatting.DARK_AQUA + BORING_WARNING);
+        } else {
+            for (String line : WARNINGS[chooseMessageNumber()]) {
+                consumer.accept(ChatFormatting.DARK_AQUA + line);
+            }
         }
     }
 

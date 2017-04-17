@@ -23,6 +23,8 @@ public class AgriCraftConfig {
     public static int cropsPerCraft = 4;
     @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Crop Stat Cap", min = "1", max = "10", comment = "The maximum attainable value of the stats on a crop.")
     public static int cropStatCap = 10;
+    @AgriConfigurable(category = AgriConfigCategory.CORE, key = "Use boring alpha warning messages", comment = "Uses a boring one-line alpha warning message instead of the more interesting default ones.")
+    public static boolean disableLinks = false;
 
     // Debug
     @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "debug", comment = "Set to true to enable debug mode.")

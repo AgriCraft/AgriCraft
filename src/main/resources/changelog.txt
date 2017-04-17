@@ -1,5 +1,11 @@
 Changelog
 ---------
+2.0.0a15
+- ADDED: Updated French translation files.
+- ADDED: Config option to remove links from alpha warning messages.
+- ADDED: Upgraded JEI integration.
+- FIXED: Comical item sizes.
+
 2.0.0a14
 - ADDED: Default Botania Files thanks to Alexandro Lara de Camargo!
 
