@@ -40,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
 
@@ -108,14 +109,14 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Handles the block drops. Called when the block is left-clicked or
-     * otherwise breaks.
+     * Handles the block drops. Called when the block is broken (not left clicked).
      */
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
+            WorldHelper.spawnItemInWorld(world, pos, new ItemStack((Item)null, 1, 0, new NBTTagCompound()));
             this.getCrop(world, pos).ifPresent(
-                    crop -> crop.getDrops(drop -> spawnAsEntity(world, pos, drop))
+                    crop -> crop.getDrops(drop -> WorldHelper.spawnItemInWorld(world, pos, drop))
             );
         }
     }

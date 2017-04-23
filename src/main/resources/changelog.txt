@@ -1,5 +1,12 @@
 Changelog
 ---------
+2.0.0a16
+- ADDED: Sprinkler wip tooltip warning.
+- ADDED: JSON filename warning, to hint at files that might be misnamed.
+- FIXED: Crash at startup caused by setting mutation chance to 1.0.
+- ADDED: Default Sugarcane mutation definition.
+- FIXED: HarvestCraft coffee plant thinking it was a Starbuck's.
+
 2.0.0a15
 - ADDED: Updated French translation files.
 - ADDED: Config option to remove links from alpha warning messages.

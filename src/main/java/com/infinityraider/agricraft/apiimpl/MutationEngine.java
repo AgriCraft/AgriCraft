@@ -37,7 +37,7 @@ public final class MutationEngine implements IAgriMutationEngine {
 
     @Override
     public boolean registerStrategy(IAgriCrossStrategy strategy) {
-        if (strategy.getRollChance() >= 1 || strategy.getRollChance() < 0) {
+        if (strategy.getRollChance() > 1f || strategy.getRollChance() < 0f) {
             throw new IndexOutOfBoundsException(
                     "Invalid roll chance of " + strategy.getRollChance() + "!\n"
                     + "The roll chance must be in the range 0.0 (inclusive) to 1.0 (exclusive)!"

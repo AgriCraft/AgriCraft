@@ -52,7 +52,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 		this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
 		this.setHardness(2.0F);
 		this.setResistance(5.0F);
-		setHarvestLevel("axe", 0);
+		this.setHarvestLevel("axe", 0);
 	}
 
 	@Override
@@ -168,5 +168,11 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 	public final IUnlistedProperty[] getUnlistedPropertyArray() {
 		return new IUnlistedProperty[] {AgriProperties.CUSTOM_WOOD_TYPE};
 	}
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        tooltip.add("A fancy farm decoration.");
+        tooltip.add("Not functional, still under development.");
+    }
 
 }

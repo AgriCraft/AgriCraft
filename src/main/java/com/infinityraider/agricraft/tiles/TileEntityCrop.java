@@ -124,7 +124,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		if (!this.isRemote()) {
 			if (!player.capabilities.isCreativeMode) {
 				//drop items if the player is not in creative
-				this.getDrops(this::spawnAsEntity);
+				this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack));
 			}
 			if (this.hasPlant()) {
 				this.getPlant().ifPresent(p -> p.onRemove(this.getWorld(), pos));
@@ -369,10 +369,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		if (!this.isRemote()) {
 			if (this.isCrossCrop()) {
 				this.setCrossCrop(false);
-				this.spawnAsEntity(new ItemStack(AgriItems.getInstance().CROPS, 1));
+				WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
 				return false;
 			} else if (this.canBeHarvested()) {
-				this.getFruits(this::spawnAsEntity, this.getRandom());
+				this.getFruits(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), this.getRandom());
 				this.setGrowthStage(0);
 				return true;
 			}
@@ -386,7 +386,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 	@Override
 	public boolean onRaked(@Nullable EntityPlayer player) {
 		if (!this.isRemote() && this.canBeRaked()) {
-			this.getRakeProducts(this::spawnAsEntity, this.getRandom());
+			this.getRakeProducts(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), this.getRandom());
 			this.setGrowthStage(0);
 			this.removeSeed();
 			return true;
