@@ -11,49 +11,62 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerSeedAnalyzer extends ContainerBase {
+public class ContainerSeedAnalyzer extends ContainerBase<TileEntitySeedAnalyzer> {
 
-    public TileEntitySeedAnalyzer seedAnalyzer;
     public int progress;
+
     public static final int seedSlotId = 36;
     public static final int journalSlotId = 37;
 
-    public ContainerSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
-        this(inventory, seedAnalyzer, 8, 94);
+    public static enum SeedAnalyzerLayout {
+
+        NORMAL(8, 94, 80, 40, 152, 68),
+        PERIPHERAL(5, 94, 77, 40, 149, 68);
+
+        public final int offsetX, offsetY;
+        public final int seedSlotX, seedSlotY;
+        public final int journalSlotX, journalSlotY;
+
+        private SeedAnalyzerLayout(int offsetX, int offsetY, int seedSlotX, int seedSlotY, int journalSlotX, int journalSlotY) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.seedSlotX = seedSlotX;
+            this.seedSlotY = seedSlotY;
+            this.journalSlotX = journalSlotX;
+            this.journalSlotY = journalSlotY;
+        }
+
     }
 
-    public ContainerSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer, int x, int y) {
-        super(inventory, x, y);
-        this.seedAnalyzer = seedAnalyzer;
-        this.addSlots();
-    }
+    public ContainerSeedAnalyzer(TileEntitySeedAnalyzer analyzer, InventoryPlayer inventory, SeedAnalyzerLayout layout) {
+        super(analyzer, inventory, layout.offsetX, layout.offsetY);
 
-    protected void addSlots() {
-        //add seed slot to the container
-        this.addSlotToContainer(new SlotSeedAnalyzerSeed(seedAnalyzer, seedSlotId, 80, 40));
-        //add journal slot to the container
-        this.addSlotToContainer(new SlotSeedAnalyzerJournal(seedAnalyzer, journalSlotId, 152, 68));
+        // Add the seed slot to the container.
+        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.tile, this.seedSlotId, layout.seedSlotX, layout.seedSlotY));
+
+        // Add the journal slot to the container.
+        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.tile, this.journalSlotId, layout.journalSlotX, layout.journalSlotY));
     }
 
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         for (IContainerListener listener : this.listeners) {
-            if (this.progress != this.seedAnalyzer.getProgress()) {
-                listener.sendProgressBarUpdate(this, 0, this.seedAnalyzer.getProgress());
+            if (this.progress != this.tile.getProgress()) {
+                listener.sendProgressBarUpdate(this, 0, this.tile.getProgress());
             }
         }
-        this.progress = this.seedAnalyzer.getProgress();
+        this.progress = this.tile.getProgress();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int type, int newValue) {
         if (type == 0) {
-            this.seedAnalyzer.setProgress(newValue);
+            this.tile.setProgress(newValue);
         }
     }
-    
+
     public final boolean hasItem(Slot slot) {
         return slot != null && StackHelper.isValid(slot.getStack());
     }
@@ -103,18 +116,18 @@ public class ContainerSeedAnalyzer extends ContainerBase {
     //gets called when you try to merge an itemstack
     @Override
     protected final boolean mergeItemStack(ItemStack stack, int start, int stop, boolean backwards) {
-        
+
         // Ensure Proper Range.
         if (start < 0 || start >= stop) {
             //throw new IndexOutOfBoundsException("The specified slot range is impossible!");
             return false;
         }
-        
+
         // Test if Valid
         if (!StackHelper.isValid(stack)) {
             return false;
         }
-        
+
         final int delta = backwards ? -1 : 1;
         int slotIndex = backwards ? stop - 1 : start;
         boolean foundSlot = false;
@@ -146,7 +159,7 @@ public class ContainerSeedAnalyzer extends ContainerBase {
     }
 
     public final boolean addToEmptySlot(ItemStack stack, int start, int stop, boolean backwards) {
-        
+
         // Ensure Proper Range
         if (start < 0 || start >= stop) {
             //throw new IndexOutOfBoundsException("The specified slot range is impossible!");

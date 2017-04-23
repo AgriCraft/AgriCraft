@@ -22,7 +22,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
     private final Optional<AgriSeed> activeSeed;
 
     public GuiSeedStorage(InventoryPlayer inventory, TileEntitySeedStorage te) {
-        super(new ContainerSeedStorage(inventory, te), 0, 14, 170, 48, -1, -1, 5, 7);
+        super(new ContainerSeedStorage(te, inventory), 0, 14, 170, 48, -1, -1, 5, 7);
         this.activeSeed = te.getLockedSeed();
     }
 

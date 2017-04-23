@@ -17,7 +17,7 @@ public class GuiSeedStorageController extends GuiSeedStorageBase {
     private static final int sizeY = 176;
 
     public GuiSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
-        super(new ContainerSeedStorageController(inventory, te), 10, 6, 184, 7, 7, 8, 82, 8);
+        super(new ContainerSeedStorageController(te, inventory), 10, 6, 184, 7, 7, 8, 82, 8);
     }
 
     @Override

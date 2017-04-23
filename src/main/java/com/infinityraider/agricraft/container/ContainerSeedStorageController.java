@@ -5,39 +5,32 @@ import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 import java.util.List;
 
-public class ContainerSeedStorageController extends ContainerSeedStorageBase {
+public class ContainerSeedStorageController extends ContainerSeedStorageBase<TileEntitySeedStorageController> {
 
-    public TileEntitySeedStorageController te;
     private static final int invOffsetX = 82;
     private static final int invOffsetY = 94;
 
-    public ContainerSeedStorageController(InventoryPlayer inventory, TileEntitySeedStorageController te) {
-        super(inventory, invOffsetX, invOffsetY);
-        this.te = te;
+    public ContainerSeedStorageController(TileEntitySeedStorageController tile, InventoryPlayer inventory) {
+        super(tile, inventory, invOffsetX, invOffsetY);
     }
 
     @Override
     public boolean addSeedToStorage(ItemStack stack) {
-        return this.te.addStackToInventory(stack);
+        return this.tile.addStackToInventory(stack);
     }
 
     @Override
     public List<ItemStack> getSeedEntries() {
-        return this.te.getControlledSeeds();
+        return this.tile.getControlledSeeds();
     }
 
     @Override
     public List<SeedStorageSlot> getSeedSlots(AgriSeed seed) {
         final ItemStack stack = seed.toStack();
-        return this.te.getSlots(stack.getItem(), stack.getItemDamage());
+        return this.tile.getSlots(stack.getItem(), stack.getItemDamage());
     }
 
-    @Override
-    public TileEntity getTileEntity() {
-        return this.te;
-    }
 }

@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a16
+- FIXED: Seed Analyzer item duplication exploit.
 - FIXED: BlockRanges could go out of bounds, a very bad thing for them to do.
 - ADDED: AgriConditions, replacing the old nearby and base blocks in the JSON files.
 - ADDED: Sprinkler wip tooltip warning.

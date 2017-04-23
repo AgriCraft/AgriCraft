@@ -70,7 +70,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     }
 
     protected void getActiveSeed() {
-        TileEntity tile = this.getContainer().getTileEntity();
+        TileEntity tile = this.getContainer().getTile();
         if (tile instanceof ISeedStorageControllable) {
             this.activeSeed = ((ISeedStorageControllable) tile).getLockedSeed().orElse(null);
         }

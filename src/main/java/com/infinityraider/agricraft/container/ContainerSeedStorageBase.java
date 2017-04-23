@@ -18,12 +18,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ContainerSeedStorageBase extends ContainerBase {
+public abstract class ContainerSeedStorageBase<T extends TileEntity> extends ContainerBase<T> {
 
-    public ContainerSeedStorageBase(InventoryPlayer inventory, int xOffset, int yOffset) {
-        super(inventory, xOffset, yOffset);
+    public ContainerSeedStorageBase(T tile, InventoryPlayer inventory, int xOffset, int yOffset) {
+        super(tile, inventory, xOffset, yOffset);
     }
-
+    
     /**
      * tries to add a stack to the storage, return true on success
      */
@@ -39,17 +39,11 @@ public abstract class ContainerSeedStorageBase extends ContainerBase {
      */
     public abstract List<SeedStorageSlot> getSeedSlots(AgriSeed seed);
 
-    /**
-     * Gets a list off all the slots corresponding to this seed and meta
-     */
-    public abstract TileEntity getTileEntity();
-
     public Optional<ISeedStorageControllable> getControllable(ItemStack stack) {
-        TileEntity te = this.getTileEntity();
-        if (te instanceof ISeedStorageController) {
-            return ((ISeedStorageController) te).getControllable(stack);
-        } else if (te instanceof ISeedStorageControllable) {
-            return Optional.of((ISeedStorageControllable) te);
+        if (this.tile instanceof ISeedStorageController) {
+            return ((ISeedStorageController) this.tile).getControllable(stack);
+        } else if (this.tile instanceof ISeedStorageControllable) {
+            return Optional.of((ISeedStorageControllable) tile);
         } else {
             return Optional.empty();
         }

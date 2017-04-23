@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.gui;
 
 import com.infinityraider.agricraft.compat.computer.methods.IMethod;
-import com.infinityraider.agricraft.container.ContainerPeripheral;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.utility.GuiHelper;
@@ -16,6 +15,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,7 +45,7 @@ public class GuiPeripheral extends GuiContainer {
 	private final int guideOffset;
 
 	public GuiPeripheral(InventoryPlayer inventory, TileEntityPeripheral peripheral) {
-		super(new ContainerPeripheral(inventory, peripheral));
+		super(new ContainerSeedAnalyzer(peripheral, inventory, ContainerSeedAnalyzer.SeedAnalyzerLayout.PERIPHERAL));
 		this.xSize = 172;
 		this.ySize = 176;
 		this.peripheral = peripheral;

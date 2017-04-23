@@ -20,7 +20,7 @@ public class GuiSeedAnalyzer extends ComponentGui<ContainerSeedAnalyzer> {
     public TileEntitySeedAnalyzer seedAnalyzer;
 
     public GuiSeedAnalyzer(InventoryPlayer inventory, TileEntitySeedAnalyzer seedAnalyzer) {
-        super(176, 176, new ContainerSeedAnalyzer(inventory, seedAnalyzer));
+        super(176, 176, new ContainerSeedAnalyzer(seedAnalyzer, inventory, ContainerSeedAnalyzer.SeedAnalyzerLayout.NORMAL));
         this.seedAnalyzer = seedAnalyzer;
     }
 

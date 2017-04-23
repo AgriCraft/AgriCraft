@@ -11,9 +11,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
+
     private EntityPlayer player;
 
-    public MessageGuiSeedStorageClearSeed() {}
+    public MessageGuiSeedStorageClearSeed() {
+    }
 
     public MessageGuiSeedStorageClearSeed(EntityPlayer player) {
         this();
@@ -28,10 +30,10 @@ public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
     @Override
     protected void processMessage(MessageContext ctx) {
         final Container container = this.player.openContainer;
-        if(container instanceof ContainerSeedStorageBase) {
+        if (container instanceof ContainerSeedStorageBase) {
             final ContainerSeedStorageBase storage = ((ContainerSeedStorageBase) container);
-            final TileEntity tileEntity = storage.getTileEntity();
-            if(tileEntity instanceof ISeedStorageControllable) {
+            final TileEntity tileEntity = storage.getTile();
+            if (tileEntity instanceof ISeedStorageControllable) {
                 ((ISeedStorageControllable) tileEntity).clearLockedSeed();
             }
         }
