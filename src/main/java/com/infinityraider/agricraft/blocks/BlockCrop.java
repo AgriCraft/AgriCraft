@@ -114,7 +114,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
-            WorldHelper.spawnItemInWorld(world, pos, new ItemStack((Item)null, 1, 0, new NBTTagCompound()));
             this.getCrop(world, pos).ifPresent(
                     crop -> crop.getDrops(drop -> WorldHelper.spawnItemInWorld(world, pos, drop))
             );
