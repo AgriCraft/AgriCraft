@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a16
+- FIXED: BlockRanges could go out of bounds, a very bad thing for them to do.
+- ADDED: AgriConditions, replacing the old nearby and base blocks in the JSON files.
 - ADDED: Sprinkler wip tooltip warning.
 - ADDED: JSON filename warning, to hint at files that might be misnamed.
 - FIXED: Crash at startup caused by setting mutation chance to 1.0.

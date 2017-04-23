@@ -9,12 +9,14 @@ import com.agricraft.agricore.plant.AgriStack;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.render.RenderMethod;
+import com.infinityraider.agricraft.api.requirement.BlockCondition;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.farming.CropPlant;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.utility.BlockRange;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -174,7 +176,7 @@ public class JsonPlant extends CropPlant {
     public ResourceLocation getSeedTexture() {
         return new ResourceLocation(plant.getTexture().getSeedTexture());
     }
-    
+
     public static final IGrowthRequirement initGrowthRequirementJSON(AgriPlant plant) {
 
         IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
@@ -191,17 +193,18 @@ public class JsonPlant extends CropPlant {
                 .map(JsonSoil::new)
                 .forEach(builder::addSoil);
 
-        plant.getRequirement().getBases().forEach(obj -> {
-            if (obj instanceof FuzzyStack) {
-                FuzzyStack stack = (FuzzyStack) obj;
-                builder.addRequiredBlock(stack, new BlockPos(0, -2, 0));
-            }
-        });
-
-        plant.getRequirement().getNearby().forEach((obj, dist) -> {
-            if (obj instanceof FuzzyStack) {
-                FuzzyStack stack = (FuzzyStack) obj;
-                builder.addRequiredBlock(stack, dist);
+        plant.getRequirement().getConditions().forEach(obj -> {
+            final Object stack = obj.toStack();
+            if (stack instanceof FuzzyStack) {
+                builder.addCondition(
+                        new BlockCondition(
+                                (FuzzyStack) stack,
+                                new BlockRange(
+                                        obj.getMinX(), obj.getMinY(), obj.getMinZ(),
+                                        obj.getMaxX(), obj.getMaxY(), obj.getMaxZ()
+                                )
+                        )
+                );
             }
         });
 
@@ -211,5 +214,5 @@ public class JsonPlant extends CropPlant {
         return builder.build();
 
     }
-    
+
 }
