@@ -1,7 +1,10 @@
 Changelog
 ---------
 2.0.0a16
-- FIXED: Seed Analyzer item duplication exploit.
+- ADDED: Disabled vanilla planting warning.
+- FIXED: Disable vanilla planting option in config not working properly.
+- ADDED: Re-implemented water pads, for plants that like water.
+- FIXED: Seed Analyzer item duplication exploit (Thanks @Moondream15!).
 - FIXED: BlockRanges could go out of bounds, a very bad thing for them to do.
 - ADDED: AgriConditions, replacing the old nearby and base blocks in the JSON files.
 - ADDED: Sprinkler wip tooltip warning.

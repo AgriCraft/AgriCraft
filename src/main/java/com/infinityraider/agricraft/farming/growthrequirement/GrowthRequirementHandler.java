@@ -49,22 +49,22 @@ public class GrowthRequirementHandler {
 
     private static void registerCustomEntries() {
         //reads custom entries
-        AgriCore.getLogger("AgriCraft").info("Registering soils to whitelist:");
+        AgriCore.getLogger("agricraft").info("Registering soils to whitelist:");
         // TODO Decide if to replace!
         String[] data = new String[]{"minecraft:dirt"};
         String total = " of " + data.length + ".";
         for (String line : data) {
-            AgriCore.getLogger("AgriCraft").debug("  Parsing " + line + total);
+            AgriCore.getLogger("agricraft").debug("  Parsing " + line + total);
             ItemStack stack = ((FuzzyStack) AgriStack.fromString(line).toStack()).toStack();
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;
 
             if (block != null) {
                 addDefaultSoil(new FuzzyStack(new ItemStack(block, stack.getItemDamage())));
             } else {
-                AgriCore.getLogger("AgriCraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
+                AgriCore.getLogger("agricraft").info(" Error when adding block to soil whitelist: Invalid block (line: " + line + ")");
             }
         }
-        AgriCore.getLogger("AgriCraft").info("Completed soil whitelist:");
+        AgriCore.getLogger("agricraft").info("Completed soil whitelist:");
     }
 
     public static void addAllToSoilWhitelist(Collection<? extends FuzzyStack> list) {

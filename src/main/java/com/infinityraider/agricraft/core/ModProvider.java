@@ -66,7 +66,7 @@ public class ModProvider implements AgriConfigAdapter {
 		if (event.getModID().equals(Reference.MOD_ID)) {
 			AgriCore.getConfig().save();
 			AgriCore.getConfig().load();
-			AgriCore.getLogger("AgriCraft").debug("Configuration reloaded.");
+			AgriCore.getLogger("agricraft").debug("Configuration reloaded.");
 		}
 	}
 	

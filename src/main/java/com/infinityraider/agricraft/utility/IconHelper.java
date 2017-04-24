@@ -71,8 +71,8 @@ public final class IconHelper {
 			return sprite;
 		} else {
 			final int fail = failCounter.addAndGet(1);
-			//AgriCore.getLogger("AgriCraft").debug("Failed to load Icon: " + resourceLocation);
-			//AgriCore.getLogger("AgriCraft").debug("Icon load failure #" + fail);
+			//AgriCore.getLogger("agricraft").debug("Failed to load Icon: " + resourceLocation);
+			//AgriCore.getLogger("agricraft").debug("Icon load failure #" + fail);
 			return getDefaultIcon();
 		}
 	}
@@ -105,7 +105,7 @@ public final class IconHelper {
 		try {
 			return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath));
 		} catch (Exception e) {
-			AgriCore.getLogger("AgriCraft").debug(e.getLocalizedMessage());
+			AgriCore.getLogger("agricraft").debug(e.getLocalizedMessage());
 			return getDefaultIcon();
 		}
 	}
@@ -138,9 +138,9 @@ public final class IconHelper {
 			}
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			// Shoot
-			AgriCore.getLogger("AgriCraft").debug("Something strange is going on with the Minecraft TextureMap!");
+			AgriCore.getLogger("agricraft").debug("Something strange is going on with the Minecraft TextureMap!");
 		} catch (SecurityException e) {
-			AgriCore.getLogger("AgriCraft").debug("Locked out of TextureMap...");
+			AgriCore.getLogger("agricraft").debug("Locked out of TextureMap...");
 		}
 		return matches;
 	}

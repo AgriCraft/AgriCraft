@@ -43,10 +43,10 @@ public final class MutationEngine implements IAgriMutationEngine {
                     + "The roll chance must be in the range 0.0 (inclusive) to 1.0 (exclusive)!"
             );
         } else if (strategy.getRollChance() == 0) {
-            AgriCore.getLogger("AgriCraft").debug("Skipping mutation strategy with zero chance!");
+            AgriCore.getLogger("agricraft").debug("Skipping mutation strategy with zero chance!");
             return false;
         } else if (hasStrategy(strategy)) {
-            AgriCore.getLogger("AgriCraft").debug("Skipping duplicate mutation strategy!");
+            AgriCore.getLogger("agricraft").debug("Skipping duplicate mutation strategy!");
             return false;
         } else {
             this.sigma += strategy.getRollChance();

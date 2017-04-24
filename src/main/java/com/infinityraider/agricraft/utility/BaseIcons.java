@@ -38,9 +38,9 @@ public enum BaseIcons {
 
 	public TextureAtlasSprite getIcon() {
 		if (!isLoaded) {
-			AgriCore.getLogger("AgriCraft").debug("Load Icon " + this.name() + " STARTED...");
+			AgriCore.getLogger("agricraft").debug("Load Icon " + this.name() + " STARTED...");
 			isLoaded = attemptLoad();
-			AgriCore.getLogger("AgriCraft").debug("Load Icon " + this.name() + ": " + (isLoaded ? "SUCEEDED!" : "FAILED!"));
+			AgriCore.getLogger("agricraft").debug("Load Icon " + this.name() + ": " + (isLoaded ? "SUCEEDED!" : "FAILED!"));
 		}
 		return cachedIcon;
 	}

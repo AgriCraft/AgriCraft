@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
-import com.infinityraider.agricraft.blocks.pad.BlockWaterPadFull;
-import com.infinityraider.agricraft.blocks.pad.BlockWaterPad;
 import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
@@ -23,7 +21,6 @@ public class AgriBlocks {
 		CROP = new BlockCrop();
 		SEED_ANALYZER = new BlockSeedAnalyzer();
 		WATER_PAD = new BlockWaterPad();
-		WATER_PAD_FULL = new BlockWaterPadFull();
 		TANK = new BlockWaterTank();
 		CHANNEL = new BlockWaterChannel();
 		CHANNEL_FULL = new BlockWaterChannelFull();
@@ -41,7 +38,6 @@ public class AgriBlocks {
 	
 	// Water Pads
 	public final BlockBase WATER_PAD;
-	public final BlockBase WATER_PAD_FULL;
 	
 	// Irrigation
 	public final BlockBase TANK;

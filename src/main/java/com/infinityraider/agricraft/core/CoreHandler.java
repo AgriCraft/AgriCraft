@@ -78,14 +78,14 @@ public final class CoreHandler {
 	public static void init() {
 
 		// Load the core!
-		AgriCore.getLogger("AgriCraft").info("Attempting to read AgriCraft JSONs!");
+		AgriCore.getLogger("agricraft").info("Attempting to read AgriCraft JSONs!");
 		AgriLoader.loadDirectory(
 				defaultDir,
                 AgriCore.getSoils(),
 				AgriCore.getPlants(),
 				AgriCore.getMutations()
 		);
-		AgriCore.getLogger("AgriCraft").info("Finished trying to read AgriCraft JSONs!");
+		AgriCore.getLogger("agricraft").info("Finished trying to read AgriCraft JSONs!");
 
 		// Save settings!
 		AgriCore.getConfig().save();
@@ -99,7 +99,7 @@ public final class CoreHandler {
     
     public static void initSoils() {
         // Announce Progress
-        AgriCore.getLogger("AgriCraft").info("Registering Soils!");
+        AgriCore.getLogger("agricraft").info("Registering Soils!");
         
         // See if soils are valid...
         final int raw = AgriCore.getSoils().getAll().size();
@@ -113,15 +113,15 @@ public final class CoreHandler {
 				.forEach(SoilRegistry.getInstance()::addSoil);
 		
         // Display Soils
-		AgriCore.getLogger("AgriCraft").info("Registered Soils ({0}/{1}):", count, raw);
+		AgriCore.getLogger("agricraft").info("Registered Soils ({0}/{1}):", count, raw);
         for (IAgriSoil soil : SoilRegistry.getInstance().getSoils()) {
-            AgriCore.getLogger("AgriCraft").info(" - {0}", soil.getName());
+            AgriCore.getLogger("agricraft").info(" - {0}", soil.getName());
         }
 	}
 
 	public static void initPlants() {
         // Announce Progress
-		AgriCore.getLogger("AgriCraft").info("Registering Plants!");
+		AgriCore.getLogger("agricraft").info("Registering Plants!");
         
         // See if plants are valid...
 		final int raw = AgriCore.getPlants().getAll().size();
@@ -136,15 +136,15 @@ public final class CoreHandler {
 				.forEach(PlantRegistry.getInstance()::addPlant);
         
         // Display Plants
-		AgriCore.getLogger("AgriCraft").info("Registered Plants ({0}/{1}):", count, raw);
+		AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
         for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
-            AgriCore.getLogger("AgriCraft").info(" - {0}", plant.getPlantName());
+            AgriCore.getLogger("agricraft").info(" - {0}", plant.getPlantName());
         }
 	}
 
 	public static void initMutations() {
         // Announce Progress
-		AgriCore.getLogger("AgriCraft").info("Registering Mutations!");
+		AgriCore.getLogger("agricraft").info("Registering Mutations!");
         
         // See if mutations are valid...
 		final int raw = AgriCore.getMutations().getAll().size();
@@ -158,9 +158,9 @@ public final class CoreHandler {
 				.forEach(MutationRegistry.getInstance()::addMutation);
         
 		// Display Mutations
-		AgriCore.getLogger("AgriCraft").info("Registered Mutations ({0}/{1}):", count, raw);
+		AgriCore.getLogger("agricraft").info("Registered Mutations ({0}/{1}):", count, raw);
 		for (IAgriMutation mutation : MutationRegistry.getInstance().getMutations()) {
-			AgriCore.getLogger("AgriCraft").info(" - {0}", mutation);
+			AgriCore.getLogger("agricraft").info(" - {0}", mutation);
 		}
 	}
 	

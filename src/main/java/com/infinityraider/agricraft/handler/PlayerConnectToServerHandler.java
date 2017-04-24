@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class PlayerConnectToServerHandler {
 
-    private static final AgriLogger log = AgriCore.getLogger("Agri-Net");
+    private static final AgriLogger log = AgriCore.getLogger("agricraft-net");
 
     @SubscribeEvent
     @SuppressWarnings("unused")

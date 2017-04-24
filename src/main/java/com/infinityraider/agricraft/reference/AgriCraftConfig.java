@@ -54,8 +54,10 @@ public class AgriCraftConfig {
     // Farming
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Fertilizer Mutations", comment = "Set to false if you wish to disable using fertilizers on a cross crop to force a mutation.")
     public static boolean fertilizerMutation = false;
-    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Disable Vanilla Farming", comment = "set to true to disable vanilla farming, meaning you can only grow plants on crops.")
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Disable Vanilla Farming", comment = "Set to true to disable vanilla farming, meaning you can only grow plants on crops.")
     public static boolean disableVanillaFarming = false;
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Show Disabled Vanilla Farming Warning", comment = "Set to true to warn that vanilla farming is disabled when trying to plant vanilla plant.")
+    public static boolean showDisabledVanillaFarmingWarning = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Hardcore stats", comment = "Set to true to enable hardcore mode for stat increasing: 1 parent: 3/4 decrement, 1/4 nothing.\n 2 parents: 2/4 decrement, 1/4 nothing, 1/4 increment.\n 3 parents: 1/4 decrement, 1/2 nothing, 1/4 increment.\n 4 parents: 1/4 decrement, 1/4 nothing, 1/2 increment.")
     public static boolean hardCoreStats = false;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Growth rate multiplier", min = "0", max = "2", comment = "This is a global growth rate multiplier.")

@@ -39,8 +39,7 @@ item.agricraft:nugget_unknown.name=Unknown Fragment
 // ========================================
 tile.agricraft:crops.name=Crop Sticks
 tile.agricraft:seed_analyzer.name=Seed Analyzer
-tile.agricraft:water_pad_normal.name=Water Pad
-tile.agricraft:water_pad_full.name=Water Pad
+tile.agricraft:water_pad.name=Water Pad
 tile.agricraft:water_tank.0.name=Wooden Water Tank
 tile.agricraft:water_tank.1.name=Iron Water Tank
 tile.agricraft:water_channel_normal.0.name=Wooden Irrigation Channel

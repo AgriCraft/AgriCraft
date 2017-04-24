@@ -30,7 +30,7 @@ public class RenderLogger {
 				timer = 0;
 
 				int callsPerSecond = RenderChannel.renderCallCounter.getAndSet(0);
-				AgriCore.getLogger("AgriRender").debug("Calls since previous output: " + callsPerSecond);
+				AgriCore.getLogger("agricraft-render").debug("Calls since previous output: " + callsPerSecond);
 			}
 		}
 	}

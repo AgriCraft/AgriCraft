@@ -39,8 +39,7 @@ item.agricraft:nugget_unknown.name=Fragment Inconnu
 // ========================================
 tile.agricraft:crops.name=Tuteurs
 tile.agricraft:seedAnalyzer.name=Analyseur de graines
-tile.agricraft:water_pad_normal.name=Protection d'eau
-tile.agricraft:water_pad_full.name=Protection d'eau
+tile.agricraft:water_pad.name=Protection d'eau
 tile.agricraft:water_tank.0.name=Réservoir d'eau en bois
 tile.agricraft:water_tank.1.name=Réservoir d'eau en fer
 tile.agricraft:water_channel_normal.0.name=Cannal d'irrigation en bois

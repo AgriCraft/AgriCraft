@@ -22,7 +22,7 @@ public class ModValidator implements AgriValidator {
             return false;
         } else {
             Block b = GameRegistry.findBlock(parts[0], parts[1]);
-            //AgriCore.getLogger("AgriCraft").debug(b);
+            //AgriCore.getLogger("agricraft").debug(b);
             return b != null;
         }
     }
@@ -34,7 +34,7 @@ public class ModValidator implements AgriValidator {
             return false;
         } else {
             Item i = GameRegistry.findItem(parts[0], parts[1]);
-            //AgriCore.getLogger("AgriCraft").debug(i);
+            //AgriCore.getLogger("agricraft").debug(i);
             return i != null;
         }
     }

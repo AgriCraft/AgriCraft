@@ -90,8 +90,8 @@ public class CustomWoodType {
                 IBlockState state = block.getStateFromMeta(meta);
                 texture = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
             } catch (Exception e) {
-                AgriCore.getLogger("AgriCraft").debug("Unable to load texture for custom wood block {0}!", block.getLocalizedName());
-                AgriCore.getLogger("AgriCraft").trace(e);
+                AgriCore.getLogger("agricraft").debug("Unable to load texture for custom wood block {0}!", block.getLocalizedName());
+                AgriCore.getLogger("agricraft").trace(e);
                 texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
             }
         }
@@ -127,7 +127,7 @@ public class CustomWoodType {
     public static CustomWoodType getFromNameAndMeta(String name, int meta) {
         Block block = Block.getBlockFromName(name);
         if (block == Blocks.AIR) {
-            AgriCore.getLogger("AgriCraft").debug("TECW: Material Defaulted!");
+            AgriCore.getLogger("agricraft").debug("TECW: Material Defaulted!");
             return getDefault();
         } else {
             return getFromBlockAndMeta(block, meta);

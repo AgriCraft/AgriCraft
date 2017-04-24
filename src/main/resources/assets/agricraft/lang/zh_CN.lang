@@ -36,8 +36,7 @@ item.agricraft:nuggetQuartz.name=石英碎片
 // ========================================
 tile.agricraft:crops.name=作物架
 tile.agricraft:seed_analyzer.name=种子分析仪
-tile.agricraft:water_pad_normal.name=水垫
-tile.agricraft:water_pad_full.name=水垫
+tile.agricraft:water_pad.name=水垫
 tile.agricraft:water_tank.0.name=木质水箱
 tile.agricraft:water_tank.1.name=铁质水箱
 tile.agricraft:water_channel_normal.0.name=木质浇灌水道

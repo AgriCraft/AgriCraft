@@ -105,14 +105,14 @@ public class AgriRecipes {
         for (AgriNuggetType type : AgriNuggetType.values()) {
             ItemStack nugget = new ItemStack(AgriItems.getInstance().AGRI_NUGGET, 9, type.ordinal());
             ItemStack ingot = OreDictHelper.getIngot(type.ingot);
-            AgriCore.getLogger("AgriCraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);
+            AgriCore.getLogger("agricraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);
             if (ingot != null) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', type.nugget));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, type.ingot));
             }
         }
 
-        AgriCore.getLogger("AgriCraft").debug("Recipes Registered");
+        AgriCore.getLogger("agricraft").debug("Recipes Registered");
     }
 
     private static void registerCustomWoodRecipes() {
@@ -139,7 +139,7 @@ public class AgriRecipes {
     private static void initWoodList() {
         if (woodList.isEmpty()) {
             ReflectionHelper.forEachValueIn(AgriBlocks.getInstance(), BlockCustomWood.class, (BlockCustomWood b) -> {
-                AgriCore.getLogger("AgriCraft").debug("Block: {0} Item: {1}", b, Item.getItemFromBlock(b));
+                AgriCore.getLogger("agricraft").debug("Block: {0} Item: {1}", b, Item.getItemFromBlock(b));
                 Optional.ofNullable(Item.getItemFromBlock(b))
                         .filter(i -> i instanceof ItemBlockCustomWood)
                         .map(i -> (ItemBlockCustomWood) i)

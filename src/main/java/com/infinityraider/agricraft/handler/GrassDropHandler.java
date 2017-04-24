@@ -2,15 +2,11 @@
  */
 package com.infinityraider.agricraft.handler;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -45,7 +41,7 @@ public final class GrassDropHandler {
         
         // Log
         // This line was oddly ignoring the debug settings...
-        //AgriCore.getLogger("AgriCraft").debug("Intercepted! Block: {0}", state.getBlock());
+        //AgriCore.getLogger("agricraft").debug("Intercepted! Block: {0}", state.getBlock());
 
         // Add grass drops if grass block.
         if (state.getBlock() instanceof BlockTallGrass) {
@@ -55,7 +51,7 @@ public final class GrassDropHandler {
             }
             // Log
             // Commenented out to prevent spam.
-            //AgriCore.getLogger("AgriCraft").debug("Inserting Drops!");
+            //AgriCore.getLogger("agricraft").debug("Inserting Drops!");
             // Add the drops.
             addGrassDrops(event.getDrops(), rand);
         }

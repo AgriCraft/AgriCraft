@@ -45,8 +45,8 @@ public class ModelErrorSuppressor {
 			errored.forEach(modelErrors::remove);
 			missing.forEach(missingVariants::remove);
 
-			AgriCore.getLogger("AgriCraft").info("Suppressed {0} Model Loading Errors!", errored.size());
-			AgriCore.getLogger("AgriCraft").info("Suppressed {0} Missing Model Variants!", missing.size());
+			AgriCore.getLogger("agricraft").info("Suppressed {0} Model Loading Errors!", errored.size());
+			AgriCore.getLogger("agricraft").info("Suppressed {0} Missing Model Variants!", missing.size());
 		}
 	}
 
