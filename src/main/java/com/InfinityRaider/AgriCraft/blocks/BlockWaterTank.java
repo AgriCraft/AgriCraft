@@ -1,6 +1,7 @@
 package com.InfinityRaider.AgriCraft.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -52,7 +53,12 @@ public class BlockWaterTank extends BlockCustomWood {
 							if (stack.getItem().hasContainerItem(stack)) {
 								player.inventory.setInventorySlotContents(player.inventory.currentItem, stack.getItem().getContainerItem(stack));
 							} else {
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+								// give the player a glass bottle if he filled the tank with a water bottle
+								if (stack.getItem().getItemStackDisplayName(stack).equals(stack.getItem().getItemStackDisplayName(new ItemStack(Items.potionitem)))) {
+									player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(Items.glass_bottle));
+								} else {
+									player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+								}
 							}
 						} else {
 							stack.splitStack(1);
