@@ -60,9 +60,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      *
      * @return The default seed name for the plant's seeds.
      */
-    default String getSeedName() {
-        return getPlantName() + " Seeds";
-    }
+    String getSeedName();
 
     /**
      * Fetches a list of all the items that are considered seeds for this
@@ -75,22 +73,16 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * Determines if the plant is to be considered a weed. Specifically, weed
      * plants are plants that cannot be harvested without de-weeding tools.
-     * <p>
-     * The default is false.
      *
      * @return If the plant is considered to be a weed.
      */
-    default boolean isWeed() {
-        return false;
-    }
+    boolean isWeed();
 
     /**
      * Determines if the plant is aggressive. A plant is considered aggressive
      * if it has the propensity to overtake any neighboring plant that is not of
      * the same type. In this manner, weeds are traditionally considered
      * aggressive.
-     * <p>
-     * The default is false.
      *
      * @return If the plant is aggressive.
      */
@@ -101,38 +93,28 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
     /**
      * Determines if the plant is affected by fertilizers. If false, this
      * setting will prevent any fertilizer from being used on the plant.
-     * <p>
-     * The default is true.
      *
      * @return If the plant can be fertilized.
      */
-    default boolean isFertilizable() {
-        return true;
-    }
+    boolean isFertilizable();
 
     /**
      * Retrieves the spread chance for a given plant. The spread chance is a
      * normalized p-value that represents the chance of the plant to overtake a
      * neighboring crop each tick.
-     * <p>
-     * The default is {@literal 0.25}.
      *
      * @return The spread chance of the plant.
      */
-    default double getSpreadChance() {
-        return 0.25;
-    }
+    double getSpreadChance();
 
     /**
      * Retrieves the spawn chance for a given plant. The spawn chance is a
-     * normalized p-value. Defaults to 0, meaning that the plant has no chance
-     * of spawning naturally.
+     * normalized p-value. Should return 0 if the plant has no chance of
+     * spawning naturally.
      *
      * @return The spawn chance of the plant.
      */
-    default double getSpawnChance() {
-        return 0;
-    }
+    double getSpawnChance();
 
     /**
      * Retrieves the base growth chance of the given plant. The growth bonus
@@ -142,57 +124,58 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      *
      * @return The base growth chance of the plant.
      */
-    default double getGrowthChanceBase() {
-        return 0.1;
-    }
+    double getGrowthChanceBase();
 
     /**
      * Retrieves the growth bonus, or the added p-value for the plant to grow
-     * per growth stat level.
+     * per growth stat level. The growth bonus is multiplied by the plant's
+     * growth stat (from {@link IAgriStat#getGrowth()}) and added to the plant's
+     * base growth chance (from {@link #getGrowthChanceBase()}) as to get the
+     * actual growth chance of the plant.
      *
      * @return The growth bonus of the plant.
      */
-    default double getGrowthChanceBonus() {
-        return 0.025;
-    }
+    double getGrowthChanceBonus();
 
     /**
-     * Retrieves the growth chance of the given plant with the given IAgriStat.
-     * The growth chance is calculated by adding the base growth chance (from
-     * {@link #getGrowthChanceBase()}) to the plant's growth bonus (from
-     * {@link #getGrowthChanceBonus()}) multiplied by the plant's growth stat
-     * (from {@link IAgriStat#getGrowth()}).
+     * Retrieves the base seed drop chance of the given plant. The seed drop
+     * chance bonus (from {@link #getSeedDropChanceBonus()}) is then multiplied
+     * by the plant's growth stage and added to this value as to get the actual
+     * growth chance of the plant.
      *
-     * @param stat The stat currently associated with the plant.
-     * @return The growth chance of the plant with the given IAgriStat.
+     * @return The base seed drop chance of the plant.
      */
-    default double getGrowthChance(IAgriStat stat) {
-        return getGrowthChanceBase() + stat.getGrowth() * getGrowthChanceBonus();
-    }
+    double getSeedDropChanceBase();
+
+    /**
+     * Retrieves the seed drop chance bonus, or the added p-value for the plant
+     * to drop its seed per growth stage. The seed drop bonus is multiplied by
+     * the plant's growth stage and added to the plant's base seed drop chance
+     * (from {@link #getSeedDropChanceBase()}) as to get the actual seed drop
+     * chance of the plant.
+     *
+     * @return The seed drop bonus of the plant.
+     */
+    double getSeedDropChanceBonus();
 
     /**
      * Determines the normalized p-value representing the chance this plant has
-     * to drop from harvested grasses.
+     * to drop from harvested grasses. Should return {@literal 0.0} if the plant
+     * has no chance of dropping from harvested grass in this manner.
      *
      * @return The chance of this plant being dropped.
      */
-    default double getGrassDropChance() {
-        return 0;
-    }
+    double getGrassDropChance();
 
     /**
      * Determines the total number of growth stages that the plant has. Notice,
      * that the number of growth stages that a plant may have is traditionally
      * less than 16, as the max meta-value of a block is 15. For AgriCraft
      * specifically, the conventional number of growth stages is 8.
-     * <p>
-     * The default number of growth stages is 8.
      *
      * @return the total number of growth stages that the plant has.
      */
-    default int getGrowthStages() {
-        return 8;
-    }
+    int getGrowthStages();
 
     /**
      * Fetches the user-friendly plant description for use in the Seed Journal.

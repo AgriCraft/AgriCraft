@@ -128,18 +128,4 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
 		return hasPlant();
 	}
 
-	@Override
-	default void getRakeProducts(Consumer<ItemStack> consumer, Random random) {
-		getSeed().map(s -> s.toStack()).ifPresent(consumer);
-		if (isMature()) {
-			getFruits(consumer, random);
-		}
-	}
-
-	@Override
-	default void getAllRakeProducts(Consumer<ItemStack> consumer) {
-		getSeed().map(s -> s.toStack()).ifPresent(consumer);
-		getAllFruits(consumer);
-	}
-
 }

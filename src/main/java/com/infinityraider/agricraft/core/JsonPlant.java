@@ -24,7 +24,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -106,6 +105,16 @@ public class JsonPlant extends CropPlant {
     @Override
     public double getGrowthChanceBonus() {
         return plant.getGrowthBonus();
+    }
+
+    @Override
+    public double getSeedDropChanceBase() {
+        return plant.getSeedDropChance();
+    }
+
+    @Override
+    public double getSeedDropChanceBonus() {
+        return plant.getSeedDropBonus();
     }
 
     @Override
