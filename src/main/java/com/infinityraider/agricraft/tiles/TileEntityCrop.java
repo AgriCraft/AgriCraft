@@ -346,7 +346,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 		if (this.crossCrop) {
 			return AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation();
 		}
-		return this.hasPlant() && this.plant.isFertilizable() && fertilizer.isFertilizerAllowed(plant.getTier());
+		return this.hasPlant() && this.plant.isFertilizable();
 	}
 
 	@Override
@@ -515,7 +515,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 			Optional<IAgriStat> stats = this.getStat();
 			consumer.accept(" - Plant: " + this.plant.getPlantName());
 			consumer.accept(" - Id: " + this.plant.getId());
-			consumer.accept(" - Tier: " + plant.getTier());
 			consumer.accept(" - Stage: " + this.getGrowthStage());
 			consumer.accept(" - Stages: " + this.plant.getGrowthStages());
 			consumer.accept(" - Meta: " + this.getGrowthStage());

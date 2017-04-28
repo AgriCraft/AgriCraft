@@ -65,7 +65,6 @@ public class JournalPageSeed implements JournalPage {
 		components.add(getTitle());
 		components.add(getDescriptionHead());
 		components.add(getSeedInformation());
-		components.add(getTier());
 		components.add(getBrightnessTitle());
 		components.add(getFruitTitle());
 		components.add(getGrowthTitle());
@@ -100,11 +99,6 @@ public class JournalPageSeed implements JournalPage {
 
 	private GuiComponent<String> getSeedInformation() {
 		return BasicComponents.getTextComponent(plant.getInformation(), 29, 38, 0.5);
-	}
-
-	private GuiComponent<String> getTier() {
-		final String text = AgriCore.getTranslator().translate("agricraft_journal.tier") + ": " + plant.getTier();
-		return BasicComponents.getTextComponent(text, 29, 66, 0.5);
 	}
 
 	private GuiComponent<String> getBrightnessTitle() {

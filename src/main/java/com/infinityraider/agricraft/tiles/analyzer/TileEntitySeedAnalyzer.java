@@ -124,12 +124,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return ticks to analyze SEED.
      */
     public final int maxProgress() {
-        if (this.specimen != null) {
-            AgriSeed seed = SeedRegistry.getInstance().valueOf(specimen).orElse(null);
-            return seed == null ? 0 : seed.getPlant().getTier() * 20;
-        } else {
-            return 0;
-        }
+        return 100;
     }
 
     /**

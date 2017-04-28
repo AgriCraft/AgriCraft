@@ -138,11 +138,6 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public int getTier() {
-        return this.plant.getTier();
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public float getHeight(int meta) {
         return Constants.UNIT * 13;

@@ -12,16 +12,6 @@ import net.minecraft.item.ItemStack;
 public interface IAgriFertilizer {
 
     /**
-     * Returns true if this fertilizer is allowed to speed up growth of a crop
-     * of this tier.
-     *
-     * @param tier The tier of the plant for the fertilizer to be applied to.
-     *
-     * @return If the fertilizer is applicable to this tier of plants.
-     */
-    boolean isFertilizerAllowed(int tier);
-
-    /**
      * Whether or not this mod can be used on a cross crop to trigger a mutation
      * (does not override configuration option).
      *

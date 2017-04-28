@@ -27,11 +27,6 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
     }
 
 	@Override
-	public boolean isFertilizerAllowed(int tier) {
-		return tier < 3;
-	}
-
-	@Override
 	public boolean canTriggerMutation() {
 		return true;
 	}

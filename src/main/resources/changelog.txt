@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a16
+- REMOVED: Plant growth tiers, which weren't used extensively and mainly just complicated the code.
 - FIXED: Seed analyzer issue where gui would attempt to render very large box, and freeze the game in the process.
 - ADDED: Disabled vanilla planting warning.
 - FIXED: Disable vanilla planting option in config not working properly.

@@ -43,21 +43,6 @@ public abstract class CropPlant implements IAgriPlant {
     // Misc. Methods
     // <editor-fold>
     // =========================================================================
-    /**
-     * Gets the growth rate for this CropPlant, used in calculations on growth
-     * tick
-     *
-     * @return the growth rate
-     */
-    public final int getGrowthRate() {
-        int tier = getTier();
-
-        if (tier > 0 && tier <= Constants.GROWTH_TIER.length) {
-            return Constants.GROWTH_TIER[tier];
-        } else {
-            return Constants.GROWTH_TIER[0];
-        }
-    }
 
     /**
      * @return if the plant is blacklisted
