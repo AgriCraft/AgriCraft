@@ -23,7 +23,13 @@ import java.util.Optional;
 
 public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable, IAgriDisplayable {
 
-    private static final int[] SLOTS = new int[]{0, 1};
+    public static final int SPECIMEN_SLOT_ID = 36;
+    public static final int JOURNAL_SLOT_ID = 37;
+
+    private static final int[] SLOTS = new int[]{
+        SPECIMEN_SLOT_ID,
+        JOURNAL_SLOT_ID
+    };
 
     /**
      * The SEED that the SEED analyzer contains.
@@ -237,20 +243,20 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //check if item can be inserted
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
-        slot = slot % 2;
-        if (slot == 0) {
-            return isValid(stack);
-        } else if (slot == 1) {
-            return (this.journal == null && this.isItemValidForSlot(slot, stack));
+        switch (slot) {
+            case SPECIMEN_SLOT_ID:
+                return isValid(stack);
+            case JOURNAL_SLOT_ID:
+                return this.journal == null && this.isItemValidForSlot(slot, stack);
+            default:
+                return false;
         }
-        return false;
     }
 
     //check if an item can be extracted
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
-        slot = slot % 2;
-        if (slot == 0 && this.specimen != null && this.specimen.hasTagCompound()) {
+        if (slot == SPECIMEN_SLOT_ID && this.specimen != null && this.specimen.hasTagCompound()) {
             return this.isSpecimenAnalyzed();
         }
         return false;
@@ -265,11 +271,10 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //returns the stack in the slot
     @Override
     public ItemStack getStackInSlot(int slot) {
-        slot = slot % 2;
         switch (slot) {
-            case 0:
+            case SPECIMEN_SLOT_ID:
                 return this.specimen;
-            case 1:
+            case JOURNAL_SLOT_ID:
                 return this.journal;
             default:
                 return null;
@@ -279,20 +284,26 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //decreases the stack in a slot by an amount and returns that amount as an itemstack
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
-        slot = slot % 2;
         ItemStack output = null;
-        if (slot == 0 && this.specimen != null) {
-            if (amount < this.specimen.stackSize) {
-                output = this.specimen.splitStack(amount);
-            } else {
-                output = this.specimen.copy();
-                this.specimen = null;
-                this.markForUpdate();
-            }
-        } else if (slot == 1 && this.journal != null) {
-            output = this.journal.copy();
-            this.journal = null;
-            this.markForUpdate();
+        switch (slot) {
+            case SPECIMEN_SLOT_ID:
+                if (this.specimen != null) {
+                    if (amount < this.specimen.stackSize) {
+                        output = this.specimen.splitStack(amount);
+                    } else {
+                        output = this.specimen.copy();
+                        this.specimen = null;
+                        this.markForUpdate();
+                    }
+                }
+                break;
+            case JOURNAL_SLOT_ID:
+                if (this.journal != null) {
+                    output = this.journal.copy();
+                    this.journal = null;
+                    this.markForUpdate();
+                }
+                break;
         }
         this.progress = 0;
         return output;
@@ -301,38 +312,41 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //gets item stack in the slot when closing the INVENTORY
     @Override
     public ItemStack removeStackFromSlot(int slot) {
-        slot = slot % 2;
-        ItemStack stackInSlot;
+        ItemStack result;
         switch (slot) {
-            case 0:
-                stackInSlot = this.specimen;
+            case SPECIMEN_SLOT_ID:
+                result = this.specimen;
+                this.specimen = null;
+                this.progress = 0;
                 break;
-            case 1:
-                stackInSlot = this.journal;
+            case JOURNAL_SLOT_ID:
+                result = this.journal;
+                this.journal = null;
                 break;
             default:
                 return null;
         }
-        if (stackInSlot != null) {
-            setInventorySlotContents(slot, null);
-        }
-        return stackInSlot;
+        this.markForUpdate();
+        return result;
     }
 
     //sets the items in a slot to this stack
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
-        slot = slot % 2;
-        if (slot == 0) {
-            this.specimen = stack;
-            if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-                stack.stackSize = getInventoryStackLimit();
-            }
-            progress = isSpecimenAnalyzed() ? maxProgress() : 0;
-        } else if (slot == 1) {
-            this.journal = stack;
+        switch (slot) {
+            case SPECIMEN_SLOT_ID:
+                this.specimen = stack;
+                if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+                    stack.stackSize = getInventoryStackLimit();
+                }
+                this.progress = isSpecimenAnalyzed() ? maxProgress() : 0;
+                this.markForUpdate();
+                return;
+            case JOURNAL_SLOT_ID:
+                this.journal = stack;
+                this.markForUpdate();
+                return;
         }
-        this.markForUpdate();
     }
 
     //returns the maximum stacksize
@@ -345,7 +359,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
         return worldObj.getTileEntity(pos) == this
-				&& player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64.0;
+                && player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64.0;
     }
 
     /**
@@ -375,12 +389,11 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        slot = slot % 2;
         switch (slot) {
-            case 0:
+            case SPECIMEN_SLOT_ID:
                 return TileEntitySeedAnalyzer.isValid(stack);
-            case 1:
-                return (stack != null && stack.getItem() != null && stack.getItem() instanceof ItemJournal);
+            case JOURNAL_SLOT_ID:
+                return StackHelper.isValid(stack, ItemJournal.class);
             default:
                 return false;
         }

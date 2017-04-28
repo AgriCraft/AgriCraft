@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.gui;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -86,6 +88,11 @@ public final class AgriGuiWrapper extends GuiContainer {
         // Save renderer state.
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
+        
+        // Render Slots
+        for (Slot s : this.getGui().getContainer().inventorySlots) {
+            fontRendererObj.drawString("" + s.slotNumber, s.xDisplayPosition, s.yDisplayPosition, Color.WHITE.getRGB());
+        }
 
         // Call render hook.
         this.guis.getLast().onRenderForeground(this, toolTips, relMouseX, relMouseY);

@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.gui.component;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.utility.GuiHelper;
 import java.awt.Color;
@@ -46,7 +47,7 @@ public final class ComponentRenderer {
     public static void renderComponentProgressBar(AgriGuiWrapper gui, GuiComponent<Supplier<Integer>> component) {
         final int width = component.getBounds().width;
         final int height = component.getBounds().height;
-        final double progress = component.getComponent().get();
+        final double progress = MathHelper.inRange(component.getComponent().get(), 0.0, 1.0);
         GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 100, 25, width, height, 16, 16, 2, 0);
         GuiUtils.drawContinuousTexturedBox(WIDGETS, 0, 0, 125, 25, (int) ((width * progress) / 100), height, 16, 16, 2, 0);
     }
