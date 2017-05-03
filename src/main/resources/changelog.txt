@@ -1,6 +1,9 @@
 Changelog
 ---------
 2.0.0a16
+- ADDED: Additional vanilla mutation JSON files.
+- ADDED: JSON files for vanilla flowers.
+- ADDED: JSON files for Mystical Agriculture plants.
 - ADDED: Seed drop chance customization, allowing for specification of when the seed should be returned from the plant.
 - REMOVED: Plant growth tiers, which weren't used extensively and mainly just complicated the code.
 - FIXED: Seed analyzer issue where gui would attempt to render very large box, and freeze the game in the process.
