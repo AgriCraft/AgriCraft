@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Rare seed analyzer crash.
 - TWEAK: Modified custom wood recipes, possibly fixing several crafting issues.
 - ADDED: Debug option to show OreDict information in item tooltips.
 - FIXED: Loading error that caused NPE to be thrown and crash the game.

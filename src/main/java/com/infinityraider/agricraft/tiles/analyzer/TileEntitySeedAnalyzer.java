@@ -181,8 +181,9 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      */
     public void analyze() {
         //analyze the SEED
-        if (this.hasSeed()) {
-            AgriSeed seed = SeedRegistry.getInstance().valueOf(specimen).get();
+        final Optional<AgriSeed> wrapper = SeedRegistry.getInstance().valueOf(specimen);
+        if (wrapper.isPresent()) {
+            AgriSeed seed = wrapper.get();
             seed = seed.withStat(seed.getStat().withAnalyzed(true));
             seed.getStat().writeToNBT(StackHelper.getTag(specimen));
             if (this.hasJournal()) {
