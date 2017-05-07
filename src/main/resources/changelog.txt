@@ -1,5 +1,10 @@
 Changelog
 ---------
+2.0.0a17
+- TWEAK: Modified custom wood recipes, possibly fixing several crafting issues.
+- ADDED: Debug option to show OreDict information in item tooltips.
+- FIXED: Loading error that caused NPE to be thrown and crash the game.
+
 2.0.0a16
 - ADDED: Additional vanilla mutation JSON files.
 - ADDED: JSON files for vanilla flowers.

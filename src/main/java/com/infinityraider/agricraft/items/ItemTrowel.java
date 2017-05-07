@@ -25,8 +25,11 @@ import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 
 import java.util.List;
 import java.util.Optional;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel, IRecipeRegister {
 
     @AgriConfigurable(
             category = AgriConfigCategory.TOOLS,
@@ -91,4 +94,10 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
                 new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_full"))
         );
     }
+
+    @Override
+    public void registerRecipes() {
+        GameRegistry.addRecipe(new ShapedOreRecipe(this, "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
+    }
+    
 }

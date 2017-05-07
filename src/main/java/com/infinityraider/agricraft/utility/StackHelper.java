@@ -55,6 +55,10 @@ public final class StackHelper {
             return tag;
         }
     }
+    
+    public static int getSize(ItemStack stack) {
+        return (stack == null) ? 0 : stack.stackSize;
+    }
 
     public static List<ItemStack> fitToMaxSize(ItemStack stack) {
         final List<ItemStack> items = new ArrayList<>();

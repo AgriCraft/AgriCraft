@@ -26,15 +26,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
-	public BlockSeedStorage() {
-		super("seed_storage");
-	}
+
+    public BlockSeedStorage() {
+        super("seed_storage");
+    }
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
-        return new InfinityProperty[] {AgriProperties.FACING};
+        return new InfinityProperty[]{AgriProperties.FACING};
     }
-    
+
     @Override
     public TileEntitySeedStorage createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorage();
@@ -95,4 +96,7 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
         return !AgriCraftConfig.disableSeedStorage;
     }
 
+    /*if (!AgriCraftConfig.disableSeedStorage) {
+			CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().SEED_STORAGE, 1, true, "wiw", "wcw", "wcw", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER, 'i', Items.IRON_INGOT, 'c', Blocks.CHEST);
+		}*/
 }

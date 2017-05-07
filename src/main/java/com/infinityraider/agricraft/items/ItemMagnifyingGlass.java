@@ -24,8 +24,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
+public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRecipeRegister {
 
     @AgriConfigurable(
             category = AgriConfigCategory.TOOLS,
@@ -59,7 +62,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
             list.add("========== " + AgriCore.getTranslator().translate("item.agricraft:magnifying_glass.name") + " ==========");
 
             // Add lighting information.
-            list.add("Brightness: (" + world.getLightFor(EnumSkyBlock.SKY, pos.add(0,1,0)) + "/16)");
+            list.add("Brightness: (" + world.getLightFor(EnumSkyBlock.SKY, pos.add(0, 1, 0)) + "/16)");
 
             // Add block information.
             if (block instanceof IAgriDisplayable) {
@@ -89,4 +92,10 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
     public boolean isEnabled() {
         return enableMagnifyingGlass;
     }
+
+    @Override
+    public void registerRecipes() {
+        GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
+    }
+
 }

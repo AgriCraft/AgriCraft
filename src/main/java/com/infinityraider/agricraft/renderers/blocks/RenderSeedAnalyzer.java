@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.analyzer.BlockSeedAnalyzer;
+import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelSeedAnalyzer;

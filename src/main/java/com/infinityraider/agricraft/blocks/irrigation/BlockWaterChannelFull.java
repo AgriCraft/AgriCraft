@@ -1,7 +1,10 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelFull;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -12,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> {
+public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> implements IRecipeRegister {
     public BlockWaterChannelFull() {
         super("full");
     }
@@ -45,4 +48,13 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityC
     public RenderChannelFull getRenderer() {
         return new RenderChannelFull(this);
     }
+
+    @Override
+    public void registerRecipes() {
+        // Creation Recipe
+        CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL_FULL, 1, false, AgriBlocks.getInstance().CHANNEL, AgriBlocks.getInstance().CHANNEL, AgriBlocks.getInstance().CHANNEL, AgriBlocks.getInstance().CHANNEL);
+        // Deconstruction Recipe
+        CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL, 4, false, AgriBlocks.getInstance().CHANNEL_FULL);
+    }
+    
 }

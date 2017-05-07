@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.blocks.decoration.BlockGrate;
+import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import net.minecraft.block.Block;

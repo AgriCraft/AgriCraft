@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.blocks.analyzer;
+package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
@@ -32,9 +32,13 @@ import java.util.Collections;
 import java.util.List;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> {
+public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> implements IRecipeRegister {
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
 
 	public BlockSeedAnalyzer() {
@@ -193,5 +197,10 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 	public int getMetaFromState(IBlockState state) {
 		return 0;
 	}
+
+    @Override
+    public void registerRecipes() {
+        GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
+    }
 
 }

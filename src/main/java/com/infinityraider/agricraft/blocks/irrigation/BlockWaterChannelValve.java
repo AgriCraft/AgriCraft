@@ -18,6 +18,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
+import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -28,8 +31,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 
-public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> {
+public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> implements IRecipeRegister {
 
 	public static final AxisAlignedBB BOX = new AxisAlignedBB(4 * Constants.UNIT, 0, 4 * Constants.UNIT, 12 * Constants.UNIT, 1, 12 * Constants.UNIT);
 
@@ -123,5 +128,10 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 			list.add(AgriCore.getTranslator().translate("agricraft_tooltip.valve"));
 		}
 	}
+
+    @Override
+    public void registerRecipes() {
+        CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL_VALVE, 1, false, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Blocks.LEVER, 1), AgriBlocks.getInstance().CHANNEL);
+    }
 
 }

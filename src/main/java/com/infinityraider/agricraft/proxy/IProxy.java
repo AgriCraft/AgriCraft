@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementH
 import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
-import com.infinityraider.agricraft.init.AgriRecipes;
+import com.infinityraider.agricraft.init.AgriOreDict;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -45,7 +45,7 @@ public interface IProxy extends IProxyBase {
     @Override
     default void postInitStart(FMLPostInitializationEvent event) {
         PluginHandler.postInit();
-        AgriRecipes.init();
+        AgriOreDict.upgradeOreDict();
         GrowthRequirementHandler.init();
     }
 

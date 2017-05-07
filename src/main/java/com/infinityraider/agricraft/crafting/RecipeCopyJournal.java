@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class RecipeJournal implements IRecipe {
+public class RecipeCopyJournal implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting invCrafting, World world) {

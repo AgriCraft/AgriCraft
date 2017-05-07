@@ -1,9 +1,13 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import com.infinityraider.infinitylib.utility.RegisterHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -16,10 +20,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> {
+public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> implements IRecipeRegister {
 
     protected static final float MIN = Constants.UNIT * Constants.QUARTER;
     protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
@@ -113,6 +120,16 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
         return false;
+    }
+
+    @Override
+    public void registerRecipes() {
+        // "Correct" wooden bowl recipe, so that may register channel recipe.
+        RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
+        
+        // Register channel recipe.
+        CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
     }
 
 }
