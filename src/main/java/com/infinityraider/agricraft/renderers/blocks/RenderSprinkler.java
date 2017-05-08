@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
@@ -72,7 +73,7 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
         if(state instanceof IExtendedBlockState) {
             type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
         } else {
-            type = CustomWoodType.getDefault();
+            type = CustomWoodTypeRegistry.DEFAULT;
         }
         tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, type.getIcon());
     }

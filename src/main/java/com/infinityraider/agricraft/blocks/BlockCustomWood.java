@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.SoundType;
@@ -152,7 +153,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
     public final IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<T> tile = (Optional<T>)WorldHelper.getTile(world, pos, TileEntityCustomWood.class);
         return getExtendedCustomWoodState((IExtendedBlockState) state, tile)
-                .withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodType.getDefault()));
+                .withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodTypeRegistry.DEFAULT));
     }
 
     protected IExtendedBlockState getExtendedCustomWoodState(IExtendedBlockState state, Optional<T> tile) {

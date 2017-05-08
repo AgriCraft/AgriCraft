@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +26,7 @@ import javax.annotation.Nonnull;
 public class TileEntityCustomWood extends TileEntityRotatableBase implements IDebuggable, IAgriDisplayable {
 	/**  A pointer to the the block the CustomWoodBlock is imitating. */
 	@Nonnull
-	private CustomWoodType woodType = CustomWoodType.getDefault();
+	private CustomWoodType woodType = CustomWoodTypeRegistry.DEFAULT;
 
 	public TileEntityCustomWood() {
 		super();
@@ -53,7 +54,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 */
     @Override
 	protected final void readRotatableTileNBT(NBTTagCompound tag) {
-		this.setMaterial(CustomWoodType.readFromNBT(tag));
+		this.setMaterial(CustomWoodTypeRegistry.getFromNbt(tag).orElse(CustomWoodTypeRegistry.DEFAULT));
 		this.readNBT(tag);
 	}
 
@@ -81,7 +82,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	}
 
     public final void setMaterial(ItemStack stack) {
-        this.setMaterial(CustomWoodType.readFromNBT(stack.getTagCompound()));
+        this.setMaterial(CustomWoodTypeRegistry.getFromNbt(stack.getTagCompound()).orElse(CustomWoodTypeRegistry.DEFAULT));
     }
 
 	/**
@@ -93,7 +94,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
 	 */
 	public final void setMaterial(Block block, int meta) {
 		if (block != null) {
-            this.setMaterial(CustomWoodType.getFromBlockAndMeta(block, meta));
+            this.setMaterial(CustomWoodTypeRegistry.getFromBlockAndMeta(block, meta).orElse(CustomWoodTypeRegistry.DEFAULT));
 		}
 	}
 

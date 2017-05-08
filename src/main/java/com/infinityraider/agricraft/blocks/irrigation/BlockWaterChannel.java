@@ -1,11 +1,15 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
+import com.infinityraider.agricraft.crafting.CustomWoodShapedRecipe;
+import com.infinityraider.agricraft.crafting.FullRecipeLayout;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.RegisterHelper;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +28,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> implements IRecipeRegister {
@@ -127,7 +132,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
         // "Correct" wooden bowl recipe, so that may register channel recipe.
         RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
-        
+
         // Register channel recipe.
         CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
     }

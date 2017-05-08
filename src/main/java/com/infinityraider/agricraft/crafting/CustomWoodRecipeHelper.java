@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.crafting;
 
 import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
 import java.util.Arrays;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public final class CustomWoodRecipeHelper {
      * @param shaped If the recipe is shaped.
      */
     public static void registerCustomWoodRecipe(Block block, int amount, boolean shaped, Object... params) {
-        CustomWoodType.getAllTypes().forEach(type -> registerCustomWoodRecipeVariant(type, new ItemStack(block, amount), shaped, params));
+        CustomWoodTypeRegistry.getAllTypes().forEach(type -> registerCustomWoodRecipeVariant(type, new ItemStack(block, amount), shaped, params));
     }
 
     /**
@@ -41,7 +42,7 @@ public final class CustomWoodRecipeHelper {
      * @param shaped If the recipe is shaped.
      */
     public static void registerCustomWoodRecipe(ItemStack result, boolean shaped, Object... params) {
-        CustomWoodType.getAllTypes().forEach(type -> registerCustomWoodRecipeVariant(type, result, shaped, params));
+        CustomWoodTypeRegistry.getAllTypes().forEach(type -> registerCustomWoodRecipeVariant(type, result, shaped, params));
     }
 
     /**

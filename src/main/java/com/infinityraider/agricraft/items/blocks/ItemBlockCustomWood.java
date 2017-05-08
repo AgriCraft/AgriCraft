@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 
 /**
  * The root item for all CustomWood blocks.
@@ -57,7 +58,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 	 * @param list the list to populate.
 	 */
 	public void getSubItems(List<ItemStack> list) {
-		for (CustomWoodType type : CustomWoodType.getAllTypes()) {
+		for (CustomWoodType type : CustomWoodTypeRegistry.getAllTypes()) {
 			ItemStack variant = new ItemStack(this.block, 1, 0);
 			variant.setTagCompound(type.writeToNBT(new NBTTagCompound()));
 			list.add(variant);
