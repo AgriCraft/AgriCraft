@@ -1,6 +1,9 @@
 Changelog
 ---------
 2.0.0a17
+- ADDED: TheOneProbe integration.
+- FIXED: Non-standard harvestcraft plant ids. Notice this will cause plant loss, but will not occur again.
+- FIXED: Mysticalagriculture plants mystically spawning in crops.
 - FIXED: Rare seed analyzer crash.
 - TWEAK: Modified custom wood recipes, possibly fixing several crafting issues.
 - ADDED: Debug option to show OreDict information in item tooltips.

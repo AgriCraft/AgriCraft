@@ -45,11 +45,19 @@ repositories {
         name "sk89q"
         url  "http://maven.sk89q.com/repo/"
     }
+    maven {
+        name "McJty maven"
+        url "http://maven.k-4u.nl/"
+    }
+    maven {
+        name "tterrag maven"
+        url "http://maven.tterrag.com/"
+    }
 	maven {
 		name "JEI"
 		url "http://dvs1.progwml6.com/files/maven"
 	}
-	 maven {
+    maven {
 		name "OpenComputers"
 		url  "http://maven.cil.li/"
 	}
@@ -61,6 +69,8 @@ dependencies {
 	compile project(':lib/InfinityLib')
 	shade project(':lib/AgriCore')
 	compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
+    deobfCompile "com.github.mcjty:compatlayer:1.10-0.2.8"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.6-56"
 	deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
 }
 
