@@ -331,7 +331,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                     if (!crop.hasPlant() && !crop.isCrossCrop()) {
                         crop.setPlant(plant);
                         return true;
-                    } else if (this.plant.isAggressive() && crop.getStat().map(s -> s.getStrength()).orElse((byte) 0) > this.getStat().map(s -> s.getStrength()).orElse((byte) 0) * this.getRandom().nextDouble()) {
+                    } else if (this.plant.isAggressive() && crop.getStat().map(s -> s.getStrength()).orElse((byte) 0) < this.getStat().map(s -> s.getStrength()).orElse((byte) 0) * this.getRandom().nextDouble()) {
                         crop.setCrossCrop(false);
                         crop.setPlant(plant);
                         return true;
