@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a17
+- ADDED: Sneaking while placing crops places cross-crops instead.
+- FIXED: Weed overtake code calculated strength backwards. Thanks @CodeCubesAndCrashes!
 - ADDED: TheOneProbe integration.
 - FIXED: Non-standard harvestcraft plant ids. Notice this will cause plant loss, but will not occur again.
 - FIXED: Mysticalagriculture plants mystically spawning in crops.
