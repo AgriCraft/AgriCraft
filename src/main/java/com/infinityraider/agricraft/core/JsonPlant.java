@@ -20,6 +20,7 @@ import com.infinityraider.agricraft.utility.BlockRange;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import net.minecraft.item.ItemStack;
@@ -132,13 +133,12 @@ public class JsonPlant extends CropPlant {
     }
 
     @Override
-    public ItemStack getRandomFruit(Random rand) {
+    public Optional<ItemStack> getRandomFruit(Random rand) {
         return this.plant.getProducts().getRandom(rand).stream()
                 .map(AgriStack::toStack)
                 .filter(p -> p instanceof FuzzyStack)
                 .map(p -> ((FuzzyStack) p).toStack())
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     @Override

@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Plants with no products would drop a null ItemStack.
+- FIXED: Crops dropping crop sticks when raked.
 - ADDED: Sneaking while placing crops places cross-crops instead.
 - FIXED: Weed overtake code calculated strength backwards. Thanks @CodeCubesAndCrashes!
 - ADDED: TheOneProbe integration.

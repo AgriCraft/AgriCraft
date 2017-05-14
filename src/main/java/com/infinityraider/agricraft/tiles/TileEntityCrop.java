@@ -120,11 +120,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         return true;
     }
 
-    public void onCropLeftClicked(EntityPlayer player) {
+    public void onCropBroken(boolean shouldPerformDrops) {
         if (!this.isRemote()) {
-            if (!player.capabilities.isCreativeMode) {
+            if (shouldPerformDrops) {
                 //drop items if the player is not in creative
-                this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack));
+                this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), true);
             }
             if (this.hasPlant()) {
                 this.getPlant().ifPresent(p -> p.onRemove(this.getWorld(), pos));
@@ -134,8 +134,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
     }
 
-    public void getDrops(Consumer<ItemStack> consumer) {
-        consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
+    public void getDrops(Consumer<ItemStack> consumer, boolean includeCropSticks) {
+        if (includeCropSticks) {
+            consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
+        }
         if (this.plant != null && this.stats != null) {
             if (this.plant.getSeedDropChanceBase() + this.growthStage * this.plant.getSeedDropChanceBonus() > this.getRandom().nextDouble()) {
                 this.getSeed().ifPresent(seed -> consumer.accept(seed.toStack()));
@@ -390,7 +392,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean onRaked(@Nullable EntityPlayer player) {
         if (!this.isRemote() && this.canBeRaked()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack));
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
             this.setGrowthStage(0);
             this.removeSeed();
             return true;

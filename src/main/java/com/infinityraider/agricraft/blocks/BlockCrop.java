@@ -95,7 +95,9 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      */
     @Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-        this.getCrop(world, pos).ifPresent(crop -> crop.onCropLeftClicked(player));
+        if (!world.isRemote) {
+            this.getCrop(world, pos).ifPresent(crop -> crop.onCropBroken(!player.capabilities.isCreativeMode));
+        }
     }
 
     /**
@@ -108,14 +110,13 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Handles the block drops. Called when the block is broken (not left clicked).
+     * Handles the block drops. Called when the block is broken (not left
+     * clicked).
      */
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(
-                    crop -> crop.getDrops(drop -> WorldHelper.spawnItemInWorld(world, pos, drop))
-            );
+            this.getCrop(world, pos).ifPresent(c -> c.onCropBroken(true));
         }
     }
 
@@ -209,7 +210,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> drops = new ArrayList<>();
-        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add));
+        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add, true));
         return drops;
     }
 

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -249,7 +250,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      * @param rand A random to select a fruit with.
      * @return A randomly chosen fruit for the plant.
      */
-    ItemStack getRandomFruit(Random rand);
+    Optional<ItemStack> getRandomFruit(Random rand);
 
     /**
      * Generates an assortment of the fruits to be dropped when the plant is
@@ -266,7 +267,7 @@ public interface IAgriPlant extends Comparable<IAgriPlant> {
      */
     default void getFruitsOnHarvest(IAgriStat stats, Consumer<ItemStack> consumer, Random rand) {
         for (int amount = (stats.getGain() + 3) / 3; amount > 0; amount--) {
-            consumer.accept(getRandomFruit(rand));
+            getRandomFruit(rand).ifPresent(consumer);
         }
     }
 
