@@ -38,8 +38,13 @@ public class PlayerInteractEventHandler {
             return;
         }
 
-        // If clicking crops, who cares?
+        // If clicking crop block, who cares?
         if (WorldHelper.getBlock(event.getWorld(), event.getPos(), IAgriCrop.class).isPresent()) {
+            return;
+        }
+        
+        // If clicking crop tile, who cares?
+        if (WorldHelper.getTile(event.getWorld(), event.getPos(), IAgriCrop.class).isPresent()) {
             return;
         }
 
