@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.Constants;
@@ -152,6 +153,15 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         return (this.buffer * 16.0f / BUFFER_CAP);
     }
 
+    @Override
+    public IrrigationConnectionType getConnectionType(EnumFacing side) {
+        if (side == EnumFacing.UP) {
+            return IrrigationConnectionType.PRIMARY;
+        } else {
+            return IrrigationConnectionType.NONE;
+        }
+    }
+
     public boolean canSprinkle() {
         return WorldHelper
                 .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
@@ -224,4 +234,5 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord() + 0.5F + xOffset, this.yCoord() + 8 * Constants.UNIT, this.zCoord() + 0.5F + zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
+
 }

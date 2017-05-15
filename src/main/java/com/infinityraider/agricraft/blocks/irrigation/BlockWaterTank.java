@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.init.AgriBlocks;
@@ -27,16 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements IRecipeRegister {
-
-    @SuppressWarnings("unchecked")
-    public static final InfinityProperty<TileEntityTank.Connection>[] CONNECTION_PROPERTIES = new InfinityProperty[]{
-        AgriProperties.TANK_DOWN,
-        AgriProperties.TANK_UP,
-        AgriProperties.TANK_NORTH,
-        AgriProperties.TANK_SOUTH,
-        AgriProperties.TANK_WEST,
-        AgriProperties.TANK_EAST
-    };
 
     public BlockWaterTank() {
         super("water_tank");
@@ -118,20 +110,21 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
-        return CONNECTION_PROPERTIES;
+        return IrrigationConnection.CONNECTIONS;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        Optional<TileEntityTank> tile = WorldHelper.getTile(worldIn, pos, TileEntityTank.class);
-        if (tile.isPresent()) {
-            TileEntityTank tank = tile.get();
-            for (EnumFacing facing : EnumFacing.values()) {
-                state = CONNECTION_PROPERTIES[facing.ordinal()].applyToBlockState(state, tank.getConnectionType(facing));
-            }
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        final Optional<TileEntityTank> tile = WorldHelper.getTile(world, pos, TileEntityTank.class);
+        if (!tile.isPresent()) {
+            return state;
         }
-        return state;
+        tile.get().checkConnections();
+        final IrrigationConnection sides = new IrrigationConnection();
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            sides.set(facing, tile.get().getConnectionType(facing));
+        }
+        return sides.write(state);
     }
 
     @Override

@@ -1,39 +1,34 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import com.agricraft.agricore.core.AgriCore;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.property.IExtendedBlockState;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.function.Consumer;
+import net.minecraft.block.BlockLever;
+import net.minecraft.util.EnumFacing;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
 
     private boolean powered = false;
-    private SidedConnection levers = new SidedConnection();
 
     @Override
     protected final void writeChannelNBT(NBTTagCompound tag) {
         tag.setBoolean(AgriNBT.POWER, powered);
-        this.levers.writeToNBT(tag);
     }
 
     //this loads the saved data for the tile entity
     @Override
     protected final void readChannelNBT(NBTTagCompound tag) {
         this.powered = tag.getBoolean(AgriNBT.POWER);
-        this.levers.readFromNBT(tag);
     }
 
     @Override
@@ -56,16 +51,13 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         }
     }
 
-    public void updateLevers() {
-        for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-            IBlockState neighbour = this.getWorld().getBlockState(this.getPos().add(dir.getFrontOffsetX(), 0, dir.getFrontOffsetZ()));
-            this.levers.setConnected(dir, neighbour.getBlock() instanceof BlockLever && neighbour.getValue(BlockLever.FACING).getFacing() == dir);
+    @Override
+    public IrrigationConnectionType getConnectionType(EnumFacing side) {
+        if (WorldHelper.getBlock(worldObj, pos.offset(side), BlockLever.class).isPresent()) {
+            return IrrigationConnectionType.AUXILIARY;
+        } else {
+            return super.getConnectionType(side);
         }
-        this.markForUpdate();
-    }
-
-    public IExtendedBlockState addLeversToState(IExtendedBlockState state) {
-        return state.withProperty(AgriProperties.CONNECTIONS, this.levers);
     }
 
     public boolean isPowered() {

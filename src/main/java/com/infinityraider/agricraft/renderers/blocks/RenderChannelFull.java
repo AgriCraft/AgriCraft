@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -35,8 +36,8 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     }
 
     @Override
-    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
-        if(connect) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
+        if(!type.isPrimary()) {
             return;
         }
         switch(dir) {
@@ -63,10 +64,10 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
                                             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, state, EnumFacing.NORTH, true, icon);
-        this.renderSide(tessellator, state, EnumFacing.EAST, true, icon);
-        this.renderSide(tessellator, state, EnumFacing.SOUTH, true, icon);
-        this.renderSide(tessellator, state, EnumFacing.WEST, true, icon);
+        this.renderSide(tessellator, state, EnumFacing.NORTH, IrrigationConnectionType.PRIMARY, icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, IrrigationConnectionType.PRIMARY, icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, IrrigationConnectionType.PRIMARY, icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, IrrigationConnectionType.PRIMARY, icon);
     }
 
     @Override

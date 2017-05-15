@@ -1,13 +1,11 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,15 +18,14 @@ import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import java.util.Arrays;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.init.Blocks;
@@ -49,21 +46,11 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
         return properties;
 	}
 
-    @Override
-    protected List<IUnlistedProperty> getUnlistedProperties() {
-        return ImmutableList.of(AgriProperties.CONNECTIONS);
-    }
-
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         Optional<TileEntityChannelValve> tile = WorldHelper.getTile(worldIn, pos, TileEntityChannelValve.class);
 		return AgriProperties.POWERED.applyToBlockState(super.getActualState(state, worldIn, pos), tile.isPresent() && tile.get().isPowered());
 	}
-
-	@Override
-    protected IExtendedBlockState getExtendedCustomWoodState(IExtendedBlockState state, Optional<TileEntityChannelValve> tile) {
-        return tile.map(t -> t.addLeversToState(state)).orElse(state);
-    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -73,7 +60,6 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
         if (te != null && te instanceof TileEntityChannelValve) {
             TileEntityChannelValve valve = (TileEntityChannelValve) te;
             valve.updatePowerStatus();
-            valve.updateLevers();
         }
 	}
 
@@ -97,11 +83,6 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 	@Override
 	public TileEntityChannelValve createNewTileEntity(World world, int meta) {
 		return new TileEntityChannelValve();
-	}
-
-	@Override
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return true;
 	}
 
 	@Override

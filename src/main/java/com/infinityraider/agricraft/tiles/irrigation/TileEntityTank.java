@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
-import net.minecraft.util.IStringSerializable;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -217,17 +217,18 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 		return false;
 	}
 
-    public Connection getConnectionType(EnumFacing facing) {
+    @Override
+    public IrrigationConnectionType getConnectionType(EnumFacing facing) {
         if(facing.getAxis() == EnumFacing.Axis.Y) {
-            return Connection.NONE;
+            return IrrigationConnectionType.NONE;
         } else if (this.hasNeighbour(facing)) {
-            return Connection.TANK;
+            return IrrigationConnectionType.AUXILIARY;
         }
         TileEntity te = worldObj.getTileEntity(getPos().offset(facing));
-        if (te instanceof TileEntityChannel) {
-            return ((TileEntityChannel) te).isSameMaterial(this) ? Connection.CHANNEL : Connection.NONE;
+        if (te instanceof TileEntityChannel && ((TileEntityChannel) te).isSameMaterial(this)) {
+            return IrrigationConnectionType.PRIMARY;
         }
-        return Connection.NONE;
+        return IrrigationConnectionType.NONE;
     }
 
 	@Override
@@ -437,17 +438,6 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	public void addDisplayInfo(List information) {
 		super.addDisplayInfo(information);
 		information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
-	}
-
-	public enum Connection implements IStringSerializable {
-		NONE,
-		TANK,
-		CHANNEL;
-
-		@Override
-		public String getName() {
-			return this.name().toLowerCase();
-		}
 	}
 
 }

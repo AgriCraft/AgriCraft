@@ -34,18 +34,6 @@ public interface AgriProperties {
     InfinityProperty<TileEntityGrate.EnumOffset> OFFSET = new InfinityProperty<>(PropertyEnum.create("offset", TileEntityGrate.EnumOffset.class), TileEntityGrate.EnumOffset.NEAR);
 
     InfinityProperty<Boolean> POWERED = new InfinityProperty<>(PropertyBool.create("powered"), false);
-    
-    InfinityProperty<Boolean> CHANNEL_NORTH = new InfinityProperty<>(PropertyBool.create("channel_north"), false);
-    InfinityProperty<Boolean> CHANNEL_EAST = new InfinityProperty<>(PropertyBool.create("channel_east"), false);
-    InfinityProperty<Boolean> CHANNEL_SOUTH = new InfinityProperty<>(PropertyBool.create("channel_south"), false);
-    InfinityProperty<Boolean> CHANNEL_WEST = new InfinityProperty<>(PropertyBool.create("channel_west"), false);
-    
-    InfinityProperty<TileEntityTank.Connection> TANK_NORTH = new InfinityProperty<>(PropertyEnum.create("tank_north", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
-    InfinityProperty<TileEntityTank.Connection> TANK_EAST = new InfinityProperty<>(PropertyEnum.create("tank_east", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
-    InfinityProperty<TileEntityTank.Connection> TANK_SOUTH = new InfinityProperty<>(PropertyEnum.create("tank_south", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
-    InfinityProperty<TileEntityTank.Connection> TANK_WEST = new InfinityProperty<>(PropertyEnum.create("tank_west", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
-    InfinityProperty<TileEntityTank.Connection> TANK_UP = new InfinityProperty<>(PropertyEnum.create("tank_up", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
-    InfinityProperty<TileEntityTank.Connection> TANK_DOWN = new InfinityProperty<>(PropertyEnum.create("tank_down", TileEntityTank.Connection.class), TileEntityTank.Connection.NONE);
 
     IUnlistedProperty<CustomWoodType> CUSTOM_WOOD_TYPE = new PropertyCustomWood("wood_type");
 

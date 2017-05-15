@@ -17,6 +17,7 @@ import java.util.List;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.function.Consumer;
 import net.minecraft.block.state.IBlockState;
@@ -139,6 +140,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     public IIrrigationComponent getNeighbor(EnumFacing direction) {
         final int dir = direction.getHorizontalIndex();
         return dir >= 0 ? neighbours[dir] : null;
+    }
+
+    @Override
+    public IrrigationConnectionType getConnectionType(EnumFacing side) {
+        if (this.hasNeighbor(side)) {
+            return IrrigationConnectionType.PRIMARY;
+        } else {
+            return IrrigationConnectionType.NONE;
+        }
     }
 
     //updates the tile entity every tick

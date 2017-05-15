@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
-import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +27,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
 
     @Override
     public void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelValve block, TileEntityChannelValve tile,
-                                         ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
 
         final TextureAtlasSprite sepIcon = BaseIcons.IRON_BLOCK.getIcon();
 
@@ -55,22 +54,17 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
     }
 
     @Override
-    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, boolean connect, TextureAtlasSprite matIcon) {
-        super.renderSide(tessellator, state, dir, connect, matIcon);
-        if(state instanceof IExtendedBlockState) {
-            IExtendedBlockState extendedState = (IExtendedBlockState) state;
-            SidedConnection levers = extendedState.getValue(AgriProperties.CONNECTIONS);
-            if (levers != null && levers.isConnected(dir)) {
-                renderConnector(tessellator, dir, matIcon);
-            }
-            if (connect) {
-                renderSeparator(tessellator, extendedState, dir, matIcon, BaseIcons.IRON_BLOCK.getIcon());
-            }
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
+        super.renderSide(tessellator, state, dir, type, matIcon);
+        if (type.isPrimary()) {
+            renderSeparator(tessellator, state, dir, matIcon, BaseIcons.IRON_BLOCK.getIcon());
+        } else if (type.isAuxiliary()) {
+            renderConnector(tessellator, dir, matIcon);
         }
     }
 
     private void renderConnector(ITessellator tessellator, EnumFacing dir, TextureAtlasSprite matIcon) {
-        switch(dir) {
+        switch (dir) {
             case EAST:
                 //positive x
                 tessellator.drawScaledPrism(12, 4, 5, 16, 12, 11, matIcon);
@@ -90,14 +84,14 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
         }
     }
 
-    private void renderSeparator(ITessellator tessellator, IExtendedBlockState state, EnumFacing dir, TextureAtlasSprite matIcon, TextureAtlasSprite sepIcon) {
+    private void renderSeparator(ITessellator tessellator, IBlockState state, EnumFacing dir, TextureAtlasSprite matIcon, TextureAtlasSprite sepIcon) {
         boolean powered = AgriProperties.POWERED.getValue(state);
-        switch(dir) {
+        switch (dir) {
             case EAST:
                 //positive x
                 tessellator.drawScaledPrism(14, 0, 3, 16, 16, 6, matIcon);
                 tessellator.drawScaledPrism(14, 0, 10, 16, 16, 13, matIcon);
-                if(powered) {
+                if (powered) {
                     tessellator.drawScaledPrism(14, 5, 6, 16, 12, 10, sepIcon);
                 } else {
                     tessellator.drawScaledPrism(14, 1, 6, 16, 5.001F, 10, sepIcon);
@@ -108,7 +102,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
                 //negative x
                 tessellator.drawScaledPrism(0, 0, 3, 2, 16, 6, matIcon);
                 tessellator.drawScaledPrism(0, 0, 10, 2, 16, 13, matIcon);
-                if(powered) {
+                if (powered) {
                     tessellator.drawScaledPrism(0, 5, 6, 2, 12, 10, sepIcon);
                 } else {
                     tessellator.drawScaledPrism(0, 1, 6, 2, 5.001F, 10, sepIcon);
@@ -119,7 +113,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
                 //negative z
                 tessellator.drawScaledPrism(3, 0, 0, 6, 16, 2, matIcon);
                 tessellator.drawScaledPrism(10, 0, 0, 13, 16, 2, matIcon);
-                if(powered) {
+                if (powered) {
                     tessellator.drawScaledPrism(6, 5, 0, 10, 12, 2, sepIcon);
                 } else {
                     tessellator.drawScaledPrism(6, 1, 0, 10, 5.001F, 2, sepIcon);
@@ -130,7 +124,7 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
                 //positive z
                 tessellator.drawScaledPrism(3, 0, 14, 6, 16, 16, matIcon);
                 tessellator.drawScaledPrism(10, 0, 14, 13, 16, 16, matIcon);
-                if(powered) {
+                if (powered) {
                     tessellator.drawScaledPrism(6, 5, 14, 10, 12, 16, sepIcon);
                 } else {
                     tessellator.drawScaledPrism(6, 1, 14, 10, 5.001F, 16, sepIcon);

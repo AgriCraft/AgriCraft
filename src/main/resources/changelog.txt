@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a17
+- TWEAK: Unified irrigation component connection properties.
 - FIXED: Channel selection bounds.
 - FIXED: Disabling vanilla farming disabled all farming.
 - FIXED: Plants with no products would drop a null ItemStack.
