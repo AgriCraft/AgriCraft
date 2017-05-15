@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Channel selection bounds.
 - FIXED: Disabling vanilla farming disabled all farming.
 - FIXED: Plants with no products would drop a null ItemStack.
 - FIXED: Crops dropping crop sticks when raked.

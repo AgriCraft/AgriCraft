@@ -1,21 +1,14 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
-import com.infinityraider.agricraft.crafting.CustomWoodShapedRecipe;
-import com.infinityraider.agricraft.crafting.FullRecipeLayout;
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.RegisterHelper;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -24,17 +17,28 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Optional;
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> implements IRecipeRegister {
 
     protected static final float MIN = Constants.UNIT * Constants.QUARTER;
     protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
+
+    protected static final double EXPANSION = 1 / 64d;
+
+    public static final AxisAlignedBB CENTER_BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX).expandXyz(EXPANSION);
+    public static final AxisAlignedBB NORTH_BOX = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT).expandXyz(EXPANSION);
+    public static final AxisAlignedBB EAST_BOX = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX).expandXyz(EXPANSION);
+    public static final AxisAlignedBB SOUTH_BOX = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE).expandXyz(EXPANSION);
+    public static final AxisAlignedBB WEST_BOX = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX).expandXyz(EXPANSION);
 
     public BlockWaterChannel() {
         super("normal");
@@ -45,7 +49,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
         return new TileEntityChannel();
     }
 
-    /**
+    /*
      * Adds all intersecting collision boxes to a list. (Be sure to only add
      * boxes to the list if they intersect the mask.) Parameters: World, pos,
      * mask, list, colliding entity
@@ -54,65 +58,58 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
-        //central box
-        AxisAlignedBB box = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
-        addCollisionBoxToList(pos, mask, list, box);
+        // Fetch Tile Entity
+        final Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos, TileEntityChannel.class);
+
+        // Add central box.
+        addCollisionBoxToList(pos, mask, list, CENTER_BOX);
 
         //adjacent boxes
-        if (AgriProperties.CHANNEL_NORTH.getValue(state)) {
-            box = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT);
-            addCollisionBoxToList(pos, mask, list, box);
-        }
-        if (AgriProperties.CHANNEL_EAST.getValue(state)) {
-            box = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX);
-            addCollisionBoxToList(pos, mask, list, box);
-        }
-        if (AgriProperties.CHANNEL_SOUTH.getValue(state)) {
-            box = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE);
-            addCollisionBoxToList(pos, mask, list, box);
-        }
-        if (AgriProperties.CHANNEL_WEST.getValue(state)) {
-            box = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX);
-            addCollisionBoxToList(pos, mask, list, box);
+        if (tile.isPresent()) {
+            if (tile.get().hasNeighbor(EnumFacing.NORTH)) {
+                Block.addCollisionBoxToList(pos, mask, list, NORTH_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.EAST)) {
+                Block.addCollisionBoxToList(pos, mask, list, EAST_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.SOUTH)) {
+                Block.addCollisionBoxToList(pos, mask, list, SOUTH_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.WEST)) {
+                Block.addCollisionBoxToList(pos, mask, list, WEST_BOX);
+            }
         }
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        final AxisAlignedBB minBB = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX);
-        if (AgriProperties.CHANNEL_NORTH.getValue(state)) {
-            minBB.addCoord(minBB.minX, MIN, 0);
-        }
-        if (AgriProperties.CHANNEL_EAST.getValue(state)) {
-            minBB.addCoord(1, MAX, minBB.maxZ);
-        }
-        if (AgriProperties.CHANNEL_SOUTH.getValue(state)) {
-            minBB.addCoord(minBB.maxX, MAX, 1);
-        }
-        if (AgriProperties.CHANNEL_WEST.getValue(state)) {
-            minBB.addCoord(0, MIN, minBB.minZ);
-        }
-        return minBB;
-    }
+        // Fetch Tile Entity
+        final Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos, TileEntityChannel.class);
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return getBoundingBox(state, world, pos).offset(pos.getX(), pos.getY(), pos.getZ());
-    }
+        // Define Core Bounding Box
+        AxisAlignedBB selection = CENTER_BOX;
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-        return getBoundingBox(state, world, pos).offset(pos.getX(), pos.getY(), pos.getZ());
-    }
+        // Expand Bounding Box
+        if (tile.isPresent()) {
+            if (tile.get().hasNeighbor(EnumFacing.NORTH)) {
+                selection = selection.union(NORTH_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.EAST)) {
+                selection = selection.union(EAST_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.SOUTH)) {
+                selection = selection.union(SOUTH_BOX);
+            }
+            if (tile.get().hasNeighbor(EnumFacing.WEST)) {
+                selection = selection.union(WEST_BOX);
+            }
+        }
 
-    @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.add(new ItemStack(item, 1, 0));    //wooden channel
-        list.add(new ItemStack(item, 1, 1));    //iron pipe
+        return selection;
     }
+    
+    
 
     //render methods
     //--------------
@@ -123,7 +120,17 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
