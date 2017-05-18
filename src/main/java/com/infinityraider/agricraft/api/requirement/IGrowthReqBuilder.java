@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 /**
  * Interface for interacting with the GrowthRequirement Builder.
  */
+@Deprecated
 public interface IGrowthReqBuilder {
 
     IGrowthReqBuilder addSoil(IAgriSoil soil);

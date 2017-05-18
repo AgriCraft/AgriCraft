@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
  * Simple Condition that requires a block to be within a certain range.
  */
 public class BlockCondition implements ICondition {
-    
+
     private final BlockRange range;
     private final FuzzyStack stack;
     private final int amount;
@@ -21,10 +21,10 @@ public class BlockCondition implements ICondition {
     public BlockCondition(FuzzyStack stack, BlockRange range) {
         this.amount = stack.toStack().stackSize;
         this.volume = range.getVolume();
-        if(this.amount > 1) {
+        if (this.amount < 1) {
             throw new IndexOutOfBoundsException("The required amount of blocks must be greater than zero!");
         }
-        if(this.amount > this.volume) {
+        if (this.amount > this.volume) {
             throw new IndexOutOfBoundsException("Required amount of blocks exceeds volume of range!");
         }
         this.range = range;
@@ -60,5 +60,5 @@ public class BlockCondition implements ICondition {
     public int getComplexity() {
         return volume;
     }
-    
+
 }

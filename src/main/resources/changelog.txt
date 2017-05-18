@@ -1,6 +1,9 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Plants + Magnifying Glass determining incorrect world light levels.
+- FIXED: Update tracker using wrong URL.
+- FIXED: Very unintelligent error in code that limited block requirements to only one block.
 - TWEAK: Unified irrigation component connection properties.
 - FIXED: Channel selection bounds.
 - FIXED: Disabling vanilla farming disabled all farming.
