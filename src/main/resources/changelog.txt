@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Crash caused by placing vines on grate.
+- FIXED: Disable vanilla farming option acting too agressively against usage of seeds.
 - FIXED: Plants + Magnifying Glass determining incorrect world light levels.
 - FIXED: Update tracker using wrong URL.
 - FIXED: Very unintelligent error in code that limited block requirements to only one block.

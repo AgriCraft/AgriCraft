@@ -8,60 +8,57 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
-
-import java.util.List;
-
 import com.infinityraider.agricraft.reference.AgriNBT;
 import java.util.function.Consumer;
 
 public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable {
 
-	private static final double WIDTH = 2 * Constants.UNIT;
-	private static final double LENGTH = 1;
+    private static final double WIDTH = 2 * Constants.UNIT;
+    private static final double LENGTH = 1;
 
-	private EnumOffset offset = EnumOffset.NEAR;
-	private EnumVines vines = EnumVines.NONE;
+    private EnumOffset offset = EnumOffset.NEAR;
+    private EnumVines vines = EnumVines.NONE;
     private EnumFacing.Axis axis = EnumFacing.Axis.X;
-	private double[] bounds;
+    private double[] bounds;
 
-	public TileEntityGrate() {
-		super();
-	}
+    public TileEntityGrate() {
+        super();
+    }
 
-	@Override
-	protected void writeNBT(NBTTagCompound tag) {
-		tag.setShort(AgriNBT.META, (short) this.offset.ordinal());
-		tag.setShort(AgriNBT.VINE, (short) this.vines.ordinal());
+    @Override
+    protected void writeNBT(NBTTagCompound tag) {
+        tag.setShort(AgriNBT.META, (short) this.offset.ordinal());
+        tag.setShort(AgriNBT.VINE, (short) this.vines.ordinal());
         tag.setShort(AgriNBT.AXIS, (short) this.axis.ordinal());
-	}
+    }
 
-	//this loads the saved data for the tile entity
-	@Override
-	protected void readNBT(NBTTagCompound tag) {
-		this.offset = EnumOffset.values()[tag.getShort(AgriNBT.META) % EnumOffset.values().length];
+    //this loads the saved data for the tile entity
+    @Override
+    protected void readNBT(NBTTagCompound tag) {
+        this.offset = EnumOffset.values()[tag.getShort(AgriNBT.META) % EnumOffset.values().length];
         this.vines = EnumVines.values()[tag.getShort(AgriNBT.VINE) % EnumVines.values().length];
         this.axis = EnumFacing.Axis.values()[tag.getShort(AgriNBT.AXIS) % EnumFacing.Axis.values().length];
-		calculateBounds();
-	}
+        calculateBounds();
+    }
 
     public EnumOffset getOffset() {
         return this.offset;
     }
 
-	public TileEntityGrate setOffSet(EnumOffset offSet) {
-        if(offSet != this.getOffset()) {
+    public TileEntityGrate setOffSet(EnumOffset offSet) {
+        if (offSet != this.getOffset()) {
             this.offset = offSet;
             this.markForUpdate();
         }
         return this;
-	}
+    }
 
     public EnumFacing.Axis getAxis() {
         return this.axis;
     }
 
     public TileEntityGrate setAxis(EnumFacing.Axis axis) {
-        if(axis != this.getAxis()) {
+        if (axis != this.getAxis()) {
             this.axis = axis;
             this.markForUpdate();
         }
@@ -77,7 +74,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
     }
 
     public TileEntityGrate setVines(EnumVines vines) {
-        if(vines != this.getVines()) {
+        if (vines != this.getVines()) {
             this.vines = vines;
             this.markForUpdate();
         }
@@ -90,7 +87,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
     public boolean addVines(boolean front) {
         EnumVines vines = this.getVines().addVines(front);
-        if(vines != this.getVines()) {
+        if (vines != this.getVines()) {
             this.setVines(vines);
             return true;
         }
@@ -99,7 +96,7 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
     public boolean removeVines(boolean front) {
         EnumVines vines = this.getVines().removeVines(front);
-        if(vines != this.getVines()) {
+        if (vines != this.getVines()) {
             this.setVines(vines);
             return true;
         }
@@ -108,62 +105,64 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
 
     public void calculateBounds() {
         float offset = this.getOffset().getOffset();
-        if (null != this.getOrientation()) switch (this.getOrientation()) {
-            default:
-            case NORTH:
-                this.bounds = new double[]{0, 0, offset, LENGTH, LENGTH, offset + WIDTH};
-                break;
-            case EAST:
-                this.bounds = new double[]{offset, 0, 0, offset + WIDTH, LENGTH, LENGTH};
-                break;
-            case DOWN:
-                this.bounds = new double[]{0, offset, 0, LENGTH, offset + WIDTH, LENGTH};
-                break;
+        if (null != this.getOrientation()) {
+            switch (this.getOrientation()) {
+                default:
+                case NORTH:
+                    this.bounds = new double[]{0, 0, offset, LENGTH, LENGTH, offset + WIDTH};
+                    break;
+                case EAST:
+                    this.bounds = new double[]{offset, 0, 0, offset + WIDTH, LENGTH, LENGTH};
+                    break;
+                case DOWN:
+                    this.bounds = new double[]{0, offset, 0, LENGTH, offset + WIDTH, LENGTH};
+                    break;
+            }
         }
     }
 
-	public boolean isPlayerInFront(EntityPlayer player) {
+    public boolean isPlayerInFront(EntityPlayer player) {
         float offset = this.getOffset().getOffset();
-		switch (this.getOrientation()) {
-			default:
-			case NORTH:
-				return player.posZ < this.zCoord() + offset + Constants.UNIT;
-			case EAST:
-				return player.posX < this.xCoord() + offset + Constants.UNIT;
-			case DOWN:
-				return player.posY < this.yCoord() + offset + Constants.UNIT;
-		}
-	}
+        switch (this.getOrientation()) {
+            default:
+            case NORTH:
+                return player.posZ < this.zCoord() + offset + Constants.UNIT;
+            case EAST:
+                return player.posX < this.xCoord() + offset + Constants.UNIT;
+            case DOWN:
+                return player.posY < this.yCoord() + offset + Constants.UNIT;
+        }
+    }
 
-	public AxisAlignedBB getBoundingBox() {
+    public AxisAlignedBB getBoundingBox() {
         float offset = this.getOffset().getOffset();
-		switch (this.getOrientation()) {
-			default:
-			case NORTH:
-				return new AxisAlignedBB(xCoord(), yCoord(), zCoord() + offset, xCoord() + LENGTH, yCoord() + LENGTH, zCoord() + offset + WIDTH);
-			case EAST:
-				return new AxisAlignedBB(xCoord() + offset, yCoord(), zCoord(), xCoord() + offset + WIDTH, yCoord() + LENGTH, zCoord() + LENGTH);
-			case DOWN:
-				return new AxisAlignedBB(xCoord(), yCoord() + offset, zCoord(), xCoord() + LENGTH, yCoord() + offset + WIDTH, zCoord() + LENGTH);
-		}
-	}
+        switch (this.getOrientation()) {
+            default:
+            case NORTH:
+                return new AxisAlignedBB(xCoord(), yCoord(), zCoord() + offset, xCoord() + LENGTH, yCoord() + LENGTH, zCoord() + offset + WIDTH);
+            case EAST:
+                return new AxisAlignedBB(xCoord() + offset, yCoord(), zCoord(), xCoord() + offset + WIDTH, yCoord() + LENGTH, zCoord() + LENGTH);
+            case DOWN:
+                return new AxisAlignedBB(xCoord(), yCoord() + offset, zCoord(), xCoord() + LENGTH, yCoord() + offset + WIDTH, zCoord() + LENGTH);
+        }
+    }
 
-	public double[] getBlockBounds() {
-		return bounds;
-	}
+    public double[] getBlockBounds() {
+        return bounds;
+    }
 
-	//debug info
-	@Override
-	public void addServerDebugInfo(Consumer<String> consumer) {
-		consumer.accept("GRATE:");
-		super.addServerDebugInfo(consumer);
-		consumer.accept("Offset: " + offset);
-		consumer.accept("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
-		consumer.accept("Bounds: ");
-		consumer.accept(" - x: " + bounds[0] + " - " + bounds[3]);
-		consumer.accept(" - y: " + bounds[1] + " - " + bounds[4]);
-		consumer.accept(" - z: " + bounds[2] + " - " + bounds[5]);
-	}
+    //debug info
+    @Override
+    public void addServerDebugInfo(Consumer<String> consumer) {
+        consumer.accept("GRATE:");
+        super.addServerDebugInfo(consumer);
+        consumer.accept("Offset: " + offset);
+        consumer.accept("Orientation: " + getOrientation() + " (" + (getOrientation() == EnumFacing.NORTH ? "xy" : getOrientation() == EnumFacing.EAST ? "zy" : "xz") + ")");
+        consumer.accept("Bounds: ");
+        consumer.accept(" - x: " + bounds[0] + " - " + bounds[3]);
+        consumer.accept(" - y: " + bounds[1] + " - " + bounds[4]);
+        consumer.accept(" - z: " + bounds[2] + " - " + bounds[5]);
+    }
 
     public enum EnumVines implements IStringSerializable {
         NONE(false, false),
@@ -184,17 +183,31 @@ public class TileEntityGrate extends TileEntityCustomWood implements IDebuggable
         }
 
         public EnumVines addVines(boolean front) {
-            if(this.hasVines(front)) {
-                return this;
+            switch (this) {
+                case NONE:
+                    return (front) ? FRONT : BACK;
+                case FRONT:
+                    return (front) ? FRONT : BOTH;
+                case BACK:
+                    return (front) ? BOTH : BACK;
+                case BOTH:
+                    return BOTH;
             }
-            return values()[this.ordinal() + (front ? 1 : 2)];
+            throw new AssertionError();
         }
 
         public EnumVines removeVines(boolean front) {
-            if(!this.hasVines(front)) {
-                return this;
+            switch (this) {
+                case NONE:
+                    return NONE;
+                case FRONT:
+                    return (front) ? NONE : FRONT;
+                case BACK:
+                    return (front) ? BACK : NONE;
+                case BOTH:
+                    return (front) ? BACK : FRONT;
             }
-            return values()[this.ordinal() - (front ? 1 : 2)];
+            throw new AssertionError();
         }
 
         @Override
