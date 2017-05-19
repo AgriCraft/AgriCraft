@@ -41,7 +41,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     private final BlockRange range;
 
     public TileEntitySprinkler() {
-        this.range = new BlockRange(this.getPos().add(-RADIUS, 1, -RADIUS), this.getPos().add(RADIUS, HEIGHT, RADIUS));
+        this.range = new BlockRange(this.getPos().add(-RADIUS, -1, -RADIUS), this.getPos().add(RADIUS, -HEIGHT, RADIUS));
     }
 
     /**
