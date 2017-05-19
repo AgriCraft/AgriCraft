@@ -133,26 +133,28 @@ public class BlockRange implements Iterable<BlockPos> {
 
         private int x, y, z;
         private final BlockRange range;
+        private boolean hasMoreBlocks; 
 
         public BlockRangeIterator(@Nonnull BlockRange range) {
             this.range = Objects.requireNonNull(range, "You cannot iterate over a range that doesn't exist!");
             this.x = range.minX;
             this.y = range.minY;
             this.z = range.minZ;
+            this.hasMoreBlocks = this.x <= range.maxX
+                              && this.y <= range.maxY
+                              && this.z <= range.maxZ;
         }
 
         @Override
         public boolean hasNext() {
-            return this.x <= this.range.getMaxX()
-                    && this.y <= this.range.getMaxY()
-                    && this.z <= this.range.getMaxZ();
+            return hasMoreBlocks; 
         }
 
         @Nonnull
         @Override
         public BlockPos next() {
             // Ensure haven't fallen out of bounds.
-            if (!hasNext()) {
+            if (!hasMoreBlocks) {
                 throw new IndexOutOfBoundsException();
             }
 
@@ -160,13 +162,16 @@ public class BlockRange implements Iterable<BlockPos> {
             final BlockPos pos = new BlockPos(x, y, z);
 
             // Post-Increment
+            // Note: ordered by y-level
             this.x += 1;
             if (this.x > this.range.getMaxX()) {
-                this.x -= 1;
-                this.y += 1;
-                if (this.y > this.range.getMaxY()) {
-                    this.y -= 1;
-                    this.z += 1;
+                this.x = this.range.getMinX();
+                this.z += 1;
+                if (this.z > this.range.getMaxZ()) {
+                    this.z = this.range.getMinZ();
+                    this.y += 1;
+                    if (this.y > this.range.getMaxY()) 
+                        hasMoreBlocks = false; 
                 }
             }
 
