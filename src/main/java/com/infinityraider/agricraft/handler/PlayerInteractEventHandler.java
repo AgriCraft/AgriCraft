@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.utility.MessageUtil;
@@ -158,6 +159,19 @@ public class PlayerInteractEventHandler {
 
         // If the player is not holding a stack of vines, who cares?
         if (stack.getItem() != Item.getItemFromBlock(Blocks.VINE)) {
+            return;
+        }
+        
+        // Fetch world information.
+        final BlockPos pos = event.getPos();
+        final World world = event.getWorld();
+        final IBlockState state = world.getBlockState(pos);
+
+        // Fetch the block at the location.
+        final Block block = state.getBlock();
+        
+        // If the player isn't clicking a grate, who cares?
+        if (!(block instanceof BlockGrate)) {
             return;
         }
 

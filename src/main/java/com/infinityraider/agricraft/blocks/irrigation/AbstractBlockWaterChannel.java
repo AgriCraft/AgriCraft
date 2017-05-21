@@ -11,6 +11,7 @@ import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -54,6 +55,11 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
     @Override
     public boolean isEnabled() {
         return AgriCraftConfig.enableIrrigation;
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
 }

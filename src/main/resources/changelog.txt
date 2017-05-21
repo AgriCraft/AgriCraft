@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a17
+- FIXED: Water in channels + water pads was opaque instead of transparent.
+- FIXED: Grate vine interaction handler prevented placement of vines anywhere in the world.
 - FIXED: Crash caused by placing vines on grate.
 - FIXED: Disable vanilla farming option acting too agressively against usage of seeds.
 - FIXED: Plants + Magnifying Glass determining incorrect world light levels.

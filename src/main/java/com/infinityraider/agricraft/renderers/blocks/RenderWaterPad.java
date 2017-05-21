@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -85,9 +84,6 @@ public class RenderWaterPad extends RenderBlockBase<BlockWaterPad> {
     }
 
     private static void renderWater(ITessellator tess, TextureAtlasSprite waterIcon) {
-        // Setup Color
-        tess.setAlpha(0.39f);
-
         //draw central water levels
         tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, waterIcon, 15.99f);
     }
