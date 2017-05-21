@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
@@ -34,9 +33,11 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
         super(block, new TileEntityTank(), true, true, true);
     }
 
-    private void renderBottom(ITessellator tessellator, TextureAtlasSprite icon) {
-        tessellator.drawScaledFace(A, A, B, B, EnumFacing.DOWN, icon, 0);
-        tessellator.drawScaledFace(A, A, B, B, EnumFacing.UP, icon, 1);
+    private void renderBottom(ITessellator tessellator, IrrigationConnectionType connection, TextureAtlasSprite icon) {
+        if (connection != IrrigationConnectionType.AUXILIARY) {
+            tessellator.drawScaledFace(A, A, B, B, EnumFacing.DOWN, icon, 0);
+            tessellator.drawScaledFace(A, A, B, B, EnumFacing.UP, icon, 1);
+        }
     }
 
     private void renderSide(ITessellator tessellator, EnumFacing dir, IrrigationConnectionType connection, TextureAtlasSprite icon) {
@@ -86,13 +87,13 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 
     @Override
     protected void renderWorldBlockWoodDynamic(ITessellator tessellator, World world, BlockPos pos, BlockWaterTank block,
-                                               TileEntityTank tank, TextureAtlasSprite sprite) {
+            TileEntityTank tank, TextureAtlasSprite sprite) {
         //only render water on the bottom layer
         if (tank.getYPosition() == 0) {
 
             // -0.0001F to avoid Z-fighting on maximum filled tanks
             float y = tank.getFluidHeight() - A;
-
+            
             // Calculate water brightness.
             final int l = RenderUtilBase.getMixedBrightness(tank.getWorld(), tank.getPos(), Blocks.WATER);
             tessellator.setBrightness(l);
@@ -112,19 +113,17 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
         renderSide(tess, EnumFacing.EAST, connections.get(EnumFacing.EAST), sprite);
         renderSide(tess, EnumFacing.SOUTH, connections.get(EnumFacing.SOUTH), sprite);
         renderSide(tess, EnumFacing.WEST, connections.get(EnumFacing.WEST), sprite);
-        if (connections.get(EnumFacing.NORTH) != IrrigationConnectionType.AUXILIARY) {
-            renderBottom(tess, sprite);
-        }
+        renderBottom(tess, connections.get(EnumFacing.DOWN), sprite);
     }
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
-                                            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
         renderSide(tess, EnumFacing.NORTH, IrrigationConnectionType.NONE, sprite);
         renderSide(tess, EnumFacing.EAST, IrrigationConnectionType.NONE, sprite);
         renderSide(tess, EnumFacing.SOUTH, IrrigationConnectionType.NONE, sprite);
         renderSide(tess, EnumFacing.WEST, IrrigationConnectionType.NONE, sprite);
-        renderBottom(tess, sprite);
+        renderBottom(tess, IrrigationConnectionType.NONE, sprite);
     }
 
     @Override

@@ -1,7 +1,8 @@
 Changelog
 ---------
 2.0.0a17
-- FIXED: Water in channels + water pads was opaque instead of transparent.
+- FIXED: Tank bottoms would render at incorrect times.
+- FIXED: Water in water pads was opaque instead of transparent.
 - FIXED: Grate vine interaction handler prevented placement of vines anywhere in the world.
 - FIXED: Crash caused by placing vines on grate.
 - FIXED: Disable vanilla farming option acting too agressively against usage of seeds.

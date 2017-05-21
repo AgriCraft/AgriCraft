@@ -85,7 +85,7 @@ public class RenderWaterPad extends RenderBlockBase<BlockWaterPad> {
 
     private static void renderWater(ITessellator tess, TextureAtlasSprite waterIcon) {
         //draw central water levels
-        tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, waterIcon, 15.99f);
+        tess.drawScaledFaceDouble(0, 0, 16, 16, EnumFacing.UP, waterIcon, 15);
     }
 
     private static void renderBase(ITessellator tess, TextureAtlasSprite matIcon) {
