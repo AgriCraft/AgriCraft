@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.registry.GameRegistry;

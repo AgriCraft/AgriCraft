@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.init.AgriBlocks;
@@ -17,13 +16,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 
 import java.util.Optional;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.IBlockAccess;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -136,11 +133,6 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
     @Override
     public void registerRecipes() {
         CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().TANK, 1, true, "w w", "w w", "www", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
-    }
-    
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
     }
 
 }
