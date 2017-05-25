@@ -26,7 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.infinityraider.agricraft.utility.BlockRange;
+import com.infinityraider.agricraft.api.util.BlockRange;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
 

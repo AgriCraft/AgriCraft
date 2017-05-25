@@ -21,7 +21,7 @@ import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.PlantRenderer;
-import com.infinityraider.agricraft.utility.BlockRange;
+import com.infinityraider.agricraft.api.util.BlockRange;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.ArrayList;
 import java.util.Collection;

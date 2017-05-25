@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.utility;
+package com.infinityraider.agricraft.api.util;
 
 import java.util.Iterator;
 import java.util.stream.Stream;

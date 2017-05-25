@@ -3,7 +3,7 @@
 package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.utility.BlockRange;
+import com.infinityraider.agricraft.api.util.BlockRange;
 import java.util.List;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
