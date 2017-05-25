@@ -5,13 +5,14 @@ import com.agricraft.agricore.plant.AgriStack;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.*;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -54,6 +55,7 @@ public class GrowthRequirementHandler {
         String[] data = new String[]{"minecraft:dirt"};
         String total = " of " + data.length + ".";
         for (String line : data) {
+            // TODO: THIS IS REALLY BAD. POSSIBLE SOURCE OF CRASHES.
             AgriCore.getLogger("agricraft").debug("  Parsing " + line + total);
             ItemStack stack = ((FuzzyStack) AgriStack.fromString(line).toStack()).toStack();
             Block block = (stack != null && stack.getItem() instanceof ItemBlock) ? ((ItemBlock) stack.getItem()).block : null;

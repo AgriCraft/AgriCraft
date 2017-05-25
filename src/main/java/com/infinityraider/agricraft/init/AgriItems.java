@@ -1,7 +1,16 @@
 package com.infinityraider.agricraft.init;
 
-import com.infinityraider.agricraft.items.*;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.items.ItemAgriSeed;
+import com.infinityraider.agricraft.items.ItemClipper;
+import com.infinityraider.agricraft.items.ItemClipping;
+import com.infinityraider.agricraft.items.ItemCrop;
+import com.infinityraider.agricraft.items.ItemDebugger;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.items.ItemMagnifyingGlass;
+import com.infinityraider.agricraft.items.ItemNugget;
+import com.infinityraider.agricraft.items.ItemRake;
+import com.infinityraider.agricraft.items.ItemTrowel;
 import com.infinityraider.infinitylib.item.ItemBase;
 
 public class AgriItems {

@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.api.crop;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import java.util.Objects;
 import javax.annotation.Nonnull;

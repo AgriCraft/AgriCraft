@@ -20,16 +20,19 @@ import net.minecraft.util.EnumFacing;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.function.Consumer;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 

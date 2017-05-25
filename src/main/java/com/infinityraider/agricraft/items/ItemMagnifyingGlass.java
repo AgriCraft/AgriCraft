@@ -23,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import net.minecraftforge.fml.common.registry.GameRegistry;

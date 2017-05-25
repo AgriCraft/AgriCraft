@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
-
-import java.util.*;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.farming.PlantStats;
+import java.util.List;
+import java.util.Random;
 
 /**
  * A helper class for working with generation.

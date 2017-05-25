@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.Collection;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Interface to create custom Stat Calculator logic use

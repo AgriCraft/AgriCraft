@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.WorldHelper;

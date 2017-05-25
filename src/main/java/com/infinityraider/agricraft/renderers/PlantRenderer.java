@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.renderers;
 
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;

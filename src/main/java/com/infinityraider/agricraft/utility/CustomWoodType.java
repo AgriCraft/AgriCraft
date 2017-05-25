@@ -1,28 +1,17 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Class representing possible custom wood types.
