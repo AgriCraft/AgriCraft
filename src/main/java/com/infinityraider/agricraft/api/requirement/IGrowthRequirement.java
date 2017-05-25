@@ -66,11 +66,7 @@ public interface IGrowthRequirement {
      * @param pos The position in the world to test the requirement at.
      * @return If the block directly below is one of the valid soils.
      */
-    default boolean hasValidSoil(IBlockAccess world, BlockPos pos) {
-        return FuzzyStack.fromBlockState(world.getBlockState(pos.down()))
-                .filter(soil -> this.getSoils().stream().anyMatch(e -> e.isVarient(soil)))
-                .isPresent();
-    }
+    boolean hasValidSoil(IBlockAccess world, BlockPos pos);
 
     /**
      * Determines if the given location of the world meets all of the conditions
@@ -80,16 +76,11 @@ public interface IGrowthRequirement {
      * {@link #isMet(World, BlockPos)} instead!</em>
      * <p>
      * Since some conditions are expected to be more costly to perform than
-     * others, this method first sorts all of the conditions in order of their
-     * complexity as reported by {@link ICondition#getComplexity()} before
-     * evaluating each one at the given position. In this manner, since the
-     * evaluation uses the short-circuiting {@link Stream#allMatch()}, the most
-     * expensive conditions will only be evaluated when absolutely necessary.
-     * <p>
-     * Notice, that the sorting or the conditions has to be performed every time
-     * the method is called, given that {@link #getConditions()} makes no
-     * promises as to the order of the returned list and default methods are
-     * incapable of storing values in a safe manner.
+     * others, this method relies on the fact that the set of all conditions are
+     * internally pre-sorted in order of their complexity as reported by
+     * {@link ICondition#getComplexity()}. In this manner, since the evaluation
+     * uses the short-circuiting {@link Stream#allMatch()}, the most expensive
+     * conditions will only be evaluated when absolutely necessary.
      *
      * @param world The world in which to evaluate the growth requirement in.
      * @param pos The position in the given world at which to evaluate the
@@ -97,11 +88,7 @@ public interface IGrowthRequirement {
      * @return {@literal true} if all of the conditions for this growth
      * requirement have been met, {@literal false} otherwise.
      */
-    default boolean hasValidConditions(IBlockAccess world, BlockPos pos) {
-        return this.getConditions().stream()
-                .sorted((a, b) -> Integer.compare(a.getComplexity(), b.getComplexity()))
-                .allMatch(c -> c.isMet(world, pos));
-    }
+    boolean hasValidConditions(IBlockAccess world, BlockPos pos);
 
     /**
      * Determines if the light level at the given position in the given world
@@ -114,12 +101,7 @@ public interface IGrowthRequirement {
      * @return {@literal true} if the light level at the given location falls
      * within the accepted range, {@literal} false otherwise.
      */
-    default boolean hasValidLight(World world, BlockPos pos) {
-        // Determine the light level of the block, as per the vanilla method used in BlockCrop.
-        final int light = world.getLightFromNeighbors(pos.up());
-        // Determine if the light level is in the proper range.
-        return light >= this.getMinLight() && light <= this.getMaxLight();
-    }
+    boolean hasValidLight(World world, BlockPos pos);
 
     /**
      * Determines if this growth requirement is met at the given position in the
@@ -139,9 +121,7 @@ public interface IGrowthRequirement {
      * @return {@literal true} <i>if-and-only-if</i> all portions of the growth
      * requirement are met, {@literal} false otherwise.
      */
-    default boolean isMet(World world, BlockPos pos) {
-        return this.hasValidSoil(world, pos) && this.hasValidLight(world, pos) && this.hasValidConditions(world, pos);
-    }
+    boolean isMet(World world, BlockPos pos);
 
     /**
      * Returns a representative ItemStack for display in the 'condition' slot in
@@ -154,11 +134,6 @@ public interface IGrowthRequirement {
      * @return A representative ItemStack for display in JEI.
      */
     @Deprecated
-    default Optional<FuzzyStack> getConditionStack() {
-        return this.getConditions().stream()
-                .filter(c -> c instanceof BlockCondition)
-                .map(c -> ((BlockCondition) c).getStack())
-                .findFirst();
-    }
+    Optional<FuzzyStack> getConditionStack();
 
 }

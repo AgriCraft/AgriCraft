@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
+import java.util.Optional;
 
 public class MethodGetStats extends MethodBase {
 	
@@ -16,7 +17,8 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return crop.getStat()
+        return Optional.ofNullable(crop.getSeed())
+                .map(s -> s.getStat())
                 .filter(IAgriStat::isAnalyzed)
                 .map(s -> new Object[] {s.getGrowth(), s.getGain(), s.getStrength()})
                 .orElse(null);

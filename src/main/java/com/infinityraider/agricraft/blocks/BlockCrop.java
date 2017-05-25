@@ -1,7 +1,17 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.util.MethodResult;
+import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.items.ItemDebugger;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
@@ -45,6 +55,13 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
+    public static final Class[] ITEM_EXCLUDES = new Class[]{
+        IAgriRakeItem.class,
+        IAgriClipperItem.class,
+        IAgriTrowelItem.class,
+        ItemDebugger.class
+    };
+
     public BlockCrop() {
         super("crop", Material.PLANTS);
         this.setTickRandomly(true);
@@ -72,11 +89,11 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(TileEntityCrop::growthTick);
+            this.getCrop(world, pos).ifPresent(TileEntityCrop::onGrowthTick);
         }
     }
 
-    /**
+    /*
      * Handles right-clicks from the player (a.k.a usage).
      * <br>
      * When the block is right clicked, the behaviour depends on the crop, and
@@ -85,7 +102,70 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
             ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return this.getCrop(world, pos).map(crop -> crop.onCropRightClicked(player, heldItem)).orElse(false);
+
+        // Step 0. Abort if remote.
+        if (world.isRemote) {
+            // I'm not sure if this is right, but oh well.
+            return true;
+        }
+
+        // Step 1. Fetch the crop.
+        TileEntityCrop crop = WorldHelper.getTile(world, pos, TileEntityCrop.class).orElse(null);
+
+        // Step 2. Give up if the crop doesn't exist;
+        if (crop == null) {
+            // Allow others to use the click event.
+            return false;
+        }
+
+        // Step 3. If the player is not holding anything, then harvest the crop.
+        if (heldItem == null) {
+            crop.onHarvest(player);
+            return true;
+        }
+
+        // Step 4. If the held item is excluded from handling, skip it.
+        if (TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
+            // Allow the excludes to do their things.
+            return false;
+        }
+
+        // Step 5. If the held item is a type of fertilizer, apply it.
+        if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
+            Optional<IAgriFertilizer> fert = FertilizerRegistry.getInstance().valueOf(heldItem);
+            return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, crop.getRandom());
+        }
+
+        // Step 6. If the held item is crops, attempt to make cross-crops.
+        if (heldItem.getItem() == AgriItems.getInstance().CROPS) {
+            // Attempt to apply crop-sticks to crop.
+            if (crop.onApplyCrops(player) == MethodResult.SUCCESS) {
+                // If player isn't in creative remove an item from the stack.
+                if (!player.isCreative()) {
+                    heldItem.stackSize--;
+                }
+                // The application was a success!
+                return true;
+            }
+        }
+
+        // Step 7. Attempt to resolve held item as a seed.
+        final Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(heldItem);
+
+        // Step 8. If held item is a seed, attempt to plant it in the crop.
+        if (seed.isPresent()) {
+            if (crop.onApplySeeds(player, seed.get()) == MethodResult.SUCCESS) {
+                // The planting was a success!
+                return true;
+            }
+        }
+
+        // Step 8. If we can't do anything else, give up and attemp to harvest instead.
+        crop.onHarvest(player);
+
+        //Returning true will prevent other things from happening
+        return true;
+
     }
 
     /**
@@ -96,7 +176,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(crop -> crop.onCropBroken(!player.capabilities.isCreativeMode));
+            this.getCrop(world, pos).ifPresent(crop -> crop.onBroken(player));
         }
     }
 
@@ -116,7 +196,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(c -> c.onCropBroken(true));
+            this.getCrop(world, pos).ifPresent(c -> c.onBroken(null));
         }
     }
 
@@ -142,12 +222,13 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Increments the contained plant's GROWTH stage. Called when bonemeal is
-     * applied to the block.
+     * Increments the contained plant's GROWTH stage. Generally, shouldn't be
+     * applied, but in the case that it is, it will simply act as a growth tick
+     * being added.
      */
     @Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-        this.getCrop(world, pos).ifPresent(TileEntityCrop::applyBoneMeal);
+        this.getCrop(world, pos).ifPresent(TileEntityCrop::onGrowthTick);
     }
 
     /**
@@ -378,7 +459,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         Optional<TileEntityCrop> tile = getCropTile(world, pos);
         return ((IExtendedBlockState) state)
-                .withProperty(AgriProperties.CROP_PLANT, tile.flatMap(TileEntityCrop::getPlant).orElse(null))
+                .withProperty(AgriProperties.CROP_PLANT, tile.map(TileEntityCrop::getSeed).map(s -> s.getPlant()).orElse(null))
                 .withProperty(AgriProperties.GROWTH_STAGE, tile.map(TileEntityCrop::getGrowthStage).orElse(0))
                 .withProperty(AgriProperties.CROSS_CROP, tile.map(TileEntityCrop::isCrossCrop).orElse(false));
     }

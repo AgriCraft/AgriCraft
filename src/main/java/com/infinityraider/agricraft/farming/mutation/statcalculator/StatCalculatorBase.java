@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 
@@ -28,11 +29,12 @@ public abstract class StatCalculatorBase implements IAgriStatCalculator, IAgriAd
         
         // Sum values
         for (IAgriCrop parent : parents) {
-            if (canInheritStats(child, parent.getPlant().get())) {
+            AgriSeed seed = parent.getSeed();
+            if (seed != null && canInheritStats(child, seed.getPlant())) {
                 validParents++;
-                growth += parent.getStat().get().getGrowth();
-                gain += parent.getStat().get().getGain();
-                strength += parent.getStat().get().getStrength();
+                growth += seed.getStat().getGrowth();
+                gain += seed.getStat().getGain();
+                strength += seed.getStat().getStrength();
             }
         }
         

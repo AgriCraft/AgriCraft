@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -130,8 +131,8 @@ public class JournalPageSeed implements JournalPage {
 
 	private void addFruits(List<GuiComponent> components) {
 		int x = 30;
-		for (ItemStack stack : discoveredSeeds.get(page).getAllFruits()) {
-			components.add(BasicComponents.getStackComponentFramed(stack, x, 102));
+		for (IAgriHarvestProduct product : discoveredSeeds.get(page).getProducts()) {
+			components.add(BasicComponents.getStackComponentFramed(product.toLabeledStack(), x, 102));
 			x += 24;
 		}
 	}

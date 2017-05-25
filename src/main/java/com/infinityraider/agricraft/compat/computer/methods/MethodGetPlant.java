@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import java.util.Optional;
 
 public class MethodGetPlant extends MethodBaseCrop {
     public MethodGetPlant() {
@@ -10,6 +10,6 @@ public class MethodGetPlant extends MethodBaseCrop {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) {
-        return new Object[] {crop.getPlant().map(IAgriPlant::getSeedName).orElse("None")};
+        return new Object[] {Optional.ofNullable(crop.getSeed()).map(s -> s.getPlant().getSeedName()).orElse("None")};
     }
 }

@@ -105,4 +105,10 @@ public interface IAgriStat {
 	 */
 	boolean addStats(@Nonnull List<String> lines);
 
+    @Override
+    public boolean equals(Object obj);
+
+    @Override
+    public int hashCode();
+
 }

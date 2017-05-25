@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MethodIsAnalyzed extends MethodBase {
 	
@@ -14,7 +15,7 @@ public class MethodIsAnalyzed extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return new Object[] {crop.getStat().filter(IAgriStat::isAnalyzed).isPresent()};
+        return new Object[] {Optional.ofNullable(crop.getSeed()).map(s -> s.getStat()).filter(IAgriStat::isAnalyzed).isPresent()};
     }
 
     @Override

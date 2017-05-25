@@ -31,7 +31,7 @@ public final class MethodUtilities {
     }
 
     public static Optional<IAgriPlant> getCropPlant(TileEntityCrop crop) {
-        return crop.getPlant();
+        return Optional.ofNullable(crop.getSeed()).map(s -> s.getPlant());
     }
 
     public static String genSignature(String name, List<MethodParameter> parameters) {
