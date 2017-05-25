@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;

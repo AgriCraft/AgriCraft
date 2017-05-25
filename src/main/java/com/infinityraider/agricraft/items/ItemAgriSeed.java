@@ -1,13 +1,7 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +22,7 @@ import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
