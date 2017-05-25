@@ -137,7 +137,6 @@ public class GuiPeripheral extends GuiContainer {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void loadButtonList() {
 		this.buttonList.add(new GuiButton(BUTTON_ID_OPEN_GUIDE, this.guiLeft + 154, this.guiTop + 7, 12, 12, "?"));
 		this.buttonList.add(new GuiButton(BUTTON_ID_SCROLL_TOP, this.guiLeft + 154, this.guiTop + 20, 10, 10, "\u219F"));

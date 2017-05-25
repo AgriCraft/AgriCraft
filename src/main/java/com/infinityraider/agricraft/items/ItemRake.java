@@ -56,7 +56,6 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
         list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
         list.add(new ItemStack(item, 1, IRON_VARIANT_META));
