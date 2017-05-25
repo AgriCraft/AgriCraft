@@ -117,11 +117,10 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    public void addDisplayInfo(List information) {
+    public void addDisplayInfo(Consumer<String> information) {
         final String tool = AgriCore.getTranslator().translate("agricraft_tooltip.storage");
         final String none = AgriCore.getTranslator().translate("agricraft_tooltip.none");
-        information.add(tool + ": " + this.getLockedSeed().map(s -> s.getPlant().getPlantName()).orElse(none));
+        information.accept(tool + ": " + this.getLockedSeed().map(s -> s.getPlant().getPlantName()).orElse(none));
         super.addDisplayInfo(information);
     }
 

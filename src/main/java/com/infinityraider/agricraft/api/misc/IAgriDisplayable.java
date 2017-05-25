@@ -2,7 +2,8 @@
  */
 package com.infinityraider.agricraft.api.misc;
 
-import java.util.List;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
 /**
  * Interface for providing players information from AgriCraft.
@@ -15,8 +16,8 @@ public interface IAgriDisplayable {
 	/**
 	 * Retrieves information for display to the player.
 	 * 
-	 * @param lines the list to add the display information to.
+	 * @param consumer the list to add the display information to.
 	 */
-	public void addDisplayInfo(List<String> lines);
+	public void addDisplayInfo(@Nonnull Consumer<String> consumer);
 	
 }

@@ -3,7 +3,9 @@ package com.infinityraider.agricraft.api.stat;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import java.util.List;
+import java.util.Collection;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Interface to create custom Stat Calculator logic use
@@ -11,24 +13,25 @@ import java.util.List;
  * calculator
  */
 public interface IAgriStatCalculator {
-    
-    default IAgriStat calculateStats(IAgriPlant plant, List<? extends IAgriCrop> matureNeighbors) {
-        return calculateStats(plant, matureNeighbors, false);
-    }
-
-    default IAgriStat calculateStats(IAgriMutation mutation, List<? extends IAgriCrop> matureNeighbors) {
-        return calculateStats(mutation.getChild(), matureNeighbors, true);
-    }
 
     /**
-     * Calculates the stats for a mutation or spread result
+     * Calculates the stats for a spread event.
      *
-     * @param result an ItemStack containing the seed of the new plant
-     * @param input a List containing all neighbouring crops
-     * @param mutation if a mutation occurred, this is false if the plant simply
-     * spread to a cross crop
+     * @param child the child that was the result of the spreading.
+     * @param input a List containing all neighboring crops
      * @return an ISeedStats object containing the resulting stats
      */
-    IAgriStat calculateStats(IAgriPlant child, List<? extends IAgriCrop> input, boolean mutation);
+    @Nonnull
+    IAgriStat calculateSpreadStats(@Nonnull IAgriPlant child, @Nonnull Collection<IAgriCrop> input);
+
+    /**
+     * Calculates the stats for a mutation.
+     *
+     * @param mutation The mutation that occurred.
+     * @param input a List containing all neighboring crops
+     * @return an ISeedStats object containing the resulting stats
+     */
+    @Nonnull
+    IAgriStat calculateMutationStats(@Nonnull IAgriMutation mutation, @Nonnull Collection<IAgriCrop> input);
 
 }

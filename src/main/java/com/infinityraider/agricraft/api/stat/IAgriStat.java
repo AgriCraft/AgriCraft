@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.api.stat;
 
-import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -62,6 +62,7 @@ public interface IAgriStat {
 	 * @param analyzed
 	 * @return the new stat.
 	 */
+    @Nonnull
 	IAgriStat withAnalyzed(boolean analyzed);
 
 	/**
@@ -70,6 +71,7 @@ public interface IAgriStat {
 	 * @param growth
 	 * @return the new stat.
 	 */
+    @Nonnull
 	IAgriStat withGrowth(int growth);
 
 	/**
@@ -78,6 +80,7 @@ public interface IAgriStat {
 	 * @param gain
 	 * @return the new stat.
 	 */
+    @Nonnull
 	IAgriStat withGain(int gain);
 
 	/**
@@ -86,6 +89,7 @@ public interface IAgriStat {
 	 * @param strength
 	 * @return the new stat.
 	 */
+    @Nonnull
 	IAgriStat withStrength(int strength);
 
 	/**
@@ -95,15 +99,17 @@ public interface IAgriStat {
 	 * @param tag The tag to serialize to.
 	 * @return if the transcription was successful.
 	 */
+    @Nonnull
 	boolean writeToNBT(@Nonnull NBTTagCompound tag);
 
 	/**
 	 * Writes the stat for display.
 	 *
-	 * @param lines The line list to add to.
+	 * @param consumer The sink to add the lines to.
 	 * @return If the writing was successful.
 	 */
-	boolean addStats(@Nonnull List<String> lines);
+    @Nonnull
+	boolean addStats(@Nonnull Consumer<String> consumer);
 
     @Override
     public boolean equals(Object obj);

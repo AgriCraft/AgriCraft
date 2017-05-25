@@ -80,12 +80,11 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    public void addDisplayInfo(List information) {
+    public void addDisplayInfo(Consumer<String> information) {
         //Required super call
         super.addDisplayInfo(information);
         //show status
         String status = AgriCore.getTranslator().translate(powered ? "agricraft_tooltip.closed" : "agricraft_tooltip.open");
-        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.state") + ": " + status);
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.state") + ": " + status);
     }
 }

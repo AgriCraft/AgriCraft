@@ -2,12 +2,7 @@
  */
 package com.infinityraider.agricraft.api.misc;
 
-import java.util.Random;
-import java.util.function.Consumer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 /**
  * Interface for harvestable objects.
@@ -28,6 +23,6 @@ public interface IAgriHarvestable {
 	 * harvested by automation.
 	 * @return if the harvest was successful.
 	 */
-	boolean onHarvest(@Nullable EntityPlayer player);
+	boolean onHarvest(EntityPlayer player);
 
 }

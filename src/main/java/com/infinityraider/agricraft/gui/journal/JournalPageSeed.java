@@ -192,20 +192,41 @@ public class JournalPageSeed implements JournalPage {
 	}
 
 	private List<IAgriMutation> getDiscoveredParentMutations() {
-		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
-				.filter(this::isMutationDiscovered)
+        // Fetch the seed associated with this page.
+        final IAgriPlant plant = discoveredSeeds.get(page);
+        // Find all discovered mutations.
+        return MutationRegistry.getInstance().streamMutations()
+                // Filter out all mutations where this plant is not a parent.
+                .filter(m -> m.hasParent(plant))
+                // Filter out all muations that are not discovered.
+                .filter(this::isMutationDiscovered)
+                // Convert into a list.
 				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getDiscoveredChildMutations() {
-		return MutationRegistry.getInstance().getMutationsForChild(discoveredSeeds.get(page)).stream()
-				.filter(this::isMutationDiscovered)
+        // Fetch the seed associated with this page.
+        final IAgriPlant plant = discoveredSeeds.get(page);
+        // Find all discovered mutations.
+        return MutationRegistry.getInstance().streamMutations()
+                // Filter out all mutations where this plant is not the child.
+                .filter(m -> m.hasChild(plant))
+                // Filter out all muations that are not discovered.
+                .filter(this::isMutationDiscovered)
+                // Convert into a list.
 				.collect(Collectors.toList());
 	}
 
 	private List<IAgriMutation> getUncompleteMutations() {
-		return MutationRegistry.getInstance().getMutationsForParent(discoveredSeeds.get(page)).stream()
-				.filter(this::isMutationHalfDiscovered)
+        // Fetch the seed associated with this page.
+        final IAgriPlant plant = discoveredSeeds.get(page);
+        // Find all discovered mutations.
+        return MutationRegistry.getInstance().streamMutations()
+                // Filter out all mutations where this plant is not a parent.
+                .filter(m -> m.hasParent(plant))
+                // Filter out all muations that are not half-discovered.
+                .filter(this::isMutationHalfDiscovered)
+                // Convert into a list.
 				.collect(Collectors.toList());
 	}
 

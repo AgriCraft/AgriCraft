@@ -31,11 +31,11 @@ public class AgriWailaAdapter implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
         Block b = dataAccessor.getBlock();
         if (b instanceof IAgriDisplayable) {
-            ((IAgriDisplayable) b).addDisplayInfo(list);
+            ((IAgriDisplayable) b).addDisplayInfo(list::add);
         }
         TileEntity te = dataAccessor.getTileEntity();
         if (te instanceof IAgriDisplayable) {
-            ((IAgriDisplayable) te).addDisplayInfo(list);
+            ((IAgriDisplayable) te).addDisplayInfo(list::add);
         }
         return list;
     }

@@ -423,9 +423,9 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void addDisplayInfo(List information) {
+    public void addDisplayInfo(Consumer<String> information) {
         super.addDisplayInfo(information);
-        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + this.getCapacity());
     }
 
 }

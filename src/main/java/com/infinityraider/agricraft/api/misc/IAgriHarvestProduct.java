@@ -21,9 +21,11 @@ public interface IAgriHarvestProduct {
     
     boolean isHidden();
     
-    @Nonnull Item getItem();
+    @Nonnull
+    Item getItem();
     
-    @Nonnull NBTTagCompound getTag();
+    @Nonnull
+    NBTTagCompound getTag();
     
     int getMeta();
     
@@ -35,10 +37,13 @@ public interface IAgriHarvestProduct {
 
     double getChance();
     
+    @Nonnull
     ItemStack toStack();
     
+    @Nonnull
     ItemStack toStack(Random rand);
     
+    @Nonnull
     ItemStack toLabeledStack();
 
 }

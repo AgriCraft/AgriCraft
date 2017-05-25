@@ -2,6 +2,8 @@
  */
 package com.infinityraider.agricraft.api.seed;
 
+import javax.annotation.Nullable;
+
 /**
  * A class for objects containing seeds.
  *
@@ -21,6 +23,7 @@ public interface IAgriSeedProvider {
      *
      * @return the seed associated with the instance or null.
      */
+    @Nullable
     AgriSeed getSeed();
 
 }

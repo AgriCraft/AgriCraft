@@ -12,7 +12,7 @@ public class StatCalculatorNormal extends StatCalculatorBase {
      * a divisor
      */
     @Override
-    protected int calculateStats(int input, int neighbours, int divisor) {
+    protected int calculateStat(int input, int neighbours, int divisor) {
         if (neighbours == 1 && AgriCraftConfig.singleSpreadsIncrement) {
             neighbours = 2;
         }
