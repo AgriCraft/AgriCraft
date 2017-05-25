@@ -28,7 +28,6 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 
     public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
-    @SuppressWarnings("unchecked")
     public RenderChannel(B block, T channel) {
         super(block, channel, true, true, true);
     }

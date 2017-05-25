@@ -23,7 +23,6 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase<TileEntitySee
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<ItemStack> getSeedEntries() {
         return this.tile.getInventory();
     }

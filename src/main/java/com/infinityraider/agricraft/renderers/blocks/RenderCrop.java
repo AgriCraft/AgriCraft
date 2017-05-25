@@ -74,7 +74,6 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void renderBaseQuads(ITessellator tessellator, EnumFacing side, TextureAtlasSprite sprite) {
         int index = side == null ? EnumFacing.values().length : side.ordinal();
         boolean createQuads = false;
