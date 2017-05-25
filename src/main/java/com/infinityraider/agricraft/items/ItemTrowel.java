@@ -57,8 +57,9 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
         if (te instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) te;
             Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
-            if (crop.hasPlant() && !seed.isPresent()) {
-                seed = crop.removeSeed();
+            if (crop.hasSeed() && !seed.isPresent()) {
+                seed = Optional.ofNullable(crop.getSeed());
+                crop.setSeed(null);
                 if (seed.isPresent()) {
                     NBTTagCompound tag = new NBTTagCompound();
                     tag.setString(AgriNBT.SEED, seed.get().getPlant().getId());
@@ -69,7 +70,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
                 } else {
                     return EnumActionResult.FAIL;
                 }
-            } else if (seed.isPresent() && !crop.hasPlant()) {
+            } else if (seed.isPresent() && !crop.hasSeed()) {
                 if (crop.setSeed(seed.get())) {
                     stack.setTagCompound(new NBTTagCompound());
                     stack.setItemDamage(0);
@@ -99,5 +100,5 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
     public void registerRecipes() {
         GameRegistry.addRecipe(new ShapedOreRecipe(this, "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
     }
-    
+
 }

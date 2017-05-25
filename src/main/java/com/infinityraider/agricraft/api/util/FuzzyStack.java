@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.api.util;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
@@ -152,6 +153,17 @@ public class FuzzyStack {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.stack);
+        hash = 97 * hash + Objects.hashCode(this.tags);
+        hash = 97 * hash + (this.ignoreMeta ? 1 : 0);
+        hash = 97 * hash + (this.useOreDict ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.ignoreTags);
+        return hash;
     }
 
     @Override

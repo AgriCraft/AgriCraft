@@ -28,25 +28,6 @@ public interface IAgriHarvestable {
 	 * harvested by automation.
 	 * @return if the harvest was successful.
 	 */
-	boolean onHarvested(@Nullable EntityPlayer player);
-
-	/**
-	 * Calls the given consumer with the assortment of random fruits gained from
-	 * harvesting this object. For example, to get a list of the random fruits,
-	 * pass the consumer list::add.
-	 *
-	 * @param consumer the consumer to add the random fruits to.
-	 * @param random the random to get the fruits with.
-	 */
-	void getFruits(@Nonnull Consumer<ItemStack> consumer, @Nonnull Random random);
-
-	/**
-	 * Calls the given consumer with the assortment of all possible fruits
-	 * gained from harvesting this object. For example, to get a list of the
-	 * random fruits, pass the consumer list::add.
-	 *
-	 * @param consumer the consumer to add the fruits to.
-	 */
-	void getAllFruits(@Nonnull Consumer<ItemStack> consumer);
+	boolean onHarvest(@Nullable EntityPlayer player);
 
 }

@@ -40,7 +40,7 @@ public class ProduceRecipeHandler implements IRecipeHandler<IAgriPlant> {
 
 	@Override
 	public boolean isRecipeValid(@Nonnull IAgriPlant recipe) {
-		return recipe.getAllFruits() != null;
+		return recipe.getProducts() != null;
 	}
 
 }

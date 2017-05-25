@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.compat.vanilla;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.util.MethodResult;
 import java.util.Optional;
 import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +34,7 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
 
 	@Override
 	public boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random) {
-		if (target.acceptsFertilizer(this) && target.onApplyFertilizer(this, random)) {
+		if (target.acceptsFertilizer(this) && target.onApplyFertilizer(this, random) == MethodResult.SUCCESS) {
 			if (player == null || !player.capabilities.isCreativeMode) {
 				stack.stackSize = stack.stackSize - 1;
 			}

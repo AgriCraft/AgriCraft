@@ -1,8 +1,5 @@
 package com.infinityraider.agricraft.api.crop;
 
-import java.util.List;
-import net.minecraft.tileentity.TileEntity;
-
 import net.minecraft.util.math.BlockPos;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestable;
@@ -12,10 +9,10 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.util.MethodResult;
 import java.util.Optional;
-import java.util.Random;
-import java.util.function.Consumer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -31,6 +28,13 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      * @return the crop's position.
      */
     BlockPos getPos();
+
+    /**
+     * Retrieves the world that the crop is in.
+     *
+     * @return The world in which the crop is located.
+     */
+    World getWorld();
 
     /**
      * @return The growth stage of the crop, between 0 and 7 (both inclusive).
@@ -54,19 +58,19 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      *
      * @param status true for crosscrop, false for regular crop
      */
-    void setCrossCrop(boolean status);
+    boolean setCrossCrop(boolean status);
 
     /**
      * @return if this crop is fertile and thus can grow
      */
     default boolean isFertile() {
-        return this.getSeed().filter(this::isFertile).isPresent();
+        return this.hasSeed() && this.isFertile(this.getSeed());
     }
 
     default boolean isFertile(AgriSeed seed) {
-        return isFertile(seed.getPlant());
+        return (seed != null) && this.isFertile(seed.getPlant());
     }
-    
+
     boolean isFertile(IAgriPlant plant);
 
     /**
@@ -84,48 +88,31 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
 
     Optional<IAgriSoil> getSoil();
 
-    /**
-     * Utility method to get access to the TileEntity fields and methods for the
-     * crop.
-     *
-     * @return the TileEntity implementing ICrop
-     */
-    TileEntity getTileEntity();
-
-    /**
-     * @return Any additional data this crop might hold
-     */
-    IAdditionalCropData getAdditionalCropData();
-
-    List<IAgriCrop> getNeighbours();
-
-    List<IAgriCrop> getMatureNeighbours();
-
-	// =========================================================================
+    // =========================================================================
     // IHarvestable Defaults
     // =========================================================================
-	
-	@Override
-	default boolean canBeHarvested() {
-		return hasPlant() && isMature();
-	}
-	
-	@Override
-	default void getFruits(Consumer<ItemStack> consumer, Random random) {
-		getSeed().ifPresent(s -> s.getPlant().getFruitsOnHarvest(s.getStat(), consumer, random));
+    @Override
+    default boolean canBeHarvested() {
+        return hasSeed() && isMature();
     }
-	
-	@Override
-	default void getAllFruits(Consumer<ItemStack> consumer) {
-		getPlant().ifPresent(p -> p.getAllFruits().forEach(consumer));
-    }
-	
-	// =========================================================================
+
+    // =========================================================================
     // IRakeable Defaults
     // =========================================================================
-	@Override
-	default boolean canBeRaked() {
-		return hasPlant();
-	}
+    @Override
+    default boolean canBeRaked() {
+        return hasSeed();
+    }
+    
+    // =========================================================================
+    // Event Methods
+    // =========================================================================
+    public MethodResult onGrowthTick();
+    
+    public MethodResult onApplyCrops(EntityPlayer player);
+    
+    public MethodResult onApplySeeds(EntityPlayer player, AgriSeed seed);
+    
+    public MethodResult onBroken(EntityPlayer player);
 
 }

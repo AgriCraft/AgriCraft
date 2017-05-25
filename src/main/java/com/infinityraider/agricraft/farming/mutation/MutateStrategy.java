@@ -8,7 +8,9 @@ import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -22,12 +24,13 @@ public class MutateStrategy implements IAgriCrossStrategy {
 
     @Override
     public Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand) {
-        List<IAgriCrop> matureNeighbors = crop.getMatureNeighbours();
+        List<IAgriCrop> matureNeighbors = WorldHelper.getTileNeighbors(crop.getWorld(), crop.getPos(), IAgriCrop.class);
+        matureNeighbors.removeIf(c -> !c.isMature());
         List<IAgriMutation> crossOvers = MutationRegistry.getInstance().getPossibleMutations(
                 matureNeighbors.stream()
-                .map(IAgriCrop::getPlant)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .map(IAgriCrop::getSeed)
+                .filter(Objects::nonNull)
+                .map(s -> s.getPlant())
                 .collect(Collectors.toList())
         );
         if (!crossOvers.isEmpty()) {

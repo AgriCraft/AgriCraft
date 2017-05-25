@@ -3,11 +3,13 @@
  */
 package com.infinityraider.agricraft.compat.jei.produce;
 
+import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import java.util.List;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 
@@ -22,7 +24,9 @@ public class ProduceRecipeWrapper extends BlankRecipeWrapper {
 
     public ProduceRecipeWrapper(IAgriPlant recipe) {
         input = new ArrayList();
-        output = recipe.getAllFruits();
+        output = recipe.getProducts().stream()
+                .map(IAgriHarvestProduct::toLabeledStack)
+                .collect(Collectors.toList());
 
         input.add(recipe.getSeed());
         

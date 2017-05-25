@@ -35,7 +35,7 @@ public abstract class PlantRenderer {
                     renderHashTagPattern(tessellator, iconA, 0);
                     break;
                 case STEM:
-                    renderStemPlant(tessellator, iconA, iconB, growthStage, plant.getBlock());
+                    renderStemPlant(tessellator, iconA, iconB, growthStage);
                     break;
                 case TALL_CROSSED:
                     renderCrossPattern(tessellator, iconA, 0);
@@ -75,7 +75,7 @@ public abstract class PlantRenderer {
         tessellator.popMatrix();
     }
 
-    private static void renderStemPlant(ITessellator tessellator, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int stage, Block vine) {
+    private static void renderStemPlant(ITessellator tessellator, TextureAtlasSprite vineIcon, TextureAtlasSprite fruitIcon, int stage) {
         int translation = stage >= 6 ? 0 : 5 - stage;
         tessellator.pushMatrix();
         tessellator.translate(0, -Constants.UNIT * 2 * translation, 0);

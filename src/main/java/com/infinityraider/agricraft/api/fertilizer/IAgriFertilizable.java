@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.fertilizer;
 
+import com.infinityraider.agricraft.api.util.MethodResult;
 import java.util.Random;
 
 /**
@@ -25,6 +26,6 @@ public interface IAgriFertilizable {
      * @param rand the random number generator to be used.
      * @return if the fertilizer was successfully applied.
      */
-    boolean onApplyFertilizer(IAgriFertilizer fertilizer, Random rand);
+    MethodResult onApplyFertilizer(IAgriFertilizer fertilizer, Random rand);
 
 }

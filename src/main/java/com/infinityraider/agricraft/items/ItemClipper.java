@@ -55,9 +55,9 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWith
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) te;
-            if (crop.hasPlant() && crop.getGrowthStage() > 1) {
+            if (crop.hasSeed() && crop.getGrowthStage() > 1) {
                 crop.setGrowthStage(crop.getGrowthStage() - 1);
-                AgriSeed seed = crop.getSeed().get();
+                AgriSeed seed = crop.getSeed();
                 seed = seed.withStat(seed.getStat());
                 world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY() + 1, pos.getZ(), ItemClipping.getClipping(seed, 1)));
                 return EnumActionResult.SUCCESS;
