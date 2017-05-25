@@ -291,11 +291,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings("unchecked")
-    public void addDisplayInfo(List information) {
+    public void addDisplayInfo(Consumer<String> information) {
         //Required call to super.
         super.addDisplayInfo(information);
-        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
     }
 
     protected IBlockState getStateChannel(IBlockState state) {

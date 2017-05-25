@@ -5,12 +5,12 @@ import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import static com.infinityraider.agricraft.reference.AgriCraftConfig.STAT_FORMAT;
 import static com.infinityraider.agricraft.reference.AgriCraftConfig.cropStatCap;
 import java.text.MessageFormat;
-import java.util.List;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import java.util.Optional;
+import java.util.function.Consumer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
@@ -108,14 +108,14 @@ public class PlantStats implements IAgriStat, IAgriAdapter<IAgriStat> {
     }
 
     @Override
-    public boolean addStats(List<String> lines) {
+    public boolean addStats(Consumer<String> lines) {
         try {
-            lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.growth"), getGrowth(), cropStatCap));
-            lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.gain"), getGain(), cropStatCap));
-            lines.add(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.strength"), getStrength(), cropStatCap));
+            lines.accept(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.growth"), getGrowth(), cropStatCap));
+            lines.accept(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.gain"), getGain(), cropStatCap));
+            lines.accept(MessageFormat.format(STAT_FORMAT, AgriCore.getTranslator().translate("agricraft_tooltip.strength"), getStrength(), cropStatCap));
             return true;
         } catch (IllegalArgumentException e) {
-            lines.add("Invalid Stat Format!");
+            lines.accept("Invalid Stat Format!");
             return false;
         }
     }

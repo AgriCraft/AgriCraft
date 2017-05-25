@@ -31,7 +31,6 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.MethodResult;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -533,10 +532,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void addDisplayInfo(List<String> information) {
+    public void addDisplayInfo(Consumer<String> information) {
 
         // Add Soil Information
-        information.add("Soil: " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
+        information.accept("Soil: " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
 
         if (this.hasSeed()) {
             // Fetch the plant.
@@ -545,23 +544,23 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             final IAgriStat stat = this.getSeed().getStat();
 
             //Add the SEED name.
-            information.add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + plant.getSeedName());
+            information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + plant.getSeedName());
             //Add the GROWTH.
             if (this.isMature()) {
-                information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growth") + ": " + AgriCore.getTranslator().translate("agricraft_tooltip.mature"));
+                information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.growth") + ": " + AgriCore.getTranslator().translate("agricraft_tooltip.mature"));
             } else {
-                information.add(AgriCore.getTranslator().translate("agricraft_tooltip.growth") + ": " + (int) (100.0 * (this.getGrowthStage() + 1) / plant.getGrowthStages()) + "%");
+                information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.growth") + ": " + (int) (100.0 * (this.getGrowthStage() + 1) / plant.getGrowthStages()) + "%");
             }
             //Add the ANALYZED data.
             if (stat.isAnalyzed()) {
                 stat.addStats(information);
             } else {
-                information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzed"));
+                information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.analyzed"));
             }
             //Add the fertility information.
-            information.add(AgriCore.getTranslator().translate(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
+            information.accept(AgriCore.getTranslator().translate(this.isFertile() ? "agricraft_tooltip.fertile" : "agricraft_tooltip.notFertile"));
         } else {
-            information.add(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
+            information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.empty"));
         }
 
     }

@@ -13,13 +13,13 @@ import net.minecraft.util.text.TextComponentString;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 
-import java.util.List;
 import net.minecraft.util.ITickable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable, IAgriDisplayable {
 
@@ -431,7 +431,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     }
 
     @Override
-    public void addDisplayInfo(List information) {
-        information.add(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
+    public void addDisplayInfo(Consumer<String> information) {
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
     }
 }

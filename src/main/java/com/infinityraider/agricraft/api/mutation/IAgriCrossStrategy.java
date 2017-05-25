@@ -14,6 +14,6 @@ public interface IAgriCrossStrategy {
     double getRollChance();
 
     @Nonnull
-    Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand);
+    Optional<AgriSeed> executeStrategy(@Nonnull IAgriCrop crop, @Nonnull Random rand);
 
 }

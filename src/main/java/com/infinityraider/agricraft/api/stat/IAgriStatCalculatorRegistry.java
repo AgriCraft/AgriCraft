@@ -6,9 +6,9 @@ import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -16,17 +16,30 @@ import java.util.Optional;
  */
 public interface IAgriStatCalculatorRegistry extends IAgriAdapterRegistry<IAgriStatCalculator> {
     
-    default Optional<IAgriStat> calculateStats(IAgriPlant plant, List<? extends IAgriCrop> matureNeighbors) {
-        return calculateStats(plant, matureNeighbors, false);
+    /**
+     * Calculates the stats for a spread event.
+     *
+     * @param child the child that was the result of the spreading.
+     * @param neighbors a List containing all neighboring crops
+     * @return an ISeedStats object containing the resulting stats
+     */
+    @Nonnull
+    default Optional<IAgriStat> calculateSpreadStats(IAgriPlant child, Collection<IAgriCrop> neighbors) {
+        return this.valueOf(child)
+                .map(calc -> calc.calculateSpreadStats(child, neighbors));
     }
 
-    default Optional<IAgriStat> calculateStats(IAgriMutation mutation, List<? extends IAgriCrop> matureNeighbors) {
-        return calculateStats(mutation.getChild(), matureNeighbors, true);
-    }
-
-    default Optional<IAgriStat> calculateStats(IAgriPlant child, List<? extends IAgriCrop> matureNeighbors, boolean mutation) {
-        return StatCalculatorRegistry.getInstance().valueOf(child)
-                .map(calc -> calc.calculateStats(child, matureNeighbors, mutation));
+    /**
+     * Calculates the stats for a mutation.
+     *
+     * @param mutation The mutation that occurred.
+     * @param neighbors a List containing all neighboring crops
+     * @return an ISeedStats object containing the resulting stats
+     */
+    @Nonnull
+    default Optional<IAgriStat> calculateMutationStats(IAgriMutation mutation, Collection<IAgriCrop> neighbors) {
+        return this.valueOf(mutation)
+                .map(calc -> calc.calculateMutationStats(mutation, neighbors));
     }
 
 }

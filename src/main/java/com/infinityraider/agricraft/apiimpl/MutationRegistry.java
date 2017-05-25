@@ -10,7 +10,7 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 
@@ -31,26 +31,10 @@ public class MutationRegistry implements IAgriMutationRegistry {
         return Collections.unmodifiableCollection(this.mutations);
 	}
 
-	@Override
-	public List<IAgriMutation> getMutationsForParent(IAgriPlant parent) {
-		return this.mutations.stream()
-				.filter(m -> m.hasParent(parent))
-				.collect(Collectors.toList());
-	}
-	
-	@Override
-	public List<IAgriMutation> getMutationsForParent(Collection<IAgriPlant> parents) {
-		return this.mutations.stream()
-				.filter(m -> m.hasParent(parents))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<IAgriMutation> getMutationsForChild(IAgriPlant child) {
-		return this.mutations.stream()
-				.filter(m -> m.hasChild(child))
-				.collect(Collectors.toList());
-	}
+    @Override
+    public Stream<IAgriMutation> streamMutations() {
+        return this.mutations.stream();
+    }
 
 	@Override
 	public boolean addMutation(double chance, String childId, String... parentIds) {
@@ -71,18 +55,6 @@ public class MutationRegistry implements IAgriMutationRegistry {
 	@Override
 	public boolean addMutation(IAgriMutation mutation) {
 		return this.mutations.contains(mutation) ? false : this.mutations.add(mutation);
-	}
-
-	@Override
-	public boolean removeMutation(IAgriPlant result) {
-		return this.mutations.removeIf(m -> m.getChild().equals(result));
-	}
-
-	@Override
-	public List<IAgriMutation> getPossibleMutations(Collection<IAgriPlant> parents) {
-		return this.mutations.stream()
-				.filter(m -> m.areParentsIn(parents))
-				.collect(Collectors.toList());
 	}
 	
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * An interface representing a mutation, which is a relation between parents and
  * a child.
  *
- * It is reccomended that you do not implement this interface yourself, as it is
+ * It is recommended that you do not implement this interface yourself, as it is
  * provided with the intention of being used as a reference.
  *
  * @author AgriCraft
@@ -65,7 +65,7 @@ public interface IAgriMutation {
 	}
 	
 	default boolean areParentsIn(Collection<IAgriPlant> plants) {
-		return plants.containsAll(this.getParents());
+        return (plants != null) && (plants.containsAll(this.getParents()));
 	}
 
 }

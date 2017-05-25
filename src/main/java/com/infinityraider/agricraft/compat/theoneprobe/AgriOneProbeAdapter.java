@@ -28,8 +28,8 @@ public class AgriOneProbeAdapter implements IProbeInfoProvider {
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         final List<String> lines = new ArrayList<>();
-        WorldHelper.getBlock(world, data.getPos(), IAgriDisplayable.class).ifPresent(e -> e.addDisplayInfo(lines));
-        WorldHelper.getTile(world, data.getPos(), IAgriDisplayable.class).ifPresent(e -> e.addDisplayInfo(lines));
+        WorldHelper.getBlock(world, data.getPos(), IAgriDisplayable.class).ifPresent(e -> e.addDisplayInfo(lines::add));
+        WorldHelper.getTile(world, data.getPos(), IAgriDisplayable.class).ifPresent(e -> e.addDisplayInfo(lines::add));
         lines.stream().forEach(probeInfo::text);
     }
     

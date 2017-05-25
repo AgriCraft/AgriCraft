@@ -44,7 +44,7 @@ public class ItemToolTipHandler {
             AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
             if (seed != null) {
                 if (seed.getStat().isAnalyzed()) {
-                    seed.getStat().addStats(event.getToolTip());
+                    seed.getStat().addStats(event.getToolTip()::add);
                 } else {
                     event.getToolTip().add(" " + AgriCore.getTranslator().translate("agricraft_tooltip.unidentified"));
                 }

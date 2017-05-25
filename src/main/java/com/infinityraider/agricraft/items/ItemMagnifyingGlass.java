@@ -66,12 +66,12 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
             // Add block information.
             if (block instanceof IAgriDisplayable) {
-                ((IAgriDisplayable) block).addDisplayInfo(list);
+                ((IAgriDisplayable) block).addDisplayInfo(list::add);
             }
 
             // Add tile information.
             if (te instanceof IAgriDisplayable) {
-                ((IAgriDisplayable) te).addDisplayInfo(list);
+                ((IAgriDisplayable) te).addDisplayInfo(list::add);
             }
 
             // Display information.
