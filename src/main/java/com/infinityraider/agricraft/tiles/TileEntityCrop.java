@@ -107,10 +107,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                 return true;
             } //check to see if the player clicked with crops (crosscrop attempt)
             else if (heldItem.getItem() == AgriItems.getInstance().CROPS) {
-                if (!this.isCrossCrop() && !player.isCreative()) {
+                if (!this.isCrossCrop() && !this.hasPlant() && !player.isCreative()) {
                     heldItem.stackSize--;
+                    this.setCrossCrop(true);
                 }
-                this.setCrossCrop(true);
+                
             } else {
                 //harvest operation
                 this.onHarvested(player);
