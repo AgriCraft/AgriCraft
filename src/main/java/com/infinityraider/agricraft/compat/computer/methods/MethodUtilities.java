@@ -3,14 +3,14 @@
  */
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
-import java.util.List;
-import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import java.util.List;
 import java.util.Optional;
+import net.minecraft.item.ItemStack;
 
 /**
  *

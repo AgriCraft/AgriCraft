@@ -8,7 +8,6 @@ import com.infinityraider.infinitylib.handler.ConfigurationHandler;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-
 import java.util.ArrayList;
 import java.util.List;
 

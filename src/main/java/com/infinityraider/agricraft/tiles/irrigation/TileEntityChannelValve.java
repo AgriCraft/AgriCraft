@@ -1,19 +1,17 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.infinitylib.utility.debug.IDebuggable;
-import net.minecraft.nbt.NBTTagCompound;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
 import net.minecraft.block.BlockLever;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
 

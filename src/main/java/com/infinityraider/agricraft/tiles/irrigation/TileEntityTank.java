@@ -1,38 +1,36 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-
 import com.infinityraider.infinitylib.block.multiblock.IMultiBlockComponent;
 import com.infinityraider.infinitylib.block.multiblock.IMultiBlockPartData;
 import com.infinityraider.infinitylib.block.multiblock.MultiBlockManager;
 import com.infinityraider.infinitylib.block.multiblock.MultiBlockPartData;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.function.Consumer;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.infinitylib.utility.WorldHelper;
-import java.util.function.Consumer;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityTank extends TileEntityCustomWood implements ITickable, IFluidHandler, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
 

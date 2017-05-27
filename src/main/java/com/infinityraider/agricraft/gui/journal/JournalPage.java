@@ -3,11 +3,10 @@ package com.infinityraider.agricraft.gui.journal;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.reference.Reference;
 import java.util.Collections;
+import java.util.List;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public interface JournalPage {

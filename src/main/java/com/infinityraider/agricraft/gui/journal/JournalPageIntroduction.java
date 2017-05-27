@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.gui.journal;
 
 import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
-import com.infinityraider.agricraft.reference.Reference;
-import net.minecraft.util.ResourceLocation;
 import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
+import com.infinityraider.agricraft.reference.Reference;
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

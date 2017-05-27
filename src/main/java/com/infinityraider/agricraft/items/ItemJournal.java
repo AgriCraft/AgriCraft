@@ -1,35 +1,34 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.crafting.RecipeCopyJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.api.items.IAgriJournalItem;
-import com.infinityraider.agricraft.crafting.RecipeCopyJournal;
-import com.infinityraider.agricraft.init.AgriItems;
-import net.minecraft.init.Items;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWithModel, IRecipeRegister {
 

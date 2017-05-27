@@ -4,14 +4,14 @@
 package com.infinityraider.agricraft.compat.jei.produce;
 
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import java.util.List;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
 /**
  *

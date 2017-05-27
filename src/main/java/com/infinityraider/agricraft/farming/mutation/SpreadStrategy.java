@@ -1,13 +1,12 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
-
-import java.util.List;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 

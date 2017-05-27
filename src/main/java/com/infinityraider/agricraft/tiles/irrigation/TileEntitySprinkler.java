@@ -3,12 +3,15 @@ package com.infinityraider.agricraft.tiles.irrigation;
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.util.BlockRange;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -16,17 +19,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.infinityraider.agricraft.api.util.BlockRange;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
 

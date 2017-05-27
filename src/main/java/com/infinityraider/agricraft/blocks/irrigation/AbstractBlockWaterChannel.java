@@ -3,10 +3,10 @@
  */
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
+import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Optional;

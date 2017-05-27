@@ -1,17 +1,15 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.agricraft.agricore.core.AgriCore;
+import static com.infinityraider.agricraft.compat.computer.methods.MethodUtilities.*;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
-
-import java.util.List;
-
-import static com.infinityraider.agricraft.compat.computer.methods.MethodUtilities.*;
 
 public abstract class MethodBase implements IMethod {
 

@@ -2,9 +2,9 @@
  */
 package com.infinityraider.agricraft.apiimpl;
 
-import java.util.Deque;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import java.util.Deque;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 

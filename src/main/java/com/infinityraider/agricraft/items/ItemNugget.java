@@ -3,16 +3,14 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.AgriNuggetType;
 import com.infinityraider.agricraft.utility.OreDictHelper;
-import java.util.List;
-
 import com.infinityraider.infinitylib.item.IAutoRenderedItem;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;

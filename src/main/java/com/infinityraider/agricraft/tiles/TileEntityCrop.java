@@ -1,42 +1,41 @@
 package com.infinityraider.agricraft.tiles;
 
-import com.infinityraider.agricraft.farming.PlantStats;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.util.MethodResult;
+import com.infinityraider.agricraft.apiimpl.MutationEngine;
+import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.apiimpl.SoilRegistry;
+import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
-import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.Optional;
+import java.util.Random;
+import java.util.function.Consumer;
+import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.MethodResult;
-import com.infinityraider.agricraft.apiimpl.MutationEngine;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import java.util.Optional;
-import java.util.Random;
-import java.util.function.Consumer;
 
 public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
 

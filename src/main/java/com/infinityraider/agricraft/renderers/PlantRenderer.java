@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.renderers;
 
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 
 @SideOnly(Side.CLIENT)
 public abstract class PlantRenderer {

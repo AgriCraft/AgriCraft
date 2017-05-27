@@ -4,6 +4,8 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.reference.Reference;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
@@ -11,9 +13,6 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class AgriCraftGuiConfig extends GuiConfig {

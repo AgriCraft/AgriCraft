@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.farming;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
-import static com.infinityraider.agricraft.reference.AgriCraftConfig.STAT_FORMAT;
-import static com.infinityraider.agricraft.reference.AgriCraftConfig.cropStatCap;
-import java.text.MessageFormat;
 import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import static com.infinityraider.agricraft.reference.AgriCraftConfig.STAT_FORMAT;
+import static com.infinityraider.agricraft.reference.AgriCraftConfig.cropStatCap;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.function.Consumer;
 import net.minecraft.nbt.NBTTagCompound;

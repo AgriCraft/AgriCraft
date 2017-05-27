@@ -1,15 +1,14 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
-
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.farming.PlantStats;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.Collection;
 import java.util.Objects;
 

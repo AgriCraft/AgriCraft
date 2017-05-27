@@ -4,12 +4,15 @@ import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.reference.Constants;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -17,10 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.render.RenderUtilBase;
-import net.minecraft.init.Blocks;
 
 @SideOnly(Side.CLIENT)
 public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntityTank> {

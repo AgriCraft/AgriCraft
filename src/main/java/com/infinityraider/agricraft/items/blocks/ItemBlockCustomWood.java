@@ -1,7 +1,11 @@
 package com.infinityraider.agricraft.items.blocks;
 
-import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,13 +14,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 
 /**
  * The root item for all CustomWood blocks.

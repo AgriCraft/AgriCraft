@@ -1,9 +1,8 @@
 package com.infinityraider.agricraft.api.items;
 
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import java.util.List;
+import net.minecraft.item.ItemStack;
 
 /**
  * This interface is implemented in AgriCraft's agricultural item class for the journal.

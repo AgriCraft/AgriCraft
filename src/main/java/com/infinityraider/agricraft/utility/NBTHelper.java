@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.utility;
 
+import com.infinityraider.agricraft.reference.AgriNBT;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import javax.annotation.Nullable;
 
 public abstract class NBTHelper {
 

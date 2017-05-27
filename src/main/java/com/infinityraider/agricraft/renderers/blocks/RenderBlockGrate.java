@@ -1,18 +1,17 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockGrate;
-import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-
-import com.infinityraider.agricraft.utility.BaseIcons;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;

@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.gui.storage;
 
 import com.infinityraider.agricraft.container.ContainerSeedStorageController;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
-import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;

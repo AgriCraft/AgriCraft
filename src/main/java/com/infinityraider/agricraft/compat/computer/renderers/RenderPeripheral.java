@@ -1,13 +1,17 @@
 package com.infinityraider.agricraft.compat.computer.renderers;
 
 import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -21,12 +25,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-
-import com.infinityraider.agricraft.utility.BaseIcons;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, TileEntityPeripheral> {
 	public static final ResourceLocation TEXTURE_TOP = new ResourceLocation("agricraft:blocks/peripheralTop");

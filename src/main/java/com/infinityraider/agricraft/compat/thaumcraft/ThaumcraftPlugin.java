@@ -3,10 +3,10 @@ package com.infinityraider.agricraft.compat.thaumcraft;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @AgriPlugin
 public class ThaumcraftPlugin implements IAgriPlugin {

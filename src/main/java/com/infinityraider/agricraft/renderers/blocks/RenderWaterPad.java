@@ -2,9 +2,12 @@ package com.infinityraider.agricraft.renderers.blocks;
 
 import com.infinityraider.agricraft.blocks.BlockWaterPad;
 import com.infinityraider.agricraft.reference.AgriProperties;
+import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -16,11 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.infinityraider.agricraft.utility.BaseIcons;
-
-import java.util.Collections;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RenderWaterPad extends RenderBlockBase<BlockWaterPad> {

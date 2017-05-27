@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -10,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 
 /**
  * Class representing possible custom wood types.
