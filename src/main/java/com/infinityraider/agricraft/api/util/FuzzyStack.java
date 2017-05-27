@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,37 +27,36 @@ public class FuzzyStack {
 
     private final boolean ignoreMeta;
     private final boolean useOreDict;
-    
+
     @Nonnull
     private final List<String> ignoreTags;
 
-    public FuzzyStack(ItemStack stack) {
+    public FuzzyStack(@Nonnull ItemStack stack) {
         this(stack, false, false);
     }
-    
-    public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean useOreDict, String... ignoreTags) {
+
+    public FuzzyStack(@Nonnull ItemStack stack, boolean ignoreMeta, boolean useOreDict, @Nonnull String... ignoreTags) {
         this(stack, ignoreMeta, useOreDict, Arrays.asList(ignoreTags));
     }
 
-    public FuzzyStack(ItemStack stack, boolean ignoreMeta, boolean useOreDict, List<String> ignoreTags) {
-        if (stack == null) {
-            throw new NullPointerException("The Itemstack must not be null for FuzzyStacks!");
-        } else if (stack.getItem() == null) {
-            throw new NullPointerException("The Item must not be null for FuzzyStacks!");
-        }
+    public FuzzyStack(@Nonnull ItemStack stack, boolean ignoreMeta, boolean useOreDict, @Nullable List<String> ignoreTags) {
+        // Perform Parameter Validation
+        Objects.requireNonNull(stack, "The Itemstack must not be null for FuzzyStacks!");
+        Objects.requireNonNull(stack.getItem(), "The Item must not be null for FuzzyStacks!");
 
+        // Perform Assignments
         this.stack = stack.copy();
         this.tags = Optional.ofNullable(stack.getTagCompound()).orElseGet(NBTTagCompound::new);
-        this.ignoreTags = (ignoreTags != null) ? ignoreTags : Collections.EMPTY_LIST;
+        this.ignoreTags = Optional.ofNullable(ignoreTags).orElseGet(Collections::emptyList);
         this.ignoreMeta = ignoreMeta;
         this.useOreDict = useOreDict;
-        
+
+        // Strip Ignored Tags From Itemstack
         this.stack.setTagCompound(stripTags(this.stack.getTagCompound()));
-        
     }
 
     @Nonnull
-    public static final Optional<FuzzyStack> fromBlockState(IBlockState state) {
+    public static final Optional<FuzzyStack> fromBlockState(@Nullable IBlockState state) {
         return Optional.ofNullable(state)
                 .map(s -> new ItemStack(s.getBlock(), 1, s.getBlock().getMetaFromState(s)))
                 .filter(i -> i.getItem() != null)
@@ -85,37 +85,37 @@ public class FuzzyStack {
         return this.tags.copy();
     }
 
-    public boolean isMetaEqual(ItemStack other) {
-        return other != null && (this.ignoreMeta || this.getMeta() == other.getMetadata());
+    public boolean isMetaEqual(@Nullable ItemStack other) {
+        return (other != null) && (this.ignoreMeta || this.getMeta() == other.getMetadata());
     }
 
-    public boolean isMetaEqual(FuzzyStack other) {
-        return other != null && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
-    }
-    
-    public boolean isTagsEqual(ItemStack other) {
-        return other != null && this.getTagCompound().equals(stripTags(other.getTagCompound()));
+    public boolean isMetaEqual(@Nullable FuzzyStack other) {
+        return (other != null) && (this.ignoreMeta || other.ignoreMeta || this.getMeta() == other.getMeta());
     }
 
-    public boolean isTagsEqual(FuzzyStack other) {
-        return other != null && other.stripTags(this.getTagCompound()).equals(this.stripTags(other.getTagCompound()));
+    public boolean isTagsEqual(@Nullable ItemStack other) {
+        return (other != null) && this.getTagCompound().equals(stripTags(other.getTagCompound()));
     }
 
-    public boolean isItemEqual(Item other) {
-        return other != null && this.stack.getItem().equals(other);
+    public boolean isTagsEqual(@Nullable FuzzyStack other) {
+        return (other != null) && other.stripTags(this.getTagCompound()).equals(this.stripTags(other.getTagCompound()));
     }
 
-    public boolean isItemEqual(ItemStack other) {
-        return other != null && this.stack.getItem().equals(other.getItem());
+    public boolean isItemEqual(@Nullable Item other) {
+        return (other != null) && this.stack.getItem().equals(other);
     }
 
-    public boolean isItemEqual(FuzzyStack other) {
-        return other != null && this.stack.getItem().equals(other.stack.getItem());
+    public boolean isItemEqual(@Nullable ItemStack other) {
+        return (other != null) && this.stack.getItem().equals(other.getItem());
     }
-    
+
+    public boolean isItemEqual(@Nullable FuzzyStack other) {
+        return (other != null) && this.stack.getItem().equals(other.stack.getItem());
+    }
+
     @Nonnull
-    private NBTTagCompound stripTags(NBTTagCompound tag) {
-        if (tag == null || this.ignoreTags.contains("*")) {
+    private NBTTagCompound stripTags(@Nullable NBTTagCompound tag) {
+        if ((tag == null) || this.ignoreTags.contains("*")) {
             return new NBTTagCompound();
         } else {
             final NBTTagCompound stripped = tag.copy();
@@ -125,7 +125,7 @@ public class FuzzyStack {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj instanceof ItemStack) {
             ItemStack other = (ItemStack) obj;
             if (other.getItem() != null) {
