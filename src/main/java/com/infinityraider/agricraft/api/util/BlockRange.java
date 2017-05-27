@@ -3,8 +3,10 @@
 package com.infinityraider.agricraft.api.util;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import javax.annotation.Nonnull;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -15,15 +17,15 @@ public class BlockRange implements Iterable<BlockPos> {
 	private final int minX, minY, minZ;
 	private final int maxX, maxY, maxZ;
 
-	public BlockRange(BlockRange range, BlockPos pos) {
+	public BlockRange(@Nonnull BlockRange range, @Nonnull BlockPos pos) {
 		this(range.getMin().add(pos), range.getMax().add(pos));
 	}
 
-	public BlockRange(BlockPos center, int radius) {
+	public BlockRange(@Nonnull BlockPos center, int radius) {
 		this(center.getX(), center.getY(), center.getZ(), radius);
 	}
 
-	public BlockRange(BlockPos min, BlockPos max) {
+	public BlockRange(@Nonnull BlockPos min, @Nonnull BlockPos max) {
 		this(
 				min.getX(), min.getY(), min.getZ(),
 				max.getX(), max.getY(), max.getZ()
@@ -61,10 +63,12 @@ public class BlockRange implements Iterable<BlockPos> {
 		}
 	}
 
+    @Nonnull
 	public BlockPos getMin() {
 		return new BlockPos(minX, minY, minZ);
 	}
 
+    @Nonnull
 	public BlockPos getMax() {
 		return new BlockPos(maxX, maxY, maxZ);
 	}
@@ -114,11 +118,13 @@ public class BlockRange implements Iterable<BlockPos> {
 				&& ((this.minZ < range.maxZ) && (this.maxZ > range.minZ));
 	}
 
+    @Nonnull
 	@Override
 	public Iterator<BlockPos> iterator() {
 		return new BlockRangeIterator(this);
 	}
 
+    @Nonnull
 	public Stream<BlockPos> stream() {
 		return StreamSupport.stream(this.spliterator(), false);
 	}
@@ -128,8 +134,8 @@ public class BlockRange implements Iterable<BlockPos> {
 		private int x, y, z;
 		private final BlockRange range;
 
-		public BlockRangeIterator(BlockRange range) {
-			this.range = range;
+		public BlockRangeIterator(@Nonnull BlockRange range) {
+			this.range = Objects.requireNonNull(range, "You cannot iterate over a range that doesn't exist!");
 			this.x = range.minX;
 			this.y = range.minY;
 			this.z = range.minZ;
@@ -142,6 +148,7 @@ public class BlockRange implements Iterable<BlockPos> {
 					&& this.z <= this.range.getMaxZ();
 		}
 
+        @Nonnull
 		@Override
 		public BlockPos next() {
 			// Ensure haven't fallen out of bounds.
