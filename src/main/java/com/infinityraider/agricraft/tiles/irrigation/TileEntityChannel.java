@@ -1,25 +1,24 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.function.Consumer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
-import com.infinityraider.infinitylib.utility.WorldHelper;
-import java.util.function.Consumer;
-import net.minecraft.block.state.IBlockState;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
 

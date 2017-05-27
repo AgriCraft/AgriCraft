@@ -9,10 +9,9 @@ import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
-import net.minecraft.block.properties.PropertyEnum;
-
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IUnlistedProperty;
 

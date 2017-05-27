@@ -1,22 +1,21 @@
 package com.infinityraider.agricraft.tiles;
 
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.Objects;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Objects;
-import java.util.function.Consumer;
-import javax.annotation.Nonnull;
 
 /**
  * This class represents the root tile entity for all AgriCraft custom WOOD

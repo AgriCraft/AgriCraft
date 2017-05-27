@@ -1,12 +1,14 @@
 package com.infinityraider.agricraft.compat.computer.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -14,18 +16,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collections;
-import java.util.List;
 
 @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {

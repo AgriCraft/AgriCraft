@@ -2,7 +2,6 @@
  */
 package com.infinityraider.agricraft.api;
 
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;

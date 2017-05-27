@@ -1,23 +1,22 @@
 package com.infinityraider.agricraft.gui.journal;
 
-import com.infinityraider.agricraft.reference.Reference;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.gui.component.BasicComponents;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
+import com.infinityraider.agricraft.reference.Reference;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class JournalPageSeed implements JournalPage {

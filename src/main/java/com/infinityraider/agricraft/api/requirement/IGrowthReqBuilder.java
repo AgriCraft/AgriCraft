@@ -3,8 +3,8 @@
 package com.infinityraider.agricraft.api.requirement;
 
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.api.util.BlockRange;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import net.minecraft.util.math.BlockPos;
 
 /**

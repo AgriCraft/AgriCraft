@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import com.infinityraider.agricraft.utility.FluidHandlerBlockWrapper;
 import com.infinityraider.agricraft.utility.IFluidHandlerBlock;
-
 import com.infinityraider.infinitylib.block.BlockCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.block.blockstate.SidedConnection;

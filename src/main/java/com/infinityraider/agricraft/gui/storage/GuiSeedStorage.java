@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.gui.storage;
 
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
+import com.infinityraider.agricraft.gui.component.BasicComponents;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
-import com.infinityraider.agricraft.gui.AgriGuiWrapper;
-import com.infinityraider.agricraft.gui.component.BasicComponents;
 import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;

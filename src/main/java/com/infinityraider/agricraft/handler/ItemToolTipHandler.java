@@ -1,21 +1,21 @@
 package com.infinityraider.agricraft.handler;
 
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.StackHelper;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import java.text.DecimalFormat;
 import net.minecraft.item.ItemStack;
-import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import com.infinityraider.agricraft.api.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import java.text.DecimalFormat;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SideOnly(Side.CLIENT)

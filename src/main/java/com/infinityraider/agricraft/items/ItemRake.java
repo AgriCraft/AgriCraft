@@ -1,32 +1,31 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.api.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.misc.IAgriRakeable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import net.minecraft.tileentity.TileEntity;
-import com.infinityraider.agricraft.api.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.misc.IAgriRakeable;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.

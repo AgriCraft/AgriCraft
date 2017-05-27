@@ -2,8 +2,8 @@
  */
 package com.infinityraider.agricraft.apiimpl;
 
-import java.util.Objects;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
+import java.util.Objects;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

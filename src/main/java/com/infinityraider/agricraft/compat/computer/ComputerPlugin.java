@@ -6,12 +6,10 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
 import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
-
-import java.util.Set;
-
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.render.block.BlockRendererRegistry;
 import com.infinityraider.infinitylib.utility.RegisterHelper;
+import java.util.Set;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;

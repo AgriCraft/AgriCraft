@@ -4,30 +4,29 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import java.util.List;
+import java.util.Optional;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
-
-import java.util.List;
-import java.util.Optional;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel, IRecipeRegister {
 

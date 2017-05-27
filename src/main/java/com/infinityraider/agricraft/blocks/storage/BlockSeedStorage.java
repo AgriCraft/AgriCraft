@@ -2,28 +2,27 @@ package com.infinityraider.agricraft.blocks.storage;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
-import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.agricraft.utility.StackHelper;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import java.util.Optional;
 
 public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
 

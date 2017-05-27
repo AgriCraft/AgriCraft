@@ -2,12 +2,12 @@
  */
 package com.infinityraider.agricraft.core;
 
+import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import com.agricraft.agricore.config.AgriConfigAdapter;
 
 /**
  *

@@ -3,9 +3,9 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;

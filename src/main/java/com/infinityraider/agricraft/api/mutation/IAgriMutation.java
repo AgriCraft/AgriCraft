@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.api.mutation;
 
-import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * An interface representing a mutation, which is a relation between parents and

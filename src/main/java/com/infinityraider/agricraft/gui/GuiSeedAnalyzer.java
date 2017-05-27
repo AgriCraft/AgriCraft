@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.gui;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.gui.component.BasicComponents;
 import com.infinityraider.agricraft.gui.journal.GuiJournal;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.gui.component.BasicComponents;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

@@ -4,25 +4,23 @@ import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.renderers.blocks.RenderTank;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import com.infinityraider.agricraft.renderers.blocks.RenderTank;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
-
-import java.util.Optional;
-import net.minecraft.world.IBlockAccess;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

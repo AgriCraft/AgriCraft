@@ -1,45 +1,43 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.Constants;
+import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderSprinkler;
+import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
-import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
+import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import net.minecraft.block.Block;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> implements IRecipeRegister {

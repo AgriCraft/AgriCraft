@@ -1,12 +1,21 @@
 package com.infinityraider.agricraft.tiles.storage;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -15,19 +24,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import com.agricraft.agricore.core.AgriCore;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.infinityraider.agricraft.reference.AgriNBT;
-import java.util.Optional;
-import java.util.function.Consumer;
-import javax.annotation.Nullable;
 
 public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeedStorageControllable, IDebuggable, ISidedInventory {
 

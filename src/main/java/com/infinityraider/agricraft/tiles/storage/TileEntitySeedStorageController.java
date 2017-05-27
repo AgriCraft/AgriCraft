@@ -3,14 +3,13 @@ package com.infinityraider.agricraft.tiles.storage;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class TileEntitySeedStorageController extends TileEntityCustomWood implements ISeedStorageController {
 

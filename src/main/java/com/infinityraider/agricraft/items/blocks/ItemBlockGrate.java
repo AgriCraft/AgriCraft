@@ -1,18 +1,17 @@
 package com.infinityraider.agricraft.items.blocks;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 /**
  * The item form of the Grate block.

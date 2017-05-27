@@ -1,9 +1,13 @@
 package com.infinityraider.agricraft.api.plant;
 
+import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -12,11 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Function;
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well

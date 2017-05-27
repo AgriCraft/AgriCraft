@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
-
 import java.util.ArrayList;
 
 public abstract class MethodBasePeripheral extends MethodBase {

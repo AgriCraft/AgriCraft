@@ -1,19 +1,19 @@
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.container.ContainerSeedStorageController;
+import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.gui.GuiPeripheral;
 import com.infinityraider.agricraft.gui.GuiSeedAnalyzer;
+import com.infinityraider.agricraft.gui.journal.GuiJournal;
 import com.infinityraider.agricraft.gui.storage.GuiSeedStorage;
 import com.infinityraider.agricraft.gui.storage.GuiSeedStorageController;
-import com.infinityraider.agricraft.gui.journal.GuiJournal;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
-import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.utility.StackHelper;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;

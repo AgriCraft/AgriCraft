@@ -3,10 +3,9 @@ package com.infinityraider.agricraft.container;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
+import java.util.List;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class ContainerSeedStorageController extends ContainerSeedStorageBase<TileEntitySeedStorageController> {
 

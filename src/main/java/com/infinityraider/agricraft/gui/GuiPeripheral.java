@@ -1,11 +1,14 @@
 package com.infinityraider.agricraft.gui;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.compat.computer.methods.IMethod;
-import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
+import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.GuiHelper;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -14,9 +17,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
-import java.util.List;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;

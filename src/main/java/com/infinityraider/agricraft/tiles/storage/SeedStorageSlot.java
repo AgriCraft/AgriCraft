@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
-
 import java.util.Comparator;
 import java.util.Optional;
 import net.minecraft.item.ItemStack;

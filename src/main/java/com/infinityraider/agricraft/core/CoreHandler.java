@@ -1,15 +1,8 @@
 package com.infinityraider.agricraft.core;
 
+import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
-import com.infinityraider.agricraft.reference.Reference;
-import java.nio.file.Path;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
@@ -20,9 +13,14 @@ import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.apiimpl.SoilRegistry;
-
+import com.infinityraider.agricraft.reference.Reference;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -1,35 +1,34 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
+import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
-import java.util.Arrays;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
-import java.util.Optional;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 
 public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> implements IRecipeRegister {
 

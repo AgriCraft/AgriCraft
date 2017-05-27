@@ -1,20 +1,19 @@
 package com.infinityraider.agricraft.gui.journal;
 
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.items.ItemJournal;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.gui.ComponentGui;
 import com.infinityraider.agricraft.gui.component.ComponentRenderer;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.gui.component.GuiComponentBuilder;
+import com.infinityraider.agricraft.items.ItemJournal;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiJournal extends ComponentGui {

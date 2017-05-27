@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
-import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.blocks.BlockGrate;
+import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.blocks.BlockWaterPad;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
+import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
+import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.infinitylib.block.BlockBase;
 
 public class AgriBlocks {

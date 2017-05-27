@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.requirement.ICondition;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

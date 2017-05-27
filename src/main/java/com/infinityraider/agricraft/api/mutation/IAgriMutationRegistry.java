@@ -2,9 +2,9 @@
  */
 package com.infinityraider.agricraft.api.mutation;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 /**
  * An interface for managing mutations.

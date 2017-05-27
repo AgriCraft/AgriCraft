@@ -3,9 +3,9 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.api.stat.IAgriStatCalculatorRegistry;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculatorHardcore;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculatorNormal;
-import com.infinityraider.agricraft.api.stat.IAgriStatCalculatorRegistry;
 
 /**
  *
