@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Class wrapping the AgriCore AgriSoil.
  */
 public class JsonSoil implements IAgriSoil {
-    
+
     private final AgriSoil soil;
     private List<FuzzyStack> varients;
 
@@ -33,13 +33,13 @@ public class JsonSoil implements IAgriSoil {
 
     @Override
     public Collection<FuzzyStack> getVarients() {
-        if(this.varients == null) {
+        if (this.varients == null) {
             this.varients = this.soil.getVarients().stream()
                     .filter(s -> s instanceof FuzzyStack)
-                    .map(s -> (FuzzyStack)s)
+                    .map(s -> (FuzzyStack) s)
                     .collect(Collectors.toList());
         }
         return this.varients;
     }
-    
+
 }

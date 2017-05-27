@@ -36,8 +36,8 @@ public interface IAgriFertilizer {
     boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random);
 
     /**
-     * Called on the client when the fertilizer is applied, can be used
-     * for particles or other visual effects.
+     * Called on the client when the fertilizer is applied, can be used for
+     * particles or other visual effects.
      *
      * @param meta UNKNOWN!
      * @param world The world that the fertilizer was applied in.

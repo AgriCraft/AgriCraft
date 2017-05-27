@@ -8,18 +8,18 @@ import com.infinityraider.agricraft.compat.vanilla.BonemealWrapper;
 
 /**
  *
- * 
+ *
  */
 public class FertilizerRegistry {
 
-	private static final IAgriAdapterRegistry<IAgriFertilizer> INSTANCE = new AdapterRegistry<>();
+    private static final IAgriAdapterRegistry<IAgriFertilizer> INSTANCE = new AdapterRegistry<>();
 
-	static {
-		INSTANCE.registerAdapter(BonemealWrapper.INSTANCE);
-	}
+    static {
+        INSTANCE.registerAdapter(BonemealWrapper.INSTANCE);
+    }
 
-	public static IAgriAdapterRegistry<IAgriFertilizer> getInstance() {
-		return INSTANCE;
-	}
+    public static IAgriAdapterRegistry<IAgriFertilizer> getInstance() {
+        return INSTANCE;
+    }
 
 }

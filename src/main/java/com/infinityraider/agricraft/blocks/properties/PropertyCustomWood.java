@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.utility.CustomWoodType;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class PropertyCustomWood implements IUnlistedProperty<CustomWoodType> {
+
     private final String name;
 
     public PropertyCustomWood(String name) {

@@ -18,31 +18,31 @@ import net.minecraftforge.fml.relauncher.Side;
 
 /**
  *
- * 
+ *
  */
 @AgriPlugin
 public class ComputerPlugin implements IAgriPlugin {
 
-	public static final BlockPeripheral PERHIPHERAL = new BlockPeripheral();
-	public static final Set<String> COMPUTER_MODS = TypeHelper.asSet(
-			"computercraft",
-			"opencomputers"
-	);
-	public static final boolean ENABLED = COMPUTER_MODS.stream().anyMatch(Loader::isModLoaded);
+    public static final BlockPeripheral PERHIPHERAL = new BlockPeripheral();
+    public static final Set<String> COMPUTER_MODS = TypeHelper.asSet(
+            "computercraft",
+            "opencomputers"
+    );
+    public static final boolean ENABLED = COMPUTER_MODS.stream().anyMatch(Loader::isModLoaded);
 
-	@Override
-	public boolean isEnabled() {
-		return ENABLED;
-	}
+    @Override
+    public boolean isEnabled() {
+        return ENABLED;
+    }
 
-	@Override
-	public void initPlugin() {
-		RegisterHelper.registerBlock(PERHIPHERAL, Reference.MOD_ID.toLowerCase(), PERHIPHERAL.getInternalName());
-		TileEntity te = PERHIPHERAL.createNewTileEntity(null, 0);
-		GameRegistry.registerTileEntity(te.getClass(), PERHIPHERAL.getInternalName());
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			BlockRendererRegistry.getInstance().registerCustomBlockRenderer(PERHIPHERAL);
-		}
-	}
+    @Override
+    public void initPlugin() {
+        RegisterHelper.registerBlock(PERHIPHERAL, Reference.MOD_ID.toLowerCase(), PERHIPHERAL.getInternalName());
+        TileEntity te = PERHIPHERAL.createNewTileEntity(null, 0);
+        GameRegistry.registerTileEntity(te.getClass(), PERHIPHERAL.getInternalName());
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            BlockRendererRegistry.getInstance().registerCustomBlockRenderer(PERHIPHERAL);
+        }
+    }
 
 }

@@ -17,18 +17,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AgriCraftGuiConfig extends GuiConfig {
 
-	public AgriCraftGuiConfig(GuiScreen guiScreen) {
-		super(guiScreen, getConfigElements(), Reference.MOD_ID, false, false,
-				GuiConfig.getAbridgedConfigPath(AgriCore.getConfig().getLocation()));
-	}
+    public AgriCraftGuiConfig(GuiScreen guiScreen) {
+        super(guiScreen, getConfigElements(), Reference.MOD_ID, false, false,
+                GuiConfig.getAbridgedConfigPath(AgriCore.getConfig().getLocation()));
+    }
 
-	private static List<IConfigElement> getConfigElements() {
-		List<IConfigElement> configElements = new ArrayList<>();
-		for (AgriConfigCategory e : AgriConfigCategory.values()) {
-			String descr = "AgriCraft " + e.getDisplayName() + " Settings";
-			String name = "agricraft.configgui.ctgy." + e.name();
-			configElements.add(new DummyConfigElement.DummyCategoryElement(descr, name, new ConfigElement(CoreHandler.getConfig().getCategory(e.name().toLowerCase())).getChildElements()));
-		}
-		return configElements;
-	}
+    private static List<IConfigElement> getConfigElements() {
+        List<IConfigElement> configElements = new ArrayList<>();
+        for (AgriConfigCategory e : AgriConfigCategory.values()) {
+            String descr = "AgriCraft " + e.getDisplayName() + " Settings";
+            String name = "agricraft.configgui.ctgy." + e.name();
+            configElements.add(new DummyConfigElement.DummyCategoryElement(descr, name, new ConfigElement(CoreHandler.getConfig().getCategory(e.name().toLowerCase())).getChildElements()));
+        }
+        return configElements;
+    }
 }

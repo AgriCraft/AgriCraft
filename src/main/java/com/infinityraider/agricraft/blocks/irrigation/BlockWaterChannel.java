@@ -105,8 +105,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
         return selection;
     }
-    
-    
 
     //render methods
     //--------------

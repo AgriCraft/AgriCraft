@@ -5,7 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class SlotSeedAnalyzerSeed extends Slot{
+public class SlotSeedAnalyzerSeed extends Slot {
+
     public SlotSeedAnalyzerSeed(IInventory inventory, int id, int x, int y) {
         super(inventory, id, x, y);
     }

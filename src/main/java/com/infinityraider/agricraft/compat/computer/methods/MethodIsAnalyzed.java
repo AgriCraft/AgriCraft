@@ -7,19 +7,19 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class MethodIsAnalyzed extends MethodBase {
-	
+
     public MethodIsAnalyzed() {
         super("isAnalyzed", false, true, true);
     }
 
     @Override
     protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
-        return new Object[] {Optional.ofNullable(crop.getSeed()).map(s -> s.getStat()).filter(IAgriStat::isAnalyzed).isPresent()};
+        return new Object[]{Optional.ofNullable(crop.getSeed()).map(s -> s.getStat()).filter(IAgriStat::isAnalyzed).isPresent()};
     }
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        return new Object[] {peripheral.isSpecimenAnalyzed()};
+        return new Object[]{peripheral.isSpecimenAnalyzed()};
     }
 
     @Override

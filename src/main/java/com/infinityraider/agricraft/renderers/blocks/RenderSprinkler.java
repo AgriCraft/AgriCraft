@@ -68,7 +68,7 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
     public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockSprinkler block, EnumFacing side) {
         tessellator.translate(0, 4 * Constants.UNIT, 0);
         CustomWoodType type;
-        if(state instanceof IExtendedBlockState) {
+        if (state instanceof IExtendedBlockState) {
             type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
         } else {
             type = CustomWoodTypeRegistry.DEFAULT;
@@ -78,7 +78,7 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tess, World world, BlockPos pos, double x, double y, double z, BlockSprinkler block,
-                                        TileEntitySprinkler te, float partialTick, int destroyStage) {
+            TileEntitySprinkler te, float partialTick, int destroyStage) {
         tess.pushMatrix();
         tess.translate(0.5F, 0, 0.5F);
         tess.rotate(te.getAngle(), 0, 1, 0);

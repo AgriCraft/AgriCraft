@@ -40,8 +40,8 @@ public class AgriWailaAdapter implements IWailaDataProvider {
     }
 
     @Override
-	public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
-		return currenttip;
+    public List<String> getWailaTail(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor dataAccessor, IWailaConfigHandler configHandler) {
+        return currenttip;
     }
 
     @Override

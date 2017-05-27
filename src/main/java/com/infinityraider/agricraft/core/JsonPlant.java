@@ -54,7 +54,7 @@ public class JsonPlant implements IAgriPlant {
         this.products = initProductListJSON(plant);
         this.growthRequirement = initGrowthRequirementJSON(plant);
     }
-    
+
     @Override
     public boolean isWeed() {
         return this.plant.isWeedable();
@@ -64,7 +64,7 @@ public class JsonPlant implements IAgriPlant {
     public boolean isAggressive() {
         return this.plant.isAgressive();
     }
-    
+
     @Override
     public boolean isFertilizable() {
         return this.plant.canBonemeal();
@@ -203,15 +203,15 @@ public class JsonPlant implements IAgriPlant {
         }
         return Collections.emptyList();
     }
-    
+
     public static final List<IAgriHarvestProduct> initProductListJSON(AgriPlant plant) {
         return plant.getProducts().getAll().stream()
                 .map(JsonPlant::convertProductJSON)
                 .collect(Collectors.toList());
     }
-    
+
     public static final IAgriHarvestProduct convertProductJSON(AgriProduct product) {
-        final FuzzyStack stack = (FuzzyStack)product.toStack();
+        final FuzzyStack stack = (FuzzyStack) product.toStack();
         return new AgriHarvestProduct(stack.getItem(), stack.getTagCompound(), stack.getMeta(), product.getMin(), product.getMax(), product.getChance(), false);
     }
 
@@ -267,7 +267,7 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof IAgriPlant) && (this.getId().equals(((IAgriPlant)obj).getId()));
+        return (obj instanceof IAgriPlant) && (this.getId().equals(((IAgriPlant) obj).getId()));
     }
 
     @Override

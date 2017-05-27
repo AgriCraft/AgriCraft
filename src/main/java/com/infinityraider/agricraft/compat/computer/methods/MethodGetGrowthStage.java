@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
 public class MethodGetGrowthStage extends MethodBaseCrop {
+
     public MethodGetGrowthStage() {
         super("getGrowthStage");
     }
@@ -14,7 +15,7 @@ public class MethodGetGrowthStage extends MethodBaseCrop {
         IBlockState state = crop.getWorld().getBlockState(crop.getPos());
         Block block = state.getBlock();
         int meta = block.getMetaFromState(state);
-        double growthStage = (100.00*meta)/7;
-        return new Object[] {growthStage};
+        double growthStage = (100.00 * meta) / 7;
+        return new Object[]{growthStage};
     }
 }

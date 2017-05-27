@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public abstract class MethodBaseGrowthReq extends MethodBase {
-	
+
     public MethodBaseGrowthReq(String name) {
         super(name, true, true, true);
     }

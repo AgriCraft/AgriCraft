@@ -18,10 +18,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedStorageController> {
 
-	public BlockSeedStorageController() {
-		super("seed_storage_controller");
-	}
-	
+    public BlockSeedStorageController() {
+        super("seed_storage_controller");
+    }
+
     @Override
     public TileEntitySeedStorageController createNewTileEntity(World world, int meta) {
         return new TileEntitySeedStorageController();
@@ -29,10 +29,10 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(player.isSneaking()) {
+        if (player.isSneaking()) {
             return false;
         }
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             player.openGui(AgriCraft.instance, GuiHandler.SEED_CONTROLLER_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
@@ -40,13 +40,13 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
 
     @Override
     @SideOnly(Side.CLIENT)
-	public RenderBlockWithTileBase<BlockSeedStorageController, TileEntitySeedStorageController> getRenderer() {
-		return null;
-	}
+    public RenderBlockWithTileBase<BlockSeedStorageController, TileEntitySeedStorageController> getRenderer() {
+        return null;
+    }
 
     @Override
-	public boolean isEnabled() {
-		return AgriCraftConfig.disableSeedWarehouse;
-	}
+    public boolean isEnabled() {
+        return AgriCraftConfig.disableSeedWarehouse;
+    }
 
 }

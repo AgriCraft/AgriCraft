@@ -11,10 +11,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageSyncFluidLevel extends MessageBase<IMessage> {
+
     private int lvl;
     private BlockPos pos;
 
-    public MessageSyncFluidLevel() {}
+    public MessageSyncFluidLevel() {
+    }
 
     public MessageSyncFluidLevel(int lvl, BlockPos pos) {
         this();
@@ -30,7 +32,7 @@ public class MessageSyncFluidLevel extends MessageBase<IMessage> {
     @Override
     protected void processMessage(MessageContext ctx) {
         World world = AgriCraft.proxy.getClientWorld();
-        if(world != null) {
+        if (world != null) {
             WorldHelper.getTile(world, pos, IIrrigationComponent.class).ifPresent(c -> c.setFluidLevel(this.lvl));
         }
     }

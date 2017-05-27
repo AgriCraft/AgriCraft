@@ -8,9 +8,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class JournalPageTitle implements JournalPage {
 
-	@Override
-	public ResourceLocation getForeground() {
-		return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalFrontPage.png");
-	}
+    @Override
+    public ResourceLocation getForeground() {
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalFrontPage.png");
+    }
 
 }

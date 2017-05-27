@@ -26,123 +26,124 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * These methods hopefully should not return null.
  *
- * 
+ *
  */
 @SideOnly(Side.CLIENT)
 public final class IconHelper {
-	
-	public static final String EXPANSION_POINT = ":";
-	public static final String EXPANSION_BLOCK = ":blocks/";
-	public static final String EXPANSION_ITEM = ":items/";
-	
-	// So that we don't have to keep hacking...
-	private static final Map<String, Deque<String>> findCache = new HashMap<>();
-	
-	private static final AtomicInteger failCounter = new AtomicInteger();
 
-	private IconHelper() {
-		// NOP
-	}
+    public static final String EXPANSION_POINT = ":";
+    public static final String EXPANSION_BLOCK = ":blocks/";
+    public static final String EXPANSION_ITEM = ":items/";
 
-	/**
-	 * A class to allow for safely getting a default icon at any stage of loading.
-	 */
-	private static class DefaultIcon extends TextureAtlasSprite {
+    // So that we don't have to keep hacking...
+    private static final Map<String, Deque<String>> findCache = new HashMap<>();
 
-		public static final TextureAtlasSprite instance = new DefaultIcon("missingno");
+    private static final AtomicInteger failCounter = new AtomicInteger();
 
-		private DefaultIcon(String location) {
-			super(location);
-			this.width = 16;
-			this.height = 16;
-			this.framesTextureData = new ArrayList<>(1);
-			this.framesTextureData.add(new int[][] {TextureUtil.MISSING_TEXTURE_DATA});
-		}
+    private IconHelper() {
+        // NOP
+    }
 
-	}
-	
-	public static TextureAtlasSprite getDefaultIcon() {
-		return DefaultIcon.instance;
-	}
+    /**
+     * A class to allow for safely getting a default icon at any stage of
+     * loading.
+     */
+    private static class DefaultIcon extends TextureAtlasSprite {
 
-	public static TextureAtlasSprite getIcon(final String resourceLocation) {
-		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(resourceLocation);
-		if (!sprite.getIconName().equals("missingno")) {
-			return sprite;
-		} else {
-			final int fail = failCounter.addAndGet(1);
-			//AgriCore.getLogger("agricraft").debug("Failed to load Icon: " + resourceLocation);
-			//AgriCore.getLogger("agricraft").debug("Icon load failure #" + fail);
-			return getDefaultIcon();
-		}
-	}
-	
-	private static TextureAtlasSprite getIcon(final String path, final String expansion) {
-		return getIcon(path, expansion, "");
-	}
-	
-	private static TextureAtlasSprite getIcon(final String path, final String expansion, final String postfix) {
-		return getIcon(path.replaceFirst(EXPANSION_POINT, expansion).concat(postfix));
-	}
+        public static final TextureAtlasSprite instance = new DefaultIcon("missingno");
 
-	public static TextureAtlasSprite getIcon(final Block block) {
-		return (block == null) ? getDefaultIcon() : getIcon(block.getRegistryName().toString(), EXPANSION_BLOCK);
-	}
+        private DefaultIcon(String location) {
+            super(location);
+            this.width = 16;
+            this.height = 16;
+            this.framesTextureData = new ArrayList<>(1);
+            this.framesTextureData.add(new int[][]{TextureUtil.MISSING_TEXTURE_DATA});
+        }
 
-	public static TextureAtlasSprite getIcon(final Item item) {
-		return (item == null) ? getDefaultIcon() : getIcon(item.getRegistryName().toString(), EXPANSION_ITEM);
-	}
+    }
 
-	public static TextureAtlasSprite getParticleIcon(final ItemStack stack) {
-		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack).getParticleTexture();
-	}
+    public static TextureAtlasSprite getDefaultIcon() {
+        return DefaultIcon.instance;
+    }
 
-	public static TextureAtlasSprite getParticleIcon(final Item item, final int meta) {
-		return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(item, meta);
-	}
+    public static TextureAtlasSprite getIcon(final String resourceLocation) {
+        TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(resourceLocation);
+        if (!sprite.getIconName().equals("missingno")) {
+            return sprite;
+        } else {
+            final int fail = failCounter.addAndGet(1);
+            //AgriCore.getLogger("agricraft").debug("Failed to load Icon: " + resourceLocation);
+            //AgriCore.getLogger("agricraft").debug("Icon load failure #" + fail);
+            return getDefaultIcon();
+        }
+    }
 
-	public static TextureAtlasSprite registerIcon(String texturePath) {
-		try {
-			return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath));
-		} catch (Exception e) {
-			AgriCore.getLogger("agricraft").debug(e.getLocalizedMessage());
-			return getDefaultIcon();
-		}
-	}
-	
-	/**
-	 * Pure hack to find icons...
-	 * 
-	 * @param name
-	 * @return 
-	 */
-	public static Deque<String> findMatches(String name) {
-		name = name.toLowerCase();
-		if (findCache.containsKey(name)) {
-			return findCache.get(name);
-		}
-		Deque<String> matches = new ArrayDeque<>();
-		try {
-			Field f = TextureMap.class.getDeclaredField("mapRegisteredSprites");
-			f.setAccessible(true);
-			Map<String, TextureAtlasSprite> textureMap = (Map<String, TextureAtlasSprite>)f.get(Minecraft.getMinecraft().getTextureMapBlocks());
-			for (String e : textureMap.keySet()) {
-				if (e.contains(name)) {
-					matches.add(e);
-				}
-			}
-			if (!findCache.isEmpty()) {
-				findCache.put(name, matches);
-			} else {
-				matches.add("missingno");
-			}
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			// Shoot
-			AgriCore.getLogger("agricraft").debug("Something strange is going on with the Minecraft TextureMap!");
-		} catch (SecurityException e) {
-			AgriCore.getLogger("agricraft").debug("Locked out of TextureMap...");
-		}
-		return matches;
-	}
+    private static TextureAtlasSprite getIcon(final String path, final String expansion) {
+        return getIcon(path, expansion, "");
+    }
+
+    private static TextureAtlasSprite getIcon(final String path, final String expansion, final String postfix) {
+        return getIcon(path.replaceFirst(EXPANSION_POINT, expansion).concat(postfix));
+    }
+
+    public static TextureAtlasSprite getIcon(final Block block) {
+        return (block == null) ? getDefaultIcon() : getIcon(block.getRegistryName().toString(), EXPANSION_BLOCK);
+    }
+
+    public static TextureAtlasSprite getIcon(final Item item) {
+        return (item == null) ? getDefaultIcon() : getIcon(item.getRegistryName().toString(), EXPANSION_ITEM);
+    }
+
+    public static TextureAtlasSprite getParticleIcon(final ItemStack stack) {
+        return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack).getParticleTexture();
+    }
+
+    public static TextureAtlasSprite getParticleIcon(final Item item, final int meta) {
+        return Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(item, meta);
+    }
+
+    public static TextureAtlasSprite registerIcon(String texturePath) {
+        try {
+            return Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(new ResourceLocation(texturePath));
+        } catch (Exception e) {
+            AgriCore.getLogger("agricraft").debug(e.getLocalizedMessage());
+            return getDefaultIcon();
+        }
+    }
+
+    /**
+     * Pure hack to find icons...
+     *
+     * @param name
+     * @return
+     */
+    public static Deque<String> findMatches(String name) {
+        name = name.toLowerCase();
+        if (findCache.containsKey(name)) {
+            return findCache.get(name);
+        }
+        Deque<String> matches = new ArrayDeque<>();
+        try {
+            Field f = TextureMap.class.getDeclaredField("mapRegisteredSprites");
+            f.setAccessible(true);
+            Map<String, TextureAtlasSprite> textureMap = (Map<String, TextureAtlasSprite>) f.get(Minecraft.getMinecraft().getTextureMapBlocks());
+            for (String e : textureMap.keySet()) {
+                if (e.contains(name)) {
+                    matches.add(e);
+                }
+            }
+            if (!findCache.isEmpty()) {
+                findCache.put(name, matches);
+            } else {
+                matches.add("missingno");
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // Shoot
+            AgriCore.getLogger("agricraft").debug("Something strange is going on with the Minecraft TextureMap!");
+        } catch (SecurityException e) {
+            AgriCore.getLogger("agricraft").debug("Locked out of TextureMap...");
+        }
+        return matches;
+    }
 
 }

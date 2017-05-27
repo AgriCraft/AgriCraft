@@ -62,12 +62,12 @@ public class CustomWoodTypeRegistry {
                 })
                 .forEach(type -> WOOD_TYPES.put(type.toString(), type));
     }
-    
+
     public static final Optional<CustomWoodType> getFromStack(ItemStack stack) {
         if (StackHelper.hasKey(stack, AgriNBT.MATERIAL, AgriNBT.MATERIAL_META)) {
             return getFromNbt(stack.getTagCompound());
         } else if (StackHelper.isValid(stack, ItemBlock.class)) {
-            final ItemBlock itemBlock = (ItemBlock)stack.getItem();
+            final ItemBlock itemBlock = (ItemBlock) stack.getItem();
             return getFromBlockAndMeta(itemBlock.getBlock(), itemBlock.getMetadata(stack));
         } else {
             return Optional.empty();
@@ -82,7 +82,7 @@ public class CustomWoodTypeRegistry {
             return Optional.empty();
         }
     }
-    
+
     public static final Optional<CustomWoodType> getFromBlockAndMeta(Block block, int meta) {
         return getFromIdAndMeta(block.getRegistryName().toString(), meta);
     }
@@ -90,7 +90,7 @@ public class CustomWoodTypeRegistry {
     public static final Optional<CustomWoodType> getFromIdAndMeta(String id, int meta) {
         return Optional.ofNullable(WOOD_TYPES.get(id + ":" + meta));
     }
-    
+
     public static final Collection<CustomWoodType> getAllTypes() {
         return WOOD_TYPES.values();
     }

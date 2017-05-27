@@ -16,15 +16,15 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  *
- * 
+ *
  */
 public class DebugModeCoreInfo extends DebugMode {
-    
+
     @Override
     public String debugName() {
         return "core info";
     }
-    
+
     @Override
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         MessageUtil.messagePlayer(player, "{0} Info:", FMLCommonHandler.instance().getSide());
@@ -36,7 +36,7 @@ public class DebugModeCoreInfo extends DebugMode {
         MessageUtil.messagePlayer(player, "AgriSoils Hash: {0}", AgriCore.getSoils().hashCode());
         MessageUtil.messagePlayer(player, " - Soil Count: {0}", AgriCore.getSoils().getAll().size());
     }
-    
+
     @Override
     public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         // NOP
@@ -46,5 +46,5 @@ public class DebugModeCoreInfo extends DebugMode {
     public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         // NOP
     }
-    
+
 }

@@ -22,15 +22,15 @@ public final class GrassDropHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void interceptGrassDrop(BlockEvent.HarvestDropsEvent event) {
-        
+
         // Skip silk touch.
         if (event.isSilkTouching()) {
             return;
         }
-        
+
         // Fetch the blockstate.
         final IBlockState state = event.getState();
-        
+
         // Skip Air or Error
         if (state == null || state.getBlock() == null) {
             return;
@@ -38,11 +38,10 @@ public final class GrassDropHandler {
 
         // Fetch the world random.
         final Random rand = event.getWorld().rand;
-        
+
         // Log
         // This line was oddly ignoring the debug settings...
         //AgriCore.getLogger("agricraft").debug("Intercepted! Block: {0}", state.getBlock());
-
         // Add grass drops if grass block.
         if (state.getBlock() instanceof BlockTallGrass) {
             // Wipe other drops, if needed.

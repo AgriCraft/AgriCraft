@@ -14,7 +14,7 @@ import com.infinityraider.infinitylib.network.serialization.IMessageWriter;
  * @author Ryan
  */
 public class JsonSerializer<T extends AgriSerializable> implements IMessageSerializer<T> {
-    
+
     private final Gson GSON = new Gson();
 
     @Override

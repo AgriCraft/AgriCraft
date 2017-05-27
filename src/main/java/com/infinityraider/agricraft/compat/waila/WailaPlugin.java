@@ -10,21 +10,21 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 @AgriPlugin
 public class WailaPlugin implements IAgriPlugin {
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-	
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     @Override
     public void initPlugin() {
         FMLInterModComms.sendMessage("Waila", "register", this.getClass().getCanonicalName() + ".initWaila");
     }
-	
-	public static void initWaila(IWailaRegistrar registry) {
-		//All blocks.
-		IWailaDataProvider agriProvider = new AgriWailaAdapter();
-		registry.registerStackProvider(agriProvider, BlockBase.class);
-		registry.registerBodyProvider(agriProvider, BlockBase.class);
-	}
+
+    public static void initWaila(IWailaRegistrar registry) {
+        //All blocks.
+        IWailaDataProvider agriProvider = new AgriWailaAdapter();
+        registry.registerStackProvider(agriProvider, BlockBase.class);
+        registry.registerBodyProvider(agriProvider, BlockBase.class);
+    }
 
 }

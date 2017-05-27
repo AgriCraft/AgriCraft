@@ -11,11 +11,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageFertilizerApplied extends MessageBase<IMessage> {
+
     private BlockPos pos;
     private Item fertilizer;
     private int meta;
 
-    public MessageFertilizerApplied() {}
+    public MessageFertilizerApplied() {
+    }
 
     public MessageFertilizerApplied(ItemStack fertilizer, BlockPos pos) {
         this();
@@ -31,7 +33,7 @@ public class MessageFertilizerApplied extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        if(this.fertilizer instanceof IAgriFertilizer) {
+        if (this.fertilizer instanceof IAgriFertilizer) {
             ((IAgriFertilizer) this.fertilizer)
                     .performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
         }

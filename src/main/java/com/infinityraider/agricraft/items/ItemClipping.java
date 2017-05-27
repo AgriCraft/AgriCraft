@@ -35,75 +35,75 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 
-	public ItemClipping() {
-		super("clipping");
-		this.setCreativeTab(null);
-	}
+    public ItemClipping() {
+        super("clipping");
+        this.setCreativeTab(null);
+    }
 
-	//this is called when you right click with this item in hand
-	@Override
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-		TileEntity te = world.getTileEntity(pos);
-		if (world.isRemote || !StackHelper.hasTag(stack) || !(te instanceof IAgriCrop)) {
-			return EnumActionResult.PASS;
-		}
-		IAgriCrop crop = (IAgriCrop) te;
-		AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
-		if (!crop.acceptsSeed(seed) || seed == null) {
-			return EnumActionResult.FAIL;
-		}
-		stack.stackSize = stack.stackSize - 1;
-		if (world.rand.nextInt(10) <= seed.getStat().getStrength()) {
-			crop.setSeed(seed);
-		}
-		return EnumActionResult.SUCCESS;
-	}
+    //this is called when you right click with this item in hand
+    @Override
+    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        TileEntity te = world.getTileEntity(pos);
+        if (world.isRemote || !StackHelper.hasTag(stack) || !(te instanceof IAgriCrop)) {
+            return EnumActionResult.PASS;
+        }
+        IAgriCrop crop = (IAgriCrop) te;
+        AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
+        if (!crop.acceptsSeed(seed) || seed == null) {
+            return EnumActionResult.FAIL;
+        }
+        stack.stackSize = stack.stackSize - 1;
+        if (world.rand.nextInt(10) <= seed.getStat().getStrength()) {
+            crop.setSeed(seed);
+        }
+        return EnumActionResult.SUCCESS;
+    }
 
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
-		Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
+        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
         // lol... This would have been a NPE, had it not been for the Optional class!
         return seed.map(s -> s.getPlant().getPlantName()).orElse("Generic") + " " + text;
-	}
+    }
 
-	public static ItemStack getClipping(AgriSeed seed, int amount) {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setString(AgriNBT.SEED, seed.getPlant().getId());
-		seed.getStat().writeToNBT(tag);
-		ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_CLIPPING);
-		stack.setTagCompound(tag);
-		return stack;
-	}
+    public static ItemStack getClipping(AgriSeed seed, int amount) {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString(AgriNBT.SEED, seed.getPlant().getId());
+        seed.getStat().writeToNBT(tag);
+        ItemStack stack = new ItemStack(AgriItems.getInstance().AGRI_CLIPPING);
+        stack.setTagCompound(tag);
+        return stack;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getModelId(ItemStack stack) {
-		Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public String getModelId(ItemStack stack) {
+        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
         return seed.map(s -> s.getPlant().getId()).orElse("");
-	}
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getBaseTexture(ItemStack stack) {
-		return "agricraft:items/clipping";
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public String getBaseTexture(ItemStack stack) {
+        return "agricraft:items/clipping";
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<ItemModelTexture> getOverlayTextures(ItemStack stack) {
-		AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
-		ResourceLocation tex = (seed == null) ? new ResourceLocation("agricraft:items/debugger") : seed.getPlant().getPrimaryPlantTexture(Constants.MATURE);
-		return TypeHelper.asList(
-				new ItemModelTexture(tex, 4, 4, 12, 12, 0, 0, 16, 16)
-		);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<ItemModelTexture> getOverlayTextures(ItemStack stack) {
+        AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
+        ResourceLocation tex = (seed == null) ? new ResourceLocation("agricraft:items/debugger") : seed.getPlant().getPrimaryPlantTexture(Constants.MATURE);
+        return TypeHelper.asList(
+                new ItemModelTexture(tex, 4, 4, 12, 12, 0, 0, 16, 16)
+        );
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<ResourceLocation> getAllTextures() {
-		return TypeHelper.asList(
-				new ResourceLocation("agricraft:items/clipping")
-		);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<ResourceLocation> getAllTextures() {
+        return TypeHelper.asList(
+                new ResourceLocation("agricraft:items/clipping")
+        );
+    }
 }

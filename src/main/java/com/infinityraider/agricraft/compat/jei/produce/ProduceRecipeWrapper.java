@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  *
- * 
+ *
  */
 public class ProduceRecipeWrapper extends BlankRecipeWrapper {
 
@@ -29,7 +29,7 @@ public class ProduceRecipeWrapper extends BlankRecipeWrapper {
                 .collect(Collectors.toList());
 
         input.add(recipe.getSeed());
-        
+
         input.add(recipe.getGrowthRequirement().getSoils().stream()
                 .flatMap(s -> s.getVarients().stream())
                 .findFirst()
@@ -45,7 +45,7 @@ public class ProduceRecipeWrapper extends BlankRecipeWrapper {
     public void getIngredients(IIngredients ingredients) {
         // Set Inputs
         ingredients.setInputs(ItemStack.class, input);
-        
+
         // Set Outputs
         ingredients.setOutputs(ItemStack.class, output);
     }

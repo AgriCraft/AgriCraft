@@ -12,50 +12,50 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  *
- * 
+ *
  */
 public class PlantRegistry implements IAgriPlantRegistry {
-	
-	private static final IAgriPlantRegistry INSTANCE = new PlantRegistry();
-	
-	private final ConcurrentMap<String, IAgriPlant> plants;
 
-	public PlantRegistry() {
-		this.plants = new ConcurrentHashMap<>();
-	}
-	
-	public static IAgriPlantRegistry getInstance() {
-		return INSTANCE;
-	}
+    private static final IAgriPlantRegistry INSTANCE = new PlantRegistry();
 
-	@Override
-	public boolean isPlant(IAgriPlant plant) {
-		return this.plants.containsKey(plant.getId());
-	}
+    private final ConcurrentMap<String, IAgriPlant> plants;
 
-	@Override
-	public IAgriPlant getPlant(String id) {
-		return this.plants.get(id);
-	}
+    public PlantRegistry() {
+        this.plants = new ConcurrentHashMap<>();
+    }
 
-	@Override
-	public boolean addPlant(IAgriPlant plant) {
-		return this.plants.putIfAbsent(plant.getId(), plant) == null;
-	}
+    public static IAgriPlantRegistry getInstance() {
+        return INSTANCE;
+    }
 
-	@Override
-	public boolean removePlant(IAgriPlant plant) {
-		return this.plants.remove(plant.getId()) != null;
-	}
+    @Override
+    public boolean isPlant(IAgriPlant plant) {
+        return this.plants.containsKey(plant.getId());
+    }
 
-	@Override
-	public Collection<IAgriPlant> getPlants() {
+    @Override
+    public IAgriPlant getPlant(String id) {
+        return this.plants.get(id);
+    }
+
+    @Override
+    public boolean addPlant(IAgriPlant plant) {
+        return this.plants.putIfAbsent(plant.getId(), plant) == null;
+    }
+
+    @Override
+    public boolean removePlant(IAgriPlant plant) {
+        return this.plants.remove(plant.getId()) != null;
+    }
+
+    @Override
+    public Collection<IAgriPlant> getPlants() {
         return Collections.unmodifiableCollection(this.plants.values());
-	}
+    }
 
-	@Override
-	public Set<String> getPlantIds() {
+    @Override
+    public Set<String> getPlantIds() {
         return Collections.unmodifiableSet(this.plants.keySet());
-	}
-	
+    }
+
 }

@@ -49,7 +49,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     private final int seedSlotButtonOffset_Y;
     protected final List<GuiComponent<StorageElement>> activeSeeds = new ArrayList<>();
     protected List<GuiComponent<ItemStack>> setActiveSeedButtons;
-    
+
     private String sortMethod = "growth";
 
     public GuiSeedStorageBase(ContainerSeedStorageBase container, int maxVertSlots, int maxHorSlots, int sortButtonX, int sortButtonY, int setActiveSeedButtonsX, int setActiveSeedButtonsY, int seedSlotsX, int seedSlotsY) {
@@ -78,11 +78,11 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     @Override
     protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
         this.clearComponents();
-        
+
         this.addComponent(BasicComponents.getButtonComponent("agricraft_tooltip.growth", sortButtonX, calcSortY(0), BUTTON_WIDTH, BUTTON_HEIGHT, (c, p) -> setSortMethod("growth")));
         this.addComponent(BasicComponents.getButtonComponent("agricraft_tooltip.gain", sortButtonX, calcSortY(1), BUTTON_WIDTH, BUTTON_HEIGHT, (c, p) -> setSortMethod("gain")));
         this.addComponent(BasicComponents.getButtonComponent("agricraft_tooltip.strength", sortButtonX, calcSortY(2), BUTTON_WIDTH, BUTTON_HEIGHT, (c, p) -> setSortMethod("strength")));
-        
+
         this.addComponent(BasicComponents.getButtonComponent("<<", sortButtonX, sortButtonY + 3 * (BUTTON_HEIGHT + 1), -1 + (BUTTON_WIDTH) / 4, BUTTON_HEIGHT, (c, p) -> this.scrollHorizontal(-this.getMaxHorizontalScroll())));
         this.addComponent(BasicComponents.getButtonComponent("<", sortButtonX + (BUTTON_WIDTH) / 4, sortButtonY + 3 * (BUTTON_HEIGHT + 1), -1 + (BUTTON_WIDTH) / 4, BUTTON_HEIGHT, (c, p) -> this.scrollHorizontal(-1)));
         this.addComponent(BasicComponents.getButtonComponent(">", sortButtonX + 1 + 2 * (BUTTON_WIDTH) / 4, sortButtonY + 3 * (BUTTON_HEIGHT + 1), -1 + (BUTTON_WIDTH) / 4, BUTTON_HEIGHT, (c, p) -> this.scrollHorizontal(1)));
@@ -92,7 +92,7 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     private int calcSortY(int index) {
         return sortButtonY + index + (index * BUTTON_HEIGHT);
     }
-    
+
     private boolean setSortMethod(String method) {
         this.sortMethod = method;
         return true;

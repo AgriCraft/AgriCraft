@@ -67,7 +67,7 @@ public class CustomWoodType {
     public String toString() {
         return this.block.getRegistryName() + ":" + this.meta;
     }
-    
+
     @SideOnly(Side.CLIENT)
     @Nonnull
     public TextureAtlasSprite getIcon() {
@@ -83,5 +83,5 @@ public class CustomWoodType {
         }
         return texture;
     }
-    
+
 }

@@ -11,36 +11,36 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 
 /**
  *
- * 
+ *
  */
 public class ProduceRecipeHandler implements IRecipeHandler<IAgriPlant> {
 
-	@Nonnull
-	@Override
-	public Class<IAgriPlant> getRecipeClass() {
-		return IAgriPlant.class;
-	}
+    @Nonnull
+    @Override
+    public Class<IAgriPlant> getRecipeClass() {
+        return IAgriPlant.class;
+    }
 
-	@Nonnull
-	@Override
-	public String getRecipeCategoryUid() {
-		return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
-	}
-	
-	@Override
-	public String getRecipeCategoryUid(IAgriPlant recipe) {
-		return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
-	}
+    @Nonnull
+    @Override
+    public String getRecipeCategoryUid() {
+        return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
+    }
 
-	@Nonnull
-	@Override
-	public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriPlant recipe) {
-		return new ProduceRecipeWrapper(recipe);
-	}
+    @Override
+    public String getRecipeCategoryUid(IAgriPlant recipe) {
+        return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
+    }
 
-	@Override
-	public boolean isRecipeValid(@Nonnull IAgriPlant recipe) {
-		return recipe.getProducts() != null;
-	}
+    @Nonnull
+    @Override
+    public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriPlant recipe) {
+        return new ProduceRecipeWrapper(recipe);
+    }
+
+    @Override
+    public boolean isRecipeValid(@Nonnull IAgriPlant recipe) {
+        return recipe.getProducts() != null;
+    }
 
 }

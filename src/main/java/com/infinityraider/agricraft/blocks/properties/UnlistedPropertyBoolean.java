@@ -8,7 +8,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
  *
  */
 public class UnlistedPropertyBoolean implements IUnlistedProperty<Boolean> {
-    
+
     private final String name;
 
     public UnlistedPropertyBoolean(String name) {
@@ -34,5 +34,5 @@ public class UnlistedPropertyBoolean implements IUnlistedProperty<Boolean> {
     public String valueToString(Boolean b) {
         return String.valueOf(b);
     }
-    
+
 }

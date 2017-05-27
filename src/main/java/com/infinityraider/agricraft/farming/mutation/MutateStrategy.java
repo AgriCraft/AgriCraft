@@ -28,10 +28,10 @@ public class MutateStrategy implements IAgriCrossStrategy {
         // Validate the parameters.
         Objects.requireNonNull(crop, "You cannot execute a mutation on a null crop!");
         Objects.requireNonNull(rand, "The random passed to a mutation strategy should not be null!");
-        
+
         // Fetch all neighboring crop instances.
         final List<IAgriCrop> neighbors = WorldHelper.getTileNeighbors(crop.getWorld(), crop.getPos(), IAgriCrop.class);
-        
+
         // Determine all possible parents.
         final List<IAgriPlant> parents = neighbors.stream()
                 // Filter out all crops that are not mature.
@@ -70,10 +70,10 @@ public class MutateStrategy implements IAgriCrossStrategy {
 
         // Choose a random index in the list.
         final int index = rand.nextInt(mutations.size());
-        
+
         // Fetch the chosen mutation from the list.
         final IAgriMutation mutation = mutations.get(index);
-        
+
         // Determine if we should actually go through with this.
         if (mutation.getChance() <= rand.nextDouble()) {
             return Optional.empty();
@@ -81,7 +81,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
 
         // Calculate the stat associated with the new plant.
         Optional<IAgriStat> stat = StatCalculatorRegistry.getInstance().calculateMutationStats(mutation, neighbors);
-        
+
         // Return the mutation result.
         return stat
                 // Map the stat to an AgriSeed by adding the plant.

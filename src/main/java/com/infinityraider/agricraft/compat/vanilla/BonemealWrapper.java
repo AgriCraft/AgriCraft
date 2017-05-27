@@ -16,51 +16,51 @@ import net.minecraft.world.World;
 
 /**
  *
- * 
+ *
  */
 public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFertilizer> {
-    
+
     public static final BonemealWrapper INSTANCE = new BonemealWrapper();
-	
-	private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
+
+    private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
 
     private BonemealWrapper() {
     }
 
-	@Override
-	public boolean canTriggerMutation() {
-		return true;
-	}
+    @Override
+    public boolean canTriggerMutation() {
+        return true;
+    }
 
-	@Override
-	public boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random) {
-		if (target.acceptsFertilizer(this) && target.onApplyFertilizer(this, random) == MethodResult.SUCCESS) {
-			if (player == null || !player.capabilities.isCreativeMode) {
-				stack.stackSize = stack.stackSize - 1;
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean applyFertilizer(EntityPlayer player, World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random) {
+        if (target.acceptsFertilizer(this) && target.onApplyFertilizer(this, random) == MethodResult.SUCCESS) {
+            if (player == null || !player.capabilities.isCreativeMode) {
+                stack.stackSize = stack.stackSize - 1;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	public void performClientAnimations(int meta, World world, BlockPos pos) {
-		// TODO!
-	}
+    @Override
+    public void performClientAnimations(int meta, World world, BlockPos pos) {
+        // TODO!
+    }
 
-	@Override
-	public boolean accepts(Object obj) {
-		return obj instanceof ItemStack && BONEMEAL.isItemEqual((ItemStack) obj);
-	}
+    @Override
+    public boolean accepts(Object obj) {
+        return obj instanceof ItemStack && BONEMEAL.isItemEqual((ItemStack) obj);
+    }
 
-	@Override
-	public Optional<IAgriFertilizer> valueOf(Object obj) {
-		if (obj instanceof ItemStack && BONEMEAL.isItemEqual((ItemStack) obj)) {
-			return Optional.of(this);
-		} else {
-			return Optional.empty();
-		}
-	}
-	
+    @Override
+    public Optional<IAgriFertilizer> valueOf(Object obj) {
+        if (obj instanceof ItemStack && BONEMEAL.isItemEqual((ItemStack) obj)) {
+            return Optional.of(this);
+        } else {
+            return Optional.empty();
+        }
+    }
+
 }

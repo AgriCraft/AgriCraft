@@ -14,5 +14,5 @@ public class FakeContainer extends Container {
     public boolean canInteractWith(EntityPlayer ep) {
         return true;
     }
-    
+
 }

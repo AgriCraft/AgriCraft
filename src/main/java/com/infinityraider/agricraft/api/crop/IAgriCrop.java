@@ -103,16 +103,16 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     default boolean canBeRaked() {
         return hasSeed();
     }
-    
+
     // =========================================================================
     // Event Methods
     // =========================================================================
     public MethodResult onGrowthTick();
-    
+
     public MethodResult onApplyCrops(EntityPlayer player);
-    
+
     public MethodResult onApplySeeds(EntityPlayer player, AgriSeed seed);
-    
+
     public MethodResult onBroken(EntityPlayer player);
 
 }

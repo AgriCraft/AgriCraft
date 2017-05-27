@@ -11,12 +11,12 @@ public class MethodGetNeededSoil extends MethodBaseGrowthReq {
 
     @Override
     protected Object[] onMethodCalled(Optional<IAgriPlant> plant) {
-        return new Object[] { plant.flatMap(this::getMainSoil).orElse("null") };
+        return new Object[]{plant.flatMap(this::getMainSoil).orElse("null")};
     }
-    
-    private final Optional<String> getMainSoil(IAgriPlant plant) {
+
+    private Optional<String> getMainSoil(IAgriPlant plant) {
         return plant.getGrowthRequirement().getSoils().stream()
-                    .findFirst()
-                    .map(s -> s.getName());
+                .findFirst()
+                .map(s -> s.getName());
     }
 }

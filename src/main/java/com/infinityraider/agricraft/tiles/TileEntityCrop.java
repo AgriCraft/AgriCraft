@@ -325,7 +325,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (this.isRemote()) {
             return false;
         }
-        
+
         // Fetch the seed;
         final AgriSeed seed = this.getSeed();
 
@@ -359,7 +359,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     public static boolean canOvertake(AgriSeed overtaker, AgriSeed victim, Random rand) {
-        return  overtaker.getPlant().isAggressive() 
+        return overtaker.getPlant().isAggressive()
                 && victim.getStat().getStrength() < overtaker.getStat().getStrength() * rand.nextDouble();
     }
 

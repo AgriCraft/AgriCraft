@@ -78,7 +78,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 
     @Override
     protected void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, BlockSeedStorage block,
-                                               TileEntitySeedStorage tile, TextureAtlasSprite icon) {
+            TileEntitySeedStorage tile, TextureAtlasSprite icon) {
         tess.pushMatrix();
         rotateBlock(tess, tile.getOrientation().getOpposite());
         tile.getLockedSeed().ifPresent(s -> drawSeed(tess, s.toStack()));
@@ -96,7 +96,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockSeedStorage block, TileEntitySeedStorage tile,
-                                            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         renderSides(tess, icon);
     }
 

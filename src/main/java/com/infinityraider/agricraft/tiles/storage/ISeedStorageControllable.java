@@ -6,6 +6,7 @@ import java.util.Optional;
 import net.minecraft.item.ItemStack;
 
 public interface ISeedStorageControllable {
+
     /**
      * Tries to add a stack to the inventory, returns true on success
      */
@@ -22,17 +23,20 @@ public interface ISeedStorageControllable {
     ItemStack getStackForSlotId(int slotId);
 
     /**
-     * Decreases the stacksize of the stack in the slot with the given ID by an amount
+     * Decreases the stacksize of the stack in the slot with the given ID by an
+     * amount
      */
     ItemStack decreaseStackSizeInSlot(int slotId, int amount);
 
     /**
-     * Returns a list of all the stacks in this inventory, all the slots in this inventory must have the same type of seed
+     * Returns a list of all the stacks in this inventory, all the slots in this
+     * inventory must have the same type of seed
      */
     List<ItemStack> getInventory();
 
     /**
-     * Returns a list of all the slots in the inventory corresponding to that seed
+     * Returns a list of all the slots in the inventory corresponding to that
+     * seed
      */
     List<SeedStorageSlot> getSlots();
 
@@ -77,7 +81,8 @@ public interface ISeedStorageControllable {
     Optional<AgriSeed> getLockedSeed();
 
     /**
-     * Returns the id of this controllable in the controller, returns -1 if this doesn't have a controller
+     * Returns the id of this controllable in the controller, returns -1 if this
+     * doesn't have a controller
      */
     int getControllableID();
 }

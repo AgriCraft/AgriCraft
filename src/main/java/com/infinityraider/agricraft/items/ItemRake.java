@@ -91,7 +91,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     public void registerRecipes() {
         // Normal Rake Recipe
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 0), "fs", 'f', "fenceWood", 's', "stickWood"));
-        
+
         // Iron Rake Recipe
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
     }

@@ -14,13 +14,13 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * @author Ryan
  */
 public class CropPlantedEvent extends Event {
-    
+
     @Nonnull
     final IAgriCrop crop;
-    
+
     @Nonnull
     final AgriSeed seed;
-    
+
     @Nullable
     final EntityPlayer player;
 
@@ -44,5 +44,5 @@ public class CropPlantedEvent extends Event {
     public EntityPlayer getPlayer() {
         return player;
     }
-    
+
 }

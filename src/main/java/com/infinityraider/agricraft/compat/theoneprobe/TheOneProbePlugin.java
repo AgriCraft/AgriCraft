@@ -16,7 +16,7 @@ public class TheOneProbePlugin implements IAgriPlugin {
     @Override
     public void initPlugin() {
         AgriCore.getLogger("agricraft").debug("Calling One Probe Register! Result: {0}",
-        FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", this.getClass().getPackage().getName() + ".GetTheOneProbe"));
+                FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", this.getClass().getPackage().getName() + ".GetTheOneProbe"));
     }
 
 }

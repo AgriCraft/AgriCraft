@@ -8,6 +8,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelSeedAnalyzer extends ModelBase {
+
     //fields
     ModelRenderer base;
     ModelRenderer stick1;

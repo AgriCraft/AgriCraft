@@ -91,7 +91,7 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, BlockSeedAnalyzer block,
-                                        TileEntitySeedAnalyzer tile, float partialTick, int destroyStage) {
+            TileEntitySeedAnalyzer tile, float partialTick, int destroyStage) {
         tessellator.draw();
         this.renderSeed(tile, 0, 0, 0);
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
