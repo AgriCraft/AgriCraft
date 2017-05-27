@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public interface ISeedStorageController {
+
     /**
      * Tries to add a stack to the inventory, returns true on success
      */
@@ -17,7 +18,8 @@ public interface ISeedStorageController {
     List<ItemStack> getControlledSeeds();
 
     /**
-     * Returns a list of all the slots in the inventory corresponding to that seed
+     * Returns a list of all the slots in the inventory corresponding to that
+     * seed
      */
     List<SeedStorageSlot> getSlots(Item seed, int meta);
 

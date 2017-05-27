@@ -19,48 +19,48 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRegister {
 
-	public ItemNugget() {
-		super("agri_nugget");
-		this.setCreativeTab(CreativeTabs.MATERIALS);
-	}
+    public ItemNugget() {
+        super("agri_nugget");
+        this.setCreativeTab(CreativeTabs.MATERIALS);
+    }
 
-	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> varients) {
-		for (AgriNuggetType type : AgriNuggetType.values()) {
-			ItemStack stack = new ItemStack(item, 1, type.ordinal());
-			OreDictionary.registerOre(type.nugget, stack);
-			varients.add(stack);
-		}
-	}
+    @Override
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> varients) {
+        for (AgriNuggetType type : AgriNuggetType.values()) {
+            ItemStack stack = new ItemStack(item, 1, type.ordinal());
+            OreDictionary.registerOre(type.nugget, stack);
+            varients.add(stack);
+        }
+    }
 
-	@Override
-	public boolean getHasSubtypes() {
-		return true;
-	}
+    @Override
+    public boolean getHasSubtypes() {
+        return true;
+    }
 
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return AgriNuggetType.getNugget(stack.getMetadata()).getUnlocalizedName();
-	}
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        return AgriNuggetType.getNugget(stack.getMetadata()).getUnlocalizedName();
+    }
 
-	@Override
-	public String getModelId(ItemStack stack) {
-		return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
-	}
+    @Override
+    public String getModelId(ItemStack stack) {
+        return AgriNuggetType.getNugget(stack.getMetadata()).nugget;
+    }
 
-	@Override
-	public String getBaseTexture(ItemStack stack) {
-		return AgriNuggetType.getNugget(stack.getMetadata()).texture;
-	}
+    @Override
+    public String getBaseTexture(ItemStack stack) {
+        return AgriNuggetType.getNugget(stack.getMetadata()).texture;
+    }
 
-	@Override
-	public List<ResourceLocation> getAllTextures() {
-		List<ResourceLocation> textures = new ArrayList<>(AgriNuggetType.values().length);
-		for (AgriNuggetType type : AgriNuggetType.values()) {
-			textures.add(new ResourceLocation(type.texture));
-		}
-		return textures;
-	}
+    @Override
+    public List<ResourceLocation> getAllTextures() {
+        List<ResourceLocation> textures = new ArrayList<>(AgriNuggetType.values().length);
+        for (AgriNuggetType type : AgriNuggetType.values()) {
+            textures.add(new ResourceLocation(type.texture));
+        }
+        return textures;
+    }
 
     @Override
     public void registerRecipes() {

@@ -22,7 +22,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
     public ContainerSeedStorageBase(T tile, InventoryPlayer inventory, int xOffset, int yOffset) {
         super(tile, inventory, xOffset, yOffset);
     }
-    
+
     /**
      * tries to add a stack to the storage, return true on success
      */

@@ -10,13 +10,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TextureStitchHandler {
+
     private static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
 
     public static TextureStitchHandler getInstance() {
         return INSTANCE;
     }
 
-    private TextureStitchHandler() {}
+    private TextureStitchHandler() {
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SuppressWarnings("unused")

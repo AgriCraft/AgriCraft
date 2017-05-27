@@ -149,7 +149,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 
     @Override
     public final IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        Optional<T> tile = (Optional<T>)WorldHelper.getTile(world, pos, TileEntityCustomWood.class);
+        Optional<T> tile = (Optional<T>) WorldHelper.getTile(world, pos, TileEntityCustomWood.class);
         return getExtendedCustomWoodState((IExtendedBlockState) state, tile)
                 .withProperty(AgriProperties.CUSTOM_WOOD_TYPE, tile.map(TileEntityCustomWood::getMaterial).orElse(CustomWoodTypeRegistry.DEFAULT));
     }

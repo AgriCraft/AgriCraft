@@ -32,13 +32,13 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, B block,
-                                        T tile, float partialTick, int destroyStage) {
+            T tile, float partialTick, int destroyStage) {
         this.renderWorldBlockWoodDynamic(tessellator, world, pos, block, tile, getIcon(tile));
     }
 
     @Override
     public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, B block, EnumFacing side) {
-        if(state instanceof IExtendedBlockState) {
+        if (state instanceof IExtendedBlockState) {
             CustomWoodType type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
             this.renderWorldBlockWoodStatic(tessellator, (IExtendedBlockState) state, block, side, type.getIcon());
         }
@@ -46,18 +46,18 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
 
     @Override
     public final void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, B block, T tile,
-                                           ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
         tile.setMaterial(stack);
         this.renderInventoryBlockWood(tessellator, world, state, block, tile, stack, entity, type, getIcon(tile));
     }
 
     protected abstract void renderWorldBlockWoodDynamic(ITessellator tess, World world, BlockPos pos, B block,
-                                                        T tile, TextureAtlasSprite icon);
+            T tile, TextureAtlasSprite icon);
 
     protected abstract void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, B block, EnumFacing side, TextureAtlasSprite icon);
 
     protected abstract void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, B block, T tile,
-                                                     ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon);
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon);
 
     @Override
     public List<ResourceLocation> getAllTextures() {

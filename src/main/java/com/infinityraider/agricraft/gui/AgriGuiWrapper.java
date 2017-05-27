@@ -35,11 +35,11 @@ public final class AgriGuiWrapper extends GuiContainer {
         return this.guis.getFirst();
     }
 
-    public final FontRenderer getFontRenderer() {
+    public FontRenderer getFontRenderer() {
         return fontRendererObj;
     }
 
-    public final RenderItem getItemRender() {
+    public RenderItem getItemRender() {
         return itemRender;
     }
 
@@ -126,7 +126,7 @@ public final class AgriGuiWrapper extends GuiContainer {
     }
 
     @Override
-    public final void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         // Calculate relative mouse position.
         final int relMouseX = mouseX - this.guiLeft;
         final int relMouseY = mouseY - this.guiTop;
@@ -154,7 +154,7 @@ public final class AgriGuiWrapper extends GuiContainer {
             this.popGui();
             return;
         }
-        
+
         // Call Hook
         this.guis.getLast().onKeyTyped(this, character, keycode);
 

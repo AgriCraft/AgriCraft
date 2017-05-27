@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  *
- * 
+ *
  */
 public class SeedWrapper implements IAgriAdapter<AgriSeed> {
 

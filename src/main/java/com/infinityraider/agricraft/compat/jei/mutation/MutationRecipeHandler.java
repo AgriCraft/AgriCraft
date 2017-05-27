@@ -11,37 +11,37 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 
 /**
  *
- * 
+ *
  */
 public class MutationRecipeHandler implements IRecipeHandler<IAgriMutation> {
 
-	@Nonnull
-	@Override
-	public Class<IAgriMutation> getRecipeClass() {
-		return IAgriMutation.class;
-	}
+    @Nonnull
+    @Override
+    public Class<IAgriMutation> getRecipeClass() {
+        return IAgriMutation.class;
+    }
 
-	@Nonnull
-	@Override
-	public String getRecipeCategoryUid() {
-		return AgriCraftJEIPlugin.CATEGORY_MUTATION;
-	}
+    @Nonnull
+    @Override
+    public String getRecipeCategoryUid() {
+        return AgriCraftJEIPlugin.CATEGORY_MUTATION;
+    }
 
-	@Nonnull
-	@Override
-	public String getRecipeCategoryUid(IAgriMutation recipe) {
-		return AgriCraftJEIPlugin.CATEGORY_MUTATION;
-	}
+    @Nonnull
+    @Override
+    public String getRecipeCategoryUid(IAgriMutation recipe) {
+        return AgriCraftJEIPlugin.CATEGORY_MUTATION;
+    }
 
-	@Nonnull
-	@Override
-	public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriMutation recipe) {
-		return new MutationRecipeWrapper(recipe);
-	}
+    @Nonnull
+    @Override
+    public IRecipeWrapper getRecipeWrapper(@Nonnull IAgriMutation recipe) {
+        return new MutationRecipeWrapper(recipe);
+    }
 
-	@Override
-	public boolean isRecipeValid(@Nonnull IAgriMutation recipe) {
-		return !recipe.getParents().isEmpty();
-	}
+    @Override
+    public boolean isRecipeValid(@Nonnull IAgriMutation recipe) {
+        return !recipe.getParents().isEmpty();
+    }
 
 }

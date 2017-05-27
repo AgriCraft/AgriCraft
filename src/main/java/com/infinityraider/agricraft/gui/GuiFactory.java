@@ -7,7 +7,6 @@ import net.minecraftforge.fml.client.IModGuiFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unused")
 public class GuiFactory implements IModGuiFactory {

@@ -15,31 +15,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class SoundHandler {
+
     private static final SoundHandler INSTANCE = new SoundHandler();
 
     public static SoundHandler getInstance() {
         return INSTANCE;
     }
 
-    private SoundHandler() {}
+    private SoundHandler() {
+    }
 
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onSoundPlayed(SoundEvent.SoundSourceEvent event) {
-        if(!AgriCraftConfig.disableSounds) {
+        if (!AgriCraftConfig.disableSounds) {
             return;
         }
         ISound sound = event.getSound();
-        if(sound == null) {
+        if (sound == null) {
             return;
         }
         World world = AgriCraft.proxy.getClientWorld();
         int x = (int) (sound.getXPosF() - 0.5F);
         int y = (int) (sound.getYPosF() - 0.5F);
         int z = (int) (sound.getZPosF() - 0.5F);
-        if(world != null) {
+        if (world != null) {
             Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-            if(block instanceof BlockCrop) {
+            if (block instanceof BlockCrop) {
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
             }

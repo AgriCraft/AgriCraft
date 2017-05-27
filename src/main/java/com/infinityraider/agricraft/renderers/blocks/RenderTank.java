@@ -92,7 +92,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
 
             // -0.0001F to avoid Z-fighting on maximum filled tanks
             float y = tank.getFluidHeight() - A;
-            
+
             // Calculate water brightness.
             final int l = RenderUtilBase.getMixedBrightness(tank.getWorld(), tank.getPos(), Blocks.WATER);
             tessellator.setBrightness(l);

@@ -46,7 +46,7 @@ public class MessageSyncPlantJson extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        
+
         if (this.index == 0) {
             AgriCore.getPlants().clearElements();
         }
@@ -68,11 +68,11 @@ public class MessageSyncPlantJson extends MessageBase<IMessage> {
     protected List<IMessageSerializer> getNecessarySerializers() {
         return ImmutableList.of(new JsonSerializer<AgriPlant>());
     }
-    
+
     @SideOnly(Side.CLIENT)
-	public final String getServerId() {
-		final ServerData data = Minecraft.getMinecraft().getCurrentServerData();
-		return "server_" + data.serverIP.replaceAll("\\.", "-").replaceAll(":", "_");
-	}
+    public final String getServerId() {
+        final ServerData data = Minecraft.getMinecraft().getCurrentServerData();
+        return "server_" + data.serverIP.replaceAll("\\.", "-").replaceAll(":", "_");
+    }
 
 }

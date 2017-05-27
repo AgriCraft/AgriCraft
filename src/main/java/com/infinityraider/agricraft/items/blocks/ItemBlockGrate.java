@@ -17,16 +17,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * The item form of the Grate block.
  */
 public class ItemBlockGrate extends ItemBlockCustomWood {
-	
+
     /**
      * The default constructor for the Grate Item.
-     * 
+     *
      * @param block the block that the item is associated with.
      */
     public ItemBlockGrate(Block block) {
         super(block);
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
@@ -56,7 +56,7 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
 
     /**
      * Sets the freshly placed TileEntityGrate's orientation.
-     * 
+     *
      * @param grate the grate in question.
      * @param hit the hit location, on the axis matching the orientation.
      * @param orientation the orientation.

@@ -18,7 +18,7 @@ public class ModValidator implements AgriValidator {
     @Override
     public boolean isValidBlock(String block) {
         String[] parts = block.split(":");
-		if (parts.length < 2) {
+        if (parts.length < 2) {
             return false;
         } else {
             Block b = GameRegistry.findBlock(parts[0], parts[1]);
@@ -30,7 +30,7 @@ public class ModValidator implements AgriValidator {
     @Override
     public boolean isValidItem(String item) {
         String[] parts = item.split(":");
-		if (parts.length < 2) {
+        if (parts.length < 2) {
             return false;
         } else {
             Item i = GameRegistry.findItem(parts[0], parts[1]);

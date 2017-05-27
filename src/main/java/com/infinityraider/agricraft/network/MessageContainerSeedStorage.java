@@ -11,13 +11,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageContainerSeedStorage extends MessageBase<IMessage> {
+
     private Item item;
     private int meta;
     private int amount;
     private EntityPlayer player;
     private int slotId;
 
-    public MessageContainerSeedStorage() {}
+    public MessageContainerSeedStorage() {
+    }
 
     public MessageContainerSeedStorage(ItemStack stack, int slotId) {
         this();
@@ -35,7 +37,7 @@ public class MessageContainerSeedStorage extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        if(player.openContainer instanceof ContainerSeedStorageBase) {
+        if (player.openContainer instanceof ContainerSeedStorageBase) {
             ContainerSeedStorageBase storage = (ContainerSeedStorageBase) player.openContainer;
             storage.moveStackFromTileEntityToPlayer(slotId, new ItemStack(item, amount, meta));
         }

@@ -10,7 +10,7 @@ import mcjty.theoneprobe.api.ITheOneProbe;
 /**
  * Since TheOneProbe has a terrible registration interface.
  */
-public class GetTheOneProbe implements Function<ITheOneProbe, Void>{
+public class GetTheOneProbe implements Function<ITheOneProbe, Void> {
 
     @Override
     public Void apply(ITheOneProbe probe) {
@@ -20,5 +20,5 @@ public class GetTheOneProbe implements Function<ITheOneProbe, Void>{
         probe.registerProvider(agriProvider);
         return null;
     }
-    
+
 }

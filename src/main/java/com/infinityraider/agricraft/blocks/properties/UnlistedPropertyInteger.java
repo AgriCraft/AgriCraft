@@ -8,7 +8,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
  *
  */
 public class UnlistedPropertyInteger implements IUnlistedProperty<Integer> {
-    
+
     private final String name;
 
     public UnlistedPropertyInteger(String name) {
@@ -34,5 +34,5 @@ public class UnlistedPropertyInteger implements IUnlistedProperty<Integer> {
     public String valueToString(Integer v) {
         return String.valueOf(v);
     }
-    
+
 }

@@ -26,10 +26,10 @@ public class MutationRecipeWrapper extends BlankRecipeWrapper {
 
     public MutationRecipeWrapper(IAgriMutation recipe) {
         // Setup lists.
-        chance = (int)(recipe.getChance() * 100) + "%";
+        chance = (int) (recipe.getChance() * 100) + "%";
         input = new ArrayList<>();
         output = recipe.getChild().getSeed();
-        
+
         // Add Parents
         recipe.getParents().stream()
                 .map(p -> p.getSeed())
@@ -38,21 +38,21 @@ public class MutationRecipeWrapper extends BlankRecipeWrapper {
 
         // Setup Soil List
         final List<ItemStack> soils = new ArrayList<>();
-        
+
         // Add Soils to List
         recipe.getChild().getGrowthRequirement().getSoils().stream()
                 .flatMap(s -> s.getVarients().stream())
                 .map(s -> s.toStack())
                 .forEach(soils::add);
-        
+
         // Add Farmland if no Soils
         if (soils.isEmpty()) {
             soils.add(new ItemStack(Blocks.FARMLAND));
         }
-        
+
         // Add Soil List to Master List
         input.add(soils);
-        
+
         // Add Condition to List
         recipe.getChild().getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())

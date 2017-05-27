@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
  * @author Ryan
  */
 public interface IAgriStatCalculatorRegistry extends IAgriAdapterRegistry<IAgriStatCalculator> {
-    
+
     /**
      * Calculates the stats for a spread event.
      *

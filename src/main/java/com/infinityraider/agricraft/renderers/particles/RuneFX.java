@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RuneFX extends AgriCraftFX {
+
     private final float uMin;
     private final float uMax;
     private final float vMin;

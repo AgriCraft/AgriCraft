@@ -66,7 +66,7 @@ public final class CustomWoodRecipeHelper {
             else if (ingredients[i] instanceof Item) {
                 ingredients[i] = new ItemStack((Item) ingredients[i]);
             }
-            
+
             // Test if input matches the material parameter.
             if (Objects.equals(MATERIAL_PARAMETER, ingredients[i])) {
                 // Replace the material parameter.

@@ -32,5 +32,5 @@ public class AgriOneProbeAdapter implements IProbeInfoProvider {
         WorldHelper.getTile(world, data.getPos(), IAgriDisplayable.class).ifPresent(e -> e.addDisplayInfo(lines::add));
         lines.stream().forEach(probeInfo::text);
     }
-    
+
 }

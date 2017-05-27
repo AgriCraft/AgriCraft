@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
 public class MethodException extends Exception {
+
     private IMethod method;
     private String msg;
 
@@ -10,6 +11,6 @@ public class MethodException extends Exception {
     }
 
     public String getDescription() {
-        return "Method '"+method.getName()+"' errored: "+msg;
+        return "Method '" + method.getName() + "' errored: " + msg;
     }
 }

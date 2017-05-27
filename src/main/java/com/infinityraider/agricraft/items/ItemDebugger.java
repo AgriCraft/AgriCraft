@@ -13,20 +13,20 @@ import java.util.List;
 
 public class ItemDebugger extends ItemDebuggerBase implements IItemWithModel {
 
-	public ItemDebugger() {
-		super(true);
-		this.setMaxStackSize(1);
-		if (ConfigurationHandler.getInstance().debug) {
-			this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-		}
-	}
+    public ItemDebugger() {
+        super(true);
+        this.setMaxStackSize(1);
+        if (ConfigurationHandler.getInstance().debug) {
+            this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+        }
+    }
 
-	@Override
-	protected List<DebugMode> getDebugModes() {
-		List<DebugMode> list = new ArrayList<>();
+    @Override
+    protected List<DebugMode> getDebugModes() {
+        List<DebugMode> list = new ArrayList<>();
         list.add(new DebugModeCheckSoil());
-		list.add(new DebugModeClearGrass());
-		list.add(new DebugModeCoreInfo());
-		return list;
-	}
+        list.add(new DebugModeClearGrass());
+        list.add(new DebugModeCoreInfo());
+        return list;
+    }
 }

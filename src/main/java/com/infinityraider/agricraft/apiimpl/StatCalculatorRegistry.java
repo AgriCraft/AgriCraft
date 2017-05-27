@@ -9,19 +9,19 @@ import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculat
 
 /**
  *
- * 
+ *
  */
 public class StatCalculatorRegistry extends AdapterRegistry<IAgriStatCalculator> implements IAgriStatCalculatorRegistry {
 
-	private static final StatCalculatorRegistry INSTANCE = new StatCalculatorRegistry();
+    private static final StatCalculatorRegistry INSTANCE = new StatCalculatorRegistry();
 
-	static {
+    static {
         INSTANCE.registerAdapter(new StatCalculatorNormal());
-		INSTANCE.registerAdapter(new StatCalculatorHardcore());
-	}
+        INSTANCE.registerAdapter(new StatCalculatorHardcore());
+    }
 
-	public static IAgriStatCalculatorRegistry getInstance() {
-		return INSTANCE;
+    public static IAgriStatCalculatorRegistry getInstance() {
+        return INSTANCE;
     }
 
 }

@@ -18,41 +18,41 @@ import net.minecraft.world.World;
 
 /**
  *
- * 
+ *
  */
 public class DebugModeClearGrass extends DebugMode {
-	
-	@AgriConfigurable(
-			category = AgriConfigCategory.DEBUG,
-			key = "Grass Breaker Radius",
-			min = "1", max = "50",
-			comment = "The radius of the grass breaking tool."
-	)
-	private static int radius = 10;
-	
-	static {
-		AgriCore.getConfig().addConfigurable(DebugModeClearGrass.class);
-	}
-	
-	@Override
-	public String debugName() {
-		return "clear grass";
-	}
 
-	@Override
-	public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		pos = pos.toImmutable();
-		for (int x = -radius; x < radius; x++) {
-			for (int z = -radius; z < radius; z++) {
-				BlockPos loc = pos.add(x, 0, z);
-				Block block = world.getBlockState(loc).getBlock();
-				if (block instanceof BlockBush) {
-					world.destroyBlock(loc, false);
-				}
-			}
-		}
-	}
-    
+    @AgriConfigurable(
+            category = AgriConfigCategory.DEBUG,
+            key = "Grass Breaker Radius",
+            min = "1", max = "50",
+            comment = "The radius of the grass breaking tool."
+    )
+    private static int radius = 10;
+
+    static {
+        AgriCore.getConfig().addConfigurable(DebugModeClearGrass.class);
+    }
+
+    @Override
+    public String debugName() {
+        return "clear grass";
+    }
+
+    @Override
+    public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        pos = pos.toImmutable();
+        for (int x = -radius; x < radius; x++) {
+            for (int z = -radius; z < radius; z++) {
+                BlockPos loc = pos.add(x, 0, z);
+                Block block = world.getBlockState(loc).getBlock();
+                if (block instanceof BlockBush) {
+                    world.destroyBlock(loc, false);
+                }
+            }
+        }
+    }
+
     @Override
     public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         // NOP
@@ -62,5 +62,5 @@ public class DebugModeClearGrass extends DebugMode {
     public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         // NOP
     }
-	
+
 }

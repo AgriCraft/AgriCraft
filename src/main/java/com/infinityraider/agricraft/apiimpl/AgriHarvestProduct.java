@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author Ryan
  */
 public final class AgriHarvestProduct implements IAgriHarvestProduct {
-    
+
     @Nonnull
     private final Item item;
     @Nonnull
@@ -71,7 +71,7 @@ public final class AgriHarvestProduct implements IAgriHarvestProduct {
     public double getChance() {
         return chance;
     }
-    
+
     @Override
     public boolean isHidden() {
         return hidden;
@@ -135,7 +135,5 @@ public final class AgriHarvestProduct implements IAgriHarvestProduct {
             return false;
         }
     }
-    
-    
-    
+
 }

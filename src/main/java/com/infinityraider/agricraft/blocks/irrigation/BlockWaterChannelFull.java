@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> implements IRecipeRegister {
+
     public BlockWaterChannelFull() {
         super("full");
     }
@@ -32,5 +33,5 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityC
         // Deconstruction Recipe
         CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL, 4, false, AgriBlocks.getInstance().CHANNEL_FULL);
     }
-    
+
 }

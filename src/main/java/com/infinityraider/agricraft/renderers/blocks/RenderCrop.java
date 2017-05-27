@@ -110,5 +110,5 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
     public boolean applyAmbientOcclusion() {
         return true;
     }
-    
+
 }

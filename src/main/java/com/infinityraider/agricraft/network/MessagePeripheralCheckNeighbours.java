@@ -11,9 +11,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessagePeripheralCheckNeighbours extends MessageBase<IMessage> {
+
     private BlockPos pos;
 
-    public MessagePeripheralCheckNeighbours() {}
+    public MessagePeripheralCheckNeighbours() {
+    }
 
     public MessagePeripheralCheckNeighbours(BlockPos pos) {
         this();
@@ -28,7 +30,7 @@ public class MessagePeripheralCheckNeighbours extends MessageBase<IMessage> {
     @Override
     protected void processMessage(MessageContext ctx) {
         World world = AgriCraft.proxy.getClientWorld();
-        if(world != null) {
+        if (world != null) {
             WorldHelper.getTile(world, pos, TileEntityPeripheral.class).ifPresent(TileEntityPeripheral::checkSides);
         }
     }

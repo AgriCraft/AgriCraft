@@ -12,7 +12,7 @@ import java.util.Random;
 
 /**
  * Class defining the default method in which plants spread to new crops.
- * 
+ *
  * TODO: Clean up this class!
  */
 public class SpreadStrategy implements IAgriCrossStrategy {

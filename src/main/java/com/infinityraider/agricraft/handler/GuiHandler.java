@@ -26,8 +26,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Gui Handler.
- * 
- * This class should be replaced with something automatic, since this stuff should be easily automated...
+ *
+ * This class should be replaced with something automatic, since this stuff
+ * should be easily automated...
  */
 public class GuiHandler implements IGuiHandler {
 

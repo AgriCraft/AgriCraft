@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public final class AgriAlphaWarnings {
 
     private static final Random rand = new Random();
-    
+
     private static final String BORING_WARNING = "AgriCraft is still in alpha. Bugs are to be expected.";
 
     private static final String[][] WARNINGS = new String[][]{

@@ -10,7 +10,7 @@ import net.minecraft.inventory.Container;
  *
  */
 public interface IAgriGui<T extends Container> {
-    
+
     // ========================================
     // Constants
     // ========================================
@@ -20,7 +20,7 @@ public interface IAgriGui<T extends Container> {
     // Getters
     // ========================================
     T getContainer();
-    
+
     int getHeight();
 
     int getWidth();
@@ -33,19 +33,19 @@ public interface IAgriGui<T extends Container> {
 
     default void onUpdateMouse(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
     }
-    
+
     default void onMouseClicked(AgriGuiWrapper wrapper, int relMouseX, int relMouseY, int mouseButton) {
     }
-    
+
     default void onMouseClickMove(AgriGuiWrapper wrapper, int relMouseX, int relMouseY, int mouseButton) {
     }
-    
+
     default void onKeyTyped(AgriGuiWrapper wrapper, char character, int keycode) {
     }
 
     default void onRenderForeground(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
     }
-    
+
     default void onRenderBackground(AgriGuiWrapper wrapper, float f, int relMouseX, int relMouseY) {
     }
 

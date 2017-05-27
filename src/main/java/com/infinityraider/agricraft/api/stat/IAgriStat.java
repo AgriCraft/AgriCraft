@@ -68,14 +68,14 @@ public interface IAgriStat {
 
     /**
      * Fetches the maximum valid gain value for a stat of this type.
-     * 
+     *
      * @return The maximum gain value a seed of this kind can have.
      */
     byte getMaxGain();
 
     /**
      * Fetches the maximum valid strength value for a stat of this type.
-     * 
+     *
      * @return The maximum strength value a seed of this kind can have.
      */
     byte getMaxStrength();

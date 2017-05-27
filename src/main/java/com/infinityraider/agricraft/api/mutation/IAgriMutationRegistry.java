@@ -23,7 +23,7 @@ public interface IAgriMutationRegistry {
      */
     @Nonnull
     Collection<IAgriMutation> getMutations();
-    
+
     /**
      * Streams all the currently registered mutations. Mutations are registered
      * during the onServerAboutToStart event, so any calls to this method before

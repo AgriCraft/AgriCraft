@@ -41,7 +41,7 @@ public interface IFluidHandlerBlock {
 
     /**
      * Attempts to drain the tank.
-     * 
+     *
      * @param world the world the tank is in.
      * @param pos the position of the tank in the given world.
      * @param state the state of the thank.
@@ -54,7 +54,7 @@ public interface IFluidHandlerBlock {
 
     /**
      * Attempts to drain the tank.
-     * 
+     *
      * @param world the world the tank is in.
      * @param pos the position of the tank in the given world.
      * @param state the state of the thank.

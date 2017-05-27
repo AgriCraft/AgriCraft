@@ -83,7 +83,7 @@ public class PlayerInteractEventHandler {
         // The player is attempting to plant a seed, which is simply unacceptable.
         // We must deny this event.
         event.setUseItem(Event.Result.DENY);
-        
+
         // If we are on the client side we are done.
         if (event.getSide().isClient()) {
             return;
@@ -130,7 +130,7 @@ public class PlayerInteractEventHandler {
         if (event.getSide().isClient()) {
             return;
         }
-        
+
         // Fetch the player.
         final EntityPlayer player = event.getEntityPlayer();
 
@@ -161,7 +161,7 @@ public class PlayerInteractEventHandler {
         if (stack.getItem() != Item.getItemFromBlock(Blocks.VINE)) {
             return;
         }
-        
+
         // Fetch world information.
         final BlockPos pos = event.getPos();
         final World world = event.getWorld();
@@ -169,7 +169,7 @@ public class PlayerInteractEventHandler {
 
         // Fetch the block at the location.
         final Block block = state.getBlock();
-        
+
         // If the player isn't clicking a grate, who cares?
         if (!(block instanceof BlockGrate)) {
             return;

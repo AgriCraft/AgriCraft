@@ -22,9 +22,9 @@ public class JournalPageIntroduction implements JournalPage {
     public List<GuiComponent> getComponents() {
         return Arrays.asList(
                 new GuiComponentBuilder<>("agricraft_journal.introduction", 24, 28, 0, 0)
-                .setRenderAction(ComponentRenderer::renderComponentText)
-                .setScale(0.5)
-                .build()
+                        .setRenderAction(ComponentRenderer::renderComponentText)
+                        .setScale(0.5)
+                        .build()
         );
     }
 

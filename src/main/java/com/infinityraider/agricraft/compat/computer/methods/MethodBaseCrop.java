@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import java.util.ArrayList;
 
 public abstract class MethodBaseCrop extends MethodBase {
-	
+
     public MethodBaseCrop(String name) {
         super(name, false, false, true);
     }
@@ -20,5 +20,5 @@ public abstract class MethodBaseCrop extends MethodBase {
         pars.add(MethodParameter.DIRECTION);
         return pars;
     }
-	
+
 }

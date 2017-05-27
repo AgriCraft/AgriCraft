@@ -55,14 +55,14 @@ public final class StackHelper {
             return tag;
         }
     }
-    
+
     public static int getSize(ItemStack stack) {
         return (stack == null) ? 0 : stack.stackSize;
     }
 
     public static List<ItemStack> fitToMaxSize(ItemStack stack) {
         final List<ItemStack> items = new ArrayList<>();
-        final int max = stack.getMaxStackSize();        
+        final int max = stack.getMaxStackSize();
         int total = stack.stackSize;
         while (total > 0) {
             ItemStack newStack = stack.copy();

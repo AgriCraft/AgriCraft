@@ -15,10 +15,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  */
 @Cancelable
 public class CropHarvestEvent extends Event {
-    
+
     @Nonnull
     private final IAgriCrop crop;
-    
+
     @Nullable
     private final EntityPlayer player;
 
@@ -31,9 +31,9 @@ public class CropHarvestEvent extends Event {
     public IAgriCrop getCrop() {
         return crop;
     }
-    
+
     public EntityPlayer getPlayer() {
         return player;
     }
-    
+
 }

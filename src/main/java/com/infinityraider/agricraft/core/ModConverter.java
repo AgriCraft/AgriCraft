@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  *
- * 
+ *
  */
 public class ModConverter implements AgriConverter {
 

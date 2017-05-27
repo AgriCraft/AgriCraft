@@ -30,15 +30,20 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Optional.InterfaceList( value = {
-        @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheral"),
-        @Optional.Interface(modid = "OpenComputers", iface = "li.cil.oc.api.network.SimpleComponent"),
+@Optional.InterfaceList(value = {
+    @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheral")
+    ,
+        @Optional.Interface(modid = "OpenComputers", iface = "li.cil.oc.api.network.SimpleComponent")
+    ,
         @Optional.Interface(modid = "OpenComputers", iface = "li.cil.oc.api.network.ManagedPeripheral")
 })
 public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
+
     private static IMethod[] methods;
     private boolean mayAnalyze = false;
-    /** Data to animate the peripheral client side */
+    /**
+     * Data to animate the peripheral client side
+     */
     @SideOnly(Side.CLIENT)
     private int updateCheck;
     @SideOnly(Side.CLIENT)
@@ -67,7 +72,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     private void initMethods() {
-        if(methods ==null) {
+        if (methods == null) {
             methods = methodList();
         }
     }
@@ -79,30 +84,31 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
 
     @Override
     public void update() {
-        if(mayAnalyze) {
-            if(this.hasSpecimen() && !isSpecimenAnalyzed()) {
+        if (mayAnalyze) {
+            if (this.hasSpecimen() && !isSpecimenAnalyzed()) {
                 super.update();
             } else {
                 reset();
             }
-        } if(worldObj.isRemote) {
-            if(updateCheck == 0) {
+        }
+        if (worldObj.isRemote) {
+            if (updateCheck == 0) {
                 checkSides();
             }
-            for(EnumFacing dir:VALID_DIRECTIONS) {
+            for (EnumFacing dir : VALID_DIRECTIONS) {
                 int timer = timers.get(dir);
-                timer = timer + (isSideActive(dir)?1:-1);
-                timer = timer<0?0:timer;
-                timer = timer>MAX?MAX:timer;
+                timer = timer + (isSideActive(dir) ? 1 : -1);
+                timer = timer < 0 ? 0 : timer;
+                timer = timer > MAX ? MAX : timer;
                 timers.put(dir, timer);
             }
-            updateCheck = (updateCheck+1)%1200;
+            updateCheck = (updateCheck + 1) % 1200;
         }
     }
 
     @SideOnly(Side.CLIENT)
     public int getTimer(EnumFacing dir) {
-        if(updateCheck == 0 || timers == null) {
+        if (updateCheck == 0 || timers == null) {
             checkSides();
         }
         return timers.get(dir);
@@ -115,7 +121,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
 
     @SideOnly(Side.CLIENT)
     public void checkSides() {
-        for(EnumFacing dir:VALID_DIRECTIONS) {
+        for (EnumFacing dir : VALID_DIRECTIONS) {
             checkSide(dir);
         }
         updateCheck = 0;
@@ -123,13 +129,13 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
 
     @SideOnly(Side.CLIENT)
     private void checkSide(EnumFacing dir) {
-        if(timers == null) {
+        if (timers == null) {
             timers = new HashMap<>();
         }
-        if(!timers.containsKey(dir)) {
+        if (!timers.containsKey(dir)) {
             timers.put(dir, 0);
         }
-        if(activeSides == null) {
+        if (activeSides == null) {
             activeSides = new HashMap<>();
         }
         activeSides.put(dir, isCrop(dir));
@@ -140,7 +146,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     public void startAnalyzing() {
-        if(!mayAnalyze && this.hasSpecimen() && !this.isSpecimenAnalyzed()) {
+        if (!mayAnalyze && this.hasSpecimen() && !this.isSpecimenAnalyzed()) {
             mayAnalyze = true;
             this.markForUpdate();
         }
@@ -153,20 +159,20 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     private void reset() {
-        if(mayAnalyze) {
+        if (mayAnalyze) {
             mayAnalyze = false;
             this.markForUpdate();
         }
     }
 
-	@Override
+    @Override
     public String getName() {
         return "agricraft_peripheral";
     }
 
     public String[] getAllMethodNames() {
         String[] names = new String[methods.length];
-        for(int i=0;i<names.length;i++) {
+        for (int i = 0; i < names.length; i++) {
             names[i] = methods[i].getName();
         }
         return names;
@@ -177,24 +183,24 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     private static IMethod[] methodList() {
-        return new IMethod[] {
-                new MethodAnalyze(),
-                new MethodGetBaseBlock(),
-                new MethodGetBrightness(),
-                new MethodGetBrightnessRange(),
-                new MethodGetCurrentSoil(),
-                new MethodGetGrowthStage(),
-                new MethodGetNeededSoil(),
-                new MethodGetPlant(),
-                new MethodGetSpecimen(),
-                new MethodGetStats(),
-                new MethodHasJournal(),
-                new MethodHasPlant(),
-                new MethodIsAnalyzed(),
-                new MethodIsCrossCrop(),
-                new MethodIsFertile(),
-                new MethodIsMature(),
-                new MethodNeedsBaseBlock()
+        return new IMethod[]{
+            new MethodAnalyze(),
+            new MethodGetBaseBlock(),
+            new MethodGetBrightness(),
+            new MethodGetBrightnessRange(),
+            new MethodGetCurrentSoil(),
+            new MethodGetGrowthStage(),
+            new MethodGetNeededSoil(),
+            new MethodGetPlant(),
+            new MethodGetSpecimen(),
+            new MethodGetStats(),
+            new MethodHasJournal(),
+            new MethodHasPlant(),
+            new MethodIsAnalyzed(),
+            new MethodIsCrossCrop(),
+            new MethodIsFertile(),
+            new MethodIsMature(),
+            new MethodNeedsBaseBlock()
         };
     }
 
@@ -238,8 +244,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     public boolean equals(IPeripheral other) {
         return other instanceof TileEntityPeripheral;
     }
-    */
-
+     */
     //---------------------
     //OpenComputers methods
     //---------------------
@@ -273,5 +278,5 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
             throw new Exception(e.getDescription());
         }
     }
-    */
+     */
 }

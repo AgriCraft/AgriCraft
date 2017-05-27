@@ -37,10 +37,10 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
 
     @Override
     protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
-        if(!type.isPrimary()) {
+        if (!type.isPrimary()) {
             return;
         }
-        switch(dir) {
+        switch (dir) {
             case EAST:
                 //positive x
                 tessellator.drawScaledFace(5, 5, 11, 12, dir, matIcon, 16);
@@ -62,7 +62,7 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
-                                            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
+            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
         this.renderSide(tessellator, state, EnumFacing.NORTH, IrrigationConnectionType.PRIMARY, icon);
         this.renderSide(tessellator, state, EnumFacing.EAST, IrrigationConnectionType.PRIMARY, icon);

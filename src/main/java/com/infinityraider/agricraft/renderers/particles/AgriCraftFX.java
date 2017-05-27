@@ -15,7 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract  class AgriCraftFX extends Particle {
+public abstract class AgriCraftFX extends Particle {
+
     protected final ResourceLocation texture;
 
     protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, ResourceLocation texture) {
@@ -49,7 +50,7 @@ public abstract  class AgriCraftFX extends Particle {
         //if anyone sees this and knows how, let me know please, thanks :D
         ITessellator tessellator = TessellatorVertexBuffer.getInstance(worldRenderer);
 
-        if(texture != null) {
+        if (texture != null) {
             float f6 = 0;
             float f7 = 1;
             float f8 = 0;
@@ -68,6 +69,6 @@ public abstract  class AgriCraftFX extends Particle {
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             super.renderParticle(worldRenderer, entity, partialTicks, f0, f1, f2, f3, f4);
         }
-		
+
     }
 }

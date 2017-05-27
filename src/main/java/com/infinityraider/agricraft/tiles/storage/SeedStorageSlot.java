@@ -22,7 +22,7 @@ public class SeedStorageSlot {
         this.slotId = slotId;
         this.invId = invId;
     }
-    
+
     public ItemStack toStack() {
         return seed.toStack(count);
     }
@@ -38,13 +38,13 @@ public class SeedStorageSlot {
     public int getId() {
         return invId >= 0 ? (1000 * invId) + slotId : slotId;
     }
-    
+
     public void writeToNbt(NBTTagCompound tag) {
         this.seed.toStack().writeToNBT(tag);
         tag.setInteger(AgriNBT.COUNT, this.count);
         tag.setInteger(AgriNBT.ID, this.slotId);
     }
-    
+
     public static final Optional<SeedStorageSlot> readFromNbt(NBTTagCompound tag, int invId) {
         Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(ItemStack.loadItemStackFromNBT(tag));
         if (seed.isPresent()) {
@@ -70,13 +70,13 @@ public class SeedStorageSlot {
 
         @Override
         public int compare(SeedStorageSlot o1, SeedStorageSlot o2) {
-            
+
             final IAgriStat s1 = o1.getSeed().getStat();
             final IAgriStat s2 = o2.getSeed().getStat();
-            
-            final int[] a1 = new int[]{ s1.getGain(), s1.getGrowth(), s1.getStrength() };
-            final int[] a2 = new int[]{ s2.getGain(), s2.getGrowth(), s2.getStrength() };
-            
+
+            final int[] a1 = new int[]{s1.getGain(), s1.getGrowth(), s1.getStrength()};
+            final int[] a2 = new int[]{s2.getGain(), s2.getGrowth(), s2.getStrength()};
+
             for (int i = 0; i < 3; i++) {
                 if (a1[i] < a2[i]) {
                     return -1;
@@ -84,7 +84,7 @@ public class SeedStorageSlot {
                     return 1;
                 }
             }
-            
+
             return 0;
         }
     }

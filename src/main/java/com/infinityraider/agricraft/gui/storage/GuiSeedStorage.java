@@ -46,7 +46,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
         this.drawScrollBarHorizontal(wrapper, texture);
     }
      */
-    private final boolean clearSeed() {
+    private boolean clearSeed() {
         new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
         //this.updateScreen();
         return true;

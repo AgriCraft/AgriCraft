@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.ArrayList;
 
 public abstract class MethodBasePeripheral extends MethodBase {
+
     public MethodBasePeripheral(String name) {
         super(name, false, true, false);
     }
