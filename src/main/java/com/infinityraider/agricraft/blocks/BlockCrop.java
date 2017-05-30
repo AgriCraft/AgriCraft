@@ -1,14 +1,13 @@
 package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.util.MethodResult;
-import com.infinityraider.agricraft.apiimpl.FertilizerRegistry;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
@@ -132,8 +131,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
 
         // Step 5. If the held item is a type of fertilizer, apply it.
-        if (FertilizerRegistry.getInstance().hasAdapter(heldItem)) {
-            Optional<IAgriFertilizer> fert = FertilizerRegistry.getInstance().valueOf(heldItem);
+        if (AgriApi.FertilizerRegistry().get().hasAdapter(heldItem)) {
+            Optional<IAgriFertilizer> fert = AgriApi.FertilizerRegistry().get().valueOf(heldItem);
             return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, crop.getRandom());
         }
 
@@ -151,7 +150,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
 
         // Step 7. Attempt to resolve held item as a seed.
-        final Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(heldItem);
+        final Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(heldItem);
 
         // Step 8. If held item is a seed, attempt to plant it in the crop.
         if (seed.isPresent()) {

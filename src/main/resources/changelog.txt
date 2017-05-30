@@ -1,5 +1,10 @@
 Changelog
 ---------
+2.0.0a18
+- TWEAK: Major API refactor in attempt to increase stability.
+- FIXED: Crash caused by attempting to disable AgriCraft sounds (note this is a "fix").
+- FIXED: MagicalAgriculture plants spawning magically.
+
 2.0.0a17
 - FIXED: Tank bottoms would render at incorrect times.
 - FIXED: Water in water pads was opaque instead of transparent.

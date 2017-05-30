@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriStack;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +35,7 @@ public class GrowthRequirementHandler {
     //-------------------------
     public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
         return FuzzyStack.fromBlockState(world.getBlockState(pos))
-                .filter(soil -> SoilRegistry.getInstance().isSoil(soil) || defaultSoils.contains(soil))
+                .filter(soil -> AgriApi.SoilRegistry().get().isSoil(soil) || defaultSoils.contains(soil))
                 .isPresent();
     }
 

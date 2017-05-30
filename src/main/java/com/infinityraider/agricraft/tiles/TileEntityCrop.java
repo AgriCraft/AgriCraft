@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
@@ -10,10 +11,6 @@ import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.util.MethodResult;
-import com.infinityraider.agricraft.apiimpl.MutationEngine;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.apiimpl.SoilRegistry;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriBlocks;
@@ -288,7 +285,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriSoil> getSoil() {
-        return SoilRegistry.getInstance().getSoil(this.worldObj.getBlockState(this.pos.down()));
+        return AgriApi.SoilRegistry().get().getSoil(this.worldObj.getBlockState(this.pos.down()));
     }
 
     // =========================================================================
@@ -307,7 +304,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
 
         // Attempt to spawn plant.
-        for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
+        for (IAgriPlant p : AgriApi.PlantRegistry().get().getPlants()) {
             if (p.getSpawnChance() > this.getRandom().nextDouble() && this.isFertile(p)) {
                 this.setCrossCrop(false);
                 this.setSeed(new AgriSeed(p, new PlantStats()));
@@ -446,8 +443,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        final IAgriStat stat = StatRegistry.getInstance().valueOf(tag).orElse(null);
-        final IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
+        final IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
+        final IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(tag.getString(AgriNBT.SEED));
         if (stat != null && plant != null) {
             this.seed = new AgriSeed(plant, stat);
         } else {
@@ -492,7 +489,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * the code that makes the crop cross with neighboring crops
      */
     public void crossOver() {
-        MutationEngine.getInstance().attemptCross(this, this.worldObj.rand);
+        AgriApi.MutationEngine().get().attemptCross(this, this.worldObj.rand);
     }
 
     @Override

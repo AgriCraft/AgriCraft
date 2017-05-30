@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.init;
 
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.items.ItemAgriSeed;
 import com.infinityraider.agricraft.items.ItemClipper;
 import com.infinityraider.agricraft.items.ItemClipping;
@@ -32,8 +31,6 @@ public class AgriItems {
         AGRI_SEED = new ItemAgriSeed();
         AGRI_NUGGET = new ItemNugget();
         MAGNIFYING_GLASS = new ItemMagnifyingGlass();
-
-        SeedRegistry.getInstance().registerAdapter((ItemAgriSeed) AGRI_SEED);
     }
 
     public final ItemBase CROPS;

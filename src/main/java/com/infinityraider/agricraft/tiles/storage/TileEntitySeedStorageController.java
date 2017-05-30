@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.storage;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +84,7 @@ public class TileEntitySeedStorageController extends TileEntityCustomWood implem
 
     @Override
     public Optional<ISeedStorageControllable> getControllable(ItemStack stack) {
-        final IAgriPlant plant = SeedRegistry.getInstance().valueOf(stack).map(s -> s.getPlant()).orElse(null);
+        final IAgriPlant plant = AgriApi.SeedRegistry().get().valueOf(stack).map(s -> s.getPlant()).orElse(null);
         if (plant == null) {
             return Optional.empty();
         }

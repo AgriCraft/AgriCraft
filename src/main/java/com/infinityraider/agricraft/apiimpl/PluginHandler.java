@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
@@ -13,7 +14,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.api.stat.IAgriStatCalculatorRegistry;
+import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
@@ -40,14 +41,14 @@ public final class PluginHandler {
     }
 
     public static void postInit() {
-        registerSoils(SoilRegistry.getInstance());
-        registerPlants(PlantRegistry.getInstance());
-        registerMutations(MutationRegistry.getInstance());
-        registerStats(StatRegistry.getInstance());
-        registerSeeds(SeedRegistry.getInstance());
-        registerFertilizers(FertilizerRegistry.getInstance());
-        registerStatCalculators(StatCalculatorRegistry.getInstance());
-        registerCrossStrategies(MutationEngine.getInstance());
+        registerSoils(AgriApi.SoilRegistry().get());
+        registerPlants(AgriApi.PlantRegistry().get());
+        registerMutations(AgriApi.MutationRegistry().get());
+        registerStats(AgriApi.StatRegistry().get());
+        registerSeeds(AgriApi.SeedRegistry().get());
+        registerFertilizers(AgriApi.FertilizerRegistry().get());
+        registerStatCalculators(AgriApi.StatCalculatorRegistry().get());
+        registerCrossStrategies(AgriApi.MutationEngine().get());
     }
 
     public static void loadTextures(Consumer<ResourceLocation> registry) {
@@ -78,7 +79,7 @@ public final class PluginHandler {
         plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(fertilizerRegistry));
     }
 
-    public static void registerStatCalculators(IAgriStatCalculatorRegistry calculatorRegistry) {
+    public static void registerStatCalculators(IAgriAdapterRegistry<IAgriStatCalculator> calculatorRegistry) {
         plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStatCalculators(calculatorRegistry));
     }
 

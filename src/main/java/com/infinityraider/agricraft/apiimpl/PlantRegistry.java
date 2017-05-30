@@ -16,16 +16,10 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class PlantRegistry implements IAgriPlantRegistry {
 
-    private static final IAgriPlantRegistry INSTANCE = new PlantRegistry();
-
     private final ConcurrentMap<String, IAgriPlant> plants;
 
     public PlantRegistry() {
         this.plants = new ConcurrentHashMap<>();
-    }
-
-    public static IAgriPlantRegistry getInstance() {
-        return INSTANCE;
     }
 
     @Override

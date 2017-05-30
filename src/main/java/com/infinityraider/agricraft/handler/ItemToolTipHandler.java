@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.handler;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.mojang.realmsclient.gui.ChatFormatting;
@@ -41,7 +41,7 @@ public class ItemToolTipHandler {
         ItemStack stack = event.getItemStack();
         // Add Seed Information.
         if (stack != null) {
-            AgriSeed seed = SeedRegistry.getInstance().valueOf(stack).orElse(null);
+            AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(stack).orElse(null);
             if (seed != null) {
                 if (seed.getStat().isAnalyzed()) {
                     seed.getStat().addStats(event.getToolTip()::add);
@@ -105,7 +105,7 @@ public class ItemToolTipHandler {
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (stack != null && stack.getItem() instanceof IAgriTrowelItem) {
-            AgriSeed seed = SeedRegistry.getInstance().valueOf(event.getItemStack()).orElse(null);
+            AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(event.getItemStack()).orElse(null);
             if (seed != null) {
                 event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
             } else {

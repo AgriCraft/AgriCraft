@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.tiles.analyzer;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -106,7 +106,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return if the analyze slot contains a <em>valid</em> SEED.
      */
     public final boolean hasSeed() {
-        return SeedRegistry.getInstance().hasAdapter(specimen);
+        return AgriApi.SeedRegistry().get().hasAdapter(specimen);
     }
 
     public final void setProgress(int value) {
@@ -133,7 +133,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return if the stack is valid.
      */
     public static boolean isValid(ItemStack stack) {
-        return SeedRegistry.getInstance().hasAdapter(stack);
+        return AgriApi.SeedRegistry().get().hasAdapter(stack);
     }
 
     /**
@@ -143,7 +143,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      */
     public final boolean isSpecimenAnalyzed() {
         if (this.specimen != null) {
-            Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(specimen);
+            Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(specimen);
             return seed.isPresent() && seed.get().getStat().isAnalyzed();
         }
         return false;
@@ -180,7 +180,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      */
     public void analyze() {
         //analyze the SEED
-        final Optional<AgriSeed> wrapper = SeedRegistry.getInstance().valueOf(specimen);
+        final Optional<AgriSeed> wrapper = AgriApi.SeedRegistry().get().valueOf(specimen);
         if (wrapper.isPresent()) {
             AgriSeed seed = wrapper.get();
             seed = seed.withStat(seed.getStat().withAnalyzed(true));

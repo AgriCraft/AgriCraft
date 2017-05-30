@@ -115,8 +115,6 @@ public class AgriCraftConfig {
     // TODO: Instead follow the reduce particles setting from minecraft.
     @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable particles", comment = "Set to true to disable particles for the sprinklers.")
     public static boolean disableParticles = false;
-    @AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Disable sounds", comment = "Set to true to disable sounds.")
-    public static boolean disableSounds = false;
 
     //seed storage
     @AgriConfigurable(category = AgriConfigCategory.STORAGE, key = "Disable seed storage system", comment = "Set to true to disable the seed storage systems.")

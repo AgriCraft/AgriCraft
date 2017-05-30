@@ -17,16 +17,10 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class SoilRegistry implements IAgriSoilRegistry {
 
-    private static final IAgriSoilRegistry INSTANCE = new SoilRegistry();
-
     private final ConcurrentMap<String, IAgriSoil> soils;
 
     public SoilRegistry() {
         this.soils = new ConcurrentHashMap<>();
-    }
-
-    public static IAgriSoilRegistry getInstance() {
-        return INSTANCE;
     }
 
     @Override

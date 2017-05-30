@@ -1,12 +1,10 @@
 package com.infinityraider.agricraft.items;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -40,7 +38,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         final PlantStats baseStat = new PlantStats();
-        for (IAgriPlant plant : PlantRegistry.getInstance().getPlants()) {
+        for (IAgriPlant plant : AgriApi.PlantRegistry().get().getPlants()) {
             if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
                 ItemStack stack = new ItemStack(item);
                 NBTTagCompound tag = new NBTTagCompound();
@@ -59,7 +57,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        final Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        final Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
         return seed.map(s -> s.getPlant().getSeedName()).orElse("Generic Seeds");
     }
 
@@ -76,7 +74,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     public boolean accepts(Object obj) {
         NBTTagCompound tag = NBTHelper.asTag(obj);
-        return tag != null && tag.hasKey(AgriNBT.SEED) && StatRegistry.getInstance().hasAdapter(tag);
+        return tag != null && tag.hasKey(AgriNBT.SEED) && AgriApi.StatRegistry().get().hasAdapter(tag);
     }
 
     @Override
@@ -85,8 +83,8 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
         if (tag == null) {
             return Optional.empty();
         }
-        IAgriPlant plant = PlantRegistry.getInstance().getPlant(tag.getString(AgriNBT.SEED));
-        IAgriStat stat = StatRegistry.getInstance().valueOf(tag).get();
+        IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(tag.getString(AgriNBT.SEED));
+        IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
         if (plant != null && stat != null) {
             return Optional.of(new AgriSeed(plant, stat));
         } else {
@@ -97,24 +95,24 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     @SideOnly(Side.CLIENT)
     public String getModelId(ItemStack stack) {
-        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
         return seed.map(s -> s.getPlant().getId()).orElse("");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public String getBaseTexture(ItemStack stack) {
-        Optional<AgriSeed> seed = SeedRegistry.getInstance().valueOf(stack);
+        Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
         return seed.map(s -> s.getPlant().getSeedTexture().toString()).orElse("agricraft:items/seed_unknown");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public List<ResourceLocation> getAllTextures() {
-        final Collection<IAgriPlant> plants = PlantRegistry.getInstance().getPlants();
+        final Collection<IAgriPlant> plants = AgriApi.PlantRegistry().get().getPlants();
         final List<ResourceLocation> textures = new ArrayList<>(plants.size());
         textures.add(new ResourceLocation("agricraft:items/seed_unknown"));
-        for (IAgriPlant p : PlantRegistry.getInstance().getPlants()) {
+        for (IAgriPlant p : AgriApi.PlantRegistry().get().getPlants()) {
             textures.add(p.getSeedTexture());
         }
         return textures;

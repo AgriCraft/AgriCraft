@@ -60,7 +60,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
             list.add("========== " + AgriCore.getTranslator().translate("item.agricraft:magnifying_glass.name") + " ==========");
 
             // Add lighting information.
-            list.add("Brightness: (" + world.getLightFromNeighbors(pos.up()) + "/16)");
+            list.add("Brightness: (" + world.getLightFromNeighbors(pos.up()) + "/15)");
 
             // Add block information.
             if (block instanceof IAgriDisplayable) {

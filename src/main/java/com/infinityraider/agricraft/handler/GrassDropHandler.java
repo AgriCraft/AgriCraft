@@ -2,8 +2,8 @@
  */
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.List;
 import java.util.Random;
@@ -57,8 +57,8 @@ public final class GrassDropHandler {
     }
 
     public static void addGrassDrops(List<ItemStack> drops, Random rand) {
-        PlantRegistry
-                .getInstance()
+        AgriApi.PlantRegistry()
+                .get()
                 .getPlants()
                 .stream()
                 .forEach(p -> addGrassDrop(drops, rand, p));

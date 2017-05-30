@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.gui.journal;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.MutationRegistry;
 import com.infinityraider.agricraft.gui.component.BasicComponents;
 import com.infinityraider.agricraft.gui.component.GuiComponent;
 import com.infinityraider.agricraft.reference.Reference;
@@ -194,7 +194,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return MutationRegistry.getInstance().streamMutations()
+        return AgriApi.MutationRegistry().get().streamMutations()
                 // Filter out all mutations where this plant is not a parent.
                 .filter(m -> m.hasParent(plant))
                 // Filter out all muations that are not discovered.
@@ -207,7 +207,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return MutationRegistry.getInstance().streamMutations()
+        return AgriApi.MutationRegistry().get().streamMutations()
                 // Filter out all mutations where this plant is not the child.
                 .filter(m -> m.hasChild(plant))
                 // Filter out all muations that are not discovered.
@@ -220,7 +220,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return MutationRegistry.getInstance().streamMutations()
+        return AgriApi.MutationRegistry().get().streamMutations()
                 // Filter out all mutations where this plant is not a parent.
                 .filter(m -> m.hasParent(plant))
                 // Filter out all muations that are not half-discovered.

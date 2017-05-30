@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
 import com.infinityraider.agricraft.crafting.RecipeCopyJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -106,7 +106,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
         List<IAgriPlant> list = new ArrayList<>();
         if (journal != null && journal.hasTagCompound()) {
             for (String id : getDiscoveredSeedIds(journal)) {
-                IAgriPlant plant = PlantRegistry.getInstance().getPlant(id);
+                IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(id);
                 if (plant != null) {
                     list.add(plant);
                 }

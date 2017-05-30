@@ -29,7 +29,7 @@ public class ModLogger implements AgriLogAdapter {
 
     @Override
     public void debug(Object source, String format, Object... objects) {
-        log(Level.INFO, source, "[AGRI-DEBUG]: " + format, objects);
+        log(Level.INFO, source, "[DEBUG]: " + format, objects);
     }
 
     @Override

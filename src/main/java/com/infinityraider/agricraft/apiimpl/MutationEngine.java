@@ -19,19 +19,14 @@ import net.minecraft.util.Tuple;
  */
 public final class MutationEngine implements IAgriMutationEngine {
 
-    private static final MutationEngine INSTANCE = new MutationEngine();
-
-    private final List<Tuple<Double, IAgriCrossStrategy>> strategies = new ArrayList<>();
+    private final List<Tuple<Double, IAgriCrossStrategy>> strategies;
 
     private double sigma = 0;
 
-    private MutationEngine() {
-        registerStrategy(new MutateStrategy());
-        registerStrategy(new SpreadStrategy());
-    }
-
-    public static MutationEngine getInstance() {
-        return INSTANCE;
+    public MutationEngine() {
+        this.strategies = new ArrayList<>();
+        this.registerStrategy(new MutateStrategy());
+        this.registerStrategy(new SpreadStrategy());
     }
 
     @Override

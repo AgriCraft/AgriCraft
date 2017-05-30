@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.farming.mutation;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.apiimpl.StatCalculatorRegistry;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
@@ -30,8 +30,9 @@ public class SpreadStrategy implements IAgriCrossStrategy {
             int index = rand.nextInt(matureNeighbours.size());
             AgriSeed seed = matureNeighbours.get(index).getSeed();
             if (seed != null && rand.nextDouble() < seed.getPlant().getSpreadChance()) {
-                return StatCalculatorRegistry.getInstance()
-                        .calculateSpreadStats(seed.getPlant(), matureNeighbours)
+                return AgriApi.StatCalculatorRegistry().get()
+                        .valueOf(seed.getPlant())
+                        .map(calc -> calc.calculateSpreadStats(seed.getPlant(), matureNeighbours))
                         .map(stat -> new AgriSeed(seed.getPlant(), stat));
             }
         }

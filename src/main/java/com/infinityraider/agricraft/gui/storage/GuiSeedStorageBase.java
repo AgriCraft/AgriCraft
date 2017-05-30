@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.gui.storage;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.gui.ComponentGui;
@@ -233,8 +233,8 @@ public abstract class GuiSeedStorageBase extends ComponentGui<ContainerSeedStora
     }
 
     protected void setActiveSeed(ItemStack stack) {
-        SeedRegistry
-                .getInstance()
+        AgriApi.SeedRegistry()
+                .get()
                 .valueOf(stack)
                 .ifPresent(this::setActiveSeed);
     }

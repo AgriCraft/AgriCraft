@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
  *
  *
  */
-public class AgriSeed {
+public final class AgriSeed {
 
     @Nonnull
     private final IAgriPlant plant;

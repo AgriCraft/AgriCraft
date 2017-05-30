@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.apiimpl.StatRegistry;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.utility.StackHelper;
@@ -25,7 +25,7 @@ public class MethodGetStats extends MethodBase {
 
     @Override
     protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
-        IAgriStat stats = StatRegistry.getInstance().valueOf(StackHelper.getTag(peripheral.getSpecimen())).orElse(null);
+        IAgriStat stats = AgriApi.StatRegistry().get().valueOf(StackHelper.getTag(peripheral.getSpecimen())).orElse(null);
         return stats == null ? null : new Object[]{stats.getGrowth(), stats.getGain(), stats.getStrength()};
     }
 

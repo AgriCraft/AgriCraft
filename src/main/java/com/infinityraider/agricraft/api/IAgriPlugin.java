@@ -15,7 +15,6 @@ import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
-import com.infinityraider.agricraft.api.stat.IAgriStatCalculatorRegistry;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.util.ResourceLocation;
@@ -88,7 +87,7 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerStatCalculators(@Nonnull IAgriStatCalculatorRegistry statCalculatorRegistry) {
+    default void registerStatCalculators(@Nonnull IAgriAdapterRegistry<IAgriStatCalculator> statCalculatorRegistry) {
         // Default Implementation: Do nothing.
     }
 

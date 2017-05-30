@@ -3,7 +3,7 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.plant.AgriMutation;
-import com.infinityraider.agricraft.apiimpl.PlantRegistry;
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 
 /**
@@ -17,9 +17,9 @@ public class JsonMutation extends Mutation {
     public JsonMutation(AgriMutation mutation) {
         super(
                 mutation.getChance(),
-                PlantRegistry.getInstance().getPlant(mutation.getChild().getId()),
-                PlantRegistry.getInstance().getPlant(mutation.getParent1().getId()),
-                PlantRegistry.getInstance().getPlant(mutation.getParent2().getId())
+                AgriApi.PlantRegistry().get().getPlant(mutation.getChild().getId()),
+                AgriApi.PlantRegistry().get().getPlant(mutation.getParent1().getId()),
+                AgriApi.PlantRegistry().get().getPlant(mutation.getParent2().getId())
         );
         this.mutation = mutation;
     }

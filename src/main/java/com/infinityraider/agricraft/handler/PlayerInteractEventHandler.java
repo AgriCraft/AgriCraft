@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.apiimpl.SeedRegistry;
 import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -50,7 +50,7 @@ public class PlayerInteractEventHandler {
         }
 
         // If the item in the player's hand is not a seed, who cares?
-        if (!SeedRegistry.getInstance().hasAdapter(stack)) {
+        if (!AgriApi.SeedRegistry().get().hasAdapter(stack)) {
             return;
         }
 
