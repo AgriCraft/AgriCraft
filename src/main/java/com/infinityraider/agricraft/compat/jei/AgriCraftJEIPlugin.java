@@ -43,8 +43,8 @@ public class AgriCraftJEIPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
         jeiRuntime = jeiRuntimeInstance;
-        AgriApi.PlantRegistry().get().getPlants().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
-        AgriApi.MutationRegistry().get().getMutations().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        AgriApi.PlantRegistry().get().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        AgriApi.MutationRegistry().get().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
     }
 
     @Override

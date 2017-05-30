@@ -67,7 +67,7 @@ public final class GrowthRequirement implements IGrowthRequirement {
 
     @Override
     public boolean hasValidSoil(IBlockAccess world, BlockPos pos) {
-        return FuzzyStack.fromBlockState(world.getBlockState(pos.down()))
+        return FuzzyStack.from(world.getBlockState(pos.down()))
                 .filter(soil -> this.getSoils().stream().anyMatch(e -> e.isVarient(soil)))
                 .isPresent();
     }

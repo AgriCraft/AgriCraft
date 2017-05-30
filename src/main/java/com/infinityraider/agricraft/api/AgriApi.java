@@ -2,12 +2,14 @@
  */
 package com.infinityraider.agricraft.api;
 
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
-import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
@@ -34,7 +36,7 @@ public final class AgriApi {
     private static final LazyFinal<IAgriApiConnector> connector = new LazyFinal<>(AgriApi::connect);
 
     @Nonnull
-    public static Optional<IAgriPlantRegistry> PlantRegistry() {
+    public static Optional<IAgriRegistry<IAgriPlant>> PlantRegistry() {
         return connector.get().connectPlantRegistry();
     }
 
@@ -49,12 +51,12 @@ public final class AgriApi {
     }
 
     @Nonnull
-    public static Optional<IAgriAdapterRegistry<IAgriStat>> StatRegistry() {
+    public static Optional<IAgriAdapterizer<IAgriStat>> StatRegistry() {
         return connector.get().connectStatRegistry();
     }
 
     @Nonnull
-    public static Optional<IAgriAdapterRegistry<IAgriStatCalculator>> StatCalculatorRegistry() {
+    public static Optional<IAgriAdapterizer<IAgriStatCalculator>> StatCalculatorRegistry() {
         return connector.get().connectStatCalculatorRegistry();
     }
 
@@ -64,12 +66,12 @@ public final class AgriApi {
     }
 
     @Nonnull
-    public static Optional<IAgriAdapterRegistry<AgriSeed>> SeedRegistry() {
+    public static Optional<IAgriAdapterizer<AgriSeed>> SeedRegistry() {
         return connector.get().connectSeedRegistry();
     }
 
     @Nonnull
-    public static Optional<IAgriAdapterRegistry<IAgriFertilizer>> FertilizerRegistry() {
+    public static Optional<IAgriAdapterizer<IAgriFertilizer>> FertilizerRegistry() {
         return connector.get().connectFertilizerRegistry();
     }
 

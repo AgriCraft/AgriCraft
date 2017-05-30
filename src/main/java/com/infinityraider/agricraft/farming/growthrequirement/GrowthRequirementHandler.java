@@ -34,8 +34,8 @@ public class GrowthRequirementHandler {
     //Methods for fertile soils
     //-------------------------
     public static boolean isSoilValid(IBlockAccess world, BlockPos pos) {
-        return FuzzyStack.fromBlockState(world.getBlockState(pos))
-                .filter(soil -> AgriApi.SoilRegistry().get().isSoil(soil) || defaultSoils.contains(soil))
+        return FuzzyStack.from(world.getBlockState(pos))
+                .filter(soil -> AgriApi.SoilRegistry().get().stream().anyMatch(s -> s.isVarient(soil)) || defaultSoils.contains(soil))
                 .isPresent();
     }
 

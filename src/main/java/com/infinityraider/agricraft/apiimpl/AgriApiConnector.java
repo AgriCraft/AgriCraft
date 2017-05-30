@@ -3,12 +3,14 @@
 package com.infinityraider.agricraft.apiimpl;
 
 import com.infinityraider.agricraft.api.IAgriApiConnector;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
-import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
 import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
@@ -20,28 +22,28 @@ import java.util.Optional;
  */
 public class AgriApiConnector implements IAgriApiConnector {
     
-    private final Optional<IAgriPlantRegistry> plantRegistry;
+    private final Optional<IAgriRegistry<IAgriPlant>> plantRegistry;
     private final Optional<IAgriMutationRegistry> mutationRegistry;
     private final Optional<IAgriSoilRegistry> soilRegistry;
-    private final Optional<IAgriAdapterRegistry<IAgriStat>> statRegistry;
-    private final Optional<IAgriAdapterRegistry<IAgriStatCalculator>> statCalculatorRegistry;
+    private final Optional<IAgriAdapterizer<IAgriStat>> statRegistry;
+    private final Optional<IAgriAdapterizer<IAgriStatCalculator>> statCalculatorRegistry;
     private final Optional<IAgriMutationEngine> mutationEngine;
-    private final Optional<IAgriAdapterRegistry<AgriSeed>> seedRegistry;
-    private final Optional<IAgriAdapterRegistry<IAgriFertilizer>> fertilizerRegistry;
+    private final Optional<IAgriAdapterizer<AgriSeed>> seedRegistry;
+    private final Optional<IAgriAdapterizer<IAgriFertilizer>> fertilizerRegistry;
 
     public AgriApiConnector() {
-        this.plantRegistry = Optional.of(new PlantRegistry());
-        this.mutationRegistry = Optional.of(new MutationRegistry());
-        this.soilRegistry = Optional.of(new SoilRegistry());
-        this.statRegistry = Optional.of(new AdapterRegistry<>());
-        this.statCalculatorRegistry = Optional.of(new AdapterRegistry<>());
-        this.mutationEngine = Optional.of(new MutationEngine());
-        this.seedRegistry = Optional.of(new AdapterRegistry<>());
-        this.fertilizerRegistry = Optional.of(new AdapterRegistry<>());
+        this.plantRegistry = Optional.of(new AgriRegistry<>());
+        this.mutationRegistry = Optional.of(new AgriMutationRegistry());
+        this.soilRegistry = Optional.of(new AgriSoilRegistry());
+        this.statRegistry = Optional.of(new AgriAdapterizer<>());
+        this.statCalculatorRegistry = Optional.of(new AgriAdapterizer<>());
+        this.mutationEngine = Optional.of(new AgriMutationEngine());
+        this.seedRegistry = Optional.of(new AgriAdapterizer<>());
+        this.fertilizerRegistry = Optional.of(new AgriAdapterizer<>());
     }
 
     @Override
-    public Optional<IAgriPlantRegistry> connectPlantRegistry() {
+    public Optional<IAgriRegistry<IAgriPlant>> connectPlantRegistry() {
         return this.plantRegistry;
     }
 
@@ -56,12 +58,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
-    public Optional<IAgriAdapterRegistry<IAgriStat>> connectStatRegistry() {
+    public Optional<IAgriAdapterizer<IAgriStat>> connectStatRegistry() {
         return this.statRegistry;
     }
 
     @Override
-    public Optional<IAgriAdapterRegistry<IAgriStatCalculator>> connectStatCalculatorRegistry() {
+    public Optional<IAgriAdapterizer<IAgriStatCalculator>> connectStatCalculatorRegistry() {
         return this.statCalculatorRegistry;
     }
 
@@ -71,12 +73,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
-    public Optional<IAgriAdapterRegistry<AgriSeed>> connectSeedRegistry() {
+    public Optional<IAgriAdapterizer<AgriSeed>> connectSeedRegistry() {
         return this.seedRegistry;
     }
 
     @Override
-    public Optional<IAgriAdapterRegistry<IAgriFertilizer>> connectFertilizerRegistry() {
+    public Optional<IAgriAdapterizer<IAgriFertilizer>> connectFertilizerRegistry() {
         return this.fertilizerRegistry;
     }
     

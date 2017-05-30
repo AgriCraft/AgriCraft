@@ -52,7 +52,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
         // Determine the list of possible cross-over mutations.
         final List<IAgriMutation> mutations = AgriApi.MutationRegistry().get()
                 // Stream all mutations.
-                .streamMutations()
+                .stream()
                 // Filter out mutations with both parents in the 'parents' list.
                 .filter(m -> m.areParentsIn(parents))
                 // Filter out mutations whose child wouldn't be viable here.

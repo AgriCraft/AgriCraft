@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.plant;
 
 import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.render.RenderMethod;
 import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
@@ -23,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * wrapped by the api. Meaning if you query the ICropPlant object you
  * registered, it will return a different object.
  */
-public interface IAgriPlant {
+public interface IAgriPlant extends IAgriRegisterable {
 
     /**
      * Determines the unique id of the plant. The id should be lowercase, with
@@ -32,6 +33,7 @@ public interface IAgriPlant {
      *
      * @return The unique id of the plant.
      */
+    @Override
     String getId();
 
     /**

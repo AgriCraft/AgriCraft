@@ -38,7 +38,7 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
             return null;
         }
         final FuzzyStack toResolve = new FuzzyStack(stack);
-        Optional<IAgriPlant> plant = AgriApi.PlantRegistry().get().getPlants().stream()
+        Optional<IAgriPlant> plant = AgriApi.PlantRegistry().get().all().stream()
                 .filter(p -> p.getSeedItems().contains(toResolve))
                 .findFirst();
         if (plant.isPresent()) {

@@ -2,8 +2,8 @@
  */
 package com.infinityraider.agricraft.api.mutation;
 
-import java.util.Collection;
-import java.util.stream.Stream;
+import com.infinityraider.agricraft.api.misc.IAgriRegistry;
+import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
@@ -11,36 +11,12 @@ import javax.annotation.Nonnull;
  *
  * @author AgriCraft Team
  */
-public interface IAgriMutationRegistry {
-
-    /**
-     * Gets a unmodifiable list of all mutations currently registered. Mutations
-     * are populated onServerAboutToStartEvent, so any calls before that will
-     * return the empty list.
-     *
-     * @return A unmodifiable view of the set of all mutations currently
-     * registered.
-     */
-    @Nonnull
-    Collection<IAgriMutation> getMutations();
-
-    /**
-     * Streams all the currently registered mutations. Mutations are registered
-     * during the onServerAboutToStart event, so any calls to this method before
-     * that will return indeterminate results.
-     * <p>
-     * Notice, that if you want a stream of mutations, this method is highly
-     * preferred over {@link #getMutations()} given that this method can
-     * directly reference the mutation list instead of having to wrap it.
-     *
-     * @return A stream consisting of all currently registered mutations.
-     */
-    @Nonnull
-    Stream<IAgriMutation> streamMutations();
+public interface IAgriMutationRegistry extends IAgriRegistry<IAgriMutation> {
 
     /**
      * Creates and registers a new mutation.
      *
+     * @param id the id of the mutation, may not be null.
      * @param chance the chance of the mutation occurring as a normalized
      * p-value.
      * @param childId PlantID for the child plant;
@@ -48,15 +24,8 @@ public interface IAgriMutationRegistry {
      * @return {@literal true} if the mutation had not been registered before,
      * {@literal false} otherwise.
      */
-    boolean addMutation(double chance, String childId, String... parentIds);
-
-    /**
-     * Registers the given mutation.
-     *
-     * @param mutation The mutation to be registered.
-     * @return {@literal true} if the mutation had not been registered before,
-     * {@literal false} otherwise.
-     */
-    boolean addMutation(IAgriMutation mutation);
+    boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull String... parentIds);
+    
+    boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull List<String> parentIds);
 
 }

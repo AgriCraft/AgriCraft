@@ -60,7 +60,7 @@ public class MessageSyncPlantJson extends MessageBase<IMessage> {
             AgriSaver.saveElements(worldDir, AgriCore.getPlants().getAll());
             AgriCore.getPlants().getAll().stream()
                     .map(JsonPlant::new)
-                    .forEach(AgriApi.PlantRegistry().get()::addPlant);
+                    .forEach(AgriApi.PlantRegistry().get()::add);
         }
     }
 

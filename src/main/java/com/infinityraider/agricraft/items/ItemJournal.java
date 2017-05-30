@@ -106,7 +106,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
         List<IAgriPlant> list = new ArrayList<>();
         if (journal != null && journal.hasTagCompound()) {
             for (String id : getDiscoveredSeedIds(journal)) {
-                IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(id);
+                IAgriPlant plant = AgriApi.PlantRegistry().get().get(id);
                 if (plant != null) {
                     list.add(plant);
                 }

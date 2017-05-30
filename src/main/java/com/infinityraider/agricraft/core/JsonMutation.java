@@ -16,10 +16,11 @@ public class JsonMutation extends Mutation {
 
     public JsonMutation(AgriMutation mutation) {
         super(
+                mutation.getChild().getId().replace("_plant", "_mutation"),
                 mutation.getChance(),
-                AgriApi.PlantRegistry().get().getPlant(mutation.getChild().getId()),
-                AgriApi.PlantRegistry().get().getPlant(mutation.getParent1().getId()),
-                AgriApi.PlantRegistry().get().getPlant(mutation.getParent2().getId())
+                AgriApi.PlantRegistry().get().get(mutation.getChild().getId()),
+                AgriApi.PlantRegistry().get().get(mutation.getParent1().getId()),
+                AgriApi.PlantRegistry().get().get(mutation.getParent2().getId())
         );
         this.mutation = mutation;
     }

@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.util.FuzzyStack;
 import com.infinityraider.agricraft.api.util.MethodResult;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.PlantStats;
@@ -76,7 +77,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return MethodResult.PASS;
         }
 
-        // If this is a cross-crop or contains a plant, do nothing!
+        // If this is a cross-crop or has a plant, do nothing!
         if (this.isCrossCrop() || this.hasSeed()) {
             return MethodResult.FAIL;
         }
@@ -105,7 +106,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return MethodResult.PASS;
         }
 
-        // If this is a cross-crop or contains a plant, do nothing!
+        // If this is a cross-crop or has a plant, do nothing!
         if (this.isCrossCrop() || this.hasSeed()) {
             return MethodResult.FAIL;
         }
@@ -285,7 +286,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriSoil> getSoil() {
-        return AgriApi.SoilRegistry().get().getSoil(this.worldObj.getBlockState(this.pos.down()));
+        return FuzzyStack
+                .from(this.worldObj.getBlockState(this.pos.down()))
+                .flatMap(stack -> AgriApi.SoilRegistry().get().stream().filter(soil -> soil.isVarient(stack)).findFirst());
     }
 
     // =========================================================================
@@ -304,7 +307,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
 
         // Attempt to spawn plant.
-        for (IAgriPlant p : AgriApi.PlantRegistry().get().getPlants()) {
+        for (IAgriPlant p : AgriApi.PlantRegistry().get().all()) {
             if (p.getSpawnChance() > this.getRandom().nextDouble() && this.isFertile(p)) {
                 this.setCrossCrop(false);
                 this.setSeed(new AgriSeed(p, new PlantStats()));
@@ -444,7 +447,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public void readTileNBT(NBTTagCompound tag) {
         final IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
-        final IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(tag.getString(AgriNBT.SEED));
+        final IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED));
         if (stat != null && plant != null) {
             this.seed = new AgriSeed(plant, stat);
         } else {

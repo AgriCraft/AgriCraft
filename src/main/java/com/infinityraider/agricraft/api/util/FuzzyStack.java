@@ -56,10 +56,17 @@ public class FuzzyStack {
     }
 
     @Nonnull
-    public static final Optional<FuzzyStack> fromBlockState(@Nullable IBlockState state) {
+    public static final Optional<FuzzyStack> from(@Nullable IBlockState state) {
         return Optional.ofNullable(state)
                 .map(s -> new ItemStack(s.getBlock(), 1, s.getBlock().getMetaFromState(s)))
                 .filter(i -> i.getItem() != null)
+                .map(FuzzyStack::new);
+    }
+    
+    @Nonnull
+    public static final Optional<FuzzyStack> from(@Nullable ItemStack stack) {
+        return Optional.ofNullable(stack)
+                .filter(s -> (s.getItem() != null))
                 .map(FuzzyStack::new);
     }
 

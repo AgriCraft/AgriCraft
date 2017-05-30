@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.soil;
 
+import com.infinityraider.agricraft.api.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.util.FuzzyStack;
 import java.util.Collection;
 import net.minecraft.item.ItemStack;
@@ -9,7 +10,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Class for interacting with AgriCraft soil definitions.
  */
-public interface IAgriSoil {
+public interface IAgriSoil extends IAgriRegisterable {
 
     String getId();
 

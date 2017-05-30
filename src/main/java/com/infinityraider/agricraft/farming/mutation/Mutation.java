@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 
 public class Mutation implements IAgriMutation {
@@ -12,9 +13,16 @@ public class Mutation implements IAgriMutation {
     private final double chance;
 
     @Nonnull
+    private final String id;
+    @Nonnull
     private final IAgriPlant child;
     @Nonnull
     private final List<IAgriPlant> parents;
+
+    @Override
+    public String getId() {
+        return id;
+    }
 
     @Override
     public double getChance() {
@@ -43,6 +51,7 @@ public class Mutation implements IAgriMutation {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
+        sb.append(this.id).append(": ");
         for (IAgriPlant p : this.parents) {
             sb.append(p.getPlantName()).append(" + ");
         }
@@ -51,14 +60,15 @@ public class Mutation implements IAgriMutation {
         return sb.toString();
     }
 
-    public Mutation(double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
-        this(chance, child, Arrays.asList(parents));
+    public Mutation(@Nonnull String id, double chance, @Nonnull IAgriPlant child, @Nonnull IAgriPlant... parents) {
+        this(id, chance, child, Arrays.asList(parents));
     }
 
-    public Mutation(double chance, IAgriPlant child, List<IAgriPlant> parents) {
+    public Mutation(@Nonnull String id, double chance, @Nonnull IAgriPlant child, @Nonnull List<IAgriPlant> parents) {
+        this.id = Objects.requireNonNull(id);
         this.chance = MathHelper.inRange(chance, 0, 1);
-        this.child = child;
-        this.parents = parents;
+        this.child = Objects.requireNonNull(child);
+        this.parents = Objects.requireNonNull(parents);
     }
 
 }

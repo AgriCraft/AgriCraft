@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
  *
  * @param <T> The type that this registry adapts to.
  */
-public interface IAgriAdapterRegistry<T> {
+public interface IAgriAdapterizer<T> {
 
     /**
      * Determines if the registry has the given adapter instance.

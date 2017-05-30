@@ -17,13 +17,13 @@ import net.minecraft.util.Tuple;
  * calculates the new stats (growth, gain, strength) of the new plant based on
  * the 4 neighbours.
  */
-public final class MutationEngine implements IAgriMutationEngine {
+public final class AgriMutationEngine implements IAgriMutationEngine {
 
     private final List<Tuple<Double, IAgriCrossStrategy>> strategies;
 
     private double sigma = 0;
 
-    public MutationEngine() {
+    public AgriMutationEngine() {
         this.strategies = new ArrayList<>();
         this.registerStrategy(new MutateStrategy());
         this.registerStrategy(new SpreadStrategy());

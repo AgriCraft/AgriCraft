@@ -38,7 +38,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         final PlantStats baseStat = new PlantStats();
-        for (IAgriPlant plant : AgriApi.PlantRegistry().get().getPlants()) {
+        for (IAgriPlant plant : AgriApi.PlantRegistry().get().all()) {
             if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
                 ItemStack stack = new ItemStack(item);
                 NBTTagCompound tag = new NBTTagCompound();
@@ -83,7 +83,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
         if (tag == null) {
             return Optional.empty();
         }
-        IAgriPlant plant = AgriApi.PlantRegistry().get().getPlant(tag.getString(AgriNBT.SEED));
+        IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED));
         IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
         if (plant != null && stat != null) {
             return Optional.of(new AgriSeed(plant, stat));
@@ -109,10 +109,10 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @Override
     @SideOnly(Side.CLIENT)
     public List<ResourceLocation> getAllTextures() {
-        final Collection<IAgriPlant> plants = AgriApi.PlantRegistry().get().getPlants();
+        final Collection<IAgriPlant> plants = AgriApi.PlantRegistry().get().all();
         final List<ResourceLocation> textures = new ArrayList<>(plants.size());
         textures.add(new ResourceLocation("agricraft:items/seed_unknown"));
-        for (IAgriPlant p : AgriApi.PlantRegistry().get().getPlants()) {
+        for (IAgriPlant p : AgriApi.PlantRegistry().get().all()) {
             textures.add(p.getSeedTexture());
         }
         return textures;

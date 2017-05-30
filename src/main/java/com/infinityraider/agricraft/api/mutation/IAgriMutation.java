@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.mutation;
 
+import com.infinityraider.agricraft.api.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import javax.annotation.Nonnull;
  * @author AgriCraft
  * @since v2
  */
-public interface IAgriMutation {
+public interface IAgriMutation extends IAgriRegisterable {
 
     /**
      * Retrieves the probability of the mutation occurring. Recommended to be

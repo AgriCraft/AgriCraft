@@ -2,11 +2,12 @@
  */
 package com.infinityraider.agricraft.api;
 
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
-import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
+import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
@@ -21,7 +22,7 @@ import javax.annotation.Nonnull;
 public interface IAgriApiConnector {
     
     @Nonnull
-    Optional<IAgriPlantRegistry> connectPlantRegistry();
+    Optional<IAgriRegistry<IAgriPlant>> connectPlantRegistry();
     
     @Nonnull
     Optional<IAgriMutationRegistry> connectMutationRegistry();
@@ -30,18 +31,18 @@ public interface IAgriApiConnector {
     Optional<IAgriSoilRegistry> connectSoilRegistry();
     
     @Nonnull
-    Optional<IAgriAdapterRegistry<IAgriStat>> connectStatRegistry();
+    Optional<IAgriAdapterizer<IAgriStat>> connectStatRegistry();
     
     @Nonnull
-    Optional<IAgriAdapterRegistry<IAgriStatCalculator>> connectStatCalculatorRegistry();
+    Optional<IAgriAdapterizer<IAgriStatCalculator>> connectStatCalculatorRegistry();
     
     @Nonnull
     Optional<IAgriMutationEngine> connectMutationEngine();
     
     @Nonnull
-    Optional<IAgriAdapterRegistry<AgriSeed>> connectSeedRegistry();
+    Optional<IAgriAdapterizer<AgriSeed>> connectSeedRegistry();
     
     @Nonnull
-    Optional<IAgriAdapterRegistry<IAgriFertilizer>> connectFertilizerRegistry();
+    Optional<IAgriAdapterizer<IAgriFertilizer>> connectFertilizerRegistry();
     
 }

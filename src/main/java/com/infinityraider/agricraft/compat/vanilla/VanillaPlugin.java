@@ -4,7 +4,7 @@ package com.infinityraider.agricraft.compat.vanilla;
 
 import com.infinityraider.agricraft.api.AgriPlugin;
 import com.infinityraider.agricraft.api.IAgriPlugin;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.stat.IAgriStat;
@@ -40,24 +40,24 @@ public class VanillaPlugin implements IAgriPlugin {
     }
 
     @Override
-    public void registerSeeds(IAgriAdapterRegistry<AgriSeed> seedRegistry) {
+    public void registerSeeds(IAgriAdapterizer<AgriSeed> seedRegistry) {
         seedRegistry.registerAdapter(new SeedWrapper());
         seedRegistry.registerAdapter((ItemAgriSeed)AgriItems.getInstance().AGRI_SEED);
     }
 
     @Override
-    public void registerStats(IAgriAdapterRegistry<IAgriStat> statRegistry) {
+    public void registerStats(IAgriAdapterizer<IAgriStat> statRegistry) {
         statRegistry.registerAdapter(new PlantStats());
     }
 
     @Override
-    public void registerStatCalculators(IAgriAdapterRegistry<IAgriStatCalculator> statCalculatorRegistry) {
+    public void registerStatCalculators(IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry) {
         statCalculatorRegistry.registerAdapter(new StatCalculatorNormal());
         statCalculatorRegistry.registerAdapter(new StatCalculatorHardcore());
     }
 
     @Override
-    public void registerFertilizers(IAgriAdapterRegistry<IAgriFertilizer> fertilizerRegistry) {
+    public void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry) {
         fertilizerRegistry.registerAdapter(BonemealWrapper.INSTANCE);
     }
     

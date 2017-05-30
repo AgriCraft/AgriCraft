@@ -43,7 +43,7 @@ public class BlockCondition implements ICondition {
     public boolean isMet(IBlockAccess world, BlockPos pos) {
         return new BlockRange(this.range, pos).stream()
                 .map(world::getBlockState)
-                .map(FuzzyStack::fromBlockState)
+                .map(FuzzyStack::from)
                 .map(o -> o.orElse(null))
                 .filter(this.stack::equals)
                 .skip(this.amount - 1)

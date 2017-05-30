@@ -106,11 +106,11 @@ public final class CoreHandler {
         AgriCore.getSoils().getAll().stream()
                 .filter(AgriSoil::isEnabled)
                 .map(JsonSoil::new)
-                .forEach(AgriApi.SoilRegistry().get()::addSoil);
+                .forEach(AgriApi.SoilRegistry().get()::add);
 
         // Display Soils
         AgriCore.getLogger("agricraft").info("Registered Soils ({0}/{1}):", count, raw);
-        for (IAgriSoil soil : AgriApi.SoilRegistry().get().getSoils()) {
+        for (IAgriSoil soil : AgriApi.SoilRegistry().get().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", soil.getName());
         }
     }
@@ -129,11 +129,11 @@ public final class CoreHandler {
         AgriCore.getPlants().getAll().stream()
                 .filter(AgriPlant::isEnabled)
                 .map(JsonPlant::new)
-                .forEach(AgriApi.PlantRegistry().get()::addPlant);
+                .forEach(AgriApi.PlantRegistry().get()::add);
 
         // Display Plants
         AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
-        for (IAgriPlant plant : AgriApi.PlantRegistry().get().getPlants()) {
+        for (IAgriPlant plant : AgriApi.PlantRegistry().get().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", plant.getPlantName());
         }
     }
@@ -151,11 +151,11 @@ public final class CoreHandler {
         AgriCore.getMutations().getAll().stream()
                 .filter(AgriMutation::isEnabled)
                 .map(JsonMutation::new)
-                .forEach(AgriApi.MutationRegistry().get()::addMutation);
+                .forEach(AgriApi.MutationRegistry().get()::add);
 
         // Display Mutations
         AgriCore.getLogger("agricraft").info("Registered Mutations ({0}/{1}):", count, raw);
-        for (IAgriMutation mutation : AgriApi.MutationRegistry().get().getMutations()) {
+        for (IAgriMutation mutation : AgriApi.MutationRegistry().get().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", mutation);
         }
     }

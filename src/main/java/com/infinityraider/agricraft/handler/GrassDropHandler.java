@@ -59,7 +59,7 @@ public final class GrassDropHandler {
     public static void addGrassDrops(List<ItemStack> drops, Random rand) {
         AgriApi.PlantRegistry()
                 .get()
-                .getPlants()
+                .all()
                 .stream()
                 .forEach(p -> addGrassDrop(drops, rand, p));
     }

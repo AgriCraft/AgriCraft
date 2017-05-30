@@ -2,14 +2,14 @@
  */
 package com.infinityraider.agricraft.api;
 
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterRegistry;
+import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.api.seed.AgriSeed;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.soil.IAgriSoilRegistry;
@@ -71,11 +71,11 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerSoils(@Nonnull IAgriSoilRegistry soilRegistry) {
+    default void registerSoils(@Nonnull IAgriRegistry<IAgriSoil> soilRegistry) {
         // Default Implementation: Do nothing.
     }
 
-    default void registerPlants(@Nonnull IAgriPlantRegistry plantRegistry) {
+    default void registerPlants(@Nonnull IAgriRegistry<IAgriPlant> plantRegistry) {
         // Default Implementation: Do nothing.
     }
 
@@ -83,11 +83,11 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerStats(@Nonnull IAgriAdapterRegistry<IAgriStat> statRegistry) {
+    default void registerStats(@Nonnull IAgriAdapterizer<IAgriStat> statRegistry) {
         // Default Implementation: Do nothing.
     }
 
-    default void registerStatCalculators(@Nonnull IAgriAdapterRegistry<IAgriStatCalculator> statCalculatorRegistry) {
+    default void registerStatCalculators(@Nonnull IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry) {
         // Default Implementation: Do nothing.
     }
 
@@ -95,11 +95,11 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerSeeds(@Nonnull IAgriAdapterRegistry<AgriSeed> seedRegistry) {
+    default void registerSeeds(@Nonnull IAgriAdapterizer<AgriSeed> seedRegistry) {
         // Default Implementation: Do nothing.
     }
 
-    default void registerFertilizers(@Nonnull IAgriAdapterRegistry<IAgriFertilizer> fertilizerRegistry) {
+    default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry) {
         // Default Implementation: Do nothing.
     }
 

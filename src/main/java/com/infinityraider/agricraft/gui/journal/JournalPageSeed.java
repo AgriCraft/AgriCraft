@@ -194,7 +194,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return AgriApi.MutationRegistry().get().streamMutations()
+        return AgriApi.MutationRegistry().get().stream()
                 // Filter out all mutations where this plant is not a parent.
                 .filter(m -> m.hasParent(plant))
                 // Filter out all muations that are not discovered.
@@ -207,7 +207,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return AgriApi.MutationRegistry().get().streamMutations()
+        return AgriApi.MutationRegistry().get().stream()
                 // Filter out all mutations where this plant is not the child.
                 .filter(m -> m.hasChild(plant))
                 // Filter out all muations that are not discovered.
@@ -220,7 +220,7 @@ public class JournalPageSeed implements JournalPage {
         // Fetch the seed associated with this page.
         final IAgriPlant plant = discoveredSeeds.get(page);
         // Find all discovered mutations.
-        return AgriApi.MutationRegistry().get().streamMutations()
+        return AgriApi.MutationRegistry().get().stream()
                 // Filter out all mutations where this plant is not a parent.
                 .filter(m -> m.hasParent(plant))
                 // Filter out all muations that are not half-discovered.

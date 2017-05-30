@@ -60,7 +60,7 @@ public class MessageSyncSoilJson extends MessageBase<IMessage> {
             AgriSaver.saveElements(worldDir, AgriCore.getSoils().getAll());
             AgriCore.getSoils().getAll().stream()
                     .map(JsonSoil::new)
-                    .forEach(AgriApi.SoilRegistry().get()::addSoil);
+                    .forEach(AgriApi.SoilRegistry().get()::add);
         }
     }
 

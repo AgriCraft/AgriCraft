@@ -27,8 +27,8 @@ public class DebugModeCheckSoil extends DebugMode {
 
     @Override
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        FuzzyStack soil = FuzzyStack.fromBlockState(world.getBlockState(pos)).orElse(null);
-        String type = AgriApi.SoilRegistry().get().getSoils().stream()
+        FuzzyStack soil = FuzzyStack.from(world.getBlockState(pos)).orElse(null);
+        String type = AgriApi.SoilRegistry().get().all().stream()
                 .filter(s -> s.isVarient(soil))
                 .map(s -> s.getName())
                 .findFirst()

@@ -60,7 +60,7 @@ public class MessageSyncMutationJson extends MessageBase<IMessage> {
             AgriSaver.saveElements(worldDir, AgriCore.getMutations().getAll());
             AgriCore.getMutations().getAll().stream()
                     .map(JsonMutation::new)
-                    .forEach(AgriApi.MutationRegistry().get()::addMutation);
+                    .forEach(AgriApi.MutationRegistry().get()::add);
         }
     }
 
