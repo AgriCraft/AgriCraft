@@ -50,7 +50,7 @@ public class AgriCraftConfig {
     @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Sprinkler growth chance", min = "0", max = "100", comment = "Every x seconds each plant in sprinkler range has this chance to growth tick")
     public static int sprinklerGrowthChance = 20;
     @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Sprinkler water usage", min = "0", max = "10000", comment = "Water usage of the sprinkler in mB per second")
-    public static int sprinklerRatePerSecond = 10;
+    public static int sprinklerRatePerSecond = 20; // Note: this was 10, but integer division by 20 results in zero usage per update.
     public static int sprinklerRatePerHalfSecond = 5;
     public static float sprinklerGrowthChancePercent = 0.1f;
     public static int sprinklerGrowthIntervalTicks = 100;

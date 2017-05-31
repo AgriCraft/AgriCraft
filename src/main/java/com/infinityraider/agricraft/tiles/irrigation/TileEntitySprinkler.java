@@ -38,6 +38,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     private float angle = 0.0F;
     private boolean active = false;
 
+    private final int TICKS_PER_SECOND = 20; // TODO: Don't hardcode.
+
     //private final BlockRange range;
 
     public TileEntitySprinkler() {
@@ -86,8 +88,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     @Override
     public void update() {
         if (!worldObj.isRemote && this.isActive()) {
-            this.counter = (counter + 1) % AgriCraftConfig.sprinklerGrowthIntervalTicks;
-            this.buffer -= 10;
+            this.counter = (counter + 1) % (AgriCraftConfig.sprinklerGrowthInterval * TICKS_PER_SECOND);
+            this.buffer -= AgriCraftConfig.sprinklerRatePerSecond / TICKS_PER_SECOND; // TODO: Fix, integer div is inaccurate.
             BlockRange range = new BlockRange(this.getPos().add(-RADIUS, -1, -RADIUS), this.getPos().add(RADIUS, -HEIGHT, RADIUS));
             range.stream().forEach(p -> this.irrigate(p, false));
         } else if (this.active) {
@@ -163,10 +165,13 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     }
 
     public boolean canSprinkle() {
+        return this.buffer >= AgriCraftConfig.sprinklerRatePerSecond / TICKS_PER_SECOND;
+        /*
         return WorldHelper
                 .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
                 .filter(c -> c.getFluidAmount(0) > AgriCraftConfig.sprinklerRatePerHalfSecond)
                 .isPresent();
+        */
     }
 
     private boolean isActive() {
@@ -191,7 +196,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
         } else if (!farmlandOnly && ((block instanceof IPlantable) || (block instanceof IGrowable))) {
             // X1 chance to force GROWTH tick on plant every Y1 ticks
-            if (counter == 0 && worldObj.rand.nextDouble() <= AgriCraftConfig.sprinklerGrowthChancePercent) {
+            if (counter == 0 && worldObj.rand.nextInt(100) < AgriCraftConfig.sprinklerGrowthChance) {
                 block.updateTick(this.getWorld(), pos, state, worldObj.rand);
             }
         }

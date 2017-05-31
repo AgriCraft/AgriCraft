@@ -208,7 +208,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                 }
             }
             // Handle Sprinklers
-            TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.add(0, 1, 0), TileEntitySprinkler.class).orElse(null);
+            TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.add(0, -1, 0), TileEntitySprinkler.class).orElse(null);
             if (spr != null) {
                 updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
             }
