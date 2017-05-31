@@ -38,10 +38,10 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     private float angle = 0.0F;
     private boolean active = false;
 
-    private final BlockRange range;
+    //private final BlockRange range;
 
     public TileEntitySprinkler() {
-        this.range = new BlockRange(this.getPos().add(-RADIUS, -1, -RADIUS), this.getPos().add(RADIUS, -HEIGHT, RADIUS));
+        //this.range = new BlockRange(this.getPos().add(-RADIUS, -1, -RADIUS), this.getPos().add(RADIUS, -HEIGHT, RADIUS));
     }
 
     /**
@@ -88,7 +88,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         if (!worldObj.isRemote && this.isActive()) {
             this.counter = (counter + 1) % AgriCraftConfig.sprinklerGrowthIntervalTicks;
             this.buffer -= 10;
-            this.range.stream().forEach(p -> this.irrigate(p, false));
+            BlockRange range = new BlockRange(this.getPos().add(-RADIUS, -1, -RADIUS), this.getPos().add(RADIUS, -HEIGHT, RADIUS));
+            range.stream().forEach(p -> this.irrigate(p, false));
         } else if (this.active) {
             this.renderLiquidSpray();
         }
