@@ -83,7 +83,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
         if (tag == null) {
             return Optional.empty();
         }
-        IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED));
+        IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED)).orElse(null);
         IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
         if (plant != null && stat != null) {
             return Optional.of(new AgriSeed(plant, stat));

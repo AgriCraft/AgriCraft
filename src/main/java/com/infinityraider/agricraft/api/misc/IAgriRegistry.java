@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.api.misc;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -15,13 +16,13 @@ public interface IAgriRegistry<T extends IAgriRegisterable> {
 
     boolean has(String id);
 
-    boolean has(T plant);
+    boolean has(T element);
 
-    T get(String id);
+    Optional<T> get(String id);
 
-    boolean add(T plant);
+    boolean add(T element);
 
-    boolean remove(T plant);
+    boolean remove(T element);
 
     Collection<T> all();
     

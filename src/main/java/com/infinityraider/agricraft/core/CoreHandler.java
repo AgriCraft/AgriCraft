@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.soil.IAgriSoil;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import net.minecraft.util.ResourceLocation;
@@ -150,7 +151,9 @@ public final class CoreHandler {
         // Transfer
         AgriCore.getMutations().getAll().stream()
                 .filter(AgriMutation::isEnabled)
-                .map(JsonMutation::new)
+                .map(JsonHelper::wrap)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .forEach(AgriApi.MutationRegistry().get()::add);
 
         // Display Mutations
@@ -168,4 +171,5 @@ public final class CoreHandler {
                 .map(t -> new ResourceLocation(t))
                 .forEach(consumer);
     }
+
 }

@@ -10,12 +10,16 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -61,34 +65,23 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.discoveredSeeds") + ": " + getDiscoveredSeedIds(stack).size());
+        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.discoveredSeeds") + ": " + getDiscoveredSeedIds(stack).count());
     }
 
-    private List<String> getDiscoveredSeedIds(ItemStack journal) {
-        if (journal == null) {
-            return new ArrayList<>();
-        }
-        //check if the journal has AgriCraftNBT and if it doesn't, create a new one
-        if (!journal.hasTagCompound()) {
-            journal.setTagCompound(new NBTTagCompound());
-            return new ArrayList<>();
-        }
-
-        NBTTagCompound tag = journal.getTagCompound();
-        String discovered = tag.getString(AgriNBT.DISCOVERED_SEEDS);
-        if (discovered.isEmpty()) {
-            return new ArrayList<>();
-        } else {
-            return Arrays.asList(discovered.split(";"));
-        }
+    private Stream<String> getDiscoveredSeedIds(@Nullable ItemStack journal) {
+        return Optional.ofNullable(journal)
+                .map(ItemStack::getTagCompound)
+                .map(tag -> tag.getString(AgriNBT.DISCOVERED_SEEDS))
+                .map(ids -> ids.split(";"))
+                .map(Arrays::stream)
+                .orElseGet(Stream::empty);
     }
 
     @Override
-    public void addEntry(ItemStack journal, IAgriPlant plant) {
-        if (journal != null && journal.getItem() != null && plant != null) {
-            List<String> seeds = getDiscoveredSeedIds(journal);
-            if (!seeds.contains(plant.getId())) {
-                NBTTagCompound tag = journal.getTagCompound();
+    public void addEntry(@Nullable ItemStack journal, @Nullable IAgriPlant plant) {
+        if (journal != null && plant != null) {
+            if (!isSeedDiscovered(journal, plant)) {
+                NBTTagCompound tag = StackHelper.getTag(journal);
                 String old = tag.getString(AgriNBT.DISCOVERED_SEEDS);
                 tag.setString(AgriNBT.DISCOVERED_SEEDS, old + plant.getId() + ";");
                 journal.setTagCompound(tag);
@@ -97,22 +90,19 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     }
 
     @Override
-    public boolean isSeedDiscovered(ItemStack journal, IAgriPlant plant) {
-        return journal != null && plant != null && getDiscoveredSeedIds(journal).contains(plant.getId());
+    public boolean isSeedDiscovered(@Nullable ItemStack journal, @Nullable IAgriPlant plant) {
+        return (journal != null) && (plant != null) && getDiscoveredSeedIds(journal).anyMatch(plant.getId()::equals);
     }
 
     @Override
-    public List<IAgriPlant> getDiscoveredSeeds(ItemStack journal) {
-        List<IAgriPlant> list = new ArrayList<>();
-        if (journal != null && journal.hasTagCompound()) {
-            for (String id : getDiscoveredSeedIds(journal)) {
-                IAgriPlant plant = AgriApi.PlantRegistry().get().get(id);
-                if (plant != null) {
-                    list.add(plant);
-                }
-            }
-        }
-        return list;
+    public List<IAgriPlant> getDiscoveredSeeds(@Nullable ItemStack journal) {
+        return Optional.ofNullable(journal)
+                .map(this::getDiscoveredSeedIds)
+                .orElseGet(Stream::empty)
+                .map(AgriApi.PlantRegistry().get()::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override

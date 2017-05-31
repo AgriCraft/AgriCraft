@@ -10,8 +10,6 @@ import com.infinityraider.agricraft.farming.mutation.Mutation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import scala.actors.threadpool.Arrays;
 
 /**
@@ -39,7 +37,7 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
         parentIds.forEach(parentId -> Objects.requireNonNull(parentId, "The id of a parent for a mutation may not be null!"));
 
         // Step III. Map Child.
-        final IAgriPlant childPlant = AgriApi.PlantRegistry().get().get(id);
+        final IAgriPlant childPlant = AgriApi.PlantRegistry().get().get(id).orElse(null);
 
         // Step IV. Abort If Child Missing.
         if (childPlant == null) {
@@ -52,7 +50,7 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
 
         // Step VI. Map Parents, Aborting If Missing.
         for (String parentId : parentIds) {
-            final IAgriPlant parentPlant = AgriApi.PlantRegistry().get().get(parentId);
+            final IAgriPlant parentPlant = AgriApi.PlantRegistry().get().get(parentId).orElse(null);
             if (parentPlant != null) {
                 parentPlants.add(parentPlant);
             } else {

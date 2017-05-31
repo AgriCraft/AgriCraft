@@ -6,11 +6,12 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.AgriApi;
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.core.JsonMutation;
+import com.infinityraider.agricraft.core.JsonHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -59,7 +60,9 @@ public class MessageSyncMutationJson extends MessageBase<IMessage> {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
             AgriSaver.saveElements(worldDir, AgriCore.getMutations().getAll());
             AgriCore.getMutations().getAll().stream()
-                    .map(JsonMutation::new)
+                    .map(JsonHelper::wrap)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .forEach(AgriApi.MutationRegistry().get()::add);
         }
     }

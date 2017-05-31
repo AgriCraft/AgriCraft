@@ -447,7 +447,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public void readTileNBT(NBTTagCompound tag) {
         final IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
-        final IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED));
+        final IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED)).orElse(null);
         if (stat != null && plant != null) {
             this.seed = new AgriSeed(plant, stat);
         } else {

@@ -49,6 +49,11 @@ public class Mutation implements IAgriMutation {
     }
 
     @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.id).append(": ");
