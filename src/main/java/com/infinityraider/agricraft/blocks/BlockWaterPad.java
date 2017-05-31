@@ -77,7 +77,7 @@ public class BlockWaterPad extends BlockCustomRenderedBase implements IFluidHand
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return Blocks.DIRT.getDrops(world, pos, state, fortune);
+        return Blocks.DIRT.getDrops(world, pos, Blocks.DIRT.getDefaultState(), fortune);
     }
 
     @Override
