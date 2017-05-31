@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.network;
 
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.infinitylib.network.MessageBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;

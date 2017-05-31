@@ -7,10 +7,10 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.util.ResourceHelper;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -107,11 +107,11 @@ public final class CoreHandler {
         AgriCore.getSoils().getAll().stream()
                 .filter(AgriSoil::isEnabled)
                 .map(JsonSoil::new)
-                .forEach(AgriApi.SoilRegistry().get()::add);
+                .forEach(AgriApi.getSoilRegistry()::add);
 
         // Display Soils
         AgriCore.getLogger("agricraft").info("Registered Soils ({0}/{1}):", count, raw);
-        for (IAgriSoil soil : AgriApi.SoilRegistry().get().all()) {
+        for (IAgriSoil soil : AgriApi.getSoilRegistry().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", soil.getName());
         }
     }
@@ -130,11 +130,11 @@ public final class CoreHandler {
         AgriCore.getPlants().getAll().stream()
                 .filter(AgriPlant::isEnabled)
                 .map(JsonPlant::new)
-                .forEach(AgriApi.PlantRegistry().get()::add);
+                .forEach(AgriApi.getPlantRegistry()::add);
 
         // Display Plants
         AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
-        for (IAgriPlant plant : AgriApi.PlantRegistry().get().all()) {
+        for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", plant.getPlantName());
         }
     }
@@ -154,11 +154,11 @@ public final class CoreHandler {
                 .map(JsonHelper::wrap)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(AgriApi.MutationRegistry().get()::add);
+                .forEach(AgriApi.getMutationRegistry()::add);
 
         // Display Mutations
         AgriCore.getLogger("agricraft").info("Registered Mutations ({0}/{1}):", count, raw);
-        for (IAgriMutation mutation : AgriApi.MutationRegistry().get().all()) {
+        for (IAgriMutation mutation : AgriApi.getMutationRegistry().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", mutation);
         }
     }

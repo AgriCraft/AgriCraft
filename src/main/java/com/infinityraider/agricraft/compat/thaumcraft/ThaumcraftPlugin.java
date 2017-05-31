@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.compat.thaumcraft;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.AgriPlugin;
-import com.infinityraider.agricraft.api.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriPlugin;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.item.ItemStack;

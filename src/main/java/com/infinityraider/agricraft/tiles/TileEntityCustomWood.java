@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;

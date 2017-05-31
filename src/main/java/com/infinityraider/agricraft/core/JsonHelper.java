@@ -3,9 +3,9 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.plant.AgriMutation;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.farming.mutation.Mutation;
 import java.util.Optional;
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ public final class JsonHelper {
         final String mutationId = mutation.getChild().getId().replace("_plant", "_mutation");
 
         // Step IV. Determine Child.
-        final Optional<IAgriPlant> child = AgriApi.PlantRegistry().get().get(mutation.getChild().getId());
+        final Optional<IAgriPlant> child = AgriApi.getPlantRegistry().get(mutation.getChild().getId());
 
         // Step V. Abort If Child Missing.
         if (!child.isPresent()) {
@@ -38,8 +38,8 @@ public final class JsonHelper {
         }
 
         // Step VI. Determine Parents.
-        final Optional<IAgriPlant> parentOne = AgriApi.PlantRegistry().get().get(mutation.getParent1().getId());
-        final Optional<IAgriPlant> parentTwo = AgriApi.PlantRegistry().get().get(mutation.getParent2().getId());
+        final Optional<IAgriPlant> parentOne = AgriApi.getPlantRegistry().get(mutation.getParent1().getId());
+        final Optional<IAgriPlant> parentTwo = AgriApi.getPlantRegistry().get(mutation.getParent2().getId());
 
         // Step VII. Abort If Missing Parent.
         if ((!parentOne.isPresent()) && (!parentTwo.isPresent())) {

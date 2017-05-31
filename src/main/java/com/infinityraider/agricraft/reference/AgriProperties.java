@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.reference;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.blocks.properties.PropertyCropPlant;
 import com.infinityraider.agricraft.blocks.properties.PropertyCustomWood;
 import com.infinityraider.agricraft.blocks.properties.UnlistedPropertyBoolean;

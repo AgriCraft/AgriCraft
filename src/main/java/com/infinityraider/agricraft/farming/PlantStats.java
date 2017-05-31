@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.farming;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import static com.infinityraider.agricraft.reference.AgriCraftConfig.STAT_FORMAT;
 import static com.infinityraider.agricraft.reference.AgriCraftConfig.cropStatCap;

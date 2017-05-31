@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.util.math.BlockPos;

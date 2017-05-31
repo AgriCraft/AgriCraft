@@ -1,17 +1,17 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.api.util.MethodResult;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriBlocks;
@@ -27,6 +27,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -286,9 +287,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriSoil> getSoil() {
-        return FuzzyStack
-                .from(this.worldObj.getBlockState(this.pos.down()))
-                .flatMap(stack -> AgriApi.SoilRegistry().get().stream().filter(soil -> soil.isVarient(stack)).findFirst());
+        final IBlockState state = this.worldObj.getBlockState(this.pos.down());
+        return AgriApi.getSoilRegistry().get(state);
     }
 
     // =========================================================================
@@ -307,7 +307,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
 
         // Attempt to spawn plant.
-        for (IAgriPlant p : AgriApi.PlantRegistry().get().all()) {
+        for (IAgriPlant p : AgriApi.getPlantRegistry().all()) {
             if (p.getSpawnChance() > this.getRandom().nextDouble() && this.isFertile(p)) {
                 this.setCrossCrop(false);
                 this.setSeed(new AgriSeed(p, new PlantStats()));
@@ -446,8 +446,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        final IAgriStat stat = AgriApi.StatRegistry().get().valueOf(tag).orElse(null);
-        final IAgriPlant plant = AgriApi.PlantRegistry().get().get(tag.getString(AgriNBT.SEED)).orElse(null);
+        final IAgriStat stat = AgriApi.getStatRegistry().valueOf(tag).orElse(null);
+        final IAgriPlant plant = AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.SEED)).orElse(null);
         if (stat != null && plant != null) {
             this.seed = new AgriSeed(plant, stat);
         } else {
@@ -492,7 +492,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * the code that makes the crop cross with neighboring crops
      */
     public void crossOver() {
-        AgriApi.MutationEngine().get().attemptCross(this, this.worldObj.rand);
+        AgriApi.getMutationEngine().attemptCross(this, this.worldObj.rand);
     }
 
     @Override

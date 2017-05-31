@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.crafting;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Objects;
 import java.util.function.Function;
 

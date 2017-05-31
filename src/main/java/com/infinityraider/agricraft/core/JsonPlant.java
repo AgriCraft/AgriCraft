@@ -7,17 +7,17 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriProduct;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.render.RenderMethod;
-import com.infinityraider.agricraft.api.requirement.BlockCondition;
-import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.util.BlockRange;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
-import com.infinityraider.agricraft.apiimpl.AgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.render.RenderMethod;
+import com.infinityraider.agricraft.api.v1.requirement.BlockCondition;
+import com.infinityraider.agricraft.api.v1.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.v1.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.util.BlockRange;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
+import com.infinityraider.agricraft.impl.v1.AgriHarvestProduct;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.farming.growthrequirement.GrowthReqBuilder;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
@@ -229,7 +229,7 @@ public class JsonPlant implements IAgriPlant {
 
     public static final IGrowthRequirement initGrowthRequirementJSON(AgriPlant plant) {
 
-        IGrowthReqBuilder builder = GrowthRequirementHandler.getNewBuilder();
+        IGrowthReqBuilder builder = new GrowthReqBuilder();
 
         if (plant == null) {
             return builder.build();

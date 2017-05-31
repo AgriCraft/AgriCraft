@@ -3,7 +3,7 @@
  */
 package com.infinityraider.agricraft.compat.jei.mutation;
 
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;

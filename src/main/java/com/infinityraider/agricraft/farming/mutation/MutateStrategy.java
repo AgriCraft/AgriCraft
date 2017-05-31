@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.farming.mutation;
 
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.mutation.IAgriCrossStrategy;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriCrossStrategy;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
@@ -50,7 +50,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
         }
 
         // Determine the list of possible cross-over mutations.
-        final List<IAgriMutation> mutations = AgriApi.MutationRegistry().get()
+        final List<IAgriMutation> mutations = AgriApi.getMutationRegistry()
                 // Stream all mutations.
                 .stream()
                 // Filter out mutations with both parents in the 'parents' list.
@@ -79,7 +79,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
         }
 
         // Calculate the stat associated with the new plant.
-        Optional<IAgriStat> stat = AgriApi.StatCalculatorRegistry().get().valueOf(mutation).map(c -> c.calculateMutationStats(mutation, neighbors));
+        Optional<IAgriStat> stat = AgriApi.getStatCalculatorRegistry().valueOf(mutation).map(c -> c.calculateMutationStats(mutation, neighbors));
 
         // Return the mutation result.
         return stat

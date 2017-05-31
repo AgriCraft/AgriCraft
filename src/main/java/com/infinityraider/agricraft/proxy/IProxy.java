@@ -1,9 +1,8 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.apiimpl.PluginHandler;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
 import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
@@ -43,7 +42,6 @@ public interface IProxy extends IProxyBase {
     default void postInitStart(FMLPostInitializationEvent event) {
         PluginHandler.postInit();
         AgriOreDict.upgradeOreDict();
-        GrowthRequirementHandler.init();
     }
 
     default void registerVillagerSkin(int id, String resource) {

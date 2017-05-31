@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.items;
 
-import com.infinityraider.agricraft.farming.growthrequirement.GrowthRequirementHandler;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -47,7 +47,12 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         final BlockPos cropPos = pos.up();
 
         // Test if placement is valid.
-        if (!world.isAirBlock(cropPos) || !GrowthRequirementHandler.isSoilValid(world, pos)) {
+        if (!world.isAirBlock(cropPos)) {
+            return EnumActionResult.FAIL;
+        }
+        
+        // Test if soil is valid.
+        if (!AgriApi.getSoilRegistry().contains(world.getBlockState(pos))) {
             return EnumActionResult.FAIL;
         }
 

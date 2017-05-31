@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
-import com.infinityraider.agricraft.api.requirement.BlockCondition;
-import com.infinityraider.agricraft.api.requirement.ICondition;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.requirement.BlockCondition;
+import com.infinityraider.agricraft.api.v1.requirement.ICondition;
+import com.infinityraider.agricraft.api.v1.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

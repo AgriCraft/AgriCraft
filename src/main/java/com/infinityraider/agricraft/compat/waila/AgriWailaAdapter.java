@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.waila;
 
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import java.util.List;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;

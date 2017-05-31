@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.utility.WorldHelper;

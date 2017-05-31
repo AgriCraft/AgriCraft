@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;

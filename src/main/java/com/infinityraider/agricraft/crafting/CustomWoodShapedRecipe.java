@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.crafting;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;

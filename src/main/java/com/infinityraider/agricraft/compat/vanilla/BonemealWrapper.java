@@ -2,10 +2,10 @@
  */
 package com.infinityraider.agricraft.compat.vanilla;
 
-import com.infinityraider.agricraft.api.adapter.IAgriAdapter;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizable;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.util.MethodResult;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import java.util.Optional;
 import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;

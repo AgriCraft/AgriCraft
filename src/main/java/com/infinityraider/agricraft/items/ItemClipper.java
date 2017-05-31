@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;

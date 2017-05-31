@@ -4,7 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.AgriApi;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.core.JsonPlant;
 import com.infinityraider.infinitylib.network.MessageBase;
@@ -60,7 +60,7 @@ public class MessageSyncPlantJson extends MessageBase<IMessage> {
             AgriSaver.saveElements(worldDir, AgriCore.getPlants().getAll());
             AgriCore.getPlants().getAll().stream()
                     .map(JsonPlant::new)
-                    .forEach(AgriApi.PlantRegistry().get()::add);
+                    .forEach(AgriApi.getPlantRegistry()::add);
         }
     }
 

@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.utility;
 
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import java.util.ArrayList;
 import java.util.Collection;

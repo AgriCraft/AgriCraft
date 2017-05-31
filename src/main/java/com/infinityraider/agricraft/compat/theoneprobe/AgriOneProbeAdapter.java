@@ -2,7 +2,7 @@
  */
 package com.infinityraider.agricraft.compat.theoneprobe;
 
-import com.infinityraider.agricraft.api.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.ArrayList;
 import java.util.List;

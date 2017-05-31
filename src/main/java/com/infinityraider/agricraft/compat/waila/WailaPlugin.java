@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.waila;
 
-import com.infinityraider.agricraft.api.AgriPlugin;
-import com.infinityraider.agricraft.api.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriPlugin;
 import com.infinityraider.infinitylib.block.BlockBase;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;

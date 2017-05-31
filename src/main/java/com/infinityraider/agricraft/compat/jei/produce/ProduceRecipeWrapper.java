@@ -3,8 +3,8 @@
  */
 package com.infinityraider.agricraft.compat.jei.produce;
 
-import com.infinityraider.agricraft.api.misc.IAgriHarvestProduct;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

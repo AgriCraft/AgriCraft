@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
@@ -51,7 +51,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
             return EnumActionResult.PASS;
         }
         IAgriCrop crop = (IAgriCrop) te;
-        AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(stack).orElse(null);
+        AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
         if (!crop.acceptsSeed(seed) || seed == null) {
             return EnumActionResult.FAIL;
         }
@@ -65,7 +65,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         String text = AgriCore.getTranslator().translate("item.agricraft:clipping.name");
-        Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
+        Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
         // lol... This would have been a NPE, had it not been for the Optional class!
         return seed.map(s -> s.getPlant().getPlantName()).orElse("Generic") + " " + text;
     }
@@ -82,7 +82,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
     @Override
     @SideOnly(Side.CLIENT)
     public String getModelId(ItemStack stack) {
-        Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
+        Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
         return seed.map(s -> s.getPlant().getId()).orElse("");
     }
 
@@ -95,8 +95,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
     @Override
     @SideOnly(Side.CLIENT)
     public List<ItemModelTexture> getOverlayTextures(ItemStack stack) {
-        ResourceLocation tex = AgriApi.SeedRegistry()
-                .get()
+        ResourceLocation tex = AgriApi.getSeedRegistry()
                 .valueOf(stack)
                 .map(s -> s.getPlant().getPrimaryPlantTexture(Constants.MATURE))
                 .orElse(DEFAULT_PLANT_ICON);

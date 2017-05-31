@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.farming.mutation;
 
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.mutation.IAgriMutation;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

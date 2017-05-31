@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.gui.journal;
 
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.AgriGuiWrapper;
 import com.infinityraider.agricraft.gui.ComponentGui;
 import com.infinityraider.agricraft.gui.component.ComponentRenderer;

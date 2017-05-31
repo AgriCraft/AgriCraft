@@ -3,7 +3,7 @@
  */
 package com.infinityraider.agricraft.compat.jei.produce;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
 import mezz.jei.api.recipe.IRecipeHandler;

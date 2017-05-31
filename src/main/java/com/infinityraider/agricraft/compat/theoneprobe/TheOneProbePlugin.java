@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.compat.theoneprobe;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.AgriPlugin;
-import com.infinityraider.agricraft.api.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriPlugin;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 @AgriPlugin

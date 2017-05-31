@@ -3,10 +3,10 @@
 package com.infinityraider.agricraft.farming.growthrequirement;
 
 import com.agricraft.agricore.util.MathHelper;
-import com.infinityraider.agricraft.api.requirement.ICondition;
-import com.infinityraider.agricraft.api.requirement.IGrowthReqBuilder;
-import com.infinityraider.agricraft.api.requirement.IGrowthRequirement;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.requirement.ICondition;
+import com.infinityraider.agricraft.api.v1.requirement.IGrowthReqBuilder;
+import com.infinityraider.agricraft.api.v1.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import java.util.ArrayList;
 import java.util.List;
 

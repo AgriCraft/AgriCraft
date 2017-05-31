@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.farming.mutation.statcalculator;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.util.Optional;
 

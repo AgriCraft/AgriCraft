@@ -3,7 +3,7 @@
  */
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnection;
+import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;

@@ -3,8 +3,8 @@
 package com.infinityraider.agricraft.compat.computer;
 
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.AgriPlugin;
-import com.infinityraider.agricraft.api.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriPlugin;
 import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.render.block.BlockRendererRegistry;

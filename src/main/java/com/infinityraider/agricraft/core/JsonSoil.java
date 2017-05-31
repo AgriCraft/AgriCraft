@@ -3,8 +3,8 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.plant.AgriSoil;
-import com.infinityraider.agricraft.api.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

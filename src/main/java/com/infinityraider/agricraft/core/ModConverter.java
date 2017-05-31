@@ -3,7 +3,7 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.util.AgriConverter;
-import com.infinityraider.agricraft.api.util.FuzzyStack;
+import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;

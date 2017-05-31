@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.misc.IAgriRakeable;
+import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.misc.IAgriRakeable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;

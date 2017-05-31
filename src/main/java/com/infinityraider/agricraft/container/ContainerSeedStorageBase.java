@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageController;
@@ -97,7 +97,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
             ItemStack notMergedStack = slot.getStack();
             originalStackInSlot = notMergedStack.copy();
             //try to move item from the player's inventory into the container
-            AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(notMergedStack).orElse(null);
+            AgriSeed seed = AgriApi.getSeedRegistry().valueOf(notMergedStack).orElse(null);
             if (seed != null && seed.getStat().isAnalyzed()) {
                 ISeedStorageControllable controllable = this.getControllable(notMergedStack).orElse(null);
                 if (controllable != null && controllable.hasLockedSeed()) {

@@ -3,9 +3,9 @@
  */
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.items.ItemJournal;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
@@ -22,12 +22,12 @@ public final class MethodUtilities {
         if (journal == null || journal.getItem() == null || !(journal.getItem() instanceof ItemJournal)) {
             return false;
         }
-        Optional<AgriSeed> s = AgriApi.SeedRegistry().get().valueOf(seed);
+        Optional<AgriSeed> s = AgriApi.getSeedRegistry().valueOf(seed);
         return s.isPresent() && ((ItemJournal) journal.getItem()).isSeedDiscovered(journal, s.get().getPlant());
     }
 
     public static Optional<IAgriPlant> getCropPlant(ItemStack specimen) {
-        return AgriApi.SeedRegistry().get().valueOf(specimen).map(seed -> seed.getPlant());
+        return AgriApi.getSeedRegistry().valueOf(specimen).map(seed -> seed.getPlant());
     }
 
     public static Optional<IAgriPlant> getCropPlant(TileEntityCrop crop) {

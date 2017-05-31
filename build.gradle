@@ -24,7 +24,7 @@ apply plugin: 'maven-publish'
 // Tweak MineCraft Task
 minecraft {
     makeObfSourceJar = false
-	useDepAts = true
+    useDepAts = true
 }
 
 // Setup Remotes
@@ -41,7 +41,7 @@ repositories {
         name "sponge"
         url  "http://repo.spongepowered.org/maven/"
     }
-	maven {
+    maven {
         name "sk89q"
         url  "http://maven.sk89q.com/repo/"
     }
@@ -53,62 +53,77 @@ repositories {
         name "tterrag maven"
         url "http://maven.tterrag.com/"
     }
-	maven {
-		name "JEI"
-		url "http://dvs1.progwml6.com/files/maven"
-	}
     maven {
-		name "OpenComputers"
-		url  "http://maven.cil.li/"
-	}
+        name "JEI"
+        url "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        name "OpenComputers"
+        url  "http://maven.cil.li/"
+    }
 }
 
 // List Deps.
 dependencies {
     // Mods (For auto-import)
-	compile project(':lib/InfinityLib')
-	shade project(':lib/AgriCore')
-	compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
+    shade project(':lib/AgriCore')
+    compile project(':lib/InfinityLib')
+    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
     deobfCompile "com.github.mcjty:compatlayer:1.10-0.2.8"
     deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.6-56"
-	deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
+    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
 }
 
 // Add AgriPlants
 processResources {
-	from('lib/AgriPlants') {
-		include '**/*.json'
-		into 'json/defaults'
-	}
+    from('lib/AgriPlants') {
+        include '**/*.json'
+        into 'json/defaults'
+    }
 }
 
 // Javadoc
 task mainJavadoc(type: Javadoc) {
-	source = sourceSets.main.allJava
-	title = "AgriCraft ${mod.version} Documentation"
-	destinationDir = file("${project.docsDir}/mainJavadoc")
-	failOnError = false
+    source = sourceSets.main.allJava
+    title = "AgriCraft ${mod.version} Documentation"
+    destinationDir = file("${project.docsDir}/mainJavadoc")
+    failOnError = false
 }
 
 task apiJavadoc(type: Javadoc) {
-	source = sourceSets.main.allJava
-	include "**/api/**"
-	title = "AgriCraft ${mod.version} API Documentation"
-	destinationDir = file("${project.docsDir}/apiJavadoc")
-	failOnError = false
+    source = sourceSets.main.allJava
+    include "**/api/**"
+    title = "AgriCraft ${mod.version} API Documentation"
+    destinationDir = file("${project.docsDir}/apiJavadoc")
+    failOnError = false
 }
 
 // Jars
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+task mainSourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
+    classifier = 'sources'
 }
 
-task apiJar(type: Jar) {
+task mainJavadocJar(type: Jar, dependsOn: mainJavadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task apiJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
-    from sourceSets.main.output
     include "${mod.package.replace('.', '/')}/api/**/*"
     classifier = 'api'
+}
+
+task apiSourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    include "${mod.package.replace('.', '/')}/api/**/*"
+    classifier = 'api-sources'
+}
+
+task apiJavadocJar(type: Jar, dependsOn: apiJavadoc) {
+    from apiJavadoc.destinationDir
+    classifier = 'api-javadoc'
 }
 
 // Tell build that it needs the API compiled first.
@@ -120,7 +135,6 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            artifact javadocJar
             artifact sourceJar
             artifact apiJar
         }

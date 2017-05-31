@@ -3,10 +3,10 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.item.IItemWithModel;
@@ -55,7 +55,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) te;
-            Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
+            Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
             if (crop.hasSeed() && !seed.isPresent()) {
                 seed = Optional.ofNullable(crop.getSeed());
                 crop.setSeed(null);

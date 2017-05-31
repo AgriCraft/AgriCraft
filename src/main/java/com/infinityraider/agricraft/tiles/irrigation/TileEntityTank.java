@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.api.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
+import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
+import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;

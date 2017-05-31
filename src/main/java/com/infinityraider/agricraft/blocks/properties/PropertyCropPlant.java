@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.blocks.properties;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class PropertyCropPlant implements IUnlistedProperty<IAgriPlant> {

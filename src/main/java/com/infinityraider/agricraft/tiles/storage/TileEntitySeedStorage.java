@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.tiles.storage;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Reference;
@@ -75,7 +75,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
         if (tag.hasKey(AgriNBT.SEED)) {
             //read the locked SEED
             ItemStack seedStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
-            this.lockedSeed = AgriApi.SeedRegistry().get().valueOf(seedStack).orElse(null);
+            this.lockedSeed = AgriApi.getSeedRegistry().valueOf(seedStack).orElse(null);
             if (tag.hasKey(AgriNBT.INVENTORY)) {
                 //read the slots
                 NBTTagList tagList = tag.getTagList(AgriNBT.INVENTORY, 10);
@@ -128,7 +128,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public boolean addStackToInventory(ItemStack stack) {
 
         // Fetch the seed.
-        final AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(stack).filter(s -> s.getStat().isAnalyzed()).orElse(null);
+        final AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).filter(s -> s.getStat().isAnalyzed()).orElse(null);
         if (seed == null || worldObj.isRemote) {
             return false;
         }
@@ -201,7 +201,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                     slotsList.remove(slotAt);
                 }
             } else {
-                final AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(inputStack).get();
+                final AgriSeed seed = AgriApi.getSeedRegistry().valueOf(inputStack).get();
                 slotAt = new SeedStorageSlot(seed, inputStack.stackSize, realSlotId, this.getControllableID());
                 if (slotAt.count > 0) {
                     this.slots.put(realSlotId, slotAt);
@@ -219,7 +219,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     private boolean isValidForSlot(int realSlot, ItemStack stack) {
 
         // Fetch the seed.
-        AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(stack).orElse(null);
+        AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
 
         // If the seed is not analyzed then it is not valid.
         if (seed == null || !seed.getStat().isAnalyzed()) {
@@ -484,7 +484,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        AgriSeed seed = AgriApi.SeedRegistry().get().valueOf(stack).orElse(null);
+        AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
         if (seed == null || !seed.getStat().isAnalyzed()) {
             return false;
         }

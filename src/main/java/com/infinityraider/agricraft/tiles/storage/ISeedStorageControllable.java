@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.item.ItemStack;

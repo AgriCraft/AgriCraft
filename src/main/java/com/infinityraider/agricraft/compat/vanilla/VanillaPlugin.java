@@ -2,13 +2,13 @@
  */
 package com.infinityraider.agricraft.compat.vanilla;
 
-import com.infinityraider.agricraft.api.AgriPlugin;
-import com.infinityraider.agricraft.api.IAgriPlugin;
-import com.infinityraider.agricraft.api.adapter.IAgriAdapterizer;
-import com.infinityraider.agricraft.api.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
-import com.infinityraider.agricraft.api.stat.IAgriStatCalculator;
+import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
+import com.infinityraider.agricraft.api.v1.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculatorHardcore;
 import com.infinityraider.agricraft.farming.mutation.statcalculator.StatCalculatorNormal;

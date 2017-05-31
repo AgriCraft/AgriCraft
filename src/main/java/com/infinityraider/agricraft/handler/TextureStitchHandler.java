@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.apiimpl.PluginHandler;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;

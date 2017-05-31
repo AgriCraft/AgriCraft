@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.network;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorage;
 import com.infinityraider.infinitylib.network.MessageBase;
@@ -86,7 +86,7 @@ public class MessageTileEntitySeedStorage extends MessageBase<IMessage> {
 
             @Override
             public IMessageReader<IAgriStat> getReader(Class<IAgriStat> clazz) {
-                return buf -> AgriApi.StatRegistry().get().valueOf(ByteBufUtil.readNBT(buf)).get();
+                return buf -> AgriApi.getStatRegistry().valueOf(ByteBufUtil.readNBT(buf)).get();
             }
         });
     }

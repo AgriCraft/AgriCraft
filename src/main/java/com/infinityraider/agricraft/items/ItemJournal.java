@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.crafting.RecipeCopyJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -99,7 +99,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
         return Optional.ofNullable(journal)
                 .map(this::getDiscoveredSeedIds)
                 .orElseGet(Stream::empty)
-                .map(AgriApi.PlantRegistry().get()::get)
+                .map(AgriApi.getPlantRegistry()::get)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

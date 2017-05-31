@@ -4,7 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.AgriApi;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.core.JsonHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
@@ -63,7 +63,7 @@ public class MessageSyncMutationJson extends MessageBase<IMessage> {
                     .map(JsonHelper::wrap)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .forEach(AgriApi.MutationRegistry().get()::add);
+                    .forEach(AgriApi.getMutationRegistry()::add);
         }
     }
 

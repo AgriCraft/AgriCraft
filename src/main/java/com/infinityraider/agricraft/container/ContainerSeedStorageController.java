@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.container;
 
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
 import java.util.List;

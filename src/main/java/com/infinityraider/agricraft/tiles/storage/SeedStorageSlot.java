@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.tiles.storage;
 
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
-import com.infinityraider.agricraft.api.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import java.util.Comparator;
 import java.util.Optional;
@@ -46,7 +46,7 @@ public class SeedStorageSlot {
     }
 
     public static final Optional<SeedStorageSlot> readFromNbt(NBTTagCompound tag, int invId) {
-        Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(ItemStack.loadItemStackFromNBT(tag));
+        Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(ItemStack.loadItemStackFromNBT(tag));
         if (seed.isPresent()) {
             int id = tag.getInteger(AgriNBT.ID);
             int count = tag.getInteger(AgriNBT.COUNT);

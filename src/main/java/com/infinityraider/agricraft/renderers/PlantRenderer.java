@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.renderers;
 
-import com.infinityraider.agricraft.api.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import javax.annotation.Nonnull;

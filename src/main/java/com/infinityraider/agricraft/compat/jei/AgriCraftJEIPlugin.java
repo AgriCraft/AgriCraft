@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.compat.jei;
 
-import com.infinityraider.agricraft.api.AgriApi;
-import com.infinityraider.agricraft.api.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeCategory;
 import com.infinityraider.agricraft.compat.jei.mutation.MutationRecipeHandler;
 import com.infinityraider.agricraft.compat.jei.produce.ProduceRecipeCategory;
@@ -43,14 +43,14 @@ public class AgriCraftJEIPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
         jeiRuntime = jeiRuntimeInstance;
-        AgriApi.PlantRegistry().get().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
-        AgriApi.MutationRegistry().get().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        AgriApi.getPlantRegistry().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        AgriApi.getMutationRegistry().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
     }
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         subtypeRegistry.registerSubtypeInterpreter(AgriItems.getInstance().AGRI_SEED, (stack) -> {
-            Optional<AgriSeed> seed = AgriApi.SeedRegistry().get().valueOf(stack);
+            Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
             return seed.map(s -> s.getPlant().getId()).orElse("generic");
         });
     }
