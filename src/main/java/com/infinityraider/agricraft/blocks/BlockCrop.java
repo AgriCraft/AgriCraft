@@ -249,7 +249,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * @return if the crop is placed in a valid location.
      */
     public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
-        return AgriApi.getSoilRegistry().contains(world.getBlockState(pos));
+        return AgriApi.getSoilRegistry().contains(world.getBlockState(pos.down()));
     }
 
     /**
