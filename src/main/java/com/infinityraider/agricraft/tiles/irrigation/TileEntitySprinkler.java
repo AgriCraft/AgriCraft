@@ -4,7 +4,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
-import com.infinityraider.agricraft.api.v1.util.BlockRange;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -32,19 +31,26 @@ import java.util.function.Consumer;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent, IAgriDisplayable {
 
-    public static final int BUFFER_CAP = 100;
-    public static final int RADIUS = 3;
-    public static final int HEIGHT = 5;
-
-    private int buffer = 0;
     private int counter = 0;
     private float angle = 0.0F;
-    private boolean active = false;
-
-    private final BlockRange range;
+    private static final int BUFFER_CAP        = 100;
+    private static final int TICKS_PER_SECOND  = 20;
+    private static final int COVERAGE_HEIGHT   = 5; // Configure here. Note: the lowest y-level will be farmland only.
+    private static final int COVERAGE_RADIUS   = 3; // Configure here.
+    private static final int COVERAGE_DIAMETER = 1 + 2 * COVERAGE_RADIUS;
+    private static final int COVERAGE_AREA     = COVERAGE_DIAMETER * COVERAGE_DIAMETER;
+    private boolean active;
+    private int buffer;
+    private int columnCounter;
+    private int waterUsageRemainingMb;
+    private int waterUsageRemainingTicks;
 
     public TileEntitySprinkler() {
-        this.range = new BlockRange(this.getPos().add(-RADIUS, 1, -RADIUS), this.getPos().add(RADIUS, HEIGHT, RADIUS));
+        this.active                   = false;
+        this.buffer                   = 0;
+        this.columnCounter            = 0;
+        this.waterUsageRemainingMb    = Integer.MAX_VALUE;
+        this.waterUsageRemainingTicks = 0;
     }
 
     /**
@@ -63,35 +69,152 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             tag.setInteger(AgriNBT.LEVEL, this.counter);
         }
         if (this.active) {
-            tag.setBoolean(AgriNBT.ACTIVE, active);
+            tag.setBoolean(AgriNBT.ACTIVE, this.active);
         }
         if (this.buffer > 0) {
             tag.setInteger(AgriNBT.BUFFER, this.buffer);
         }
+        if (this.columnCounter > 0) {
+            tag.setInteger(AgriNBT.COLUMN_COUNTER, this.columnCounter);
+        }
+        if (this.waterUsageRemainingMb < Integer.MAX_VALUE) {
+            tag.setInteger(AgriNBT.WATER_USAGE_REMAINING_MB, this.waterUsageRemainingMb);
+        }
+        if (this.waterUsageRemainingTicks > 0) {
+            tag.setInteger(AgriNBT.WATER_USAGE_REMAINING_TICKS, this.waterUsageRemainingTicks);
+        }
     }
 
     //this loads the saved data for the tile entity
-    // Note: tag.get* methods will return zero/false if key does not exist.
+    // Note: tag.get* methods *should* return zero/false if the key does not exist.
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        this.counter = tag.getInteger(AgriNBT.LEVEL);
-        this.active  = tag.getBoolean(AgriNBT.ACTIVE);
-        this.buffer  = tag.getInteger(AgriNBT.BUFFER);
+        this.counter                  = tag.getInteger(AgriNBT.LEVEL);
+        this.active                   = tag.getBoolean(AgriNBT.ACTIVE);
+        this.buffer                   = tag.getInteger(AgriNBT.BUFFER);
+        this.columnCounter            = tag.getInteger(AgriNBT.COLUMN_COUNTER);
+        this.waterUsageRemainingMb    = tag.hasKey(    AgriNBT.WATER_USAGE_REMAINING_MB) ?
+                                        tag.getInteger(AgriNBT.WATER_USAGE_REMAINING_MB) : Integer.MAX_VALUE;
+        this.waterUsageRemainingTicks = tag.getInteger(AgriNBT.WATER_USAGE_REMAINING_TICKS);
     }
 
     //checks if the sprinkler is CONNECTED to an irrigation channel
     public boolean isConnected() {
-        return this.worldObj != null && this.worldObj.getBlockState(getPos().up()).getBlock() instanceof BlockWaterChannel;
+        return WorldHelper.getBlock(this.worldObj, this.pos.up(), BlockWaterChannel.class).isPresent();
     }
 
+    /**
+     * On the client, this invokes the particle effects.
+     * On the server, this starts by updating the water usage variables. If the buffer is empty or too low, then
+     * the method ends. Otherwise it next consumes the per-tick amount of water. Then it irrigates the next column,
+     * unless they're all done. Finally, it increments the columnCounter variable, and also resets it if needed.
+     * This should be called once per tick, to honor the mB/second configuration setting. But if it is called
+     * more often, both the irrigation cycle and the water consumption will speed up proportionally.
+     */
     @Override
     public void update() {
-        if (!worldObj.isRemote && this.isActive()) {
-            this.counter = (counter + 1) % AgriCraftConfig.sprinklerGrowthIntervalTicks;
-            this.buffer -= 10;
-            this.range.stream().forEach(p -> this.irrigate(p, false));
+        if (!this.worldObj.isRemote) {
+            // Step 1: Check if we need to refresh (or reset) the water usage variables.
+            if (this.waterUsageRemainingTicks <= 0 || this.waterUsageRemainingMb < 0) {
+                this.waterUsageRemainingMb    = Math.abs(AgriCraftConfig.sprinklerRatePerSecond);
+                this.waterUsageRemainingTicks = TICKS_PER_SECOND;
+            }
+
+            // Step 2: Calculate the per-tick water usage rate, then decrease the remainder-tracking variables.
+            // Note: This math executes regardless of if actual consumption occurs, so that the
+            //       water usage rate refresh still happens every twenty ticks.
+            // Note: This should be calculated using int/int division, and not with floats.
+            final int waterUsageThisTick   = this.waterUsageRemainingMb / this.waterUsageRemainingTicks;
+            this.waterUsageRemainingMb    -= waterUsageThisTick;
+            this.waterUsageRemainingTicks -= 1;
+
+            // Step 3: Check if there is enough water to irrigate this tick, and also if this is a change in state.
+            final boolean currentActiveness = (this.buffer >= waterUsageThisTick && this.buffer > 0);
+            if (currentActiveness != this.active) {
+                this.active = currentActiveness;
+                this.markForUpdate();
+            }
+
+            // Step 4: If we aren't irrigating, stop.
+            if (!this.active) {
+                return;
+            }
+
+            // Step 5: Otherwise, consume the water and continue.
+            this.buffer -= waterUsageThisTick;
+
+            // Step 6: if we're within bounds, sprinkle the next column!
+            if (this.columnCounter >= 0 && this.columnCounter < COVERAGE_AREA) {
+                irrigateCurrentColumn();
+            }
+
+            // Step 7: Update the counter.
+            this.columnCounter += 1;
+
+            // Step 8: If the counter exceeds both minimums, or if it is (incorrectly) negative, reset it.
+            if (   this.columnCounter >= COVERAGE_AREA
+                && this.columnCounter >= AgriCraftConfig.sprinklerGrowthIntervalTicks
+                || this.columnCounter < 0) {
+                this.columnCounter = 0;
+            }
         } else if (this.active) {
             this.renderLiquidSpray();
+        }
+    }
+
+    /**
+     * Convenience method to wrap the coordinate calculations. Also makes update() and irrigateColumn() cleaner.
+     */
+    private void irrigateCurrentColumn() {
+        final int targetX = this.pos.getX() - COVERAGE_RADIUS + (this.columnCounter % COVERAGE_DIAMETER);
+        final int targetZ = this.pos.getZ() - COVERAGE_RADIUS + (this.columnCounter / COVERAGE_DIAMETER);
+        final int startY  = this.pos.getY() - 1;
+        final int stopY   = Math.max(this.pos.getY() - COVERAGE_HEIGHT, 0); // Avoid the void.
+        irrigateColumn(targetX, targetZ, startY, stopY);
+    }
+
+    /**
+     * This method will search through a vertical column of positions, starting from the top.
+     * It will stop searching any lower once it hits anything other than air or plants.
+     * Any plant found has an independant chance for a growth tick. That percentage is controlled by AgriCraftConfig.
+     * Farmland also ends the search, but it first has its moisture set to max (7) if it isn't already.
+     * The lowest position is special: a plant this far away is not helped. Only farmland is currently.
+     *
+     * @param int targetX
+     * @param int targetZ
+     * @param int highestY
+     * @param int lowestY
+     */
+    private void irrigateColumn(final int targetX, final int targetZ, final int highestY, final int lowestY) {
+        for (int targetY = highestY; targetY >= lowestY; targetY -= 1) {
+            BlockPos target    = new BlockPos(targetX, targetY, targetZ);
+            IBlockState state  = this.worldObj.getBlockState(target);
+            Block block        = state.getBlock();
+
+            // Option A: Skip empty/air blocks.
+            // TODO: Is there a way to use isSideSolid to ignore minor obstructions? (Farmland isn't solid.)
+            if (block.isAir(state, this.worldObj, target)) {
+                continue;
+            }
+
+            // Option B: Give plants a chance to grow, and then continue onward to irrigate the farmland too.
+            if ((block instanceof IPlantable || block instanceof IGrowable) && targetY != lowestY) {
+                if (this.getRandom().nextInt(100) < AgriCraftConfig.sprinklerGrowthChance) {
+                    block.updateTick(this.worldObj, target, state, this.getRandom());
+                }
+                continue;
+            }
+
+            // Option C: Dry farmland gets set as moist.
+            if (block instanceof BlockFarmland) {
+                if (state.getValue(BlockFarmland.MOISTURE) < 7) {
+                   this.worldObj.setBlockState(target, state.withProperty(BlockFarmland.MOISTURE, 7), 2);
+                }
+                break; // Explicitly expresses the intent to stop.
+            }
+
+            // Option D: If it's none of the above, it blocks the sprinkler's irrigation. Stop.
+            break;
         }
     }
 
@@ -159,41 +282,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             return IrrigationConnectionType.PRIMARY;
         } else {
             return IrrigationConnectionType.NONE;
-        }
-    }
-
-    public boolean canSprinkle() {
-        return WorldHelper
-                .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
-                .filter(c -> c.getFluidAmount(0) > AgriCraftConfig.sprinklerRatePerHalfSecond)
-                .isPresent();
-    }
-
-    private boolean isActive() {
-        boolean newState = this.canSprinkle();
-        if (newState != this.active) {
-            this.active = newState;
-            this.markForUpdate();
-        }
-        return this.active;
-    }
-
-    /**
-     * Depending on the block type either irrigates farmland or forces plant
-     * GROWTH (based on chance)
-     */
-    private void irrigate(BlockPos pos, boolean farmlandOnly) {
-        IBlockState state = this.getWorld().getBlockState(pos);
-        Block block = state.getBlock();
-        if (block instanceof BlockFarmland && block.getMetaFromState(state) < 7) {
-            // irrigate farmland
-            int flag = counter == 0 ? 2 : 6;
-            worldObj.setBlockState(pos, block.getStateFromMeta(7), flag);
-        } else if (!farmlandOnly && ((block instanceof IPlantable) || (block instanceof IGrowable))) {
-            // X1 chance to force GROWTH tick on plant every Y1 ticks
-            if (counter == 0 && worldObj.rand.nextDouble() <= AgriCraftConfig.sprinklerGrowthChancePercent) {
-                block.updateTick(this.getWorld(), pos, state, worldObj.rand);
-            }
         }
     }
 
