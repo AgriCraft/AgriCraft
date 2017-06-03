@@ -35,4 +35,7 @@ public interface AgriNBT {
     String DIRECTION = "agri_direction";
     String MULTI_BLOCK = "agri_multiblock";
     String BUFFER = "agri_buffer";
+    String COLUMN_COUNTER = "agri_column_counter";
+    String WATER_USAGE_REMAINING_MB = "agri_water_usage_remaining_mb";
+    String WATER_USAGE_REMAINING_TICKS = "agri_water_usage_remaining_ticks";
 }
