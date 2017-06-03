@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -26,8 +28,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.function.Consumer;
 
-public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent {
+public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent, IAgriDisplayable {
 
     public static final int BUFFER_CAP = 100;
     public static final int RADIUS = 3;
@@ -234,4 +237,9 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addDisplayInfo(Consumer<String> information) {
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + BUFFER_CAP);
+    }
 }
