@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.log.AgriLogAdapter;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.text.MessageFormat;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
@@ -29,7 +30,9 @@ public class ModLogger implements AgriLogAdapter {
 
     @Override
     public void debug(Object source, String format, Object... objects) {
-        log(Level.INFO, source, "[DEBUG]: " + format, objects);
+        if (AgriCraftConfig.debug) {
+            log(Level.INFO, source, "[DEBUG]: " + format, objects);
+        }
     }
 
     @Override

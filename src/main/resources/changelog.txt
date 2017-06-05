@@ -1,6 +1,9 @@
 Changelog
 ---------
 2.0.0a18
+- FIXED: Debug logging filter not working.
+- FIXED: Bugs? (Lots of stuff changed in the API refactor)?
+- FIXED: Crash caused by breaking water pads.
 - TWEAK: Major API refactor in attempt to increase stability.
 - FIXED: Crash caused by attempting to disable AgriCraft sounds (note this is a "fix").
 - FIXED: MagicalAgriculture plants spawning magically.
