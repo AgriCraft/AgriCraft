@@ -1,5 +1,13 @@
 Changelog
 ---------
+2.0.0a19
+- FIXED: Peripheral rendering. (Still WIP).
+- FIXED: Crashed caused by having ComputerCraft installed.
+- FIXED: Crafting crash caused by disabling irrigation channels.
+- FIXED: Crash at server start caused by FML's ASM not working properly.
+- FIXED: Some compilation warnings.
+- FIXED: Crash at server start caused by null plant product.
+
 2.0.0a18
 - FIXED: Minor issues with Mystical Agriculture plants.
 - ADDED: Additional Magical Agriculture plants.

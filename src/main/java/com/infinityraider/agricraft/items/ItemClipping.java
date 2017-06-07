@@ -34,8 +34,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author The AgriCraft Team
  */
 public class ItemClipping extends ItemBase implements IAutoRenderedItem {
-    
-    @SideOnly(Side.CLIENT)
+
+    //
+    // The following line has been commented out, since apparently Forge ASM is
+    // *special*, and cannot handle simple static variable declarations such as
+    // this.
+    //
+    //@SideOnly(Side.CLIENT)
     public static final ResourceLocation DEFAULT_PLANT_ICON = new ResourceLocation("agricraft:items/debugger");
 
     public ItemClipping() {

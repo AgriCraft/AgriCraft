@@ -131,12 +131,14 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
     @Override
     public void registerRecipes() {
-        // "Correct" wooden bowl recipe, so that may register channel recipe.
-        RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
+        if (this.isEnabled()) {
+            // "Correct" wooden bowl recipe, so that may register channel recipe.
+            RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
 
-        // Register channel recipe.
-        CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
+            // Register channel recipe.
+            CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 /**
  * Interface representing a possible plant product.
  */
+@Deprecated
 public interface IAgriHarvestProduct {
 
     public static final String PRODUCT_MARKER_TAG = "agri_product";

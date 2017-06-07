@@ -112,4 +112,5 @@ public class RenderSeedAnalyzer extends RenderBlockWithTileBase<BlockSeedAnalyze
     public boolean applyAmbientOcclusion() {
         return false;
     }
+
 }

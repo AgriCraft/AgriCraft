@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -207,19 +208,23 @@ public class JsonPlant implements IAgriPlant {
     public static final List<IAgriHarvestProduct> initProductListJSON(AgriPlant plant) {
         return plant.getProducts().getAll().stream()
                 .map(JsonPlant::convertProductJSON)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
-    public static final IAgriHarvestProduct convertProductJSON(AgriProduct product) {
-        final FuzzyStack stack = (FuzzyStack) product.toStack();
-        return new AgriHarvestProduct(stack.getItem(), stack.getTagCompound(), stack.getMeta(), product.getMin(), product.getMax(), product.getChance(), false);
+    public static final Optional<IAgriHarvestProduct> convertProductJSON(AgriProduct product) {
+        return product
+                .toStack(FuzzyStack.class)
+                .map(stack -> new AgriHarvestProduct(stack.getItem(), stack.getTagCompound(), stack.getMeta(), product.getMin(), product.getMax(), product.getChance(), false));
     }
 
     public static final List<FuzzyStack> initSeedItemsListJSON(AgriPlant plant) {
         final List<FuzzyStack> seeds = new ArrayList<>(plant.getSeedItems().size());
         plant.getSeedItems().stream()
-                .map(i -> (FuzzyStack) i.toStack())
-                .filter(TypeHelper::isNonNull)
+                .map(i -> i.toStack(FuzzyStack.class))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .forEach(seeds::add);
         if (seeds.isEmpty()) {
             seeds.add(new FuzzyStack(new ItemStack(AgriItems.getInstance().AGRI_SEED)));
@@ -244,11 +249,11 @@ public class JsonPlant implements IAgriPlant {
                 .forEach(builder::addSoil);
 
         plant.getRequirement().getConditions().forEach(obj -> {
-            final Object stack = obj.toStack();
-            if (stack instanceof FuzzyStack) {
+            final Optional<FuzzyStack> stack = obj.toStack(FuzzyStack.class);
+            if (stack.isPresent()) {
                 builder.addCondition(
                         new BlockCondition(
-                                (FuzzyStack) stack,
+                                stack.get(),
                                 new BlockRange(
                                         obj.getMinX(), obj.getMinY(), obj.getMinZ(),
                                         obj.getMaxX(), obj.getMaxY(), obj.getMaxZ()

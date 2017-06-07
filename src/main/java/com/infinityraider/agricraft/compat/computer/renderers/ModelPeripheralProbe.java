@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.renderers.models;
+package com.infinityraider.agricraft.compat.computer.renderers;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

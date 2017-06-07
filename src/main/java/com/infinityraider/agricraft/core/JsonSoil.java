@@ -6,8 +6,8 @@ import com.agricraft.agricore.plant.AgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Class wrapping the AgriCore AgriSoil.
@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 public class JsonSoil implements IAgriSoil {
 
     private final AgriSoil soil;
-    private List<FuzzyStack> varients;
+    private final List<FuzzyStack> varients;
 
     public JsonSoil(AgriSoil soil) {
         this.soil = soil;
+        this.varients = this.soil.getVarients(FuzzyStack.class);
     }
 
     @Override
@@ -33,13 +34,7 @@ public class JsonSoil implements IAgriSoil {
 
     @Override
     public Collection<FuzzyStack> getVarients() {
-        if (this.varients == null) {
-            this.varients = this.soil.getVarients().stream()
-                    .filter(s -> s instanceof FuzzyStack)
-                    .map(s -> (FuzzyStack) s)
-                    .collect(Collectors.toList());
-        }
-        return this.varients;
+        return Collections.unmodifiableCollection(this.varients);
     }
 
 }

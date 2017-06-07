@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
+import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +48,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 
     @Override
     public ModelResourceLocation getBlockModelResourceLocation() {
-        return null;
+        return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());
     }
 
     @Override
@@ -118,6 +120,11 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getWorldTypeID(), pos.getX(), pos.getY(), pos.getZ(), 32);
         new MessagePeripheralCheckNeighbours(pos).sendToAllAround(point);
     }
+    
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -128,4 +135,10 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
     }
+
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+    
 }
