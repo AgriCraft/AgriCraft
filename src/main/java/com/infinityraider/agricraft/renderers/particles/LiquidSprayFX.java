@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LiquidSprayFX extends AgriCraftFX {
 
     public LiquidSprayFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector) {
-        super(world, x, y, z, scale, gravity, vector, new ResourceLocation(BaseIcons.WATER_STILL.location));
+        super(world, x, y, z, scale, gravity, vector, new ResourceLocation("minecraft:textures/blocks/water_still.png"));
         this.particleMaxAge = 15;
         this.setSize(0.2f, 0.2f);
     }
