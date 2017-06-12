@@ -5,17 +5,15 @@ package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriProduct;
-import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.render.RenderMethod;
 import com.infinityraider.agricraft.api.v1.requirement.BlockCondition;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowthReqBuilder;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
-import com.infinityraider.agricraft.impl.v1.AgriHarvestProduct;
 import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.farming.growthrequirement.GrowthReqBuilder;
 import com.infinityraider.agricraft.init.AgriItems;
@@ -29,8 +27,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -46,13 +45,11 @@ public class JsonPlant implements IAgriPlant {
     private final AgriPlant plant;
 
     private final List<FuzzyStack> seedItems;
-    private final List<IAgriHarvestProduct> products;
     private final IGrowthRequirement growthRequirement;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.seedItems = initSeedItemsListJSON(plant);
-        this.products = initProductListJSON(plant);
         this.growthRequirement = initGrowthRequirementJSON(plant);
     }
 
@@ -150,8 +147,21 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public List<IAgriHarvestProduct> getProducts() {
-        return Collections.unmodifiableList(this.products);
+    public void getPossibleProducts(Consumer<ItemStack> products) {
+        this.plant.getProducts().getAll().stream()
+                .map(p -> p.toStack(FuzzyStack.class))
+                .filter(Optional::isPresent)
+                .map(p -> p.get().toStack())
+                .forEach(products);
+    }
+
+    @Override
+    public void getHarvestProducts(Consumer<ItemStack> products, IAgriCrop crop, IAgriStat stat, Random rand) {
+        this.plant.getProducts().getRandom(rand).stream()
+                .map(p -> p.toStack(FuzzyStack.class))
+                .filter(Optional::isPresent)
+                .map(p -> p.get().toStack())
+                .forEach(products);
     }
 
     @Override
@@ -203,20 +213,6 @@ public class JsonPlant implements IAgriPlant {
             PlantRenderer.renderPlant((ITessellator) textureToIcon, this, growthStage);
         }
         return Collections.emptyList();
-    }
-
-    public static final List<IAgriHarvestProduct> initProductListJSON(AgriPlant plant) {
-        return plant.getProducts().getAll().stream()
-                .map(JsonPlant::convertProductJSON)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-    }
-
-    public static final Optional<IAgriHarvestProduct> convertProductJSON(AgriProduct product) {
-        return product
-                .toStack(FuzzyStack.class)
-                .map(stack -> new AgriHarvestProduct(stack.getItem(), stack.getTagCompound(), stack.getMeta(), product.getMin(), product.getMax(), product.getChance(), false));
     }
 
     public static final List<FuzzyStack> initSeedItemsListJSON(AgriPlant plant) {

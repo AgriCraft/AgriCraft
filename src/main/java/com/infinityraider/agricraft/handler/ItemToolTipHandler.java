@@ -4,12 +4,10 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.mojang.realmsclient.gui.ChatFormatting;
-import java.text.DecimalFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -52,20 +50,20 @@ public class ItemToolTipHandler {
         }
     }
 
-    @SubscribeEvent
-    public void addProductInfo(ItemTooltipEvent event) {
-        if (StackHelper.hasTag(event.getItemStack())) {
-            final NBTTagCompound tag = StackHelper.getTag(event.getItemStack());
-            if (tag.hasKey(IAgriHarvestProduct.PRODUCT_MARKER_TAG)) {
-                final int minAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MIN_TAG);
-                final int maxAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MAX_TAG);
-                final double chance = tag.getDouble(IAgriHarvestProduct.PRODUCT_CHANCE_TAG);
-                event.getToolTip().add(ChatFormatting.GRAY + "Chance: " + DecimalFormat.getPercentInstance().format(chance));
-                event.getToolTip().add(ChatFormatting.GRAY + "Min. Amount: " + minAmount);
-                event.getToolTip().add(ChatFormatting.GRAY + "Max. Amount: " + maxAmount);
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public void addProductInfo(ItemTooltipEvent event) {
+//        if (StackHelper.hasTag(event.getItemStack())) {
+//            final NBTTagCompound tag = StackHelper.getTag(event.getItemStack());
+//            if (tag.hasKey(IAgriHarvestProduct.PRODUCT_MARKER_TAG)) {
+//                final int minAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MIN_TAG);
+//                final int maxAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MAX_TAG);
+//                final double chance = tag.getDouble(IAgriHarvestProduct.PRODUCT_CHANCE_TAG);
+//                event.getToolTip().add(ChatFormatting.GRAY + "Chance: " + DecimalFormat.getPercentInstance().format(chance));
+//                event.getToolTip().add(ChatFormatting.GRAY + "Min. Amount: " + minAmount);
+//                event.getToolTip().add(ChatFormatting.GRAY + "Max. Amount: " + maxAmount);
+//            }
+//        }
+//    }
 
     @SubscribeEvent
     public void addNbtInfo(ItemTooltipEvent event) {

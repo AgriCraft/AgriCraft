@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
@@ -52,6 +51,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return MethodResult.PASS;
         }
 
+        // Otherwise attempt to do something with the event.
         if (this.isCrossCrop() && AgriCraftConfig.crossOverChance > this.getRandom().nextDouble()) {
             this.crossOver();
             return MethodResult.SUCCESS;
@@ -157,11 +157,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             }
             if (this.isMature()) {
                 for (int trials = (this.seed.getStat().getGain() + 3) / 3; trials > 0; trials--) {
-                    for (IAgriHarvestProduct product : this.seed.getPlant().getProducts()) {
-                        if (this.getRandom().nextDouble() <= product.getChance()) {
-                            consumer.accept(product.toStack(this.getRandom()));
-                        }
-                    }
+                    this.seed.getPlant().getHarvestProducts(consumer, this, this.seed.getStat(), this.getRandom());
                 }
             }
         }
@@ -293,7 +289,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // =========================================================================
     // IWeedable Methods
     // =========================================================================
-    @Override
     public boolean spawn() {
         // If in remote world, abort!
         if (this.isRemote()) {
@@ -318,7 +313,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         return false;
     }
 
-    @Override
     public boolean spread() {
         // If remote, abort.
         if (this.isRemote()) {
@@ -400,19 +394,21 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IHarvestable methods.
     // =========================================================================
     @Override
-    public boolean onHarvest(@Nullable EntityPlayer player) {
-        if (!this.isRemote()) {
-            if (this.isCrossCrop()) {
-                this.setCrossCrop(false);
-                WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
-                return false;
-            } else if (this.canBeHarvested()) {
-                this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
-                this.setGrowthStage(0);
-                return true;
-            }
+    public MethodResult onHarvest(@Nullable EntityPlayer player) {
+        // Skip harvest if remote.
+        if (this.isRemote()) {
+            return MethodResult.PASS;
+        } else if (this.isCrossCrop()) {
+            this.setCrossCrop(false);
+            WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
+            return MethodResult.SUCCESS;
+        } else if (this.canBeHarvested()) {
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
+            this.setGrowthStage(0);
+            return MethodResult.SUCCESS;
+        } else {
+            return MethodResult.PASS;
         }
-        return false;
     }
 
     // =========================================================================
@@ -484,7 +480,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         setGrowthStage(this.growthStage + 1);
 
         // The operation was a success.
-        return;
+        // return;
     }
 
     /**

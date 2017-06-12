@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
-import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.render.RenderMethod;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowthRequirement;
@@ -8,7 +8,10 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -201,15 +204,32 @@ public interface IAgriPlant extends IAgriRegisterable {
     IGrowthRequirement getGrowthRequirement();
 
     /**
-     * Retrieves a list of all possible products of this plant. This should be a
-     * unmodifiable view of a constant list. Notice this is used as the master
-     * list of products for AgriCraft, in that it will be used for both
-     * harvesting drops, and for display in both the Seed Journal and JEI (if
-     * the product is not hidden).
+     * Retrieves all possible products of harvesting this plant. Note, this
+     * function is to be used for informational purposes only, i.e. for display
+     * in the seed journal and JEI. As such, this method is not required as to
+     * provide the complete set of all items that this plant could actually drop
+     * on a harvest event, but rather is required to list all the products that
+     * should show up in the journal. Consequently, if you wish for your plant
+     * to produce a hidden easter-egg style product, it should not be listed
+     * here!
      *
-     * @return A list containing all the possible products of the plant.
+     * @param products a consumer for collecting all the possible plant products
+     * that should be listed.
      */
-    List<IAgriHarvestProduct> getProducts();
+    void getPossibleProducts(@Nonnull Consumer<ItemStack> products);
+
+    /**
+     * Retrieves the products that would be produced upon harvesting the given
+     * plant, with the given stat, at the given position in the given world.
+     * This method will always be called on harvest events, including any time
+     * that the containing crop is broken. As such, it is important as to check the actual passed growth value of the plant, given that the plant is not garnteed as to be mature when this method is called.
+     *
+     * @param products a consumer for collecting all the possible plant harvest products that should be dropped.
+     * @param crop the crop instance that contains this plant.
+     * @param stat the stats associated with this instance of the plant.
+     * @param rand a random for use in rng.
+     */
+    void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriCrop crop, @Nonnull IAgriStat stat, @Nonnull Random rand);
 
     // =========================================================================
     // IAgriPlant Rendering Interface

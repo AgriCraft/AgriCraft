@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.gui.journal;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestProduct;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.gui.component.BasicComponents;
@@ -11,6 +10,7 @@ import com.infinityraider.agricraft.reference.Reference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -129,11 +129,10 @@ public class JournalPageSeed implements JournalPage {
     }
 
     private void addFruits(List<GuiComponent> components) {
-        int x = 30;
-        for (IAgriHarvestProduct product : discoveredSeeds.get(page).getProducts()) {
-            components.add(BasicComponents.getStackComponentFramed(product.toLabeledStack(), x, 102));
-            x += 24;
-        }
+        final AtomicInteger x = new AtomicInteger(30);
+        discoveredSeeds.get(page).getPossibleProducts(
+                p -> components.add(BasicComponents.getStackComponentFramed(p, x.getAndAdd(24), 102))
+        );
     }
 
     private void addSeeds(List<GuiComponent> components) {

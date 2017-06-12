@@ -57,6 +57,8 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      * Converts this crop to a crosscrop or a regular crop
      *
      * @param status true for crosscrop, false for regular crop
+     * 
+     * @return if the cross crop was successfully set.
      */
     boolean setCrossCrop(boolean status);
 
@@ -77,14 +79,6 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      * @return if this crop is fully grown
      */
     boolean isMature();
-
-    default boolean spawn() {
-        return false;
-    }
-
-    default boolean spread() {
-        return false;
-    }
 
     Optional<IAgriSoil> getSoil();
 

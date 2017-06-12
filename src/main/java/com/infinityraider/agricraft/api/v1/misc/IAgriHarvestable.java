@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.v1.misc;
 
+import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -23,6 +24,6 @@ public interface IAgriHarvestable {
      * harvested by automation.
      * @return if the harvest was successful.
      */
-    boolean onHarvest(EntityPlayer player);
+    MethodResult onHarvest(EntityPlayer player);
 
 }
