@@ -64,7 +64,7 @@ public final class AgriHarvestProduct implements IAgriHarvestProduct {
 
     @Override
     public int getAmount(Random rand) {
-        return this.getMinAmount() + rand.nextInt(this.maxAmount - this.minAmount);
+        return this.getMinAmount() + rand.nextInt(1 + this.maxAmount - this.minAmount);
     }
 
     @Override
