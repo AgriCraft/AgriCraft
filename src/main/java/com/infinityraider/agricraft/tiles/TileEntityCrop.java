@@ -31,6 +31,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -196,6 +198,23 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     // =========================================================================
     // ISeedProvider Methods
+    // </editor-fold>
+    // =========================================================================
+    // =========================================================================
+    // IAgriCrop Methods
+    // <editor-fold>
+    // =========================================================================
+
+    public BlockPos getPosDeobf() {
+        return this.getPos();
+    }
+
+    public World getWorldDeobf() {
+        return this.getWorld();
+    }
+
+    // =========================================================================
+    // IAgriCrop Methods
     // </editor-fold>
     // =========================================================================
     // =========================================================================

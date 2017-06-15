@@ -24,17 +24,21 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
 
     /**
      * Retrieves the location of the crop instance.
+     * Implementors can just call getPos() if possible. Renamed because of ForgeGradle obfuscation bug.
+     * https://github.com/MinecraftForge/ForgeGradle/issues/205
      *
      * @return the crop's position.
      */
-    BlockPos getPos();
+    BlockPos getPosDeobf();
 
     /**
      * Retrieves the world that the crop is in.
+     * Implementors can just call getWorld() if possible. Renamed because of ForgeGradle obfuscation bug.
+     * https://github.com/MinecraftForge/ForgeGradle/issues/205
      *
      * @return The world in which the crop is located.
      */
-    World getWorld();
+    World getWorldDeobf();
 
     /**
      * @return The growth stage of the crop, between 0 and 7 (both inclusive).

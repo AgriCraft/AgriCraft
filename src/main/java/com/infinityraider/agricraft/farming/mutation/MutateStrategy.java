@@ -29,7 +29,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
         Objects.requireNonNull(rand, "The random passed to a mutation strategy should not be null!");
 
         // Fetch all neighboring crop instances.
-        final List<IAgriCrop> neighbors = WorldHelper.getTileNeighbors(crop.getWorld(), crop.getPos(), IAgriCrop.class);
+        final List<IAgriCrop> neighbors = WorldHelper.getTileNeighbors(crop.getWorldDeobf(), crop.getPosDeobf(), IAgriCrop.class);
 
         // Determine all possible parents.
         final List<IAgriPlant> parents = neighbors.stream()
