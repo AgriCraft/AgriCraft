@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.0.0a19
+- FIXED: BlockRange iterator not working correctly.
 - FIXED: Crash caused by setting plant product max to equal plant product min.
 - FIXED: Peripheral rendering. (Still WIP).
 - FIXED: Crashed caused by having ComputerCraft installed.
