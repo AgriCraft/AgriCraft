@@ -160,13 +160,13 @@ public class BlockRange implements Iterable<BlockPos> {
             final BlockPos pos = new BlockPos(x, y, z);
 
             // Post-Increment
-            this.x += 1;
-            if (this.x > this.range.getMaxX()) {
-                this.x = this.range.getMinX();
-                this.y += 1;
-                if (this.y > this.range.getMaxY()) {
-                    this.y = this.range.getMinY();
-                    this.z += 1;
+            this.x = this.x + 1;
+            if (this.x > this.range.maxX) {
+                this.x = this.range.minX;
+                this.y = this.y + 1;
+                if (this.y > this.range.maxY) {
+                    this.y = this.range.minY;
+                    this.z = this.z + 1;
                 }
             }
 

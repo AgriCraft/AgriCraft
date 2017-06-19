@@ -2,25 +2,23 @@
  */
 package com.infinityraider.agricraft.items.modes;
 
-// Debug Additions
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
+import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
-import java.util.Optional;
-import javax.annotation.Nonnull;
-
-import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -36,15 +34,12 @@ public class DebugModeTestBlockRange extends DebugMode {
     /**
      * This method allows the user to test what Block Positions are covered by the BlockRange iterator.
      * The expected result will be the full cuboid between opposing corner positions.
-     *
-     * However, as of 2017/06/14, only the lines of blocks along three edges are produced by the iterator.
-     * (The coordinate variables don't change once they reach their Max. Need to reset to their Min for the next loop.)
      * Also remember that the BlockRange min and max positions aren't necessarily the input positions.
      *
      * Usage:
      * Right-click on two blocks to specify the opposite corners.
      * Some blocks should get replaced with free wool. Be careful.
-     * In case of terrible bugs, might overwrite unexpected locations!
+     * In case of terrible bugs, might destroy or overwrite unexpected locations!
      */
 
     @Override
@@ -57,7 +52,7 @@ public class DebugModeTestBlockRange extends DebugMode {
             setStartPos(stack, pos);
             player.addChatComponentMessage(new TextComponentString("Starting corner set: (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")"));
             player.addChatComponentMessage(new TextComponentString("Next right click will set the opposite/ending corner."));
-            player.addChatComponentMessage(new TextComponentString("WARNING: this mode will overwrite blocks, be careful."));
+            player.addChatComponentMessage(new TextComponentString("WARNING: this mode will destroy blocks, be careful."));
         } else {
             // This is the second click. Load the starting coordinate. Use 'pos' as the ending coordinate. Then fill the cuboid with wool.
             int count = 0;
@@ -66,8 +61,9 @@ public class DebugModeTestBlockRange extends DebugMode {
             // IMPORTANT PART OF THE TEST IS BELOW
             //
             BlockRange range = new BlockRange(startPos.get(), pos);
-            for (BlockPos target : range) {                         // <-- Iterator gives incomplete set
+            for (BlockPos target : range) {                         // <-- Is the iterator giving a complete set?
                 IBlockState old = world.getBlockState(target);
+                world.destroyBlock(target, true);
                 world.setBlockState(target, wool);
                 world.notifyBlockUpdate(target, old, wool, 2);
                 count += 1;
@@ -88,6 +84,10 @@ public class DebugModeTestBlockRange extends DebugMode {
 
     private static final String NBT_START = "agri_debug_blockrange_startpos";
 
+    /**
+     * @param stack Which ItemStack to read from. Typically is the debugger.
+     * @return An Optional of BlockPos if there is a length 3 int array with the right key. Empty otherwise.
+     */
     private Optional<BlockPos> getStartPos(@Nonnull ItemStack stack) {
         NBTTagCompound tag;
         if(!stack.hasTagCompound()) {
@@ -108,6 +108,10 @@ public class DebugModeTestBlockRange extends DebugMode {
         return start;
     }
 
+    /**
+     * @param stack Where to save the BlockPos. Typically is the debugger.
+     * @param p The position to save, or null if you want to delete the tag.
+     */
     private void setStartPos(@Nonnull ItemStack stack, BlockPos p) {
         NBTTagCompound tag;
         if(!stack.hasTagCompound()) {
