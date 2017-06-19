@@ -24,7 +24,7 @@ public class SpreadStrategy implements IAgriCrossStrategy {
 
     @Override
     public Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand) {
-        List<IAgriCrop> matureNeighbours = WorldHelper.getTileNeighbors(crop.getWorld(), crop.getPos(), IAgriCrop.class);
+        List<IAgriCrop> matureNeighbours = WorldHelper.getTileNeighbors(crop.getCropWorld(), crop.getCropPos(), IAgriCrop.class);
         matureNeighbours.removeIf(c -> !c.isMature());
         if (!matureNeighbours.isEmpty()) {
             int index = rand.nextInt(matureNeighbours.size());

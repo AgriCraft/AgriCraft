@@ -1,12 +1,15 @@
 Changelog
 ---------
 2.0.0a19
+- ADDED: New debugger mode for debugging block ranges. This proves that block ranges work properly. As a side effect plant requirements might have been fixed.
+- ADDED: New member on development team.
+- FIXED: Crash caused by bug in ForgeGradle obfuscation code. See https://github.com/MinecraftForge/ForgeGradle/issues/205 for more information on why this wasn't my fault.
 - FIXED: BlockRange iterator not working correctly.
 - FIXED: Crash caused by setting plant product max to equal plant product min.
 - FIXED: Peripheral rendering. (Still WIP).
 - FIXED: Crashed caused by having ComputerCraft installed.
 - FIXED: Crafting crash caused by disabling irrigation channels.
-- FIXED: Crash at server start caused by FML's ASM not working properly.
+- FIXED: Crash at server start caused by FML's @SideOnly ASM not working properly for static in-line declarations.
 - FIXED: Some compilation warnings.
 - FIXED: Crash at server start caused by null plant product.
 

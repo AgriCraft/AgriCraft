@@ -27,14 +27,14 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      *
      * @return the crop's position.
      */
-    BlockPos getPos();
+    BlockPos getCropPos();
 
     /**
      * Retrieves the world that the crop is in.
      *
      * @return The world in which the crop is located.
      */
-    World getWorld();
+    World getCropWorld();
 
     /**
      * @return The growth stage of the crop, between 0 and 7 (both inclusive).

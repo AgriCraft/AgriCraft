@@ -31,6 +31,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -196,6 +198,27 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     // =========================================================================
     // ISeedProvider Methods
+    // </editor-fold>
+    // =========================================================================
+    // =========================================================================
+    // IAgriCrop Methods
+    // -------------------------------------------------------------------------
+    // The following methods were added due to a ForgeGradle obfuscation bug.
+    // See: https://github.com/MinecraftForge/ForgeGradle/issues/205
+    // <editor-fold>
+    // =========================================================================
+    @Override
+    public BlockPos getCropPos() {
+        return this.getPos();
+    }
+
+    @Override
+    public World getCropWorld() {
+        return this.getWorld();
+    }
+
+    // =========================================================================
+    // IAgriCrop Methods
     // </editor-fold>
     // =========================================================================
     // =========================================================================
