@@ -205,11 +205,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // <editor-fold>
     // =========================================================================
 
-    public BlockPos getPosDeobf() {
+    public BlockPos getCropPos() {
         return this.getPos();
     }
 
-    public World getWorldDeobf() {
+    public World getCropWorld() {
         return this.getWorld();
     }
 
