@@ -62,28 +62,26 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         if (this.counter > 0) {
             tag.setInteger(AgriNBT.LEVEL, this.counter);
         }
-        tag.setBoolean(AgriNBT.ACTIVE, active);
+        if (this.active) {
+            tag.setBoolean(AgriNBT.ACTIVE, active);
+        }
+        if (this.buffer > 0) {
+            tag.setInteger(AgriNBT.BUFFER, this.buffer);
+        }
     }
 
     //this loads the saved data for the tile entity
+    // Note: tag.get* methods will return zero/false if key does not exist.
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        if (tag.hasKey(AgriNBT.LEVEL)) {
-            this.counter = tag.getInteger(AgriNBT.LEVEL);
-        } else {
-            this.counter = 0;
-        }
-
-        if (tag.hasKey(AgriNBT.ACTIVE)) {
-            this.active = tag.getBoolean(AgriNBT.ACTIVE);
-        } else {
-            this.active = false;
-        }
+        this.counter = tag.getInteger(AgriNBT.LEVEL);
+        this.active  = tag.getBoolean(AgriNBT.ACTIVE);
+        this.buffer  = tag.getInteger(AgriNBT.BUFFER);
     }
 
     //checks if the sprinkler is CONNECTED to an irrigation channel
     public boolean isConnected() {
-        return this.worldObj != null && this.worldObj.getBlockState(getPos().add(0, 1, 0)).getBlock() instanceof BlockWaterChannel;
+        return this.worldObj != null && this.worldObj.getBlockState(getPos().up()).getBlock() instanceof BlockWaterChannel;
     }
 
     @Override
@@ -203,7 +201,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     public TextureAtlasSprite getChannelIcon() {
         // Fetch the Icon using the handy world helper class.
         return WorldHelper
-                .getTile(worldObj, pos.add(0, 1, 0), TileEntityChannel.class)
+                .getTile(worldObj, pos.up(), TileEntityChannel.class)
                 .map(c -> c.getIcon())
                 .orElse(BaseIcons.OAK_PLANKS.getIcon());
     }

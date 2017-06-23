@@ -34,5 +34,5 @@ public interface AgriNBT {
     String FLAG = "agri_flag";
     String DIRECTION = "agri_direction";
     String MULTI_BLOCK = "agri_multiblock";
-
+    String BUFFER = "agri_buffer";
 }
