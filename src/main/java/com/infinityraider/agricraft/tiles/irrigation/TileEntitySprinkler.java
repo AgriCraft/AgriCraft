@@ -53,15 +53,11 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         this.waterUsageRemainingTicks = 0;
     }
 
-    /**
-     * Retrieves the current angle of the sprinkler head.
-     *
-     * @return The sprinkler head angle.
-     */
-    public float getAngle() {
-        return angle;
-    }
 
+    // =========================================================================
+    // NBT Methods
+    // <editor-fold>
+    // =========================================================================
     //this saves the data on the tile entity
     @Override
     public void writeTileNBT(NBTTagCompound tag) {
@@ -102,7 +98,15 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     public boolean isConnected() {
         return WorldHelper.getBlock(this.worldObj, this.pos.up(), BlockWaterChannel.class).isPresent();
     }
+    // =========================================================================
+    // NBT Methods
+    // </editor-fold>
+    // =========================================================================
 
+    // =========================================================================
+    // ITickable Methods
+    // <editor-fold>
+    // =========================================================================
     /**
      * On the client, this invokes the particle effects.
      * On the server, this starts by updating the water usage variables. If the buffer is empty or too low, then
@@ -217,6 +221,15 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             break;
         }
     }
+    // =========================================================================
+    // ITickable Methods
+    // </editor-fold>
+    // =========================================================================
+
+    // =========================================================================
+    // IIrrigationComponent Methods
+    // <editor-fold>
+    // =========================================================================
 
     @Override
     public boolean canConnectTo(EnumFacing side, IConnectable component) {
@@ -284,7 +297,15 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             return IrrigationConnectionType.NONE;
         }
     }
+    // =========================================================================
+    // IIrrigationComponent Methods
+    // </editor-fold>
+    // =========================================================================
 
+    // =========================================================================
+    // Client Methods
+    // <editor-fold>
+    // =========================================================================
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getChannelIcon() {
         // Fetch the Icon using the handy world helper class.
@@ -328,4 +349,17 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     public void addDisplayInfo(Consumer<String> information) {
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + BUFFER_CAP);
     }
+
+    /**
+     * Retrieves the current angle of the sprinkler head.
+     *
+     * @return The sprinkler head angle.
+     */
+    public float getAngle() {
+        return angle;
+    }
+    // =========================================================================
+    // Client Methods
+    // </editor-fold>
+    // =========================================================================
 }
