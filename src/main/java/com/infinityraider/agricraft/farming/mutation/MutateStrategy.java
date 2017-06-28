@@ -79,7 +79,7 @@ public class MutateStrategy implements IAgriCrossStrategy {
         }
 
         // Calculate the stat associated with the new plant.
-        Optional<IAgriStat> stat = AgriApi.getStatCalculatorRegistry().valueOf(mutation).map(c -> c.calculateMutationStats(mutation, neighbors));
+        Optional<IAgriStat> stat = AgriApi.getStatCalculatorRegistry().valueOf(mutation.getChild()).map(c -> c.calculateMutationStats(mutation, neighbors));
 
         // Return the mutation result.
         return stat
