@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.0.0a19
+- FIXED: Seeds not being consumed when planted on crops, effectively duplicating them.
+- FIXED: Issue that prevented mutations from occurring.
 - ADDED: New debugger mode for debugging block ranges. This proves that block ranges work properly. As a side effect plant requirements might have been fixed.
 - ADDED: New member on development team.
 - FIXED: Crash caused by bug in ForgeGradle obfuscation code. See https://github.com/MinecraftForge/ForgeGradle/issues/205 for more information on why this wasn't my fault.

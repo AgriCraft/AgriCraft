@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.renderers.blocks.RenderCrop;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.WorldHelper;
@@ -154,6 +155,10 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         // Step 8. If held item is a seed, attempt to plant it in the crop.
         if (seed.isPresent()) {
             if (crop.onApplySeeds(player, seed.get()) == MethodResult.SUCCESS) {
+                // Remove the consumed seed from the player's inventory.
+                // For now we really don't care if the method fails,
+                // so not checking the method's result is ok.
+                StackHelper.decreaseStackSize(player, heldItem, 1);
                 // The planting was a success!
                 return true;
             }
