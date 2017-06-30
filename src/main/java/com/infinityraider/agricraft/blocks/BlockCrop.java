@@ -132,8 +132,10 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
         // Step 5. If the held item is a type of fertilizer, apply it.
         if (AgriApi.getFertilizerRegistry().hasAdapter(heldItem)) {
-            Optional<IAgriFertilizer> fert = AgriApi.getFertilizerRegistry().valueOf(heldItem);
-            return fert.isPresent() && fert.get().applyFertilizer(player, world, pos, crop, heldItem, crop.getRandom());
+            AgriApi.getFertilizerRegistry()
+                    .valueOf(heldItem)
+                    .ifPresent(f -> f.applyFertilizer(player, world, pos, crop, heldItem, crop.getRandom()));
+            return true; // Even if it didn't grow or cross, we've still handled this block activation, so return true.
         }
 
         // Step 6. If the held item is crops, attempt to make cross-crops.
