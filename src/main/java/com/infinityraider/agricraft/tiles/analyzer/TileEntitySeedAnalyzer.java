@@ -325,9 +325,15 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         return result;
     }
 
-    //sets the items in a slot to this stack
+    /**
+     * Sets the items in a slot to this stack.
+     * Also makes sure the journal is updated if the specimen is already analyzed.
+     * @param slot  Use either of the two constants to refer to the slots.
+     * @param stack It is recommended to first call isItemValidForSlot, as this method does not.
+     */
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
+        // Step 1: Update the appropriate slot.
         switch (slot) {
             case SPECIMEN_SLOT_ID:
                 this.specimen = stack;
@@ -335,13 +341,21 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
                     stack.stackSize = getInventoryStackLimit();
                 }
                 this.progress = isSpecimenAnalyzed() ? maxProgress() : 0;
-                this.markForUpdate();
-                return;
+                break;
             case JOURNAL_SLOT_ID:
                 this.journal = stack;
-                this.markForUpdate();
-                return;
+                break;
         }
+
+        // Step 2: If both an analyzed plant and a journal are present, then make sure there's an entry recorded.
+        final Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(specimen);
+        if (seed.isPresent() && this.hasJournal() && seed.get().getStat().isAnalyzed()) {
+            // The add method tests if the journal already has the plant before adding it.
+            ((ItemJournal) journal.getItem()).addEntry(journal, seed.get().getPlant());
+        }
+
+        // Step 3: Finish up.
+        this.markForUpdate();
     }
 
     //returns the maximum stacksize
