@@ -212,7 +212,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      */
     @Override
     public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-        return this.getCrop(world, pos).map(crop -> !crop.isMature()).orElse(false);
+        return this.getCrop(world, pos).map(crop -> crop.hasSeed() && !crop.isMature()).orElse(false);
     }
 
     /**
