@@ -288,6 +288,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
                     } else {
                         output = this.specimen.copy();
                         this.specimen = null;
+                        this.progress = 0;
                         this.markForUpdate();
                     }
                 }
@@ -300,7 +301,6 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
                 }
                 break;
         }
-        this.progress = 0;
         return output;
     }
 
