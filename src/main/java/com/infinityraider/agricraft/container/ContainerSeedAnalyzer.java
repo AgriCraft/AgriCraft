@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.container;
 
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.StackHelper;
-import com.infinityraider.infinitylib.container.ContainerBase;
+import com.infinityraider.infinitylib.container.ContainerTileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerSeedAnalyzer extends ContainerBase<TileEntitySeedAnalyzer> {
+public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnalyzer> {
 
     public int progress;
 
@@ -42,28 +42,28 @@ public class ContainerSeedAnalyzer extends ContainerBase<TileEntitySeedAnalyzer>
         super(analyzer, inventory, layout.offsetX, layout.offsetY);
 
         // Add the seed slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.tile, this.seedSlotId, layout.seedSlotX, layout.seedSlotY));
+        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.getTile(), this.seedSlotId, layout.seedSlotX, layout.seedSlotY));
 
         // Add the journal slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.tile, this.journalSlotId, layout.journalSlotX, layout.journalSlotY));
+        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.getTile(), this.journalSlotId, layout.journalSlotX, layout.journalSlotY));
     }
 
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         for (IContainerListener listener : this.listeners) {
-            if (this.progress != this.tile.getProgress()) {
-                listener.sendProgressBarUpdate(this, 0, this.tile.getProgress());
+            if (this.progress != this.getTile().getProgress()) {
+                listener.sendProgressBarUpdate(this, 0, this.getTile().getProgress());
             }
         }
-        this.progress = this.tile.getProgress();
+        this.progress = this.getTile().getProgress();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int type, int newValue) {
         if (type == 0) {
-            this.tile.setProgress(newValue);
+            this.getTile().setProgress(newValue);
         }
     }
 

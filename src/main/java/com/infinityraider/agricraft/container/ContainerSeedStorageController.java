@@ -18,18 +18,18 @@ public class ContainerSeedStorageController extends ContainerSeedStorageBase<Til
 
     @Override
     public boolean addSeedToStorage(ItemStack stack) {
-        return this.tile.addStackToInventory(stack);
+        return this.getTile().addStackToInventory(stack);
     }
 
     @Override
     public List<ItemStack> getSeedEntries() {
-        return this.tile.getControlledSeeds();
+        return this.getTile().getControlledSeeds();
     }
 
     @Override
     public List<SeedStorageSlot> getSeedSlots(AgriSeed seed) {
         final ItemStack stack = seed.toStack();
-        return this.tile.getSlots(stack.getItem(), stack.getItemDamage());
+        return this.getTile().getSlots(stack.getItem(), stack.getItemDamage());
     }
 
 }

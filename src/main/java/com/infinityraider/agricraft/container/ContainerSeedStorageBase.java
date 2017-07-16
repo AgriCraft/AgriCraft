@@ -6,9 +6,10 @@ import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageController;
 import com.infinityraider.agricraft.tiles.storage.SeedStorageSlot;
-import com.infinityraider.infinitylib.container.ContainerBase;
 import java.util.List;
 import java.util.Optional;
+
+import com.infinityraider.infinitylib.container.ContainerTileBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -17,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-public abstract class ContainerSeedStorageBase<T extends TileEntity> extends ContainerBase<T> {
+public abstract class ContainerSeedStorageBase<T extends TileEntity> extends ContainerTileBase<T> {
 
     public ContainerSeedStorageBase(T tile, InventoryPlayer inventory, int xOffset, int yOffset) {
         super(tile, inventory, xOffset, yOffset);
@@ -39,10 +40,10 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
     public abstract List<SeedStorageSlot> getSeedSlots(AgriSeed seed);
 
     public Optional<ISeedStorageControllable> getControllable(ItemStack stack) {
-        if (this.tile instanceof ISeedStorageController) {
-            return ((ISeedStorageController) this.tile).getControllable(stack);
-        } else if (this.tile instanceof ISeedStorageControllable) {
-            return Optional.of((ISeedStorageControllable) tile);
+        if (this.getTile() instanceof ISeedStorageController) {
+            return ((ISeedStorageController) this.getTile()).getControllable(stack);
+        } else if (this.getTile() instanceof ISeedStorageControllable) {
+            return Optional.of((ISeedStorageControllable) getTile());
         } else {
             return Optional.empty();
         }
