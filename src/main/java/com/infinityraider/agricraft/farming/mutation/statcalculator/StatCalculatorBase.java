@@ -160,7 +160,7 @@ public abstract class StatCalculatorBase implements IAgriStatCalculator, IAgriAd
 
         // Account for invalid parents, if enabled in config.
         if (AgriCraftConfig.otherCropsAffectStatsNegatively) {
-            meanDivisor = meanDivisor + validParents;
+            meanDivisor = meanDivisor + invalidParents;
         }
 
         // Verify that the mean divisor is at least one.
