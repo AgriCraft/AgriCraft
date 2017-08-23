@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -188,12 +189,36 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         return (!this.crossCrop) && (this.seed == null || seed == null);
     }
 
+    /**
+     * This sets the seed for this crop. Using null will remove the seed.
+     * If this call changes the value for seed:
+     * - It will first reset the growth stage back to zero.
+     * - Then it will make sure that markForUpdate gets called, if setGrowthStage didn't do it already.
+     * - And then it will return true.
+     * Otherwise it will return false, indicating there was no change and no update.
+     *
+     * @param seed the seed to associate with this instance.
+     * @return true if this changed the seed and caused an update.
+     */
     @Override
     public boolean setSeed(AgriSeed seed) {
-        final AgriSeed oldSeed = this.seed;
+        // Check if the new value is already equal to the current seed. (I.e. same plant and same stats.)
+        if (seed != null ? seed.equals(this.seed) : this.seed == null) {
+            // No change to make.
+            return false;
+        }
+
+        // Otherwise set the seed to the new value.
         this.seed = seed;
-        this.markForUpdate();
-        return this.seed != oldSeed;
+
+        // Also reset the growth. This happens regardless of if we're adding, removing, or changing a seed.
+        if (!setGrowthStage(0)) {
+            // If setGrowthStage didn't cause an update already, then we make sure we do.
+            this.markForUpdate();
+        }
+
+        // Finally report that a change and an update did occur.
+        return true;
     }
 
     // =========================================================================
@@ -262,28 +287,30 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void setGrowthStage(int stage) {
-        // If remote, abort!
+    public boolean setGrowthStage(int stage) {
+        // If remote, abort! No change to report.
         if (this.isRemote()) {
-            return;
+            return false;
         }
 
-        // If no seed, abort!
-        if (!this.hasSeed()) {
-            return;
-        }
-
-        // Bring growth stage into bounds.
-        if (stage < 0) {
+        // Make sure that the new value is valid.
+        if (this.hasSeed()) {
+            // If there is a plant currently, make sure the value is valid.
+            stage = MathHelper.inRange(stage, 0, this.seed.getPlant().getGrowthStages() - 1);
+        } else if (stage != 0) {
+            // If this has no plant, the growth stage should be zero.
+            // And if someone was trying to set it as non-zero, then that's a mistake.
+            AgriCore.getCoreLogger().warn("Can't set a non-zero growth stage when a crop has no seed!");
             stage = 0;
-        } else if (stage >= this.seed.getPlant().getGrowthStages()) {
-            stage = this.seed.getPlant().getGrowthStages() - 1;
         }
 
         // If the new growth stage is different, perform update.
         if (stage != this.growthStage) {
             this.growthStage = stage;
             this.markForUpdate();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -443,7 +470,6 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public boolean onRaked(@Nullable EntityPlayer player) {
         if (!this.isRemote() && this.canBeRaked()) {
             this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
-            this.setGrowthStage(0);
             this.setSeed(null);
             return true;
         } else {

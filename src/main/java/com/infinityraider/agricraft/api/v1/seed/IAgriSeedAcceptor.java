@@ -20,9 +20,10 @@ public interface IAgriSeedAcceptor {
 
     /**
      * Sets the seed associated with this instance.
+     * Use null to remove the seed from this instance.
      *
      * @param seed the seed to associate with this instance.
-     * @return the seed priorly associated with this instance.
+     * @return true if this changed the value, or false if they were equal already.
      */
     boolean setSeed(@Nullable AgriSeed seed);
 
