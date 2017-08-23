@@ -42,11 +42,15 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     int getGrowthStage();
 
     /**
-     * Sets the growth stage for this crop
+     * Sets the growth stage for this crop, normalized to the range of valid values for the plant.
+     * If there is no plant, this will set the stage to zero, and log a warning if the input was non-zero.
+     * If growthStage changes, this will call markForUpdate and return true to inform the caller.
+     * Otherwise this will return false to indicate that growthStage didn't change and didn't do an update.
      *
-     * @param stage the growth stage, between 0 and 7 (both inclusive).
+     * @param stage The new value, from 0 (inclusive) up to the plant's stage amount (exclusive), if this has a plant.
+     * @return true if this changed the value and markForUpdate was called.
      */
-    void setGrowthStage(int stage);
+    boolean setGrowthStage(int stage);
 
     /**
      * @return if this crop is a crosscrop
