@@ -422,8 +422,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         if (this.isRemote()) {
             return MethodResult.PASS;
         } else if (this.isCrossCrop()) {
-            this.setCrossCrop(false);
-            WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
+            if (this.setCrossCrop(false)) {
+                // Only spawn the crop stick if the cross was successfully removed.
+                WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
+            }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
             this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
