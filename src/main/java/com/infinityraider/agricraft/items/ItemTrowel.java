@@ -56,7 +56,10 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
         if (te instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) te;
             Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
-            if (crop.hasSeed() && !seed.isPresent()) {
+            if (crop.isCrossCrop()) {
+                // Cross-crops cannot hold seeds, so the trowel cannot extract from or insert into them.
+                return EnumActionResult.FAIL;
+            } else if (crop.hasSeed() && !seed.isPresent()) {
                 seed = Optional.ofNullable(crop.getSeed());
                 crop.setSeed(null);
                 if (seed.isPresent()) {
