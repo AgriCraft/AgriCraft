@@ -6,6 +6,9 @@ import com.infinityraider.agricraft.api.v1.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -23,8 +26,10 @@ public class SpreadStrategy implements IAgriCrossStrategy {
     }
 
     @Override
-    public Optional<AgriSeed> executeStrategy(IAgriCrop crop, Random rand) {
-        List<IAgriCrop> matureNeighbours = WorldHelper.getTileNeighbors(crop.getCropWorld(), crop.getCropPos(), IAgriCrop.class);
+    @Nonnull
+    public Optional<AgriSeed> executeStrategy(@Nonnull IAgriCrop crop, @Nonnull Random rand) {
+        List<IAgriCrop> allNeighbours = WorldHelper.getTileNeighbors(crop.getCropWorld(), crop.getCropPos(), IAgriCrop.class);
+        List<IAgriCrop> matureNeighbours = new ArrayList<>(allNeighbours);
         matureNeighbours.removeIf(c -> !c.isMature());
         if (!matureNeighbours.isEmpty()) {
             int index = rand.nextInt(matureNeighbours.size());
@@ -32,7 +37,7 @@ public class SpreadStrategy implements IAgriCrossStrategy {
             if (seed != null && rand.nextDouble() < seed.getPlant().getSpreadChance()) {
                 return AgriApi.getStatCalculatorRegistry()
                         .valueOf(seed.getPlant())
-                        .map(calc -> calc.calculateSpreadStats(seed.getPlant(), matureNeighbours))
+                        .map(calc -> calc.calculateSpreadStats(seed.getPlant(), allNeighbours))
                         .map(stat -> new AgriSeed(seed.getPlant(), stat));
             }
         }
