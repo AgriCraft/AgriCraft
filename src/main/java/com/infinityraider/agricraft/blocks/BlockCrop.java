@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.blocks;
 
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
@@ -10,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.reference.Reference;
@@ -19,11 +21,8 @@ import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -33,6 +32,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -206,36 +206,124 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
     }
 
+    // =========================================================================
+    // IGrowable Methods
+    // <editor-fold>
+    // =========================================================================
+
     /**
-     * Determines if bonemeal may be applied to the plant contained in the
-     * crops.
+     * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
      *
-     * @return if bonemeal may be applied.
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
+     * In vanilla Minecraft, this method signals if a bonemeal should be consumed when used on this object.
+     * If true, it should be followed by a call to {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
+     *
+     * Unlike vanilla, this should always return the same result as {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
+     *
+     * @return true if the interface is enabled and the target will accept bonemeal.
      */
     @Override
     public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-        return this.getCrop(world, pos).map(crop -> !crop.isMature()).orElse(false);
+        return AgriCraftConfig.allowIGrowableOnCrop
+                && checkOrUseBonemeal(world, null, pos, false);
     }
 
     /**
-     * Determines if bonemeal speeds up the GROWTH of the contained plant.
+     * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
      *
-     * @return false, so that we have full control over fertilizers.
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
+     * This method tells the caller if they should continue onward and call {@link #grow(World, Random, BlockPos, IBlockState)},
+     * or if they should stop instead. In vanilla Minecraft, saplings and mushrooms  use this method to be able to
+     * consume bonemeal but not necessarily grow into a tree every time.
+     *
+     * Misleadingly named! If this is false but canGrow is true, then bonemeal will be useless and wasted.
+     *
+     * Unlike vanilla, this should always return the same result as {@link #canGrow(World, BlockPos, IBlockState, boolean)}.
+     *
+     * @return true if the interface is enabled and the target will accept bonemeal.
      */
     @Override
     public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
-        return false;
+        return AgriCraftConfig.allowIGrowableOnCrop
+                && checkOrUseBonemeal(world, rand, pos, false);
     }
 
     /**
-     * Increments the contained plant's GROWTH stage. Generally, shouldn't be
-     * applied, but in the case that it is, it will simply act as a growth tick
-     * being added.
+     * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
+     *
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
+     * If this is enabled, and the target can accept the bonemeal fertilizer currently, then this will apply it.
+     * This method is the same as bonemeal being used on the target for free.
+     * See {@link #checkOrUseBonemeal(World, Random, BlockPos, boolean)} for runtime exceptions to watch out for.
      */
     @Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-        this.getCrop(world, pos).ifPresent(TileEntityCrop::onGrowthTick);
+        if (AgriCraftConfig.allowIGrowableOnCrop) {
+            checkOrUseBonemeal(world, world.rand, pos, true);
+        }
     }
+
+    /**
+     * This is the reference copy of a stack of bonemeal. This is maintained instead of a reference to the actual
+     * IAgriFertilizer object, in case the mapping changes during runtime.
+     */
+    private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
+
+    /**
+     * Helper method for the IGrowable interface. Checks if bonemeal can be applied at the requested position.
+     * Can also then apply the bonemeal fertilizer if the check passes and the last parameter is set to true.
+     * Uses AgriCraft's Fertilizer system, specifically whatever adapter is registered for bonemeal/ItemDye.
+     *
+     * Will throw runtime exceptions if either:
+     * - world is null,
+     * - pos is null,
+     * - rand is null while tryToApplyBonemeal is true,
+     * - there is no IAgriFertilizable object at the BlockPos, -OR-
+     * - bonemeal (i.e. ItemDye with meta 15) is not registered as a fertilizer.
+     *
+     * @param world The world to check.
+     * @param rand A source of randomness. Only necessary when tryToApplyBonemeal is true, can be null otherwise.
+     * @param pos The location of crop to check.
+     * @param tryToApplyBonemeal When true, will also apply the bonemeal if it's accepted by the crop.
+     * @return true if both the IGrowable interface is enabled, and the crop accepts bonemeal currently.
+     *         false if either the IGrowable interface is disabled, or the crop does not accept bonemeal.
+     *         The return value is not dependent on the result of applying the bonemeal.
+     */
+    private boolean checkOrUseBonemeal(@Nonnull World world, @Nullable Random rand, @Nonnull BlockPos pos, boolean tryToApplyBonemeal) {
+        // Sanity check the parameters.
+        Objects.requireNonNull(world, "IGrowable on BlockCrop can't function with a null world parameter.");
+        Objects.requireNonNull(pos,   "IGrowable on BlockCrop can't function with a null pos parameter.");
+        if (tryToApplyBonemeal) {
+            Objects.requireNonNull(rand, "IGrowable#grow on BlockCrop can't function with a null rand parameter.");
+        }
+
+        // Get the crop that is being targeted.
+        IAgriFertilizable crop = WorldHelper
+                                 .getTile(world, pos, IAgriFertilizable.class)
+                                 .orElseThrow(() -> new RuntimeException("There is no IAgriFertilizable at: " + pos));
+
+        // Get the AgriCraft fertilizer representation of bonemeal.
+        IAgriFertilizer meal   = AgriApi
+                                 .getFertilizerRegistry()
+                                 .valueOf(BONEMEAL)
+                                 .orElseThrow(() -> new RuntimeException("Bonemeal is not registered as a fertilizer."));
+
+        // Use those two references to perform the check.
+        boolean canApplyBonemeal = crop.acceptsFertilizer(meal);
+
+        // If the caller has requested it, and the crop allows it, then also apply the bonemeal now.
+        if (tryToApplyBonemeal && canApplyBonemeal) {
+            crop.onApplyFertilizer(meal, rand);
+        }
+
+        // Regardless of the outcome of applying the fertilizer, return the result of the check itself.
+        return canApplyBonemeal;
+    }
+
+    // =========================================================================
+    // IGrowable Methods
+    // </editor-fold>
+    // =========================================================================
 
     /**
      * Handles changes in the crop's neighbors.
