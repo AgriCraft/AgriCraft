@@ -11,9 +11,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
-import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.farming.PlantStats;
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -421,37 +419,46 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     // =========================================================================
-    // IFertilizable Methods
+    // IAgriFertilizable Methods
     // =========================================================================
     @Override
     public boolean acceptsFertilizer(IAgriFertilizer fertilizer) {
+        // First check if this is a cross crops. In all other cases this is a regular crop.
         if (this.crossCrop) {
+            // This is a cross crop.
+            // + A cross over (e.g. mutation) can occur if both requirements are met.
+            // - Otherwise the fertilizer usage is blocked by returning false.
             return AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation();
+        } else if (!this.hasSeed()) {
+            // This is a regular crop, AND it is empty.
+            // + Random plants (such as weeds) have a chance to spawn.
+            return true;
+        } else if (this.getSeed().getPlant().isFertilizable()) {
+            // This is a regular crop, AND it has a plant, AND that plant allows boosts from fertilizers.
+            // + Immature plants can grow.
+            // + Fully grown plants have a chance to spread clones to neighboring crops
+            return true;
+        } else {
+            // This is a regular crop, AND it has a plant, AND that plant does NOT allow fertilizers.
+            // - Block the consumption and application of the fertilizer by returning false.
+            return false;
         }
-        return this.hasSeed() && this.getSeed().getPlant().isFertilizable();
     }
 
     @Override
     public MethodResult onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
-        // If in remote world, pass.
         if (this.isRemote()) {
+            // The client doesn't need to do anything special.
             return MethodResult.PASS;
-        }
-
-        // Attempt to fertilize plant.
-        if (this.hasSeed() && this.getSeed().getPlant().isFertilizable() && this.getGrowthStage() < Constants.MATURE) {
-            ((BlockCrop) AgriBlocks.getInstance().CROP).grow(getWorld(), rand, getPos(), getWorld().getBlockState(getPos()));
+        } else if (!this.acceptsFertilizer(fertilizer)) {
+            // This method has been called in error. Make a note and block the tick.
+            AgriCore.getCoreLogger().warn("onApplyFertilizer should not be called if acceptFertilizer is false!");
+            return MethodResult.FAIL;
+        } else {
+            // The regular growth tick method handles the rest, now that the special cases have been filtered out.
+            this.onGrowthTick();
             return MethodResult.SUCCESS;
         }
-
-        // Attempt to perform mutation.
-        if (this.isCrossCrop() && AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation()) {
-            this.crossOver();
-            return MethodResult.SUCCESS;
-        }
-
-        // The action was a failure.
-        return MethodResult.FAIL;
     }
 
     // =========================================================================
