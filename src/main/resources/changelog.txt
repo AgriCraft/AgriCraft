@@ -1,5 +1,17 @@
 Changelog
 ---------
+2.0.0a20
+- FIXED: Growth progress should be reset if a plant is removed.
+- FIXED: Invalid parents shouldn't be ignored when spreading to cross crops.
+- FIXED: The setting for "Other Crops Affect Stats Negatively" would calculate them incorrectly in most situations, preventing normal stat growth.
+- FIXED: Trowels shouldn't be able to interact with cross crops.
+- FIXED: A crop stick should not spawn if removing the cross crop fails.
+- FIXED: Spread chance calculations were backwards.
+- FIXED: GUIs (such as the seed analyzer) were updated to be compatible with InfinityLib 0.11.
+- FIXED: The harvest product amount should vary from min to max.
+- FIXED: Seed analysis progress shouldn't get reset by removing the journal.
+- ADDED: Already analyzed seeds will update the journal when inserted.
+
 2.0.0a19
 - FIXED: Seeds not being consumed when planted on crops, effectively duplicating them.
 - FIXED: Issue that prevented mutations from occurring.
