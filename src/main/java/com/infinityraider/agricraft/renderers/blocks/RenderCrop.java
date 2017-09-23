@@ -39,10 +39,6 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
         this.cropQuads = Maps.newIdentityHashMap();
     }
 
-    static {
-        AgriCore.getConfig().addConfigurable(RenderCrop.class);
-    }
-
     @Override
     public List<ResourceLocation> getAllTextures() {
         return TypeHelper.asList(TEXTURE);
