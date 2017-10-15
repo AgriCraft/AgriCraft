@@ -10,7 +10,7 @@ public enum AgriNuggetType {
 
     Emerald("gemEmerald", "oreEmerald"),
     Diamond("gemDiamond", "oreDiamond"),
-    Quartz("quartz", "quartz"),
+    Quartz("gemQuartz", "oreQuartz"),
     Iron,
     Copper,
     Tin,
