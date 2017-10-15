@@ -70,12 +70,14 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
             OreDictionary.registerOre(type.nugget, oneNugget);
 
             // 2) Conditional recipes. Only if the ingot exists, because AgriCraft doesn't add its own.
-            ItemStack nugget = new ItemStack(this, 9, type.ordinal());
             ItemStack ingot = OreDictHelper.getIngot(type.ingot);
             if (ingot != null) {
                 AgriCore.getLogger("agricraft").info("Adding a recipe to convert nine {0} into one {1}", type.nugget, type.ingot);
                 GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', type.nugget));
-                GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, type.ingot));
+
+                // TODO: Research the necessity of 'uncrafting' ingots back into nuggets. It causes compatibility issues.
+                //ItemStack nineNuggets = new ItemStack(this, 9, type.ordinal());
+                //GameRegistry.addRecipe(new ShapelessOreRecipe(nineNuggets, type.ingot));
             }
         }
     }
