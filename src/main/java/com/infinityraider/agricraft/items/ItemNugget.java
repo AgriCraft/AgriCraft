@@ -65,14 +65,15 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
     public void registerRecipes() {
         for (AgriNuggetType type : AgriNuggetType.values()) {
             // 1) Ore Dictionary registration.
+            AgriCore.getLogger("agricraft").info("Registering in Ore Dictionary: {0}", type.nugget);
             ItemStack oneNugget = new ItemStack(this, 1, type.ordinal());
             OreDictionary.registerOre(type.nugget, oneNugget);
 
             // 2) Conditional recipes. Only if the ingot exists, because AgriCraft doesn't add its own.
             ItemStack nugget = new ItemStack(this, 9, type.ordinal());
             ItemStack ingot = OreDictHelper.getIngot(type.ingot);
-            AgriCore.getLogger("agricraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);
             if (ingot != null) {
+                AgriCore.getLogger("agricraft").info("Adding a recipe to convert nine {0} into one {1}", type.nugget, type.ingot);
                 GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', type.nugget));
                 GameRegistry.addRecipe(new ShapelessOreRecipe(nugget, type.ingot));
             }
