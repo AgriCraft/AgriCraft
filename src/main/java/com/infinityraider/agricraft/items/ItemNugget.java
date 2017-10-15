@@ -28,7 +28,6 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
     public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> varients) {
         for (AgriNuggetType type : AgriNuggetType.values()) {
             ItemStack stack = new ItemStack(item, 1, type.ordinal());
-            OreDictionary.registerOre(type.nugget, stack);
             varients.add(stack);
         }
     }
@@ -65,6 +64,11 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
     @Override
     public void registerRecipes() {
         for (AgriNuggetType type : AgriNuggetType.values()) {
+            // 1) Ore Dictionary registration.
+            ItemStack oneNugget = new ItemStack(this, 1, type.ordinal());
+            OreDictionary.registerOre(type.nugget, oneNugget);
+
+            // 2) Conditional recipes. Only if the ingot exists, because AgriCraft doesn't add its own.
             ItemStack nugget = new ItemStack(this, 9, type.ordinal());
             ItemStack ingot = OreDictHelper.getIngot(type.ingot);
             AgriCore.getLogger("agricraft").debug("Registering Nugget: {0} For: {1}", type.nugget, type.ingot);
