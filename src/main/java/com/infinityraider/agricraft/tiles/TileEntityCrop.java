@@ -33,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -85,9 +86,20 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return MethodResult.FAIL;
         }
 
-        // If the growth requirement is not met, abort!
-        if (!seed.getPlant().getGrowthRequirement().isMet(worldObj, pos)) {
+        // If the soil is wrong, report and abort.
+        if (!seed.getPlant().getGrowthRequirement().hasValidSoil(worldObj, pos)) {
+            player.addChatComponentMessage(new TextComponentString("The soil is not valid for this seed. You can't plant it here."));
             return MethodResult.FAIL;
+        }
+
+        // If the additional conditions are wrong, warn and continue.
+        if (!seed.getPlant().getGrowthRequirement().hasValidConditions(worldObj, pos)) {
+            player.addChatComponentMessage(new TextComponentString("Caution: This plant has additional requirements that are unmet."));
+        }
+
+        // If the lighting is wrong, warn and continue.
+        if (!seed.getPlant().getGrowthRequirement().hasValidLight(worldObj, pos)) {
+            player.addChatComponentMessage(new TextComponentString("Caution: This plant won't grow with the current light level."));
         }
 
 //        // Notify event listeners of a planting event.
