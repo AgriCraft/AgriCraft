@@ -391,9 +391,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         final IAgriPlant plant = seed.getPlant();
 
-        // If don't roll a spread event, abort.
-        if (plant.getSpreadChance() > this.getRandom().nextDouble()) {
-            for (IAgriCrop crop : WorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class)) {
+        // Try to spread in each direction.
+        for (IAgriCrop crop : WorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class)) {
+            if (plant.getSpreadChance() > this.getRandom().nextDouble()) {
                 final AgriSeed other = crop.getSeed();
                 if (other == null) {
                     if (!crop.isCrossCrop()) {
