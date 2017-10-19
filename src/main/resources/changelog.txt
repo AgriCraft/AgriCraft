@@ -1,5 +1,11 @@
 Changelog
 ---------
+2.0.0a21
+- FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.
+- FIXED: Quartz nuggets used the wrong ore dictionary name.
+- REMOVED: Recipe that turns ingots into nuggets. Unneeded and could cause conflicts.
+- ADDED: Better logging messages for nuggets.
+
 2.0.0a20
 - FIXED: Growth progress should be reset if a plant is removed.
 - FIXED: Invalid parents shouldn't be ignored when spreading to cross crops.
@@ -11,10 +17,6 @@ Changelog
 - FIXED: The harvest product amount should vary from min to max.
 - FIXED: Seed analysis progress shouldn't get reset by removing the journal.
 - ADDED: Already analyzed seeds will update the journal when inserted.
-- FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.
-- FIXED: Quartz nuggets used the wrong ore dictionary name.
-- REMOVED: Recipe that turns ingots into nuggets. Unneeded and could cause conflicts.
-- ADDED: Better logging messages for nuggets.
 
 2.0.0a19
 - FIXED: Seeds not being consumed when planted on crops, effectively duplicating them.
