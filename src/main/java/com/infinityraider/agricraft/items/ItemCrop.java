@@ -71,7 +71,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         StackHelper.decreaseStackSize(player, stack,1);
 
         // Handle sneak placing of crosscrops.
-        if (player.isSneaking() && stack.stackSize > 0) {
+        if (player != null && player.isSneaking() && stack.stackSize > 0) {
             WorldHelper
                     .getTile(world, cropPos, TileEntityCrop.class)
                     .ifPresent(c -> {
