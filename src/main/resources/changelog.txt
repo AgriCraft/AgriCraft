@@ -5,6 +5,34 @@ Changelog
 - FIXED: Quartz nuggets used the wrong ore dictionary name.
 - REMOVED: Recipe that turns ingots into nuggets. Unneeded and could cause conflicts.
 - ADDED: Better logging messages for nuggets.
+- ADDED: A new issue template on GitHub. It should appear on the submission page.
+- TWEAK: When regular spreading (not onto a cross crop), the chance is checked individually per direction.
+- FIXED: Before spreading, check that the soil below the destination single crop is valid for this plant.
+- FIXED: Sprinklers should search for pipes above, not below themselves.
+- ADDED: Support for WAILA and TOP to display information about sprinklers.
+- FIXED: Sprinkler water buffer wasn't getting saved to NBT.
+- FIXED: Sprinklers used fixed settings instead of the ones in the settings.
+- FIXED: Sprinklers now correctly target the cuboid immediately below themselves.
+- TWEAK: Sprinklers are more server-friendly and realistic.
+- FIXED: Bonemeal getting consumed wastefully when fertilizer mutations were turned off.
+- TWEAK: Fertilizers now wrap the update logic, instead of reimplementing it. Makes things more consistent.
+- ADDED: The AgriCraft crop block now properly implements the IGrowable interface.
+- ADDED: New config setting to enable the IGrowable interface. On by default.
+- ADDED: The debugger item has a new mode that tests and reports on blocks that are IGrowable.
+- ADDED: Mini bonemeal particle effect when using bonemeal on AgriCraft crop sticks.
+- FIXED: The ItemCrop was blocking right clicks on the tops of items.
+- ADDED: Crop sticks are now placed relative to the face that was clicked on.
+- ADDED: Check for null player in ItemCrop, should avoid crashes when used by machines.
+- FIXED: Plants that required multiple specific blocks nearby would be satisfied by having one.
+- ADDED: JSONs for Agricural Expansion mod. (Thank you Zackeezy!)
+- FIXED: Seed item ids in JSONs for HarvestCraft. (Thank you TokkenGmr!)
+- FIXED: Ids in JSONs for vanilla tulips. (Thank you Dilnu!)
+- FIXED: Diamahlia JSON should not allow bonemeal.
+- FIXED: Resource plants use agri_nugget instead of ingots, diamonds, emeralds, and quartz.
+- TWEAK: Mushrooms, cactus, carrots, and sugarcanes are now accepted as seeds in vanilla JSONs.
+- REMOVED: Duplicate vanilla mushroom JSONs.
+- FIXED: The Magnifying Glass's reported brightness should be affected by time of day.
+- FIXED: Crops should not drop seeds when harvesting the plant on them.
 
 2.0.0a20
 - FIXED: Growth progress should be reset if a plant is removed.
