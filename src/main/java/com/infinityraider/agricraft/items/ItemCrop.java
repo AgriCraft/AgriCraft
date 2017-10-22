@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.items;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
@@ -57,7 +58,13 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         }
 
         // Set the block to a crop.
-        world.setBlockState(cropPos, AgriBlocks.getInstance().CROP.getDefaultState());
+        final Boolean success = world.setBlockState(cropPos, AgriBlocks.getInstance().CROP.getDefaultState());
+
+        // If there was trouble, abort.
+        if (!success) {
+            AgriCore.getCoreLogger().error("ItemCrop#onItemUse failed to create the BlockCrop!");
+            return EnumActionResult.FAIL;
+        }
 
         // Remove the crop used from the stack.
         stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
