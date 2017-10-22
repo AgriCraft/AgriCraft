@@ -37,7 +37,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
 
     // This is called when you right click with this item in hand.
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         // Skip if remote, or clicked wrong face of block.
         if (world.isRemote || side != EnumFacing.UP) {
             return EnumActionResult.PASS;
