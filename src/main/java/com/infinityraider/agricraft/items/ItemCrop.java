@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
@@ -67,7 +68,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         }
 
         // Remove the crop used from the stack.
-        stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
+        StackHelper.decreaseStackSize(player, stack,1);
 
         // Handle sneak placing of crosscrops.
         if (player.isSneaking() && stack.stackSize > 0) {
@@ -75,7 +76,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
                     .getTile(world, cropPos, TileEntityCrop.class)
                     .ifPresent(c -> {
                         c.setCrossCrop(true);
-                        stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
+                        StackHelper.decreaseStackSize(player, stack,1);
                     });
         }
 
