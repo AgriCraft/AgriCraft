@@ -38,13 +38,13 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
     // This is called when you right click with this item in hand.
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        // Skip if remote, or clicked wrong face of block.
-        if (world.isRemote || side != EnumFacing.UP) {
+        // Skip if remote.
+        if (world.isRemote) {
             return EnumActionResult.PASS;
         }
 
-        // Fetch information.
-        final BlockPos cropPos = pos.up();
+        // Calculate the target position.
+        final BlockPos cropPos = pos.offset(side);
 
         // Test if placement is valid.
         if (!world.isAirBlock(cropPos)) {
@@ -52,12 +52,12 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         }
         
         // Test if soil is valid.
-        if (!AgriApi.getSoilRegistry().contains(world.getBlockState(pos))) {
+        if (!AgriApi.getSoilRegistry().contains(world.getBlockState(cropPos.down()))) {
             return EnumActionResult.FAIL;
         }
 
         // Set the block to a crop.
-        world.setBlockState(pos.up(), AgriBlocks.getInstance().CROP.getDefaultState());
+        world.setBlockState(cropPos, AgriBlocks.getInstance().CROP.getDefaultState());
 
         // Remove the crop used from the stack.
         stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
@@ -65,7 +65,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
         // Handle sneak placing of crosscrops.
         if (player.isSneaking() && stack.stackSize > 0) {
             WorldHelper
-                    .getTile(world, pos.add(0, 1, 0), TileEntityCrop.class)
+                    .getTile(world, cropPos, TileEntityCrop.class)
                     .ifPresent(c -> {
                         c.setCrossCrop(true);
                         stack.stackSize = player.capabilities.isCreativeMode ? stack.stackSize : stack.stackSize - 1;
