@@ -140,7 +140,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Drop drops if should drop.
         if (player == null || !player.isCreative()) {
-            this.getDrops(drop -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, drop), true);
+            this.getDrops(drop -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, drop), true, true);
         }
 
         // Remove the block.
@@ -159,13 +159,13 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // Misc. Methods
     // <editor-fold>
     // =========================================================================
-    public void getDrops(Consumer<ItemStack> consumer, boolean includeCropSticks) {
+    public void getDrops(Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
         // Perform crop stick drop.
         if (includeCropSticks) {
             consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
         }
         if (this.hasSeed()) {
-            if (this.seed.getPlant().getSeedDropChanceBase() + this.growthStage * this.seed.getPlant().getSeedDropChanceBonus() > this.getRandom().nextDouble()) {
+            if (includeSeeds && this.seed.getPlant().getSeedDropChanceBase() + this.growthStage * this.seed.getPlant().getSeedDropChanceBonus() > this.getRandom().nextDouble()) {
                 consumer.accept(this.getSeed().toStack());
             }
             if (this.isMature()) {
@@ -476,7 +476,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false, false);
             this.setGrowthStage(0);
             return MethodResult.SUCCESS;
         } else {
@@ -490,7 +490,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean onRaked(@Nullable EntityPlayer player) {
         if (!this.isRemote() && this.canBeRaked()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false);
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false, true);
             this.setSeed(null);
             return true;
         } else {
