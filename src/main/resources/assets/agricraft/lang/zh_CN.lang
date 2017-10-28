@@ -2,6 +2,7 @@
 // Creative Tabs
 // ========================================
 itemGroup.agricraft=农业工艺
+itemGroup.agricraft_seeds=农业工艺|种子
 
 // ========================================
 // Items
@@ -19,17 +20,19 @@ item.agricraft:clipping.name=接穗
 // ========================================
 // Nuggets
 // ========================================
-item.agricraft:nuggetDiamond.name=钻石颗粒
-item.agricraft:nuggetIron.name=铁颗粒
-item.agricraft:nuggetEmerald.name=绿宝石颗粒
-item.agricraft:nuggetTin.name=锡颗粒
-item.agricraft:nuggetLead.name=铅颗粒
-item.agricraft:nuggetSilver.name=银颗粒
-item.agricraft:nuggetAluminum.name=铝颗粒
-item.agricraft:nuggetNickel.name=镍颗粒
-item.agricraft:nuggetPlatinum.name=铂颗粒
-item.agricraft:nuggetOsmium.name=锇颗粒
-item.agricraft:nuggetQuartz.name=石英碎片
+item.agricraft:nugget_diamond.name=钻石粒
+item.agricraft:nugget_iron.name=铁粒
+item.agricraft:nugget_emerald.name=绿宝石粒
+item.agricraft:nugget_tin.name=锡粒
+item.agricraft:nugget_lead.name=铅粒
+item.agricraft:nugget_copper.name=铜粒
+item.agricraft:nugget_silver.name=银粒
+item.agricraft:nugget_aluminum.name=铝粒
+item.agricraft:nugget_nickel.name=镍粒
+item.agricraft:nugget_platinum.name=铂粒
+item.agricraft:nugget_osmium.name=锇粒
+item.agricraft:nugget_quartz.name=石英碎片
+item.agricraft:nugget_unknown.name=未知碎片
 
 // ========================================
 // Blocks
@@ -41,7 +44,7 @@ tile.agricraft:water_tank.0.name=木质水箱
 tile.agricraft:water_tank.1.name=铁质水箱
 tile.agricraft:water_channel_normal.0.name=木质浇灌水道
 tile.agricraft:water_channel_full.0.name=木质浇灌水道
-tile.agricraft:water_channel_normal.1.name=铁质浇灌水道
+tile.agricraft:water_channel.1.name=铁质浇灌水道
 tile.agricraft:water_channel_valve.0.name=木质水道阀门
 tile.agricraft:water_channel_valve.1.name=铁质水道阀门
 tile.agricraft:sprinkler.name=洒水壶
@@ -55,8 +58,8 @@ tile.agricraft:peripheral.name=数控种子分析仪
 // ========================================
 // Entities
 // ========================================
-entity.AgriCraft.villagerFarmer.name=村民
-entity.AgriCraft.leash.name=皮带结
+entity.AgriCraft.villager_farmer.name=村民
+entity.AgriCraft.villager.farmer.agricraft=农业研究员
 
 // ========================================
 // GUI
@@ -128,7 +131,7 @@ agricraft_description.method.isMature=Returns if the crop crop at the specified 
 agricraft_description.method.needsBaseBlock=Returns if the crop crop at the specified direction needs a base block
 
 // ========================================
-// Misc.
+// Misc
 // ========================================
 agricraft_arg.direction=direction
 agricraft_arg.direction.optional=(optional) direction
@@ -137,10 +140,10 @@ agricraft_arg.direction.optional=(optional) direction
 // NEI GUI
 // ========================================
 agricraft_nei.mutation.title=作物杂交
+agricraft_nei.cropProduct.title=作物产出
 agricraft_nei.soil=土壤
 agricraft_nei.needs=需要
 agricraft_nei.below=底部
-agricraft_nei.nearby=旁边
 agricraft_nei.nearby=附近
 
 // ========================================
