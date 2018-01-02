@@ -44,7 +44,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
     public BlockSeedAnalyzer() {
         super("seed_analyzer", Material.GROUND);
         this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-        this.isBlockContainer = true;
+        this.hasTileEntity = true;
         this.setTickRandomly(false);
         //set mining statistics
         this.setHardness(1);
@@ -102,7 +102,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 
     //open the gui when the block is activated
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             return false;
         }
@@ -200,7 +200,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " bs", "pwp", 's', "stickWood", 'g', "paneGlass", 'b', Blocks.STONE_SLAB, 'p', "plankWood", 'w', "slabWood"));
     }
 
 }

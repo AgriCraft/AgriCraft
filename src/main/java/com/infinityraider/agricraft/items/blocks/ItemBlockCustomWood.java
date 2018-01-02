@@ -8,14 +8,19 @@ import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * The root item for all CustomWood blocks.
@@ -44,14 +49,14 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         this.getSubItems(list);
     }
 
     /**
      * Populates the sub-item list. This method allows getting sub blocks server
      * side as well (no @side, like
-     * {@link #getSubItems(Item, CreativeTabs, List)}). This method is marked
+     * {@link #getSubItems(CreativeTabs, NonNullList)}). This method is marked
      * for cleaning.
      *
      * @param list the list to populate.
@@ -80,13 +85,13 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
      * </p>
      *
      * @param stack
-     * @param player
-     * @param list
+     * @param world
+     * @param tooltip
      * @param flag
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
         ItemStack material;
         if (stack.getItemDamage() == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey(AgriNBT.MATERIAL) && stack.getTagCompound().hasKey(AgriNBT.MATERIAL_META)) {
             NBTTagCompound tag = stack.getTagCompound();
@@ -96,7 +101,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
         } else {
             material = new ItemStack(Blocks.PLANKS);
         }
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + material.getItem().getItemStackDisplayName(material));
+        tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + material.getItem().getItemStackDisplayName(material));
     }
 
     /**

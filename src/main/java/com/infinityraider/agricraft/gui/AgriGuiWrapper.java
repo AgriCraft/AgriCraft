@@ -36,7 +36,7 @@ public final class AgriGuiWrapper extends GuiContainer {
     }
 
     public FontRenderer getFontRenderer() {
-        return fontRendererObj;
+        return fontRenderer;
     }
 
     public RenderItem getItemRender() {
@@ -96,7 +96,7 @@ public final class AgriGuiWrapper extends GuiContainer {
 
         // Draw current tooltip, if present.
         if (toolTips.size() > 0) {
-            drawHoveringText(toolTips, relMouseX, relMouseY, fontRendererObj);
+            drawHoveringText(toolTips, relMouseX, relMouseY, fontRenderer);
         }
 
         // Restore renderer state.

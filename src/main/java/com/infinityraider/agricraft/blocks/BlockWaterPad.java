@@ -86,8 +86,8 @@ public class BlockWaterPad extends BlockCustomRenderedBase implements IFluidHand
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return FluidUtil.interactWithFluidHandler(stack, new FluidHandlerBlockWrapper(this, world, pos), player);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return FluidUtil.interactWithFluidHandler(player, hand, new FluidHandlerBlockWrapper(this, world, pos));
     }
 
     @Override

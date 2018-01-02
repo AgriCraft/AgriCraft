@@ -23,12 +23,6 @@ public class MutationRecipeHandler implements IRecipeHandler<IAgriMutation> {
 
     @Nonnull
     @Override
-    public String getRecipeCategoryUid() {
-        return AgriCraftJEIPlugin.CATEGORY_MUTATION;
-    }
-
-    @Nonnull
-    @Override
     public String getRecipeCategoryUid(IAgriMutation recipe) {
         return AgriCraftJEIPlugin.CATEGORY_MUTATION;
     }

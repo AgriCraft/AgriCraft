@@ -96,7 +96,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 
     //checks if the sprinkler is CONNECTED to an irrigation channel
     public boolean isConnected() {
-        return WorldHelper.getBlock(this.worldObj, this.pos.up(), BlockWaterChannel.class).isPresent();
+        return WorldHelper.getBlock(this.getWorld(), this.pos.up(), BlockWaterChannel.class).isPresent();
     }
     // =========================================================================
     // NBT Methods
@@ -117,7 +117,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
      */
     @Override
     public void update() {
-        if (!this.worldObj.isRemote) {
+        if (!this.getWorld().isRemote) {
             // Step 1: Check if we need to refresh (or reset) the water usage variables.
             if (this.waterUsageRemainingTicks <= 0 || this.waterUsageRemainingMb < 0) {
                 this.waterUsageRemainingMb    = Math.abs(AgriCraftConfig.sprinklerRatePerSecond);
@@ -183,28 +183,23 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
      * Any plant found has an independant chance for a growth tick. That percentage is controlled by AgriCraftConfig.
      * Farmland also ends the search, but it first has its moisture set to max (7) if it isn't already.
      * The lowest position is special: a plant this far away is not helped. Only farmland is currently.
-     *
-     * @param int targetX
-     * @param int targetZ
-     * @param int highestY
-     * @param int lowestY
      */
     private void irrigateColumn(final int targetX, final int targetZ, final int highestY, final int lowestY) {
         for (int targetY = highestY; targetY >= lowestY; targetY -= 1) {
             BlockPos target    = new BlockPos(targetX, targetY, targetZ);
-            IBlockState state  = this.worldObj.getBlockState(target);
+            IBlockState state  = this.getWorld().getBlockState(target);
             Block block        = state.getBlock();
 
             // Option A: Skip empty/air blocks.
             // TODO: Is there a way to use isSideSolid to ignore minor obstructions? (Farmland isn't solid.)
-            if (block.isAir(state, this.worldObj, target)) {
+            if (block.isAir(state, this.getWorld(), target)) {
                 continue;
             }
 
             // Option B: Give plants a chance to grow, and then continue onward to irrigate the farmland too.
             if ((block instanceof IPlantable || block instanceof IGrowable) && targetY != lowestY) {
                 if (this.getRandom().nextInt(100) < AgriCraftConfig.sprinklerGrowthChance) {
-                    block.updateTick(this.worldObj, target, state, this.getRandom());
+                    block.updateTick(this.getWorld(), target, state, this.getRandom());
                 }
                 continue;
             }
@@ -212,7 +207,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             // Option C: Dry farmland gets set as moist.
             if (block instanceof BlockFarmland) {
                 if (state.getValue(BlockFarmland.MOISTURE) < 7) {
-                   this.worldObj.setBlockState(target, state.withProperty(BlockFarmland.MOISTURE, 7), 2);
+                   this.getWorld().setBlockState(target, state.withProperty(BlockFarmland.MOISTURE, 7), 2);
                 }
                 break; // Explicitly expresses the intent to stop.
             }
@@ -310,7 +305,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     public TextureAtlasSprite getChannelIcon() {
         // Fetch the Icon using the handy world helper class.
         return WorldHelper
-                .getTile(worldObj, pos.up(), TileEntityChannel.class)
+                .getTile(this.getWorld(), pos.up(), TileEntityChannel.class)
                 .map(c -> c.getIcon())
                 .orElse(BaseIcons.OAK_PLANKS.getIcon());
     }
@@ -340,7 +335,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 
     @SideOnly(Side.CLIENT)
     private void spawnLiquidSpray(double xOffset, double zOffset, Vec3d vector) {
-        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.worldObj, this.xCoord() + 0.5F + xOffset, this.yCoord() + 8 * Constants.UNIT, this.zCoord() + 0.5F + zOffset, 0.3F, 0.7F, vector);
+        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.getWorld(), this.xCoord() + 0.5F + xOffset, this.yCoord() + 8 * Constants.UNIT, this.zCoord() + 0.5F + zOffset, 0.3F, 0.7F, vector);
         Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
     }
 

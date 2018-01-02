@@ -7,8 +7,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class RecipeCopyJournal implements IRecipe {
+public class RecipeCopyJournal extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting invCrafting, World world) {
@@ -50,19 +51,13 @@ public class RecipeCopyJournal implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 9;
+    public boolean canFit(int width, int height) {
+        return true;
     }
 
     @Override
     public ItemStack getRecipeOutput() {
         return null;
-    }
-
-    @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-        ItemStack remaining = getCraftingResult(inv);
-        return new ItemStack[]{remaining};
     }
 
 }

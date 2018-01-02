@@ -5,9 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.crafting.RecipeCopyJournal;
 import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
@@ -20,19 +18,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWithModel, IRecipeRegister {
 
@@ -55,17 +52,17 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote) {
             player.openGui(AgriCraft.instance, GuiHandler.JOURNAL_GUI_ID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
         }
-        return new ActionResult<>(EnumActionResult.PASS, stack);
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.discoveredSeeds") + ": " + getDiscoveredSeedIds(stack).count());
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+        tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.discoveredSeeds") + ": " + getDiscoveredSeedIds(stack).count());
     }
 
     private Stream<String> getDiscoveredSeedIds(@Nullable ItemStack journal) {
@@ -108,10 +105,10 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     @Override
     public void registerRecipes() {
         // Normal Crafting
-        GameRegistry.addRecipe(new ShapedOreRecipe(this, "csc", "sbs", "csc", 'c', AgriItems.getInstance().CROPS, 's', Items.WHEAT_SEEDS, 'b', Items.BOOK));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "csc", "sbs", "csc", 'c', AgriItems.getInstance().CROPS, 's', Items.WHEAT_SEEDS, 'b', Items.BOOK));
         // Copy Crafting
-        RecipeSorter.register("recipe.copy_journal", RecipeCopyJournal.class, RecipeSorter.Category.SHAPELESS, "");
-        GameRegistry.addRecipe(new RecipeCopyJournal());
+        //RecipeSorter.register("recipe.copy_journal", RecipeCopyJournal.class, RecipeSorter.Category.SHAPELESS, "");
+        //GameRegistry.addRecipe(new RecipeCopyJournal());
     }
 
 }

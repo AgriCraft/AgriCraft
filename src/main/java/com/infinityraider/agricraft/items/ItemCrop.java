@@ -4,7 +4,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IItemWithModel;
@@ -21,8 +20,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegister {
 
@@ -39,7 +36,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
 
     // This is called when you right click with this item in hand.
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         // Skip if remote.
         if (world.isRemote) {
             return EnumActionResult.PASS;
@@ -67,11 +64,13 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
             return EnumActionResult.FAIL;
         }
 
+        ItemStack stack = player.getHeldItem(hand);
+
         // Remove the crop used from the stack.
         StackHelper.decreaseStackSize(player, stack,1);
 
         // Handle sneak placing of crosscrops.
-        if (player != null && player.isSneaking() && stack.stackSize > 0) {
+        if (player.isSneaking() && stack.getCount() > 0) {
             WorldHelper
                     .getTile(world, cropPos, TileEntityCrop.class)
                     .ifPresent(c -> {
@@ -90,7 +89,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, AgriCraftConfig.cropsPerCraft), "ss", "ss", 's', "stickWood"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, AgriCraftConfig.cropsPerCraft), "ss", "ss", 's', "stickWood"));
     }
 
 }

@@ -71,21 +71,22 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRec
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile == null || !(tile instanceof TileEntityGrate)) {
             return true;
         }
         TileEntityGrate grate = (TileEntityGrate) tile;
         boolean front = grate.isPlayerInFront(player);
+        ItemStack stack = player.getHeldItem(hand);
         if (player.isSneaking()) {
             if (grate.removeVines(front)) {
                 spawnAsEntity(world, pos, new ItemStack(Blocks.VINE, 1));
                 return true;
             }
-        } else if (stack != null && stack.getItem() == Item.getItemFromBlock(Blocks.VINE)) {
+        } else if (stack.getItem() == Item.getItemFromBlock(Blocks.VINE)) {
             if (grate.addVines(front) && !player.capabilities.isCreativeMode) {
-                stack.stackSize = stack.stackSize - 1;
+                stack.setCount(stack.getCount() - 1);
                 return true;
             }
         }

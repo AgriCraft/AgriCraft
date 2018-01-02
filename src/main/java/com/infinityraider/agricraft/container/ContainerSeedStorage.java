@@ -28,7 +28,7 @@ public class ContainerSeedStorage extends ContainerSeedStorageBase<TileEntitySee
 
     @Override
     public List<SeedStorageSlot> getSeedSlots(AgriSeed seed) {
-        return this.getTile().getSlots();
+        return this.getTile().getSeedSlots();
     }
 
 }

@@ -94,11 +94,6 @@ public class AgriCraft extends InfinityMod {
     }
 
     @Override
-    public Object getModEntityRegistry() {
-        return 0;
-    }
-
-    @Override
     public void registerMessages(INetworkWrapper wrapper) {
         wrapper.registerMessage(MessageContainerSeedStorage.class);
         wrapper.registerMessage(MessageFertilizerApplied.class);
@@ -114,6 +109,6 @@ public class AgriCraft extends InfinityMod {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
-        AgriAlphaWarnings.chooseMessage(l -> e.player.addChatComponentMessage(ForgeHooks.newChatWithLinks(l)));
+        AgriAlphaWarnings.chooseMessage(l -> e.player.sendMessage(ForgeHooks.newChatWithLinks(l)));
     }
 }

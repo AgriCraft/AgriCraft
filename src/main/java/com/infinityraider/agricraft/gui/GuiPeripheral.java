@@ -66,9 +66,9 @@ public class GuiPeripheral extends GuiContainer {
         //write name: x coordinate is in the middle, 6 down from the top, and setting color to white
         float scale = 0.8F;
         GL11.glScalef(scale, scale, scale);
-        this.fontRendererObj.drawString(name, (int) ((9 + this.xSize / 2 - this.fontRendererObj.getStringWidth(name) / 2) / scale), (int) (6 / scale), WHITE);
+        this.fontRenderer.drawString(name, (int) ((9 + this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2) / scale), (int) (6 / scale), WHITE);
         GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
-        this.fontRendererObj.drawString(net.minecraft.client.resources.I18n.format("container.inventory"), 4, this.ySize - 94 + 2, WHITE);
+        this.fontRenderer.drawString(net.minecraft.client.resources.I18n.format("container.inventory"), 4, this.ySize - 94 + 2, WHITE);
     }
 
     @Override
@@ -121,17 +121,17 @@ public class GuiPeripheral extends GuiContainer {
     private void drawMethodHelp(IMethod method) {
         if (method != null) {
             drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
-            int height = fontRendererObj.FONT_HEIGHT;
-            this.fontRendererObj.drawString(AgriCore.getTranslator().translate("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
+            int height = fontRenderer.FONT_HEIGHT;
+            this.fontRenderer.drawString(AgriCore.getTranslator().translate("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
-            List<String> write = GuiHelper.getLinesFromData(GuiHelper.splitInLines(this.fontRendererObj, method.getDescription(), 230, scale));
+            List<String> write = GuiHelper.getLinesFromData(GuiHelper.splitInLines(this.fontRenderer, method.getDescription(), 230, scale));
             int x = 4 + this.guiLeft + 7;
             int y = this.guiTop + 175 + height;
             for (int i = 0; i < write.size(); i++) {
                 String line = write.get(i);
                 int yOffset = i * height;
-                this.fontRendererObj.drawString(line, (int) (x / scale), (int) (y / scale) + yOffset, WHITE);    //1644054 means black
+                this.fontRenderer.drawString(line, (int) (x / scale), (int) (y / scale) + yOffset, WHITE);    //1644054 means black
             }
             GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
         }
@@ -249,7 +249,7 @@ public class GuiPeripheral extends GuiContainer {
         }
 
         public void enable(int posY) {
-            this.yPosition = posY;
+            this.y = posY;
             this.visible = true;
         }
 
@@ -257,20 +257,19 @@ public class GuiPeripheral extends GuiContainer {
             this.visible = false;
         }
 
-        @Override
         public void drawButton(Minecraft minecraft, int x, int y) {
             if (this.visible) {
-                FontRenderer fontrenderer = minecraft.fontRendererObj;
+                FontRenderer fontrenderer = minecraft.fontRenderer;
                 minecraft.getTextureManager().bindTexture(BUTTON_TEXTURES);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                this.hovered = x >= this.xPosition && y >= this.yPosition && x < this.xPosition + this.width && y < this.yPosition + this.height;
+                this.hovered = x >= this.x && y >= this.y && x < this.x + this.width && y < this.y + this.height;
                 int k = this.getHoverState(this.isMouseOver());
                 GL11.glEnable(GL11.GL_BLEND);
                 OpenGlHelper.glBlendFunc(770, 771, 1, 0);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 int vOffset = isActive() ? 86 : 46 + k * 20;
-                this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, vOffset, this.width / 2, this.height);
-                this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, vOffset, this.width / 2, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 0, vOffset, this.width / 2, this.height);
+                this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width / 2, vOffset, this.width / 2, this.height);
                 this.mouseDragged(minecraft, x, y);
                 int l = 14737632;
                 if (packedFGColour != 0) {
@@ -282,7 +281,7 @@ public class GuiPeripheral extends GuiContainer {
                 }
                 float scale = 0.6F;
                 GL11.glScalef(scale, scale, scale);
-                this.drawCenteredString(fontrenderer, this.displayString, (int) ((this.xPosition + this.width / 2) / scale), (int) ((this.yPosition + (this.height - 4) / 2) / scale), l);
+                this.drawCenteredString(fontrenderer, this.displayString, (int) ((this.x + this.width / 2) / scale), (int) ((this.y + (this.height - 4) / 2) / scale), l);
                 GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
             }
         }

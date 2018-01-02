@@ -38,7 +38,7 @@ public final class StackHelper {
      * valid as per the method's description, {@literal false} otherwise.
      */
     public static boolean isValid(ItemStack stack) {
-        return (stack != null) && (stack.getItem() != null);
+        return (stack != null) && (stack.getItem() != null) && stack.getCount() > 0;
     }
 
     /**
@@ -178,17 +178,6 @@ public final class StackHelper {
     }
 
     /**
-     * Fetches the size of a given stack in a null-safe manner.
-     *
-     * @param stack the stack to get the size of.
-     * @return the size of the given stack, or {@literal 0} if the given stack
-     * was null.
-     */
-    public static int getSize(@Nullable ItemStack stack) {
-        return (stack == null) ? 0 : stack.stackSize;
-    }
-
-    /**
      * Breaks up an ItemStack into stacks that obey the maximum size limit set
      * by the contained item.
      *
@@ -198,22 +187,17 @@ public final class StackHelper {
      */
     @Nonnull
     public static List<ItemStack> fitToMaxSize(@Nullable ItemStack stack) {
-        // Skip if the stack is null.
-        if (stack == null) {
-            return Collections.EMPTY_LIST;
-        }
-
         // Skip if the stack is empty.
-        if (stack.stackSize < 1) {
+        if (stack.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
 
         // Fetch stack information.
-        int stackSize = stack.stackSize;
+        int stackSize = stack.getCount();
         final int maxSize = stack.getMaxStackSize();
 
         // Wrap given stack if size is below max size.
-        if (stack.stackSize <= maxSize) {
+        if (stack.getCount() <= maxSize) {
             Arrays.asList(stack);
         }
 
@@ -226,7 +210,7 @@ public final class StackHelper {
         // Loop through stack.
         while (stackSize > maxSize) {
             ItemStack partial = stack.copy();
-            partial.stackSize = maxSize;
+            partial.setCount(maxSize);
             stackSize = stackSize - maxSize;
             stacks.add(partial);
         }
@@ -234,7 +218,7 @@ public final class StackHelper {
         // Add last stack if not empty.
         if (stackSize > 0) {
             ItemStack partial = stack.copy();
-            partial.stackSize = stackSize;
+            partial.setCount(stackSize);
             stacks.add(partial);
         }
 
@@ -263,14 +247,12 @@ public final class StackHelper {
     public static MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nullable ItemStack stack, int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Cannot decrease ItemStack size by a negative amount! " + amount + " is not valid!");
-        } else if (stack == null) {
-            return MethodResult.FAIL;
         } else if (player != null && player.isCreative()) {
             return MethodResult.PASS;
-        } else if (stack.stackSize - amount < 0) {
+        } else if (stack.getCount() - amount < 0) {
             return MethodResult.FAIL;
         } else {
-            stack.stackSize = stack.stackSize - amount;
+            stack.setCount(stack.getCount() - amount);
             return MethodResult.PASS;
         }
     }

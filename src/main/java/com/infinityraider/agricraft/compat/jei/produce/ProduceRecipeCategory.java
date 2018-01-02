@@ -4,6 +4,7 @@
 package com.infinityraider.agricraft.compat.jei.produce;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.compat.jei.AgriCraftJEIPlugin;
 import javax.annotation.Nonnull;
 import mezz.jei.api.IGuiHelper;
@@ -45,6 +46,11 @@ public class ProduceRecipeCategory extends BlankRecipeCategory<ProduceRecipeWrap
     @Override
     public String getTitle() {
         return localizedName;
+    }
+
+    @Override
+    public String getModName() {
+        return AgriCraft.instance.getModId();
     }
 
     @Nonnull

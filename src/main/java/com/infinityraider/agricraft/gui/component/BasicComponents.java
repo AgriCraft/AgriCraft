@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -79,7 +80,7 @@ public class BasicComponents {
 
     public static void addStackTooltip(GuiComponent<ItemStack> component, List<String> tooltip) {
         if (component.getComponent() != null) {
-            tooltip.addAll(component.getComponent().getTooltip(Minecraft.getMinecraft().thePlayer, false));
+            tooltip.addAll(component.getComponent().getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL));
         }
     }
 

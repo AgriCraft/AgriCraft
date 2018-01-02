@@ -9,13 +9,10 @@ import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRegister {
 
@@ -25,9 +22,9 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> varients) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> varients) {
         for (AgriNuggetType type : AgriNuggetType.values()) {
-            ItemStack stack = new ItemStack(item, 1, type.ordinal());
+            ItemStack stack = new ItemStack(this, 1, type.ordinal());
             varients.add(stack);
         }
     }
@@ -73,7 +70,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
             ItemStack ingot = OreDictHelper.getIngot(type.ingot);
             if (ingot != null) {
                 AgriCore.getLogger("agricraft").info("Adding a recipe to convert nine {0} into one {1}", type.nugget, type.ingot);
-                GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', type.nugget));
+                //GameRegistry.addRecipe(new ShapedOreRecipe(ingot, "nnn", "nnn", "nnn", 'n', type.nugget));
 
                 // TODO: Research the necessity of 'uncrafting' ingots back into nuggets. It causes compatibility issues.
                 //ItemStack nineNuggets = new ItemStack(this, 9, type.ordinal());

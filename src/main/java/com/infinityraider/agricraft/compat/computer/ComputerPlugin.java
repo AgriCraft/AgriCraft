@@ -8,9 +8,7 @@ import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.IAgriPlugin;
 import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.render.block.BlockRendererRegistry;
-import com.infinityraider.infinitylib.utility.RegisterHelper;
 import java.util.Set;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -38,7 +36,7 @@ public class ComputerPlugin implements IAgriPlugin {
 
     @Override
     public void initPlugin() {
-        RegisterHelper.registerBlock(PERHIPHERAL, Reference.MOD_ID.toLowerCase(), PERHIPHERAL.getInternalName());
+        //RegisterHelper.registerBlock(PERHIPHERAL, Reference.MOD_ID.toLowerCase(), PERHIPHERAL.getInternalName());
         GameRegistry.registerTileEntity(TileEntityPeripheral.class, PERHIPHERAL.getInternalName());
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             BlockRendererRegistry.getInstance().registerCustomBlockRenderer(PERHIPHERAL);

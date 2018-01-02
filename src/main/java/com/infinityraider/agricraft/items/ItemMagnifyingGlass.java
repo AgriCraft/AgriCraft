@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -20,12 +21,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nullable;
 
 public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRecipeRegister {
 
@@ -50,7 +50,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
     //this is called when you right click with this item in hand
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             List<String> list = new ArrayList<>();
             IBlockState state = world.getBlockState(pos);
@@ -75,7 +75,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
             // Display information.
             for (String msg : list) {
-                player.addChatComponentMessage(new TextComponentString(msg));
+                player.sendMessage(new TextComponentString(msg));
             }
         }
         return EnumActionResult.SUCCESS;
@@ -83,8 +83,8 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.magnifyingGlass"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+        tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.magnifyingGlass"));
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
     }
 
 }

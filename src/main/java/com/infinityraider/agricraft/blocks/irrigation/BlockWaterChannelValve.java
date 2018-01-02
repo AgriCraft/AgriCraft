@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -53,8 +53,8 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 
     @Override
     @SuppressWarnings("deprecation")
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
-        super.neighborChanged(state, world, pos, block);
+    public void observedNeighborChange(IBlockState observerState, World world, BlockPos pos, Block changedBlock, BlockPos changedBlockPos) {
+        super.observedNeighborChange(observerState, world, pos, changedBlock, changedBlockPos);
         TileEntity te = world.getTileEntity(pos);
         if (te != null && te instanceof TileEntityChannelValve) {
             TileEntityChannelValve valve = (TileEntityChannelValve) te;
@@ -103,8 +103,8 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-            super.addInformation(stack, player, list, flag);
+        public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
+            super.addInformation(stack, world, list, flag);
             list.add(AgriCore.getTranslator().translate("agricraft_tooltip.valve"));
         }
     }

@@ -137,7 +137,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
                 // Filter ToolTips
                 .filter(c -> c.contains(relMouseX, relMouseY))
                 // Add ToolTips
-                .forEach(c -> c.addToolTip(tooltips, Minecraft.getMinecraft().thePlayer));
+                .forEach(c -> c.addToolTip(tooltips, Minecraft.getMinecraft().player));
     }
 
     @Override

@@ -73,7 +73,7 @@ public class OreDictHelper {
         for (ItemStack itemStack : OreDictionary.getOres(type.ore)) {
             if (itemStack.getItem() instanceof ItemBlock) {
                 ItemBlock block = (ItemBlock) itemStack.getItem();
-                oreBlocks.put(type.name(), block.block);
+                oreBlocks.put(type.name(), block.getBlock());
                 oreBlockMeta.put(type.name(), itemStack.getItemDamage());
                 return;
             }

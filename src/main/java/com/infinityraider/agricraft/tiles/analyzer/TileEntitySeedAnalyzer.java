@@ -11,6 +11,8 @@ import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +22,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
-public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable, IAgriDisplayable {
+public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements ISidedInventory, ITickable, IAgriDisplayable, IInventoryItemHandler {
 
     public static final int SPECIMEN_SLOT_ID = 36;
     public static final int JOURNAL_SLOT_ID = 37;
@@ -67,13 +69,13 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     @Override
     protected void readRotatableTileNBT(NBTTagCompound tag) {
         if (tag.hasKey(AgriNBT.SEED)) {
-            this.specimen = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriNBT.SEED));
+            this.specimen = new ItemStack(tag.getCompoundTag(AgriNBT.SEED));
         } else {
             //Not certain this is required... Unsure if networking thing?
             this.specimen = null;
         }
         if (tag.hasKey(AgriItems.getInstance().JOURNAL.getUnlocalizedName())) {
-            this.journal = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName()));
+            this.journal = new ItemStack(tag.getCompoundTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName()));
         } else {
             this.journal = null;
         }
@@ -161,15 +163,15 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             //increment progress counter
             this.progress = progress < this.maxProgress() ? progress + 1 : this.maxProgress();
             //if progress is complete analyze the SEED
-            if (progress == this.maxProgress() && !worldObj.isRemote) {
+            if (progress == this.maxProgress() && !this.getWorld().isRemote) {
                 this.analyze();
                 change = true;
             }
         }
         if (change) {
             this.markForUpdate();
-            this.worldObj.addBlockEvent(this.getPos(), this.worldObj.getBlockState(getPos()).getBlock(), 0, 0);
-            this.worldObj.notifyBlockOfStateChange(getPos(), this.getBlockType());
+            this.getWorld().addBlockEvent(this.getPos(), this.getWorld().getBlockState(getPos()).getBlock(), 0, 0);
+            this.getWorld().notifyNeighborsOfStateChange(getPos(), this.getBlockType(), true);
         }
     }
 
@@ -283,7 +285,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         switch (slot) {
             case SPECIMEN_SLOT_ID:
                 if (this.specimen != null) {
-                    if (amount < this.specimen.stackSize) {
+                    if (amount < this.specimen.getCount()) {
                         output = this.specimen.splitStack(amount);
                     } else {
                         output = this.specimen.copy();
@@ -337,8 +339,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         switch (slot) {
             case SPECIMEN_SLOT_ID:
                 this.specimen = stack;
-                if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-                    stack.stackSize = getInventoryStackLimit();
+                if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+                    stack.setCount(getInventoryStackLimit());
                 }
                 this.progress = isSpecimenAnalyzed() ? maxProgress() : 0;
                 break;
@@ -366,8 +368,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 
     //if this is usable by a player
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(pos) == this
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return this.getWorld().getTileEntity(pos) == this
                 && player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64.0;
     }
 

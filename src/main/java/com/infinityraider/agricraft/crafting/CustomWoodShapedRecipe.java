@@ -12,13 +12,17 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import javax.annotation.Nullable;
 
 /**
  * Root class for all shaped custom wood recipes.
  */
-public class CustomWoodShapedRecipe implements IRecipe {
+public class CustomWoodShapedRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
     final ItemStack result;
     final FullRecipeLayout layout;
@@ -64,18 +68,13 @@ public class CustomWoodShapedRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 9;
+    public boolean canFit(int width, int height) {
+        return true;
     }
 
     @Override
     public ItemStack getRecipeOutput() {
         return result;
-    }
-
-    @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting ic) {
-        return ForgeHooks.defaultRecipeGetRemainingItems(ic);
     }
 
     public Optional<CustomWoodType> inferMaterial(InventoryCrafting ic) {
@@ -90,5 +89,4 @@ public class CustomWoodShapedRecipe implements IRecipe {
         }
         return Optional.empty();
     }
-
 }

@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.renderers.particles;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +31,7 @@ public class RuneFX extends AgriCraftFX {
     }
 
     @Override
-    public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
+    public void renderParticle(BufferBuilder worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         ITessellator tessellator = TessellatorVertexBuffer.getInstance(worldRenderer);
         tessellator.draw();
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);

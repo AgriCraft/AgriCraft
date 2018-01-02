@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -40,8 +41,8 @@ public class CustomWoodTypeRegistry {
     @SideOnly(Side.CLIENT)
     public static void initClient() {
         init(block -> {
-            List<ItemStack> subItems = new ArrayList<>();
-            block.getSubItems(block, block.getCreativeTab(), subItems);
+            NonNullList<ItemStack> subItems = NonNullList.create();
+            block.getSubItems(block.getCreativeTab(), subItems);
             return subItems.stream().mapToInt(ItemStack::getItemDamage);
         });
     }
@@ -55,9 +56,9 @@ public class CustomWoodTypeRegistry {
                 .flatMap(plank -> {
                     ItemBlock block = ((ItemBlock) plank.getItem());
                     if (plank.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                        return getItemDamages.apply(block).mapToObj(meta -> new CustomWoodType(block.block, meta));
+                        return getItemDamages.apply(block).mapToObj(meta -> new CustomWoodType(block.getBlock(), meta));
                     } else {
-                        return Stream.of(new CustomWoodType(block.block, plank.getItemDamage()));
+                        return Stream.of(new CustomWoodType(block.getBlock(), plank.getItemDamage()));
                     }
                 })
                 .forEach(type -> WOOD_TYPES.put(type.toString(), type));

@@ -25,8 +25,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel, IRecipeRegister {
 
@@ -51,7 +49,8 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
 
     // this is called when you right click with this item in hand
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitx, float hity, float hitz) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitx, float hity, float hitz) {
+        ItemStack stack = player.getHeldItem(hand);
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) te;
@@ -100,7 +99,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
 
     @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ShapedOreRecipe(this, "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
     }
 
 }

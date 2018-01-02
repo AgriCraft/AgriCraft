@@ -65,7 +65,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     public BlockCrop() {
         super("crop", Material.PLANTS);
         this.setTickRandomly(true);
-        this.isBlockContainer = true;
+        this.hasTileEntity = true;
         this.setSoundType(SoundType.PLANT);
         this.setHardness(0.0F);
         //this.disableStats();
@@ -100,8 +100,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * what item it was clicked with.
      */
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-            ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
 
         // Step 0. Abort if remote.
         if (world.isRemote) {
@@ -119,7 +119,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
 
         // Step 3. If the player is not holding anything, then harvest the crop.
-        if (heldItem == null) {
+        if (heldItem.isEmpty()) {
             crop.onHarvest(player);
             return true;
         }
@@ -144,7 +144,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             if (crop.onApplyCrops(player) == MethodResult.SUCCESS) {
                 // If player isn't in creative remove an item from the stack.
                 if (!player.isCreative()) {
-                    heldItem.stackSize--;
+                    heldItem.setCount(heldItem.getCount() - 1);
                 }
                 // The application was a success!
                 return true;
@@ -329,12 +329,11 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
      * Handles changes in the crop's neighbors.
      */
     @Override
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-        if (!this.canBlockStay(worldIn, pos)) {
-            this.dropBlockAsItem(worldIn, pos, state, 0);
-            worldIn.removeTileEntity(pos);
-            worldIn.setBlockToAir(pos);
+    public void observedNeighborChange(IBlockState observerState, World world, BlockPos pos, Block changedBlock, BlockPos changedBlockPos) {
+        if (!this.canBlockStay(world, pos)) {
+            this.dropBlockAsItem(world, pos, observerState, 0);
+            world.removeTileEntity(pos);
+            world.setBlockToAir(pos);
         }
     }
 
@@ -420,7 +419,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Nullable
     @Deprecated
     @SuppressWarnings("deprecation")
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return Block.NULL_AABB;
     }
 

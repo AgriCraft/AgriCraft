@@ -102,7 +102,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+    public void observedNeighborChange(IBlockState state, World world, BlockPos pos, Block changedBlock, BlockPos changedBlockPos) {
         if (!this.canBlockStay(world, pos)) {
             this.dropBlockAsItem(world, pos, state, 0);
             world.removeTileEntity(pos);
@@ -175,14 +175,8 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        tooltip.add("A fancy farm decoration.");
-        tooltip.add("Not functional, still under development.");
-    }
-
-    @Override
     public void registerRecipes() {
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.getInstance().SPRINKLER, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.getInstance().SPRINKLER, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
     }
 
 }

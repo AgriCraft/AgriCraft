@@ -18,9 +18,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,13 +33,15 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         boolean update = false;
         if (world.isRemote) {
             return true;
         }
         TileEntityTank tank = WorldHelper.getTile(world, pos, TileEntityTank.class).orElse(null);
-        if (stack != null && stack.getItem() != null && tank != null) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (!stack.isEmpty() && tank != null) {
+            /*
             FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(stack);
             // put water from liquid container in tank
             if (liquid != null && liquid.getFluid() == FluidRegistry.WATER) {
@@ -52,7 +51,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
                     update = true;
                     // change the inventory if player is not in creative mode
                     if (!player.capabilities.isCreativeMode) {
-                        if (stack.stackSize == 1) {
+                        if (stack.getCount() == 1) {
                             if (stack.getItem().hasContainerItem(stack)) {
                                 player.inventory.setInventorySlotContents(player.inventory.currentItem, stack.getItem().getContainerItem(stack));
                             } else {
@@ -64,16 +63,18 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
                         }
                     }
                 }
-            } // put water from tank in empty liquid container
-            else {
+                */
+            } else {
+            /*
                 FluidStack tankContents = tank.getTankInfo(null)[0].fluid;
+                // put water from tank in empty liquid container
                 if (tankContents != null) {
                     ItemStack filledContainer = FluidContainerRegistry.fillFluidContainer(tankContents, stack);
                     FluidStack filledLiquid = FluidContainerRegistry.getFluidForFilledItem(filledContainer);
                     if (filledLiquid != null) {
                         // change the inventory if the player is not in creative mode
                         if (!player.capabilities.isCreativeMode) {
-                            if (stack.stackSize == 1) {
+                            if (stack.getCount() == 1) {
                                 if (stack.getItem().hasContainerItem(stack)) {
                                     player.inventory.setInventorySlotContents(player.inventory.currentItem, stack.getItem().getContainerItem(stack));
                                 } else {
@@ -94,6 +95,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
                     }
                 }
             }
+                */
         }
         return update;
     }

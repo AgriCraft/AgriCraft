@@ -65,8 +65,8 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
     }
 
     @Override
-    public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, BlockPeripheral block,
-            TileEntityPeripheral tile, float partialTick, int destroyStage) {
+    public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
+                                        BlockPeripheral block, TileEntityPeripheral tile, float partialTick, int destroyStage, float alpha) {
         tessellator.draw();
         this.renderSeed(tile, 0, 0, 0);
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);

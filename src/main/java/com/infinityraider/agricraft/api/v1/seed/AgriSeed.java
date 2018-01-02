@@ -55,7 +55,7 @@ public final class AgriSeed {
     public ItemStack toStack(int size) {
         ItemStack stack = this.plant.getSeed().copy();
         this.stat.writeToNBT(stack.getTagCompound());
-        stack.stackSize = size;
+        stack.setCount(size);
         return stack;
     }
 

@@ -105,7 +105,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 
     //open the gui when the block is activated
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) {
             return false;
         }
@@ -117,7 +117,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 
     @Override
     public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
-        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getWorldTypeID(), pos.getX(), pos.getY(), pos.getZ(), 32);
+        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getId(), pos.getX(), pos.getY(), pos.getZ(), 32);
         new MessagePeripheralCheckNeighbours(pos).sendToAllAround(point);
     }
     

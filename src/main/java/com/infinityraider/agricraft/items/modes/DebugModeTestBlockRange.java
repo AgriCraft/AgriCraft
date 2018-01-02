@@ -50,9 +50,9 @@ public class DebugModeTestBlockRange extends DebugMode {
         if (!startPos.isPresent()) {
             // This is the first click. Save 'pos' as the starting coordinate.
             setStartPos(stack, pos);
-            player.addChatComponentMessage(new TextComponentString("Starting corner set: (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")"));
-            player.addChatComponentMessage(new TextComponentString("Next right click will set the opposite/ending corner."));
-            player.addChatComponentMessage(new TextComponentString("WARNING: this mode will destroy blocks, be careful."));
+            player.sendMessage(new TextComponentString("Starting corner set: (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")"));
+            player.sendMessage(new TextComponentString("Next right click will set the opposite/ending corner."));
+            player.sendMessage(new TextComponentString("WARNING: this mode will destroy blocks, be careful."));
         } else {
             // This is the second click. Load the starting coordinate. Use 'pos' as the ending coordinate. Then fill the cuboid with wool.
             int count = 0;
@@ -71,9 +71,9 @@ public class DebugModeTestBlockRange extends DebugMode {
             //
             // IMPORTANT PART OF THE TEST IS ABOVE
             //
-            player.addChatComponentMessage(new TextComponentString("Volume:     " + range.getVolume()));
-            player.addChatComponentMessage(new TextComponentString("Replaced:  " + count));
-            player.addChatComponentMessage(new TextComponentString("Coverage: " + (range.getVolume() == count ? "Complete" : "INCOMPLETE")));
+            player.sendMessage(new TextComponentString("Volume:     " + range.getVolume()));
+            player.sendMessage(new TextComponentString("Replaced:  " + count));
+            player.sendMessage(new TextComponentString("Coverage: " + (range.getVolume() == count ? "Complete" : "INCOMPLETE")));
             setStartPos(stack,null);
         }
     }

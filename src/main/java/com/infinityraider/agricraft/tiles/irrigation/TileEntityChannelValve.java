@@ -30,7 +30,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     @Override
     public void update() {
-        if (!this.worldObj.isRemote) {
+        if (!this.getWorld().isRemote) {
             if (!this.powered) {
                 super.update();
             } else if (++ticksSinceNeighbourCheck > NEIGHBOUR_CHECK_DELAY) {
@@ -42,7 +42,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     public void updatePowerStatus() {
         final boolean wasPowered = powered;
-        powered = worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0;
+        powered = this.getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0;
         if (powered != wasPowered) {
             markForUpdate();
         }
@@ -50,7 +50,7 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     @Override
     public IrrigationConnectionType getConnectionType(EnumFacing side) {
-        if (WorldHelper.getBlock(worldObj, pos.offset(side), BlockLever.class).isPresent()) {
+        if (WorldHelper.getBlock(this.getWorld(), pos.offset(side), BlockLever.class).isPresent()) {
             return IrrigationConnectionType.AUXILIARY;
         } else {
             return super.getConnectionType(side);

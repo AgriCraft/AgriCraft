@@ -87,9 +87,9 @@ public final class CustomWoodRecipeHelper {
 
         // Register the Recipe
         if (shaped) {
-            GameRegistry.addShapedRecipe(result, ingredients);
+            //GameRegistry.addShapedRecipe(result, ingredients);
         } else {
-            GameRegistry.addShapelessRecipe(result, ingredients);
+            //GameRegistry.addShapelessRecipe(result, ingredients);
         }
     }
 

@@ -12,7 +12,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'gradle.plugin.com.rlonryan:QuikMod:1.0.21'
     }
 }
@@ -68,11 +68,7 @@ dependencies {
     // Mods (For auto-import)
     shade project(':lib/AgriCore')
     compile project(':lib/InfinityLib')
-    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4:dev"
-    compile "li.cil.oc:OpenComputers:MC1.10.2-1.6.+"
-    deobfCompile "com.github.mcjty:compatlayer:1.10-0.2.8"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.6-56"
-    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.416"
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
 }
 
 // Add AgriPlants

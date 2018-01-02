@@ -38,7 +38,7 @@ public interface ISeedStorageControllable {
      * Returns a list of all the slots in the inventory corresponding to that
      * seed
      */
-    List<SeedStorageSlot> getSlots();
+    List<SeedStorageSlot> getSeedSlots();
 
     /**
      * Returns the coordinates of the controller controlling this controllable

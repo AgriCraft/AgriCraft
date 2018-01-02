@@ -4,7 +4,7 @@ import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.infinitylib.render.tessellation.TessellatorVertexBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
@@ -23,9 +23,9 @@ public abstract class AgriCraftFX extends Particle {
         super(world, x, y, z, 0, 0, 0);
         this.texture = texture;
         this.particleScale = scale;
-        this.motionX = vector.xCoord;
-        this.motionY = vector.yCoord;
-        this.motionZ = vector.zCoord;
+        this.motionX = vector.x;
+        this.motionY = vector.y;
+        this.motionZ = vector.z;
     }
 
     protected AgriCraftFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, TextureAtlasSprite icon) {
@@ -34,9 +34,9 @@ public abstract class AgriCraftFX extends Particle {
         this.setParticleTexture(icon);
         this.particleGravity = gravity;
         this.particleScale = scale;
-        this.motionX = vector.xCoord;
-        this.motionY = vector.yCoord;
-        this.motionZ = vector.zCoord;
+        this.motionX = vector.x;
+        this.motionY = vector.y;
+        this.motionZ = vector.z;
     }
 
     @Override
@@ -45,7 +45,7 @@ public abstract class AgriCraftFX extends Particle {
     }
 
     @Override
-    public void renderParticle(VertexBuffer worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
+    public void renderParticle(BufferBuilder worldRenderer, Entity entity, float partialTicks, float f0, float f1, float f2, float f3, float f4) {
         //I'm doing this because else the textures blink and are fucked up and I have no idea how to fix it,
         //if anyone sees this and knows how, let me know please, thanks :D
         ITessellator tessellator = TessellatorVertexBuffer.getInstance(worldRenderer);

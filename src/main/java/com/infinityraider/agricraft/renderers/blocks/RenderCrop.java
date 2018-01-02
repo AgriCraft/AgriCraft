@@ -46,7 +46,7 @@ public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCro
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
-            BlockCrop block, TileEntityCrop tile, float partialTick, int destroyStage) {
+                                        BlockCrop block, TileEntityCrop crop, float partialTick, int destroyStage, float alpha) {
     }
 
     @Override

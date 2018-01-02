@@ -10,22 +10,18 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Tuple;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nullable;
 
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
@@ -43,7 +39,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IAgriRakeable) {
             IAgriRakeable tile = (IAgriRakeable) te;
@@ -55,9 +51,9 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
-        list.add(new ItemStack(item, 1, WOOD_VARIANT_META));
-        list.add(new ItemStack(item, 1, IRON_VARIANT_META));
+    public void getSubItems(CreativeTabs creativeTabs, NonNullList<ItemStack> list) {
+        list.add(new ItemStack(this, 1, WOOD_VARIANT_META));
+        list.add(new ItemStack(this, 1, IRON_VARIANT_META));
     }
 
     @Override
@@ -75,8 +71,8 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.rake"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+        tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.rake"));
     }
 
     @Override
@@ -90,10 +86,10 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     @Override
     public void registerRecipes() {
         // Normal Rake Recipe
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 0), "fs", 'f', "fenceWood", 's', "stickWood"));
+        //GameRegistry.addShapedRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 0), "fs", 'f', "fenceWood", 's', "stickWood"));
 
         // Iron Rake Recipe
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
     }
 
 }

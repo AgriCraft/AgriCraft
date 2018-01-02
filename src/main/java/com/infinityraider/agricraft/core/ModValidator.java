@@ -21,7 +21,7 @@ public class ModValidator implements AgriValidator {
         if (parts.length < 2) {
             return false;
         } else {
-            Block b = GameRegistry.findBlock(parts[0], parts[1]);
+            Block b = Block.getBlockFromName(parts[0] + ":" + parts[1]);
             //AgriCore.getLogger("agricraft").debug(b);
             return b != null;
         }
@@ -33,7 +33,7 @@ public class ModValidator implements AgriValidator {
         if (parts.length < 2) {
             return false;
         } else {
-            Item i = GameRegistry.findItem(parts[0], parts[1]);
+            Item i = Item.getByNameOrId(parts[0] + ":" + parts[1]);
             //AgriCore.getLogger("agricraft").debug(i);
             return i != null;
         }

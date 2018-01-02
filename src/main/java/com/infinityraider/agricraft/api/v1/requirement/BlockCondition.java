@@ -19,7 +19,7 @@ public class BlockCondition implements ICondition {
     private final int volume;
 
     public BlockCondition(FuzzyStack stack, BlockRange range) {
-        this.amount = stack.toStack().stackSize;
+        this.amount = stack.toStack().getCount();
         this.volume = range.getVolume();
         if (this.amount < 1) {
             throw new IndexOutOfBoundsException("The required amount of blocks must be greater than zero!");

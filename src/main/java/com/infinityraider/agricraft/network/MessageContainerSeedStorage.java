@@ -25,7 +25,7 @@ public class MessageContainerSeedStorage extends MessageBase<IMessage> {
         this();
         this.item = stack.getItem();
         this.meta = stack.getItemDamage();
-        this.amount = stack.stackSize;
+        this.amount = stack.getCount();
         this.player = AgriCraft.proxy.getClientPlayer();
         this.slotId = slotId;
     }

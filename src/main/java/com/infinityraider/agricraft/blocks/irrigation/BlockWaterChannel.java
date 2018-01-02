@@ -5,24 +5,21 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
-import com.infinityraider.infinitylib.utility.RegisterHelper;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import javax.annotation.Nullable;
 
 public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> implements IRecipeRegister {
 
@@ -31,11 +28,11 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
 
     protected static final double EXPANSION = 1 / 64d;
 
-    public static final AxisAlignedBB CENTER_BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX).expandXyz(EXPANSION);
-    public static final AxisAlignedBB NORTH_BOX = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT).expandXyz(EXPANSION);
-    public static final AxisAlignedBB EAST_BOX = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX).expandXyz(EXPANSION);
-    public static final AxisAlignedBB SOUTH_BOX = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE).expandXyz(EXPANSION);
-    public static final AxisAlignedBB WEST_BOX = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX).expandXyz(EXPANSION);
+    public static final AxisAlignedBB CENTER_BOX = new AxisAlignedBB(MIN, MIN, MIN, MAX, MAX, MAX).expand(EXPANSION, EXPANSION, EXPANSION);
+    public static final AxisAlignedBB NORTH_BOX = new AxisAlignedBB(MIN, MIN, 0, MAX, MAX, MIN + Constants.UNIT).expand(EXPANSION, EXPANSION, EXPANSION);
+    public static final AxisAlignedBB EAST_BOX = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX).expand(EXPANSION, EXPANSION, EXPANSION);
+    public static final AxisAlignedBB SOUTH_BOX = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE).expand(EXPANSION, EXPANSION, EXPANSION);
+    public static final AxisAlignedBB WEST_BOX = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX).expand(EXPANSION, EXPANSION, EXPANSION);
 
     public BlockWaterChannel() {
         super("normal");
@@ -54,7 +51,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity, boolean isActualState) {
         // Fetch Tile Entity
         final Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos, TileEntityChannel.class);
 
@@ -133,8 +130,8 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     public void registerRecipes() {
         if (this.isEnabled()) {
             // "Correct" wooden bowl recipe, so that may register channel recipe.
-            RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
+            //RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
+            //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
 
             // Register channel recipe.
             CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);

@@ -37,7 +37,7 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
         if (target.acceptsFertilizer(this) && target.onApplyFertilizer(this, random) == MethodResult.SUCCESS) {
             world.playEvent(2005, pos, 1); // Bonemeal particle effect. Last parameter (data) is num of particles.
             if (player == null || !player.capabilities.isCreativeMode) {
-                stack.stackSize = stack.stackSize - 1;
+                stack.setCount(stack.getCount() - 1);
             }
             return true;
         } else {

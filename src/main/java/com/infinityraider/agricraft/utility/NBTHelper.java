@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public abstract class NBTHelper {
 
@@ -26,15 +25,6 @@ public abstract class NBTHelper {
             coords = new int[]{tag.getInteger(AgriNBT.X), tag.getInteger(AgriNBT.Y), tag.getInteger(AgriNBT.Z)};
         }
         return coords;
-    }
-
-    public static void clearEmptyStacksFromNBT(NBTTagList list) {
-        for (int i = list.tagCount() - 1; i >= 0; i--) {
-            ItemStack stack = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(i));
-            if (stack == null || stack.getItem() == null) {
-                list.removeTag(i);
-            }
-        }
     }
 
     public static boolean hasKey(NBTTagCompound tag, String... keys) {

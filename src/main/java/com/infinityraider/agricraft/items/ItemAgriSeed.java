@@ -16,9 +16,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,11 +36,11 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         final PlantStats baseStat = new PlantStats();
         for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
             if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
-                ItemStack stack = new ItemStack(item);
+                ItemStack stack = new ItemStack(this);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setString(AgriNBT.SEED, plant.getId());
                 baseStat.writeToNBT(tag);

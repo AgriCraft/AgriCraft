@@ -21,12 +21,6 @@ public class ProduceRecipeHandler implements IRecipeHandler<IAgriPlant> {
         return IAgriPlant.class;
     }
 
-    @Nonnull
-    @Override
-    public String getRecipeCategoryUid() {
-        return AgriCraftJEIPlugin.CATEGORY_PRODUCE;
-    }
-
     @Override
     public String getRecipeCategoryUid(IAgriPlant recipe) {
         return AgriCraftJEIPlugin.CATEGORY_PRODUCE;

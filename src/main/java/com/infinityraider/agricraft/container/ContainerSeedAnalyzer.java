@@ -53,7 +53,7 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
         super.detectAndSendChanges();
         for (IContainerListener listener : this.listeners) {
             if (this.progress != this.getTile().getProgress()) {
-                listener.sendProgressBarUpdate(this, 0, this.getTile().getProgress());
+                listener.sendWindowProperty(this, 0, this.getTile().getProgress());
             }
         }
         this.progress = this.getTile().getProgress();
@@ -68,7 +68,7 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
     }
 
     public final boolean hasItem(Slot slot) {
-        return slot != null && StackHelper.isValid(slot.getStack());
+        return slot != null && slot.getHasStack();
     }
 
     //this gets called when a player shift clicks a stack into the inventory
@@ -80,7 +80,7 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
 
         // There is nothing to move!
         if (!hasItem(slot)) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         // Fetch the itemstack and a copy.
@@ -102,15 +102,15 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
         }
 
         if (this.mergeItemStack(slotStack, start, stop, false)) {
-            if (slotStack.stackSize == 0) {
-                slot.putStack(null);
+            if (slotStack.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             }
             slot.onSlotChanged();
-            slot.onPickupFromSlot(player, slotStack);
+            slot.onTake(player, slotStack);
             return itemstack;
         }
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     //gets called when you try to merge an itemstack
@@ -138,15 +138,15 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
                 Slot slot = this.inventorySlots.get(slotIndex);
                 ItemStack stackInSlot = slot.getStack();
                 if (slot.isItemValid(stack) && StackHelper.areEqual(stack, stackInSlot)) {
-                    int combinedSize = stackInSlot.stackSize + stack.stackSize;
+                    int combinedSize = stackInSlot.getCount() + stack.getCount();
                     if (combinedSize <= stack.getMaxStackSize()) {
-                        stack.stackSize = 0;
-                        stackInSlot.stackSize = combinedSize;
+                        stack.setCount(0);
+                        stackInSlot.setCount(combinedSize);
                         slot.onSlotChanged();
                         return true;
-                    } else if (stackInSlot.stackSize < stack.getMaxStackSize()) {
-                        stack.stackSize = combinedSize - stack.getMaxStackSize();
-                        stackInSlot.stackSize = stack.getMaxStackSize();
+                    } else if (stackInSlot.getCount() < stack.getMaxStackSize()) {
+                        stack.setCount(combinedSize - stack.getMaxStackSize());
+                        stackInSlot.setCount(stack.getMaxStackSize());
                         slot.onSlotChanged();
                         foundSlot = true;
                     }
@@ -178,11 +178,10 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
         // Iterate through the slot range searching for an empty stack.
         while (start <= slotIndex && slotIndex < stop) {
             Slot slot = this.inventorySlots.get(slotIndex);
-            ItemStack stackInSlot = slot.getStack();
-            if (stackInSlot == null && slot.isItemValid(stack)) {
+            if (slot.isItemValid(stack)) {
                 slot.putStack(stack.copy());
                 slot.onSlotChanged();
-                stack.stackSize = 0;
+                stack.setCount(0);
                 return true;
             }
             slotIndex += delta;

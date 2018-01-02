@@ -71,7 +71,7 @@ public class MutationRecipeWrapper extends BlankRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRendererObj.drawString(chance, 56, 14, Color.GRAY.getRGB(), false);
+        minecraft.fontRenderer.drawString(chance, 56, 14, Color.GRAY.getRGB(), false);
     }
 
 }

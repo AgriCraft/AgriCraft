@@ -15,6 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -53,7 +54,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
      * returns a list if itemStacks, for each slot.
      */
     @Override
-    public List<ItemStack> getInventory() {
+    public NonNullList<ItemStack> getInventory() {
         return super.getInventory();
     }
 
@@ -67,13 +68,13 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
             return;
         }
         ItemStack stackToMove = controllable.getStackForSlotId(slotId);
-        if (stack == null) {
+        if (stack.isEmpty()) {
             return;
         }
-        if (stackToMove == null || stackToMove.getItem() == null) {
+        if (stackToMove.isEmpty()) {
             return;
         }
-        stackToMove.stackSize = stack.stackSize > stackToMove.stackSize ? stackToMove.stackSize : stack.stackSize;
+        stackToMove.setCount(stack.getCount() > stackToMove.getCount() ? stackToMove.getCount() : stack.getCount());
         stackToMove.setTagCompound(controllable.getStackForSlotId(slotId).getTagCompound());
         if (this.mergeItemStack(stackToMove, 0, PLAYER_INVENTORY_SIZE, false)) {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -81,7 +82,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
                 new MessageContainerSeedStorage(stack, slotId).sendToServer();
             } else {
                 //on the server decrease the size of the stack, where it is synced to the client
-                controllable.decreaseStackSizeInSlot(slotId, stack.stackSize - stackToMove.stackSize);
+                controllable.decreaseStackSizeInSlot(slotId, stack.getCount() - stackToMove.getCount());
             }
         }
     }
@@ -92,7 +93,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
-        ItemStack originalStackInSlot = null;
+        ItemStack originalStackInSlot = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(clickedSlot);
         if (slot != null && slot.getHasStack()) {
             ItemStack notMergedStack = slot.getStack();
@@ -102,26 +103,26 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
             if (seed != null && seed.getStat().isAnalyzed()) {
                 ISeedStorageControllable controllable = this.getControllable(notMergedStack).orElse(null);
                 if (controllable != null && controllable.hasLockedSeed()) {
-                    ItemStack locked = controllable.getLockedSeed().map(s -> s.toStack()).orElse(null);
+                    ItemStack locked = controllable.getLockedSeed().map(AgriSeed::toStack).orElse(ItemStack.EMPTY);
                     if (notMergedStack.getItem() != locked.getItem() || notMergedStack.getItemDamage() != locked.getItemDamage()) {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 if (this.addSeedToStorage(notMergedStack)) {
-                    notMergedStack.stackSize = 0;
+                    notMergedStack.setCount(0);
                 } else {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
-            if (notMergedStack.stackSize == 0) {
-                slot.putStack(null);
+            if (notMergedStack.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (notMergedStack.stackSize == originalStackInSlot.stackSize) {
-                return null;
+            if (notMergedStack.getCount() == originalStackInSlot.getCount()) {
+                return ItemStack.EMPTY;
             }
-            slot.onPickupFromSlot(player, notMergedStack);
+            slot.onTake(player, notMergedStack);
         }
         return originalStackInSlot;
     }
@@ -137,21 +138,21 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
         Slot currentSlot;
         ItemStack currentStack;
         //look for identical stacks to merge with
-        while (stack.stackSize > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
+        while (stack.getCount() > 0 && (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot)) {
             currentSlot = this.inventorySlots.get(k);
             currentStack = currentSlot.getStack();
-            if (currentStack != null && currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
-                int l = currentStack.stackSize + stack.stackSize;
+            if (currentStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == currentStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, currentStack)) {
+                int l = currentStack.getCount() + stack.getCount();
                 //total stacksize is smaller than the limit: merge entire stack into this stack
                 if (l <= stack.getMaxStackSize()) {
-                    stack.stackSize = 0;
-                    currentStack.stackSize = l;
+                    stack.setCount(0);
+                    currentStack.setCount(l);
                     currentSlot.onSlotChanged();
                     flag = true;
                 } //total stacksize exceeds the limit: merge part of the stack into this stack
-                else if (currentStack.stackSize < stack.getMaxStackSize()) {
-                    stack.stackSize -= stack.getMaxStackSize() - currentStack.stackSize;
-                    currentStack.stackSize = stack.getMaxStackSize();
+                else if (currentStack.getCount() < stack.getMaxStackSize()) {
+                    stack.setCount(stack.getCount() - stack.getMaxStackSize() - currentStack.getCount());
+                    currentStack.setCount(stack.getMaxStackSize());
                     currentSlot.onSlotChanged();
                     flag = true;
                 }
@@ -159,15 +160,15 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
             k = iterateBackwards ? k - 1 : k + 1;
         }
         //couldn't completely merge stack with an existing slot, find the first empty slot to put the rest of the stack in
-        if (stack.stackSize > 0) {
+        if (stack.getCount() > 0) {
             k = iterateBackwards ? endSlot - 1 : startSlot;
             while (!iterateBackwards && k < endSlot || iterateBackwards && k >= startSlot) {
                 currentSlot = this.inventorySlots.get(k);
                 currentStack = currentSlot.getStack();
-                if (currentStack == null) {
+                if (currentStack.isEmpty()) {
                     currentSlot.putStack(stack.copy());
                     currentSlot.onSlotChanged();
-                    stack.stackSize = 0;
+                    stack.setCount(0);
                     flag = true;
                     break;
                 }

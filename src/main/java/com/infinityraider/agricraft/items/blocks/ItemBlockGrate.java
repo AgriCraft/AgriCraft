@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -12,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * The item form of the Grate block.
@@ -29,9 +32,9 @@ public class ItemBlockGrate extends ItemBlockCustomWood {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean flag) {
-        super.addInformation(stack, player, list, flag);
-        list.add(AgriCore.getTranslator().translate("agricraft_tooltip.grate"));
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        super.addInformation(stack, world, tooltip, flag);
+        tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.grate"));
     }
 
     @Override

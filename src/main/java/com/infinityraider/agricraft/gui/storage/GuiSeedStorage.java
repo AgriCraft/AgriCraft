@@ -47,7 +47,7 @@ public class GuiSeedStorage extends GuiSeedStorageBase {
     }
      */
     private boolean clearSeed() {
-        new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().thePlayer).sendToServer();
+        new MessageGuiSeedStorageClearSeed(Minecraft.getMinecraft().player).sendToServer();
         //this.updateScreen();
         return true;
     }

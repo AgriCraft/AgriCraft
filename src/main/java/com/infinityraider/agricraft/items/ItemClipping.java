@@ -50,8 +50,9 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
 
     //this is called when you right click with this item in hand
     @Override
-    public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         TileEntity te = world.getTileEntity(pos);
+        ItemStack stack = player.getHeldItem(hand);
         if (world.isRemote || !StackHelper.hasTag(stack) || !(te instanceof IAgriCrop)) {
             return EnumActionResult.PASS;
         }
@@ -60,7 +61,7 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
         if (!crop.acceptsSeed(seed) || seed == null) {
             return EnumActionResult.FAIL;
         }
-        stack.stackSize = stack.stackSize - 1;
+        stack.setCount(stack.getCount() - 1);
         if (world.rand.nextInt(10) <= seed.getStat().getStrength()) {
             crop.setSeed(seed);
         }
