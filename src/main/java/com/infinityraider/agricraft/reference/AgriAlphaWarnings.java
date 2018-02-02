@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  */
 public final class AgriAlphaWarnings {
 
-    private static final Random rand = new Random();
+    private static final Random RAND = new Random();
 
     private static final String BORING_WARNING = "AgriCraft is still in alpha. Bugs are to be expected.";
 
@@ -53,7 +53,7 @@ public final class AgriAlphaWarnings {
         },};
 
     public static int chooseMessageNumber() {
-        return rand.nextInt(WARNINGS.length);
+        return RAND.nextInt(WARNINGS.length);
     }
 
     public static void chooseMessage(Consumer<String> consumer) {

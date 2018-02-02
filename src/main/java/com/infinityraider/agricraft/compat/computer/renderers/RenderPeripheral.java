@@ -24,11 +24,11 @@ import net.minecraft.world.World;
 
 public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, TileEntityPeripheral> {
 
-    public static final ResourceLocation TEXTURE_TOP = new ResourceLocation("agricraft:blocks/peripheralTop");
-    public static final ResourceLocation TEXTURE_SIDE = new ResourceLocation("agricraft:blocks/peripheralSide");
-    public static final ResourceLocation TEXTURE_BOTTOM = new ResourceLocation("agricraft:blocks/peripheralBottom");
-    public static final ResourceLocation TEXTURE_INNER = new ResourceLocation("agricraft:blocks/peripheralInner");
-    public static final ResourceLocation TEXTURE_PROBE = new ResourceLocation("agricraft:textures/blocks/peripheralProbe.png");
+    public static final ResourceLocation TEXTURE_TOP = new ResourceLocation("agricraft:blocks/peripheral_top");
+    public static final ResourceLocation TEXTURE_SIDE = new ResourceLocation("agricraft:blocks/peripheral_side");
+    public static final ResourceLocation TEXTURE_BOTTOM = new ResourceLocation("agricraft:blocks/peripheral_bottom");
+    public static final ResourceLocation TEXTURE_INNER = new ResourceLocation("agricraft:blocks/peripheral_inner");
+    public static final ResourceLocation TEXTURE_PROBE = new ResourceLocation("agricraft:textures/blocks/peripheral_probe.png");
 
     private static final ModelTechne<ModelPeripheralProbe> MODEL_PERIPHERAL = new ModelTechne<>(new ModelPeripheralProbe()).setDiffuseLighting(false);
 

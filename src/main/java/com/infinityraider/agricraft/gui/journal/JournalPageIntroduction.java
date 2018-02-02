@@ -15,7 +15,7 @@ public class JournalPageIntroduction implements JournalPage {
 
     @Override
     public ResourceLocation getForeground() {
-        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalIntroduction.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_page_intro.png");
     }
 
     @Override

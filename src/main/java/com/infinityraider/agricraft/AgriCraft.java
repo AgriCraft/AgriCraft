@@ -62,7 +62,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
         guiFactory = Reference.GUI_FACTORY_CLASS,
         updateJSON = Reference.UPDATE_URL,
         dependencies
-        = "required-after:Forge@[" + Reference.VERSION_FORGE + ",);"
+        = "required-after:forge@[" + Reference.VERSION_FORGE + ",);"
         + "required-after:infinitylib@[" + Reference.VERSION_INFLIB + ",);"
 )
 public class AgriCraft extends InfinityMod {

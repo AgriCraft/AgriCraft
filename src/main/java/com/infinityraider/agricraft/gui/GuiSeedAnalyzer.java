@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiSeedAnalyzer extends ComponentGui<ContainerSeedAnalyzer> {
 
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/GuiSeedAnalyzer.png");
+    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_seed_analyzer.png");
 
     public TileEntitySeedAnalyzer seedAnalyzer;
 

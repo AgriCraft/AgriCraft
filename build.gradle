@@ -68,6 +68,7 @@ dependencies {
     // Mods (For auto-import)
     shade project(':lib/AgriCore')
     compile project(':lib/InfinityLib')
+    compile 'com.google.guava:guava:24.0-jre'
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
 }
 

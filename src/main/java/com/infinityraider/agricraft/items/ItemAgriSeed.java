@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.NBTHelper;
+import com.infinityraider.agricraft.utility.StringUtil;
 import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.infinitylib.item.ItemBase;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
     @SideOnly(Side.CLIENT)
     public String getBaseTexture(ItemStack stack) {
         Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(stack);
-        return seed.map(s -> s.getPlant().getSeedTexture().toString()).orElse("agricraft:items/seed_unknown");
+        return seed.map(s -> s.getPlant().getSeedTexture().toString()).map(StringUtil::convertCamelCaseToSnakeCase).orElse("agricraft:items/seed_unknown");
     }
 
     @Override
