@@ -49,7 +49,6 @@ public final class CoreHandler {
     }
 
     public static void preInit(FMLPreInitializationEvent event) {
-
         // Setup Config.
         configDir = event.getSuggestedConfigurationFile().getParentFile().toPath().resolve(Reference.MOD_ID);
         config = new Configuration(configDir.resolve("config.cfg").toFile());
@@ -70,10 +69,22 @@ public final class CoreHandler {
                 .filter(AGRI_FOLDER_PATTERN.asPredicate())
                 .forEach(r -> ResourceHelper.copyResource(r, configDir.resolve(r), false)
                 );
+        
+        // Load the JSON files.
+        loadJsons();
     }
 
     public static void init() {
+        // Save settings!
+        AgriCore.getConfig().save();
 
+        // Load JSON Stuff
+        initSoils();
+        initPlants();
+        initMutations();
+    }
+    
+    public static void loadJsons() {
         // Load the core!
         AgriCore.getLogger("agricraft").info("Attempting to read AgriCraft JSONs!");
         AgriLoader.loadDirectory(
@@ -83,15 +94,6 @@ public final class CoreHandler {
                 AgriCore.getMutations()
         );
         AgriCore.getLogger("agricraft").info("Finished trying to read AgriCraft JSONs!");
-
-        // Save settings!
-        AgriCore.getConfig().save();
-
-        // Load JSON Stuff
-        initSoils();
-        initPlants();
-        initMutations();
-
     }
 
     public static void initSoils() {

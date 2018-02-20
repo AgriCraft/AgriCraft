@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.items.ItemDebugger;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
