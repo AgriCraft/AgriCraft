@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -37,14 +38,16 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      *
      * Defaults to null, for empty.
      */
-    private ItemStack specimen = null;
+    @Nonnull
+    private ItemStack specimen = ItemStack.EMPTY;
 
     /**
      * The journal that the SEED analyzer contains.
      *
      * Defaults to null, for empty.
      */
-    private ItemStack journal = null;
+    @Nonnull
+    private ItemStack journal = ItemStack.EMPTY;
 
     /**
      * The current progress of the SEED analyzer.
@@ -53,12 +56,12 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 
     @Override
     protected void writeRotatableTileNBT(NBTTagCompound tag) {
-        if (this.specimen != null && this.specimen.getItem() != null) {
+        if (!this.specimen.isEmpty() && this.specimen.getItem() != null) {
             NBTTagCompound seedTag = new NBTTagCompound();
             this.specimen.writeToNBT(seedTag);
             tag.setTag(AgriNBT.SEED, seedTag);
         }
-        if (this.journal != null && this.journal.getItem() != null) {
+        if (!this.journal.isEmpty() && this.journal.getItem() != null) {
             NBTTagCompound journalTag = new NBTTagCompound();
             this.journal.writeToNBT(journalTag);
             tag.setTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName(), journalTag);
@@ -72,12 +75,12 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             this.specimen = new ItemStack(tag.getCompoundTag(AgriNBT.SEED));
         } else {
             //Not certain this is required... Unsure if networking thing?
-            this.specimen = null;
+            this.specimen = ItemStack.EMPTY;
         }
         if (tag.hasKey(AgriItems.getInstance().JOURNAL.getUnlocalizedName())) {
             this.journal = new ItemStack(tag.getCompoundTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName()));
         } else {
-            this.journal = null;
+            this.journal = ItemStack.EMPTY;
         }
         this.progress = tag.getInteger("progress");
     }
@@ -98,6 +101,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      *
      * @return the item in the analyze slot.
      */
+    @Nonnull
     public final ItemStack getSpecimen() {
         return this.specimen;
     }
@@ -144,7 +148,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return if the specimen has been ANALYZED.
      */
     public final boolean isSpecimenAnalyzed() {
-        if (this.specimen != null) {
+        if (!this.specimen.isEmpty()) {
             Optional<AgriSeed> seed = AgriApi.getSeedRegistry().valueOf(specimen);
             return seed.isPresent() && seed.get().getStat().isAnalyzed();
         }
@@ -199,7 +203,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return if the analyzer is analyzing.
      */
     public final boolean isAnalyzing() {
-        return this.specimen != null && !this.isSpecimenAnalyzed() && progress < maxProgress();
+        return (!this.specimen.isEmpty() && !this.isSpecimenAnalyzed() && progress < maxProgress());
     }
 
     /**
@@ -208,7 +212,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      * @return if the analyzer contains a journal.
      */
     public final boolean hasJournal() {
-        return (this.journal != null && this.journal.getItem() != null);
+        return (!this.journal.isEmpty() && this.journal.getItem() != null);
     }
 
     /**
@@ -244,7 +248,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             case SPECIMEN_SLOT_ID:
                 return isValid(stack);
             case JOURNAL_SLOT_ID:
-                return this.journal == null && this.isItemValidForSlot(slot, stack);
+                return this.journal.isEmpty() && this.isItemValidForSlot(slot, stack);
             default:
                 return false;
         }
@@ -253,7 +257,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //check if an item can be extracted
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStackIn, EnumFacing direction) {
-        if (slot == SPECIMEN_SLOT_ID && this.specimen != null && this.specimen.hasTagCompound()) {
+        if (slot == SPECIMEN_SLOT_ID && !this.specimen.isEmpty() && this.specimen.hasTagCompound()) {
             return this.isSpecimenAnalyzed();
         }
         return false;
@@ -270,9 +274,9 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     public ItemStack getStackInSlot(int slot) {
         switch (slot) {
             case SPECIMEN_SLOT_ID:
-                return Optional.ofNullable(this.specimen).orElse(ItemStack.EMPTY);
+                return this.specimen;
             case JOURNAL_SLOT_ID:
-                return Optional.ofNullable(this.journal).orElse(ItemStack.EMPTY);
+                return this.journal;
             default:
                 return ItemStack.EMPTY;
         }
@@ -281,29 +285,29 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     //decreases the stack in a slot by an amount and returns that amount as an itemstack
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
-        ItemStack output = null;
+        ItemStack output = ItemStack.EMPTY;
         switch (slot) {
             case SPECIMEN_SLOT_ID:
-                if (this.specimen != null) {
+                if (!this.specimen.isEmpty()) {
                     if (amount < this.specimen.getCount()) {
                         output = this.specimen.splitStack(amount);
                     } else {
                         output = this.specimen.copy();
-                        this.specimen = null;
+                        this.specimen = ItemStack.EMPTY;
                         this.progress = 0;
                         this.markForUpdate();
                     }
                 }
                 break;
             case JOURNAL_SLOT_ID:
-                if (this.journal != null) {
+                if (!this.journal.isEmpty()) {
                     output = this.journal.copy();
-                    this.journal = null;
+                    this.journal = ItemStack.EMPTY;
                     this.markForUpdate();
                 }
                 break;
         }
-        return Optional.ofNullable(output).orElse(ItemStack.EMPTY);
+        return output;
     }
 
     //gets item stack in the slot when closing the INVENTORY
@@ -313,18 +317,18 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         switch (slot) {
             case SPECIMEN_SLOT_ID:
                 result = this.specimen;
-                this.specimen = null;
+                this.specimen = ItemStack.EMPTY;
                 this.progress = 0;
                 break;
             case JOURNAL_SLOT_ID:
                 result = this.journal;
-                this.journal = null;
+                this.journal = ItemStack.EMPTY;
                 break;
             default:
                 return ItemStack.EMPTY;
         }
         this.markForUpdate();
-        return Optional.ofNullable(result).orElse(ItemStack.EMPTY);
+        return result;
     }
 
     /**
@@ -335,11 +339,15 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
      */
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack) {
+        // Step 0: Convert null to empty stack.
+        if (stack == null) {
+            stack = ItemStack.EMPTY;
+        }
         // Step 1: Update the appropriate slot.
         switch (slot) {
             case SPECIMEN_SLOT_ID:
                 this.specimen = stack;
-                if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+                if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
                     stack.setCount(getInventoryStackLimit());
                 }
                 this.progress = isSpecimenAnalyzed() ? maxProgress() : 0;
@@ -441,8 +449,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 
     @Override
     public void clear() {
-        this.specimen = null;
-        this.journal = null;
+        this.specimen = ItemStack.EMPTY;
+        this.journal = ItemStack.EMPTY;
     }
 
     @Override

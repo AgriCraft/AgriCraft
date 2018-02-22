@@ -27,6 +27,7 @@ public class JournalPageSeed implements JournalPage {
     private static final ResourceLocation QUESTION_MARK = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_question_mark.png");
     private static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_brightness_bar.png");
     private static final ResourceLocation BRIGHTNESS_FRAME = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_brightness_frame.png");
+    private static final ResourceLocation SEED_PAGE_FOREGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_page_seed.png");
 
     private final GuiJournal journal;
     private final int page;
@@ -47,7 +48,7 @@ public class JournalPageSeed implements JournalPage {
 
     @Override
     public ResourceLocation getForeground() {
-        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_seed_page.png");
+        return SEED_PAGE_FOREGROUND;
     }
 
     @Override
