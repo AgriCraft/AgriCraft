@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.blocks;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -15,12 +17,12 @@ import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,14 +34,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> implements IRecipeRegister {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
+    
+    private final ItemBlockAgricraft itemBlock;
 
     public BlockSeedAnalyzer() {
         super("seed_analyzer", Material.GROUND);
@@ -49,6 +51,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
         //set mining statistics
         this.setHardness(1);
         this.setResistance(1);
+        this.itemBlock = new ItemBlockAgricraft(this);
     }
 
     //creates a new tile entity every time a block of this type is placed
@@ -90,11 +93,11 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
         items.add(new ItemStack(this, 1, 0));
         if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntitySeedAnalyzer) {
             TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(pos);
-            if (analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId) != null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.seedSlotId));
+            if (analyzer.getStackInSlot(ContainerSeedAnalyzer.SEED_SLOT_ID) != null) {
+                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.SEED_SLOT_ID));
             }
-            if (analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId) != null) {
-                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId));
+            if (analyzer.getStackInSlot(ContainerSeedAnalyzer.JOURNAL_SLOT_ID) != null) {
+                items.add(analyzer.getStackInSlot(ContainerSeedAnalyzer.JOURNAL_SLOT_ID));
             }
         }
         return items;
@@ -107,6 +110,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
             return false;
         }
         if (!world.isRemote) {
+            AgriCore.getLogger("agricraft").info("Opening Seed Analyzer GUI!");
             player.openGui(AgriCraft.instance, GuiHandler.ANALYZER_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
@@ -179,6 +183,11 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
     @Override
     public Class<? extends ItemBlock> getItemBlockClass() {
         return null;
+    }
+
+    @Override
+    public Optional<? extends ItemBlock> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override

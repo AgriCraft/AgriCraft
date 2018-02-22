@@ -270,11 +270,11 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     public ItemStack getStackInSlot(int slot) {
         switch (slot) {
             case SPECIMEN_SLOT_ID:
-                return this.specimen;
+                return Optional.ofNullable(this.specimen).orElse(ItemStack.EMPTY);
             case JOURNAL_SLOT_ID:
-                return this.journal;
+                return Optional.ofNullable(this.journal).orElse(ItemStack.EMPTY);
             default:
-                return null;
+                return ItemStack.EMPTY;
         }
     }
 
@@ -303,7 +303,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
                 }
                 break;
         }
-        return output;
+        return Optional.ofNullable(output).orElse(ItemStack.EMPTY);
     }
 
     //gets item stack in the slot when closing the INVENTORY
@@ -321,10 +321,10 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
                 this.journal = null;
                 break;
             default:
-                return null;
+                return ItemStack.EMPTY;
         }
         this.markForUpdate();
-        return result;
+        return Optional.ofNullable(result).orElse(ItemStack.EMPTY);
     }
 
     /**

@@ -47,7 +47,7 @@ public class JournalPageSeed implements JournalPage {
 
     @Override
     public ResourceLocation getForeground() {
-        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/GuiJournalSeedPage.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/gui/journal/gui_journal_seed_page.png");
     }
 
     @Override

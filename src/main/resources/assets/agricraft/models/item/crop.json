@@ -1,6 +1,0 @@
-{
-	"parent": "agricraft:item/base",
-	"textures": {
-		"layer0": "agricraft:items/crop_sticks"
-	}
-}

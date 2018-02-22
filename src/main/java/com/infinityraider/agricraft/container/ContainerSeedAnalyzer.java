@@ -15,8 +15,8 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
 
     public int progress;
 
-    public static final int seedSlotId = 36;
-    public static final int journalSlotId = 37;
+    public static final int SEED_SLOT_ID = 36;
+    public static final int JOURNAL_SLOT_ID = 37;
 
     public static enum SeedAnalyzerLayout {
 
@@ -42,10 +42,10 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
         super(analyzer, inventory, layout.offsetX, layout.offsetY);
 
         // Add the seed slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.getTile(), this.seedSlotId, layout.seedSlotX, layout.seedSlotY));
+        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.getTile(), SEED_SLOT_ID, layout.seedSlotX, layout.seedSlotY));
 
         // Add the journal slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.getTile(), this.journalSlotId, layout.journalSlotX, layout.journalSlotY));
+        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.getTile(), JOURNAL_SLOT_ID, layout.journalSlotX, layout.journalSlotY));
     }
 
     @Override
@@ -91,14 +91,14 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
         final int start;
         final int stop;
 
-        if (clickedSlot == seedSlotId || clickedSlot == journalSlotId) {
+        if (clickedSlot == SEED_SLOT_ID || clickedSlot == JOURNAL_SLOT_ID) {
             //try to move item from the analyzer into the player's inventory
             start = 0;
             stop = inventorySlots.size() - 2;
         } else {
             //try to move item from the player's inventory into the analyzer
-            start = seedSlotId;
-            stop = journalSlotId + 1;
+            start = SEED_SLOT_ID;
+            stop = JOURNAL_SLOT_ID + 1;
         }
 
         if (this.mergeItemStack(slotStack, start, stop, false)) {

@@ -34,8 +34,8 @@ public class GuiSeedAnalyzer extends ComponentGui<ContainerSeedAnalyzer> {
     }
 
     private boolean openJournal(AgriGuiWrapper wrapper) {
-        final ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.journalSlotId);
-        if (journal != null) {
+        final ItemStack journal = seedAnalyzer.getStackInSlot(ContainerSeedAnalyzer.JOURNAL_SLOT_ID);
+        if (journal != ItemStack.EMPTY) {
             wrapper.pushGui(new GuiJournal(journal));
         }
         return true;

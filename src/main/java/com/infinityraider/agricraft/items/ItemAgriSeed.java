@@ -26,9 +26,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IAutoRenderedItem {
 
     /**
-     * This constructor shouldn't be called from anywhere except from the
-     * BlockModPlant public constructor, if you create a new BlockModPlant, its
-     * constructor will create the seed for you
+     * This constructor shouldn't be called from anywhere except from the BlockModPlant public
+     * constructor, if you create a new BlockModPlant, its constructor will create the seed for you
      */
     public ItemAgriSeed() {
         super("agri_seed");
@@ -37,15 +36,17 @@ public class ItemAgriSeed extends ItemBase implements IAgriAdapter<AgriSeed>, IA
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        final PlantStats baseStat = new PlantStats();
-        for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
-            if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
-                ItemStack stack = new ItemStack(this);
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setString(AgriNBT.SEED, plant.getId());
-                baseStat.writeToNBT(tag);
-                stack.setTagCompound(tag);
-                list.add(stack);
+        if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+            final PlantStats baseStat = new PlantStats();
+            for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
+                if (plant.getSeedItems().stream().anyMatch(s -> s.isItemEqual(this))) {
+                    ItemStack stack = new ItemStack(this);
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setString(AgriNBT.SEED, plant.getId());
+                    baseStat.writeToNBT(tag);
+                    stack.setTagCompound(tag);
+                    list.add(stack);
+                }
             }
         }
     }

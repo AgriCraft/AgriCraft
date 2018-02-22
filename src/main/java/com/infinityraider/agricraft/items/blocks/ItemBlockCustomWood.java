@@ -28,8 +28,7 @@ import javax.annotation.Nullable;
 public class ItemBlockCustomWood extends ItemBlockAgricraft {
 
     /**
-     * The default constructor. A super call to this is generally all that is
-     * needed in subclasses.
+     * The default constructor. A super call to this is generally all that is needed in subclasses.
      *
      * @param block the block associated with this item.
      */
@@ -50,14 +49,15 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        this.getSubItems(list);
+        if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+            this.getSubItems(list);
+        }
     }
 
     /**
-     * Populates the sub-item list. This method allows getting sub blocks server
-     * side as well (no @side, like
-     * {@link #getSubItems(CreativeTabs, NonNullList)}). This method is marked
-     * for cleaning.
+     * Populates the sub-item list. This method allows getting sub blocks server side as well (no
+     * @side, like {@link #getSubItems(CreativeTabs, NonNullList)}). This method is marked for
+     * cleaning.
      *
      * @param list the list to populate.
      */
@@ -70,18 +70,18 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     }
 
     /**
-     * Retrieves the block's displayable information. This method does not need
-     * to be overridden by most CustomWood blocks.
+     * Retrieves the block's displayable information. This method does not need to be overridden by
+     * most CustomWood blocks.
      * <p>
-     * If the block name is not displaying correctly, check the language files
-     * and Names.Objects.[blockname]. If that does not correct the issue, ensure
-     * that the block overrides both getInternalName() and getTileEntityName()
-     * and returns Names.Objects.[blockname].
+     * If the block name is not displaying correctly, check the language files and
+     * Names.Objects.[blockname]. If that does not correct the issue, ensure that the block
+     * overrides both getInternalName() and getTileEntityName() and returns
+     * Names.Objects.[blockname].
      * </p>
      * <p>
-     * All custom WOOD blocks have a MATERIAL that we want shown, so we make
-     * this method final. Some however, has more information they want to add,
-     * so we add a addMore() method to OVERRIDE in that event.
+     * All custom WOOD blocks have a MATERIAL that we want shown, so we make this method final. Some
+     * however, has more information they want to add, so we add a addMore() method to OVERRIDE in
+     * that event.
      * </p>
      *
      * @param stack
@@ -105,9 +105,8 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
     }
 
     /**
-     * Retrieves the item's unlocalized name. This is the key used in the
-     * language files. Should return something like
-     * tile.agricraft:[internalname].[META].name Final as to prevent being
+     * Retrieves the item's unlocalized name. This is the key used in the language files. Should
+     * return something like tile.agricraft:[internalname].[META].name Final as to prevent being
      * messed up.
      *
      * @param stack the item in question.

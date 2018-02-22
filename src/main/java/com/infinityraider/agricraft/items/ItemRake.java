@@ -51,9 +51,11 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
     }
 
     @Override
-    public void getSubItems(CreativeTabs creativeTabs, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this, 1, WOOD_VARIANT_META));
-        list.add(new ItemStack(this, 1, IRON_VARIANT_META));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+            list.add(new ItemStack(this, 1, WOOD_VARIANT_META));
+            list.add(new ItemStack(this, 1, IRON_VARIANT_META));
+        }
     }
 
     @Override

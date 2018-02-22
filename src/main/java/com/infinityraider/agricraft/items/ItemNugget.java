@@ -23,9 +23,11 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> varients) {
-        for (AgriNuggetType type : AgriNuggetType.values()) {
-            ItemStack stack = new ItemStack(this, 1, type.ordinal());
-            varients.add(stack);
+        if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+            for (AgriNuggetType type : AgriNuggetType.values()) {
+                ItemStack stack = new ItemStack(this, 1, type.ordinal());
+                varients.add(stack);
+            }
         }
     }
 

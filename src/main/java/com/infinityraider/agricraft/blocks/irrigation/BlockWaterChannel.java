@@ -33,9 +33,17 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     public static final AxisAlignedBB EAST_BOX = new AxisAlignedBB(MAX - Constants.UNIT, MIN, MIN, Constants.UNIT * Constants.WHOLE, MAX, MAX).expand(EXPANSION, EXPANSION, EXPANSION);
     public static final AxisAlignedBB SOUTH_BOX = new AxisAlignedBB(MIN, MIN, MAX - Constants.UNIT, MAX, MAX, Constants.UNIT * Constants.WHOLE).expand(EXPANSION, EXPANSION, EXPANSION);
     public static final AxisAlignedBB WEST_BOX = new AxisAlignedBB(0, MIN, MIN, MIN + Constants.UNIT, MAX, MAX).expand(EXPANSION, EXPANSION, EXPANSION);
+    
+    private final BlockWaterChannelValve.ItemBlockValve itemBlock;
 
     public BlockWaterChannel() {
         super("normal");
+        this.itemBlock = new BlockWaterChannelValve.ItemBlockValve(this);
+    }
+
+    @Override
+    public Optional<BlockWaterChannelValve.ItemBlockValve> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
@@ -22,9 +23,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements IRecipeRegister {
+    
+    private final ItemBlockCustomWood itemBlock;
 
     public BlockWaterTank() {
         super("water_tank");
+        this.itemBlock = new ItemBlockCustomWood(this);
+    }
+
+    @Override
+    public Optional<ItemBlockCustomWood> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override

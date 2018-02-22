@@ -13,14 +13,17 @@ import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -28,10 +31,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRecipeRegister {
+    
+    private final ItemBlockGrate itemBlock;
 
     public BlockGrate() {
         super("grate");
         this.fullBlock = false;
+        this.itemBlock = new ItemBlockGrate(this);
     }
 
     @Override
@@ -57,6 +63,11 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRec
     @Override
     public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
         return ItemBlockGrate.class;
+    }
+
+    @Override
+    public Optional<? extends ItemBlock> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override
