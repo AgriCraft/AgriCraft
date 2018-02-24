@@ -36,13 +36,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockWaterPad extends BlockCustomRenderedBase implements IFluidHandlerBlock {
 
     public static final AxisAlignedBB WATER_PAD_BOUNDS = new AxisAlignedBB(0, 0, 0, 1, 0.5, 1);
-    
-    private final ItemBlockAgricraft itemBlock;
 
     public BlockWaterPad() {
         super("water_pad", Material.GROUND);
         this.setHardness(0.5F);
-        this.itemBlock = new ItemBlockAgricraft(this);
     }
 
     @Override

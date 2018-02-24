@@ -15,7 +15,10 @@ import com.infinityraider.infinitylib.block.multiblock.MultiBlockManager;
 import com.infinityraider.infinitylib.block.multiblock.MultiBlockPartData;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,15 +26,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityTank extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable {
+public class TileEntityTank extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IMultiBlockComponent<MultiBlockManager, MultiBlockPartData>, IDebuggable, IFluidHandler {
 
     public static final int SYNC_DELTA = Constants.HALF_BUCKET_mB;
 
@@ -39,10 +42,11 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     public static final int SINGLE_CAPACITY = 8 * Constants.BUCKET_mB;
 
+    public static final MultiBlockPartData DEFAULT_MULTI_BLOCK_DATA = new MultiBlockPartData(0, 0, 0, 1, 1, 1);
+
     /**
-     * Don't call this directly, use getFluidLevel() and setFluidLevel(int
-     * amount) because only the tank at position (0, 0, 0) in the multiblock
-     * holds the liquid.
+     * Don't call this directly, use getFluidLevel() and setFluidLevel(int amount) because only the
+     * tank at position (0, 0, 0) in the multiblock holds the liquid.
      * <p>
      * Represents the amount of fluid the tank is holding.
      * </p>
@@ -50,11 +54,11 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     private int fluidLevel = 0;
     private int lastFluidLevel = 0;
     private int lastDiscreteFluidLevel = 0;
-    private MultiBlockPartData multiBlockData;
+    @Nonnull
+    private MultiBlockPartData multiBlockData = DEFAULT_MULTI_BLOCK_DATA;
 
     /**
-     * Main component cache is only used in the server thread because it's
-     * accessed there very often
+     * Main component cache is only used in the server thread because it's accessed there very often
      */
     private TileEntityTank mainComponent;
 
@@ -126,11 +130,11 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     @Override
     public int getFluidAmount(int y) {
-        if (this.getMainComponent() == this) {
+        if (this != this.getMainComponent()) {
+            return this.mainComponent.getFluidAmount(y);
+        } else {
             return this.fluidLevel;
         }
-        TileEntityTank mainComponent = this.getMainComponent();
-        return mainComponent != null ? mainComponent.getFluidAmount(0) : 0;
     }
 
     /**
@@ -149,8 +153,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     }
 
     /**
-     * Maps the current fluid LEVEL into the interval [0,
-     * {@value #DISCRETE_MAX}]
+     * Maps the current fluid LEVEL into the interval [0, {@value #DISCRETE_MAX}]
      *
      * @return The discrete fluid level.
      */
@@ -232,50 +235,73 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 	 * IFluidHandler methods
 	 * ---------------------
      */
-    //try to fill the tank
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (resource == null || !this.canFill(from, resource.getFluid())) {
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        return new IFluidTankProperties[]{};
+    }
+
+    @Override
+    public int fill(FluidStack fluid, boolean doFill) {
+        // Ensure that fluid is water.
+        if (fluid.getFluid() != FluidRegistry.WATER) {
+            // Nope!
             return 0;
         }
-        int filled = Math.min(resource.amount, this.getCapacity() - this.getFluidAmount(0));
-        if (doFill && !this.getWorld().isRemote) {
-            this.setFluidLevel(this.getFluidAmount(0) + filled);
+
+        // Determine amount.
+        final int total = this.getFluidAmount(0) + fluid.amount;
+        final int over = total - this.getCapacity();
+        final int used;
+
+        // Determine amount acutally used.
+        if (over <= 0) {
+            used = fluid.amount;
+        } else {
+            used = fluid.amount - over;
         }
-        return filled;
+
+        // If should do fill, fill.
+        if (doFill) {
+            this.setFluidLevel(total);
+        }
+
+        // Return the amount filled.
+        return used;
     }
 
     //try to drain from the tank
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-        if (resource == null || !this.canDrain(from, resource.getFluid())) {
-            return null;
+    @Override
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        return this.drain(new FluidStack(FluidRegistry.WATER, maxDrain), doDrain);
+    }
+
+    @Override
+    public FluidStack drain(FluidStack fluid, boolean doDrain) {
+        // Test that the fluid type matches.
+        if (fluid.getFluid() != FluidRegistry.WATER) {
+            return new FluidStack(FluidRegistry.WATER, 0);
         }
-        int drained = Math.min(resource.amount, this.getFluidAmount(0));
-        if (doDrain && !getWorld().isRemote) {
-            this.setFluidLevel(this.getFluidAmount(0) - drained);
+
+        // Fetch the amount in the tank.
+        final int amount = getFluidAmount(0);
+        final int drained;
+
+        // Determine amount to drain.
+        if (amount >= fluid.amount) {
+            drained = fluid.amount;
+        } else {
+            drained = amount;
         }
+
+        // If should do drain, drain.
+        if (doDrain) {
+            this.setFluidLevel(amount - drained);
+        }
+
+        // Return the amount drained.
         return new FluidStack(FluidRegistry.WATER, drained);
     }
 
-    //try to drain from the tank
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-        return this.drain(from, new FluidStack(FluidRegistry.WATER, maxDrain), doDrain);
-    }
-
-    //check if the tank can be filled
-    public boolean canFill(EnumFacing from, Fluid fluid) {
-        return fluid == FluidRegistry.WATER && this.getFluidAmount(0) != this.getCapacity();
-    }
-
-    //check if the tank can be drained
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
-        return fluid == FluidRegistry.WATER && this.getFluidAmount(0) != 0;
-    }
-
-    public FluidTankInfo[] getTankInfo(EnumFacing from) {
-        FluidTankInfo[] info = new FluidTankInfo[1];
-        info[0] = new FluidTankInfo(this.getContents(), this.getCapacity());
-        return info;
-    }
 
     /*
 	 * MultiBlock methods
@@ -300,16 +326,14 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     @Override
     public void setMultiBlockPartData(MultiBlockPartData data) {
-        this.multiBlockData = data;
+        this.multiBlockData = Objects.requireNonNull(data, "The MultiBlockPartData for a given tank may not be null!");
         this.mainComponent = null;
         this.markForUpdate();
     }
 
     @Override
+    @Nonnull
     public MultiBlockPartData getMultiBlockData() {
-        if (this.multiBlockData == null) {
-            this.multiBlockData = new MultiBlockPartData(0, 0, 0, 1, 1, 1);
-        }
         return this.multiBlockData;
     }
 
@@ -324,7 +348,8 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     @Override
     public boolean isValidComponent(IMultiBlockComponent component) {
-        return component instanceof TileEntityTank && this.isSameMaterial((TileEntityTank) component);
+        return (component instanceof TileEntityTank)
+                && (this.isSameMaterial((TileEntityTank) component));
     }
 
     @Override
@@ -352,22 +377,24 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     @Override
     public void preMultiBlockBreak() {
-        MultiBlockPartData data = this.getMultiBlockData();
-        int[] fluidLevelByLayer = new int[data.sizeY()];
-        int area = data.sizeX() * data.sizeZ();
+        int[] fluidLevelByLayer = new int[this.multiBlockData.sizeY()];
+        int area = this.multiBlockData.sizeX() * this.multiBlockData.sizeZ();
         int fluidContentByLayer = area * SINGLE_CAPACITY;
-        int layer = 0;
-        while (fluidLevel > 0 && layer < fluidLevelByLayer.length) {
-            fluidLevelByLayer[layer] = (fluidLevel >= fluidContentByLayer) ? (fluidContentByLayer / area) : (fluidLevel / area);
-            fluidLevel = (fluidLevel >= fluidContentByLayer) ? (fluidLevel - fluidContentByLayer) : 0;
-            layer++;
+        int fluidAmount = fluidLevel;
+
+        // Calculate fluid amount per layer.
+        for (int layer = 0; fluidAmount > 0; layer++) {
+            fluidLevelByLayer[layer] = Math.min(fluidContentByLayer, fluidAmount);
+            fluidAmount -= fluidContentByLayer;
         }
-        for (int x = 0; x < data.sizeX(); x++) {
-            for (int y = 0; y < fluidLevelByLayer.length; y++) {
-                for (int z = 0; z < data.sizeZ(); z++) {
-                    TileEntityTank tank = (TileEntityTank) this.getWorld().getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
-                    if (tank != null) {
-                        tank.fluidLevel = fluidLevelByLayer[y];
+        
+        // Distribute up the fluid level.
+        for (int x = 0; x < this.multiBlockData.sizeX(); x++) {
+            for (int y = 0; y < this.multiBlockData.sizeY(); y++) {
+                for (int z = 0; z < this.multiBlockData.sizeZ(); z++) {
+                    final Optional<TileEntityTank> tank = WorldHelper.getTile(world, pos, TileEntityTank.class);
+                    if (tank.isPresent()) {
+                        tank.get().fluidLevel = fluidLevelByLayer[y];
                     }
                 }
             }
