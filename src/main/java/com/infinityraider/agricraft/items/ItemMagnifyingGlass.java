@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -27,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRecipeRegister {
+public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel {
 
     @AgriConfigurable(
             category = AgriConfigCategory.TOOLS,
@@ -90,11 +89,6 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
     @Override
     public boolean isEnabled() {
         return enableMagnifyingGlass;
-    }
-
-    @Override
-    public void registerRecipes() {
-        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "sgs", " s ", " s ", 's', "stickWood", 'g', "paneGlass"));
     }
 
 }

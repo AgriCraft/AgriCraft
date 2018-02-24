@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRakeable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,7 +25,7 @@ import javax.annotation.Nullable;
 /**
  * Tool to uproot weeds. Comes in a wooden and iron variant.
  */
-public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel, IRecipeRegister {
+public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel {
 
     private static final int WOOD_VARIANT_META = 0;
     private static final int IRON_VARIANT_META = 1;
@@ -83,15 +82,6 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel,
                 new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
                 new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_iron"))
         );
-    }
-
-    @Override
-    public void registerRecipes() {
-        // Normal Rake Recipe
-        //GameRegistry.addShapedRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 0), "fs", 'f', "fenceWood", 's', "stickWood"));
-
-        // Iron Rake Recipe
-        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 1, 1), "fs", 'f', Blocks.IRON_BARS, 's', "stickWood"));
     }
 
 }

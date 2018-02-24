@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +20,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegister {
+public class ItemCrop extends ItemBase implements IItemWithModel {
 
     public ItemCrop() {
         super("crop_sticks");
@@ -85,11 +84,6 @@ public class ItemCrop extends ItemBase implements IItemWithModel, IRecipeRegiste
 
         // Action was a success.
         return EnumActionResult.SUCCESS;
-    }
-
-    @Override
-    public void registerRecipes() {
-        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, AgriCraftConfig.cropsPerCraft), "ss", "ss", 's', "stickWood"));
     }
 
 }

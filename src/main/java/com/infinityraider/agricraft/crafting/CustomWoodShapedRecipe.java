@@ -2,84 +2,52 @@
  */
 package com.infinityraider.agricraft.crafting;
 
-import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
+import com.google.gson.JsonObject;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.agricraft.utility.StackHelper;
-import java.util.Objects;
 import java.util.Optional;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IRecipeFactory;
+import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * Root class for all shaped custom wood recipes.
  */
-public class CustomWoodShapedRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class CustomWoodShapedRecipe extends ShapedOreRecipe {
 
-    final ItemStack result;
-    final FullRecipeLayout layout;
-
-    public CustomWoodShapedRecipe(ItemStack result, FullRecipeLayout layout) {
-        this.result = result;
-        this.layout = layout;
+    public CustomWoodShapedRecipe(ResourceLocation id, ItemStack result, CraftingHelper.ShapedPrimer primer) {
+        super(id, result, primer);
     }
 
     @Override
     public boolean matches(InventoryCrafting ic, World world) {
-        final Optional<CustomWoodType> material = inferMaterial(ic);
-        if (!material.isPresent()) {
-            return false;
-        }
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
-                final FuzzyStack expected = layout.get(r, c);
-                final ItemStack input = ic.getStackInRowAndColumn(r, c);
-                final Optional<CustomWoodType> inputMaterial = CustomWoodTypeRegistry.getFromStack(input);
-                if (inputMaterial.isPresent() && !material.equals(inputMaterial)) {
-                    return false;
-                } else if (!Objects.equals(input, expected)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return super.matches(ic, world) && inferMaterial(ic).isPresent();
     }
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting ic) {
+        final ItemStack result = super.getCraftingResult(ic);
         final Optional<CustomWoodType> material = inferMaterial(ic);
         if (material.isPresent()) {
-            final ItemStack instance = result.copy();
-            final NBTTagCompound tag = StackHelper.getTag(instance);
+            final NBTTagCompound tag = StackHelper.getTag(result);
             material.get().writeToNBT(tag);
-            instance.setTagCompound(tag);
-            return instance;
-        } else {
-            return null;
+            result.setTagCompound(tag);
         }
-    }
-
-    @Override
-    public boolean canFit(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
         return result;
     }
 
     public Optional<CustomWoodType> inferMaterial(InventoryCrafting ic) {
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
+        for (int r = 0; r < ic.getWidth(); r++) {
+            for (int c = 0; c < ic.getHeight(); c++) {
                 final ItemStack stack = ic.getStackInRowAndColumn(r, c);
                 final Optional<CustomWoodType> material = CustomWoodTypeRegistry.getFromStack(stack);
                 if (material.isPresent()) {
@@ -88,5 +56,20 @@ public class CustomWoodShapedRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
             }
         }
         return Optional.empty();
+    }
+    
+    public static final class Factory implements IRecipeFactory {
+
+        @Override
+        public IRecipe parse(JsonContext context, JsonObject json) {
+            ShapedOreRecipe fake = ShapedOreRecipe.factory(context, json);
+            CraftingHelper.ShapedPrimer primer = new CraftingHelper.ShapedPrimer();
+            primer.width = fake.getRecipeWidth();
+            primer.height = fake.getRecipeHeight();
+            primer.input = fake.getIngredients();
+            primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true); // Hack
+            return new CustomWoodShapedRecipe(fake.getRegistryName(), fake.getRecipeOutput(), primer);
+        }
+        
     }
 }

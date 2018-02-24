@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " i ",
+        "sr ",
+        " s "
+    ],
+    "key": {
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "r": {
+            "item": "minecraft:shears",
+            "data": 0
+        },
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:clipper",
+        "data": 0,
+        "count": 1
+    }
+}

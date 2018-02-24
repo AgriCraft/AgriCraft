@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWithModel, IRecipeRegister {
+public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWithModel {
 
     @AgriConfigurable(
             category = AgriConfigCategory.TOOLS,
@@ -76,11 +75,6 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWith
     @Override
     public boolean isEnabled() {
         return enableClipper;
-    }
-
-    @Override
-    public void registerRecipes() {
-        //GameRegistry.addRecipe(new ShapedOreRecipe(this, " i ", "scn", " s ", 'i', "ingotIron", 's', "stickWood", 'c', Items.SHEARS));
     }
 
 }

@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "sss",
+        " s ",
+        " s "
+    ],
+    "key": {
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:rake",
+        "data": 0,
+        "count": 1
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "nnn",
+        " i ",
+        " i "
+    ],
+    "key": {
+        "n": {
+            "type": "forge:ore_dict",
+            "ore": "nuggetIron"
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        }
+    },
+    "result": {
+        "item": "agricraft:rake",
+        "data": 1,
+        "count": 1
+    }
+}

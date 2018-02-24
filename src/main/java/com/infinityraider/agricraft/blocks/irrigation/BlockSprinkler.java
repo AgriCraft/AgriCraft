@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -14,7 +13,6 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Collections;
 import java.util.List;
@@ -24,8 +22,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -36,12 +32,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> implements IRecipeRegister {
+public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(
             Constants.UNIT * Constants.QUARTER,
@@ -181,11 +175,6 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     @Override
     public final IUnlistedProperty[] getUnlistedPropertyArray() {
         return new IUnlistedProperty[]{AgriProperties.CUSTOM_WOOD_TYPE};
-    }
-
-    @Override
-    public void registerRecipes() {
-        //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(AgriBlocks.getInstance().SPRINKLER, 1), " w ", " i ", "bcb", 'w', "plankWood", 'i', "ingotIron", 'b', Blocks.IRON_BARS, 'c', Items.BUCKET));
     }
 
 }

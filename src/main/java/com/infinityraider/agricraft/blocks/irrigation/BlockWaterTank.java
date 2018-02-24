@@ -2,13 +2,10 @@ package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements IRecipeRegister {
+public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
     
     private final ItemBlockCustomWood itemBlock;
 
@@ -137,11 +134,6 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> implements I
     @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public void registerRecipes() {
-        CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().TANK, 1, true, "w w", "w w", "www", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
     }
 
 }

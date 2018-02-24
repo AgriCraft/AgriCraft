@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockGrate;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -8,12 +7,10 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderBlockGrate;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -23,14 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRecipeRegister {
+public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
     
     private final ItemBlockGrate itemBlock;
 
@@ -150,11 +146,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRec
     @Override
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public void registerRecipes() {
-        CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 8, true, "w w", " w ", "w w", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
     }
 
 }

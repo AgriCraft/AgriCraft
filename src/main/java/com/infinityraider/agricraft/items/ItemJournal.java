@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +28,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.RecipeSorter;
 
-public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWithModel, IRecipeRegister {
+public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWithModel {
 
     public ItemJournal() {
         super("journal");
@@ -100,15 +98,6 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void registerRecipes() {
-        // Normal Crafting
-        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "csc", "sbs", "csc", 'c', AgriItems.getInstance().CROPS, 's', Items.WHEAT_SEEDS, 'b', Items.BOOK));
-        // Copy Crafting
-        //RecipeSorter.register("recipe.copy_journal", RecipeCopyJournal.class, RecipeSorter.Category.SHAPELESS, "");
-        //GameRegistry.addRecipe(new RecipeCopyJournal());
     }
 
 }

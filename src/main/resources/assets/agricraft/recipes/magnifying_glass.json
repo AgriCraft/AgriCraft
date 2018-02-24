@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "sgs",
+        " s ",
+        " s "
+    ],
+    "key": {
+        "g": {
+            "type": "forge:ore_dict",
+            "ore": "paneGlass"
+        },
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:magnifying_glass",
+        "data": 0,
+        "count": 1
+    }
+}

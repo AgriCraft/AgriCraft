@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "csc",
+        "sbs",
+        "csc"
+    ],
+    "key": {
+        "c": {
+            "item": "agricraft:crop_sticks",
+            "data": 0
+        },
+        "s": {
+            "item": "minecraft:wheat_seeds",
+            "data": 0
+        },
+        "b": {
+            "item": "minecraft:book",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "agricraft:journal",
+        "data": 0,
+        "count": 1
+    }
+}

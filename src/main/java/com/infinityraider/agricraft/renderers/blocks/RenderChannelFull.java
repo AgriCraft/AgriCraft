@@ -37,7 +37,7 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
 
     @Override
     protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
-        if (!type.isPrimary()) {
+        if (type.isPrimary()) {
             return;
         }
         switch (dir) {

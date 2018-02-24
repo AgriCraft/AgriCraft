@@ -1,0 +1,30 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        " w ",
+        " i ",
+        "bub"
+    ],
+    "key": {
+        "w": {
+            "type": "forge:ore_dict",
+            "ore": "slabWood"
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "u": {
+            "item": "minecraft:bucket",
+            "data": 0
+        },
+        "b": {
+            "item": "minecraft:iron_bars",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "agricraft:sprinkler",
+        "data": 0
+    }
+}

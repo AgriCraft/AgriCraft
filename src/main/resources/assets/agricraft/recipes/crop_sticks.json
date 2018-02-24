@@ -1,0 +1,18 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "ss",
+        "ss"
+    ],
+    "key": {
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:crop_sticks",
+        "data": 0,
+        "count": 4
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "type": "agricraft:custom_wood_shaped",
+    "pattern": [
+        "w w",
+        "w w",
+        "www"
+    ],
+    "key": {
+        "w": {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:water_tank",
+        "data": 0,
+        "count": 4
+    }
+}

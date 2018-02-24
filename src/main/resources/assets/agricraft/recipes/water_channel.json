@@ -1,0 +1,19 @@
+{
+    "type": "agricraft:custom_wood_shaped",
+    "pattern": [
+        " w ",
+        "w w",
+        " w "
+    ],
+    "key": {
+        "w": {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:water_channel_normal",
+        "data": 0,
+        "count": 4
+    }
+}

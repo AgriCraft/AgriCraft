@@ -1,0 +1,27 @@
+{
+    "type": "agricraft:custom_wood_shaped",
+    "pattern": [
+        " l ",
+        " i ",
+        " c "
+    ],
+    "key": {
+        "l": {
+            "item": "minecraft:lever",
+            "data": 0
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "c": {
+            "item": "agricraft:water_channel_normal",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "agricraft:water_channel_valve",
+        "data": 0,
+        "count": 1
+    }
+}

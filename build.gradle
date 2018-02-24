@@ -30,32 +30,24 @@ minecraft {
 // Setup Remotes
 repositories {
     maven {
-        name "chickenbones"
-        url  "http://chickenbones.net/maven/"
-    }
-    maven {
-        name "Mobius Repo"
-        url  "http://mobiusstrip.eu/maven/"
-    }
-    maven {
-        name "sponge"
-        url  "http://repo.spongepowered.org/maven/"
-    }
-    maven {
-        name "sk89q"
-        url  "http://maven.sk89q.com/repo/"
-    }
-    maven {
-        name "McJty maven"
-        url "http://maven.k-4u.nl/"
+        name "TehNut Repo"
+        url "http://tehnut.info/maven"
     }
     maven {
         name "tterrag maven"
         url "http://maven.tterrag.com/"
     }
     maven {
-        name "JEI"
+        name "JEI Repo"
         url "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+		name = "CoFH Maven"
+		url = "http://maven.covers1624.net"
+    }
+    maven {
+        name "sk89q"
+        url  "http://maven.sk89q.com/repo/"
     }
     maven {
         name "OpenComputers"
@@ -70,6 +62,8 @@ dependencies {
     compile project(':lib/InfinityLib')
     compile 'com.google.guava:guava:24.0-jre'
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
+    // Have to disable transitive deps on this one since stupid stuff is going on...
+    deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
 }
 
 // Add AgriPlants

@@ -47,7 +47,7 @@ public class RecipeCopyJournal extends IForgeRegistryEntry.Impl<IRecipe> impleme
                 return invCrafting.getStackInSlot(i).copy();
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RecipeCopyJournal extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
 }

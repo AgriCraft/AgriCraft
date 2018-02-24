@@ -1,0 +1,34 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "sgs",
+        " bs",
+        "pwp"
+    ],
+    "key": {
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        },
+        "g": {
+            "type": "forge:ore_dict",
+            "ore": "paneGlass"
+        },
+        "b": {
+            "item": "minecraft:stone_slab",
+            "data": 0
+        },
+        "p": {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+        },
+        "w": {
+            "type": "forge:ore_dict",
+            "ore": "slabWood"
+        }
+    },
+    "result": {
+        "item": "agricraft:seed_analyzer",
+        "data": 0
+    }
+}

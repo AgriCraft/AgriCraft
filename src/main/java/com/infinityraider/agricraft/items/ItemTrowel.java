@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -26,7 +25,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel, IRecipeRegister {
+public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithModel {
 
     @AgriConfigurable(
             category = AgriConfigCategory.TOOLS,
@@ -95,11 +94,6 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem, IItemWithMo
                 new Tuple<>(0, new ModelResourceLocation(this.getRegistryName() + "")),
                 new Tuple<>(1, new ModelResourceLocation(this.getRegistryName() + "_full"))
         );
-    }
-
-    @Override
-    public void registerRecipes() {
-        //GameRegistry.addRecipe(new ShapedOreRecipe(this, "  s", "ii ", 's', "stickWood", 'i', "ingotIron"));
     }
 
 }

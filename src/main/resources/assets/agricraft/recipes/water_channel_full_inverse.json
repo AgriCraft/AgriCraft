@@ -1,0 +1,19 @@
+{
+    "type": "agricraft:custom_wood_shaped",
+    "pattern": [
+        " f ",
+        "f f",
+        " f "
+    ],
+    "key": {
+        "f": {
+            "item": "agricraft:water_channel_full",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "agricraft:water_channel_normal",
+        "data": 0,
+        "count": 4
+    }
+}

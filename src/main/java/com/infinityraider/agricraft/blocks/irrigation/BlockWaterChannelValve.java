@@ -1,15 +1,12 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
-import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannelValve;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelValve;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -30,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> implements IRecipeRegister {
+public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(4 * Constants.UNIT, 0, 4 * Constants.UNIT, 12 * Constants.UNIT, 1, 12 * Constants.UNIT);
 
@@ -115,11 +110,6 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
             super.addInformation(stack, world, list, flag);
             list.add(AgriCore.getTranslator().translate("agricraft_tooltip.valve"));
         }
-    }
-
-    @Override
-    public void registerRecipes() {
-        CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().CHANNEL_VALVE, 1, false, new ItemStack(Items.IRON_INGOT, 1), new ItemStack(Blocks.LEVER, 1), AgriBlocks.getInstance().CHANNEL);
     }
 
 }

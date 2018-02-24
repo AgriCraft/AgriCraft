@@ -1,0 +1,7 @@
+{
+	"ingredients": {
+	},
+	"recipes": {
+		"custom_wood_shaped": "com.infinityraider.agricraft.crafting.CustomWoodShapedRecipe$Factory"
+	}
+}

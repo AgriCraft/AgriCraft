@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "  s",
+        "ii ",
+        "   "
+    ],
+    "key": {
+        "s": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        }
+    },
+    "result": {
+        "item": "agricraft:trowel",
+        "data": 0,
+        "count": 1
+    }
+}

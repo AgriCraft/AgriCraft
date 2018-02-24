@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.infinityraider.agricraft.crafting.CustomWoodRecipeHelper;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.blocks.RenderChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> implements IRecipeRegister {
+public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChannel> {
 
     protected static final float MIN = Constants.UNIT * Constants.QUARTER;
     protected static final float MAX = Constants.UNIT * Constants.THREE_QUARTER;
@@ -132,18 +130,6 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
-    }
-
-    @Override
-    public void registerRecipes() {
-        if (this.isEnabled()) {
-            // "Correct" wooden bowl recipe, so that may register channel recipe.
-            //RegisterHelper.removeRecipe(new ItemStack(Items.BOWL));
-            //GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOWL, 4), "w w", " w ", 'w', "slabWood"));
-
-            // Register channel recipe.
-            CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 6, true, "w w", " w ", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
-        }
     }
 
 }
