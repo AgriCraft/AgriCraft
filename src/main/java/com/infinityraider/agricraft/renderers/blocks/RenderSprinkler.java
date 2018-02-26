@@ -78,7 +78,7 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tess, World world, BlockPos pos, double x, double y, double z,
-                                        BlockSprinkler block, TileEntitySprinkler tile, float partialTick, int destroyStage, float alpha) {
+            BlockSprinkler block, TileEntitySprinkler tile, float partialTick, int destroyStage, float alpha) {
         tess.pushMatrix();
         tess.translate(0.5F, 0, 0.5F);
         tess.rotate(tile.getAngle(), 0, 1, 0);

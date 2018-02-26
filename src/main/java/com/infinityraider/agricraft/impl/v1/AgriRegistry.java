@@ -14,11 +14,11 @@ import java.util.stream.Stream;
 
 /**
  * Basic IAgriRegistry implementation.
- * 
+ *
  * @param <T> The type of the registry.
  */
 public class AgriRegistry<T extends IAgriRegisterable> implements IAgriRegistry<T> {
-    
+
     private final ConcurrentMap<String, T> registry;
 
     public AgriRegistry() {
@@ -68,5 +68,5 @@ public class AgriRegistry<T extends IAgriRegisterable> implements IAgriRegistry<
     public Stream<T> stream() {
         return this.registry.values().stream();
     }
-    
+
 }

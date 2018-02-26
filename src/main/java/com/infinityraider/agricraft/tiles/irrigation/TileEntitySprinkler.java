@@ -35,12 +35,12 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 
     private int counter = 0;
     private float angle = 0.0F;
-    private static final int BUFFER_CAP        = 100;
-    private static final int TICKS_PER_SECOND  = 20;
-    private static final int COVERAGE_HEIGHT   = 5; // Configure here. Note: the lowest y-level will be farmland only.
-    private static final int COVERAGE_RADIUS   = 3; // Configure here.
+    private static final int BUFFER_CAP = 100;
+    private static final int TICKS_PER_SECOND = 20;
+    private static final int COVERAGE_HEIGHT = 5; // Configure here. Note: the lowest y-level will be farmland only.
+    private static final int COVERAGE_RADIUS = 3; // Configure here.
     private static final int COVERAGE_DIAMETER = 1 + 2 * COVERAGE_RADIUS;
-    private static final int COVERAGE_AREA     = COVERAGE_DIAMETER * COVERAGE_DIAMETER;
+    private static final int COVERAGE_AREA = COVERAGE_DIAMETER * COVERAGE_DIAMETER;
     private boolean active;
     private int buffer;
     private int columnCounter;
@@ -48,13 +48,12 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     private int waterUsageRemainingTicks;
 
     public TileEntitySprinkler() {
-        this.active                   = false;
-        this.buffer                   = 0;
-        this.columnCounter            = 0;
-        this.waterUsageRemainingMb    = Integer.MAX_VALUE;
+        this.active = false;
+        this.buffer = 0;
+        this.columnCounter = 0;
+        this.waterUsageRemainingMb = Integer.MAX_VALUE;
         this.waterUsageRemainingTicks = 0;
     }
-
 
     // =========================================================================
     // NBT Methods
@@ -87,12 +86,12 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     // Note: tag.get* methods *should* return zero/false if the key does not exist.
     @Override
     public void readTileNBT(NBTTagCompound tag) {
-        this.counter                  = tag.getInteger(AgriNBT.LEVEL);
-        this.active                   = tag.getBoolean(AgriNBT.ACTIVE);
-        this.buffer                   = tag.getInteger(AgriNBT.BUFFER);
-        this.columnCounter            = tag.getInteger(AgriNBT.COLUMN_COUNTER);
-        this.waterUsageRemainingMb    = tag.hasKey(    AgriNBT.WATER_USAGE_REMAINING_MB) ?
-                                        tag.getInteger(AgriNBT.WATER_USAGE_REMAINING_MB) : Integer.MAX_VALUE;
+        this.counter = tag.getInteger(AgriNBT.LEVEL);
+        this.active = tag.getBoolean(AgriNBT.ACTIVE);
+        this.buffer = tag.getInteger(AgriNBT.BUFFER);
+        this.columnCounter = tag.getInteger(AgriNBT.COLUMN_COUNTER);
+        this.waterUsageRemainingMb = tag.hasKey(AgriNBT.WATER_USAGE_REMAINING_MB)
+                ? tag.getInteger(AgriNBT.WATER_USAGE_REMAINING_MB) : Integer.MAX_VALUE;
         this.waterUsageRemainingTicks = tag.getInteger(AgriNBT.WATER_USAGE_REMAINING_TICKS);
     }
 
@@ -110,19 +109,20 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     // <editor-fold>
     // =========================================================================
     /**
-     * On the client, this invokes the particle effects.
-     * On the server, this starts by updating the water usage variables. If the buffer is empty or too low, then
-     * the method ends. Otherwise it next consumes the per-tick amount of water. Then it irrigates the next column,
-     * unless they're all done. Finally, it increments the columnCounter variable, and also resets it if needed.
-     * This should be called once per tick, to honor the mB/second configuration setting. But if it is called
-     * more often, both the irrigation cycle and the water consumption will speed up proportionally.
+     * On the client, this invokes the particle effects. On the server, this starts by updating the
+     * water usage variables. If the buffer is empty or too low, then the method ends. Otherwise it
+     * next consumes the per-tick amount of water. Then it irrigates the next column, unless they're
+     * all done. Finally, it increments the columnCounter variable, and also resets it if needed.
+     * This should be called once per tick, to honor the mB/second configuration setting. But if it
+     * is called more often, both the irrigation cycle and the water consumption will speed up
+     * proportionally.
      */
     @Override
     public void update() {
         if (!this.getWorld().isRemote) {
             // Step 1: Check if we need to refresh (or reset) the water usage variables.
             if (this.waterUsageRemainingTicks <= 0 || this.waterUsageRemainingMb < 0) {
-                this.waterUsageRemainingMb    = Math.abs(AgriCraftConfig.sprinklerRatePerSecond);
+                this.waterUsageRemainingMb = Math.abs(AgriCraftConfig.sprinklerRatePerSecond);
                 this.waterUsageRemainingTicks = TICKS_PER_SECOND;
             }
 
@@ -130,8 +130,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             // Note: This math executes regardless of if actual consumption occurs, so that the
             //       water usage rate refresh still happens every twenty ticks.
             // Note: This should be calculated using int/int division, and not with floats.
-            final int waterUsageThisTick   = this.waterUsageRemainingMb / this.waterUsageRemainingTicks;
-            this.waterUsageRemainingMb    -= waterUsageThisTick;
+            final int waterUsageThisTick = this.waterUsageRemainingMb / this.waterUsageRemainingTicks;
+            this.waterUsageRemainingMb -= waterUsageThisTick;
             this.waterUsageRemainingTicks -= 1;
 
             // Step 3: Check if there is enough water to irrigate this tick, and also if this is a change in state.
@@ -158,9 +158,9 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             this.columnCounter += 1;
 
             // Step 8: If the counter exceeds both minimums, or if it is (incorrectly) negative, reset it.
-            if (   this.columnCounter >= COVERAGE_AREA
-                && this.columnCounter >= AgriCraftConfig.sprinklerGrowthIntervalTicks
-                || this.columnCounter < 0) {
+            if (this.columnCounter >= COVERAGE_AREA
+                    && this.columnCounter >= AgriCraftConfig.sprinklerGrowthIntervalTicks
+                    || this.columnCounter < 0) {
                 this.columnCounter = 0;
             }
         } else if (this.active) {
@@ -169,28 +169,30 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     }
 
     /**
-     * Convenience method to wrap the coordinate calculations. Also makes update() and irrigateColumn() cleaner.
+     * Convenience method to wrap the coordinate calculations. Also makes update() and
+     * irrigateColumn() cleaner.
      */
     private void irrigateCurrentColumn() {
         final int targetX = this.pos.getX() - COVERAGE_RADIUS + (this.columnCounter % COVERAGE_DIAMETER);
         final int targetZ = this.pos.getZ() - COVERAGE_RADIUS + (this.columnCounter / COVERAGE_DIAMETER);
-        final int startY  = this.pos.getY() - 1;
-        final int stopY   = Math.max(this.pos.getY() - COVERAGE_HEIGHT, 0); // Avoid the void.
+        final int startY = this.pos.getY() - 1;
+        final int stopY = Math.max(this.pos.getY() - COVERAGE_HEIGHT, 0); // Avoid the void.
         irrigateColumn(targetX, targetZ, startY, stopY);
     }
 
     /**
-     * This method will search through a vertical column of positions, starting from the top.
-     * It will stop searching any lower once it hits anything other than air or plants.
-     * Any plant found has an independant chance for a growth tick. That percentage is controlled by AgriCraftConfig.
-     * Farmland also ends the search, but it first has its moisture set to max (7) if it isn't already.
-     * The lowest position is special: a plant this far away is not helped. Only farmland is currently.
+     * This method will search through a vertical column of positions, starting from the top. It
+     * will stop searching any lower once it hits anything other than air or plants. Any plant found
+     * has an independant chance for a growth tick. That percentage is controlled by
+     * AgriCraftConfig. Farmland also ends the search, but it first has its moisture set to max (7)
+     * if it isn't already. The lowest position is special: a plant this far away is not helped.
+     * Only farmland is currently.
      */
     private void irrigateColumn(final int targetX, final int targetZ, final int highestY, final int lowestY) {
         for (int targetY = highestY; targetY >= lowestY; targetY -= 1) {
-            BlockPos target    = new BlockPos(targetX, targetY, targetZ);
-            IBlockState state  = this.getWorld().getBlockState(target);
-            Block block        = state.getBlock();
+            BlockPos target = new BlockPos(targetX, targetY, targetZ);
+            IBlockState state = this.getWorld().getBlockState(target);
+            Block block = state.getBlock();
 
             // Option A: Skip empty/air blocks.
             // TODO: Is there a way to use isSideSolid to ignore minor obstructions? (Farmland isn't solid.)
@@ -209,7 +211,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
             // Option C: Dry farmland gets set as moist.
             if (block instanceof BlockFarmland) {
                 if (state.getValue(BlockFarmland.MOISTURE) < 7) {
-                   this.getWorld().setBlockState(target, state.withProperty(BlockFarmland.MOISTURE, 7), 2);
+                    this.getWorld().setBlockState(target, state.withProperty(BlockFarmland.MOISTURE, 7), 2);
                 }
                 break; // Explicitly expresses the intent to stop.
             }
@@ -227,7 +229,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     // IIrrigationComponent Methods
     // <editor-fold>
     // =========================================================================
-
     @Override
     public boolean canConnectTo(EnumFacing side, IConnectable component) {
         return side.equals(EnumFacing.UP) && component instanceof TileEntityChannel;
@@ -346,7 +347,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         // Validate
         Preconditions.checkNotNull(information);
-        
+
         // Add Information
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + BUFFER_CAP);
     }

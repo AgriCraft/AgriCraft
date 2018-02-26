@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
-    
+
     private final ItemBlockGrate itemBlock;
 
     public BlockGrate() {

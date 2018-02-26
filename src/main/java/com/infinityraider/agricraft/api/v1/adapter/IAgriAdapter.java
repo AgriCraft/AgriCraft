@@ -14,21 +14,19 @@ import javax.annotation.Nullable;
 public interface IAgriAdapter<T> {
 
     /**
-     * Determines if this adapter is capable of converting the given object to
-     * the target type.
+     * Determines if this adapter is capable of converting the given object to the target type.
      *
      * @param obj The object that needs to be converted.
-     * @return {@literal true} if this adapter can convert the given object to
-     * the target type, {@literal false} otherwise.
+     * @return {@literal true} if this adapter can convert the given object to the target type,
+     * {@literal false} otherwise.
      */
     boolean accepts(@Nullable Object obj);
 
     /**
-     * Converts the given object to the target type of this adapter, or returns
-     * the empty optional.
+     * Converts the given object to the target type of this adapter, or returns the empty optional.
      * <p>
-     * Notice, implementations of this method should never return null, instead
-     * the method should return {@link Optional#empty()}.
+     * Notice, implementations of this method should never return null, instead the method should
+     * return {@link Optional#empty()}.
      *
      * @param obj
      * @return

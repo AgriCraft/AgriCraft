@@ -30,12 +30,12 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
     public static final AxisAlignedBB BOX = new AxisAlignedBB(4 * Constants.UNIT, 0, 4 * Constants.UNIT, 12 * Constants.UNIT, 1, 12 * Constants.UNIT);
 
     private final ItemBlockValve itemBlock;
-    
+
     public BlockWaterChannelValve() {
         super("valve");
         this.itemBlock = new ItemBlockValve(this);
     }
-    
+
     @Override
     public Optional<ItemBlockCustomWood> getItemBlock() {
         return Optional.of(this.itemBlock);

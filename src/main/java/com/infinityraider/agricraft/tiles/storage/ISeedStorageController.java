@@ -18,8 +18,7 @@ public interface ISeedStorageController {
     List<ItemStack> getControlledSeeds();
 
     /**
-     * Returns a list of all the slots in the inventory corresponding to that
-     * seed
+     * Returns a list of all the slots in the inventory corresponding to that seed
      */
     List<SeedStorageSlot> getSlots(Item seed, int meta);
 

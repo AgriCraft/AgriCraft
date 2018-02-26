@@ -21,15 +21,23 @@ import javax.annotation.Nonnull;
  * @author Ryan
  */
 public class AgriApiConnector implements IAgriApiConnector {
-    
-    @Nonnull private final IAgriRegistry<IAgriPlant> plantRegistry;
-    @Nonnull private final IAgriMutationRegistry mutationRegistry;
-    @Nonnull private final IAgriSoilRegistry soilRegistry;
-    @Nonnull private final IAgriAdapterizer<IAgriStat> statRegistry;
-    @Nonnull private final IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry;
-    @Nonnull private final IAgriMutationEngine mutationEngine;
-    @Nonnull private final IAgriAdapterizer<AgriSeed> seedRegistry;
-    @Nonnull private final IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry;
+
+    @Nonnull
+    private final IAgriRegistry<IAgriPlant> plantRegistry;
+    @Nonnull
+    private final IAgriMutationRegistry mutationRegistry;
+    @Nonnull
+    private final IAgriSoilRegistry soilRegistry;
+    @Nonnull
+    private final IAgriAdapterizer<IAgriStat> statRegistry;
+    @Nonnull
+    private final IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry;
+    @Nonnull
+    private final IAgriMutationEngine mutationEngine;
+    @Nonnull
+    private final IAgriAdapterizer<AgriSeed> seedRegistry;
+    @Nonnull
+    private final IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry;
 
     public AgriApiConnector() {
         this.plantRegistry = new AgriRegistry<>();
@@ -95,5 +103,5 @@ public class AgriApiConnector implements IAgriApiConnector {
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerRegistry;
     }
-    
+
 }

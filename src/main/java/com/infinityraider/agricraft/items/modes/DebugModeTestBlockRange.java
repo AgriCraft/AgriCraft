@@ -32,20 +32,19 @@ public class DebugModeTestBlockRange extends DebugMode {
     }
 
     /**
-     * This method allows the user to test what Block Positions are covered by the BlockRange iterator.
-     * The expected result will be the full cuboid between opposing corner positions.
-     * Also remember that the BlockRange min and max positions aren't necessarily the input positions.
+     * This method allows the user to test what Block Positions are covered by the BlockRange
+     * iterator. The expected result will be the full cuboid between opposing corner positions. Also
+     * remember that the BlockRange min and max positions aren't necessarily the input positions.
      *
-     * Usage:
-     * Right-click on two blocks to specify the opposite corners.
-     * Some blocks should get replaced with free wool. Be careful.
-     * In case of terrible bugs, might destroy or overwrite unexpected locations!
+     * Usage: Right-click on two blocks to specify the opposite corners. Some blocks should get
+     * replaced with free wool. Be careful. In case of terrible bugs, might destroy or overwrite
+     * unexpected locations!
      */
-
     @Override
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote)
+        if (world.isRemote) {
             return;
+        }
         Optional<BlockPos> startPos = getStartPos(stack);
         if (!startPos.isPresent()) {
             // This is the first click. Save 'pos' as the starting coordinate.
@@ -74,23 +73,23 @@ public class DebugModeTestBlockRange extends DebugMode {
             player.sendMessage(new TextComponentString("Volume:     " + range.getVolume()));
             player.sendMessage(new TextComponentString("Replaced:  " + count));
             player.sendMessage(new TextComponentString("Coverage: " + (range.getVolume() == count ? "Complete" : "INCOMPLETE")));
-            setStartPos(stack,null);
+            setStartPos(stack, null);
         }
     }
 
     /**
      * Utility get and set methods to save the BlockPos between clicks.
      */
-
     private static final String NBT_START = "agri_debug_blockrange_startpos";
 
     /**
      * @param stack Which ItemStack to read from. Typically is the debugger.
-     * @return An Optional of BlockPos if there is a length 3 int array with the right key. Empty otherwise.
+     * @return An Optional of BlockPos if there is a length 3 int array with the right key. Empty
+     * otherwise.
      */
     private Optional<BlockPos> getStartPos(@Nonnull ItemStack stack) {
         NBTTagCompound tag;
-        if(!stack.hasTagCompound()) {
+        if (!stack.hasTagCompound()) {
             tag = new NBTTagCompound();
             stack.setTagCompound(tag);
         } else {
@@ -98,7 +97,7 @@ public class DebugModeTestBlockRange extends DebugMode {
         }
         Optional<BlockPos> start = Optional.empty();
         assert tag != null;
-        if(tag.hasKey(NBT_START)) {
+        if (tag.hasKey(NBT_START)) {
             int[] raw = (tag.getIntArray(NBT_START));
             if (raw.length == 3) {
                 BlockPos p = new BlockPos(raw[0], raw[1], raw[2]);
@@ -114,7 +113,7 @@ public class DebugModeTestBlockRange extends DebugMode {
      */
     private void setStartPos(@Nonnull ItemStack stack, BlockPos p) {
         NBTTagCompound tag;
-        if(!stack.hasTagCompound()) {
+        if (!stack.hasTagCompound()) {
             tag = new NBTTagCompound();
             stack.setTagCompound(tag);
         } else {
@@ -135,7 +134,6 @@ public class DebugModeTestBlockRange extends DebugMode {
     /**
      * Interface method stubs.
      */
-
     @Override
     public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         // NOP

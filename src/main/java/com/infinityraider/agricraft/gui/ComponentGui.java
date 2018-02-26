@@ -238,7 +238,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
             this.lastMouseY = relMouseY;
         }
     }
-    
+
     static {
         AgriCore.getConfig().addConfigurable(ComponentGui.class);
     }

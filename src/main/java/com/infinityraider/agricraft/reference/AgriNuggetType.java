@@ -46,8 +46,8 @@ public enum AgriNuggetType {
     }
 
     /**
-     * Retrieves the nugget type corresponding to a meta. This method is
-     * index-safe, and will return the unknown type for bad indices.
+     * Retrieves the nugget type corresponding to a meta. This method is index-safe, and will return
+     * the unknown type for bad indices.
      *
      * @param i the meta of the nugget.
      * @return the nugget type corresponding to the given index.

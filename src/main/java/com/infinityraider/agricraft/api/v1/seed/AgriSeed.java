@@ -12,8 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * A simple class for representing seeds. Seeds are immutable objects, for
- * safety reasons.
+ * A simple class for representing seeds. Seeds are immutable objects, for safety reasons.
  *
  *
  */
@@ -59,15 +58,15 @@ public final class AgriSeed {
     public ItemStack toStack(int size) {
         // Get the stack.
         final ItemStack stack = Preconditions.checkNotNull(this.plant.getSeed());
-        
+
         // Get the tag.
         final NBTTagCompound tag = Optional.ofNullable(stack.getTagCompound())
                 .map(NBTTagCompound::copy)
                 .orElseGet(NBTTagCompound::new);
-        
+
         // Write the stat to the tag.
         this.stat.writeToNBT(tag);
-        
+
         // Return a new stack.
         return new ItemStack(stack.getItem(), size, stack.getMetadata(), tag);
     }
@@ -75,9 +74,9 @@ public final class AgriSeed {
     @Override
     public final boolean equals(Object obj) {
         return (obj instanceof AgriSeed)
-                && (this.equals((AgriSeed)obj));
+                && (this.equals((AgriSeed) obj));
     }
-    
+
     public final boolean equals(AgriSeed other) {
         return (other != null)
                 && (this.plant.equals(other.plant))

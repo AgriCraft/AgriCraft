@@ -16,8 +16,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
- * Encodes all requirements a plant needs to mutate and grow Uses the Builder
- * class inside to construct instances.
+ * Encodes all requirements a plant needs to mutate and grow Uses the Builder class inside to
+ * construct instances.
  */
 public final class GrowthRequirement implements IGrowthRequirement {
 
@@ -81,7 +81,7 @@ public final class GrowthRequirement implements IGrowthRequirement {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Evaluate
         return FuzzyStack.from(world.getBlockState(pos.down()))
                 .filter(soil -> this.getSoils().stream().anyMatch(e -> e.isVarient(soil)))
@@ -93,7 +93,7 @@ public final class GrowthRequirement implements IGrowthRequirement {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Evaluate
         return this.getConditions().stream()
                 .allMatch(c -> c.isMet(world, pos));
@@ -104,7 +104,7 @@ public final class GrowthRequirement implements IGrowthRequirement {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Determine the light level of the block, as per the vanilla method used in BlockCrop.
         final int light = world.getLightFromNeighbors(pos.up());
         // Determine if the light level is in the proper range.
@@ -116,7 +116,7 @@ public final class GrowthRequirement implements IGrowthRequirement {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Evaluate
         return this.hasValidSoil(world, pos)
                 && this.hasValidLight(world, pos)

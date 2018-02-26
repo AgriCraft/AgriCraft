@@ -32,7 +32,7 @@ public interface IAgriSoil extends IAgriRegisterable {
     default boolean isVarient(@Nonnull ItemStack stack) {
         // Validate
         Preconditions.checkNotNull(stack);
-        
+
         // Delegate
         return isVarient(new FuzzyStack(stack));
     }
@@ -40,7 +40,7 @@ public interface IAgriSoil extends IAgriRegisterable {
     default boolean isVarient(@Nonnull FuzzyStack stack) {
         // Validate
         Preconditions.checkNotNull(stack);
-        
+
         // Evaluate
         return this.getVarients().contains(stack);
     }

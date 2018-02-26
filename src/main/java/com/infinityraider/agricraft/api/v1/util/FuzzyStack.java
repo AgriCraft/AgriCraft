@@ -62,7 +62,7 @@ public class FuzzyStack {
                 .filter(i -> i.getItem() != null)
                 .map(FuzzyStack::new);
     }
-    
+
     @Nonnull
     public static final Optional<FuzzyStack> from(@Nullable ItemStack stack) {
         return Optional.ofNullable(stack)

@@ -131,7 +131,7 @@ public class BlockRange implements Iterable<BlockPos> {
 
     /**
      * An iterator over a block range.
-     * 
+     *
      * Thank you findbugs for noting that this should have been static.
      */
     public static class BlockRangeIterator implements Iterator<BlockPos> {

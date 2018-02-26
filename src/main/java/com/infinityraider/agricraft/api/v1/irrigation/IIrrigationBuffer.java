@@ -15,20 +15,18 @@ public interface IIrrigationBuffer extends IIrrigationComponent {
     /**
      * Returns the total fluid capacity above this height level
      *
-     * @param height the reference height from the bottom of the block where 1
-     * unit is 1/16th of a block
-     * @return the amount of fluid that can be stored above the height level in
-     * mB
+     * @param height the reference height from the bottom of the block where 1 unit is 1/16th of a
+     * block
+     * @return the amount of fluid that can be stored above the height level in mB
      */
     int capacityAboveHeight(float height);
 
     /**
      * Returns the total fluid volume above this height level
      *
-     * @param height the reference height from the bottom of the block where 1
-     * unit is 1/16th of a block
-     * @return the amount of fluid currently in the buffer above the height
-     * level in mB
+     * @param height the reference height from the bottom of the block where 1 unit is 1/16th of a
+     * block
+     * @return the amount of fluid currently in the buffer above the height level in mB
      */
     int fluidVolumeAboveHeight(float height);
 }

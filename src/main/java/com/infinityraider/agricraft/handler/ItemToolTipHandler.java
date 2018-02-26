@@ -67,19 +67,18 @@ public class ItemToolTipHandler {
 //            }
 //        }
 //    }
-    
     private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
         event.getToolTip().add(ChatFormatting.DARK_AQUA + MessageFormat.format(format, objects));
     }
-    
+
     private static void addCategory(ItemTooltipEvent event, String category) {
         event.getToolTip().add(ChatFormatting.DARK_AQUA + category + ":");
     }
-    
+
     private static void addParameter(ItemTooltipEvent event, String key, Object value) {
         event.getToolTip().add(ChatFormatting.DARK_AQUA + " - " + key + ": " + Objects.toString(value));
     }
-    
+
     @SubscribeEvent
     public void addRegistryInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableRegistryTooltips) {
@@ -88,7 +87,7 @@ public class ItemToolTipHandler {
             addParameter(event, "id", item.getRegistryName());
         }
     }
-    
+
     @SubscribeEvent
     public void addNbtInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableNBTTooltips) {

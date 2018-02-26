@@ -17,16 +17,14 @@ public enum SeedRequirementStatus {
      */
     WRONG_SOIL,
     /**
-     * The seed has requirements that are not met or there are other reasons it
-     * cannot be planted.
+     * The seed has requirements that are not met or there are other reasons it cannot be planted.
      */
     MISSING_REQUIREMENTS,
     /**
      * The seed could be planted if the block was tilled.
      *
      * <p>
-     * Note: For soils other than vanilla dirt/farmland, WRONG_SOIL may be
-     * returned instead.
+     * Note: For soils other than vanilla dirt/farmland, WRONG_SOIL may be returned instead.
      * <P>
      */
     NEEDS_TILLING,

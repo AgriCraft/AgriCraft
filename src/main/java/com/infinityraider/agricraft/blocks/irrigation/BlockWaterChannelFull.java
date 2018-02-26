@@ -11,12 +11,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityChannelFull> {
 
     private final ItemBlockCustomWood itemBlock;
-    
+
     public BlockWaterChannelFull() {
         super("full");
         this.itemBlock = new ItemBlockCustomWood(this);
     }
-    
+
     @Override
     public Optional<ItemBlockCustomWood> getItemBlock() {
         return Optional.of(this.itemBlock);

@@ -57,7 +57,7 @@ public class CustomWoodShapedRecipe extends ShapedOreRecipe {
         }
         return Optional.empty();
     }
-    
+
     public static final class Factory implements IRecipeFactory {
 
         @Override
@@ -70,6 +70,6 @@ public class CustomWoodShapedRecipe extends ShapedOreRecipe {
             primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true); // Hack
             return new CustomWoodShapedRecipe(fake.getRegistryName(), fake.getRecipeOutput(), primer);
         }
-        
+
     }
 }

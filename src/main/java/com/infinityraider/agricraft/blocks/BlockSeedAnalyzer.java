@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
-    
+
     private final ItemBlockAgricraft itemBlock;
 
     public BlockSeedAnalyzer() {

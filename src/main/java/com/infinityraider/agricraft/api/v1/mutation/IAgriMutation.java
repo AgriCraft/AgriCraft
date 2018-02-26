@@ -9,11 +9,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * An interface representing a mutation, which is a relation between parents and
- * a child.
+ * An interface representing a mutation, which is a relation between parents and a child.
  *
- * It is recommended that you do not implement this interface yourself, as it is
- * provided with the intention of being used as a reference.
+ * It is recommended that you do not implement this interface yourself, as it is provided with the
+ * intention of being used as a reference.
  *
  * @author AgriCraft
  * @since v2
@@ -21,8 +20,8 @@ import javax.annotation.Nullable;
 public interface IAgriMutation extends IAgriRegisterable {
 
     /**
-     * Retrieves the probability of the mutation occurring. Recommended to be
-     * within the normalized p-value bounds of 0.0 and 1.0.
+     * Retrieves the probability of the mutation occurring. Recommended to be within the normalized
+     * p-value bounds of 0.0 and 1.0.
      *
      * @return the probability of the mutation occurring.
      */
@@ -37,9 +36,9 @@ public interface IAgriMutation extends IAgriRegisterable {
     IAgriPlant getChild();
 
     /**
-     * Gets a list of the required neighboring plants for the mutation to occur.
-     * These required plants are also known as <i>parents</i>, which are bred in
-     * the mutation to produce the <i>child</i>.
+     * Gets a list of the required neighboring plants for the mutation to occur. These required
+     * plants are also known as <i>parents</i>, which are bred in the mutation to produce the
+     * <i>child</i>.
      *
      * @return a list of the parent plants for the mutation.
      */

@@ -19,8 +19,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * This class represents the root tile entity for all AgriCraft custom WOOD
- * blocks. Through this class, the custom woods are remembered for the blocks. *
+ * This class represents the root tile entity for all AgriCraft custom WOOD blocks. Through this
+ * class, the custom woods are remembered for the blocks. *
  */
 public class TileEntityCustomWood extends TileEntityRotatableBase implements IDebuggable, IAgriDisplayable {
 
@@ -74,8 +74,7 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
     }
 
     /**
-     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from an
-     * ItemStack.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from an ItemStack.
      *
      * @param type: the type to set the block's MATERIAL to.
      */
@@ -88,8 +87,8 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
     }
 
     /**
-     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from the
-     * name of the MATERIAL (block) and its metadata value.
+     * Sets the CustomWood block's MATERIAL, the MATERIAL to mimic, from the name of the MATERIAL
+     * (block) and its metadata value.
      *
      * @param block the name of the MATERIAL (block).
      * @param meta the metadata value of the MATERIAL (block).

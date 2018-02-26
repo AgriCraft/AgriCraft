@@ -77,7 +77,7 @@ public interface IProxy extends IProxyBase {
     default String translateToLocal(String string) {
         return string;
     }
-    
+
     default String getLocale() {
         // Whatever...
         return "en_US";

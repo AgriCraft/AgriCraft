@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
-    
+
     private final ItemBlockCustomWood itemBlock;
 
     public BlockWaterTank() {

@@ -59,8 +59,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
     }
 
     /**
-     * Tries to move an item stack form the correct tile entity to the player's
-     * inventory
+     * Tries to move an item stack form the correct tile entity to the player's inventory
      */
     public void moveStackFromTileEntityToPlayer(int slotId, ItemStack stack) {
         ISeedStorageControllable controllable = this.getControllable(stack).orElse(null);
@@ -88,8 +87,7 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
     }
 
     /**
-     * Handles shift clicking in the inventory, return the stack that was
-     * transferred
+     * Handles shift clicking in the inventory, return the stack that was transferred
      */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int clickedSlot) {
@@ -128,8 +126,8 @@ public abstract class ContainerSeedStorageBase<T extends TileEntity> extends Con
     }
 
     /**
-     * Tries to merge an itemstack into a range of slots, return true if the
-     * stack was (partly) merged
+     * Tries to merge an itemstack into a range of slots, return true if the stack was (partly)
+     * merged
      */
     @Override
     protected boolean mergeItemStack(ItemStack stack, int startSlot, int endSlot, boolean iterateBackwards) {

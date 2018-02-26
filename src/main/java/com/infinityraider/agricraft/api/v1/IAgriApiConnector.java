@@ -19,34 +19,34 @@ import javax.annotation.Nonnull;
  * @author Ryan
  */
 public interface IAgriApiConnector {
-    
+
     IAgriApiConnector FAKE = new AgriApiConnectorFake();
-    
+
     @Nonnull
     AgriApiState getState();
-    
+
     @Nonnull
     IAgriRegistry<IAgriPlant> connectPlantRegistry();
-    
+
     @Nonnull
     IAgriMutationRegistry connectMutationRegistry();
-    
+
     @Nonnull
     IAgriSoilRegistry connectSoilRegistry();
-    
+
     @Nonnull
     IAgriAdapterizer<IAgriStat> connectStatRegistry();
-    
+
     @Nonnull
     IAgriAdapterizer<IAgriStatCalculator> connectStatCalculatorRegistry();
-    
+
     @Nonnull
     IAgriMutationEngine connectMutationEngine();
-    
+
     @Nonnull
     IAgriAdapterizer<AgriSeed> connectSeedRegistry();
-    
+
     @Nonnull
     IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
-    
+
 }

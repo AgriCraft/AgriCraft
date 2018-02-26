@@ -17,11 +17,10 @@ public interface IIrrigationComponent extends IConnectable, IIrrigationContainer
     int getCapacity();
 
     /**
-     * Determines the water height, relative to the bottom of the block, and
-     * scaled on the 0 - 16 interval.
+     * Determines the water height, relative to the bottom of the block, and scaled on the 0 - 16
+     * interval.
      * <p>
-     * <b>Notice</b>: This method is not to be considered efficient, due to the
-     * rounding required.
+     * <b>Notice</b>: This method is not to be considered efficient, due to the rounding required.
      * </p>
      *
      * @return the component's fluid height.
@@ -29,8 +28,8 @@ public interface IIrrigationComponent extends IConnectable, IIrrigationContainer
     float getFluidHeight(int lvl);
 
     /**
-     * Sets the irrigation component's contained fluid level. Don't use this
-     * method to transfer fluids between containers.
+     * Sets the irrigation component's contained fluid level. Don't use this method to transfer
+     * fluids between containers.
      *
      * @param lvl the level to set the fluid to.
      */
@@ -40,8 +39,8 @@ public interface IIrrigationComponent extends IConnectable, IIrrigationContainer
     /**
      * Synchronizes the fluid level between the server and it's clients.
      * <p>
-     * Should not be called excessively, and implementations should use a
-     * discrete level system to prevent too frequent synchronization.
+     * Should not be called excessively, and implementations should use a discrete level system to
+     * prevent too frequent synchronization.
      * </p>
      */
     void syncFluidLevel();

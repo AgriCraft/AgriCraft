@@ -120,7 +120,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
         NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getId(), pos.getX(), pos.getY(), pos.getZ(), 32);
         new MessagePeripheralCheckNeighbours(pos).sendToAllAround(point);
     }
-    
+
     @Override
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -140,5 +140,5 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
-    
+
 }

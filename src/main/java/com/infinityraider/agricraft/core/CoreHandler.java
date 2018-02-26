@@ -69,7 +69,7 @@ public final class CoreHandler {
                 .filter(AGRI_FOLDER_PATTERN.asPredicate())
                 .forEach(r -> ResourceHelper.copyResource(r, configDir.resolve(r), false)
                 );
-        
+
         // Load the JSON files.
         loadJsons();
     }
@@ -83,7 +83,7 @@ public final class CoreHandler {
         initPlants();
         initMutations();
     }
-    
+
     public static void loadJsons() {
         // Load the core!
         AgriCore.getLogger("agricraft").info("Attempting to read AgriCraft JSONs!");

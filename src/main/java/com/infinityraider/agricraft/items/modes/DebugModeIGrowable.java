@@ -28,12 +28,12 @@ public class DebugModeIGrowable extends DebugMode {
     }
 
     // Saved copies of the texts that do not change. Unicode 00A7 is the formatting code squiggle. 'r' is reset.
-    private static final String chatTrue  = "\u00A72True  \u00A7r";                               // '2' is dark green.
+    private static final String chatTrue = "\u00A72True  \u00A7r";                               // '2' is dark green.
     private static final String chatFalse = "\u00A74False \u00A7r";                               // '4' is dark red.
     private static final String chatNotIG = "\u00A78----  ----  (Block is not IGrowable)\u00A7r"; // '8' is dark gray.
-    private static final String chatInfo  = "x, y, z | canGrow | canUseBonemeal | BlockName\n" +
-                                            "Note: for testing purposes, all three methods (including grow)\n" +
-                                            "get called by this mode. It is not mimicking bonemeal's logic.";
+    private static final String chatInfo = "x, y, z | canGrow | canUseBonemeal | BlockName\n"
+            + "Note: for testing purposes, all three methods (including grow)\n"
+            + "get called by this mode. It is not mimicking bonemeal's logic.";
 
     @Override
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
@@ -52,13 +52,13 @@ public class DebugModeIGrowable extends DebugMode {
         } else {
             // Otherwise run the tests and record the results.
             IBlockState state = world.getBlockState(pos);
-            outputRaw.append(crop.canGrow(world, pos, state, false)             ? chatTrue : chatFalse); // canGrow
+            outputRaw.append(crop.canGrow(world, pos, state, false) ? chatTrue : chatFalse); // canGrow
             outputRaw.append(crop.canUseBonemeal(world, world.rand, pos, state) ? chatTrue : chatFalse); // canUseBonemeal
             crop.grow(world, world.rand, pos, state);                                                    // grow
 
             // It's also helpful to also make clear what block was being tested.
             outputRaw.append("\u00A73"); // '3' is dark aqua.
-            outputRaw.append(crop.toString().replaceFirst("Block",""));
+            outputRaw.append(crop.toString().replaceFirst("Block", ""));
             outputRaw.append("\u00A7r");
         }
 
@@ -66,7 +66,7 @@ public class DebugModeIGrowable extends DebugMode {
         outputRaw.append(" \u00A78[...]\u00A7r"); // '8' is dark gray.
 
         // Create a hover box with explanatory information.
-        TextComponentString hoverComponent  = new TextComponentString(chatInfo);
+        TextComponentString hoverComponent = new TextComponentString(chatInfo);
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent);
 
         // Turn the output String into a chat message.

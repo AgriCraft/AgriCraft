@@ -35,9 +35,9 @@ public final class AgriApi {
     /**
      * Determines the current state of the AgriCraft API.
      * <p>
-     * Notice, unlike the other API methods, this one is always safe to use, and
-     * will not throw an exception when AgriCraft is not installed, opting
-     * instead to return {@link AgriApiState#INVALID}.
+     * Notice, unlike the other API methods, this one is always safe to use, and will not throw an
+     * exception when AgriCraft is not installed, opting instead to return
+     * {@link AgriApiState#INVALID}.
      *
      * @return the current state of the AgriCraft API.
      */
@@ -49,8 +49,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Plant Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Plant Registry.
      */
@@ -62,8 +62,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Mutation Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Mutation Registry.
      */
@@ -75,8 +75,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Soil Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Soil Registry.
      */
@@ -88,8 +88,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Stat Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Stat Registry.
      */
@@ -101,8 +101,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft StatCalculator Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft StatCalculator Registry.
      */
@@ -114,8 +114,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Mutation Engine.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Mutation Engine.
      */
@@ -127,8 +127,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Seed Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Seed Registry.
      */
@@ -140,8 +140,8 @@ public final class AgriApi {
     /**
      * Fetches the AgriCraft Fertilizer Registry.
      * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException}
-     * if the corresponding version of AgriCraft is not currently installed.
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
      *
      * @return the AgriCraft Fertilizer Registry.
      */
@@ -151,8 +151,8 @@ public final class AgriApi {
     }
 
     /**
-     * Establishes a connection to AgriCraft, if it is present, or returns a
-     * fake connection to nothing.
+     * Establishes a connection to AgriCraft, if it is present, or returns a fake connection to
+     * nothing.
      *
      * @return a connection to AgriCraft, or a connection to nothing.
      */

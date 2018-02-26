@@ -304,7 +304,6 @@ public interface IAgriPlant extends IAgriRegisterable {
     // =========================================================================
     // </editor-fold>
     // =========================================================================
-    
     @Override
     public boolean equals(@Nullable Object obj);
 

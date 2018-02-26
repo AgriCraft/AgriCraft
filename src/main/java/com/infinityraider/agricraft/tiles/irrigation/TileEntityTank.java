@@ -387,7 +387,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
             fluidLevelByLayer[layer] = Math.min(fluidContentByLayer, fluidAmount);
             fluidAmount -= fluidContentByLayer;
         }
-        
+
         // Distribute up the fluid level.
         for (int x = 0; x < this.multiBlockData.sizeX(); x++) {
             for (int y = 0; y < this.multiBlockData.sizeY(); y++) {

@@ -7,9 +7,8 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 
 /**
- * Interface to create custom Stat Calculator logic use
- * API.setStatCalculator(IStatCalculator calculator) to set the active
- * calculator
+ * Interface to create custom Stat Calculator logic use API.setStatCalculator(IStatCalculator
+ * calculator) to set the active calculator
  */
 public interface IAgriStatCalculator {
 

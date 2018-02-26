@@ -34,15 +34,25 @@ public class AgriItems {
         MAGNIFYING_GLASS = new ItemMagnifyingGlass();
     }
 
-    @Nonnull public final ItemBase CROPS;
-    @Nonnull public final ItemBase JOURNAL;
-    @Nonnull public final ItemBase TROWEL;
-    @Nonnull public final ItemBase DEBUGGER;
-    @Nonnull public final ItemBase HAND_RAKE;
-    @Nonnull public final ItemBase CLIPPER;
-    @Nonnull public final ItemBase AGRI_CLIPPING;
-    @Nonnull public final ItemBase AGRI_SEED;
-    @Nonnull public final ItemBase AGRI_NUGGET;
-    @Nonnull public final ItemBase MAGNIFYING_GLASS;
+    @Nonnull
+    public final ItemBase CROPS;
+    @Nonnull
+    public final ItemBase JOURNAL;
+    @Nonnull
+    public final ItemBase TROWEL;
+    @Nonnull
+    public final ItemBase DEBUGGER;
+    @Nonnull
+    public final ItemBase HAND_RAKE;
+    @Nonnull
+    public final ItemBase CLIPPER;
+    @Nonnull
+    public final ItemBase AGRI_CLIPPING;
+    @Nonnull
+    public final ItemBase AGRI_SEED;
+    @Nonnull
+    public final ItemBase AGRI_NUGGET;
+    @Nonnull
+    public final ItemBase MAGNIFYING_GLASS;
 
 }

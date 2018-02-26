@@ -8,8 +8,7 @@ import java.util.Optional;
 public class StatCalculatorNormal extends StatCalculatorBase {
 
     /**
-     * calculates the new stats based on an input stat, the nr of neighbours and
-     * a divisor
+     * calculates the new stats based on an input stat, the nr of neighbours and a divisor
      */
     @Override
     protected int calculateStat(int input, int neighbours, int divisor) {

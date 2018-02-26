@@ -42,7 +42,7 @@ public class VanillaPlugin implements IAgriPlugin {
     @Override
     public void registerSeeds(IAgriAdapterizer<AgriSeed> seedRegistry) {
         seedRegistry.registerAdapter(new SeedWrapper());
-        seedRegistry.registerAdapter((ItemAgriSeed)AgriItems.getInstance().AGRI_SEED);
+        seedRegistry.registerAdapter((ItemAgriSeed) AgriItems.getInstance().AGRI_SEED);
     }
 
     @Override
@@ -60,5 +60,5 @@ public class VanillaPlugin implements IAgriPlugin {
     public void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry) {
         fertilizerRegistry.registerAdapter(BonemealWrapper.INSTANCE);
     }
-    
+
 }

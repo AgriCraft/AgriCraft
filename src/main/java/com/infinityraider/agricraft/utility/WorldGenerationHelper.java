@@ -19,8 +19,8 @@ public class WorldGenerationHelper {
      * Gets a random SEED from a list of plants
      *
      * @param rand Random object to be used
-     * @param setTag If the SEED should be initialized with an AgriCraftNBT TAG
-     * containing random stats
+     * @param setTag If the SEED should be initialized with an AgriCraftNBT TAG containing random
+     * stats
      * @param plants List of plants to grab a random SEED from
      * @return an ItemStack containing a random SEED
      */

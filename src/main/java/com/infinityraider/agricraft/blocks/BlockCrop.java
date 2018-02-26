@@ -196,8 +196,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Handles the block drops. Called when the block is broken (not left
-     * clicked).
+     * Handles the block drops. Called when the block is broken (not left clicked).
      */
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
@@ -210,15 +209,16 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     // IGrowable Methods
     // <editor-fold>
     // =========================================================================
-
     /**
      * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
      *
-     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
-     * In vanilla Minecraft, this method signals if a bonemeal should be consumed when used on this object.
-     * If true, it should be followed by a call to {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs. In
+     * vanilla Minecraft, this method signals if a bonemeal should be consumed when used on this
+     * object. If true, it should be followed by a call to
+     * {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
      *
-     * Unlike vanilla, this should always return the same result as {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
+     * Unlike vanilla, this should always return the same result as
+     * {@link #canUseBonemeal(World, Random, BlockPos, IBlockState)}.
      *
      * @return true if the interface is enabled and the target will accept bonemeal.
      */
@@ -231,14 +231,17 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     /**
      * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
      *
-     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
-     * This method tells the caller if they should continue onward and call {@link #grow(World, Random, BlockPos, IBlockState)},
-     * or if they should stop instead. In vanilla Minecraft, saplings and mushrooms  use this method to be able to
-     * consume bonemeal but not necessarily grow into a tree every time.
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs. This
+     * method tells the caller if they should continue onward and call
+     * {@link #grow(World, Random, BlockPos, IBlockState)}, or if they should stop instead. In
+     * vanilla Minecraft, saplings and mushrooms use this method to be able to consume bonemeal but
+     * not necessarily grow into a tree every time.
      *
-     * Misleadingly named! If this is false but canGrow is true, then bonemeal will be useless and wasted.
+     * Misleadingly named! If this is false but canGrow is true, then bonemeal will be useless and
+     * wasted.
      *
-     * Unlike vanilla, this should always return the same result as {@link #canGrow(World, BlockPos, IBlockState, boolean)}.
+     * Unlike vanilla, this should always return the same result as
+     * {@link #canGrow(World, BlockPos, IBlockState, boolean)}.
      *
      * @return true if the interface is enabled and the target will accept bonemeal.
      */
@@ -251,10 +254,11 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     /**
      * WARNING: You should be using AgriCraft's IAgriFertilizer interface instead!
      *
-     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs.
-     * If this is enabled, and the target can accept the bonemeal fertilizer currently, then this will apply it.
-     * This method is the same as bonemeal being used on the target for free.
-     * See {@link #checkOrUseBonemeal(World, Random, BlockPos, boolean)} for runtime exceptions to watch out for.
+     * Part of the vanilla IGrowable interface. Can be enabled and disabled via the configs. If this
+     * is enabled, and the target can accept the bonemeal fertilizer currently, then this will apply
+     * it. This method is the same as bonemeal being used on the target for free. See
+     * {@link #checkOrUseBonemeal(World, Random, BlockPos, boolean)} for runtime exceptions to watch
+     * out for.
      */
     @Override
     public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
@@ -264,49 +268,49 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * This is the reference copy of a stack of bonemeal. This is maintained instead of a reference to the actual
-     * IAgriFertilizer object, in case the mapping changes during runtime.
+     * This is the reference copy of a stack of bonemeal. This is maintained instead of a reference
+     * to the actual IAgriFertilizer object, in case the mapping changes during runtime.
      */
     private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
 
     /**
-     * Helper method for the IGrowable interface. Checks if bonemeal can be applied at the requested position.
-     * Can also then apply the bonemeal fertilizer if the check passes and the last parameter is set to true.
-     * Uses AgriCraft's Fertilizer system, specifically whatever adapter is registered for bonemeal/ItemDye.
+     * Helper method for the IGrowable interface. Checks if bonemeal can be applied at the requested
+     * position. Can also then apply the bonemeal fertilizer if the check passes and the last
+     * parameter is set to true. Uses AgriCraft's Fertilizer system, specifically whatever adapter
+     * is registered for bonemeal/ItemDye.
      *
-     * Will throw runtime exceptions if either:
-     * - world is null,
-     * - pos is null,
-     * - rand is null while tryToApplyBonemeal is true,
-     * - there is no IAgriFertilizable object at the BlockPos, -OR-
-     * - bonemeal (i.e. ItemDye with meta 15) is not registered as a fertilizer.
+     * Will throw runtime exceptions if either: - world is null, - pos is null, - rand is null while
+     * tryToApplyBonemeal is true, - there is no IAgriFertilizable object at the BlockPos, -OR- -
+     * bonemeal (i.e. ItemDye with meta 15) is not registered as a fertilizer.
      *
      * @param world The world to check.
-     * @param rand A source of randomness. Only necessary when tryToApplyBonemeal is true, can be null otherwise.
+     * @param rand A source of randomness. Only necessary when tryToApplyBonemeal is true, can be
+     * null otherwise.
      * @param pos The location of crop to check.
-     * @param tryToApplyBonemeal When true, will also apply the bonemeal if it's accepted by the crop.
-     * @return true if both the IGrowable interface is enabled, and the crop accepts bonemeal currently.
-     *         false if either the IGrowable interface is disabled, or the crop does not accept bonemeal.
-     *         The return value is not dependent on the result of applying the bonemeal.
+     * @param tryToApplyBonemeal When true, will also apply the bonemeal if it's accepted by the
+     * crop.
+     * @return true if both the IGrowable interface is enabled, and the crop accepts bonemeal
+     * currently. false if either the IGrowable interface is disabled, or the crop does not accept
+     * bonemeal. The return value is not dependent on the result of applying the bonemeal.
      */
     private boolean checkOrUseBonemeal(@Nonnull World world, @Nullable Random rand, @Nonnull BlockPos pos, boolean tryToApplyBonemeal) {
         // Sanity check the parameters.
         Objects.requireNonNull(world, "IGrowable on BlockCrop can't function with a null world parameter.");
-        Objects.requireNonNull(pos,   "IGrowable on BlockCrop can't function with a null pos parameter.");
+        Objects.requireNonNull(pos, "IGrowable on BlockCrop can't function with a null pos parameter.");
         if (tryToApplyBonemeal) {
             Objects.requireNonNull(rand, "IGrowable#grow on BlockCrop can't function with a null rand parameter.");
         }
 
         // Get the crop that is being targeted.
         IAgriFertilizable crop = WorldHelper
-                                 .getTile(world, pos, IAgriFertilizable.class)
-                                 .orElseThrow(() -> new RuntimeException("There is no IAgriFertilizable at: " + pos));
+                .getTile(world, pos, IAgriFertilizable.class)
+                .orElseThrow(() -> new RuntimeException("There is no IAgriFertilizable at: " + pos));
 
         // Get the AgriCraft fertilizer representation of bonemeal.
-        IAgriFertilizer meal   = AgriApi
-                                 .getFertilizerRegistry()
-                                 .valueOf(BONEMEAL)
-                                 .orElseThrow(() -> new RuntimeException("Bonemeal is not registered as a fertilizer."));
+        IAgriFertilizer meal = AgriApi
+                .getFertilizerRegistry()
+                .valueOf(BONEMEAL)
+                .orElseThrow(() -> new RuntimeException("Bonemeal is not registered as a fertilizer."));
 
         // Use those two references to perform the check.
         boolean canApplyBonemeal = crop.acceptsFertilizer(meal);
@@ -324,7 +328,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     // IGrowable Methods
     // </editor-fold>
     // =========================================================================
-
     /**
      * Handles changes in the crop's neighbors.
      */
@@ -357,8 +360,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Determines if the crops contain a mature plant by checking if the
-     * metadata matches {@link Constants#MATURE}.
+     * Determines if the crops contain a mature plant by checking if the metadata matches
+     * {@link Constants#MATURE}.
      *
      * @return if the crop is done growing.
      */
@@ -432,9 +435,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Determines if the block is a normal block, such as cobblestone. This
-     * tells Minecraft if crops are not a normal block (meaning no levers can be
-     * placed on it, it's transparent, ...).
+     * Determines if the block is a normal block, such as cobblestone. This tells Minecraft if crops
+     * are not a normal block (meaning no levers can be placed on it, it's transparent, ...).
      *
      * @return false - the block is not a normal block.
      */
@@ -445,8 +447,8 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Determines if a side of the block should be rendered, such as one flush
-     * with a wall that wouldn't need rendering.
+     * Determines if a side of the block should be rendered, such as one flush with a wall that
+     * wouldn't need rendering.
      *
      * @return false - all of the crop's sides need to be rendered.
      */
@@ -468,8 +470,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     /**
-     * Renders the hit effects, such as the flying particles when the block is
-     * hit.
+     * Renders the hit effects, such as the flying particles when the block is hit.
      *
      * @return false - the block is one-shot and needs no hit particles.
      */

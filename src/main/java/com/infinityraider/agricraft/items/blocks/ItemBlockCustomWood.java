@@ -54,6 +54,7 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
 
     /**
      * Populates the sub-item list. This method allows getting sub blocks server side as well (no
+     *
      * @side, like {@link #getSubItems(CreativeTabs, NonNullList)}). This method is marked for
      * cleaning.
      *

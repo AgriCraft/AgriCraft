@@ -11,13 +11,11 @@ import net.minecraft.client.gui.FontRenderer;
 public abstract class GuiHelper {
 
     /**
-     * Utility method: splits the string in different lines so it will fit on
-     * the page.
+     * Utility method: splits the string in different lines so it will fit on the page.
      *
      * @param fontRendererObj the font renderer to check against.
      * @param input the line to split up.
-     * @param maxWidth the maximum allowable width of the line before being
-     * wrapped.
+     * @param maxWidth the maximum allowable width of the line before being wrapped.
      * @param scale the scale of the text to the width.
      * @return the string split up into lines by the '\n' character.
      */

@@ -87,8 +87,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     }
 
     /**
-     * Determines if the SEED analyzer contains a SEED or trowel in its analyze
-     * slot. A null check on {@link #getSpecimen()} should return the same.
+     * Determines if the SEED analyzer contains a SEED or trowel in its analyze slot. A null check
+     * on {@link #getSpecimen()} should return the same.
      *
      * @return if a SEED or trowel is present.
      */
@@ -97,8 +97,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     }
 
     /**
-     * Retrieves the item in the analyzer's analyze slot. (Does not remove). May
-     * be either a SEED or a trowel.
+     * Retrieves the item in the analyzer's analyze slot. (Does not remove). May be either a SEED or
+     * a trowel.
      *
      * @return the item in the analyze slot.
      */
@@ -333,9 +333,10 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     }
 
     /**
-     * Sets the items in a slot to this stack.
-     * Also makes sure the journal is updated if the specimen is already analyzed.
-     * @param slot  Use either of the two constants to refer to the slots.
+     * Sets the items in a slot to this stack. Also makes sure the journal is updated if the
+     * specimen is already analyzed.
+     *
+     * @param slot Use either of the two constants to refer to the slots.
      * @param stack It is recommended to first call isItemValidForSlot, as this method does not.
      */
     @Override
@@ -458,7 +459,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         // Validate
         Preconditions.checkNotNull(information);
-        
+
         // Add Information
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
     }

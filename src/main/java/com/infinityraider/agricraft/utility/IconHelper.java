@@ -45,8 +45,7 @@ public final class IconHelper {
     }
 
     /**
-     * A class to allow for safely getting a default icon at any stage of
-     * loading.
+     * A class to allow for safely getting a default icon at any stage of loading.
      */
     private static class DefaultIcon extends TextureAtlasSprite {
 

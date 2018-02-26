@@ -50,7 +50,7 @@ public class BlockCondition implements ICondition {
         // Validate.
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Return.
         return new BlockRange(this.range, pos).stream()
                 .map(world::getBlockState)
@@ -66,7 +66,7 @@ public class BlockCondition implements ICondition {
     public void addDescription(@Nonnull Consumer<String> consumer) {
         // Validate
         Preconditions.checkNotNull(consumer);
-        
+
         // Add description.
         consumer.accept("Required Blocks");
     }

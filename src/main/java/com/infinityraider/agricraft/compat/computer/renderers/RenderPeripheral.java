@@ -47,7 +47,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
         list.add(TEXTURE_INNER);
         return list;
     }
-    
+
     @Override
     public TextureAtlasSprite getIcon() {
         return IconHelper.getIcon(TEXTURE_PROBE.toString());
@@ -66,7 +66,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
-                                        BlockPeripheral block, TileEntityPeripheral tile, float partialTick, int destroyStage, float alpha) {
+            BlockPeripheral block, TileEntityPeripheral tile, float partialTick, int destroyStage, float alpha) {
         tessellator.draw();
         this.renderSeed(tile, 0, 0, 0);
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
@@ -77,22 +77,22 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
         renderProbe(tessellator);
     }
-    
+
     private void renderChasis(ITessellator tessellator) {
         // Fetch Icons
         final TextureAtlasSprite iconTop = getIcon(TEXTURE_TOP);
         final TextureAtlasSprite iconSide = getIcon(TEXTURE_SIDE);
         final TextureAtlasSprite iconBottom = getIcon(TEXTURE_BOTTOM);
         final TextureAtlasSprite iconInside = getIcon(TEXTURE_INNER);
-        
+
         // Render Top
         tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, iconTop, 16);
         tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.DOWN, iconTop, 14);
-        
+
         // Render Bottom
         tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, iconInside, 2);
         tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.DOWN, iconBottom, 0);
-        
+
         // Render Sides - Don't Ask Why This Works...
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
             // Push Matrix
@@ -113,7 +113,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
         if (probeQuads == null) {
             probeQuads = MODEL_PERIPHERAL.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_PROBE));
         }
-        
+
         // Add Probe Quads
         tessellator.addQuads(probeQuads);
     }

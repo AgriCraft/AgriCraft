@@ -80,7 +80,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player) {
         // Ensure seed is valid.
         Preconditions.checkNotNull(seed, "Cannot apply a null seed!");
-        
+
         // If on client side do nothing!
         if (this.isRemote()) {
             return MethodResult.PASS;
@@ -144,7 +144,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
         // Verify the consumer is not null.
         Preconditions.checkNotNull(consumer);
-        
+
         // If on client side do nothing!
         if (this.isRemote()) {
             return MethodResult.PASS;
@@ -174,7 +174,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public void getDrops(@Nonnull Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
         // Check that the consumer is not null.
         Preconditions.checkNotNull(consumer);
-        
+
         // Perform crop stick drop.
         if (includeCropSticks) {
             consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
@@ -215,12 +215,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     /**
-     * This sets the seed for this crop. Using null will remove the seed.
-     * If this call changes the value for seed:
-     * - It will first reset the growth stage back to zero.
-     * - Then it will make sure that markForUpdate gets called, if setGrowthStage didn't do it already.
-     * - And then it will return true.
-     * Otherwise it will return false, indicating there was no change and no update.
+     * This sets the seed for this crop. Using null will remove the seed. If this call changes the
+     * value for seed: - It will first reset the growth stage back to zero. - Then it will make sure
+     * that markForUpdate gets called, if setGrowthStage didn't do it already. - And then it will
+     * return true. Otherwise it will return false, indicating there was no change and no update.
      *
      * @param seed the seed to associate with this instance.
      * @return true if this changed the seed and caused an update.
@@ -406,8 +404,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         // Try to spread in each direction.
         for (IAgriCrop crop : WorldHelper.getTileNeighbors(this.getWorld(), pos, IAgriCrop.class)) {
             // Note: Checking the probability is faster. Also check that this plant can be planted there.
-            if (   plant.getSpreadChance() > this.getRandom().nextDouble()
-                && plant.getGrowthRequirement().hasValidSoil(this.getWorld(), crop.getCropPos())) {
+            if (plant.getSpreadChance() > this.getRandom().nextDouble()
+                    && plant.getGrowthRequirement().hasValidSoil(this.getWorld(), crop.getCropPos())) {
                 final AgriSeed other = crop.getSeed();
                 if (other == null) {
                     if (!crop.isCrossCrop()) {
@@ -440,8 +438,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         // If the fertilizer is null, then well, no.
         if (fertilizer == null) {
             return false;
-        }
-        // First check if this is a cross crops. In all other cases this is a regular crop.
+        } // First check if this is a cross crops. In all other cases this is a regular crop.
         else if (this.crossCrop) {
             // This is a cross crop.
             // + A cross over (e.g. mutation) can occur if both requirements are met.
@@ -468,7 +465,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public MethodResult onApplyFertilizer(@Nullable IAgriFertilizer fertilizer, @Nonnull Random rand) {
         // Validate
         Preconditions.checkNotNull(rand);
-        
+
         // Do stuff
         if (this.isRemote()) {
             // The client doesn't need to do anything special.
@@ -492,7 +489,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public MethodResult onHarvest(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
         // Check that consumer is not null.
         Preconditions.checkNotNull(consumer);
-        
+
         // Skip harvest if remote.
         if (this.isRemote()) {
             return MethodResult.PASS;

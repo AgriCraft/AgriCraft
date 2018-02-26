@@ -6,8 +6,7 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Interface for representing stats. Stats are immutable objects, to aid in
- * overall safety.
+ * Interface for representing stats. Stats are immutable objects, to aid in overall safety.
  *
  *
  */
@@ -33,8 +32,8 @@ public interface IAgriStat {
     /**
      * Fetches the growth value associated with this instance.
      * <p>
-     * The returned value should <em>always</em> be less than the value returned
-     * by {@link #getMaxGrowth()}.
+     * The returned value should <em>always</em> be less than the value returned by
+     * {@link #getMaxGrowth()}.
      *
      * @return The growth value of the seed.
      */
@@ -43,8 +42,8 @@ public interface IAgriStat {
     /**
      * Fetches the gain value associated with this instance.
      * <p>
-     * The returned value should <em>always</em> be less than the value returned
-     * by {@link #getMaxGain()}.
+     * The returned value should <em>always</em> be less than the value returned by
+     * {@link #getMaxGain()}.
      *
      * @return The gain value of the seed.
      */
@@ -53,8 +52,8 @@ public interface IAgriStat {
     /**
      * Fetches the strength value associated with this instance.
      * <p>
-     * The returned value should <em>always</em> be less than the value returned
-     * by {@link #getMaxStrength()}.
+     * The returned value should <em>always</em> be less than the value returned by
+     * {@link #getMaxStrength()}.
      *
      * @return The strength value of the seed.
      */
@@ -118,8 +117,8 @@ public interface IAgriStat {
     IAgriStat withStrength(int strength);
 
     /**
-     * Writes the stat to an NBTTagcompound. Make sure to set the stat id value
-     * when implementing this.
+     * Writes the stat to an NBTTagcompound. Make sure to set the stat id value when implementing
+     * this.
      *
      * @param tag The tag to serialize to.
      * @return if the transcription was successful.

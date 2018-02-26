@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.reference;
 
 /**
- * A class containing the constants and default values used in the coding of the
- * AgriCraft mod.
+ * A class containing the constants and default values used in the coding of the AgriCraft mod.
  */
 public interface Constants {
 
@@ -27,8 +26,8 @@ public interface Constants {
     int THREE_QUARTER = QUARTER * 3;
 
     /**
-     * The value of 1/16 as represented in float form. Pre-calculated as to cut
-     * back on calculations.
+     * The value of 1/16 as represented in float form. Pre-calculated as to cut back on
+     * calculations.
      */
     float UNIT = 1.0f / WHOLE;
 
@@ -55,8 +54,7 @@ public interface Constants {
     int MATURE = 7;
 
     /**
-     * An array of the possible growth tiers. Ranges from 0-5, with 0 containing
-     * the default value.
+     * An array of the possible growth tiers. Ranges from 0-5, with 0 containing the default value.
      */
     int[] GROWTH_TIER = {
         50, //Tier 0, a placeholder and default value.

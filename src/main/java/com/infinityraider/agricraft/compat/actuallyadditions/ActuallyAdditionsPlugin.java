@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Loader;
 
 @AgriPlugin
 public class ActuallyAdditionsPlugin implements IAgriPlugin {
-    
+
     @AgriConfigurable(
             key = "ActuallyAdditions Farmer Energy Cost",
             category = AgriConfigCategory.COMPATIBILITY,
@@ -30,7 +30,7 @@ public class ActuallyAdditionsPlugin implements IAgriPlugin {
         AgriCore.getLogger("agricraft").debug("AgriCraft ActuallyAdditionsPlugin enabled!");
         ActuallyAdditionsAPI.addFarmerBehavior(new AgriCraftFarmerBehavior());
     }
-    
+
     static {
         AgriCore.getConfig().addConfigurable(ActuallyAdditionsPlugin.class);
     }

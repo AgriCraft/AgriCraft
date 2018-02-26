@@ -34,7 +34,7 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
 
     @Override
     public void renderWorldBlockDynamic(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z,
-                                        B block, T tile, float partialTick, int destroyStage, float alpha) {
+            B block, T tile, float partialTick, int destroyStage, float alpha) {
         this.renderWorldBlockWoodDynamic(tessellator, world, pos, block, tile, getIcon(tile));
     }
 

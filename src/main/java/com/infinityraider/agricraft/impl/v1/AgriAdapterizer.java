@@ -43,7 +43,7 @@ public class AgriAdapterizer<T> implements IAgriAdapterizer<T> {
     public boolean registerAdapter(@Nonnull IAgriAdapter<T> adapter) {
         // Validate
         Preconditions.checkNotNull(adapter);
-        
+
         // Register
         if (!this.adapters.contains(adapter)) {
             this.adapters.push(adapter);
@@ -57,7 +57,7 @@ public class AgriAdapterizer<T> implements IAgriAdapterizer<T> {
     public boolean unregisterAdapter(@Nonnull IAgriAdapter<T> adapter) {
         // Validate
         Preconditions.checkNotNull(adapter);
-        
+
         // Remove
         return this.adapters.removeFirstOccurrence(adapter);
     }

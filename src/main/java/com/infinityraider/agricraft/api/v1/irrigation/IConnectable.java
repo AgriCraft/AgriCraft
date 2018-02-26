@@ -21,8 +21,8 @@ public interface IConnectable {
     boolean canConnectTo(EnumFacing side, IConnectable connectable);
 
     /**
-     * Called whenever the component should refresh its connections table.
-     * Default implementation does nothing;
+     * Called whenever the component should refresh its connections table. Default implementation
+     * does nothing;
      */
     default void checkConnections() {
         // Does nothing.

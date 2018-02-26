@@ -24,7 +24,7 @@ public class ProduceRecipeWrapper extends BlankRecipeWrapper {
         // Allocate Lists
         input = new ArrayList<>();
         output = new ArrayList<>();
-        
+
         // Fill Output List
         recipe.getPossibleProducts(output::add);
 
@@ -38,7 +38,7 @@ public class ProduceRecipeWrapper extends BlankRecipeWrapper {
                 .map(s -> s.toStack())
                 .orElse(new ItemStack(Blocks.FARMLAND))
         );
-        
+
         // Add Representative Growth Requirement Stack to Input List
         recipe.getGrowthRequirement().getConditionStack()
                 .map(b -> b.toStack())

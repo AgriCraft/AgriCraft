@@ -141,14 +141,12 @@ public abstract class StatCalculatorBase implements IAgriStatCalculator, IAgriAd
     }
 
     /**
-     * calculates the new stats based on an input stat, the nr of neighbours and
-     * a divisor
+     * calculates the new stats based on an input stat, the nr of neighbours and a divisor
      */
     protected abstract int calculateStat(int input, int neighbours, int divisor);
 
     /**
-     * Calculates the divisor to use for the mean operation on the stats of the
-     * parent plants.
+     * Calculates the divisor to use for the mean operation on the stats of the parent plants.
      *
      * @param validParents The total number of valid parents.
      * @param invalidParents The total number of invalid parents.

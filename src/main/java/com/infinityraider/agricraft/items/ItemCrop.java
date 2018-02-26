@@ -48,7 +48,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel {
         if (!world.isAirBlock(cropPos)) {
             return EnumActionResult.FAIL;
         }
-        
+
         // Test if soil is valid.
         if (!AgriApi.getSoilRegistry().contains(world.getBlockState(cropPos.down()))) {
             return EnumActionResult.FAIL;
@@ -66,7 +66,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel {
         ItemStack stack = player.getHeldItem(hand);
 
         // Remove the crop used from the stack.
-        StackHelper.decreaseStackSize(player, stack,1);
+        StackHelper.decreaseStackSize(player, stack, 1);
 
         // Handle sneak placing of crosscrops.
         if (player.isSneaking() && stack.getCount() > 0) {
@@ -74,7 +74,7 @@ public class ItemCrop extends ItemBase implements IItemWithModel {
                     .getTile(world, cropPos, TileEntityCrop.class)
                     .ifPresent(c -> {
                         c.setCrossCrop(true);
-                        StackHelper.decreaseStackSize(player, stack,1);
+                        StackHelper.decreaseStackSize(player, stack, 1);
                     });
         }
 

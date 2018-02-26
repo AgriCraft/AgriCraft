@@ -7,8 +7,7 @@ package com.infinityraider.agricraft.reference;
 /**
  * Class for tracking AgriCraftNBT names.
  *
- * <s>This is fine, as these are never supposed to change, across all
- * classes.</s>
+ * <s>This is fine, as these are never supposed to change, across all classes.</s>
  *
  * @since 2.0.0
  */

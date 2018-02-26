@@ -39,5 +39,5 @@ public class ClientProxy implements IClientProxyBase, IProxy {
     public String getLocale() {
         return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
     }
-    
+
 }

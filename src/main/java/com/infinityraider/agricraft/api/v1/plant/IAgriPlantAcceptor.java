@@ -21,8 +21,8 @@ public interface IAgriPlantAcceptor {
     boolean acceptsPlant(@Nullable IAgriPlant plant);
 
     /**
-     * Sets the AgriPlant associated with this instance. Should always return
-     * the same result as acceptsPlant() if the plant is invalid.
+     * Sets the AgriPlant associated with this instance. Should always return the same result as
+     * acceptsPlant() if the plant is invalid.
      *
      * @param plant the plant to associate with this instance.
      * @return if the plant was successfully associated with the instance.

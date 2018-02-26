@@ -21,8 +21,7 @@ import net.minecraft.world.World;
 /**
  * Interface to interact with AgriCraft's crops.
  *
- * To retrieve the ICrop instance use:
- * {@code API.getCrop(World world, int x, int y, int z)}
+ * To retrieve the ICrop instance use: {@code API.getCrop(World world, int x, int y, int z)}
  */
 public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFertilizable, IAgriHarvestable, IAgriRakeable {
 
@@ -47,11 +46,13 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
 
     /**
      * Sets the growth stage for this crop, normalized to the range of valid values for the plant.
-     * If there is no plant, this will set the stage to zero, and log a warning if the input was non-zero.
-     * If growthStage changes, this will call markForUpdate and return true to inform the caller.
-     * Otherwise this will return false to indicate that growthStage didn't change and didn't do an update.
+     * If there is no plant, this will set the stage to zero, and log a warning if the input was
+     * non-zero. If growthStage changes, this will call markForUpdate and return true to inform the
+     * caller. Otherwise this will return false to indicate that growthStage didn't change and
+     * didn't do an update.
      *
-     * @param stage The new value, from 0 (inclusive) up to the plant's stage amount (exclusive), if this has a plant.
+     * @param stage The new value, from 0 (inclusive) up to the plant's stage amount (exclusive), if
+     * this has a plant.
      * @return true if this changed the value and markForUpdate was called.
      */
     boolean setGrowthStage(int stage);
@@ -65,7 +66,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      * Converts this crop to a crosscrop or a regular crop
      *
      * @param status true for crosscrop, false for regular crop
-     * 
+     *
      * @return if the cross crop was successfully set.
      */
     boolean setCrossCrop(boolean status);

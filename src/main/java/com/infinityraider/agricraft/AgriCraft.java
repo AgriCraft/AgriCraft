@@ -26,27 +26,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * <p>
- * This is my first "real" mod, I've made this while learning to use Minecraft
- * Forge to Mod Minecraft. The code might not be optimal but that wasn't the
- * point of this project.
+ * This is my first "real" mod, I've made this while learning to use Minecraft Forge to Mod
+ * Minecraft. The code might not be optimal but that wasn't the point of this project.
  * </p>
  * Cheers to:
  * <ul>
  * <li> Pam for trusting me with her source code and support. </li>
- * <li> Pahimar for making his code open source and for creating his Let's Mod
- * Reboot Youtube series, I've learned a lot from this (also used some code,
- * credit's due where credit's due). </li>
+ * <li> Pahimar for making his code open source and for creating his Let's Mod Reboot Youtube
+ * series, I've learned a lot from this (also used some code, credit's due where credit's due).
+ * </li>
  * <li> VSWE for his "Forging a Minecraft Mod" summer courses. </li>
  * <li> NealeGaming for his Minecraft modding tutorials on youtube. </li>
  * <li> Imasius (a.k.a. Nimo) for learning me to better code in java. </li>
  * <li> RlonRyan for helping out with the code. </li>
  * <li> HenryLoenwind for the API. </li>
- * <li> MechWarrior99, SkullyGamingMC, VapourDrive and SkeletonPunk for
- * providing textures. </li>
+ * <li> MechWarrior99, SkullyGamingMC, VapourDrive and SkeletonPunk for providing textures. </li>
  * </ul>
  *
- * I've annotated my code heavily, for myself and for possible others who might
- * learn from it.
+ * I've annotated my code heavily, for myself and for possible others who might learn from it.
  * <br>
  * Oh and keep on modding in the free world!
  * <p>

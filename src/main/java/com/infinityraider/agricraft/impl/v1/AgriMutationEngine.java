@@ -16,9 +16,8 @@ import javax.annotation.Nullable;
 import net.minecraft.util.Tuple;
 
 /**
- * This class decides whether a plant is spreading or mutating and also
- * calculates the new stats (growth, gain, strength) of the new plant based on
- * the 4 neighbours.
+ * This class decides whether a plant is spreading or mutating and also calculates the new stats
+ * (growth, gain, strength) of the new plant based on the 4 neighbours.
  */
 public final class AgriMutationEngine implements IAgriMutationEngine {
 
@@ -37,7 +36,7 @@ public final class AgriMutationEngine implements IAgriMutationEngine {
     public boolean registerStrategy(IAgriCrossStrategy strategy) {
         // Validate
         Preconditions.checkNotNull(strategy, "Cannot register a null strategy to the mutation engine!");
-        
+
         // Register
         if (strategy.getRollChance() > 1f || strategy.getRollChance() < 0f) {
             throw new IndexOutOfBoundsException(
@@ -75,7 +74,7 @@ public final class AgriMutationEngine implements IAgriMutationEngine {
     public Optional<IAgriCrossStrategy> rollStrategy(@Nonnull Random rand) {
         // Validate
         Preconditions.checkNotNull(rand);
-        
+
         // Roll
         final double value = rand.nextDouble() * sigma;
         return this.strategies.stream()

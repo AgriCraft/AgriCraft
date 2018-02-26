@@ -122,7 +122,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         // Validate
         Preconditions.checkNotNull(information);
-        
+
         // Add Information
         final String tool = AgriCore.getTranslator().translate("agricraft_tooltip.storage");
         final String none = AgriCore.getTranslator().translate("agricraft_tooltip.none");
@@ -256,7 +256,7 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
                 SeedStorageSlot slotAt = this.slots.get(realSlotId);
                 if (slotAt != null) {
                     stackInSlot = slotAt.toStack();
-                    stackInSlot.setCount( Math.min(amount, slotAt.count));
+                    stackInSlot.setCount(Math.min(amount, slotAt.count));
                     if (slotAt.count <= amount) {
                         this.slots.remove(realSlotId);
                         this.slotsList.remove(slotAt);

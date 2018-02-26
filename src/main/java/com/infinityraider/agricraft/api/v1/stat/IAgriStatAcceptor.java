@@ -21,8 +21,8 @@ public interface IAgriStatAcceptor {
     boolean acceptsStat(@Nullable IAgriStat stat);
 
     /**
-     * Sets the AgriStat associated with this instance. Should always return the
-     * same result as acceptsStat() if the stat is invalid.
+     * Sets the AgriStat associated with this instance. Should always return the same result as
+     * acceptsStat() if the stat is invalid.
      *
      * @param stat the stat to associate with this instance.
      * @return if the stat was successfully associated with the instance.
