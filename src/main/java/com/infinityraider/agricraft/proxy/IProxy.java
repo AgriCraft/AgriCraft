@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
+import java.util.function.Function;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -70,5 +71,16 @@ public interface IProxy extends IProxyBase {
 
     @Override
     default void initConfiguration(FMLPreInitializationEvent event) {
+    }
+
+    // Since apparently translation is now client-side only.
+    // This is why we can't have nice things.
+    default String translateToLocal(String string) {
+        return string;
+    }
+    
+    default String getLocale() {
+        // Whatever...
+        return "en_US";
     }
 }
