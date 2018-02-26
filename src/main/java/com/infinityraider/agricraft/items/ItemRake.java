@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRakeable;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +43,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem, IItemWithModel 
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof IAgriRakeable) {
             IAgriRakeable tile = (IAgriRakeable) te;
-            if (tile.onRaked(player)) {
+            if (tile.onRaked((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), player)) {
                 return EnumActionResult.SUCCESS;
             }
         }

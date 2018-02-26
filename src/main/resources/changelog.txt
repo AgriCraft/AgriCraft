@@ -3,6 +3,8 @@ Changelog
 2.1.0a0
 - PORTED: Ported to version 1.12 of Minecraft
 - FIXED:  Memory churn caused by AgriCraft item models. The garbage collector should kick in less frequently now.
+- ADDED:  Actually Additions Farmer support.
+- FIXED:  The mess that was CustomWoodRecipes is now a very nice system using 1.12's JSON recipe files.
 
 2.0.0a21
 - FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.

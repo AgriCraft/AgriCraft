@@ -38,7 +38,7 @@ public final class StackHelper {
      * valid as per the method's description, {@literal false} otherwise.
      */
     public static boolean isValid(ItemStack stack) {
-        return (stack != null) && (stack.getItem() != null) && stack.getCount() > 0;
+        return (stack != null) && (!stack.isEmpty()) && (stack.getItem() != null) && stack.getCount() > 0;
     }
 
     /**
@@ -54,7 +54,7 @@ public final class StackHelper {
      * valid as per the method's description, {@literal false} otherwise.
      */
     public static boolean isValid(ItemStack stack, Class<?> itemClass) {
-        return (stack != null) && (TypeHelper.isType(stack.getItem(), itemClass));
+        return (stack != null) && (!stack.isEmpty()) && (TypeHelper.isType(stack.getItem(), itemClass));
     }
 
     /**
@@ -133,7 +133,7 @@ public final class StackHelper {
      * otherwise.
      */
     public static boolean hasTag(@Nullable ItemStack stack) {
-        return (stack != null) && (stack.getTagCompound() != null);
+        return (stack != null) && (!stack.isEmpty()) && (stack.getTagCompound() != null);
     }
 
     /**
@@ -149,7 +149,7 @@ public final class StackHelper {
      * and the tag has all of the given keys, {@literal false} otherwise}.
      */
     public static boolean hasKey(@Nullable ItemStack stack, @Nullable String... keys) {
-        return (stack != null) && NBTHelper.hasKey(stack.getTagCompound(), keys);
+        return (stack != null) && (!stack.isEmpty()) && NBTHelper.hasKey(stack.getTagCompound(), keys);
     }
 
     /**
@@ -245,7 +245,9 @@ public final class StackHelper {
      */
     @Nonnull
     public static MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nullable ItemStack stack, int amount) {
-        if (amount < 0) {
+        if (stack == null || stack.isEmpty()) {
+            return MethodResult.FAIL;
+        } else if (amount < 0) {
             throw new IllegalArgumentException("Cannot decrease ItemStack size by a negative amount! " + amount + " is not valid!");
         } else if (player != null && player.isCreative()) {
             return MethodResult.PASS;

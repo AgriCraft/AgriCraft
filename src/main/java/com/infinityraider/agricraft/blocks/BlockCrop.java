@@ -120,7 +120,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
         // Step 3. If the player is not holding anything, then harvest the crop.
         if (heldItem.isEmpty()) {
-            crop.onHarvest(player);
+            crop.onHarvest((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), player);
             return true;
         }
 
@@ -156,7 +156,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
         // Step 8. If held item is a seed, attempt to plant it in the crop.
         if (seed.isPresent()) {
-            if (crop.onApplySeeds(player, seed.get()) == MethodResult.SUCCESS) {
+            if (crop.onApplySeeds(seed.get(), player) == MethodResult.SUCCESS) {
                 // Remove the consumed seed from the player's inventory.
                 // For now we really don't care if the method fails,
                 // so not checking the method's result is ok.
@@ -167,7 +167,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         }
 
         // Step 8. If we can't do anything else, give up and attemp to harvest instead.
-        crop.onHarvest(player);
+        crop.onHarvest((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), player);
 
         //Returning true will prevent other things from happening
         return true;
@@ -182,7 +182,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(crop -> crop.onBroken(player));
+            this.getCrop(world, pos).ifPresent(crop -> crop.onBroken((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), player));
         }
     }
 
@@ -202,7 +202,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
         if (!world.isRemote) {
-            this.getCrop(world, pos).ifPresent(c -> c.onBroken(null));
+            this.getCrop(world, pos).ifPresent(c -> c.onBroken((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), null));
         }
     }
 

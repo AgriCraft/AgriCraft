@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.MathHelper;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -17,11 +18,13 @@ import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -31,7 +34,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -73,7 +75,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public MethodResult onApplySeeds(EntityPlayer player, AgriSeed seed) {
+    public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player) {
+        // Ensure seed is valid.
+        Preconditions.checkNotNull(seed, "Cannot apply a null seed!");
+        
         // If on client side do nothing!
         if (this.isRemote()) {
             return MethodResult.PASS;
@@ -86,18 +91,18 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // If the soil is wrong, report and abort.
         if (!seed.getPlant().getGrowthRequirement().hasValidSoil(this.getWorld(), pos)) {
-            player.sendMessage(new TextComponentString("The soil is not valid for this seed. You can't plant it here."));
+            MessageUtil.messagePlayer(player, "The soil is not valid for this seed. You can't plant it here.");
             return MethodResult.FAIL;
         }
 
         // If the additional conditions are wrong, warn and continue.
         if (!seed.getPlant().getGrowthRequirement().hasValidConditions(this.getWorld(), pos)) {
-            player.sendMessage(new TextComponentString("Caution: This plant has additional requirements that are unmet."));
+            MessageUtil.messagePlayer(player, "Caution: This plant has additional requirements that are unmet.");
         }
 
         // If the lighting is wrong, warn and continue.
         if (!seed.getPlant().getGrowthRequirement().hasValidLight(this.getWorld(), pos)) {
-            player.sendMessage(new TextComponentString("Caution: This plant won't grow with the current light level."));
+            MessageUtil.messagePlayer(player, "Caution: This plant won't grow with the current light level.");
         }
 
 //        // Notify event listeners of a planting event.
@@ -113,7 +118,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public MethodResult onApplyCrops(EntityPlayer player) {
+    public MethodResult onApplyCrops(@Nullable EntityPlayer player) {
         // If on client side do nothing!
         if (this.isRemote()) {
             return MethodResult.PASS;
@@ -132,7 +137,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public MethodResult onBroken(EntityPlayer player) {
+    public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
+        // Verify the consumer is not null.
+        Preconditions.checkNotNull(consumer);
+        
         // If on client side do nothing!
         if (this.isRemote()) {
             return MethodResult.PASS;
@@ -140,7 +148,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Drop drops if should drop.
         if (player == null || !player.isCreative()) {
-            this.getDrops(drop -> WorldHelper.spawnItemInWorld(this.getWorld(), this.pos, drop), true, true);
+            this.getDrops(consumer, true, true);
         }
 
         // Remove the block.
@@ -160,6 +168,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // <editor-fold>
     // =========================================================================
     public void getDrops(Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
+        // Check that the consumer is not null.
+        Preconditions.checkNotNull(consumer);
+        
         // Perform crop stick drop.
         if (includeCropSticks) {
             consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
@@ -465,18 +476,20 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IHarvestable methods.
     // =========================================================================
     @Override
-    public MethodResult onHarvest(@Nullable EntityPlayer player) {
+    public MethodResult onHarvest(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
+        // Check that consumer is not null.
+        Preconditions.checkNotNull(consumer);
+        
         // Skip harvest if remote.
         if (this.isRemote()) {
             return MethodResult.PASS;
         } else if (this.isCrossCrop()) {
             if (this.setCrossCrop(false)) {
-                // Only spawn the crop stick if the cross was successfully removed.
-                WorldHelper.spawnItemInWorld(this.getWorld(), this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
+                consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, 1));
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.getWorld(), this.pos, stack), false, false);
+            this.getDrops(consumer, false, false);
             this.setGrowthStage(0);
             return MethodResult.SUCCESS;
         } else {
@@ -488,9 +501,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IRakeable methods.
     // =========================================================================
     @Override
-    public boolean onRaked(@Nullable EntityPlayer player) {
+    public boolean onRaked(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
+        // Check that consumer is valid.
+        Preconditions.checkNotNull(consumer);
+        // Actually do something.
         if (!this.isRemote() && this.canBeRaked()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.getWorld(), this.pos, stack), false, true);
+            this.getDrops(consumer, false, true);
             this.setSeed(null);
             return true;
         } else {

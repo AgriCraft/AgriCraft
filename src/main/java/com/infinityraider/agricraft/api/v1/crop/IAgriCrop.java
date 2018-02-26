@@ -10,7 +10,11 @@ import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import java.util.Optional;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -107,10 +111,10 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     // =========================================================================
     public MethodResult onGrowthTick();
 
-    public MethodResult onApplyCrops(EntityPlayer player);
+    public MethodResult onApplyCrops(@Nullable EntityPlayer player);
 
-    public MethodResult onApplySeeds(EntityPlayer player, AgriSeed seed);
+    public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player);
 
-    public MethodResult onBroken(EntityPlayer player);
+    public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
 
 }

@@ -38,7 +38,7 @@ public class ItemToolTipHandler {
     public void addSeedStatsTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         // Add Seed Information.
-        if (stack != null) {
+        if (!stack.isEmpty()) {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
             if (seed != null) {
                 if (seed.getStat().isAnalyzed()) {
@@ -64,7 +64,6 @@ public class ItemToolTipHandler {
 //            }
 //        }
 //    }
-
     @SubscribeEvent
     public void addNbtInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableNBTTooltips) {
@@ -82,7 +81,7 @@ public class ItemToolTipHandler {
 
     @SubscribeEvent
     public void addOreDictInfo(ItemTooltipEvent event) {
-        if (AgriCraftConfig.enableOreDictTooltips) {
+        if (AgriCraftConfig.enableOreDictTooltips && !event.getItemStack().isEmpty()) {
             event.getToolTip().add(ChatFormatting.DARK_AQUA + "OreDict:");
             final int[] ids = OreDictionary.getOreIDs(event.getItemStack());
             for (int id : ids) {
@@ -102,7 +101,7 @@ public class ItemToolTipHandler {
     @SubscribeEvent
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if (stack != null && stack.getItem() instanceof IAgriTrowelItem) {
+        if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(event.getItemStack()).orElse(null);
             if (seed != null) {
                 event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
