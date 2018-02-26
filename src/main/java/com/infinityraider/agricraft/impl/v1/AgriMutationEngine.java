@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.farming.mutation.MutateStrategy;
@@ -10,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.util.Tuple;
 
 /**
@@ -19,6 +22,7 @@ import net.minecraft.util.Tuple;
  */
 public final class AgriMutationEngine implements IAgriMutationEngine {
 
+    @Nonnull
     private final List<Tuple<Double, IAgriCrossStrategy>> strategies;
 
     private double sigma = 0;
@@ -31,6 +35,10 @@ public final class AgriMutationEngine implements IAgriMutationEngine {
 
     @Override
     public boolean registerStrategy(IAgriCrossStrategy strategy) {
+        // Validate
+        Preconditions.checkNotNull(strategy, "Cannot register a null strategy to the mutation engine!");
+        
+        // Register
         if (strategy.getRollChance() > 1f || strategy.getRollChance() < 0f) {
             throw new IndexOutOfBoundsException(
                     "Invalid roll chance of " + strategy.getRollChance() + "!\n"
@@ -50,11 +58,12 @@ public final class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     @Override
-    public boolean hasStrategy(IAgriCrossStrategy strategy) {
+    public boolean hasStrategy(@Nullable IAgriCrossStrategy strategy) {
         return this.strategies.stream().anyMatch(t -> t.getSecond().equals(strategy));
     }
 
     @Override
+    @Nonnull
     public List<IAgriCrossStrategy> getStrategies() {
         return this.strategies.stream()
                 .map(t -> t.getSecond())
@@ -62,7 +71,12 @@ public final class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     @Override
-    public Optional<IAgriCrossStrategy> rollStrategy(Random rand) {
+    @Nonnull
+    public Optional<IAgriCrossStrategy> rollStrategy(@Nonnull Random rand) {
+        // Validate
+        Preconditions.checkNotNull(rand);
+        
+        // Roll
         final double value = rand.nextDouble() * sigma;
         return this.strategies.stream()
                 // Value looks very important here... lol.

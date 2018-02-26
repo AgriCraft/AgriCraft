@@ -2,9 +2,11 @@
  */
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
-import java.util.List;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -13,12 +15,16 @@ import net.minecraft.world.IBlockAccess;
  */
 public class BlockCondition implements ICondition {
 
+    @Nonnull
     private final BlockRange range;
+    @Nonnull
     private final FuzzyStack stack;
     private final int amount;
     private final int volume;
 
-    public BlockCondition(FuzzyStack stack, BlockRange range) {
+    public BlockCondition(@Nonnull FuzzyStack stack, @Nonnull BlockRange range) {
+        this.stack = Preconditions.checkNotNull(stack);
+        this.range = Preconditions.checkNotNull(range);
         this.amount = stack.toStack().getCount();
         this.volume = range.getVolume();
         if (this.amount < 1) {
@@ -27,20 +33,25 @@ public class BlockCondition implements ICondition {
         if (this.amount > this.volume) {
             throw new IndexOutOfBoundsException("Required amount of blocks exceeds volume of range!");
         }
-        this.range = range;
-        this.stack = stack;
     }
 
+    @Nonnull
     public FuzzyStack getStack() {
         return stack;
     }
 
+    @Nonnull
     public BlockRange getRange() {
         return range;
     }
 
     @Override
-    public boolean isMet(IBlockAccess world, BlockPos pos) {
+    public boolean isMet(@Nonnull IBlockAccess world, @Nonnull BlockPos pos) {
+        // Validate.
+        Preconditions.checkNotNull(world);
+        Preconditions.checkNotNull(pos);
+        
+        // Return.
         return new BlockRange(this.range, pos).stream()
                 .map(world::getBlockState)
                 .map(FuzzyStack::from)
@@ -52,8 +63,12 @@ public class BlockCondition implements ICondition {
     }
 
     @Override
-    public void addDescription(List<String> lines) {
-        lines.add("Required Blocks");
+    public void addDescription(@Nonnull Consumer<String> consumer) {
+        // Validate
+        Preconditions.checkNotNull(consumer);
+        
+        // Add description.
+        consumer.accept("Required Blocks");
     }
 
     @Override

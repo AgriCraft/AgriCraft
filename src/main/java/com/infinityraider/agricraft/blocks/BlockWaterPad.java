@@ -3,7 +3,6 @@
  */
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import com.infinityraider.agricraft.utility.FluidHandlerBlockWrapper;

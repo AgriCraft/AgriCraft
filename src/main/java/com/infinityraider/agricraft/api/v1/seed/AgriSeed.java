@@ -2,11 +2,14 @@
  */
 package com.infinityraider.agricraft.api.v1.seed;
 
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * A simple class for representing seeds. Seeds are immutable objects, for
@@ -22,8 +25,8 @@ public final class AgriSeed {
     private final IAgriStat stat;
 
     public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriStat stat) {
-        this.plant = Objects.requireNonNull(plant, "The plant in an AgriSeed may not be null!");
-        this.stat = Objects.requireNonNull(stat, "The stat in an AgriSeed may not be null!");
+        this.plant = Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!");
+        this.stat = Preconditions.checkNotNull(stat, "The stat in an AgriSeed may not be null!");
     }
 
     @Nonnull
@@ -46,28 +49,39 @@ public final class AgriSeed {
         return new AgriSeed(plant, stat);
     }
 
+    @Nonnull
     public ItemStack toStack() {
-        ItemStack stack = this.plant.getSeed().copy();
-        this.stat.writeToNBT(stack.getTagCompound());
-        return stack;
+        // Delegate.
+        return toStack(1);
     }
 
+    @Nonnull
     public ItemStack toStack(int size) {
-        ItemStack stack = this.plant.getSeed().copy();
-        this.stat.writeToNBT(stack.getTagCompound());
-        stack.setCount(size);
-        return stack;
+        // Get the stack.
+        final ItemStack stack = Preconditions.checkNotNull(this.plant.getSeed());
+        
+        // Get the tag.
+        final NBTTagCompound tag = Optional.ofNullable(stack.getTagCompound())
+                .map(NBTTagCompound::copy)
+                .orElseGet(NBTTagCompound::new);
+        
+        // Write the stat to the tag.
+        this.stat.writeToNBT(tag);
+        
+        // Return a new stack.
+        return new ItemStack(stack.getItem(), size, stack.getMetadata(), tag);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof AgriSeed) {
-            final AgriSeed other = (AgriSeed) obj;
-            return (this.plant.equals(other.plant))
-                    && (this.stat.equals(other.stat));
-        } else {
-            return false;
-        }
+    public final boolean equals(Object obj) {
+        return (obj instanceof AgriSeed)
+                && (this.equals((AgriSeed)obj));
+    }
+    
+    public final boolean equals(AgriSeed other) {
+        return (other != null)
+                && (this.plant.equals(other.plant))
+                && (this.stat.equals(other.stat));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -39,17 +41,21 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
 
     //this has to return true to make it so the getContainerItem method gets called when this item is used in a recipe
     @Override
-    public boolean hasContainerItem(ItemStack stack) {
+    public boolean hasContainerItem(@Nonnull ItemStack stack) {
+        Preconditions.checkNotNull(stack);
         return true;
     }
 
     //when this item is used in a crafting recipe it is replaced by the item return by this method
     @Override
-    public ItemStack getContainerItem(ItemStack itemStack) {
-        return itemStack.copy();
+    @Nonnull
+    public ItemStack getContainerItem(@Nonnull ItemStack stack) {
+        Preconditions.checkNotNull(stack);
+        return stack.copy();
     }
 
     @Override
+    @Nonnull
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (world.isRemote) {
             player.openGui(AgriCraft.instance, GuiHandler.JOURNAL_GUI_ID, world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
@@ -59,12 +65,17 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+        Preconditions.checkNotNull(stack);
         tooltip.add(AgriCore.getTranslator().translate("agricraft_tooltip.discoveredSeeds") + ": " + getDiscoveredSeedIds(stack).count());
     }
 
-    private Stream<String> getDiscoveredSeedIds(@Nullable ItemStack journal) {
-        return Optional.ofNullable(journal)
+    @Nonnull
+    private Stream<String> getDiscoveredSeedIds(@Nonnull ItemStack journal) {
+        // Validate
+        Preconditions.checkNotNull(journal);
+        // Return
+        return Optional.of(journal)
                 .map(ItemStack::getTagCompound)
                 .map(tag -> tag.getString(AgriNBT.DISCOVERED_SEEDS))
                 .map(ids -> ids.split(";"))
@@ -73,8 +84,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     }
 
     @Override
-    public void addEntry(@Nullable ItemStack journal, @Nullable IAgriPlant plant) {
-        if (journal != null && plant != null) {
+    public void addEntry(@Nonnull ItemStack journal, @Nullable IAgriPlant plant) {
+        // Validate.
+        Preconditions.checkNotNull(journal);
+        // Do stuff.
+        if (plant != null) {
             if (!isSeedDiscovered(journal, plant)) {
                 NBTTagCompound tag = StackHelper.getTag(journal);
                 String old = tag.getString(AgriNBT.DISCOVERED_SEEDS);
@@ -85,8 +99,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem, IItemWith
     }
 
     @Override
-    public boolean isSeedDiscovered(@Nullable ItemStack journal, @Nullable IAgriPlant plant) {
-        return (journal != null) && (plant != null) && getDiscoveredSeedIds(journal).anyMatch(plant.getId()::equals);
+    public boolean isSeedDiscovered(@Nonnull ItemStack journal, @Nullable IAgriPlant plant) {
+        // Validate
+        Preconditions.checkNotNull(journal);
+        // Return
+        return (plant != null) && getDiscoveredSeedIds(journal).anyMatch(plant.getId()::equals);
     }
 
     @Override

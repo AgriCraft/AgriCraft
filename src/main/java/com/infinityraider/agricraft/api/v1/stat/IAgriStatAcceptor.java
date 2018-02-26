@@ -3,6 +3,8 @@
 package com.infinityraider.agricraft.api.v1.stat;
 
 import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  *
@@ -16,7 +18,7 @@ public interface IAgriStatAcceptor {
      * @param stat the stat to validate for the instance.
      * @return if the stat is valid for this instance.
      */
-    boolean acceptsStat(IAgriStat stat);
+    boolean acceptsStat(@Nullable IAgriStat stat);
 
     /**
      * Sets the AgriStat associated with this instance. Should always return the
@@ -25,13 +27,14 @@ public interface IAgriStatAcceptor {
      * @param stat the stat to associate with this instance.
      * @return if the stat was successfully associated with the instance.
      */
-    boolean setStat(IAgriStat stat);
+    boolean setStat(@Nullable IAgriStat stat);
 
     /**
      * Clears the AgriStat associated with the instance.
      *
      * @return the stat removed from the instance, or the empty optional.
      */
+    @Nonnull
     Optional<IAgriStat> removeStat();
 
 }

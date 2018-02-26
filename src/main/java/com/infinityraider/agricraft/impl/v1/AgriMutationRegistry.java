@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.farming.mutation.Mutation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nonnull;
 import scala.actors.threadpool.Arrays;
 
 /**
@@ -22,12 +23,12 @@ import scala.actors.threadpool.Arrays;
 public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements IAgriMutationRegistry {
 
     @Override
-    public boolean add(String id, double chance, String childId, String... parentIds) {
+    public boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull String... parentIds) {
         return this.add(id, chance, childId, Arrays.asList(parentIds));
     }
 
     @Override
-    public boolean add(String id, double chance, String childId, List<String> parentIds) {
+    public boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull List<String> parentIds) {
         // Step I. Validate Parameters.
         Objects.requireNonNull(id, "The id of a mutation may not be null!");
         Objects.requireNonNull(childId, "The id of the child plant for a mutation may not be null!");

@@ -12,6 +12,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+import javax.annotation.Nonnull;
 
 /**
  * A fake API connector, for when the API was not found.
@@ -19,46 +20,55 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
 final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
+    @Nonnull
     public AgriApiState getState() {
         return AgriApiState.INVALID;
     }
 
     @Override
+    @Nonnull
     public IAgriRegistry<IAgriPlant> connectPlantRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriMutationRegistry connectMutationRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriSoilRegistry connectSoilRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriStat> connectStatRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriStatCalculator> connectStatCalculatorRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriMutationEngine connectMutationEngine() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<AgriSeed> connectSeedRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }

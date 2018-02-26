@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * An interface representing a mutation, which is a relation between parents and
@@ -45,27 +46,27 @@ public interface IAgriMutation extends IAgriRegisterable {
     @Nonnull
     List<IAgriPlant> getParents();
 
-    default boolean hasChild(IAgriPlant plant) {
+    default boolean hasChild(@Nullable IAgriPlant plant) {
         return this.getChild().equals(plant);
     }
 
-    default boolean hasParent(IAgriPlant plant) {
+    default boolean hasParent(@Nullable IAgriPlant plant) {
         return this.getParents().contains(plant);
     }
 
-    default boolean hasParent(IAgriPlant... plants) {
+    default boolean hasParent(@Nonnull IAgriPlant... plants) {
         return this.getParents().containsAll(Arrays.asList(plants));
     }
 
-    default boolean hasParent(Collection<IAgriPlant> plants) {
+    default boolean hasParent(@Nullable Collection<IAgriPlant> plants) {
         return this.getParents().containsAll(plants);
     }
 
-    default boolean areParentsIn(IAgriPlant... plants) {
+    default boolean areParentsIn(@Nonnull IAgriPlant... plants) {
         return Arrays.asList(plants).containsAll(this.getParents());
     }
 
-    default boolean areParentsIn(Collection<IAgriPlant> plants) {
+    default boolean areParentsIn(@Nullable Collection<IAgriPlant> plants) {
         return (plants != null) && (plants.containsAll(this.getParents()));
     }
 

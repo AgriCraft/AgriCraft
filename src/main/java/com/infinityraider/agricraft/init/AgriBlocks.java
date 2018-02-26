@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.infinitylib.block.BlockBase;
+import javax.annotation.Nonnull;
 
 public class AgriBlocks {
 
@@ -33,25 +34,34 @@ public class AgriBlocks {
     }
 
     // Crops
+    @Nonnull
     public final BlockBase CROP;
 
     // Analyzers
+    @Nonnull
     public final BlockBase SEED_ANALYZER;
 
     // Water Pads
+    @Nonnull
     public final BlockBase WATER_PAD;
 
     // Irrigation
+    @Nonnull
     public final BlockBase TANK;
+    @Nonnull
     public final BlockBase CHANNEL;
+    @Nonnull
     public final BlockBase CHANNEL_FULL;
+    @Nonnull
     public final BlockBase CHANNEL_VALVE;
+    @Nonnull
     public final BlockBase SPRINKLER;
 
     // Seed Storage
     //public final BlockBase SEED_STORAGE;
     //public static final BlockBase SEED_STORAGE_CONTROLLER = new BlockSeedStorageController();
     // Decoration
+    @Nonnull
     public final BlockBase GRATE;
 
 }

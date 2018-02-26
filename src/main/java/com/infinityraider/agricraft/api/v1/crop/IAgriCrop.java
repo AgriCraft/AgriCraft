@@ -77,17 +77,18 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
         return this.hasSeed() && this.isFertile(this.getSeed());
     }
 
-    default boolean isFertile(AgriSeed seed) {
+    default boolean isFertile(@Nullable AgriSeed seed) {
         return (seed != null) && this.isFertile(seed.getPlant());
     }
 
-    boolean isFertile(IAgriPlant plant);
+    boolean isFertile(@Nullable IAgriPlant plant);
 
     /**
      * @return if this crop is fully grown
      */
     boolean isMature();
 
+    @Nonnull
     Optional<IAgriSoil> getSoil();
 
     // =========================================================================
@@ -109,12 +110,16 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     // =========================================================================
     // Event Methods
     // =========================================================================
+    @Nonnull
     public MethodResult onGrowthTick();
 
+    @Nonnull
     public MethodResult onApplyCrops(@Nullable EntityPlayer player);
 
+    @Nonnull
     public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player);
 
+    @Nonnull
     public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
 
 }

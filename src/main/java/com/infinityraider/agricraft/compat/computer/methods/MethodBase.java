@@ -85,7 +85,7 @@ public abstract class MethodBase implements IMethod {
     // The object array thing here is quite odd.
     private Object[] callMethodForPeripheral(TileEntityPeripheral peripheral, ItemStack journal) throws MethodException {
         if (requiresJournal) {
-            if (journal == null || journal.getItem() == null) {
+            if (!journal.isEmpty() || journal.getItem() == null) {
                 throw new MethodException(this, "Journal is missing");
             }
             ItemStack specimen = peripheral.getSpecimen();

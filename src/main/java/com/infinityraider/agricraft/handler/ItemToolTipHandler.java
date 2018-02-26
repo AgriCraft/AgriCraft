@@ -8,6 +8,9 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.mojang.realmsclient.gui.ChatFormatting;
+import java.text.MessageFormat;
+import java.util.Objects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -64,17 +67,39 @@ public class ItemToolTipHandler {
 //            }
 //        }
 //    }
+    
+    private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
+        event.getToolTip().add(ChatFormatting.DARK_AQUA + MessageFormat.format(format, objects));
+    }
+    
+    private static void addCategory(ItemTooltipEvent event, String category) {
+        event.getToolTip().add(ChatFormatting.DARK_AQUA + category + ":");
+    }
+    
+    private static void addParameter(ItemTooltipEvent event, String key, Object value) {
+        event.getToolTip().add(ChatFormatting.DARK_AQUA + " - " + key + ": " + Objects.toString(value));
+    }
+    
+    @SubscribeEvent
+    public void addRegistryInfo(ItemTooltipEvent event) {
+        if (AgriCraftConfig.enableRegistryTooltips) {
+            final Item item = event.getItemStack().getItem();
+            addCategory(event, "Registry");
+            addParameter(event, "id", item.getRegistryName());
+        }
+    }
+    
     @SubscribeEvent
     public void addNbtInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableNBTTooltips) {
-            event.getToolTip().add(ChatFormatting.DARK_AQUA + "NBT:");
+            addCategory(event, "NBT");
             if (StackHelper.hasTag(event.getItemStack())) {
                 final NBTTagCompound tag = StackHelper.getTag(event.getItemStack());
                 for (String key : tag.getKeySet()) {
-                    event.getToolTip().add(ChatFormatting.DARK_AQUA + " - " + key + ": " + tag.getTag(key).toString());
+                    addParameter(event, key, tag.getTag(key));
                 }
             } else {
-                event.getToolTip().add(ChatFormatting.DARK_AQUA + " - No NBT Tags");
+                addFormatted(event, " - No NBT Tags");
             }
         }
     }
@@ -82,13 +107,13 @@ public class ItemToolTipHandler {
     @SubscribeEvent
     public void addOreDictInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableOreDictTooltips && !event.getItemStack().isEmpty()) {
-            event.getToolTip().add(ChatFormatting.DARK_AQUA + "OreDict:");
+            addCategory(event, "OreDict");
             final int[] ids = OreDictionary.getOreIDs(event.getItemStack());
             for (int id : ids) {
-                event.getToolTip().add(ChatFormatting.DARK_AQUA + " - " + OreDictionary.getOreName(id) + " (" + id + ")");
+                addFormatted(event, " - {1} ({0})", id, OreDictionary.getOreName(id));
             }
             if (ids.length == 0) {
-                event.getToolTip().add(ChatFormatting.DARK_AQUA + " - No OreDict Entries");
+                addFormatted(event, " - No OreDict Entries");
             }
         }
     }

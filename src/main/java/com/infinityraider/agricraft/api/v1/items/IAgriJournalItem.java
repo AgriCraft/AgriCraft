@@ -2,6 +2,8 @@ package com.infinityraider.agricraft.api.v1.items;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -16,23 +18,23 @@ import net.minecraft.item.ItemStack;
 public interface IAgriJournalItem extends IAgriCraftItem {
 
     /**
-     * Checks if a seed is discovered in the journal
+     * Checks if a plant is discovered in the journal.
      *
-     * @param journal an ItemStack holding the journal
-     * @param seed an ItemStack containing a seed
-     * @return if the seed is discovered in the journal
+     * @param journal an ItemStack holding the journal.
+     * @param plant the plant to check for in the journal.
+     * @return if the seed is discovered in the journal.
      */
-    boolean isSeedDiscovered(ItemStack journal, IAgriPlant plant);
+    boolean isSeedDiscovered(@Nonnull ItemStack journal, @Nullable IAgriPlant plant);
 
     /**
      * This adds an entry the journal, for example when a seed is analyzed in
      * the seed analyzer this method is called. This internally checks if the
      * seed is discovered already before adding to prevent duplicate entries
      *
-     * @param journal an ItemStack holding the journal
-     * @param seed an ItemStack containing a seed
+     * @param journal an ItemStack holding the journal.
+     * @param plant the plant to add to the journal.
      */
-    void addEntry(ItemStack journal, IAgriPlant plant);
+    void addEntry(@Nonnull ItemStack journal, @Nullable IAgriPlant plant);
 
     /**
      * Gets an ArrayList containing all seeds discovered in this journal
@@ -41,5 +43,6 @@ public interface IAgriJournalItem extends IAgriCraftItem {
      * @return an ArrayList containing an ItemStack for every discovered seed
      * (the list may be empty but will never be null)
      */
-    List<IAgriPlant> getDiscoveredSeeds(ItemStack journal);
+    @Nonnull
+    List<IAgriPlant> getDiscoveredSeeds(@Nonnull ItemStack journal);
 }

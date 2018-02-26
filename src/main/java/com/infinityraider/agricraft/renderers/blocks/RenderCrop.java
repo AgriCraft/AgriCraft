@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCrop extends RenderBlockWithTileBase<BlockCrop, TileEntityCrop> {
 
-    public static ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("agricraft:blocks/crop");
 
     private Map<VertexFormat, List<BakedQuad>[]> cropQuads;
 

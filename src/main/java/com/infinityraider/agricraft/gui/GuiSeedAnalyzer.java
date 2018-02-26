@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiSeedAnalyzer extends ComponentGui<ContainerSeedAnalyzer> {
 
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_seed_analyzer.png");
+    public static final ResourceLocation ANALYZER_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_seed_analyzer.png");
 
     public TileEntitySeedAnalyzer seedAnalyzer;
 
@@ -27,7 +27,7 @@ public class GuiSeedAnalyzer extends ComponentGui<ContainerSeedAnalyzer> {
     @Override
     protected void onComponentGuiInit(AgriGuiWrapper wrapper) {
         final String name = AgriCore.getTranslator().translate("agricraft_gui.seedAnalyzer");
-        this.addBackground(texture);
+        this.addBackground(ANALYZER_TEXTURE);
         this.addComponent(BasicComponents.getButtonComponent("", 131, 67, 18, 18, (c, p) -> openJournal(wrapper)));
         this.addComponent(BasicComponents.getTextComponent(name, this.getWidth() / 2, 6, 1.0, true));
         this.addComponent(BasicComponents.getProgressBarComponent(() -> this.seedAnalyzer.getProgressScaled(100), 66, 78, 44, 8));

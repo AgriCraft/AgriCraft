@@ -3,6 +3,8 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
 import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  *
@@ -16,7 +18,7 @@ public interface IAgriPlantAcceptor {
      * @param plant the plant to validate for the instance.
      * @return if the plant is valid for the instance.
      */
-    boolean acceptsPlant(IAgriPlant plant);
+    boolean acceptsPlant(@Nullable IAgriPlant plant);
 
     /**
      * Sets the AgriPlant associated with this instance. Should always return
@@ -25,13 +27,14 @@ public interface IAgriPlantAcceptor {
      * @param plant the plant to associate with this instance.
      * @return if the plant was successfully associated with the instance.
      */
-    boolean setPlant(IAgriPlant plant);
+    boolean setPlant(@Nullable IAgriPlant plant);
 
     /**
      * Removes the AgriPlant associated with this instance.
      *
      * @return the removed plant, or the empty optional if no plant was removed.
      */
+    @Nonnull
     Optional<IAgriPlant> removePlant();
 
 }

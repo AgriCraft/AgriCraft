@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.storage;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
@@ -18,6 +19,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -117,7 +119,11 @@ public class TileEntitySeedStorage extends TileEntityCustomWood implements ISeed
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addDisplayInfo(Consumer<String> information) {
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Validate
+        Preconditions.checkNotNull(information);
+        
+        // Add Information
         final String tool = AgriCore.getTranslator().translate("agricraft_tooltip.storage");
         final String none = AgriCore.getTranslator().translate("agricraft_tooltip.none");
         information.accept(tool + ": " + this.getLockedSeed().map(s -> s.getPlant().getPlantName()).orElse(none));

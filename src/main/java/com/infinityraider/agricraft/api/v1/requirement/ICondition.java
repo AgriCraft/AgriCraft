@@ -2,7 +2,8 @@
  */
 package com.infinityraider.agricraft.api.v1.requirement;
 
-import java.util.List;
+import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -41,14 +42,13 @@ public interface ICondition {
      * @return {@literal true} <i>if-and-only-if</i> this condition is met at
      * the provided location in the given world, {@literal false} otherwise.
      */
-    boolean isMet(IBlockAccess world, BlockPos pos);
+    boolean isMet(@Nonnull IBlockAccess world, @Nonnull BlockPos pos);
 
     /**
      * Adds a detailed description of the condition to the provided list.
      *
-     * @param lines The list of lines this condition's description should be
-     * added to.
+     * @param consumer a consumer accepting the lines of text of the condition's description.
      */
-    void addDescription(List<String> lines);
+    void addDescription(@Nonnull Consumer<String> consumer);
 
 }

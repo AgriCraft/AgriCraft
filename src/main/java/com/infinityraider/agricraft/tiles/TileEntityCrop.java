@@ -49,6 +49,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // <editor-fold>
     // =========================================================================
     @Override
+    @Nonnull
     public MethodResult onGrowthTick() {
         // If remote world, pass.
         if (this.isRemote()) {
@@ -75,6 +76,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
+    @Nonnull
     public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player) {
         // Ensure seed is valid.
         Preconditions.checkNotNull(seed, "Cannot apply a null seed!");
@@ -118,6 +120,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
+    @Nonnull
     public MethodResult onApplyCrops(@Nullable EntityPlayer player) {
         // If on client side do nothing!
         if (this.isRemote()) {
@@ -137,6 +140,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
+    @Nonnull
     public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
         // Verify the consumer is not null.
         Preconditions.checkNotNull(consumer);
@@ -167,7 +171,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // Misc. Methods
     // <editor-fold>
     // =========================================================================
-    public void getDrops(Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
+    public void getDrops(@Nonnull Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
         // Check that the consumer is not null.
         Preconditions.checkNotNull(consumer);
         
@@ -206,7 +210,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public boolean acceptsSeed(AgriSeed seed) {
+    public boolean acceptsSeed(@Nullable AgriSeed seed) {
         return (!this.crossCrop) && (this.seed == null || seed == null);
     }
 
@@ -222,7 +226,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * @return true if this changed the seed and caused an update.
      */
     @Override
-    public boolean setSeed(AgriSeed seed) {
+    public boolean setSeed(@Nullable AgriSeed seed) {
         // Check if the new value is already equal to the current seed. (I.e. same plant and same stats.)
         if (seed != null ? seed.equals(this.seed) : this.seed == null) {
             // No change to make.
@@ -336,8 +340,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public boolean isFertile(IAgriPlant plant) {
-        return this.getWorld().isAirBlock(this.pos.up())
+    public boolean isFertile(@Nullable IAgriPlant plant) {
+        return (plant != null)
+                && this.getWorld().isAirBlock(this.pos.up())
                 && plant.getGrowthRequirement().isMet(this.getWorld(), pos);
     }
 
@@ -352,6 +357,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
+    @Nonnull
     public Optional<IAgriSoil> getSoil() {
         final IBlockState state = this.getWorld().getBlockState(this.pos.down());
         return AgriApi.getSoilRegistry().get(state);
@@ -390,15 +396,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return false;
         }
 
-        // Fetch the seed;
-        final AgriSeed seed = this.getSeed();
-
         // If don't have plant, abort.
-        if (seed == null) {
+        if (this.seed == null) {
             return false;
         }
 
-        final IAgriPlant plant = seed.getPlant();
+        final IAgriPlant plant = this.seed.getPlant();
 
         // Try to spread in each direction.
         for (IAgriCrop crop : WorldHelper.getTileNeighbors(this.getWorld(), pos, IAgriCrop.class)) {
@@ -408,12 +411,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
                 final AgriSeed other = crop.getSeed();
                 if (other == null) {
                     if (!crop.isCrossCrop()) {
-                        crop.setSeed(seed);
+                        crop.setSeed(this.seed);
                         return true;
                     }
-                } else if (canOvertake(seed, other, this.getRandom())) {
+                } else if (canOvertake(this.seed, other, this.getRandom())) {
                     crop.setCrossCrop(false);
-                    crop.setSeed(seed);
+                    crop.setSeed(this.seed);
                     return true;
                 }
 
@@ -424,7 +427,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         return false;
     }
 
-    public static boolean canOvertake(AgriSeed overtaker, AgriSeed victim, Random rand) {
+    public static boolean canOvertake(@Nonnull AgriSeed overtaker, @Nonnull AgriSeed victim, @Nonnull Random rand) {
         return overtaker.getPlant().isAggressive()
                 && victim.getStat().getStrength() < overtaker.getStat().getStrength() * rand.nextDouble();
     }
@@ -433,9 +436,13 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IAgriFertilizable Methods
     // =========================================================================
     @Override
-    public boolean acceptsFertilizer(IAgriFertilizer fertilizer) {
+    public boolean acceptsFertilizer(@Nullable IAgriFertilizer fertilizer) {
+        // If the fertilizer is null, then well, no.
+        if (fertilizer == null) {
+            return false;
+        }
         // First check if this is a cross crops. In all other cases this is a regular crop.
-        if (this.crossCrop) {
+        else if (this.crossCrop) {
             // This is a cross crop.
             // + A cross over (e.g. mutation) can occur if both requirements are met.
             // - Otherwise the fertilizer usage is blocked by returning false.
@@ -444,20 +451,25 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             // This is a regular crop, AND it is empty.
             // + Random plants (such as weeds) have a chance to spawn.
             return true;
-        } else if (this.getSeed().getPlant().isFertilizable()) {
+        } else {
             // This is a regular crop, AND it has a plant, AND that plant allows boosts from fertilizers.
             // + Immature plants can grow.
             // + Fully grown plants have a chance to spread clones to neighboring crops
-            return true;
-        } else {
+            // return true;
             // This is a regular crop, AND it has a plant, AND that plant does NOT allow fertilizers.
             // - Block the consumption and application of the fertilizer by returning false.
-            return false;
+            // return false;
+            return this.getSeed().getPlant().isFertilizable();
         }
     }
 
     @Override
-    public MethodResult onApplyFertilizer(IAgriFertilizer fertilizer, Random rand) {
+    @Nonnull
+    public MethodResult onApplyFertilizer(@Nullable IAgriFertilizer fertilizer, @Nonnull Random rand) {
+        // Validate
+        Preconditions.checkNotNull(rand);
+        
+        // Do stuff
         if (this.isRemote()) {
             // The client doesn't need to do anything special.
             return MethodResult.PASS;
@@ -476,6 +488,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // IHarvestable methods.
     // =========================================================================
     @Override
+    @Nonnull
     public MethodResult onHarvest(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player) {
         // Check that consumer is not null.
         Preconditions.checkNotNull(consumer);
@@ -518,7 +531,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // Other
     // =========================================================================
     @Override
-    public void writeTileNBT(NBTTagCompound tag) {
+    public void writeTileNBT(@Nonnull NBTTagCompound tag) {
+        Preconditions.checkNotNull(tag);
         tag.setBoolean(AgriNBT.CROSS_CROP, crossCrop);
         tag.setInteger(AgriNBT.META, growthStage);
         if (this.hasSeed()) {
@@ -528,7 +542,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void readTileNBT(NBTTagCompound tag) {
+    public void readTileNBT(@Nonnull NBTTagCompound tag) {
+        Preconditions.checkNotNull(tag);
         final IAgriStat stat = AgriApi.getStatRegistry().valueOf(tag).orElse(null);
         final IAgriPlant plant = AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.SEED)).orElse(null);
         if (stat != null && plant != null) {
@@ -579,7 +594,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void addServerDebugInfo(Consumer<String> consumer) {
+    public void addServerDebugInfo(@Nonnull Consumer<String> consumer) {
+        Preconditions.checkNotNull(consumer);
         consumer.accept("CROP:");
         if (this.crossCrop) {
             consumer.accept(" - This is a crosscrop");
@@ -610,14 +626,17 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public void addClientDebugInfo(Consumer<String> consumer) {
+    public void addClientDebugInfo(@Nonnull Consumer<String> consumer) {
+        Preconditions.checkNotNull(consumer);
         if (this.hasSeed()) {
             consumer.accept(" - Texture: " + this.getSeed().getPlant().getPrimaryPlantTexture(this.getGrowthStage()).toString());
         }
     }
 
     @Override
-    public void addDisplayInfo(Consumer<String> information) {
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Validate
+        Preconditions.checkNotNull(information);
 
         // Add Soil Information
         information.accept("Soil: " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));

@@ -22,6 +22,7 @@ public interface IAgriApiConnector {
     
     IAgriApiConnector FAKE = new AgriApiConnectorFake();
     
+    @Nonnull
     AgriApiState getState();
     
     @Nonnull

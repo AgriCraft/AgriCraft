@@ -4,10 +4,8 @@ package com.infinityraider.agricraft.utility;
 
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;

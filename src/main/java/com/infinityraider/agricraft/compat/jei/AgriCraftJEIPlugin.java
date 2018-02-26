@@ -23,7 +23,7 @@ public class AgriCraftJEIPlugin implements IModPlugin {
     public static final String CATEGORY_MUTATION = "agricraft.mutation";
     public static final String CATEGORY_PRODUCE = "agricraft.produce";
 
-    private static IJeiRuntime jeiRuntime;
+    private IJeiRuntime jeiRuntime = null;
 
     @Override
     public void register(@Nonnull IModRegistry registry) {
@@ -42,9 +42,9 @@ public class AgriCraftJEIPlugin implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntimeInstance) {
-        jeiRuntime = jeiRuntimeInstance;
-        AgriApi.getPlantRegistry().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
-        AgriApi.getMutationRegistry().all().forEach(jeiRuntime.getRecipeRegistry()::addRecipe);
+        this.jeiRuntime = jeiRuntimeInstance;
+        AgriApi.getPlantRegistry().all().forEach(this.jeiRuntime.getRecipeRegistry()::addRecipe);
+        AgriApi.getMutationRegistry().all().forEach(this.jeiRuntime.getRecipeRegistry()::addRecipe);
     }
 
     @Override

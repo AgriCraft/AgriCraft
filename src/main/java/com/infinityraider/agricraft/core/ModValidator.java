@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  *
@@ -42,8 +41,7 @@ public class ModValidator implements AgriValidator {
     @Override
     public boolean isValidTexture(String texture) {
         try {
-            ResourceLocation temp = new ResourceLocation(texture);
-            return true;
+            return new ResourceLocation(texture).toString().equalsIgnoreCase(texture);
         } catch (NullPointerException e) {
             return false;
         }

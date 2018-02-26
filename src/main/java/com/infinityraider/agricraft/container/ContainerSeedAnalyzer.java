@@ -40,12 +40,14 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
 
     public ContainerSeedAnalyzer(TileEntitySeedAnalyzer analyzer, InventoryPlayer inventory, SeedAnalyzerLayout layout) {
         super(analyzer, inventory, layout.offsetX, layout.offsetY);
+        
+        // Create a seed slot.
+        final SlotSeedAnalyzerSeed slotSeed = new SlotSeedAnalyzerSeed(this.getTile(), SEED_SLOT_ID, layout.seedSlotX, layout.seedSlotY);
+        final SlotSeedAnalyzerJournal slotJournal = new SlotSeedAnalyzerJournal(this.getTile(), JOURNAL_SLOT_ID, layout.journalSlotX, layout.journalSlotY);
 
-        // Add the seed slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerSeed(this.getTile(), SEED_SLOT_ID, layout.seedSlotX, layout.seedSlotY));
-
-        // Add the journal slot to the container.
-        this.addSlotToContainer(new SlotSeedAnalyzerJournal(this.getTile(), JOURNAL_SLOT_ID, layout.journalSlotX, layout.journalSlotY));
+        // Add the slots to the container.
+        this.addSlotToContainer(slotSeed);
+        this.addSlotToContainer(slotJournal);
     }
 
     @Override

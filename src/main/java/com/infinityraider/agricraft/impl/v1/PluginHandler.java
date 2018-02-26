@@ -21,6 +21,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -31,14 +32,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public final class PluginHandler {
 
-    private static final Deque<IAgriPlugin> plugins = new ConcurrentLinkedDeque<>();
+    @Nonnull
+    private static final Deque<IAgriPlugin> PLUGINS = new ConcurrentLinkedDeque<>();
 
     public static void preInit(FMLPreInitializationEvent event) {
-        plugins.addAll(getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class));
+        PLUGINS.addAll(getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class));
     }
 
     public static void init() {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::initPlugin);
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::initPlugin);
     }
 
     public static void postInit() {
@@ -53,39 +55,39 @@ public final class PluginHandler {
     }
 
     public static void loadTextures(Consumer<ResourceLocation> registry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerTextures(registry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerTextures(registry));
     }
 
     public static void registerSoils(IAgriRegistry<IAgriSoil> soilRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoils(soilRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoils(soilRegistry));
     }
 
     public static void registerPlants(IAgriRegistry<IAgriPlant> plantRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerPlants(plantRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerPlants(plantRegistry));
     }
 
     public static void registerMutations(IAgriMutationRegistry mutationRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerMutations(mutationRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerMutations(mutationRegistry));
     }
 
     public static void registerStats(IAgriAdapterizer<IAgriStat> statRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
     }
 
     public static void registerSeeds(IAgriAdapterizer<AgriSeed> seedRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(seedRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(seedRegistry));
     }
 
     public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(fertilizerRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(fertilizerRegistry));
     }
 
     public static void registerStatCalculators(IAgriAdapterizer<IAgriStatCalculator> calculatorRegistry) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStatCalculators(calculatorRegistry));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStatCalculators(calculatorRegistry));
     }
 
     public static void registerCrossStrategies(IAgriMutationEngine mutationEngine) {
-        plugins.stream().filter(IAgriPlugin::isEnabled).forEach(p -> p.registerCrossStrategies(mutationEngine));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(p -> p.registerCrossStrategies(mutationEngine));
     }
 
     /**
@@ -99,8 +101,9 @@ public final class PluginHandler {
      * @param type The class type to load, as to get around Type erasure.
      * @return A list of the loaded classes, instantiated.
      */
+    @Nonnull
     private static <T> List<T> getInstances(ASMDataTable asm, Class anno, Class<T> type) {
-        List<T> instances = new ArrayList<>();
+        final List<T> instances = new ArrayList<>();
         for (ASMDataTable.ASMData asmData : asm.getAll(anno.getCanonicalName())) {
             try {
                 T instance = Class.forName(asmData.getClassName()).asSubclass(type).newInstance();

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.analyzer;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -454,7 +455,11 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
     }
 
     @Override
-    public void addDisplayInfo(Consumer<String> information) {
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Validate
+        Preconditions.checkNotNull(information);
+        
+        // Add Information
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.analyzer") + ": " + (this.hasSpecimen() ? specimen.getDisplayName() : AgriCore.getTranslator().translate("agricraft_tooltip.none")));
     }
 }

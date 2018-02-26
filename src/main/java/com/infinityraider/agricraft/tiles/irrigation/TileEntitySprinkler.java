@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
 import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
@@ -28,6 +29,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent, IAgriDisplayable {
 
@@ -341,7 +343,11 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addDisplayInfo(Consumer<String> information) {
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Validate
+        Preconditions.checkNotNull(information);
+        
+        // Add Information
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + BUFFER_CAP);
     }
 

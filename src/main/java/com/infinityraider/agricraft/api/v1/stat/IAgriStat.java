@@ -18,6 +18,7 @@ public interface IAgriStat {
      *
      * @return the stat's id.
      */
+    @Nonnull
     default String getId() {
         return this.getClass().getCanonicalName();
     }

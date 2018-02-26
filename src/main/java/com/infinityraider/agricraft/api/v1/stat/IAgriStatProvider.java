@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.api.v1.stat;
 
 import java.util.Optional;
+import javax.annotation.Nonnull;
 
 /**
  * Interface for objects that have AgriStats.
@@ -23,6 +24,7 @@ public interface IAgriStatProvider {
      *
      * @return the stat associated with the instance or the empty optional.
      */
+    @Nonnull
     Optional<IAgriStat> getStat();
 
 }

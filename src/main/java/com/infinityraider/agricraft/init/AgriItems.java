@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.items.ItemNugget;
 import com.infinityraider.agricraft.items.ItemRake;
 import com.infinityraider.agricraft.items.ItemTrowel;
 import com.infinityraider.infinitylib.item.ItemBase;
+import javax.annotation.Nonnull;
 
 public class AgriItems {
 
@@ -33,15 +34,15 @@ public class AgriItems {
         MAGNIFYING_GLASS = new ItemMagnifyingGlass();
     }
 
-    public final ItemBase CROPS;
-    public final ItemBase JOURNAL;
-    public final ItemBase TROWEL;
-    public final ItemBase DEBUGGER;
-    public final ItemBase HAND_RAKE;
-    public final ItemBase CLIPPER;
-    public final ItemBase AGRI_CLIPPING;
-    public final ItemBase AGRI_SEED;
-    public final ItemBase AGRI_NUGGET;
-    public final ItemBase MAGNIFYING_GLASS;
+    @Nonnull public final ItemBase CROPS;
+    @Nonnull public final ItemBase JOURNAL;
+    @Nonnull public final ItemBase TROWEL;
+    @Nonnull public final ItemBase DEBUGGER;
+    @Nonnull public final ItemBase HAND_RAKE;
+    @Nonnull public final ItemBase CLIPPER;
+    @Nonnull public final ItemBase AGRI_CLIPPING;
+    @Nonnull public final ItemBase AGRI_SEED;
+    @Nonnull public final ItemBase AGRI_NUGGET;
+    @Nonnull public final ItemBase MAGNIFYING_GLASS;
 
 }

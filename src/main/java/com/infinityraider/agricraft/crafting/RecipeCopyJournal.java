@@ -17,7 +17,7 @@ public class RecipeCopyJournal extends IForgeRegistryEntry.Impl<IRecipe> impleme
         boolean foundBook = false;
         for (int i = 0; i < invCrafting.getSizeInventory(); i++) {
             ItemStack stackAtIndex = invCrafting.getStackInSlot(i);
-            if (stackAtIndex != null && stackAtIndex.getItem() != null) {
+            if (!stackAtIndex.isEmpty() && stackAtIndex.getItem() != null) {
                 if (stackAtIndex.getItem() instanceof ItemJournal) {
                     if (!foundJournal) {
                         foundJournal = true;

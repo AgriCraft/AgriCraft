@@ -30,7 +30,7 @@ public final class AgriApi {
 
     public static final String API_ID = "agricraft-api-v1";
 
-    private static final IAgriApiConnector connector = connect();
+    private static final IAgriApiConnector CONNECTOR = connect();
 
     /**
      * Determines the current state of the AgriCraft API.
@@ -41,8 +41,9 @@ public final class AgriApi {
      *
      * @return the current state of the AgriCraft API.
      */
+    @Nonnull
     AgriApiState getState() {
-        return AgriApi.connector.getState();
+        return AgriApi.CONNECTOR.getState();
     }
 
     /**
@@ -55,7 +56,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriRegistry<IAgriPlant> getPlantRegistry() {
-        return AgriApi.connector.connectPlantRegistry();
+        return AgriApi.CONNECTOR.connectPlantRegistry();
     }
 
     /**
@@ -68,7 +69,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriMutationRegistry getMutationRegistry() {
-        return AgriApi.connector.connectMutationRegistry();
+        return AgriApi.CONNECTOR.connectMutationRegistry();
     }
 
     /**
@@ -81,7 +82,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriSoilRegistry getSoilRegistry() {
-        return AgriApi.connector.connectSoilRegistry();
+        return AgriApi.CONNECTOR.connectSoilRegistry();
     }
 
     /**
@@ -94,7 +95,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriAdapterizer<IAgriStat> getStatRegistry() {
-        return AgriApi.connector.connectStatRegistry();
+        return AgriApi.CONNECTOR.connectStatRegistry();
     }
 
     /**
@@ -107,7 +108,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriAdapterizer<IAgriStatCalculator> getStatCalculatorRegistry() {
-        return AgriApi.connector.connectStatCalculatorRegistry();
+        return AgriApi.CONNECTOR.connectStatCalculatorRegistry();
     }
 
     /**
@@ -120,7 +121,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriMutationEngine getMutationEngine() {
-        return AgriApi.connector.connectMutationEngine();
+        return AgriApi.CONNECTOR.connectMutationEngine();
     }
 
     /**
@@ -133,7 +134,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriAdapterizer<AgriSeed> getSeedRegistry() {
-        return AgriApi.connector.connectSeedRegistry();
+        return AgriApi.CONNECTOR.connectSeedRegistry();
     }
 
     /**
@@ -146,7 +147,7 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriAdapterizer<IAgriFertilizer> getFertilizerRegistry() {
-        return AgriApi.connector.connectFertilizerRegistry();
+        return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
 
     /**

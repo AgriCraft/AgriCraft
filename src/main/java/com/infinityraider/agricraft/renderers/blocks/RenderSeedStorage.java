@@ -60,7 +60,7 @@ public class RenderSeedStorage extends RenderBlockCustomWood<BlockSeedStorage, T
      * Render the seed as TESR
      */
     private void drawSeed(ITessellator tess, ItemStack seed) {
-        if (seed == null || seed.getItem() == null) {
+        if (seed.isEmpty() || seed.getItem() == null) {
             return;
         }
 

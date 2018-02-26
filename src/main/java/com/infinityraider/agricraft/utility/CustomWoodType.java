@@ -1,8 +1,11 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -19,13 +22,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class CustomWoodType {
 
+    @Nonnull
     private final Block block;
     private final int meta;
+    @Nullable
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite texture;
 
-    protected CustomWoodType(Block block, int meta) {
-        this.block = block;
+    protected CustomWoodType(@Nonnull Block block, int meta) {
+        this.block = Preconditions.checkNotNull(block);
         this.meta = meta;
     }
 
@@ -45,6 +50,7 @@ public class CustomWoodType {
         return new ItemStack(getBlock(), 1, getMeta());
     }
 
+    // TODO: Address NPE possibility.
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tag.setString(AgriNBT.MATERIAL, this.getBlock().getRegistryName().toString());
         tag.setInteger(AgriNBT.MATERIAL_META, this.getMeta());
@@ -61,6 +67,11 @@ public class CustomWoodType {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getBlock(), this.getMeta());
     }
 
     @Override

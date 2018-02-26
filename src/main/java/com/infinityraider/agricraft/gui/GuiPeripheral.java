@@ -173,6 +173,9 @@ public class GuiPeripheral extends GuiContainer {
                 case BUTTON_ID_SCROLL_TOP:
                     scroll(-scrollPosition);
                     break;
+                default:
+                    // Do nothing.
+                    break;
             }
         }
     }

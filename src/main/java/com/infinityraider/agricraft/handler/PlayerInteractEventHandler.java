@@ -190,7 +190,7 @@ public class PlayerInteractEventHandler {
             return;
         }
         ItemStack heldItem = event.getEntityPlayer().getActiveItemStack();
-        if (heldItem != null && heldItem.getItem() == Items.DYE && heldItem.getItemDamage() == 15) {
+        if (!heldItem.isEmpty() && heldItem.getItem() == Items.DYE && heldItem.getItemDamage() == 15) {
             TileEntity te = event.getWorld().getTileEntity(event.getPos());
             if (te != null && (te instanceof TileEntityCrop)) {
                 event.setUseItem(Event.Result.DENY);

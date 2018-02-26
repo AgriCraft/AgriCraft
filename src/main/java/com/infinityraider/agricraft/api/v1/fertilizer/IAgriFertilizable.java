@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.api.v1.fertilizer;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import java.util.Random;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * An interface for fertilizable things.
@@ -34,7 +35,7 @@ public interface IAgriFertilizable {
      *             and there is a plant in it,
      *             and the plant does not allow fertilizing.
      */
-    boolean acceptsFertilizer(IAgriFertilizer fertilizer);
+    boolean acceptsFertilizer(@Nullable IAgriFertilizer fertilizer);
 
     /**
      * Apply the specified fertilizer to this crop.
@@ -52,6 +53,6 @@ public interface IAgriFertilizable {
      *                 and fertilizer should NOT be consumed.
      */
     @Nonnull
-    MethodResult onApplyFertilizer(IAgriFertilizer fertilizer, Random rand);
+    MethodResult onApplyFertilizer(@Nullable IAgriFertilizer fertilizer, @Nonnull Random rand);
 
 }

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.block.BlockLever;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -77,10 +78,10 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addDisplayInfo(Consumer<String> information) {
-        //Required super call
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Required super call (handles validation for us).
         super.addDisplayInfo(information);
-        //show status
+        // show status
         String status = AgriCore.getTranslator().translate(powered ? "agricraft_tooltip.closed" : "agricraft_tooltip.open");
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.state") + ": " + status);
     }

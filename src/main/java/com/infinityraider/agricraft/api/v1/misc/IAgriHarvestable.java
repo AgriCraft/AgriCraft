@@ -29,6 +29,7 @@ public interface IAgriHarvestable {
      * harvested by automation.
      * @return if the harvest was successful.
      */
+    @Nonnull
     MethodResult onHarvest(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
 
 }

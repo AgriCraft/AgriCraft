@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import java.util.function.Function;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

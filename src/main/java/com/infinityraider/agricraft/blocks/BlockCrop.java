@@ -55,7 +55,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
-    public static final Class[] ITEM_EXCLUDES = new Class[]{
+    static final Class[] ITEM_EXCLUDES = new Class[]{
         IAgriRakeItem.class,
         IAgriClipperItem.class,
         IAgriTrowelItem.class,

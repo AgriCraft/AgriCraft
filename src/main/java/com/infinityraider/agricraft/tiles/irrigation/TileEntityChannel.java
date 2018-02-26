@@ -12,6 +12,7 @@ import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -180,7 +181,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                     float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum Y1 of the channel
                     float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum Y1 of the channel
                     int V_tot = tank.getFluidAmount(0) + updatedLevel;
-                    if (y_c != y_t) {
+                    // Following change was suggested by findbugs.
+                    if (Math.abs(y_c - y_t) < 0.0001) {
                         //total volume is below the channel connection
                         if (y_t <= y1) {
                             updatedLevel = 0;
@@ -289,8 +291,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addDisplayInfo(Consumer<String> information) {
-        //Required call to super.
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        //Required call to super (handles validation for us).
         super.addDisplayInfo(information);
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
     }

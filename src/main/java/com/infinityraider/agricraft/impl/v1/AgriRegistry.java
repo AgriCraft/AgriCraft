@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 /**
  * Basic IAgriRegistry implementation.
+ * 
+ * @param <T> The type of the registry.
  */
 public class AgriRegistry<T extends IAgriRegisterable> implements IAgriRegistry<T> {
     

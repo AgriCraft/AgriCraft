@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
@@ -144,7 +145,10 @@ public class TileEntityCustomWood extends TileEntityRotatableBase implements IDe
     }
 
     @Override
-    public void addDisplayInfo(Consumer<String> information) {
+    public void addDisplayInfo(@Nonnull Consumer<String> information) {
+        // Validate
+        Preconditions.checkNotNull(information);
+        // Add Information
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.material") + ": " + getMaterialStack().getDisplayName());
     }
 }

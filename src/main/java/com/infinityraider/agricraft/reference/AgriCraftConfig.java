@@ -29,6 +29,8 @@ public class AgriCraftConfig {
     // Debug
     @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "debug", comment = "Set to true to enable debug mode.")
     public static boolean debug = false;
+    @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "Display Registry ToolTips", comment = "Set to true to add Registry information to itemstack tooltips.")
+    public static boolean enableRegistryTooltips = false;
     @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "Display OreDict Tooltips", comment = "Set to true to add OreDict info to itemstack tooltips.")
     public static boolean enableOreDictTooltips = false;
     @AgriConfigurable(category = AgriConfigCategory.DEBUG, key = "Display NBT Tooltips", comment = "Set to true to add NBT info to itemstack tooltips.")

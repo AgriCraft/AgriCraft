@@ -60,7 +60,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
         return this.container;
     }
 
-    public final void resetMouse() {
+    public final synchronized void resetMouse() {
         this.lastMouseX = -1;
         this.lastMouseY = -1;
     }

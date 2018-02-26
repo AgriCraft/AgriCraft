@@ -14,6 +14,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -21,14 +22,14 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
  */
 public class AgriApiConnector implements IAgriApiConnector {
     
-    private final IAgriRegistry<IAgriPlant> plantRegistry;
-    private final IAgriMutationRegistry mutationRegistry;
-    private final IAgriSoilRegistry soilRegistry;
-    private final IAgriAdapterizer<IAgriStat> statRegistry;
-    private final IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry;
-    private final IAgriMutationEngine mutationEngine;
-    private final IAgriAdapterizer<AgriSeed> seedRegistry;
-    private final IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry;
+    @Nonnull private final IAgriRegistry<IAgriPlant> plantRegistry;
+    @Nonnull private final IAgriMutationRegistry mutationRegistry;
+    @Nonnull private final IAgriSoilRegistry soilRegistry;
+    @Nonnull private final IAgriAdapterizer<IAgriStat> statRegistry;
+    @Nonnull private final IAgriAdapterizer<IAgriStatCalculator> statCalculatorRegistry;
+    @Nonnull private final IAgriMutationEngine mutationEngine;
+    @Nonnull private final IAgriAdapterizer<AgriSeed> seedRegistry;
+    @Nonnull private final IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry;
 
     public AgriApiConnector() {
         this.plantRegistry = new AgriRegistry<>();
@@ -42,46 +43,55 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
+    @Nonnull
     public AgriApiState getState() {
         return AgriApiState.VALID;
     }
 
     @Override
+    @Nonnull
     public IAgriRegistry<IAgriPlant> connectPlantRegistry() {
         return this.plantRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriMutationRegistry connectMutationRegistry() {
         return this.mutationRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriSoilRegistry connectSoilRegistry() {
         return this.soilRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriStat> connectStatRegistry() {
         return this.statRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriStatCalculator> connectStatCalculatorRegistry() {
         return this.statCalculatorRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriMutationEngine connectMutationEngine() {
         return this.mutationEngine;
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<AgriSeed> connectSeedRegistry() {
         return this.seedRegistry;
     }
 
     @Override
+    @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerRegistry;
     }

@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,6 +32,7 @@ public interface IGrowthRequirement {
      * @return A list containing all the soils valid for this growth
      * requirement.
      */
+    @Nonnull
     Collection<IAgriSoil> getSoils();
 
     /**
@@ -40,6 +42,7 @@ public interface IGrowthRequirement {
      * @return A list containing all the conditions that compose this growth
      * requirement.
      */
+    @Nonnull
     Collection<ICondition> getConditions();
 
     /**
@@ -121,7 +124,7 @@ public interface IGrowthRequirement {
      * @return {@literal true} <i>if-and-only-if</i> all portions of the growth
      * requirement are met, {@literal} false otherwise.
      */
-    boolean isMet(World world, BlockPos pos);
+    boolean isMet(@Nonnull World world, @Nonnull BlockPos pos);
 
     /**
      * Returns a representative ItemStack for display in the 'condition' slot in
@@ -134,6 +137,7 @@ public interface IGrowthRequirement {
      * @return A representative ItemStack for display in JEI.
      */
     @Deprecated
+    @Nonnull
     Optional<FuzzyStack> getConditionStack();
 
 }

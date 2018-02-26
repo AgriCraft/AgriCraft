@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class PlayerConnectToServerHandler {
 
-    private static final AgriLogger log = AgriCore.getLogger("agricraft-net");
+    private static final AgriLogger LOG = AgriCore.getLogger("agricraft-net");
 
     @SubscribeEvent
     @SuppressWarnings("unused")
@@ -27,39 +27,39 @@ public class PlayerConnectToServerHandler {
     }
 
     private void syncSoils(EntityPlayerMP player) {
-        log.debug("Sending soils to player: " + player.getDisplayNameString());
+        LOG.debug("Sending soils to player: " + player.getDisplayNameString());
         final int count = AgriCore.getSoils().getAll().size();
         Iterator<AgriSoil> it = AgriCore.getSoils().getAll().iterator();
         for (int i = 0; it.hasNext(); i++) {
             AgriSoil soil = it.next();
-            log.debug("Sending Soil: {0} ({1} of {2})", soil, i + 1, count);
+            LOG.debug("Sending Soil: {0} ({1} of {2})", soil, i + 1, count);
             new MessageSyncSoilJson(soil, i, count).sendTo(player);
         }
-        log.debug("Finished sending soils to player: " + player.getDisplayNameString());
+        LOG.debug("Finished sending soils to player: " + player.getDisplayNameString());
     }
 
     private void syncPlants(EntityPlayerMP player) {
-        log.debug("Sending plants to player: " + player.getDisplayNameString());
+        LOG.debug("Sending plants to player: " + player.getDisplayNameString());
         final int count = AgriCore.getPlants().getAll().size();
         Iterator<AgriPlant> it = AgriCore.getPlants().getAll().iterator();
         for (int i = 0; it.hasNext(); i++) {
             AgriPlant plant = it.next();
-            log.debug("Sending plant: {0} ({1} of {2})", plant.getPlantName(), i + 1, count);
+            LOG.debug("Sending plant: {0} ({1} of {2})", plant.getPlantName(), i + 1, count);
             new MessageSyncPlantJson(plant, i, count).sendTo(player);
         }
-        log.debug("Finished sending plants to player: " + player.getDisplayNameString());
+        LOG.debug("Finished sending plants to player: " + player.getDisplayNameString());
     }
 
     private void syncMutations(EntityPlayerMP player) {
-        log.debug("Sending mutations to player: " + player.getDisplayNameString());
+        LOG.debug("Sending mutations to player: " + player.getDisplayNameString());
         final int count = AgriCore.getMutations().getAll().size();
         final Iterator<AgriMutation> it = AgriCore.getMutations().getAll().iterator();
         for (int i = 0; it.hasNext(); i++) {
             AgriMutation mutation = it.next();
-            log.debug("Sending mutation: ({0} of {1})", i + 1, count);
+            LOG.debug("Sending mutation: ({0} of {1})", i + 1, count);
             new MessageSyncMutationJson(mutation, i, count).sendTo(player);
         }
-        log.debug("Finished sending mutations to player: " + player.getDisplayNameString());
+        LOG.debug("Finished sending mutations to player: " + player.getDisplayNameString());
     }
 
 }
