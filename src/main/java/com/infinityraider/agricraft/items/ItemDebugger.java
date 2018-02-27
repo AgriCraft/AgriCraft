@@ -27,6 +27,7 @@ public class ItemDebugger extends ItemDebuggerBase implements IItemWithModel {
         list.add(new DebugModeCoreInfo());
         list.add(new DebugModeTestBlockRange()); // Just for temporary testing.
         list.add(new DebugModeIGrowable());
+        list.add(new DebugModeDiffLight());
         return list;
     }
 }

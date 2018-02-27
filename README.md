@@ -13,7 +13,9 @@ AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 |![1.7.10] | No more work will be done on 1.7.10 by [InfinityRaider](https://github.com/InfinityRaider) or [RlonRyan](https://github.com/InfinityRaider/AgriCraft/commits/master?author=RlonRyan), if you want to maintain 1.7.10, contact us on Discord
 |![1.8.9]  | The 1.8.9 branch was highly experimental and the rendering is one big hack. Don't expect anything.
 |![1.9]    | Skipped 1.9, as it was an incredibly short-lived release.
-|![1.10]   | Port in progress.
+|![1.10]   | Port finished, but not moved out of alpha.
+|![1.11]   | Skipped 1.11.
+|![1.12]   | Port in progress.
 
 ## Bug Reports [![bug]][bug-link]
 
@@ -31,7 +33,7 @@ this kind of information is, most of the time, only needed by pack creators and 
 [build-link]:https://travis-ci.org/AgriCraft/AgriCraft
 [build]:https://travis-ci.org/AgriCraft/AgriCraft.svg?branch=master "Travis-CI Build Status"
 [branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
-[minecraft]:https://agricraft.github.io/versions/1.10/minecraft.svg "Minecraft Version"
+[minecraft]:https://agricraft.github.io/versions/1.12/minecraft.svg "Minecraft Version"
 [curse-link]:http://agricraft.github.io/curse
 [curse]:http://cf.way2muchnoise.eu/full_agricraft_downloads.svg "CurseForge"
 [contact-link]:https://agricraft.github.io/contact
@@ -47,3 +49,5 @@ this kind of information is, most of the time, only needed by pack creators and 
 [1.8.9]:https://agricraft.github.io/versions/1.8.9/status.svg
 [1.9]:https://agricraft.github.io/versions/1.9/status.svg
 [1.10]:https://agricraft.github.io/versions/1.10/status.svg
+[1.11]:https://agricraft.github.io/versions/1.11/status.svg
+[1.12]:https://agricraft.github.io/versions/1.12/status.svg
