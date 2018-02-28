@@ -6,6 +6,8 @@ Changelog
 - ADDED:  Actually Additions Farmer support.
 - FIXED:  The mess that was CustomWoodRecipes is now a very nice system using 1.12's JSON recipe files.
 - FIXED:  Grates not placing properly. Grates now place in the proper location with the proper orientation.
+- FIXED:  Crops consuming seeds planted in creative mode.
+- FIXED:  Clippings not planting in crop instance.
 
 2.0.0a21
 - FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.

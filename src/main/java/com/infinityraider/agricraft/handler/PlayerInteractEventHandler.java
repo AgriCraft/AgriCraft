@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +31,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class PlayerInteractEventHandler {
 
     /**
-     * Event handler to disable vanilla farming
+     * Event handler to disable vanilla farming.
+     * 
+     * @param event
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
@@ -91,7 +92,7 @@ public class PlayerInteractEventHandler {
 
         // Should the server notify the player that vanilla farming has been disabled?
         if (AgriCraftConfig.showDisabledVanillaFarmingWarning) {
-            MessageUtil.messagePlayer(event.getEntityPlayer(), ChatFormatting.GRAY + "Vanilla planting is disabled!");
+            MessageUtil.messagePlayer(event.getEntityPlayer(), "`7Vanilla planting is disabled!`r");
         }
     }
 

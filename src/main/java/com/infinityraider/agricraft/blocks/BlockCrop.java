@@ -158,6 +158,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         if (seed.isPresent()) {
             if (crop.onApplySeeds(seed.get(), player) == MethodResult.SUCCESS) {
                 // Remove the consumed seed from the player's inventory.
+                // But only if the player was not in creative mode.
                 // For now we really don't care if the method fails,
                 // so not checking the method's result is ok.
                 StackHelper.decreaseStackSize(player, heldItem, 1);
@@ -166,7 +167,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
             }
         }
 
-        // Step 8. If we can't do anything else, give up and attemp to harvest instead.
+        // Step 8. If we can't do anything else, give up and attempt to harvest instead.
         crop.onHarvest((stack) -> WorldHelper.spawnItemInWorld(world, pos, stack), player);
 
         //Returning true will prevent other things from happening

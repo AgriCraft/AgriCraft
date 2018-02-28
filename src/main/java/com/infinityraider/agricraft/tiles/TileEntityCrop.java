@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.tiles;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.util.MathHelper;
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -79,7 +80,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Nonnull
     public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player) {
         // Ensure seed is valid.
-        Preconditions.checkNotNull(seed, "Cannot apply a null seed!");
+        Preconditions.checkNotNull(seed, "`7Cannot apply a null seed!`r");
 
         // If on client side do nothing!
         if (this.isRemote()) {
@@ -93,18 +94,18 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // If the soil is wrong, report and abort.
         if (!seed.getPlant().getGrowthRequirement().hasValidSoil(this.getWorld(), pos)) {
-            MessageUtil.messagePlayer(player, "The soil is not valid for this seed. You can't plant it here.");
+            MessageUtil.messagePlayer(player, "`7The soil is not valid for this seed. You can't plant it here.`r");
             return MethodResult.FAIL;
         }
 
         // If the additional conditions are wrong, warn and continue.
         if (!seed.getPlant().getGrowthRequirement().hasValidConditions(this.getWorld(), pos)) {
-            MessageUtil.messagePlayer(player, "Caution: This plant has additional requirements that are unmet.");
+            MessageUtil.messagePlayer(player, "`7Caution: This plant has additional requirements that are unmet.`r");
         }
 
         // If the lighting is wrong, warn and continue.
         if (!seed.getPlant().getGrowthRequirement().hasValidLight(this.getWorld(), pos)) {
-            MessageUtil.messagePlayer(player, "Caution: This plant won't grow with the current light level.");
+            MessageUtil.messagePlayer(player, "`7Caution: This plant won't grow with the current light level.`r");
         }
 
 //        // Notify event listeners of a planting event.
@@ -226,19 +227,19 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean setSeed(@Nullable AgriSeed seed) {
         // Check if the new value is already equal to the current seed. (I.e. same plant and same stats.)
-        if (seed != null ? seed.equals(this.seed) : this.seed == null) {
+        if (Objects.equal(this.seed, seed)) {
             // No change to make.
             return false;
         }
 
         // Otherwise set the seed to the new value.
         this.seed = seed;
+        
+        // Reset the growth stage.
+        this.growthStage = 0;
 
-        // Also reset the growth. This happens regardless of if we're adding, removing, or changing a seed.
-        if (!setGrowthStage(0)) {
-            // If setGrowthStage didn't cause an update already, then we make sure we do.
-            this.markForUpdate();
-        }
+        // Mark the tile for an update.
+        this.markForUpdate();
 
         // Finally report that a change and an update did occur.
         return true;

@@ -12,12 +12,13 @@ import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.render.item.ItemModelTexture;
+import com.infinityraider.infinitylib.utility.MessageUtil;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -30,7 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Class representing clipping items.
  *
- * @todo Convert to conform with new API.
  * @author The AgriCraft Team
  */
 public class ItemClipping extends ItemBase implements IAutoRenderedItem {
@@ -51,21 +51,41 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
     //this is called when you right click with this item in hand
     @Override
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
-        TileEntity te = world.getTileEntity(pos);
-        ItemStack stack = player.getHeldItem(hand);
-        if (world.isRemote || !StackHelper.hasTag(stack) || !(te instanceof IAgriCrop)) {
+        // If in creative or remote, skip.
+        if (world.isRemote) {
             return EnumActionResult.PASS;
         }
-        IAgriCrop crop = (IAgriCrop) te;
-        AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
-        if (!crop.acceptsSeed(seed) || seed == null) {
+
+        // Get the item & seed.
+        final ItemStack stack = player.getHeldItem(hand);
+        final AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
+
+        // If seed is missing, error and pass.
+        if (seed == null) {
+            AgriCore.getLogger("agricraft").info("Unable to resolve an ItemClipping to an instance of an AgriSeed!");
+            return EnumActionResult.PASS;
+        }
+
+        // Look for a crop instance at the given location.
+        final IAgriCrop crop = WorldHelper.getTile(world, pos, IAgriCrop.class).orElse(null);
+
+        // If the crop is missing, does not accept the given seed, or is not fertile for the seed, pass.
+        if (crop == null || !crop.acceptsSeed(seed) || !crop.isFertile(seed)) {
+            return EnumActionResult.PASS;
+        }
+
+        // Destroy the seed if needed.
+        if (world.rand.nextInt(10) > seed.getStat().getStrength()) {
+            // Message the player as to explain.
+            MessageUtil.messagePlayer(player, "`7The clipping did not take...`r");
+            // Decrease the stack size.
+            StackHelper.decreaseStackSize(player, stack, 1);
+            // Return that the action was a success (or moreso a failure...).
             return EnumActionResult.FAIL;
         }
-        stack.setCount(stack.getCount() - 1);
-        if (world.rand.nextInt(10) <= seed.getStat().getStrength()) {
-            crop.setSeed(seed);
-        }
-        return EnumActionResult.SUCCESS;
+
+        // Return that nothing happened.
+        return EnumActionResult.PASS;
     }
 
     @Override
@@ -117,4 +137,5 @@ public class ItemClipping extends ItemBase implements IAutoRenderedItem {
                 new ResourceLocation("agricraft:items/clipping")
         );
     }
+
 }
