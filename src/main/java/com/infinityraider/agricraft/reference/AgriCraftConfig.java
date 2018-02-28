@@ -74,7 +74,7 @@ public class AgriCraftConfig {
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Non parent crops affect stats negatively", comment = "True means any crop that is not considered a valid parent will affect stat gain negatively.")
     public static boolean otherCropsAffectStatsNegatively = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Mutation Chance", min = "0", max = "1", comment = "Define mutation chance (0.0 means no mutations, only spreading and 1.0 means only mutations no spreading.")
-    public static float mutationChance = Constants.DEFAULT_MUTATION_CHANCE;
+    public static float mutationChance = 0.2f;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Valid parents", min = "1", max = "3", comment = "What are considered valid parents for stat increasing: 1 = Any. 2 = Mutation parents and identical crops. 3 = Only identical crops.")
     public static int validParents = 2;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Single spread stat increase", comment = "Set to true to allow crops that spread from one single crop to increase stats.")

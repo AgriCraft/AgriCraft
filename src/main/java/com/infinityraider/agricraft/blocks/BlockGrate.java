@@ -20,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -116,28 +117,20 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
         return items;
     }
 
-    /*
-	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-		return getSelectedBoundingBox(state, world, pos);
-	}
-     */
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        // Get Axis
+        return WorldHelper.getTile(worldIn, pos, TileEntityGrate.class)
+                .map(t -> t.getOffset().getBounds(t.getAxis()))
+                .orElse(FULL_BLOCK_AABB);
+    }
 
- /*
-	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-		final double[] b;
-		final TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntityGrate) {
-			final TileEntityGrate tg = (TileEntityGrate) te;
-			b = tg.getBlockBounds();
-		} else {
-			b = new double[]{0, 0, 0, 1, 1, 1};
-		}
-		return new AxisAlignedBB(b[0] + pos.getX(), b[1] + pos.getY(), b[2] + pos.getZ(), b[3] + pos.getX(), b[4] + pos.getY(), b[5] + pos.getZ());
-	}
-     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        return getCollisionBoundingBox(state, worldIn, pos).offset(pos);
+    }
+    
     @Override
     public boolean isEnabled() {
         return AgriCraftConfig.enableGrates;

@@ -7,11 +7,8 @@ import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.init.AgriOreDict;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
-import com.infinityraider.agricraft.utility.RenderLogger;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -59,9 +56,6 @@ public interface IProxy extends IProxyBase {
     default void registerEventHandlers() {
         registerEventHandler(new PlayerInteractEventHandler());
         registerEventHandler(new GrassDropHandler());
-        if (AgriCraftConfig.debug) {
-            FMLCommonHandler.instance().bus().register(new RenderLogger());
-        }
     }
 
     @Override

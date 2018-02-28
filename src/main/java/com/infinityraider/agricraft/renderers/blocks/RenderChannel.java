@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -23,8 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends TileEntityChannel> extends RenderBlockCustomWood<B, T> {
-
-    public static AtomicInteger renderCallCounter = new AtomicInteger(0);
 
     public RenderChannel(B block, T channel) {
         super(block, channel, true, true, true);
@@ -96,14 +93,11 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
     }
 
     protected void drawWater(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
+        // Check if there is water to be rendered.
         if (channel.getFluidAmount(0) < 0) {
             // There exists no water to be rendered.
             return;
         }
-
-        // There is water to render.
-        // Increment the render counter.
-        renderCallCounter.incrementAndGet();
 
         // Calculate water brightness.
         final int l = RenderUtilBase.getMixedBrightness(channel.getWorld(), channel.getPos(), Blocks.WATER);

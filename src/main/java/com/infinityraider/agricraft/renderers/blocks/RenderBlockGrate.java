@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.blocks.BlockGrate;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.utility.BaseIcons;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -57,10 +58,14 @@ public class RenderBlockGrate extends RenderBlockCustomWood<BlockGrate, TileEnti
     @Override
     protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, BlockGrate block, EnumFacing side, TextureAtlasSprite sprite) {
         // Setup
-        final float offset = AgriProperties.OFFSET.getValue(state).getOffset();
+        final TileEntityGrate.EnumOffset offset = AgriProperties.OFFSET.getValue(state);
+        final EnumFacing.Axis axis = AgriProperties.AXIS.getValue(state);
+        
+        // Rotate
+        RenderUtilBase.rotateBlock(tess, EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis));
 
         // Offset
-        tess.translate(0, 0, offset);
+        tess.translate(0, 0, offset.getOffset());
 
         // Draw Grate
         tess.drawScaledPrism(1, 0, 0, 3, 16, 2, sprite);
