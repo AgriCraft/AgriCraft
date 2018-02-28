@@ -1,15 +1,20 @@
-package com.infinityraider.agricraft.compat.computer.blocks;
+package com.infinityraider.agricraft.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.renderers.blocks.RenderPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
+import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.item.IInfinityItem;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,16 +28,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {
+    
+    private final ItemBlockAgricraft item;
 
     public BlockPeripheral() {
         super("peripheral", Material.IRON);
+        this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
+        this.item = new ItemBlockAgricraft(this);
     }
 
     @Override
@@ -62,22 +69,11 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
+    @Nonnull
+    public <T extends ItemBlock & IInfinityItem> Optional<T> getItemBlock() {
+        return Optional.of((T)this.item);
     }
 
-    /*
-    @Override
-    @Optional.Method(modid = Names.AgriCraftMods.computerCraft)
-    public IPeripheral getPeripheral(World world, BlockPos pos, int side) {
-        TileEntity te = world.getTileEntity(pos);
-        if(te==null || !(te instanceof TileEntityPeripheral)) {
-            return null;
-        }
-        return (TileEntityPeripheral) te;
-    }
-     */
-    //called when the block is broken
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (!world.isRemote) {

@@ -3,7 +3,7 @@
 package com.infinityraider.agricraft.compat.vanilla;
 
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -25,6 +25,16 @@ public class VanillaPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return "vanilla";
+    }
+
+    @Override
+    public String getName() {
+        return "Vanilla Minecraft Integration";
     }
 
     @Override

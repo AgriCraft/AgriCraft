@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
@@ -148,6 +149,19 @@ public final class AgriApi {
     @Nonnull
     public static IAgriAdapterizer<IAgriFertilizer> getFertilizerRegistry() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
+    }
+    
+    /**
+     * Fetches the AgriCraft Peripheral Method Registry.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft Plant Registry.
+     */
+    @Nonnull
+    public static IAgriRegistry<IAgriPeripheralMethod> getPeripheralMethodRegistry() {
+        return AgriApi.CONNECTOR.connectPeripheralMethodRegistry();
     }
 
     /**

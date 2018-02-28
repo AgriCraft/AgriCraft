@@ -1,7 +1,8 @@
-package com.infinityraider.agricraft.compat.computer.renderers;
+package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.blocks.BlockPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.IconHelper;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
@@ -28,7 +29,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
     public static final ResourceLocation TEXTURE_SIDE = new ResourceLocation("agricraft:blocks/peripheral_side");
     public static final ResourceLocation TEXTURE_BOTTOM = new ResourceLocation("agricraft:blocks/peripheral_bottom");
     public static final ResourceLocation TEXTURE_INNER = new ResourceLocation("agricraft:blocks/peripheral_inner");
-    public static final ResourceLocation TEXTURE_PROBE = new ResourceLocation("agricraft:textures/blocks/peripheral_probe.png");
+    public static final ResourceLocation TEXTURE_PROBE = new ResourceLocation("agricraft:blocks/peripheral_probe");
 
     private static final ModelTechne<ModelPeripheralProbe> MODEL_PERIPHERAL = new ModelTechne<>(new ModelPeripheralProbe()).setDiffuseLighting(false);
 
@@ -45,6 +46,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
         list.add(TEXTURE_SIDE);
         list.add(TEXTURE_BOTTOM);
         list.add(TEXTURE_INNER);
+        list.add(TEXTURE_PROBE);
         return list;
     }
 
@@ -75,6 +77,7 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
     @Override
     public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockPeripheral block, TileEntityPeripheral tile,
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+        renderChasis(tessellator);
         renderProbe(tessellator);
     }
 
@@ -113,9 +116,18 @@ public class RenderPeripheral extends RenderBlockWithTileBase<BlockPeripheral, T
         if (probeQuads == null) {
             probeQuads = MODEL_PERIPHERAL.getBakedQuads(tessellator.getVertexFormat(), getIcon(TEXTURE_PROBE));
         }
-
+        
         // Add Probe Quads
-        tessellator.addQuads(probeQuads);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            // Push Matrix
+            tessellator.pushMatrix();
+            // Rotate The Block
+            rotateBlock(tessellator, side);
+            // Add probe for the side.
+            tessellator.addQuads(probeQuads);
+            // Pop Matrix
+            tessellator.popMatrix();
+        }
     }
 
     private void renderSeed(TileEntitySeedAnalyzer te, double x, double y, double z) {

@@ -1,0 +1,30 @@
+{
+    "type": "forge:ore_shaped",
+    "pattern": [
+        "rgr",
+        "rar",
+        "rir"
+    ],
+    "key": {
+        "g": {
+            "type": "forge:ore_dict",
+            "ore": "paneGlass"
+        },
+        "r": {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        },
+        "a": {
+            "item": "agricraft:seed_analyzer",
+            "data": 0
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "blockIron"
+        }
+    },
+    "result": {
+        "item": "agricraft:peripheral",
+        "data": 0
+    }
+}

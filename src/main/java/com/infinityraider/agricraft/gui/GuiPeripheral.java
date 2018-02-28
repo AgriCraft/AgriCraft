@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.gui;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.compat.computer.methods.IMethod;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.utility.GuiHelper;
@@ -20,16 +20,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 
 @SideOnly(Side.CLIENT)
 public class GuiPeripheral extends GuiContainer {
 
-    public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_peripheral.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_peripheral.png");
 
     public static final int WHITE = 4210752;
 
     private final TileEntityPeripheral peripheral;
-    private final IMethod[] methods;
+    private final IAgriPeripheralMethod[] methods;
 
     private static final int BUTTON_ID_OPEN_GUIDE = 0;
     private static final int BUTTON_ID_SCROLL_DOWN = 1;
@@ -49,7 +50,7 @@ public class GuiPeripheral extends GuiContainer {
         this.xSize = 172;
         this.ySize = 176;
         this.peripheral = peripheral;
-        this.methods = peripheral.getMethods();
+        this.methods = AgriApi.getPeripheralMethodRegistry().all().toArray(new IAgriPeripheralMethod[0]);
         guideOffset = this.xSize - 4;
     }
 
@@ -74,7 +75,7 @@ public class GuiPeripheral extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float opacity, int x, int y) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
         drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         if (this.peripheral.getProgress() > 0) {
             int state = this.peripheral.getProgressScaled(40);
@@ -118,19 +119,18 @@ public class GuiPeripheral extends GuiContainer {
         this.drawTexturedModalRect(xOffset, yOffset + offset + length, 0, 255, 5, 1);
     }
 
-    private void drawMethodHelp(IMethod method) {
+    private void drawMethodHelp(IAgriPeripheralMethod method) {
         if (method != null) {
             drawTexturedModalRect(this.guiLeft, this.guiTop + this.ySize - 4, 0, this.ySize, 252, 70);
-            int height = fontRenderer.FONT_HEIGHT;
             this.fontRenderer.drawString(AgriCore.getTranslator().translate("agricraft_description.peripheralHelp") + ": " + method.getSignature(), this.guiLeft + 7, this.guiTop + 175, WHITE);
             float scale = 0.9F;
             GL11.glScalef(scale, scale, scale);
             List<String> write = GuiHelper.getLinesFromData(GuiHelper.splitInLines(this.fontRenderer, method.getDescription(), 230, scale));
             int x = 4 + this.guiLeft + 7;
-            int y = this.guiTop + 175 + height;
+            int y = this.guiTop + 175 + fontRenderer.FONT_HEIGHT;
             for (int i = 0; i < write.size(); i++) {
                 String line = write.get(i);
-                int yOffset = i * height;
+                int yOffset = i * fontRenderer.FONT_HEIGHT;
                 this.fontRenderer.drawString(line, (int) (x / scale), (int) (y / scale) + yOffset, WHITE);    //1644054 means black
             }
             GL11.glScalef(1 / scale, 1 / scale, 1 / scale);
@@ -144,7 +144,7 @@ public class GuiPeripheral extends GuiContainer {
         this.buttonList.add(new GuiButton(BUTTON_ID_SCROLL_DOWN, this.guiLeft + 154, this.guiTop + 42, 10, 10, "\u2193"));
         this.buttonList.add(new GuiButton(BUTTON_ID_SCROLL_BOTTOM, this.guiLeft + 154, this.guiTop + 53, 10, 10, "\u21A1"));
         for (int i = 0; i < methods.length; i++) {
-            this.buttonList.add(new GuiButtonMethod(BUTTON_METHOD_OFFSET + i, this.guiLeft + guideOffset + 3, this.guiTop + 8 + 16 * i, 68, 16, methods[i].getName()));
+            this.buttonList.add(new GuiButtonMethod(BUTTON_METHOD_OFFSET + i, this.guiLeft + guideOffset + 3, this.guiTop + 8 + 16 * i, 68, 16, methods[i].getId()));
         }
         updateButtons();
     }
@@ -215,7 +215,7 @@ public class GuiPeripheral extends GuiContainer {
         return methods.length - BUTTON_AMOUNT;
     }
 
-    private IMethod getActiveMethod() {
+    private IAgriPeripheralMethod getActiveMethod() {
         GuiButtonMethod button = GuiButtonMethod.activeButton;
         if (button == null) {
             return null;

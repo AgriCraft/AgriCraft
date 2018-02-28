@@ -42,14 +42,6 @@ repositories {
         url "http://dvs1.progwml6.com/files/maven"
     }
     maven {
-		name = "CoFH Maven"
-		url = "http://maven.covers1624.net"
-    }
-    maven {
-        name "sk89q"
-        url  "http://maven.sk89q.com/repo/"
-    }
-    maven {
         name "OpenComputers"
         url  "http://maven.cil.li/"
     }
@@ -68,6 +60,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
     // Have to disable transitive deps on this one since stupid stuff is going on...
     deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.1-r121"
+    deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
 }
 

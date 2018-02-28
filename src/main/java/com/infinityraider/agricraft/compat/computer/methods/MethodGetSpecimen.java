@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import net.minecraft.item.ItemStack;
 

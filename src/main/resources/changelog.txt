@@ -8,6 +8,9 @@ Changelog
 - FIXED:  Grates not placing properly. Grates now place in the proper location with the proper orientation.
 - FIXED:  Crops consuming seeds planted in creative mode.
 - FIXED:  Clippings not planting in crop instance.
+- ADDED:  OpenComputers 1.12 support. I.e. added back in the peripheral block.
+- FIXED:  Shift-clicking items from Seed Analyzers overwrites first inventory slot.
+- ADDED:  IAgriPeripheralMethod to API, allowing for the registration of custom method extensions to the peripheral.
 
 2.0.0a21
 - FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.

@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.utility;
 
 import com.agricraft.agricore.util.TypeHelper;
+import com.google.common.base.Preconditions;
 import com.google.common.math.IntMath;
 import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import java.math.RoundingMode;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,8 +36,10 @@ public final class StackHelper {
      * @return {@literal true} if and only if the given ItemStack is considered valid as per the
      * method's description, {@literal false} otherwise.
      */
-    public static boolean isValid(ItemStack stack) {
-        return (stack != null) && (!stack.isEmpty()) && (stack.getItem() != null) && stack.getCount() > 0;
+    public static boolean isValid(@Nullable ItemStack stack) {
+        return (stack != null)
+                && (!stack.isEmpty())
+                && (stack.getItem() != null);
     }
 
     /**
@@ -50,7 +53,9 @@ public final class StackHelper {
      * method's description, {@literal false} otherwise.
      */
     public static boolean isValid(ItemStack stack, Class<?> itemClass) {
-        return (stack != null) && (!stack.isEmpty()) && (TypeHelper.isType(stack.getItem(), itemClass));
+        return (stack != null)
+                && (!stack.isEmpty())
+                && (TypeHelper.isType(stack.getItem(), itemClass));
     }
 
     /**
@@ -69,7 +74,7 @@ public final class StackHelper {
 
     /**
      * Determines if the given ItemStacks are equal, as per the vanilla definition of ItemStack
-     * equality. Two item stacks, a & b, are considered equal if and only if either a & b are both
+     * equality ignoring item. Two item stacks, a & b, are considered equal if and only if either a & b are both
      * null or a & b are both non-null and a's item, metadata, and tags equal b's item metadata, and
      * tags. Notice, this method is simply a wrapper of
      * {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}, with documentation added based
@@ -82,6 +87,27 @@ public final class StackHelper {
      */
     public static boolean areEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         return ItemStack.areItemStacksEqual(a, b);
+    }
+    
+    /**
+     * Determines if two ItemStacks are compatible as to be merged.
+     * <br>
+     * Two ItemStacks, a & b, are considered compatible if and only if:
+     * <ul>
+     *  <li>both are non-null</li>
+     *  <li>both have the same item as determined by {@link #areItemsEqual()}</li>
+     *  <li>both have the same damage.</li>
+     *  <li>both have equivalent NBTTags as determined by {@link #areItemStackTagsEqual()}</li>
+     * </ul>
+     * @param a
+     * @param b
+     * @return 
+     */
+    public static boolean areCompatible(@Nonnull ItemStack a, @Nonnull ItemStack b) {
+        return (a == b)
+                || ItemStack.areItemsEqualIgnoreDurability(a, b)
+                && (a.getItemDamage() == b.getItemDamage())
+                && ItemStack.areItemStackTagsEqual(a, b);
     }
 
     /**
@@ -109,7 +135,7 @@ public final class StackHelper {
      * the item from stack b, {@literal false} otherwise.
      */
     public static boolean areItemsEqualIgnoringMeta(@Nullable ItemStack a, @Nullable ItemStack b) {
-        return ItemStack.areItemsEqual(a, b);
+        return ItemStack.areItemsEqualIgnoreDurability(a, b);
     }
 
     /**
@@ -148,7 +174,7 @@ public final class StackHelper {
     @Nonnull
     public static NBTTagCompound getTag(@Nonnull ItemStack stack) {
         // Ensure the given stack is not null.
-        Objects.requireNonNull(stack, "The stack to fetch the NBTTagCompound from must not be null!");
+        Preconditions.checkNotNull(stack, "The stack to fetch the NBTTagCompound from must not be null!");
 
         // Attempt to fetch a non-null tag.
         NBTTagCompound tag = stack.getTagCompound();
@@ -172,7 +198,7 @@ public final class StackHelper {
      * proper-sized stacks.
      */
     @Nonnull
-    public static List<ItemStack> fitToMaxSize(@Nullable ItemStack stack) {
+    public static List<ItemStack> fitToMaxSize(@Nonnull ItemStack stack) {
         // Skip if the stack is empty.
         if (stack.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -221,18 +247,34 @@ public final class StackHelper {
      * stack.
      * @param stack the stack to have its size decreased.
      * @param amount the amount to decrease the stack size by, must be a positive number.
-     * @return {@link MethodResult#PASS} if and only if the stack was not null and the stack size
-     * was greater than or equal to the amount to be removed. {@link MethodResult#PASS} if and only
-     * if the stack was not null and the player is in creative mode. {@link MethodResult#FAIL}
-     * otherwise.
+     * @return
+     *  <table>
+     *      <tr>
+     *          <td>{@link MethodResult#PASS}</td>
+     *          <td>if and only if the stack was not null and the stack size was greater than or equal to the amount to be removed.</td>
+     *      </tr>
+     *      <tr>
+     *          <td>{@link MethodResult#PASS}</td>
+     *          <td>if and only if the stack was not null and the player is in creative mode.</td>
+     *      </tr>
+     *      <tr>
+     *          <td>{@link MethodResult#FAIL}</td>
+     *          <td>otherwise.</td>
+     *      </tr>
+     *  </table>
      * @throws IllegalArgumentException if the given amount was less than zero.
      */
     @Nonnull
-    public static MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nullable ItemStack stack, int amount) {
-        if (stack == null || stack.isEmpty()) {
+    public static MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nonnull ItemStack stack, @Nonnegative int amount) {
+        // Validate arguments.
+        Preconditions.checkNotNull(stack, "Null Itemstack Detected!");
+        Preconditions.checkArgument(amount > 0, "Cannot decrease ItemStack size by a negative amount! %d", amount);
+        
+        // Do stuff.
+        if (stack.isEmpty()) {
             return MethodResult.FAIL;
         } else if (amount < 0) {
-            throw new IllegalArgumentException("Cannot decrease ItemStack size by a negative amount! " + amount + " is not valid!");
+            throw new IllegalArgumentException("" + amount + " is not valid!");
         } else if (player != null && player.isCreative()) {
             return MethodResult.PASS;
         } else if (stack.getCount() - amount < 0) {

@@ -1,8 +1,12 @@
 package com.infinityraider.agricraft.container;
 
+import com.google.common.base.Preconditions;
+import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.utility.ContainerHelper;
 import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.container.ContainerTileBase;
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -117,80 +121,51 @@ public class ContainerSeedAnalyzer extends ContainerTileBase<TileEntitySeedAnaly
 
     //gets called when you try to merge an itemstack
     @Override
-    protected final boolean mergeItemStack(ItemStack stack, int start, int stop, boolean backwards) {
+    protected final boolean mergeItemStack(@Nonnull ItemStack stack, int start, int stop, boolean backwards) {
+        // Ensure the stack is not null.
+        Preconditions.checkNotNull(stack);
 
         // Ensure Proper Range.
-        if (start < 0 || start >= stop) {
-            //throw new IndexOutOfBoundsException("The specified slot range is impossible!");
-            return false;
+        if (start < 0 || stop < 0) {
+            throw new IndexOutOfBoundsException("The specified slot range is impossible!");
+        }
+        
+        // Swap start and stop if needed.
+        if (stop < start) {
+            int temp = start;
+            start = stop;
+            stop = temp;
+            backwards = !backwards;
         }
 
         // Test if Valid
-        if (!StackHelper.isValid(stack)) {
-            return false;
+        if (stack.isEmpty()) {
+            return true;
         }
 
-        final int delta = backwards ? -1 : 1;
-        int slotIndex = backwards ? stop - 1 : start;
-        boolean foundSlot = false;
-
-        //try to stack with existing stacks first
-        if (stack.isStackable()) {
-            while (slotIndex >= start && slotIndex < stop) {
-                Slot slot = this.inventorySlots.get(slotIndex);
-                ItemStack stackInSlot = slot.getStack();
-                if (slot.isItemValid(stack) && StackHelper.areEqual(stack, stackInSlot)) {
-                    int combinedSize = stackInSlot.getCount() + stack.getCount();
-                    if (combinedSize <= stack.getMaxStackSize()) {
-                        stack.setCount(0);
-                        stackInSlot.setCount(combinedSize);
-                        slot.onSlotChanged();
-                        return true;
-                    } else if (stackInSlot.getCount() < stack.getMaxStackSize()) {
-                        stack.setCount(combinedSize - stack.getMaxStackSize());
-                        stackInSlot.setCount(stack.getMaxStackSize());
-                        slot.onSlotChanged();
-                        foundSlot = true;
-                    }
+        // Iterate.
+        if (backwards) {
+            for (int i = start; i < stop; ++i) {
+                // Attempt to merge into the slot.
+                ContainerHelper.attemptMergeIntoSlot(this.inventorySlots.get(i), stack);
+                // If the stack is empty we are done.
+                if (stack.isEmpty()) {
+                    return true;
                 }
-                slotIndex += delta;
+            }
+        } else {
+            for (int i = stop - 1; i >= start; --i) {
+                // Attempt to merge into the slot.
+                ContainerHelper.attemptMergeIntoSlot(this.inventorySlots.get(i), stack);
+                // If the stack is empty we are done.
+                if (stack.isEmpty()) {
+                    return true;
+                }
             }
         }
-        foundSlot = addToEmptySlot(stack, start, stop, backwards) | foundSlot;
-        return foundSlot;
-    }
-
-    public final boolean addToEmptySlot(ItemStack stack, int start, int stop, boolean backwards) {
-
-        // Ensure Proper Range
-        if (start < 0 || start >= stop) {
-            //throw new IndexOutOfBoundsException("The specified slot range is impossible!");
-            return false;
-        }
-
-        // Test if Valid
-        if (!StackHelper.isValid(stack)) {
-            return false;
-        }
-
-        // Vars
-        final int delta = backwards ? -1 : 1;
-        int slotIndex = backwards ? stop - 1 : start;
-
-        // Iterate through the slot range searching for an empty stack.
-        while (start <= slotIndex && slotIndex < stop) {
-            Slot slot = this.inventorySlots.get(slotIndex);
-            if (slot.isItemValid(stack)) {
-                slot.putStack(stack.copy());
-                slot.onSlotChanged();
-                stack.setCount(0);
-                return true;
-            }
-            slotIndex += delta;
-        }
-
-        // No open slot was found!
-        return false;
+        
+        // Return if the stack was completely depleted.
+        return stack.isEmpty();
     }
 
 }

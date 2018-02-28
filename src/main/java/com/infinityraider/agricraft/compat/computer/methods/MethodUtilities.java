@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  *
- * @author ryeni
+ * @author RlonRyan
  */
 public final class MethodUtilities {
 

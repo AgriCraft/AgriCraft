@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.compat.thaumcraft;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.reference.Constants;
 import net.minecraft.item.ItemStack;
@@ -13,13 +13,21 @@ public class ThaumcraftPlugin implements IAgriPlugin {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public String getId() {
+        return "thaumcraft";
+    }
+
+    @Override
+    public String getName() {
+        return "Thaumcraft Integration";
     }
 
     @Override
     public void initPlugin() {
-
-        AgriCore.getLogger("AgriCraft-Plugins").info("Plugins are working! Reported from plugin {0}!", this.getClass().getCanonicalName());
 
         // Fix Golems
         FMLInterModComms.sendMessage(

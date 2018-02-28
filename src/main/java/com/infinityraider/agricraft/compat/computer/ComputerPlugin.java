@@ -2,18 +2,28 @@
  */
 package com.infinityraider.agricraft.compat.computer;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriPlugin;
-import com.infinityraider.agricraft.compat.computer.blocks.BlockPeripheral;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
-import com.infinityraider.infinitylib.render.block.BlockRendererRegistry;
-import java.util.Set;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
+import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.compat.computer.methods.MethodAnalyze;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBaseBlock;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightness;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetBrightnessRange;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetCurrentSoil;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetGrowthStage;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetNeededSoil;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetPlant;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetSpecimen;
+import com.infinityraider.agricraft.compat.computer.methods.MethodGetStats;
+import com.infinityraider.agricraft.compat.computer.methods.MethodHasJournal;
+import com.infinityraider.agricraft.compat.computer.methods.MethodHasPlant;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsAnalyzed;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsCrossCrop;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsFertile;
+import com.infinityraider.agricraft.compat.computer.methods.MethodIsMature;
+import com.infinityraider.agricraft.compat.computer.methods.MethodNeedsBaseBlock;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
+import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -22,26 +32,48 @@ import net.minecraftforge.fml.relauncher.Side;
 @AgriPlugin
 public class ComputerPlugin implements IAgriPlugin {
 
-    public static final BlockPeripheral PERHIPHERAL = new BlockPeripheral();
-    public static final Set<String> COMPUTER_MODS = TypeHelper.asSet(
-            "computercraft",
-            "OpenComputers"
-    );
-    public static final boolean ENABLED = COMPUTER_MODS.stream().anyMatch(Loader::isModLoaded);
+    @Nonnull
+    private static final IAgriPeripheralMethod[] METHODS = new IAgriPeripheralMethod[]{
+        new MethodAnalyze(),
+        new MethodGetBaseBlock(),
+        new MethodGetBrightness(),
+        new MethodGetBrightnessRange(),
+        new MethodGetCurrentSoil(),
+        new MethodGetGrowthStage(),
+        new MethodGetNeededSoil(),
+        new MethodGetPlant(),
+        new MethodGetSpecimen(),
+        new MethodGetStats(),
+        new MethodHasJournal(),
+        new MethodHasPlant(),
+        new MethodIsAnalyzed(),
+        new MethodIsCrossCrop(),
+        new MethodIsFertile(),
+        new MethodIsMature(),
+        new MethodNeedsBaseBlock()
+    };
 
     @Override
     public boolean isEnabled() {
-        return ENABLED;
+        return true;
     }
 
     @Override
-    public void initPlugin() {
-        //RegisterHelper.registerBlock(PERHIPHERAL, Reference.MOD_ID.toLowerCase(), PERHIPHERAL.getInternalName());
-        GameRegistry.registerTileEntity(TileEntityPeripheral.class, PERHIPHERAL.getInternalName());
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            BlockRendererRegistry.getInstance().registerCustomBlockRenderer(PERHIPHERAL);
+    public String getId() {
+        return "computer";
+    }
+
+    @Override
+    public String getName() {
+        return "Computer Integration";
+    }
+
+    @Override
+    public void registerPeripheralMethods(IAgriRegistry<IAgriPeripheralMethod> methodRegistry) {
+        // Register all the default methods.
+        for (IAgriPeripheralMethod m : METHODS) {
+            methodRegistry.add(m);
         }
-        AgriCore.getLogger("Computer Integration Enabled!");
     }
 
 }

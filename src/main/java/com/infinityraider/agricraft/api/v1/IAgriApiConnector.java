@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
@@ -48,5 +49,8 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
+
+    @Nonnull
+    IAgriRegistry<IAgriPeripheralMethod> connectPeripheralMethodRegistry();
 
 }

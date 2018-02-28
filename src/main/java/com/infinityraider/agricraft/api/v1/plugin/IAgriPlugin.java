@@ -1,9 +1,10 @@
 /*
  */
-package com.infinityraider.agricraft.api.v1;
+package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
@@ -60,7 +61,11 @@ import net.minecraft.util.ResourceLocation;
 public interface IAgriPlugin {
 
     boolean isEnabled();
-
+    
+    String getId();
+    
+    String getName();
+    
     default void initPlugin() {
         // Default Implementation: Do nothing.
     }
@@ -98,6 +103,10 @@ public interface IAgriPlugin {
     }
 
     default void registerTextures(@Nonnull Consumer<ResourceLocation> textureRegistry) {
+        // Default Implementation: Do nothing.
+    }
+    
+    default void registerPeripheralMethods(@Nonnull IAgriRegistry<IAgriPeripheralMethod> methodRegistry) {
         // Default Implementation: Do nothing.
     }
 

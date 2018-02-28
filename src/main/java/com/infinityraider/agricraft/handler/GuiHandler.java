@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.container.ContainerSeedStorage;
 import com.infinityraider.agricraft.container.ContainerSeedStorageController;

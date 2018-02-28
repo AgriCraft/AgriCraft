@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
@@ -70,6 +71,11 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Override
     @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public IAgriRegistry<IAgriPeripheralMethod> connectPeripheralMethodRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

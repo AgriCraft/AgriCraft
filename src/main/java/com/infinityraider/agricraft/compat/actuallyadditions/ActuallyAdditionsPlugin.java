@@ -4,7 +4,7 @@ import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import de.ellpeck.actuallyadditions.api.ActuallyAdditionsAPI;
 import net.minecraftforge.fml.common.Loader;
 
@@ -26,8 +26,17 @@ public class ActuallyAdditionsPlugin implements IAgriPlugin {
     }
 
     @Override
+    public String getId() {
+        return "actuallyadditions";
+    }
+
+    @Override
+    public String getName() {
+        return "ActuallyAdditions Integration";
+    }
+
+    @Override
     public void initPlugin() {
-        AgriCore.getLogger("agricraft").debug("AgriCraft ActuallyAdditionsPlugin enabled!");
         ActuallyAdditionsAPI.addFarmerBehavior(new AgriCraftFarmerBehavior());
     }
 

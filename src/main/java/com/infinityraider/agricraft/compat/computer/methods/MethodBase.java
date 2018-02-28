@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.compat.computer.methods;
 
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.agricraft.agricore.core.AgriCore;
 import static com.infinityraider.agricraft.compat.computer.methods.MethodUtilities.*;
-import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
+import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import java.util.List;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class MethodBase implements IMethod {
+public abstract class MethodBase implements IAgriPeripheralMethod {
 
     // Not entirely sure why this is private if it is final...
     public final String name;
@@ -33,7 +34,7 @@ public abstract class MethodBase implements IMethod {
     }
 
     @Override
-    public final String getName() {
+    public final String getId() {
         return name;
     }
 
@@ -44,7 +45,7 @@ public abstract class MethodBase implements IMethod {
 
     @Override
     public final String getDescription() {
-        return AgriCore.getTranslator().translate("agricraft_description.method." + this.getName());
+        return AgriCore.getTranslator().translate("agricraft_description.method." + this.getId());
     }
 
     @Override

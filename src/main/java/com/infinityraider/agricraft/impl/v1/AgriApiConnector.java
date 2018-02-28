@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApiState;
 import com.infinityraider.agricraft.api.v1.IAgriApiConnector;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
@@ -38,6 +39,8 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriAdapterizer<AgriSeed> seedRegistry;
     @Nonnull
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry;
+    @Nonnull
+    private final IAgriRegistry<IAgriPeripheralMethod> peripheralMethodRegistry;
 
     public AgriApiConnector() {
         this.plantRegistry = new AgriRegistry<>();
@@ -48,6 +51,7 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.mutationEngine = new AgriMutationEngine();
         this.seedRegistry = new AgriAdapterizer<>();
         this.fertilizerRegistry = new AgriAdapterizer<>();
+        this.peripheralMethodRegistry = new AgriRegistry<>();
     }
 
     @Override
@@ -102,6 +106,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerRegistry;
+    }
+
+    @Override
+    @Nonnull
+    public IAgriRegistry<IAgriPeripheralMethod> connectPeripheralMethodRegistry() {
+        return this.peripheralMethodRegistry;
     }
 
 }
