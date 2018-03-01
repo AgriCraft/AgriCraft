@@ -89,7 +89,7 @@ task apiJavadoc(type: Javadoc) {
 }
 
 // Jars
-task mainSourcesJar(type: Jar, dependsOn: classes) {
+task mainSourceJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
     classifier = 'sources'
 }
@@ -105,10 +105,10 @@ task apiJar(type: Jar, dependsOn: classes) {
     classifier = 'api'
 }
 
-task apiSourcesJar(type: Jar, dependsOn: classes) {
+task apiSourceJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
     include "${mod.package.replace('.', '/')}/api/**/*"
-    classifier = 'api-sources'
+    classifier = 'api-source'
 }
 
 task apiJavadocJar(type: Jar, dependsOn: apiJavadoc) {
@@ -124,9 +124,15 @@ publishing {
     tasks.publish.dependsOn 'build'
     publications {
         mavenJava(MavenPublication) {
+            // Main
             artifact jar
+            artifact javadocJar
             artifact sourceJar
+            
+            // API
             artifact apiJar
+            artifact apiJavadocJar
+            artifact apiSourceJar
         }
     }
     repositories {
