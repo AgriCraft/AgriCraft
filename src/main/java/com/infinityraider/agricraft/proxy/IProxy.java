@@ -68,7 +68,4 @@ public interface IProxy extends IProxyBase {
     default void activateRequiredModules() {
     }
 
-    @Override
-    default void initConfiguration(FMLPreInitializationEvent event) {
-    }
 }

@@ -3,9 +3,11 @@ package com.infinityraider.agricraft.blocks.storage;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.storage.TileEntitySeedStorageController;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
+import java.util.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,9 +19,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedStorageController> {
+    
+    private final ItemBlockCustomWood itemBlock;
 
     public BlockSeedStorageController() {
         super("seed_storage_controller");
+        this.itemBlock = new ItemBlockCustomWood(this);
     }
 
     @Override
@@ -47,6 +52,11 @@ public class BlockSeedStorageController extends BlockCustomWood<TileEntitySeedSt
     @Override
     public boolean isEnabled() {
         return AgriCraftConfig.disableSeedWarehouse;
+    }
+    
+    @Override
+    public Optional<? extends ItemBlockCustomWood> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
 }

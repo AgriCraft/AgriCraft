@@ -75,7 +75,7 @@ public class ItemMagnifyingGlass extends ItemBase implements IItemWithModel, IRe
 
             // Display information.
             for (String msg : list) {
-                player.addChatComponentMessage(new TextComponentString(msg));
+                player.sendMessage(new TextComponentString(msg));
             }
         }
         return EnumActionResult.SUCCESS;

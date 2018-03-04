@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.compat.computer.renderers.RenderPeripheral;
 import com.infinityraider.agricraft.compat.computer.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
@@ -30,9 +31,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Optional.Interface(modid = "ComputerCraft", iface = "dan200.computercraft.api.peripheral.IPeripheralProvider")
 public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {
+    
+    private final ItemBlockAgricraft item;
 
     public BlockPeripheral() {
         super("peripheral", Material.IRON);
+        this.item = new ItemBlockAgricraft(this);
     }
 
     @Override
@@ -62,8 +66,8 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
+    public java.util.Optional<ItemBlockAgricraft> getItemBlock() {
+        return java.util.Optional.of(this.item);
     }
 
     /*

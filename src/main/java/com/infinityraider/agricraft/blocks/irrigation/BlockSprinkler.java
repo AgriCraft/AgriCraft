@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
@@ -13,6 +14,7 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.item.IInfinityItem;
 import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Collections;
@@ -50,6 +52,8 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
             Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
             Constants.UNIT * Constants.THREE_QUARTER
     );
+    
+    private final ItemBlockAgricraft itemBlock;
 
     public BlockSprinkler() {
         super("sprinkler", Material.IRON);
@@ -57,6 +61,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
         this.setHardness(2.0F);
         this.setResistance(5.0F);
         this.setHarvestLevel("axe", 0);
+        this.itemBlock = new ItemBlockAgricraft(this);
     }
 
     @Override
@@ -150,8 +155,8 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
+    public Optional<? extends ItemBlockAgricraft> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override

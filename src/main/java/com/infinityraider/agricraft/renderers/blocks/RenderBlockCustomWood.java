@@ -5,10 +5,12 @@ import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.agricraft.utility.CustomWoodType;
+import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -75,6 +77,14 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
             return BaseIcons.OAK_PLANKS.getIcon();
         }
         return tile.getIcon();
+    }
+    
+    @Override
+    public Object getItemQuadsCacheKey(World world, ItemStack stack, EntityLivingBase entity) {
+        return Optional.ofNullable(stack)
+                .map(ItemStack::getTagCompound)
+                .flatMap(CustomWoodTypeRegistry::getFromNbt)
+                .orElse(null);
     }
 
 }

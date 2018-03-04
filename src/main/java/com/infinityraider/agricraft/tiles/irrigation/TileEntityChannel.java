@@ -83,7 +83,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     public int acceptFluid(int y, int amount, boolean partial) {
-        if (!worldObj.isRemote && amount >= 0 && this.canAcceptFluid(0, amount, partial)) {
+        if (!this.world.isRemote && amount >= 0 && this.canAcceptFluid(0, amount, partial)) {
             int room = this.getCapacity() - this.getFluidAmount(0);
             if (room >= amount) {
                 this.setFluidLevel(this.getFluidAmount(0) + amount);
@@ -114,7 +114,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     public final void checkConnections() {
         for (int i = 0; i < EnumFacing.HORIZONTALS.length; i++) {
             final EnumFacing dir = EnumFacing.HORIZONTALS[i];
-            neighbours[i] = WorldHelper.getTile(worldObj, pos.offset(dir), IIrrigationComponent.class)
+            neighbours[i] = WorldHelper.getTile(this.world, pos.offset(dir), IIrrigationComponent.class)
                     .filter(n -> n.canConnectTo(dir.getOpposite(), this) || this.canConnectTo(dir, n))
                     .orElse(null);
         }
@@ -156,7 +156,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
             checkConnections();
             ticksSinceNeighbourCheck = 0;
         }
-        if (!this.worldObj.isRemote) {
+        if (!this.world.isRemote) {
             //calculate total fluid lvl and capacity
             int totalLvl = 0;
             int nr = 1;
@@ -208,7 +208,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                 }
             }
             // Handle Sprinklers
-            TileEntitySprinkler spr = WorldHelper.getTile(worldObj, this.pos.down(), TileEntitySprinkler.class).orElse(null);
+            TileEntitySprinkler spr = WorldHelper.getTile(this.world, this.pos.down(), TileEntitySprinkler.class).orElse(null);
             if (spr != null) {
                 updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
             }
@@ -235,11 +235,11 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     public void syncFluidLevel() {
-        if (!this.worldObj.isRemote) {
+        if (!this.world.isRemote) {
             int newDiscreteLvl = getDiscreteFluidLevel();
             if (newDiscreteLvl != lastDiscreteLvl) {
                 lastDiscreteLvl = newDiscreteLvl;
-                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(),
+                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.world.provider.getDimension(),
                         this.xCoord(), this.yCoord(), this.zCoord(), 64);
                 new MessageSyncFluidLevel(this.lvl, this.getPos()).sendToAllAround(point);
             }

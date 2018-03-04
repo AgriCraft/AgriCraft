@@ -78,16 +78,16 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     //updates the tile entity every tick
     @Override
     public void update() {
-        if (!this.worldObj.isRemote) {
-            if (this.worldObj.canBlockSeeSky(getPos()) && this.worldObj.isRaining()) {
+        if (!this.world.isRemote) {
+            if (this.world.canBlockSeeSky(getPos()) && this.world.isRaining()) {
                 if (!this.hasNeighbour(EnumFacing.UP)) {
-                    Biome biome = this.worldObj.getBiomeGenForCoords(getPos());
+                    Biome biome = this.world.getBiome(getPos()); // I think?
                     if (biome.getRainfall() > 0) {
                         this.setFluidLevel(this.getFluidAmount(0) + 1);
                     }
                 }
             }
-            Block block = this.worldObj.getBlockState(pos.add(0, 1, 0)).getBlock();
+            Block block = this.world.getBlockState(pos.add(0, 1, 0)).getBlock();
             if (AgriCraftConfig.fillFromFlowingWater && (block == Blocks.WATER || block == Blocks.FLOWING_WATER)) {
                 this.setFluidLevel(this.getFluidAmount(0) + 5);
             }
@@ -97,7 +97,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     @Override
     public void syncFluidLevel() {
         if (needsSync()) {
-            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.worldObj.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
+            NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.world.provider.getDimension(), this.xCoord(), this.yCoord(), this.zCoord(), 64);
             new MessageSyncFluidLevel(this.fluidLevel, this.getPos()).sendToAllAround(point);
         }
     }
@@ -178,7 +178,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
 
     @Override
     public int acceptFluid(int y, int amount, boolean partial) {
-        if (!worldObj.isRemote && this.canAcceptFluid(y, amount, partial) && amount >= 0) {
+        if (!this.world.isRemote && this.canAcceptFluid(y, amount, partial) && amount >= 0) {
             int room = this.getCapacity() - this.getFluidAmount(0);
             if (room >= amount) {
                 this.setFluidLevel(this.getFluidAmount(0) + amount);
@@ -197,7 +197,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
             TileEntityTank tank = this.getMainComponent();
             lvl = lvl > tank.getCapacity() ? tank.getCapacity() : lvl;
             tank.fluidLevel = lvl;
-            if (!tank.worldObj.isRemote) {
+            if (!tank.world.isRemote) {
                 tank.syncFluidLevel();
             }
         }
@@ -211,7 +211,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
     @Override
     public IrrigationConnectionType getConnectionType(EnumFacing facing) {
         // If looking at y-axis, we need to decide if the tank has another tank below it.
-        TileEntity te = worldObj.getTileEntity(getPos().offset(facing));
+        TileEntity te = this.world.getTileEntity(getPos().offset(facing));
         if (te instanceof TileEntityChannel && ((TileEntityChannel) te).isSameMaterial(this)) {
             return IrrigationConnectionType.PRIMARY;
         } else if (te instanceof TileEntityTank && ((TileEntityTank) te).isSameMaterial(this)) {
@@ -240,7 +240,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
             return 0;
         }
         int filled = Math.min(resource.amount, this.getCapacity() - this.getFluidAmount(0));
-        if (doFill && !worldObj.isRemote) {
+        if (doFill && !this.world.isRemote) {
             this.setFluidLevel(this.getFluidAmount(0) + filled);
         }
         return filled;
@@ -253,7 +253,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
             return null;
         }
         int drained = Math.min(resource.amount, this.getFluidAmount(0));
-        if (doDrain && !worldObj.isRemote) {
+        if (doDrain && !this.world.isRemote) {
             this.setFluidLevel(this.getFluidAmount(0) - drained);
         }
         return new FluidStack(FluidRegistry.WATER, drained);
@@ -293,7 +293,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         if (this.mainComponent == null) {
             IMultiBlockPartData data = this.getMultiBlockData();
             this.mainComponent = WorldHelper
-                    .getTile(worldObj, getPos().add(-data.posX(), -data.posY(), -data.posZ()), TileEntityTank.class)
+                    .getTile(this.world, getPos().add(-data.posX(), -data.posY(), -data.posZ()), TileEntityTank.class)
                     .orElse(this);
         }
         return mainComponent;
@@ -340,7 +340,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
+                    TileEntityTank tank = (TileEntityTank) this.world.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
                     if (tank == null) {
                         continue;
                     }
@@ -372,7 +372,7 @@ public class TileEntityTank extends TileEntityCustomWood implements ITickable, I
         for (int x = 0; x < data.sizeX(); x++) {
             for (int y = 0; y < fluidLevelByLayer.length; y++) {
                 for (int z = 0; z < data.sizeZ(); z++) {
-                    TileEntityTank tank = (TileEntityTank) worldObj.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
+                    TileEntityTank tank = (TileEntityTank) this.world.getTileEntity(getPos().add(xCoord(), yCoord(), zCoord()));
                     if (tank != null) {
                         tank.fluidLevel = fluidLevelByLayer[y];
                     }

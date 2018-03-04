@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.blocks;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.container.ContainerSeedAnalyzer;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -15,13 +16,13 @@ import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -40,6 +41,8 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySeedAnalyzer> implements IRecipeRegister {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT, 0, Constants.UNIT, Constants.UNIT * (Constants.WHOLE - 1), Constants.UNIT * Constants.QUARTER, Constants.UNIT * (Constants.WHOLE - 1));
+    
+    private final ItemBlockAgricraft itemBlock;
 
     public BlockSeedAnalyzer() {
         super("seed_analyzer", Material.GROUND);
@@ -49,6 +52,7 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
         //set mining statistics
         this.setHardness(1);
         this.setResistance(1);
+        this.itemBlock = new ItemBlockAgricraft(this);
     }
 
     //creates a new tile entity every time a block of this type is placed
@@ -177,8 +181,8 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
+    public Optional<ItemBlockAgricraft> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     @Override

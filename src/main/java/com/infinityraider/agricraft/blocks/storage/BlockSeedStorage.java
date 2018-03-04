@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.blocks.storage;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderSeedStorage;
@@ -25,9 +26,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
+    
+    private final ItemBlockCustomWood itemBlock;
 
     public BlockSeedStorage() {
         super("seed_storage");
+        this.itemBlock = new ItemBlockCustomWood(this);
     }
 
     @Override
@@ -98,4 +102,9 @@ public class BlockSeedStorage extends BlockCustomWood<TileEntitySeedStorage> {
     /*if (!AgriCraftConfig.disableSeedStorage) {
 			CustomWoodRecipeHelper.registerCustomWoodRecipe(AgriBlocks.getInstance().SEED_STORAGE, 1, true, "wiw", "wcw", "wcw", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER, 'i', Items.IRON_INGOT, 'c', Blocks.CHEST);
 		}*/
+    @Override
+    public Optional<? extends ItemBlockCustomWood> getItemBlock() {
+        return Optional.of(this.itemBlock);
+    }
+
 }

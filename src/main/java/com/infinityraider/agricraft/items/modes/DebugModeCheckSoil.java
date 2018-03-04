@@ -33,7 +33,7 @@ public class DebugModeCheckSoil extends DebugMode {
                 .map(s -> s.getName())
                 .findFirst()
                 .orElse("Unknown Soil");
-        player.addChatComponentMessage(new TextComponentString("Soil type: \'" + type + "\'"));
+        player.sendMessage(new TextComponentString("Soil type: \'" + type + "\'"));
     }
 
     @Override

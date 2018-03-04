@@ -35,7 +35,7 @@ public class MessageFertilizerApplied extends MessageBase<IMessage> {
     protected void processMessage(MessageContext ctx) {
         if (this.fertilizer instanceof IAgriFertilizer) {
             ((IAgriFertilizer) this.fertilizer)
-                    .performClientAnimations(this.meta, Minecraft.getMinecraft().thePlayer.worldObj, this.pos);
+                    .performClientAnimations(this.meta, Minecraft.getMinecraft().player.world, this.pos);
         }
     }
 

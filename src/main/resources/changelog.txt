@@ -1,5 +1,9 @@
 Changelog
 ---------
+2.0.0a22
+- FIXED:   Memory churn issue.
+- REMOVED: Computer integration due to issues with recent updates to InfinityLib. Integration should be back shortly.
+
 2.0.0a21
 - FIXED: AgriCraft nuggets would not get registered in the ore dictionary on multiplayer servers.
 - FIXED: Quartz nuggets used the wrong ore dictionary name.

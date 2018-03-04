@@ -76,7 +76,7 @@ public class DebugModeIGrowable extends DebugMode {
         outputComponent.getStyle().setHoverEvent(hoverEvent);
 
         // Now send the completed chat message.
-        player.addChatComponentMessage(outputComponent);
+        player.sendMessage(outputComponent);
     }
 
     @Override

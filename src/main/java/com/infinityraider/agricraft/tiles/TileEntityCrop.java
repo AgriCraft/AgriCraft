@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.Optional;
@@ -85,19 +86,19 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
 
         // If the soil is wrong, report and abort.
-        if (!seed.getPlant().getGrowthRequirement().hasValidSoil(worldObj, pos)) {
-            player.addChatComponentMessage(new TextComponentString("The soil is not valid for this seed. You can't plant it here."));
+        if (!seed.getPlant().getGrowthRequirement().hasValidSoil(this.world, pos)) {
+            MessageUtil.messagePlayer(player, "`7The soil is not valid for this seed. You can't plant it here.`r");
             return MethodResult.FAIL;
         }
 
         // If the additional conditions are wrong, warn and continue.
-        if (!seed.getPlant().getGrowthRequirement().hasValidConditions(worldObj, pos)) {
-            player.addChatComponentMessage(new TextComponentString("Caution: This plant has additional requirements that are unmet."));
+        if (!seed.getPlant().getGrowthRequirement().hasValidConditions(this.world, pos)) {
+            MessageUtil.messagePlayer(player, "`7Caution: This plant has additional requirements that are unmet.`r");
         }
 
         // If the lighting is wrong, warn and continue.
-        if (!seed.getPlant().getGrowthRequirement().hasValidLight(worldObj, pos)) {
-            player.addChatComponentMessage(new TextComponentString("Caution: This plant won't grow with the current light level."));
+        if (!seed.getPlant().getGrowthRequirement().hasValidLight(this.world, pos)) {
+            MessageUtil.messagePlayer(player, "`7Caution: This plant won't grow with the current light level.`r");
         }
 
 //        // Notify event listeners of a planting event.
@@ -140,7 +141,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Drop drops if should drop.
         if (player == null || !player.isCreative()) {
-            this.getDrops(drop -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, drop), true, true);
+            this.getDrops(drop -> WorldHelper.spawnItemInWorld(this.world, this.pos, drop), true, true);
         }
 
         // Remove the block.
@@ -284,7 +285,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         // Otherwise perform change.
         this.crossCrop = status;
         SoundType type = Blocks.PLANKS.getSoundType(null, null, null, null);
-        worldObj.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
+        this.world.playSound(null, (double) ((float) xCoord() + 0.5F), (double) ((float) yCoord() + 0.5F), (double) ((float) zCoord() + 0.5F), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 2.0F, type.getPitch() * 0.8F);
         this.markForUpdate();
 
         // Operation was a success!
@@ -326,8 +327,8 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public boolean isFertile(IAgriPlant plant) {
-        return worldObj.isAirBlock(this.pos.up())
-                && plant.getGrowthRequirement().isMet(this.worldObj, pos);
+        return this.world.isAirBlock(this.pos.up())
+                && plant.getGrowthRequirement().isMet(this.world, pos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -342,7 +343,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
     @Override
     public Optional<IAgriSoil> getSoil() {
-        final IBlockState state = this.worldObj.getBlockState(this.pos.down());
+        final IBlockState state = this.world.getBlockState(this.pos.down());
         return AgriApi.getSoilRegistry().get(state);
     }
 
@@ -390,10 +391,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         final IAgriPlant plant = seed.getPlant();
 
         // Try to spread in each direction.
-        for (IAgriCrop crop : WorldHelper.getTileNeighbors(worldObj, pos, IAgriCrop.class)) {
+        for (IAgriCrop crop : WorldHelper.getTileNeighbors(this.world, pos, IAgriCrop.class)) {
             // Note: Checking the probability is faster. Also check that this plant can be planted there.
             if (   plant.getSpreadChance() > this.getRandom().nextDouble()
-                && plant.getGrowthRequirement().hasValidSoil(worldObj, crop.getCropPos())) {
+                && plant.getGrowthRequirement().hasValidSoil(this.world, crop.getCropPos())) {
                 final AgriSeed other = crop.getSeed();
                 if (other == null) {
                     if (!crop.isCrossCrop()) {
@@ -472,11 +473,11 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         } else if (this.isCrossCrop()) {
             if (this.setCrossCrop(false)) {
                 // Only spawn the crop stick if the cross was successfully removed.
-                WorldHelper.spawnItemInWorld(this.worldObj, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
+                WorldHelper.spawnItemInWorld(this.world, this.pos, new ItemStack(AgriItems.getInstance().CROPS, 1));
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false, false);
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.world, this.pos, stack), false, false);
             this.setGrowthStage(0);
             return MethodResult.SUCCESS;
         } else {
@@ -490,7 +491,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     @Override
     public boolean onRaked(@Nullable EntityPlayer player) {
         if (!this.isRemote() && this.canBeRaked()) {
-            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.worldObj, this.pos, stack), false, true);
+            this.getDrops(stack -> WorldHelper.spawnItemInWorld(this.world, this.pos, stack), false, true);
             this.setSeed(null);
             return true;
         } else {
@@ -559,7 +560,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
      * the code that makes the crop cross with neighboring crops
      */
     public void crossOver() {
-        AgriApi.getMutationEngine().attemptCross(this, this.worldObj.rand);
+        AgriApi.getMutationEngine().attemptCross(this, this.world.rand);
     }
 
     @Override

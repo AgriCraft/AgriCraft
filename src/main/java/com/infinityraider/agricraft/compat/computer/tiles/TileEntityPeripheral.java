@@ -91,7 +91,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
                 reset();
             }
         }
-        if (worldObj.isRemote) {
+        if (this.world.isRemote) {
             if (updateCheck == 0) {
                 checkSides();
             }
@@ -142,7 +142,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     private boolean isCrop(EnumFacing dir) {
-        return worldObj.getBlockState(new BlockPos(xCoord() + dir.getFrontOffsetX(), yCoord() + dir.getFrontOffsetY(), zCoord() + dir.getFrontOffsetZ())).getBlock() instanceof BlockCrop;
+        return this.world.getBlockState(new BlockPos(xCoord() + dir.getFrontOffsetX(), yCoord() + dir.getFrontOffsetY(), zCoord() + dir.getFrontOffsetZ())).getBlock() instanceof BlockCrop;
     }
 
     public void startAnalyzing() {
@@ -179,7 +179,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer {
     }
 
     public Object[] invokeMethod(IMethod method, Object... arguments) throws MethodException {
-        return method.call(this, worldObj, getPos(), this.getJournal(), arguments);
+        return method.call(this, this.world, getPos(), this.getJournal(), arguments);
     }
 
     private static IMethod[] methodList() {

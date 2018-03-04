@@ -5,6 +5,7 @@ package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
+import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
@@ -55,5 +56,8 @@ public abstract class AbstractBlockWaterChannel<T extends TileEntityChannel> ext
     public boolean isEnabled() {
         return AgriCraftConfig.enableIrrigation;
     }
+    
+    @Override
+    abstract public Optional<? extends ItemBlockCustomWood> getItemBlock();
 
 }

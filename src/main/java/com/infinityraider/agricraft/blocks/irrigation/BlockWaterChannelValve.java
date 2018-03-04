@@ -33,9 +33,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntityChannelValve> implements IRecipeRegister {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(4 * Constants.UNIT, 0, 4 * Constants.UNIT, 12 * Constants.UNIT, 1, 12 * Constants.UNIT);
+    
+    private final ItemBlockCustomWood itemBlock;
 
     public BlockWaterChannelValve() {
         super("valve");
+        this.itemBlock = new ItemBlockCustomWood(this);
     }
 
     @Override
@@ -91,8 +94,8 @@ public class BlockWaterChannelValve extends AbstractBlockWaterChannel<TileEntity
     }
 
     @Override
-    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockValve.class;
+    public Optional<? extends ItemBlockCustomWood> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
     public static class ItemBlockValve extends ItemBlockCustomWood {

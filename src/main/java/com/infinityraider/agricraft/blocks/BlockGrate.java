@@ -28,10 +28,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRecipeRegister {
+    
+    private final ItemBlockGrate itemBlock;
 
     public BlockGrate() {
         super("grate");
         this.fullBlock = false;
+        this.itemBlock = new ItemBlockGrate(this);
     }
 
     @Override
@@ -52,11 +55,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRec
         state = AgriProperties.OFFSET.applyToBlockState(state, tile.map(TileEntityGrate::getOffset).orElse(TileEntityGrate.EnumOffset.NEAR));
         state = AgriProperties.AXIS.applyToBlockState(state, tile.map(TileEntityGrate::getAxis).orElse(EnumFacing.Axis.X));
         return state;
-    }
-
-    @Override
-    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockGrate.class;
     }
 
     @Override
@@ -143,6 +141,11 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> implements IRec
     @Override
     public void registerRecipes() {
         CustomWoodRecipeHelper.registerCustomWoodRecipe(this, 8, true, "w w", " w ", "w w", 'w', CustomWoodRecipeHelper.MATERIAL_PARAMETER);
+    }
+    
+    @Override
+    public Optional<? extends ItemBlockGrate> getItemBlock() {
+        return Optional.of(this.itemBlock);
     }
 
 }

@@ -1,9 +1,11 @@
 [submodule "AgriPlants"]
 	path = lib/AgriPlants
 	url = https://github.com/AgriCraft/AgriPlants
+	branch = 1.10.2
 [submodule "lib/InfinityLib"]
 	path = lib/InfinityLib
 	url = https://github.com/InfinityRaider/InfinityLib.git
+	branch = 1.10.2
 [submodule "lib/AgriCore"]
 	path = lib/AgriCore
 	url = https://github.com/AgriCraft/AgriCore.git

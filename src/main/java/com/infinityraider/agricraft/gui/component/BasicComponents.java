@@ -79,7 +79,7 @@ public class BasicComponents {
 
     public static void addStackTooltip(GuiComponent<ItemStack> component, List<String> tooltip) {
         if (component.getComponent() != null) {
-            tooltip.addAll(component.getComponent().getTooltip(Minecraft.getMinecraft().thePlayer, false));
+            tooltip.addAll(component.getComponent().getTooltip(Minecraft.getMinecraft().player, false));
         }
     }
 

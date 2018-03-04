@@ -518,11 +518,6 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         return new InfinityProperty[]{};
     }
 
-    @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
-
     /**
      * Retrieves the type of plant growing within the crops.
      *

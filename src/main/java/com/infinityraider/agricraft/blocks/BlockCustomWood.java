@@ -127,9 +127,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
     }
 
     @Override
-    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockCustomWood.class;
-    }
+    abstract public Optional<? extends ItemBlockCustomWood> getItemBlock();
 
     @Override
     @SideOnly(Side.CLIENT)

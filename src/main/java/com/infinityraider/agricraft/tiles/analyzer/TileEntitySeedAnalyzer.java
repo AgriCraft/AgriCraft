@@ -161,15 +161,15 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             //increment progress counter
             this.progress = progress < this.maxProgress() ? progress + 1 : this.maxProgress();
             //if progress is complete analyze the SEED
-            if (progress == this.maxProgress() && !worldObj.isRemote) {
+            if (progress == this.maxProgress() && !this.world.isRemote) {
                 this.analyze();
                 change = true;
             }
         }
         if (change) {
             this.markForUpdate();
-            this.worldObj.addBlockEvent(this.getPos(), this.worldObj.getBlockState(getPos()).getBlock(), 0, 0);
-            this.worldObj.notifyBlockOfStateChange(getPos(), this.getBlockType());
+            this.world.addBlockEvent(this.getPos(), this.world.getBlockState(getPos()).getBlock(), 0, 0);
+            this.world.notifyBlockOfStateChange(getPos(), this.getBlockType());
         }
     }
 
@@ -366,8 +366,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
 
     //if this is usable by a player
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return worldObj.getTileEntity(pos) == this
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return this.world.getTileEntity(pos) == this
                 && player.getDistanceSq(pos.add(0.5, 0.5, 0.5)) <= 64.0;
     }
 
