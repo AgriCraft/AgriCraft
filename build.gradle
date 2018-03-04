@@ -46,8 +46,8 @@ repositories {
         url  "http://maven.cil.li/"
     }
     maven {
-        name "ModMaven"
-        url "https://modmaven.k-4u.nl"
+        name "ActuallyAdditions"
+        url "https://maven.chaosfield.at/"
     }
 }
 

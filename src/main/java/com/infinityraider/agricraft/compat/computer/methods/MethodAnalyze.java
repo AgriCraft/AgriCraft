@@ -10,7 +10,7 @@ public class MethodAnalyze extends MethodBasePeripheral {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         peripheral.startAnalyzing();
         return new Object[0];
     }
@@ -19,4 +19,5 @@ public class MethodAnalyze extends MethodBasePeripheral {
     protected ArrayList<MethodParameter> getParameters() {
         return new ArrayList<>();
     }
+
 }

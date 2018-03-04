@@ -11,7 +11,7 @@ public class MethodGetSpecimen extends MethodBasePeripheral {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         ItemStack stack = peripheral.getStackInSlot(ContainerSeedAnalyzer.SEED_SLOT_ID);
         return new Object[]{stack == null ? null : stack.getDisplayName()};
     }

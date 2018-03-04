@@ -10,7 +10,7 @@ public abstract class MethodBasePeripheral extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityCrop crop) throws InvocationException {
         return new Object[0];
     }
 

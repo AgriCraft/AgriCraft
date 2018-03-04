@@ -5,12 +5,13 @@ import com.agricraft.agricore.core.AgriCore;
 import static com.infinityraider.agricraft.compat.computer.methods.MethodUtilities.*;
 import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class MethodBase implements IAgriPeripheralMethod {
 
@@ -49,11 +50,21 @@ public abstract class MethodBase implements IAgriPeripheralMethod {
     }
 
     @Override
-    public final Object[] call(TileEntityPeripheral peripheral, World world, BlockPos pos, ItemStack journal, Object... args) throws MethodException {
+    public Object[] call(IBlockAccess world, BlockPos pos, ItemStack journal, Object... args) throws InvocationException {
 
         if (appliesToPeripheral) {
             if (args != null && args.length != 0) {
-                throw new MethodException(this, "Too many arguments!");
+                throw new InvocationException(this, "Too many arguments!");
+            } else if (world == null || pos == null) {
+                throw new InvocationException(this, "Missing world and block position!");
+            }
+
+            // Get the peripheral.
+            final TileEntityPeripheral peripheral = WorldHelper.getTile(world, pos, TileEntityPeripheral.class).orElse(null);
+
+            // Validate & Call
+            if (peripheral == null) {
+                throw new InvocationException(this, "Unable to locate peripheral!");
             } else {
                 return callMethodForPeripheral(peripheral, journal);
             }
@@ -62,53 +73,53 @@ public abstract class MethodBase implements IAgriPeripheralMethod {
             EnumFacing dir = EnumFacing.valueOf(args[0].toString());
 
             if (dir == null) {
-                throw new MethodException(this, "Invalid Direction!");
+                throw new InvocationException(this, "Invalid Direction!");
             }
 
             TileEntity tile = world.getTileEntity(pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()));
 
             if (tile == null) {
-                throw new MethodException(this, "Missing Crop!");
+                throw new InvocationException(this, "Missing Crop!");
             }
 
             if (!(tile instanceof TileEntityCrop)) {
-                throw new MethodException(this, "Not a crop!");
+                throw new InvocationException(this, "Not a crop!");
             }
 
             return callMethodForCrop((TileEntityCrop) tile, journal);
 
         } else {
-            throw new MethodException(this, "Command does not apply to anything!");
+            throw new InvocationException(this, "Command does not apply to anything!");
         }
 
     }
 
     // The object array thing here is quite odd.
-    private Object[] callMethodForPeripheral(TileEntityPeripheral peripheral, ItemStack journal) throws MethodException {
+    private Object[] callMethodForPeripheral(TileEntityPeripheral peripheral, ItemStack journal) throws InvocationException {
         if (requiresJournal) {
             if (!journal.isEmpty() || journal.getItem() == null) {
-                throw new MethodException(this, "Journal is missing");
+                throw new InvocationException(this, "Journal is missing");
             }
             ItemStack specimen = peripheral.getSpecimen();
             ItemStack seed = specimen.copy();
             if (!isSeedDiscovered(journal, seed)) {
-                throw new MethodException(this, "No information about this seed in the journal");
+                throw new InvocationException(this, "No information about this seed in the journal");
             }
         }
         return onMethodCalled(peripheral);
     }
 
-    private Object[] callMethodForCrop(TileEntityCrop crop, ItemStack journal) throws MethodException {
+    private Object[] callMethodForCrop(TileEntityCrop crop, ItemStack journal) throws InvocationException {
         boolean hasJournal = journal != null;
         if (requiresJournal) {
             if (!hasJournal) {
-                throw new MethodException(this, "Journal is missing");
+                throw new InvocationException(this, "Journal is missing");
             }
             if (!crop.hasSeed()) {
-                throw new MethodException(this, "There is no plant in the crop to analyze!");
+                throw new InvocationException(this, "There is no plant in the crop to analyze!");
             }
             if (crop.hasSeed() && !isSeedDiscovered(journal, crop.getSeed().toStack())) {
-                throw new MethodException(this, "No information about this seed in the journal");
+                throw new InvocationException(this, "No information about this seed in the journal");
             }
         }
         return onMethodCalled(crop);
@@ -116,8 +127,8 @@ public abstract class MethodBase implements IAgriPeripheralMethod {
 
     protected abstract List<MethodParameter> getParameters();
 
-    protected abstract Object[] onMethodCalled(TileEntityCrop crop) throws MethodException;
+    protected abstract Object[] onMethodCalled(TileEntityCrop crop) throws InvocationException;
 
-    protected abstract Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException;
+    protected abstract Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException;
 
 }

@@ -15,7 +15,7 @@ public class MethodGetStats extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityCrop crop) throws InvocationException {
         return Optional.ofNullable(crop.getSeed())
                 .map(s -> s.getStat())
                 .filter(IAgriStat::isAnalyzed)
@@ -24,7 +24,7 @@ public class MethodGetStats extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         IAgriStat stats = AgriApi.getStatRegistry().valueOf(StackHelper.getTag(peripheral.getSpecimen())).orElse(null);
         return stats == null ? null : new Object[]{stats.getGrowth(), stats.getGain(), stats.getStrength()};
     }

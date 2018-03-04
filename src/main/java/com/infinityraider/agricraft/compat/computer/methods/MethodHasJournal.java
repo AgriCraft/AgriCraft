@@ -10,7 +10,7 @@ public class MethodHasJournal extends MethodBasePeripheral {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         return new Object[]{peripheral.getJournal() != null};
     }
 

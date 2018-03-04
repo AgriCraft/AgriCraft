@@ -10,7 +10,7 @@ public class MethodNeedsBaseBlock extends MethodBaseGrowthReq {
     }
 
     @Override
-    protected Object[] onMethodCalled(Optional<IAgriPlant> plant) throws MethodException {
+    protected Object[] onMethodCalled(Optional<IAgriPlant> plant) throws InvocationException {
         return new Object[]{plant.flatMap(p -> p.getGrowthRequirement().getConditionStack()).isPresent()};
     }
 

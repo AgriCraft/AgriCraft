@@ -14,16 +14,16 @@ public abstract class MethodBaseGrowthReq extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityCrop crop) throws InvocationException {
         return onMethodCalled(getCropPlant(crop));
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         return onMethodCalled(getCropPlant(peripheral.getSpecimen()));
     }
 
-    protected abstract Object[] onMethodCalled(Optional<IAgriPlant> plant) throws MethodException;
+    protected abstract Object[] onMethodCalled(Optional<IAgriPlant> plant) throws InvocationException;
 
     @Override
     protected ArrayList<MethodParameter> getParameters() {

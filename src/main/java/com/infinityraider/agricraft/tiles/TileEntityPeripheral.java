@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.compat.computer.methods.MethodException;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import java.util.HashMap;
@@ -205,8 +204,8 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
 
         // Step 3. Attempt to evaluate the method.
         try {
-            return method.call(this, this.getWorld(), this.getPos(), this.getJournal(), argObjects);
-        } catch (MethodException e) {
+            return method.call(this.getWorld(), this.getPos(), this.getJournal(), argObjects);
+        } catch (IAgriPeripheralMethod.InvocationException e) {
             throw new Exception(e.getDescription());
         }
     }

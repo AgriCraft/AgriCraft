@@ -13,12 +13,12 @@ public class MethodIsAnalyzed extends MethodBase {
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityCrop crop) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityCrop crop) throws InvocationException {
         return new Object[]{Optional.ofNullable(crop.getSeed()).map(s -> s.getStat()).filter(IAgriStat::isAnalyzed).isPresent()};
     }
 
     @Override
-    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws MethodException {
+    protected Object[] onMethodCalled(TileEntityPeripheral peripheral) throws InvocationException {
         return new Object[]{peripheral.isSpecimenAnalyzed()};
     }
 
