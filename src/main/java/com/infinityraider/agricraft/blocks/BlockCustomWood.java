@@ -127,11 +127,6 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
     }
 
     @Override
-    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockCustomWood.class;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public ModelResourceLocation getBlockModelResourceLocation() {
         return new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + getInternalName());

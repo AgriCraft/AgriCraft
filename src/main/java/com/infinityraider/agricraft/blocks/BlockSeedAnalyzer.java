@@ -180,11 +180,6 @@ public class BlockSeedAnalyzer extends BlockTileCustomRenderedBase<TileEntitySee
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
-
-    @Override
     public Optional<? extends ItemBlock> getItemBlock() {
         return Optional.of(this.itemBlock);
     }

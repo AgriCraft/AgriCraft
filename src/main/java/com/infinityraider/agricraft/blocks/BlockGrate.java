@@ -58,11 +58,6 @@ public class BlockGrate extends BlockCustomWood<TileEntityGrate> {
     }
 
     @Override
-    public Class<? extends ItemBlockCustomWood> getItemBlockClass() {
-        return ItemBlockGrate.class;
-    }
-
-    @Override
     public Optional<? extends ItemBlock> getItemBlock() {
         return Optional.of(this.itemBlock);
     }

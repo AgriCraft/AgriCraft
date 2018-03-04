@@ -66,7 +66,7 @@ public class OreDictHelper {
 
     //finds the ingot for a nugget ore dictionary entry
     public static ItemStack getIngot(String ingotName) {
-        return OreDictionary.getOres(ingotName).stream().findAny().orElse(null);
+        return OreDictionary.getOres(ingotName).stream().findAny().orElse(ItemStack.EMPTY);
     }
 
     private static void getOreBlock(AgriNuggetType type) {

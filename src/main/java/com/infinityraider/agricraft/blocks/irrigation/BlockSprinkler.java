@@ -148,11 +148,6 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
-
-    @Override
     public Optional<ItemBlockAgricraft> getItemBlock() {
         return Optional.of(this.itemBlock);
     }
