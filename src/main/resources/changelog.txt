@@ -1,5 +1,7 @@
 Changelog
 ---------
+2.1.0a2
+
 2.1.0a1
 - FIXED: Crash preventing servers from launching.
 - FIXED: Seed Analyzers merging ItemStacks improperly.
