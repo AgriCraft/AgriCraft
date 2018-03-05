@@ -3,9 +3,7 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
-import com.infinityraider.agricraft.handler.GrassDropHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
-import com.infinityraider.agricraft.handler.PlayerInteractEventHandler;
 import com.infinityraider.agricraft.init.AgriOreDict;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -54,8 +52,6 @@ public interface IProxy extends IProxyBase {
 
     @Override
     default void registerEventHandlers() {
-        registerEventHandler(new PlayerInteractEventHandler());
-        registerEventHandler(new GrassDropHandler());
     }
 
     @Override

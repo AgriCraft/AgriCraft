@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.1.0a1
+- FIXED: Crash preventing servers from launching.
+- FIXED: Seed Analyzers merging ItemStacks improperly.
 
 2.1.0a0
 - PORTED: Ported to version 1.12 of Minecraft

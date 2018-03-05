@@ -10,12 +10,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = "agricraft", value = Side.CLIENT)
 public class TextureStitchHandler {
 
     private TextureStitchHandler() {
     }
-
+    
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SuppressWarnings("unused")
     public static void onTextureStitch(TextureStitchEvent e) {

@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.container;
 
 import com.google.common.base.Preconditions;
-import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.ContainerHelper;
-import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.container.ContainerTileBase;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;

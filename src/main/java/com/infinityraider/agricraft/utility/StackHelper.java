@@ -74,9 +74,9 @@ public final class StackHelper {
 
     /**
      * Determines if the given ItemStacks are equal, as per the vanilla definition of ItemStack
-     * equality ignoring item. Two item stacks, a & b, are considered equal if and only if either a & b are both
-     * null or a & b are both non-null and a's item, metadata, and tags equal b's item metadata, and
-     * tags. Notice, this method is simply a wrapper of
+     * equality ignoring item. Two item stacks, a & b, are considered equal if and only if either a
+     * & b are both null or a & b are both non-null and a's item, metadata, and tags equal b's item
+     * metadata, and tags. Notice, this method is simply a wrapper of
      * {@link ItemStack#areItemStacksEqual(ItemStack, ItemStack)}, with documentation added based
      * off of bytecode analysis.
      *
@@ -88,26 +88,49 @@ public final class StackHelper {
     public static boolean areEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         return ItemStack.areItemStacksEqual(a, b);
     }
-    
+
     /**
      * Determines if two ItemStacks are compatible as to be merged.
      * <br>
      * Two ItemStacks, a & b, are considered compatible if and only if:
      * <ul>
-     *  <li>both are non-null</li>
-     *  <li>both have the same item as determined by {@link #areItemsEqual()}</li>
-     *  <li>both have the same damage.</li>
-     *  <li>both have equivalent NBTTags as determined by {@link #areItemStackTagsEqual()}</li>
+     * <li>both are non-null</li>
+     * <li>both are non-empty</li>
+     * <li>both have the same item</li>
+     * <li>both are stackable</li>
+     * <li>both have no subtypes or have the same metadata</li>
+     * <li>both have the same item as determined by {@link #areItemsEqual()}</li>
+     * <li>both have the same damage</li>
+     * <li>both have equivalent NBTTags as determined by {@link #areItemStackTagsEqual()}</li>
      * </ul>
+     *
      * @param a
      * @param b
-     * @return 
+     * @return
      */
     public static boolean areCompatible(@Nonnull ItemStack a, @Nonnull ItemStack b) {
-        return (a == b)
-                || ItemStack.areItemsEqualIgnoreDurability(a, b)
-                && (a.getItemDamage() == b.getItemDamage())
-                && ItemStack.areItemStackTagsEqual(a, b);
+        // Validate
+        Preconditions.checkNotNull(a);
+        Preconditions.checkNotNull(b);
+
+        // The following is 'borrowed' from ItemHandlerHelper.canItemsStack
+        if (a.isEmpty() || b.isEmpty() || a.getItem() != b.getItem()) {
+            return false;
+        }
+
+        if (!a.isStackable()) {
+            return false;
+        }
+
+        if (a.getHasSubtypes() && a.getMetadata() != b.getMetadata()) {
+            return false;
+        }
+
+        if (a.hasTagCompound() != b.hasTagCompound()) {
+            return false;
+        }
+
+        return (!a.hasTagCompound() || a.getTagCompound().equals(b.getTagCompound())) && a.areCapsCompatible(b);
     }
 
     /**
@@ -248,20 +271,21 @@ public final class StackHelper {
      * @param stack the stack to have its size decreased.
      * @param amount the amount to decrease the stack size by, must be a positive number.
      * @return
-     *  <table>
-     *      <tr>
-     *          <td>{@link MethodResult#PASS}</td>
-     *          <td>if and only if the stack was not null and the stack size was greater than or equal to the amount to be removed.</td>
-     *      </tr>
-     *      <tr>
-     *          <td>{@link MethodResult#PASS}</td>
-     *          <td>if and only if the stack was not null and the player is in creative mode.</td>
-     *      </tr>
-     *      <tr>
-     *          <td>{@link MethodResult#FAIL}</td>
-     *          <td>otherwise.</td>
-     *      </tr>
-     *  </table>
+     * <table>
+     * <tr>
+     * <td>{@link MethodResult#PASS}</td>
+     * <td>if and only if the stack was not null and the stack size was greater than or equal to the
+     * amount to be removed.</td>
+     * </tr>
+     * <tr>
+     * <td>{@link MethodResult#PASS}</td>
+     * <td>if and only if the stack was not null and the player is in creative mode.</td>
+     * </tr>
+     * <tr>
+     * <td>{@link MethodResult#FAIL}</td>
+     * <td>otherwise.</td>
+     * </tr>
+     * </table>
      * @throws IllegalArgumentException if the given amount was less than zero.
      */
     @Nonnull
@@ -269,7 +293,7 @@ public final class StackHelper {
         // Validate arguments.
         Preconditions.checkNotNull(stack, "Null Itemstack Detected!");
         Preconditions.checkArgument(amount > 0, "Cannot decrease ItemStack size by a negative amount! %d", amount);
-        
+
         // Do stuff.
         if (stack.isEmpty()) {
             return MethodResult.FAIL;

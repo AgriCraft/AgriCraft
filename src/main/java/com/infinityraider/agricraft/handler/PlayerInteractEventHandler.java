@@ -23,11 +23,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings("unused")
+@Mod.EventBusSubscriber(modid = "agricraft")
 public class PlayerInteractEventHandler {
 
     /**
@@ -36,7 +38,7 @@ public class PlayerInteractEventHandler {
      * @param event
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
+    public static void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
         // If not disabled, don't bother.
         if (!AgriCraftConfig.disableVanillaFarming) {
             return;
@@ -100,7 +102,7 @@ public class PlayerInteractEventHandler {
      * Event handler to create water pads
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void waterPadCreation(PlayerInteractEvent.RightClickBlock event) {
+    public static void waterPadCreation(PlayerInteractEvent.RightClickBlock event) {
         // Fetch held item.
         final ItemStack stack = event.getItemStack();
 
@@ -148,8 +150,8 @@ public class PlayerInteractEventHandler {
      * This is done with an event because else the player will place the vines
      * as a block instead of applying them to the grate
      */
-    @SubscribeEvent
-    public void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
         // Fetch the ItemStack
         final ItemStack stack = event.getItemStack();
 
@@ -185,8 +187,8 @@ public class PlayerInteractEventHandler {
      * Event handler to deny bonemeal while sneaking on crops that are not
      * allowed to be bonemealed
      */
-    @SubscribeEvent
-    public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
         if (!event.getEntityPlayer().isSneaking()) {
             return;
         }

@@ -39,7 +39,7 @@ public final class LightHelper {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
-        
+
         // Create the array.
         final byte lightData[] = new byte[LIGHT_METHOD_COUNT];
 
@@ -50,8 +50,13 @@ public final class LightHelper {
         lightData[3] = (byte) world.getLightFor(EnumSkyBlock.SKY, pos);
         lightData[4] = (byte) world.getLightFor(EnumSkyBlock.BLOCK, pos);
         lightData[5] = (byte) world.getLightFromNeighbors(pos);
-        lightData[6] = (byte) world.getLightFromNeighborsFor(EnumSkyBlock.SKY, pos);
-        lightData[7] = (byte) world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, pos);
+        if (world.isRemote) {
+            lightData[6] = (byte) world.getLightFromNeighborsFor(EnumSkyBlock.SKY, pos);
+            lightData[7] = (byte) world.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, pos);
+        } else {
+            lightData[6] = (byte) 0;
+            lightData[7] = (byte) 0;
+        }
         lightData[8] = (byte) world.getLightBrightness(pos);
 
         // Return the array.
@@ -64,7 +69,7 @@ public final class LightHelper {
         Preconditions.checkNotNull(serverLightData);
         Preconditions.checkArgument(clientLightData.length == LIGHT_METHOD_COUNT);
         Preconditions.checkArgument(serverLightData.length == LIGHT_METHOD_COUNT);
-        
+
         // Send message.
         MessageUtil.messagePlayer(player, "`7==================================================`r");
         MessageUtil.messagePlayer(player, "       `eLight Level`r");

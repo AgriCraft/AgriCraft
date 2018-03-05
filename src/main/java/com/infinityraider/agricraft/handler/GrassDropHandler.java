@@ -11,6 +11,7 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,10 +19,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  *
  * @author Ryan
  */
+@Mod.EventBusSubscriber(modid = "agricraft")
 public final class GrassDropHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void interceptGrassDrop(BlockEvent.HarvestDropsEvent event) {
+    public static void interceptGrassDrop(BlockEvent.HarvestDropsEvent event) {
 
         // Skip silk touch.
         if (event.isSilkTouching()) {
