@@ -3,13 +3,14 @@
  */
 package com.infinityraider.agricraft.blocks;
 
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.renderers.blocks.RenderWaterPad;
 import com.infinityraider.agricraft.utility.FluidHandlerBlockWrapper;
 import com.infinityraider.agricraft.utility.IFluidHandlerBlock;
 import com.infinityraider.infinitylib.block.BlockCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
+import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +24,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -50,9 +50,9 @@ public class BlockWaterPad extends BlockCustomRenderedBase implements IFluidHand
 
     @Override
     protected IUnlistedProperty[] getUnlistedPropertyArray() {
-        return new IUnlistedProperty[]{
-            AgriProperties.CONNECTIONS
-        };
+        final List<IUnlistedProperty> props = new ArrayList<>();
+        AgriSideMetaMatrix.addUnlistedProperties(props::add);
+        return props.toArray(new IUnlistedProperty[6]);
     }
 
     @Override
@@ -62,12 +62,13 @@ public class BlockWaterPad extends BlockCustomRenderedBase implements IFluidHand
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        SidedConnection connection = new SidedConnection();
+        AgriSideMetaMatrix connection = new AgriSideMetaMatrix();
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            IBlockState stateAt = world.getBlockState(pos.offset(facing));
-            connection.setConnected(facing, stateAt.getBlock() == state.getBlock());
+            final IBlockState stateAt = world.getBlockState(pos.offset(facing));
+            final byte value = (byte)(stateAt.getBlock() == state.getBlock() ? 1 : 0);
+            connection.set(facing, value);
         }
-        return ((IExtendedBlockState) state).withProperty(AgriProperties.CONNECTIONS, connection);
+        return connection.writeToBlockState(state);
     }
 
     @Override

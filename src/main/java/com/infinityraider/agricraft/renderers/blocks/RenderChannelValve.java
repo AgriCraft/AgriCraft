@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Constants;
@@ -21,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, TileEntityChannelValve> {
 
     public RenderChannelValve(BlockWaterChannelValve block) {
-        super(block, new TileEntityChannelValve());
+        super(block, block.createNewTileEntity(null, 0));
     }
 
     @Override
@@ -53,11 +52,11 @@ public class RenderChannelValve extends RenderChannel<BlockWaterChannelValve, Ti
     }
 
     @Override
-    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
-        super.renderSide(tessellator, state, dir, type, matIcon);
-        if (type.isPrimary()) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, byte connection, TextureAtlasSprite matIcon) {
+        super.renderSide(tessellator, state, dir, connection, matIcon);
+        if (connection == 1) {
             renderSeparator(tessellator, state, dir, matIcon, BaseIcons.IRON_BLOCK.getIcon());
-        } else if (type.isAuxiliary()) {
+        } else if (connection == -1) {
             renderConnector(tessellator, dir, matIcon);
         }
     }

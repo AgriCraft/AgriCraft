@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks;
 
-import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.reference.Reference;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -139,7 +139,7 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 
     @Override
     protected InfinityProperty[] getPropertyArray() {
-        return new InfinityProperty[0];
+        return new InfinityProperty[]{};
     }
 
     @Override
@@ -155,14 +155,14 @@ public abstract class BlockCustomWood<T extends TileEntityCustomWood> extends Bl
 
     @Override
     public final IUnlistedProperty[] getUnlistedPropertyArray() {
-        List<IUnlistedProperty> list = getUnlistedProperties();
-        IUnlistedProperty[] props = list.toArray(new IUnlistedProperty[list.size() + 1]);
-        props[props.length - 1] = AgriProperties.CUSTOM_WOOD_TYPE;
-        return props;
+        final List<IUnlistedProperty> list = new ArrayList<>();
+        this.addUnlistedProperties(list::add);
+        list.add(AgriProperties.CUSTOM_WOOD_TYPE);
+        return list.toArray(new IUnlistedProperty[list.size()]);
     }
 
-    protected List<IUnlistedProperty> getUnlistedProperties() {
-        return Collections.emptyList();
+    protected void addUnlistedProperties(Consumer<IUnlistedProperty> consumer) {
+        // Nothing to do here.
     }
 
 }

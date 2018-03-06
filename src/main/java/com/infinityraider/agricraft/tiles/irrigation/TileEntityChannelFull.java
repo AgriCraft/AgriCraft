@@ -1,19 +1,14 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public class TileEntityChannelFull extends TileEntityChannel {
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean hasNeighbor(EnumFacing direction) {
-        if (this.getWorld() == null) {
-            return true;
-        } else {
-            return super.hasNeighbor(direction);
-        }
+    // Not much to do here...
+    public TileEntityChannelFull() {
+        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD);
+    }
+
+    public TileEntityChannelFull(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold) {
+        super(fluidCapacity, fluidHeightMin, fluidHeightMax, fluidSyncThreshold);
     }
 
 }

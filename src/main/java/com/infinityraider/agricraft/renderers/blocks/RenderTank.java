@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.utility.BaseIcons;
@@ -29,18 +28,18 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
     final static float B = Constants.WHOLE - A;
 
     public RenderTank(BlockWaterTank block) {
-        super(block, new TileEntityTank(), true, true, true);
+        super(block, block.createNewTileEntity(null, 0), true, true, true);
     }
 
-    private void renderBottom(ITessellator tessellator, IrrigationConnectionType connection, TextureAtlasSprite icon) {
-        if (connection != IrrigationConnectionType.AUXILIARY) {
+    private void renderBottom(ITessellator tessellator, byte connection, TextureAtlasSprite icon) {
+        if (connection < 2) {
             tessellator.drawScaledFace(A, A, B, B, EnumFacing.DOWN, icon, 0);
             tessellator.drawScaledFace(A, A, B, B, EnumFacing.UP, icon, 1);
         }
     }
 
-    private void renderSide(ITessellator tessellator, EnumFacing dir, IrrigationConnectionType connection, TextureAtlasSprite icon) {
-        if (connection == IrrigationConnectionType.AUXILIARY) {
+    private void renderSide(ITessellator tessellator, EnumFacing dir, byte connection, TextureAtlasSprite icon) {
+        if (connection < 0 || connection > 1) {
             return;
         }
         //data about side to render
@@ -53,7 +52,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
         tessellator.drawScaledFace(xAxis ? min : 0, xAxis ? 0 : min, xAxis ? max : 16, xAxis ? 16 : max, EnumFacing.UP, icon, 16);
 
         //render side
-        if (connection == IrrigationConnectionType.NONE) {
+        if (connection == 0) {
             tessellator.drawScaledFace(0, 0, 16, 16, dir, icon, index > 0 ? 16 : 0);
             tessellator.drawScaledFace(0, 0, 16, 16, dir.getOpposite(), icon, index > 0 ? 14 : 2);
         } else {
@@ -87,11 +86,13 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
     @Override
     protected void renderWorldBlockWoodDynamic(ITessellator tessellator, World world, BlockPos pos, BlockWaterTank block,
             TileEntityTank tank, TextureAtlasSprite sprite) {
-        //only render water on the bottom layer
-        if (tank.getYPosition() == 0) {
+        //only render water in one on top.
+        final int level = tank.getFluidHeight();
+        final AgriSideMetaMatrix connections = tank.getConnections();
+        //if (level > 0 && (level <= tank.getMaxFluidHeight() || connections.get(EnumFacing.UP) > 1)) {
 
             // -0.0001F to avoid Z-fighting on maximum filled tanks
-            float y = tank.getFluidHeight() - A;
+            final float y = (level * 16 / 1_000_000f) - A;
 
             // Calculate water brightness.
             final int l = RenderUtilBase.getMixedBrightness(tank.getWorld(), tank.getPos(), Blocks.WATER);
@@ -101,28 +102,27 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
             //draw surface
             final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
             tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, waterIcon, y);
-        }
+        //}
     }
 
     @Override
-    protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, BlockWaterTank block, EnumFacing side, TextureAtlasSprite sprite) {
-        final IrrigationConnection connections = new IrrigationConnection();
-        connections.read(state);
-        renderSide(tess, EnumFacing.NORTH, connections.get(EnumFacing.NORTH), sprite);
-        renderSide(tess, EnumFacing.EAST, connections.get(EnumFacing.EAST), sprite);
-        renderSide(tess, EnumFacing.SOUTH, connections.get(EnumFacing.SOUTH), sprite);
-        renderSide(tess, EnumFacing.WEST, connections.get(EnumFacing.WEST), sprite);
+    protected void renderWorldBlockWoodStatic(ITessellator tess, IExtendedBlockState state, BlockWaterTank block, EnumFacing face, TextureAtlasSprite sprite) {
+        final AgriSideMetaMatrix connections = new AgriSideMetaMatrix();
+        connections.readFromBlockState(state);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            renderSide(tess, side, connections.get(side), sprite);
+        }
         renderBottom(tess, connections.get(EnumFacing.DOWN), sprite);
     }
 
     @Override
     protected void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, BlockWaterTank block, TileEntityTank tile,
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite sprite) {
-        renderSide(tess, EnumFacing.NORTH, IrrigationConnectionType.NONE, sprite);
-        renderSide(tess, EnumFacing.EAST, IrrigationConnectionType.NONE, sprite);
-        renderSide(tess, EnumFacing.SOUTH, IrrigationConnectionType.NONE, sprite);
-        renderSide(tess, EnumFacing.WEST, IrrigationConnectionType.NONE, sprite);
-        renderBottom(tess, IrrigationConnectionType.NONE, sprite);
+        renderSide(tess, EnumFacing.NORTH, (byte)0, sprite);
+        renderSide(tess, EnumFacing.EAST, (byte)0, sprite);
+        renderSide(tess, EnumFacing.SOUTH, (byte)0, sprite);
+        renderSide(tess, EnumFacing.WEST, (byte)0, sprite);
+        renderBottom(tess, (byte)0, sprite);
     }
 
     @Override

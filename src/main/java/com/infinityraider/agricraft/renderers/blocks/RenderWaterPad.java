@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.BlockWaterPad;
 import com.infinityraider.agricraft.reference.AgriProperties;
 import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;
@@ -16,14 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderWaterPad extends RenderBlockBase<BlockWaterPad> {
-
-    private static final SidedConnection DEFAULT = new SidedConnection();
 
     public RenderWaterPad(BlockWaterPad block) {
         super(block, true);
@@ -40,15 +37,16 @@ public class RenderWaterPad extends RenderBlockBase<BlockWaterPad> {
         final TextureAtlasSprite matIcon = BaseIcons.DIRT.getIcon();
         final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
 
-        // Check Full
-        SidedConnection connection = state instanceof IExtendedBlockState ? ((IExtendedBlockState) state).getValue(AgriProperties.CONNECTIONS) : DEFAULT;
-
         // Draw Base
         renderBase(tessellator, matIcon);
+        
+        // Get Connections.
+        final AgriSideMetaMatrix connections = new AgriSideMetaMatrix();
+        connections.readFromBlockState(state);
 
         // Render Sides
         for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-            if (!connection.isConnected(dir)) {
+            if (connections.get(dir) < 1) {
                 renderSide(tessellator, dir, matIcon);
             }
         }

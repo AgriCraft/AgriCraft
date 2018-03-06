@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnection;
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.irrigation.AbstractBlockWaterChannel;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.utility.BaseIcons;
@@ -28,13 +27,12 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
     }
 
     protected void renderWoodChannel(ITessellator tessellator, IBlockState state, TextureAtlasSprite icon) {
-        final IrrigationConnection metas = new IrrigationConnection();
-        metas.read(state);
+        final AgriSideMetaMatrix connections = new AgriSideMetaMatrix();
+        connections.readFromBlockState(state);
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, state, EnumFacing.NORTH, metas.get(EnumFacing.NORTH), icon);
-        this.renderSide(tessellator, state, EnumFacing.EAST, metas.get(EnumFacing.EAST), icon);
-        this.renderSide(tessellator, state, EnumFacing.SOUTH, metas.get(EnumFacing.SOUTH), icon);
-        this.renderSide(tessellator, state, EnumFacing.WEST, metas.get(EnumFacing.WEST), icon);
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            this.renderSide(tessellator, state, side, connections.get(side), icon);
+        }
     }
 
     protected void renderBottom(ITessellator tessellator, TextureAtlasSprite matIcon) {
@@ -47,45 +45,45 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         tessellator.drawScaledPrism(11, 5, 11, 12, 12, 12, matIcon);
     }
 
-    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, byte type, TextureAtlasSprite matIcon) {
         switch (dir) {
             case EAST:
                 //positive x
-                if (type.isPrimary()) {
+                if (type > 0) {
                     tessellator.drawScaledPrism(12, 4, 4, 16, 5, 12, matIcon);
                     tessellator.drawScaledPrism(12, 5, 4, 16, 12, 5, matIcon);
                     tessellator.drawScaledPrism(12, 5, 11, 16, 12, 12, matIcon);
-                } else {
+                } else if (type == 0) {
                     tessellator.drawScaledPrism(11, 5, 5, 12, 12, 11, matIcon);
                 }
                 break;
             case WEST:
                 //negative x
-                if (type.isPrimary()) {
+                if (type > 0) {
                     tessellator.drawScaledPrism(0, 4, 4, 4, 5, 12, matIcon);
                     tessellator.drawScaledPrism(0, 5, 4, 4, 12, 5, matIcon);
                     tessellator.drawScaledPrism(0, 5, 11, 4, 12, 12, matIcon);
-                } else {
+                } else if (type == 0) {
                     tessellator.drawScaledPrism(4, 5, 5, 5, 12, 11, matIcon);
                 }
                 break;
             case NORTH:
                 //negative z
-                if (type.isPrimary()) {
+                if (type > 0) {
                     tessellator.drawScaledPrism(4, 4, 0, 12, 5, 4, matIcon);
                     tessellator.drawScaledPrism(4, 5, 0, 5, 12, 4, matIcon);
                     tessellator.drawScaledPrism(11, 5, 0, 12, 12, 4, matIcon);
-                } else {
+                } else if (type == 0) {
                     tessellator.drawScaledPrism(5, 5, 4, 11, 12, 5, matIcon);
                 }
                 break;
             case SOUTH:
                 //positive z
-                if (type.isPrimary()) {
+                if (type > 0) {
                     tessellator.drawScaledPrism(4, 4, 12, 12, 5, 16, matIcon);
                     tessellator.drawScaledPrism(4, 5, 12, 5, 12, 16, matIcon);
                     tessellator.drawScaledPrism(11, 5, 12, 12, 12, 16, matIcon);
-                } else {
+                } else if (type == 0) {
                     tessellator.drawScaledPrism(5, 5, 11, 11, 12, 12, matIcon);
                 }
                 break;
@@ -94,7 +92,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 
     protected void drawWater(ITessellator tessellator, T channel, TextureAtlasSprite icon) {
         // Check if there is water to be rendered.
-        if (channel.getFluidAmount(0) < 0) {
+        if (channel.getFluidHeight() <= channel.getMinFluidHeight()) {
             // There exists no water to be rendered.
             return;
         }
@@ -105,22 +103,25 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         tessellator.setAlpha(0.39f);
 
         // Calculate y to avoid plane rendering conflicts
-        final float y = channel.getFluidHeight() - 0.001f;
+        final float y = (channel.getFluidHeight() * 16 / 1_000_000f) - 0.001f;
 
         //draw central water levels
         tessellator.drawScaledFaceDouble(5, 5, 11, 11, EnumFacing.UP, icon, y);
+        
+        // Fetch the connections.
+        final AgriSideMetaMatrix connections = channel.getConnections();
 
         //connect to edges
-        if (channel.hasNeighbor(EnumFacing.NORTH)) {
+        if (connections.get(EnumFacing.NORTH) > 0) {
             tessellator.drawScaledFaceDouble(5, 0, 11, 5, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbor(EnumFacing.EAST)) {
+        if (connections.get(EnumFacing.EAST) > 0) {
             tessellator.drawScaledFaceDouble(11, 5, 16, 11, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbor(EnumFacing.SOUTH)) {
+        if (connections.get(EnumFacing.SOUTH) > 0) {
             tessellator.drawScaledFaceDouble(5, 11, 11, 16, EnumFacing.UP, icon, y);
         }
-        if (channel.hasNeighbor(EnumFacing.WEST)) {
+        if (connections.get(EnumFacing.WEST) > 0) {
             tessellator.drawScaledFaceDouble(0, 5, 5, 11, EnumFacing.UP, icon, y);
         }
 
@@ -141,10 +142,10 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, B block, T channel, ItemStack stack,
             EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, state, EnumFacing.NORTH, IrrigationConnectionType.NONE, icon);
-        this.renderSide(tessellator, state, EnumFacing.EAST, IrrigationConnectionType.NONE, icon);
-        this.renderSide(tessellator, state, EnumFacing.SOUTH, IrrigationConnectionType.NONE, icon);
-        this.renderSide(tessellator, state, EnumFacing.WEST, IrrigationConnectionType.NONE, icon);
+        this.renderSide(tessellator, state, EnumFacing.NORTH, (byte)0, icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, (byte)0, icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, (byte)0, icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, (byte)0, icon);
 
     }
 

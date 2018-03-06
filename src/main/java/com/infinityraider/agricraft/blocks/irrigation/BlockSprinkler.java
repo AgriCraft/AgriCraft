@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -22,7 +23,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -110,7 +110,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 
     //see if the block can stay
     public boolean canBlockStay(World world, BlockPos pos) {
-        return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof BlockWaterChannel);
+        return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof IAgriFluidComponent);
     }
 
     @Override

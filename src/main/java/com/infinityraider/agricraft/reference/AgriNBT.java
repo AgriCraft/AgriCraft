@@ -37,4 +37,7 @@ public interface AgriNBT {
     String COLUMN_COUNTER = "agri_column_counter";
     String WATER_USAGE_REMAINING_MB = "agri_water_usage_remaining_mb";
     String WATER_USAGE_REMAINING_TICKS = "agri_water_usage_remaining_ticks";
+
+    String FLUID_AMOUNT = "agri_fluid_amount";
+
 }

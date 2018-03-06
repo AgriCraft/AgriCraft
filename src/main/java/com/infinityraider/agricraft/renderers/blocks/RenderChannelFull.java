@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, TileEntityChannelFull> {
 
     public RenderChannelFull(BlockWaterChannelFull block) {
-        super(block, new TileEntityChannelFull());
+        super(block, block.createNewTileEntity(null, 0));
     }
 
     @Override
@@ -36,8 +35,8 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     }
 
     @Override
-    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, IrrigationConnectionType type, TextureAtlasSprite matIcon) {
-        if (type.isPrimary()) {
+    protected void renderSide(ITessellator tessellator, IBlockState state, EnumFacing dir, byte connection, TextureAtlasSprite matIcon) {
+        if (connection > 0) {
             return;
         }
         switch (dir) {
@@ -64,10 +63,10 @@ public class RenderChannelFull extends RenderChannel<BlockWaterChannelFull, Tile
     protected void renderInventoryBlockWood(ITessellator tessellator, World world, IBlockState state, BlockWaterChannelFull block, TileEntityChannelFull channel,
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon) {
         this.renderBottom(tessellator, icon);
-        this.renderSide(tessellator, state, EnumFacing.NORTH, IrrigationConnectionType.PRIMARY, icon);
-        this.renderSide(tessellator, state, EnumFacing.EAST, IrrigationConnectionType.PRIMARY, icon);
-        this.renderSide(tessellator, state, EnumFacing.SOUTH, IrrigationConnectionType.PRIMARY, icon);
-        this.renderSide(tessellator, state, EnumFacing.WEST, IrrigationConnectionType.PRIMARY, icon);
+        this.renderSide(tessellator, state, EnumFacing.NORTH, (byte) 1, icon);
+        this.renderSide(tessellator, state, EnumFacing.EAST, (byte) 1, icon);
+        this.renderSide(tessellator, state, EnumFacing.SOUTH, (byte) 1, icon);
+        this.renderSide(tessellator, state, EnumFacing.WEST, (byte) 1, icon);
     }
 
     @Override

@@ -1,13 +1,13 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -16,7 +16,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityChannelValve extends TileEntityChannel implements IDebuggable {
 
-    private boolean powered = false;
+    private boolean powered;
+
+    public TileEntityChannelValve() {
+        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD);
+    }
+
+    public TileEntityChannelValve(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold) {
+        super(fluidCapacity, fluidHeightMin, fluidHeightMax, fluidSyncThreshold);
+        this.powered = false;
+    }
+
+    @Override
+    protected byte classifyConnection(EnumFacing side) {
+        final Block b = WorldHelper.getBlock(world, pos.offset(side), Block.class).orElse(null);
+        final IAgriFluidComponent component = WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).orElse(null);
+        if (b instanceof BlockLever) {
+            return -1;
+        } else if (component == null) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
 
     @Override
     protected final void writeChannelNBT(NBTTagCompound tag) {
@@ -29,18 +51,6 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         this.powered = tag.getBoolean(AgriNBT.POWER);
     }
 
-    @Override
-    public void update() {
-        if (!this.getWorld().isRemote) {
-            if (!this.powered) {
-                super.update();
-            } else if (++ticksSinceNeighbourCheck > NEIGHBOUR_CHECK_DELAY) {
-                checkConnections();
-                ticksSinceNeighbourCheck = 0;
-            }
-        }
-    }
-
     public void updatePowerStatus() {
         final boolean wasPowered = powered;
         powered = this.getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0;
@@ -49,31 +59,38 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         }
     }
 
-    @Override
-    public IrrigationConnectionType getConnectionType(EnumFacing side) {
-        if (WorldHelper.getBlock(this.getWorld(), pos.offset(side), BlockLever.class).isPresent()) {
-            return IrrigationConnectionType.AUXILIARY;
-        } else {
-            return super.getConnectionType(side);
-        }
-    }
-
     public boolean isPowered() {
         return powered;
     }
 
     @Override
-    public boolean canAcceptFluid(int y, int amount, boolean partial) {
-        return !powered && super.canAcceptFluid(y, amount, partial);
+    public int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate) {
+        if (!this.powered) {
+            return super.acceptFluid(inputHeight, inputAmount, partial, simulate);
+        } else {
+            return inputAmount;
+        }
+    }
+
+    @Override
+    public void update() {
+        if (!this.powered) {
+            super.update();
+        }
+    }
+
+    @Override
+    public void addClientDebugInfo(Consumer<String> consumer) {
+        super.addClientDebugInfo(consumer);
+        consumer.accept("VALVE:");
+        consumer.accept("  - State: " + (this.isPowered() ? "closed" : "open"));
     }
 
     @Override
     public void addServerDebugInfo(Consumer<String> consumer) {
-        consumer.accept("VALVE");
+        super.addServerDebugInfo(consumer);
+        consumer.accept("VALVE:");
         consumer.accept("  - State: " + (this.isPowered() ? "closed" : "open"));
-        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + Constants.BUCKET_mB / 2);
-        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
-        consumer.accept("  - Material: " + this.getMaterialBlock().getRegistryName() + ":" + this.getMaterialMeta()); //Much Nicer.
     }
 
     @Override
@@ -85,4 +102,5 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
         String status = AgriCore.getTranslator().translate(powered ? "agricraft_tooltip.closed" : "agricraft_tooltip.open");
         information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.state") + ": " + status);
     }
+
 }

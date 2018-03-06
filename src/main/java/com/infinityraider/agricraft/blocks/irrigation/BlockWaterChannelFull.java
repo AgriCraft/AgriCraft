@@ -21,7 +21,7 @@ public class BlockWaterChannelFull extends AbstractBlockWaterChannel<TileEntityC
     public Optional<ItemBlockCustomWood> getItemBlock() {
         return Optional.of(this.itemBlock);
     }
-
+    
     @Override
     public TileEntityChannelFull createNewTileEntity(World world, int meta) {
         return new TileEntityChannelFull();

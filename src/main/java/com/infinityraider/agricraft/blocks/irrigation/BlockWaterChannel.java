@@ -58,26 +58,29 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity, boolean isActualState) {
-        // Fetch Tile Entity
-        final Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos, TileEntityChannel.class);
-
         // Add central box.
         addCollisionBoxToList(pos, mask, list, CENTER_BOX);
 
+        // Fetch Tile Entity
+        final TileEntityChannel tile = WorldHelper.getTile(world, pos, TileEntityChannel.class).orElse(null);
+
+        // If null stop.
+        if (tile == null) {
+            return;
+        }
+
         //adjacent boxes
-        if (tile.isPresent()) {
-            if (tile.get().hasNeighbor(EnumFacing.NORTH)) {
-                Block.addCollisionBoxToList(pos, mask, list, NORTH_BOX);
-            }
-            if (tile.get().hasNeighbor(EnumFacing.EAST)) {
-                Block.addCollisionBoxToList(pos, mask, list, EAST_BOX);
-            }
-            if (tile.get().hasNeighbor(EnumFacing.SOUTH)) {
-                Block.addCollisionBoxToList(pos, mask, list, SOUTH_BOX);
-            }
-            if (tile.get().hasNeighbor(EnumFacing.WEST)) {
-                Block.addCollisionBoxToList(pos, mask, list, WEST_BOX);
-            }
+        if (tile.getConnections().get(EnumFacing.NORTH) > 0) {
+            Block.addCollisionBoxToList(pos, mask, list, NORTH_BOX);
+        }
+        if (tile.getConnections().get(EnumFacing.EAST) > 0) {
+            Block.addCollisionBoxToList(pos, mask, list, EAST_BOX);
+        }
+        if (tile.getConnections().get(EnumFacing.SOUTH) > 0) {
+            Block.addCollisionBoxToList(pos, mask, list, SOUTH_BOX);
+        }
+        if (tile.getConnections().get(EnumFacing.WEST) > 0) {
+            Block.addCollisionBoxToList(pos, mask, list, WEST_BOX);
         }
     }
 
@@ -85,23 +88,23 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         // Fetch Tile Entity
-        final Optional<TileEntityChannel> tile = WorldHelper.getTile(world, pos, TileEntityChannel.class);
+        final TileEntityChannel tile = WorldHelper.getTile(world, pos, TileEntityChannel.class).orElse(null);
 
         // Define Core Bounding Box
         AxisAlignedBB selection = CENTER_BOX;
 
         // Expand Bounding Box
-        if (tile.isPresent()) {
-            if (tile.get().hasNeighbor(EnumFacing.NORTH)) {
+        if (tile != null) {
+            if (tile.getConnections().get(EnumFacing.NORTH) > 0) {
                 selection = selection.union(NORTH_BOX);
             }
-            if (tile.get().hasNeighbor(EnumFacing.EAST)) {
+            if (tile.getConnections().get(EnumFacing.EAST) > 0) {
                 selection = selection.union(EAST_BOX);
             }
-            if (tile.get().hasNeighbor(EnumFacing.SOUTH)) {
+            if (tile.getConnections().get(EnumFacing.SOUTH) > 0) {
                 selection = selection.union(SOUTH_BOX);
             }
-            if (tile.get().hasNeighbor(EnumFacing.WEST)) {
+            if (tile.getConnections().get(EnumFacing.WEST) > 0) {
                 selection = selection.union(WEST_BOX);
             }
         }
@@ -114,7 +117,7 @@ public class BlockWaterChannel extends AbstractBlockWaterChannel<TileEntityChann
     @Override
     @SideOnly(Side.CLIENT)
     public RenderChannel getRenderer() {
-        return new RenderChannel(this, new TileEntityChannel());
+        return new RenderChannel(this, this.createNewTileEntity(null, 0));
     }
 
     @Override

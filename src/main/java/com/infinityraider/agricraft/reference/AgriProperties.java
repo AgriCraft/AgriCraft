@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.blocks.properties.UnlistedPropertyInteger;
 import com.infinityraider.agricraft.tiles.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
-import com.infinityraider.infinitylib.block.blockstate.SidedConnection;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -35,5 +34,4 @@ public interface AgriProperties {
 
     IUnlistedProperty<CustomWoodType> CUSTOM_WOOD_TYPE = new PropertyCustomWood("wood_type");
 
-    IUnlistedProperty<SidedConnection> CONNECTIONS = new SidedConnection.Property("connections");
 }

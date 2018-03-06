@@ -2,9 +2,7 @@ package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Preconditions;
-import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
+import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -30,8 +28,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 
-public class TileEntitySprinkler extends TileEntityBase implements ITickable, IIrrigationComponent, IAgriDisplayable {
+public class TileEntitySprinkler extends TileEntityBase implements ITickable, IAgriFluidComponent, IAgriDisplayable {
 
     private int counter = 0;
     private float angle = 0.0F;
@@ -230,71 +230,66 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
     // <editor-fold>
     // =========================================================================
     @Override
-    public boolean canConnectTo(EnumFacing side, IConnectable component) {
-        return side.equals(EnumFacing.UP) && component instanceof TileEntityChannel;
+    public boolean canConnectTo(EnumFacing side, IAgriConnectable component) {
+        return side.equals(EnumFacing.UP) && component instanceof IAgriFluidComponent;
     }
 
     @Override
-    public boolean canAcceptFluid(int y, int amount, boolean partial) {
-        if (buffer + amount <= BUFFER_CAP) {
-            return true;
-        } else {
-            return partial;
+    public AgriSideMetaMatrix getConnections() {
+        final AgriSideMetaMatrix connections = new AgriSideMetaMatrix();
+        connections.set(EnumFacing.UP, (byte)1);
+        return connections;
+    }
+
+    @Override
+    public int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate) {
+        // Calculate total fluid amount.
+        final int totalFluid = this.buffer + inputAmount;
+        final int remainingFluid = Math.max(totalFluid - BUFFER_CAP, 0);
+        final int consumedFluid = inputAmount - remainingFluid;
+        
+        // If there was a remainder, but we aren't allowed to have remainders, abort.
+        if (remainingFluid != 0 && !partial) {
+            return inputAmount;
         }
-    }
-
-    @Override
-    public int acceptFluid(int y, int amount, boolean partial) {
-        if (canAcceptFluid(y, amount, partial)) {
-            this.buffer += amount;
-            if (this.buffer > BUFFER_CAP) {
-                amount = this.buffer - BUFFER_CAP;
-                this.buffer = BUFFER_CAP;
-            } else {
-                amount = 0;
-            }
+        
+        // If the remainder doesn't equal input, and we are not simulating, then we need to update.
+        if (remainingFluid != inputAmount && !simulate) {
+            // Update the fluid amount.
+            this.buffer = this.buffer + consumedFluid;
+            // Mark the component as dirty as it changed.
+            this.world.markChunkDirty(pos, this);
         }
-        return amount;
+        
+        // Return consumed amount.
+        return consumedFluid;
     }
 
     @Override
-    public int getFluidAmount(int y) {
+    public int getFluidAmount() {
         return this.buffer;
     }
-
+    
     @Override
-    public int getCapacity() {
+    public int getFluidCapacity() {
         return BUFFER_CAP;
     }
 
     @Override
-    public void setFluidLevel(int lvl) {
-        // This can be skipped... Shhh!
-    }
-
-    @Override
-    public void syncFluidLevel() {
-        // This can be skipped... Shhh!
-    }
-
-    @Override
     public int getFluidHeight() {
-        return this.buffer;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public float getFluidHeight(int lvl) {
-        return (this.buffer * 16.0f / BUFFER_CAP);
+    public int getMinFluidHeight() {
+        return 0;
     }
 
     @Override
-    public IrrigationConnectionType getConnectionType(EnumFacing side) {
-        if (side == EnumFacing.UP) {
-            return IrrigationConnectionType.PRIMARY;
-        } else {
-            return IrrigationConnectionType.NONE;
-        }
+    public int getMaxFluidHeight() {
+        return 1000;
     }
+    
     // =========================================================================
     // IIrrigationComponent Methods
     // </editor-fold>
@@ -349,7 +344,7 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, II
         Preconditions.checkNotNull(information);
 
         // Add Information
-        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + BUFFER_CAP);
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.buffer + "/" + BUFFER_CAP);
     }
 
     /**

@@ -1,49 +1,86 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.irrigation.IConnectable;
-import com.infinityraider.agricraft.api.v1.irrigation.IIrrigationComponent;
-import com.infinityraider.agricraft.api.v1.irrigation.IrrigationConnectionType;
-import com.infinityraider.agricraft.network.MessageSyncFluidLevel;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
+import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
+import com.infinityraider.agricraft.network.MessageSyncFluidAmount;
+import com.infinityraider.agricraft.utility.IAgriFluidComponentSyncable;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 
-public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IIrrigationComponent, IDebuggable {
+public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IAgriFluidComponent, IAgriFluidComponentSyncable, IDebuggable {
+    
+    public static final int CHANNEL_FLUID_CAPACITY = 1_000;
+    public static final int CHANNEL_FLUID_HEIGHT_MIN = 250_000;
+    public static final int CHANNEL_FLUID_HEIGHT_MAX = 750_000;
+    public static final int CHANNEL_FLUID_SYNC_THRESHOLD = 100;
+    
+    private final int fluidCapacity;
+    private final int fluidHeightMin;
+    private final int fluidHeightMax;
 
-    private final IIrrigationComponent[] neighbours = new IIrrigationComponent[4];
-    protected static final int NEIGHBOUR_CHECK_DELAY = 1024;
-    protected int ticksSinceNeighbourCheck = NEIGHBOUR_CHECK_DELAY;
+    private final int fluidSyncThreshold;
 
-    // Might want to move this to a static import class...
-    protected static final int MIN = 5;
-    protected static final int MAX = 12;
-    protected static final int HEIGHT = MAX - MIN;
-    protected static final int DISCRETE_MAX = 16;
-    protected static final int ABSOLUTE_MAX = AgriCraftConfig.channelCapacity;
-    protected static final float DISCRETE_FACTOR = (float) DISCRETE_MAX / (float) ABSOLUTE_MAX;
+    private final int fluidDensity;
 
-    private int lvl;
-    private int lastDiscreteLvl = 0;
+    @Nonnull
+    private final AgriSideMetaMatrix connections;
+    private final int heightsCache[];
+
+    private int fluidAmount;
+    private int oldFluidAmount;
+
+    public TileEntityChannel() {
+        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD);
+    }
+
+    public TileEntityChannel(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold) {
+        // Validate inputs.
+        Preconditions.checkArgument(fluidCapacity > 0);
+        Preconditions.checkArgument(fluidHeightMin >= 0);
+        Preconditions.checkArgument(fluidHeightMax <= 1_000_000);
+        Preconditions.checkArgument(fluidHeightMin < fluidHeightMax);
+        Preconditions.checkArgument(fluidSyncThreshold > 0);
+        
+        // Save the given values.
+        this.fluidCapacity = fluidCapacity;
+        this.fluidHeightMin = fluidHeightMin;
+        this.fluidHeightMax = fluidHeightMax;
+        this.fluidSyncThreshold = fluidSyncThreshold;
+        
+        // Calculate density.
+        this.fluidDensity = (fluidHeightMax - fluidHeightMin) / fluidCapacity;
+        
+        // Set the other stuff.
+        this.fluidAmount = 0;
+        this.connections = new AgriSideMetaMatrix();
+        this.heightsCache = new int[]{-1, -1, -1, -1, -1, -1};
+        
+        // Perform initial refresh.
+        this.refreshConnections();
+    }
 
     //this saves the data on the tile entity
     @Override
     protected final void writeNBT(NBTTagCompound tag) {
-        if (this.lvl > 0) {
-            tag.setInteger(AgriNBT.LEVEL, this.lvl);
-        }
+        // Write fluid amount.
+        tag.setInteger(AgriNBT.FLUID_AMOUNT, this.fluidAmount);
+
+        // Write connection matrix.
+        this.connections.writeToNbt(tag);
+
+        // Write other stuff.
         writeChannelNBT(tag);
     }
 
@@ -53,11 +90,28 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     //this loads the saved data for the tile entity
     @Override
     protected final void readNBT(NBTTagCompound tag) {
-        if (tag.hasKey(AgriNBT.LEVEL)) {
-            this.lvl = tag.getInteger(AgriNBT.LEVEL);
-        } else {
-            this.lvl = 0;
+        // Place to hold the new fluid amount.
+        int newFluidAmount = 0;
+
+        // Read fluid amount.
+        if (tag.hasKey(AgriNBT.FLUID_AMOUNT)) {
+            newFluidAmount = tag.getInteger(AgriNBT.FLUID_AMOUNT);
         }
+
+        // Bring the fluid amount into the proper range (in case of old, bad saves).
+        if (newFluidAmount < 0) {
+            newFluidAmount = 0;
+        } else if (newFluidAmount > this.fluidCapacity) {
+            newFluidAmount = this.fluidCapacity;
+        }
+
+        // Update the fluid amount.
+        this.fluidAmount = newFluidAmount;
+
+        // Read connection matrix.
+        this.connections.readFromNbt(tag);
+
+        // Read other stuff.
         readChannelNBT(tag);
     }
 
@@ -65,228 +119,247 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    public int getFluidAmount(int y) {
-        return this.lvl;
+    public boolean canConnectTo(EnumFacing side, IAgriConnectable connectable) {
+        return (side != EnumFacing.UP)
+                && (connectable instanceof IAgriFluidComponent)
+                && (connectable.canConnectTo(EnumFacing.UP, this));
     }
 
     @Override
-    public int getCapacity() {
-        return ABSOLUTE_MAX;
+    @Nonnull
+    public AgriSideMetaMatrix getConnections() {
+        return this.connections.copy();
     }
 
     @Override
-    public void setFluidLevel(int lvl) {
-        if (lvl >= 0 && lvl <= ABSOLUTE_MAX && lvl != this.lvl) {
-            this.lvl = lvl;
-            syncFluidLevel();
+    public final void refreshConnections() {
+        // Check the connections.
+        for (EnumFacing side : EnumFacing.values()) {
+            // Classify the side.
+            this.connections.set(side, classifyConnection(side));
         }
     }
-
-    @Override
-    public int acceptFluid(int y, int amount, boolean partial) {
-        if (!this.getWorld().isRemote && amount >= 0 && this.canAcceptFluid(0, amount, partial)) {
-            int room = this.getCapacity() - this.getFluidAmount(0);
-            if (room >= amount) {
-                this.setFluidLevel(this.getFluidAmount(0) + amount);
-                amount = 0;
-            } else if (room > 0) {
-                this.setFluidLevel(this.getCapacity());
-                amount = amount - room;
-            }
-        }
-        return amount;
+    
+    protected byte classifyConnection(@Nonnull EnumFacing side) {
+        return WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).isPresent() ? (byte)1 : (byte)0;
     }
 
     @Override
-    public boolean canConnectTo(EnumFacing side, IConnectable component) {
-        return (component instanceof TileEntityCustomWood) && this.isSameMaterial((TileEntityCustomWood) component);
+    @SideOnly(Side.CLIENT)
+    public void setFluidAmount(int fluidAmount) {
+        // Ensure amount is in the proper range.
+        if (fluidAmount < 0) {
+            fluidAmount = 0;
+        } else if (fluidAmount > this.fluidCapacity) {
+            fluidAmount = this.fluidCapacity;
+        }
+
+        // Update the amounts.
+        this.fluidAmount = fluidAmount;
+        this.oldFluidAmount = fluidAmount;
+
+        // Mark the component as dirty as it changed.
+        this.world.markChunkDirty(pos, this);
     }
 
     @Override
-    public boolean canAcceptFluid(int y, int amount, boolean partial) {
-        if (this.lvl + amount >= this.getCapacity()) {
-            return true;
-        } else {
-            return partial;
-        }
-    }
-
-    @Override
-    public final void checkConnections() {
-        for (int i = 0; i < EnumFacing.HORIZONTALS.length; i++) {
-            final EnumFacing dir = EnumFacing.HORIZONTALS[i];
-            neighbours[i] = WorldHelper.getTile(this.getWorld(), pos.offset(dir), IIrrigationComponent.class)
-                    .filter(n -> n.canConnectTo(dir.getOpposite(), this) || this.canConnectTo(dir, n))
-                    .orElse(null);
-        }
+    public int getFluidAmount() {
+        return this.fluidAmount;
     }
 
     @Override
     public int getFluidHeight() {
-        return (int) getFluidHeight(getFluidAmount(0));
+        return this.fluidHeightMin + (this.fluidAmount * this.fluidDensity);
     }
 
     @Override
-    public float getFluidHeight(int lvl) {
-        return MIN + HEIGHT * ((float) lvl) / (ABSOLUTE_MAX);
-    }
-
-    public boolean hasNeighbor(EnumFacing direction) {
-        final int dir = direction.getHorizontalIndex();
-        return dir >= 0 && neighbours[dir] != null;
-    }
-
-    public IIrrigationComponent getNeighbor(EnumFacing direction) {
-        final int dir = direction.getHorizontalIndex();
-        return dir >= 0 ? neighbours[dir] : null;
+    public int getMinFluidHeight() {
+        return this.fluidHeightMin;
     }
 
     @Override
-    public IrrigationConnectionType getConnectionType(EnumFacing side) {
-        if (this.hasNeighbor(side)) {
-            return IrrigationConnectionType.PRIMARY;
-        } else {
-            return IrrigationConnectionType.NONE;
+    public int getMaxFluidHeight() {
+        return this.fluidHeightMax;
+    }
+
+    @Override
+    public int getFluidCapacity() {
+        return this.fluidCapacity;
+    }
+
+    @Override
+    public int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate) {
+        // Validate inputs.
+        Preconditions.checkArgument(inputHeight >= 0, "Negative input heights are not allowed!");
+        Preconditions.checkArgument(inputAmount >= 0, "Negative input amounts are not allowed!");
+
+        // First get own fluid height.
+        final int fluidHeight = this.getFluidHeight();
+
+        // If incoming level is lower than own level, do nothing.
+        if (fluidHeight >= inputHeight) {
+            return inputAmount;
         }
+
+        // Calculate the total.
+        final int totalFluid = this.fluidAmount + inputAmount;
+        final int remainingFluid = Math.max(totalFluid - this.fluidCapacity, 0);
+        final int consumedFluid = inputAmount - remainingFluid;
+
+        // Validate everything.
+        if (consumedFluid < 0) {
+            throw new AssertionError("With " + totalFluid + "mb of total fluid, somehow consumed " + consumedFluid + "mb, which should be impossible!");
+        }
+
+        // If there was a remainder, but we aren't allowed to have remainders, abort.
+        if (remainingFluid != 0 && !partial) {
+            return inputAmount;
+        }
+
+        // If the remainder doesn't equal input, and we are not simulating, then we need to update.
+        if (remainingFluid != inputAmount && !simulate) {
+            // Update the fluid amount.
+            this.fluidAmount = this.fluidAmount + consumedFluid;
+            // Mark the component as dirty as it changed.
+            this.world.markChunkDirty(pos, this);
+        }
+
+        // Return the amount accepted.
+        return remainingFluid;
     }
 
-    //updates the tile entity every tick
+    @Override
+    public int getCachedFluidHeightFor(@Nonnull EnumFacing side) {
+        return this.heightsCache[side.ordinal()];
+    }
+
     @Override
     public void update() {
-        if (++ticksSinceNeighbourCheck > NEIGHBOUR_CHECK_DELAY) {
-            checkConnections();
-            ticksSinceNeighbourCheck = 0;
+        // Push down.
+        if (this.connections.get(EnumFacing.DOWN) > 0) {
+            // Get the component.
+            final IAgriFluidComponent component = WorldHelper.getTile(world, pos.offset(EnumFacing.DOWN), IAgriFluidComponent.class).orElse(null);
+            // Push all fluid.
+            if (component != null) {
+                int newFluidAmount = component.acceptFluid(1000, fluidAmount, true, false);
+                if (newFluidAmount < 0) {
+                    throw new AssertionError("A component acccepted too much fluid!");
+                }
+                this.fluidAmount = newFluidAmount;
+                this.heightsCache[EnumFacing.DOWN.ordinal()] = component.getFluidHeight();
+            }
         }
-        if (!this.getWorld().isRemote) {
-            //calculate total fluid lvl and capacity
-            int totalLvl = 0;
-            int nr = 1;
-            int updatedLevel = this.getFluidAmount(0);
-            for (IIrrigationComponent component : neighbours) {
-                if (component == null) {
-                    continue;
-                }
-                //neighbour is a channel: add its volume to the total and increase the COUNT
-                if (component instanceof TileEntityChannel) {
-                    if (!(component instanceof TileEntityChannelValve && ((TileEntityChannelValve) component).isPowered())) {
-                        totalLvl = totalLvl + ((TileEntityChannel) component).lvl;
-                        nr++;
-                    }
-                } //neighbour is a tank: calculate the fluid levels of the tank and the channel
-                else {
-                    TileEntityTank tank = (TileEntityTank) component;
-                    int Y = tank.getYPosition();
-                    float y_c = Constants.WHOLE * Y + this.getFluidHeight(updatedLevel);  //initial channel water Y1
-                    float y_t = tank.getFluidHeight();           //initial tank water Y1
-                    float y1 = (float) MIN + Constants.WHOLE * Y;   //minimum Y1 of the channel
-                    float y2 = (float) MAX + Constants.WHOLE * Y;  //maximum Y1 of the channel
-                    int V_tot = tank.getFluidAmount(0) + updatedLevel;
-                    // Following change was suggested by findbugs.
-                    if (Math.abs(y_c - y_t) < 0.0001) {
-                        //total volume is below the channel connection
-                        if (y_t <= y1) {
-                            updatedLevel = 0;
-                            tank.setFluidLevel(V_tot);
-                        } //total volume is above the channel connection
-                        else if (y_t >= y2) {
-                            updatedLevel = ABSOLUTE_MAX;
-                            tank.setFluidLevel(V_tot - ABSOLUTE_MAX);
-                        } //total volume is between channel connection top and bottom
-                        else {
-                            //some parameters
-                            int tankYSize = tank.getMultiBlockData().sizeY();
-                            int C = tank.getCapacity();
-                            //calculate the Y1 corresponding to the total volume: Y1 = f(V_tot), V_tank = f(Y1), V_channel = f(Y1)
-                            float enumerator = (V_tot) + ((ABSOLUTE_MAX * y1) / (y2 - y1) + ((float) 2 * C) / (Constants.WHOLE * tankYSize - 2));
-                            float denominator = ((ABSOLUTE_MAX) / (y2 - y1) + ((float) C) / ((float) (Constants.WHOLE * tankYSize - 2)));
-                            float y = enumerator / denominator;
-                            //convert the Y1 to volumes
-                            int channelVolume = (int) Math.floor(ABSOLUTE_MAX * (y - y1) / (y2 - y1));
-                            int tankVolume = (int) Math.ceil(C * (y - 2) / (Constants.WHOLE * tankYSize - 2));
-                            updatedLevel = channelVolume;
-                            tank.setFluidLevel(tankVolume);
-                        }
-                    }
+
+        // Push Out.
+        for (EnumFacing side : EnumFacing.HORIZONTALS) {
+            // Check if connected.
+            if (this.connections.get(side) > 0) {
+                // Get the component and attempt to push.
+                final IAgriFluidComponent component = WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).orElse(null);
+                // If present, do the thing.
+                if (component != null) {
+                    this.pushToComponent(component);
+                    this.heightsCache[side.ordinal()] = component.getFluidHeight();
                 }
             }
-            // Handle Sprinklers
-            TileEntitySprinkler spr = WorldHelper.getTile(this.getWorld(), this.pos.down(), TileEntitySprinkler.class).orElse(null);
-            if (spr != null) {
-                updatedLevel = spr.acceptFluid(1000, updatedLevel, true);
+        }
+
+        // If the fluid amount changed then need to do an update?
+        if (Math.abs(this.oldFluidAmount - this.fluidAmount) > this.fluidSyncThreshold) {
+            // Update the old amount.
+            this.oldFluidAmount = this.fluidAmount;
+
+            // If on server side, need to tell client.
+            if (!this.world.isRemote) {
+                new MessageSyncFluidAmount(world, pos, fluidAmount).sendToAll();
             }
-            //equalize water LEVEL over all neighbouring channels
-            totalLvl = totalLvl + updatedLevel;
-            int rest = totalLvl % nr;
-            int newLvl = totalLvl / nr;
-            if (nr > 1) {
-                //set fluid levels
-                for (IIrrigationComponent component : neighbours) {
-                    //TODO: cleanup
-                    if (component instanceof TileEntityChannel) {
-                        if (!(component instanceof TileEntityChannelValve && ((TileEntityChannelValve) component).isPowered())) {
-                            final int olvl = rest == 0 ? newLvl : newLvl + 1;
-                            rest = rest == 0 ? 0 : rest - 1;
-                            component.setFluidLevel(olvl);
-                        }
-                    }
-                }
-            }
-            this.setFluidLevel(newLvl + rest);
+
+            // Mark the component as dirty as it changed.
+            this.world.markChunkDirty(pos, this);
         }
     }
 
-    @Override
-    public void syncFluidLevel() {
-        if (!this.getWorld().isRemote) {
-            int newDiscreteLvl = getDiscreteFluidLevel();
-            if (newDiscreteLvl != lastDiscreteLvl) {
-                lastDiscreteLvl = newDiscreteLvl;
-                NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(),
-                        this.xCoord(), this.yCoord(), this.zCoord(), 64);
-                new MessageSyncFluidLevel(this.lvl, this.getPos()).sendToAllAround(point);
-            }
-        }
-    }
+    private void pushToComponent(@Nonnull IAgriFluidComponent component) {
+        // Triple-check not null.
+        Preconditions.checkNotNull(component);
 
-    /**
-     * Maps the current fluid LEVEL into the integer interval [0, 16]
-     *
-     * @return The discrete fluid level.
-     */
-    public int getDiscreteFluidLevel() {
-        int discreteFluidLevel = Math.round(DISCRETE_FACTOR * lvl);
-        if (discreteFluidLevel == 0 && lvl > 0) {
-            discreteFluidLevel = 1;
+        // Get the fluid heights.
+        final int fluidHeight = this.getFluidHeight();
+        final int otherHeight = component.getFluidHeight();
+
+        // Validate fluid heights.
+        if (fluidHeight < 0) {
+            throw new AssertionError("A IAgriFluidComponent reported an negative fluid height of " + fluidHeight + "!");
+        } else if (otherHeight < 0) {
+            throw new AssertionError("A IAgriFluidComponent reported an negative fluid height of " + otherHeight + "!");
         }
-        return discreteFluidLevel;
+
+        // If the other component is higher or equal, do nothing.
+        if (fluidHeight <= otherHeight) {
+            return;
+        }
+
+        // Now calculate deltas.
+        final int deltaHeight = fluidHeight - otherHeight;
+        int deltaAmount = deltaHeight * this.fluidDensity;
+
+        // Ensure that the delta makes sense.
+        if (deltaHeight <= 0) {
+            throw new AssertionError("A mathematically impossible condition has occurred, in regards to fluid height deltas!");
+        }
+        if (deltaAmount <= 0) {
+            throw new AssertionError("A mathematically impossible condition has occurred, in regards to fluid amount deltas!");
+        }
+
+        // If the delta amount is less than two, do nothing.
+        if (deltaAmount < 2) {
+            return;
+        }
+
+        // The delta needs to be less than what the component currently has.
+        if (deltaAmount > this.fluidAmount) {
+            deltaAmount = this.fluidAmount;
+        }
+
+        // Now halve the amounts to get the push amounts.
+        final int pushHeight = otherHeight + (deltaHeight / 2);
+        final int pushAmount = (deltaAmount / 2);
+
+        // Calculate the amount used.
+        final int usedAmount = pushAmount - component.acceptFluid(pushHeight, pushAmount, true, false);
+
+        // Assert that everything worked properly.
+        if (usedAmount > pushAmount) {
+            throw new AssertionError("Component used " + usedAmount + "mB but was only given " + pushAmount + "mb!");
+        } else if (usedAmount < 0) {
+            throw new AssertionError("Component used less than zero mB of fluid (" + usedAmount + "mB) which should be impossible!");
+        }
+
+        // Ensure that we can actually remove the fluid amount.
+        if (usedAmount > fluidAmount) {
+            throw new AssertionError("Detected possible concurrent modification issue.");
+        }
+
+        // Now perform the push.
+        this.fluidAmount = this.fluidAmount - usedAmount;
     }
 
     @Override
     public void addServerDebugInfo(Consumer<String> consumer) {
         consumer.accept("CHANNEL:");
         super.addServerDebugInfo(consumer);
-        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
-        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
-        consumer.accept("  - Connections: ");
-        for (EnumFacing dir : EnumFacing.values()) {
-            if (this.hasNeighbor(dir)) {
-                consumer.accept("      - " + dir.name());
-            }
-        }
+        consumer.accept(" - Fluid Amount: " + this.getFluidAmount() + " / " + this.getFluidCapacity());
+        consumer.accept(" - Fluid Height: " + this.getFluidHeight());
+        this.connections.toString(s -> consumer.accept(" " + s));
     }
 
     @Override
     public void addClientDebugInfo(Consumer<String> consumer) {
         consumer.accept("CHANNEL:");
-        super.addClientDebugInfo(consumer);
-        consumer.accept("  - FluidLevel: " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
-        consumer.accept("  - FluidHeight: " + this.getFluidHeight());
-        consumer.accept("  - Connections: ");
-        for (EnumFacing dir : EnumFacing.values()) {
-            if (this.hasNeighbor(dir)) {
-                consumer.accept("      - " + dir.name());
-            }
-        }
+        super.addServerDebugInfo(consumer);
+        consumer.accept(" - Fluid Amount: " + this.getFluidAmount() + " / " + this.getFluidCapacity());
+        consumer.accept(" - Fluid Height: " + this.getFluidHeight());
+        this.connections.toString(s -> consumer.accept(" " + s));
     }
 
     @Override
@@ -294,11 +367,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         //Required call to super (handles validation for us).
         super.addDisplayInfo(information);
-        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount(0) + "/" + ABSOLUTE_MAX);
-    }
-
-    protected IBlockState getStateChannel(IBlockState state) {
-        return state;
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.waterLevel") + ": " + this.getFluidAmount() + "/" + this.getFluidCapacity());
     }
 
 }
