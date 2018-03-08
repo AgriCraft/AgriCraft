@@ -19,24 +19,23 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     private boolean powered;
 
     public TileEntityChannelValve() {
-        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD);
-    }
-
-    public TileEntityChannelValve(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold) {
-        super(fluidCapacity, fluidHeightMin, fluidHeightMax, fluidSyncThreshold);
         this.powered = false;
     }
 
     @Override
-    protected byte classifyConnection(EnumFacing side) {
+    protected byte classifyConnection(@Nonnull EnumFacing side) {
         final Block b = WorldHelper.getBlock(world, pos.offset(side), Block.class).orElse(null);
         final IAgriFluidComponent component = WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).orElse(null);
         if (b instanceof BlockLever) {
             return -1;
         } else if (component == null) {
             return 0;
-        } else {
+        } else if (side.getAxis().isHorizontal()) {
             return 1;
+        } else if (component instanceof TileEntitySprinkler) {
+            return 2;
+        } else {
+            return 0;
         }
     }
 

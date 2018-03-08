@@ -3,9 +3,6 @@
  */
 package com.infinityraider.agricraft.api.v1.misc;
 
-import javax.annotation.Nonnull;
-import net.minecraft.util.EnumFacing;
-
 /**
  *
  * @author Ryan
@@ -57,16 +54,5 @@ public interface IAgriFluidComponent extends IAgriConnectable {
      * @return the amount of fluid that was not accepted by the component.
      */
     public int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate);
-
-    /**
-     * Retrieves the cached fluid level for neighbors to this tile. Returns -1 if the side is not in
-     * the cache.
-     *
-     * @param side the side to get the cached fluid level for.
-     * @return the last known fluid level for the neighboring component on the given side, or -1.
-     */
-    public default int getCachedFluidHeightFor(@Nonnull EnumFacing side) {
-        return -1;
-    }
 
 }

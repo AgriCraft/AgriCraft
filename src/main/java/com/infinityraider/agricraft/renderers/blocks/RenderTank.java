@@ -88,11 +88,10 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
             TileEntityTank tank, TextureAtlasSprite sprite) {
         //only render water in one on top.
         final int level = tank.getFluidHeight();
-        final AgriSideMetaMatrix connections = tank.getConnections();
-        //if (level > 0 && (level <= tank.getMaxFluidHeight() || connections.get(EnumFacing.UP) > 1)) {
+        if (level > 0) {
 
             // -0.0001F to avoid Z-fighting on maximum filled tanks
-            final float y = (level * 16 / 1_000_000f) - A;
+            final float y = (level * 16 / 1_000f) - A;
 
             // Calculate water brightness.
             final int l = RenderUtilBase.getMixedBrightness(tank.getWorld(), tank.getPos(), Blocks.WATER);
@@ -102,7 +101,7 @@ public class RenderTank extends RenderBlockCustomWood<BlockWaterTank, TileEntity
             //draw surface
             final TextureAtlasSprite waterIcon = BaseIcons.WATER_STILL.getIcon();
             tessellator.drawScaledFace(0, 0, 16, 16, EnumFacing.UP, waterIcon, y);
-        //}
+        }
     }
 
     @Override

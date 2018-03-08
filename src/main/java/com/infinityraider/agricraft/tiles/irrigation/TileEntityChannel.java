@@ -20,53 +20,61 @@ import com.infinityraider.agricraft.utility.IAgriFluidComponentSyncable;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IAgriFluidComponent, IAgriFluidComponentSyncable, IDebuggable {
-    
+
     public static final int CHANNEL_FLUID_CAPACITY = 1_000;
-    public static final int CHANNEL_FLUID_HEIGHT_MIN = 250_000;
-    public static final int CHANNEL_FLUID_HEIGHT_MAX = 750_000;
+    public static final int CHANNEL_FLUID_HEIGHT_MIN = 250;
+    public static final int CHANNEL_FLUID_HEIGHT_MAX = 750;
     public static final int CHANNEL_FLUID_SYNC_THRESHOLD = 100;
-    
+    public static final long CHANNEL_FLUID_SYNC_TIMEOUT = 1000;
+
     private final int fluidCapacity;
     private final int fluidHeightMin;
     private final int fluidHeightMax;
 
     private final int fluidSyncThreshold;
+    private final long fluidSyncTimeout;
 
     private final int fluidDensity;
 
     @Nonnull
     private final AgriSideMetaMatrix connections;
-    private final int heightsCache[];
 
-    private int fluidAmount;
-    private int oldFluidAmount;
+    protected int fluidAmount;
+    protected int oldFluidAmount;
+
+    private long last_update;
 
     public TileEntityChannel() {
-        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD);
+        this(CHANNEL_FLUID_CAPACITY, CHANNEL_FLUID_HEIGHT_MIN, CHANNEL_FLUID_HEIGHT_MAX, CHANNEL_FLUID_SYNC_THRESHOLD, CHANNEL_FLUID_SYNC_TIMEOUT);
     }
 
-    public TileEntityChannel(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold) {
+    public TileEntityChannel(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold, long fluidSyncTimeout) {
         // Validate inputs.
         Preconditions.checkArgument(fluidCapacity > 0);
         Preconditions.checkArgument(fluidHeightMin >= 0);
-        Preconditions.checkArgument(fluidHeightMax <= 1_000_000);
+        Preconditions.checkArgument(fluidHeightMax <= 1_000);
         Preconditions.checkArgument(fluidHeightMin < fluidHeightMax);
         Preconditions.checkArgument(fluidSyncThreshold > 0);
-        
+        Preconditions.checkArgument(fluidSyncTimeout >= 500);
+
         // Save the given values.
         this.fluidCapacity = fluidCapacity;
         this.fluidHeightMin = fluidHeightMin;
         this.fluidHeightMax = fluidHeightMax;
         this.fluidSyncThreshold = fluidSyncThreshold;
-        
+        this.fluidSyncTimeout = fluidSyncTimeout;
+
         // Calculate density.
-        this.fluidDensity = (fluidHeightMax - fluidHeightMin) / fluidCapacity;
-        
+        this.fluidDensity = fluidCapacity / (fluidHeightMax - fluidHeightMin);
+
+        // Validate fluid density.
+        Preconditions.checkArgument(fluidDensity > 0, "Invalid fluid density!\n\tfc: {0}\n\tmh: {1}\n\tMh: {2}", fluidCapacity, fluidHeightMin, fluidHeightMax);
+
         // Set the other stuff.
         this.fluidAmount = 0;
         this.connections = new AgriSideMetaMatrix();
-        this.heightsCache = new int[]{-1, -1, -1, -1, -1, -1};
-        
+        this.last_update = 0;
+
         // Perform initial refresh.
         this.refreshConnections();
     }
@@ -139,9 +147,18 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
             this.connections.set(side, classifyConnection(side));
         }
     }
-    
+
     protected byte classifyConnection(@Nonnull EnumFacing side) {
-        return WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).isPresent() ? (byte)1 : (byte)0;
+        final IAgriFluidComponent component = WorldHelper.getTile(world, pos.offset(side), IAgriFluidComponent.class).orElse(null);
+        if (component == null) {
+            return 0;
+        } else if (side.getAxis().isHorizontal()) {
+            return 1;
+        } else if (component instanceof TileEntitySprinkler) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -169,7 +186,7 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     public int getFluidHeight() {
-        return this.fluidHeightMin + (this.fluidAmount * this.fluidDensity);
+        return this.fluidHeightMin + (this.fluidAmount / this.fluidDensity);
     }
 
     @Override
@@ -229,11 +246,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    public int getCachedFluidHeightFor(@Nonnull EnumFacing side) {
-        return this.heightsCache[side.ordinal()];
-    }
-
-    @Override
     public void update() {
         // Push down.
         if (this.connections.get(EnumFacing.DOWN) > 0) {
@@ -246,7 +258,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                     throw new AssertionError("A component acccepted too much fluid!");
                 }
                 this.fluidAmount = newFluidAmount;
-                this.heightsCache[EnumFacing.DOWN.ordinal()] = component.getFluidHeight();
             }
         }
 
@@ -259,22 +270,28 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
                 // If present, do the thing.
                 if (component != null) {
                     this.pushToComponent(component);
-                    this.heightsCache[side.ordinal()] = component.getFluidHeight();
                 }
             }
         }
 
         // If the fluid amount changed then need to do an update?
         if (Math.abs(this.oldFluidAmount - this.fluidAmount) > this.fluidSyncThreshold) {
-            // Update the old amount.
-            this.oldFluidAmount = this.fluidAmount;
+            // Check the time.
+            long currentTime = System.currentTimeMillis();
+            // If time is greater than delta, then do sync.
+            if (currentTime - this.last_update > fluidSyncTimeout) {
+                // Update the old amount.
+                this.oldFluidAmount = this.fluidAmount;
 
-            // If on server side, need to tell client.
-            if (!this.world.isRemote) {
-                new MessageSyncFluidAmount(world, pos, fluidAmount).sendToAll();
+                // If on server side, need to tell client.
+                if (!this.world.isRemote) {
+                    new MessageSyncFluidAmount(world, pos, fluidAmount).sendToAll();
+                }
             }
+        }
 
-            // Mark the component as dirty as it changed.
+        // If the component fluid amount changed, mark this as dirty.
+        if (this.fluidAmount != this.oldFluidAmount) {
             this.world.markChunkDirty(pos, this);
         }
     }
@@ -295,21 +312,13 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         }
 
         // If the other component is higher or equal, do nothing.
-        if (fluidHeight <= otherHeight) {
+        if (fluidHeight < otherHeight) {
             return;
         }
 
         // Now calculate deltas.
         final int deltaHeight = fluidHeight - otherHeight;
         int deltaAmount = deltaHeight * this.fluidDensity;
-
-        // Ensure that the delta makes sense.
-        if (deltaHeight <= 0) {
-            throw new AssertionError("A mathematically impossible condition has occurred, in regards to fluid height deltas!");
-        }
-        if (deltaAmount <= 0) {
-            throw new AssertionError("A mathematically impossible condition has occurred, in regards to fluid amount deltas!");
-        }
 
         // If the delta amount is less than two, do nothing.
         if (deltaAmount < 2) {
@@ -336,12 +345,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         }
 
         // Ensure that we can actually remove the fluid amount.
-        if (usedAmount > fluidAmount) {
+        if (usedAmount > this.fluidAmount) {
             throw new AssertionError("Detected possible concurrent modification issue.");
         }
 
         // Now perform the push.
         this.fluidAmount = this.fluidAmount - usedAmount;
+
+        // Mark the component as dirty as it changed.
+        this.world.markChunkDirty(pos, this);
     }
 
     @Override

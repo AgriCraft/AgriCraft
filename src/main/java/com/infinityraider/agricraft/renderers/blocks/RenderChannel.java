@@ -103,7 +103,7 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
         tessellator.setAlpha(0.39f);
 
         // Calculate y to avoid plane rendering conflicts
-        final float y = (channel.getFluidHeight() * 16 / 1_000_000f) - 0.001f;
+        final float y = (channel.getFluidHeight() * 16 / 1_000f) - 0.001f;
 
         //draw central water levels
         tessellator.drawScaledFaceDouble(5, 5, 11, 11, EnumFacing.UP, icon, y);
