@@ -68,7 +68,9 @@ public final class AgriSeed {
         this.stat.writeToNBT(tag);
 
         // Return a new stack.
-        return new ItemStack(stack.getItem(), size, stack.getMetadata(), tag);
+        ItemStack toReturn = new ItemStack(stack.getItem(), size, stack.getMetadata());
+toReturn.setTagCompound(tag);
+return toReturn;
     }
 
     @Override
