@@ -229,12 +229,12 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
         }
 
         // If there was a remainder, but we aren't allowed to have remainders, abort.
-        if (remainingFluid != 0 && !partial) {
+        if (!partial && remainingFluid != 0) {
             return inputAmount;
         }
 
         // If the remainder doesn't equal input, and we are not simulating, then we need to update.
-        if (remainingFluid != inputAmount && !simulate) {
+        if (!simulate && remainingFluid != inputAmount) {
             // Update the fluid amount.
             this.fluidAmount = this.fluidAmount + consumedFluid;
             // Mark the component as dirty as it changed.

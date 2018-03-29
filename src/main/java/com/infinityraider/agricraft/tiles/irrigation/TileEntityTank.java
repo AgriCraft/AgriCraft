@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 // Imports would go here, if there were any.
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.util.EnumFacing;
@@ -48,25 +49,25 @@ public class TileEntityTank extends TileEntityChannel implements IFluidHandler {
     }
 
     @Override
-    public int fill(FluidStack fs, boolean simulate) {
+    public int fill(FluidStack fs, boolean doFill) {
         if (fs.getFluid() == FluidRegistry.WATER) {
-            return fs.amount - this.acceptFluid(1_000, fs.amount, true, simulate);
+            return fs.amount - this.acceptFluid(1_000, fs.amount, true, !doFill);
         } else {
             return 0;
         }
     }
 
     @Override
-    public FluidStack drain(FluidStack fs, boolean simulate) {
+    public FluidStack drain(FluidStack fs, boolean doDrain) {
         if (fs.getFluid() == FluidRegistry.WATER) {
-            return drain(fs.amount, simulate);
+            return drain(fs.amount, doDrain);
         } else {
             return new FluidStack(fs.getFluid(), 0);
         }
     }
 
     @Override
-    public FluidStack drain(int amount, boolean simulate) {
+    public FluidStack drain(int amount, boolean doDrain) {
         // The amount consumed.
         final int drainedAmount;
 
@@ -78,7 +79,7 @@ public class TileEntityTank extends TileEntityChannel implements IFluidHandler {
         }
 
         // If the remainder doesn't equal input, and we are not simulating, then we need to update.
-        if (drainedAmount > 0 && !simulate) {
+        if (doDrain && drainedAmount > 0) {
             // Update the fluid amount.
             this.fluidAmount = this.fluidAmount - drainedAmount;
             // Mark the component as dirty as it changed.

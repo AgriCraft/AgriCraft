@@ -151,6 +151,6 @@ public class RenderChannel<B extends AbstractBlockWaterChannel<T>, T extends Til
 
     @Override
     public boolean applyAmbientOcclusion() {
-        return false;
+        return true;
     }
 }

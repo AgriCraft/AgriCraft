@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
@@ -48,8 +49,7 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         // Attempt to interact with fluid stuff.
-        WorldHelper.getTile(world, pos, TileEntityTank.class)
-                .ifPresent(t -> FluidUtil.interactWithFluidHandler(player, hand, t));
+        FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         // Figure out if this is a fluid thing or not.
         final ItemStack stack = player.getHeldItem(hand);
         final FluidStack fluid = FluidUtil.getFluidContained(stack);

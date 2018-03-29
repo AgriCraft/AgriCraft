@@ -2,6 +2,7 @@
  */
 package com.infinityraider.agricraft.api.v1.util;
 
+import com.agricraft.agricore.core.AgriCore;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -148,8 +149,13 @@ public class FuzzyStack {
             }
 
             if (this.useOreDict || other.useOreDict) {
-                int[] ids1 = OreDictionary.getOreIDs(this.toStack());
-                int[] ids2 = OreDictionary.getOreIDs(other.toStack());
+                ItemStack a = this.toStack();
+                ItemStack b = other.toStack();
+                // To fix quite possibly the dumbest line in Forge code, we must first check that the stacks are not empty.
+                // See OreDictionary line 481
+                // (https://github.com/MinecraftForge/MinecraftForge/blob/a40df67004dc02c502f7b07d8fe7e6349273514c/src/main/java/net/minecraftforge/oredict/OreDictionary.java#L481)
+                int[] ids1 = (a.isEmpty() ? new int[0] : OreDictionary.getOreIDs(a));
+                int[] ids2 = (b.isEmpty() ? new int[0] : OreDictionary.getOreIDs(b));
                 for (int id1 : ids1) {
                     for (int id2 : ids2) {
                         if (id1 == id2) {

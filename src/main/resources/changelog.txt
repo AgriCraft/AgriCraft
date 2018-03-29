@@ -1,12 +1,19 @@
 Changelog
 ---------
-2.1.0a2
+2.12.0a3
+- FIXED: Irrigation system. Irrigation components should now properly transfer fluids.
+- FIXED: Seed drops. Seeds should now be dropped with the correct NBT tags.
+- FIXED: Crops not breaking when supporting block is broken.
+- FIXED: Breaking supporting block sometimes caused a crash.
 
-2.1.0a1
+2.12.0a2
+- FIXED: Maven versions being out-of-date.
+
+2.12.0a1
 - FIXED: Crash preventing servers from launching.
 - FIXED: Seed Analyzers merging ItemStacks improperly.
 
-2.1.0a0
+2.12.0a0
 - PORTED: Ported to version 1.12 of Minecraft
 - FIXED:  Memory churn caused by AgriCraft item models. The garbage collector should kick in less frequently now.
 - ADDED:  Actually Additions Farmer support.

@@ -261,8 +261,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, IA
             this.world.markChunkDirty(pos, this);
         }
         
-        // Return consumed amount.
-        return consumedFluid;
+        // Return unconsumed amount.
+        return remainingFluid;
     }
 
     @Override
@@ -277,7 +277,8 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, IA
 
     @Override
     public int getFluidHeight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Temporary value, for the time being.
+        return 0;
     }
 
     @Override
