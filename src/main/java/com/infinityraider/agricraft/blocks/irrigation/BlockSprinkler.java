@@ -100,6 +100,15 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
     }
 
     @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        // Call supermethod.
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        // Update tile above.
+        WorldHelper.getTile(world, pos.add(0, 1, 0), IAgriConnectable.class)
+                .ifPresent(IAgriConnectable::refreshConnections);
+    }
+
+    @Override
     public void observedNeighborChange(IBlockState state, World world, BlockPos pos, Block changedBlock, BlockPos changedBlockPos) {
         if (!this.canBlockStay(world, pos)) {
             this.dropBlockAsItem(world, pos, state, 0);
