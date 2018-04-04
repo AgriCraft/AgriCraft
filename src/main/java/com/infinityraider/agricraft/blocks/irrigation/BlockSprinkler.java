@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
@@ -22,6 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -97,6 +99,15 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
             ItemStack drop = new ItemStack(this, 1);
             spawnAsEntity(world, pos, drop);
         }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        // Call supermethod.
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        // Update tile above.
+        WorldHelper.getTile(world, pos.add(0, 1, 0), IAgriConnectable.class)
+                .ifPresent(IAgriConnectable::refreshConnections);
     }
 
     @Override
