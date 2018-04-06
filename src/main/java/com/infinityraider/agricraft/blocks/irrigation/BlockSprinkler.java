@@ -110,7 +110,7 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 
     //see if the block can stay
     public boolean canBlockStay(World world, BlockPos pos) {
-        return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof IAgriFluidComponent);
+        return WorldHelper.getTile(world, pos.add(0, 1, 0), IAgriFluidComponent.class).isPresent();
     }
 
     @Override
