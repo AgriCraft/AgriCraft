@@ -68,36 +68,56 @@ public final class AgriGuiWrapper extends GuiContainer {
     }
 
     @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.drawGuiContainerToolTipLayer(mouseX, mouseY);
+    }
+    
+    protected void drawGuiContainerToolTipLayer(int mouseX, int mouseY) {
+        // Save renderer state.
+        GlStateManager.pushMatrix();
+
+        // Translate to gui location.
+        GlStateManager.translate(this.guiLeft, this.guiTop, 0);
+        
+        // Calculate relative mouse position.
+        final int relMouseX = mouseX - this.guiLeft;
+        final int relMouseY = mouseY - this.guiTop;
+        
+        // Setup tooltip list.
+        final List<String> toolTips = new ArrayList<>();
+
+        // Call Tooltip Hook
+        this.guis.getLast().onRenderToolTips(this, toolTips, relMouseX, relMouseY);
+
+        // Draw current tooltip, if present.
+        if (toolTips.size() > 0) {
+            drawHoveringText(toolTips, relMouseX, relMouseY, fontRenderer);
+        }
+
+        // Restore renderer state.
+        GlStateManager.popMatrix();
+        
+        // Render other tooltips, if needed.
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         // Calculate relative mouse position.
         final int relMouseX = mouseX - this.guiLeft;
         final int relMouseY = mouseY - this.guiTop;
 
-        // Setup tooltip list.
-        final List<String> toolTips = new ArrayList<>();
-
         // Call Mouse Moved Hook.
-        this.guis.getLast().onUpdateMouse(this, toolTips, relMouseX, relMouseY);
-
-        // Save renderer state.
-        GlStateManager.pushAttrib();
-        GlStateManager.pushMatrix();
+        this.guis.getLast().onUpdateMouse(this, relMouseX, relMouseY);
 
         // Save renderer state.
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
         // Call render hook.
-        this.guis.getLast().onRenderForeground(this, toolTips, relMouseX, relMouseY);
-
-        // Restore renderer state.
-        GlStateManager.popMatrix();
-        GlStateManager.popAttrib();
-
-        // Draw current tooltip, if present.
-        if (toolTips.size() > 0) {
-            drawHoveringText(toolTips, relMouseX, relMouseY, fontRenderer);
-        }
+        this.guis.getLast().onRenderForeground(this, relMouseX, relMouseY);
 
         // Restore renderer state.
         GlStateManager.popMatrix();

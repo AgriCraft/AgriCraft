@@ -65,7 +65,8 @@ public interface IProxy extends IProxyBase {
     // Since apparently translation is now client-side only.
     // This is why we can't have nice things.
     default String translateToLocal(String string) {
-        return string;
+        // The {**} is a hack to get TOP integration to work.
+        return "{*" + string + "*}";
     }
 
     default String getLocale() {

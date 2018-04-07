@@ -30,6 +30,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IAgriFluidComponent, IAgriDisplayable {
 
@@ -308,6 +309,12 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, IA
                 .map(c -> c.getIcon())
                 .orElse(BaseIcons.OAK_PLANKS.getIcon());
     }
+    
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getHeadIcon() {
+        // ATM only support Iron Sprinklers.
+        return BaseIcons.IRON_BLOCK.getIcon();
+    }
 
     @SideOnly(Side.CLIENT)
     private void renderLiquidSpray() {
@@ -334,8 +341,11 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, IA
 
     @SideOnly(Side.CLIENT)
     private void spawnLiquidSpray(double xOffset, double zOffset, Vec3d vector) {
-        LiquidSprayFX liquidSpray = new LiquidSprayFX(this.getWorld(), this.xCoord() + 0.5F + xOffset, this.yCoord() + 8 * Constants.UNIT, this.zCoord() + 0.5F + zOffset, 0.3F, 0.7F, vector);
-        Minecraft.getMinecraft().effectRenderer.addEffect(liquidSpray);
+        final double sx = this.xCoord() + 0.5f + xOffset;
+        final double sy = this.yCoord() + 8 * Constants.UNIT;
+        final double sz = this.zCoord() + 0.5f + zOffset;
+        final LiquidSprayFX spray = new LiquidSprayFX(this.getWorld(), FluidRegistry.WATER, sx, sy, sz, 0.3F, 0.7F, vector);
+        Minecraft.getMinecraft().effectRenderer.addEffect(spray);
     }
 
     @Override

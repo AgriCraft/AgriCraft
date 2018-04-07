@@ -2,8 +2,10 @@
  */
 package com.infinityraider.agricraft.utility;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriProperties;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +13,16 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -92,6 +98,11 @@ public class CustomWoodTypeRegistry {
 
     public static final Collection<CustomWoodType> getAllTypes() {
         return WOOD_TYPES.values();
+    }
+    
+    public static final Optional<CustomWoodType> getFromState(@Nullable IBlockState state) {
+        return TypeHelper.cast(state, IExtendedBlockState.class)
+                .map(s -> s.getValue(AgriProperties.CUSTOM_WOOD_TYPE));
     }
 
 }

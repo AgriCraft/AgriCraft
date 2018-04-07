@@ -84,7 +84,6 @@ public final class ComponentRenderer {
 
     public static void renderComponentStack(AgriGuiWrapper gui, GuiComponent<ItemStack> component) {
         gui.getItemRender().renderItemAndEffectIntoGUI(component.getComponent(), 0, 0);
-        GlStateManager.enableAlpha();
     }
 
     public static void renderStackFrame(AgriGuiWrapper gui, GuiComponent<ItemStack> component) {

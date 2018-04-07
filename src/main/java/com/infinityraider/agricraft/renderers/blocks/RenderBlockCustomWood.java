@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -41,7 +42,9 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
     @Override
     public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, B block, EnumFacing side) {
         if (state instanceof IExtendedBlockState) {
-            CustomWoodType type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
+            // Get the custom Wood Type.
+            final CustomWoodType type = CustomWoodTypeRegistry.getFromState(state).orElse(CustomWoodTypeRegistry.DEFAULT);
+            // Render the block with the given wood type.
             this.renderWorldBlockWoodStatic(tessellator, (IExtendedBlockState) state, block, side, type.getIcon());
         }
     }
@@ -61,22 +64,25 @@ public abstract class RenderBlockCustomWood<B extends BlockCustomWood<T>, T exte
     protected abstract void renderInventoryBlockWood(ITessellator tess, World world, IBlockState state, B block, T tile,
             ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type, TextureAtlasSprite icon);
 
+    @Nonnull
     @Override
     public List<ResourceLocation> getAllTextures() {
         return Collections.emptyList();
     }
 
+    @Nonnull
     @Override
     public TextureAtlasSprite getIcon() {
         return getIcon(getTileEntity());
     }
 
     @Nonnull
-    public TextureAtlasSprite getIcon(TileEntityCustomWood tile) {
-        if (tile == null) {
+    public TextureAtlasSprite getIcon(@Nullable TileEntityCustomWood tile) {
+        if (tile != null) {
+            return tile.getIcon();
+        } else { 
             return BaseIcons.OAK_PLANKS.getIcon();
         }
-        return tile.getIcon();
     }
 
     @Override

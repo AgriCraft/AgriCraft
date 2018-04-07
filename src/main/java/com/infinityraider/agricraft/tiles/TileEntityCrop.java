@@ -234,7 +234,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Otherwise set the seed to the new value.
         this.seed = seed;
-        
+
         // Reset the growth stage.
         this.growthStage = 0;
 
@@ -517,7 +517,9 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         Preconditions.checkNotNull(consumer);
         // Actually do something.
         if (!this.isRemote() && this.canBeRaked()) {
-            this.getDrops(consumer, false, true);
+            if (AgriCraftConfig.enableRakingDrops) {
+                this.getDrops(consumer, false, AgriCraftConfig.enableRakingSeedDrops);
+            }
             this.setSeed(null);
             return true;
         } else {

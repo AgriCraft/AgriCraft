@@ -135,13 +135,21 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
     }
 
     @Override
-    public final synchronized void onRenderForeground(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
+    public final synchronized void onRenderForeground(AgriGuiWrapper wrapper, int relMouseX, int relMouseY) {
         // Render all components.
         this.components.stream()
                 // Filter Visable.
                 .filter(c -> c.isVisable())
                 // Call Render Hook
-                .peek(c -> onRenderComponent(wrapper, c, tooltips, relMouseX, relMouseY))
+                .forEach(c -> onRenderComponent(wrapper, c, relMouseX, relMouseY));
+    }
+
+    @Override
+    public final synchronized void onRenderToolTips(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
+        // Render all components.
+        this.components.stream()
+                // Filter Visable.
+                .filter(c -> c.isVisable())
                 // Filter ToolTips
                 .filter(c -> c.contains(relMouseX, relMouseY))
                 // Add ToolTips
@@ -152,7 +160,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
         }
     }
 
-    public final synchronized void onRenderComponent(AgriGuiWrapper wrapper, GuiComponent c, List<String> tooltips, int relMouseX, int relMouseY) {
+    public final synchronized void onRenderComponent(AgriGuiWrapper wrapper, GuiComponent c, int relMouseX, int relMouseY) {
         // Render the component.
         c.renderComponent(wrapper);
 
@@ -205,7 +213,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
             // Unwrap the hovered component.
             GuiComponent hovered = optionalHovered.get();
             // Draw highlighted bounds.
-            wrapper.drawRectangle(hovered.getBounds().x, hovered.getBounds().y, hovered.getBounds().width, hovered.getBounds().height, Color.PINK.hashCode());
+            wrapper.drawRectangle(hovered.getBounds().x, hovered.getBounds().y, hovered.getBounds().width, hovered.getBounds().height, Color.YELLOW.hashCode());
             // Add information to the tooltip.
             tooltips.add(ChatFormatting.DARK_AQUA + " - Component: " + Objects.toString(hovered.getComponent()));
             tooltips.add(ChatFormatting.DARK_AQUA + " - Position: (" + hovered.getBounds().x + ", " + hovered.getBounds().y + ")");
@@ -228,7 +236,7 @@ public class ComponentGui<T extends Container> implements IAgriGui<T> {
     }
 
     @Override
-    public final synchronized void onUpdateMouse(AgriGuiWrapper wrapper, List<String> tooltips, int relMouseX, int relMouseY) {
+    public final synchronized void onUpdateMouse(AgriGuiWrapper wrapper, int relMouseX, int relMouseY) {
         if (this.lastMouseX != relMouseX || this.lastMouseY != relMouseY) {
             this.components
                     .stream()

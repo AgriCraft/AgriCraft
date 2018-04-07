@@ -1,10 +1,17 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 // Imports would go here, if there were any.
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.utility.WorldHelper;
+import java.util.function.Consumer;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -27,6 +34,27 @@ public class TileEntityTank extends TileEntityChannel implements IFluidHandler {
 
     public TileEntityTank(int fluidCapacity, int fluidHeightMin, int fluidHeightMax, int fluidSyncThreshold, long fluidSyncTimeout) {
         super(fluidCapacity, fluidHeightMin, fluidHeightMax, fluidSyncThreshold, fluidSyncTimeout);
+    }
+
+    @Override
+    public void update() {
+        // Fill from rainfall.
+        if (AgriCraftConfig.fillFromRainfall) {
+            if (this.world.isRainingAt(this.pos.up())) {
+                this.fluidAmount = this.fluidAmount + 1;
+            }
+        }
+
+        // Fill from flowing water.
+        if (AgriCraftConfig.fillFromFlowingWater) {
+            final Block block = this.world.getBlockState(this.pos.up()).getBlock();
+            if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+                this.fluidAmount = this.fluidAmount + 1;
+            }
+        }
+
+        // Call super function.
+        super.update();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.agricraft.utility.CustomWoodType;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;
@@ -45,18 +46,19 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
     }
 
     @Override
-    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockSprinkler block, TileEntitySprinkler tile,
-            ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-        // Draw Top
-        tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, BaseIcons.OAK_PLANKS.getIcon());
-        // Get Core Icon
-        final TextureAtlasSprite coreIcon = BaseIcons.IRON_BLOCK.getIcon();
-        // Draw Core
-        tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, MIN_C, MAX_C, MAX_Y - 4, MAX_C, coreIcon);
-        // Draw Blades
-        tessellator.drawScaledPrism(BMX_A, MIN_Y - 8, MIN_C, BMX_B, BMX_Y - 8, MAX_C, coreIcon);
-        tessellator.drawScaledPrism(MIN_C, MIN_Y - 8, BMX_A, MAX_C, BMX_Y - 8, BMX_B, coreIcon);
-
+    public void renderInventoryBlock(ITessellator tess, World world, IBlockState state, BlockSprinkler block, TileEntitySprinkler tile, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
+        // Save translation matrix.
+        tess.pushMatrix();
+        
+        // Translate to connect to above channel.
+        tess.translate(0, -4 * Constants.UNIT, 0);
+        
+        // Render parts.
+        this.renderConnector(tess, tile.getChannelIcon());
+        this.renderHead(tess, 0, tile.getHeadIcon());
+        
+        // Reset matrix.
+        tess.popMatrix();
     }
 
     @Override
@@ -66,36 +68,57 @@ public class RenderSprinkler extends RenderBlockWithTileBase<BlockSprinkler, Til
 
     @Override
     public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockSprinkler block, EnumFacing side) {
-        tessellator.translate(0, 4 * Constants.UNIT, 0);
-        CustomWoodType type;
         if (state instanceof IExtendedBlockState) {
-            type = ((IExtendedBlockState) state).getValue(AgriProperties.CUSTOM_WOOD_TYPE);
-        } else {
-            type = CustomWoodTypeRegistry.DEFAULT;
+            // Resolve the wood type.
+            final CustomWoodType type = CustomWoodTypeRegistry.getFromState(state).orElse(CustomWoodTypeRegistry.DEFAULT);
+            // Render the connector.
+            this.renderConnector(tessellator, type.getIcon());
         }
-        tessellator.drawScaledPrism(4, 8, 4, 12, 16, 12, type.getIcon());
     }
 
     @Override
-    public void renderWorldBlockDynamic(ITessellator tess, World world, BlockPos pos, double x, double y, double z,
-            BlockSprinkler block, TileEntitySprinkler tile, float partialTick, int destroyStage, float alpha) {
+    public void renderWorldBlockDynamic(ITessellator tess, World world, BlockPos pos, double x, double y, double z, BlockSprinkler block, TileEntitySprinkler tile, float partialTick, int destroyStage, float alpha) {
+        // All we have to do here is render the sprinkler head.
+        this.renderHead(tess, tile.getAngle(), BaseIcons.IRON_BLOCK.getIcon());
+    }
+
+    public void renderConnector(ITessellator tess, TextureAtlasSprite material) {
+        // Save translation matrix.
         tess.pushMatrix();
+        
+        // Translate to connect to above channel.
+        tess.translate(0, 4 * Constants.UNIT, 0);
+        
+        // Render the connector with the given wood type.
+        tess.drawScaledPrism(4, 8, 4, 12, 16, 12, material);
+        
+        // Reset matrix.
+        tess.popMatrix();
+    }
+
+    public void renderHead(ITessellator tess, float angle, TextureAtlasSprite material) {
+        // Save translation matrix.
+        tess.pushMatrix();
+
+        // Rotate the sprinkler head to the desired angle.
         tess.translate(0.5F, 0, 0.5F);
-        tess.rotate(tile.getAngle(), 0, 1, 0);
+        tess.rotate(angle, 0, 1, 0);
         tess.translate(-0.5F, 0, -0.5F);
 
-        final TextureAtlasSprite icon = BaseIcons.IRON_BLOCK.getIcon();
-        // Draw Core
-        tess.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, icon);
-        // Draw Blades
-        tess.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, icon);
-        tess.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, icon);
+        // Draw head core.
+        tess.drawScaledPrism(MIN_C, MIN_Y, MIN_C, MAX_C, MAX_Y, MAX_C, material);
+
+        // Draw head blades.
+        tess.drawScaledPrism(BMX_A, MIN_Y, MIN_C, BMX_B, BMX_Y, MAX_C, material);
+        tess.drawScaledPrism(MIN_C, MIN_Y, BMX_A, MAX_C, BMX_Y, BMX_B, material);
+
+        // Restore translation matrix.
         tess.popMatrix();
     }
 
     @Override
     public TextureAtlasSprite getIcon() {
-        return getTileEntity().getChannelIcon();
+        return this.getTileEntity().getChannelIcon();
     }
 
     @Override

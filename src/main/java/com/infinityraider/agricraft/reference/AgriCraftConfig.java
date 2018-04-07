@@ -39,10 +39,11 @@ public class AgriCraftConfig {
     // Irrigation
     @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Enable Irrigation", comment = "Set to true if you want to enable irrigation systems.")
     public static boolean enableIrrigation = true;
-    @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Spawn water after breaking tank", comment = "Set to false to disable placing a source block when breaking non-empty tanks.")
-    public static boolean placeWater = false;
     @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Fill tank from flowing water", comment = "Set to true to let tanks fill up when water flows above them.")
     public static boolean fillFromFlowingWater = false;
+
+    @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Fill tank from rainfall", comment = "Set to true to let tanks fill up when water falls from the sky.")
+    public static boolean fillFromRainfall = true;
     @AgriConfigurable(category = AgriConfigCategory.IRRIGATION, key = "Channel Capacity", min = "100", max = "2000", comment = "The amount of water in mB that an irrigation channel can hold.")
     public static int channelCapacity = 500;
 
@@ -90,7 +91,9 @@ public class AgriCraftConfig {
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Growth Rate", min = "10", max = "50", comment = "The average number of growth ticks for the weed to grow.")
     public static int defaultGrowthChance = 50;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops items", comment = "Set to false if you wish to disable drops from raking weeds.")
-    public static boolean rakingDrops = true;
+    public static boolean enableRakingDrops = true;
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops seeds", comment = "Set to false if you wish to disable seed drops from raking weeds.")
+    public static boolean enableRakingSeedDrops = false;
 
     // World Generation
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")

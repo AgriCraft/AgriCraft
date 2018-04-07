@@ -1,5 +1,18 @@
 Changelog
 ---------
+2.12.0a4
+- FIXED: Tooltips not displaying in AgriCraft GUIs [#1108].
+- FIXED: TOP integration not localizing text properly [#1114].
+- FIXED: Tanks don't fill with magic sky water (prestidigitation) [#1119].
+- FIXED: Weed raking drop config setting being ignored [#1110].
+- FIXED: Sprinklers popping off when they shouldn't be [#1116].
+- FIXED: Sprinklers not connecting properly to channels [#1113].
+- FIXED: Sprinkler bounds incorrect.
+- FIXED: Sprinklers breaking rendering of water.
+- FIXED: Incorrect channel valve bounds.
+- FIXED: Sprinklers not rendering water droplets correctly (thanks to OpenMods).
+- FXIED: GUI system rendering oddities.
+
 2.12.0a3
 - FIXED: Irrigation system. Irrigation components should now properly transfer fluids.
 - FIXED: Seed drops. Seeds should now be dropped with the correct NBT tags.

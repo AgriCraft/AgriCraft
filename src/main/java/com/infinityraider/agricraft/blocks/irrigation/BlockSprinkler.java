@@ -1,6 +1,12 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
+import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
+import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.CENTER_BOX;
+import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.EAST_BOX;
+import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.NORTH_BOX;
+import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.SOUTH_BOX;
+import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.WEST_BOX;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -18,14 +24,16 @@ import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -37,9 +45,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprinkler> {
 
-    public static final AxisAlignedBB BOX = new AxisAlignedBB(
+    public static final AxisAlignedBB BOUNDS_SPRINKLER = new AxisAlignedBB(
             Constants.UNIT * Constants.QUARTER,
-            Constants.UNIT * Constants.THREE_QUARTER,
+            Constants.UNIT * Constants.HALF,
             Constants.UNIT * Constants.QUARTER,
             Constants.UNIT * Constants.THREE_QUARTER,
             Constants.UNIT * (Constants.WHOLE + Constants.QUARTER),
@@ -55,6 +63,15 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
         this.setResistance(5.0F);
         this.setHarvestLevel("axe", 0);
         this.itemBlock = new ItemBlockAgricraft(this);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        // Call supermethod.
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        // Update neighbor.
+        WorldHelper.getTile(world, pos.up(), IAgriConnectable.class)
+                .ifPresent(IAgriConnectable::refreshConnections);
     }
 
     @Override
@@ -110,29 +127,9 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
 
     //see if the block can stay
     public boolean canBlockStay(World world, BlockPos pos) {
-        return (world.getBlockState(pos.add(0, 1, 0)).getBlock() instanceof IAgriFluidComponent);
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return true;
-    }
-
-    @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public RenderSprinkler getRenderer() {
-        return new RenderSprinkler(this);
+        return WorldHelper.getTile(world, pos, TileEntitySprinkler.class)
+                .filter(TileEntitySprinkler::isConnected)
+                .isPresent();
     }
 
     @Override
@@ -172,4 +169,44 @@ public class BlockSprinkler extends BlockTileCustomRenderedBase<TileEntitySprink
         return new IUnlistedProperty[]{AgriProperties.CUSTOM_WOOD_TYPE};
     }
 
+    /*
+     * Adds all intersecting collision boxes to a list. (Be sure to only add
+     * boxes to the list if they intersect the mask.) Parameters: World, pos,
+     * mask, list, colliding entity
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity, boolean isActualState) {
+        // Add central box.
+        Block.addCollisionBoxToList(pos, mask, list, BOUNDS_SPRINKLER);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return BOUNDS_SPRINKLER;
+    }
+    
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public RenderSprinkler getRenderer() {
+        return new RenderSprinkler(this);
+    }
+    
 }
