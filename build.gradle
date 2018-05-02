@@ -49,6 +49,22 @@ repositories {
         name "ActuallyAdditions"
         url "https://maven.chaosfield.at/"
     }
+    maven {
+        name "Industrial Foregoing"
+        url "http://dyonovan.com/maven2/"
+    }
+    maven {
+        name "Tesla Core Lib"
+        url "http://maven.epoxide.xyz/"
+    }
+    maven {
+        name "cofh"
+        url "http://maven.covers1624.net/"
+    }
+    maven {
+        name "forgelin"
+        url  "http://maven.shadowfacts.net/"
+    }
 }
 
 // List Deps.
@@ -62,6 +78,7 @@ dependencies {
     deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.1-r121"
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
+    deobfCompile "com.buuz135.industrial.IndustrialForegoing:industrialforegoing:1.12.2-1.9.0-236"
 }
 
 // Add AgriPlants

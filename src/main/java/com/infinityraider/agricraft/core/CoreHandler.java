@@ -7,10 +7,12 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.util.ResourceHelper;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.compat.industrialforegoing.CropsPlantRecollectable;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -20,8 +22,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public final class CoreHandler {
 
@@ -82,6 +86,16 @@ public final class CoreHandler {
         initSoils();
         initPlants();
         initMutations();
+
+        // Is Industrial Foregoing registered?
+        IForgeRegistry<PlantRecollectable> registry = GameRegistry.findRegistry(PlantRecollectable.class);
+        if (registry != null)
+        {
+            registry.register(new CropsPlantRecollectable());
+            AgriCore.getLogger("agricraft").info("Registered Industral Foregoing PlantRecollectable!");
+        }
+        else
+            AgriCore.getLogger("agricraft").info("Industrial Foregoing registry not found, did not register PlantRecollectable.");
     }
 
     public static void loadJsons() {

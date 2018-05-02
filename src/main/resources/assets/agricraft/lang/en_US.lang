@@ -135,6 +135,7 @@ agricraft_description.method.needsBaseBlock=Returns if the crop crop at the spec
 // ========================================
 agricraft_arg.direction=direction
 agricraft_arg.direction.optional=(optional) direction
+item.agricraft:crop_sticks.compat.name= - Crop Sticks §o(AgriCraft)
 
 // ========================================
 // NEI GUI
