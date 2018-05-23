@@ -75,8 +75,8 @@ agricraft_tooltip.seed=种子名字
 agricraft_tooltip.growth=生长速度
 agricraft_tooltip.gain=产量
 agricraft_tooltip.strength=抗性
-agricraft_tooltip.analyzed=这股种子还未经分析过
-agricraft_tooltip.fertile=这里土壤肥沃,作物可以生长
+agricraft_tooltip.analyzed=这种子还未经分析过
+agricraft_tooltip.fertile=这里土壤肥沃，作物可以生长
 agricraft_tooltip.notFertile=这种作物不能种在这里
 agricraft_tooltip.discoveredSeeds=已发现种子
 agricraft_tooltip.material=材质
@@ -149,7 +149,7 @@ agricraft_nei.nearby=附近
 // ========================================
 // Journal
 // ========================================
-agricraft_journal.introduction=来到农业耕种的世界,今天我将会教你基础的作物 杂交技术.首先你要用4个木棍合成一个作物架.它 可以放置在湿润的耕地上,这样种子就可以直接种 植在作物架上.你还可以在作物架上再放一个作物 架,这样,便能组成一个杂交架.如果你把两个或者 更多作物种在了杂交架旁边,杂交架上就有可能出 现变异.你可以用这本笔记持续追踪你发现的杂交 可能性.要记录一个新的杂交路线只需在使用分析 仪分析种子前把本笔记放入即可. 若如此做,种子 的相关信息会被记录并显示在你面前.如果你需要 复制这本笔记,只需要在工作台里与空的书与笔进 行合成即可.
+agricraft_journal.introduction=欢迎来到农业耕种的世界，今天我将会教你基础的作物 杂交技术。首先你要用4个木棍合成一个作物架。它 可以放置在湿润的耕地上，这样种子就可以直接种 植在作物架上。你还可以在作物架上再放一个作物 架，这样，便能组成一个杂交架。如果你把两个或者 更多作物种在了杂交架旁边，杂交架上就有可能出 现变异。你可以用这本笔记持续追踪你发现的杂交 可能性。要记录一个新的杂交路线只需在使用分析 仪分析种子前把本笔记放入即可。 若如此做，种子 的相关信息会被记录并显示在你面前。如果你需要 复制这本笔记，只需要在工作台里与空的书与笔进 行合成即可。
 agricraft_journal.information=信息
 agricraft_journal.tier=级别
 agricraft_journal.brightness=亮度范围
