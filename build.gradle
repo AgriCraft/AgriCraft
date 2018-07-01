@@ -59,7 +59,7 @@ dependencies {
     compile 'com.google.guava:guava:24.0-jre'
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
     // Have to disable transitive deps on this one since stupid stuff is going on...
-    deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.1-r121"
+    deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.2-r136"
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
 }

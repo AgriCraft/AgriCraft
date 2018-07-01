@@ -13,12 +13,13 @@ import com.infinityraider.infinitylib.utility.WorldHelper;
 import de.ellpeck.actuallyadditions.api.farmer.FarmerResult;
 import de.ellpeck.actuallyadditions.api.farmer.IFarmerBehavior;
 import de.ellpeck.actuallyadditions.api.internal.IFarmer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -61,7 +62,7 @@ public class AgriCraftFarmerBehavior implements IFarmerBehavior {
             final MethodResult result = agriCrop.get().onHarvest(products::add, null);
             if (result == MethodResult.SUCCESS) {
                 farmer.extractEnergy(ActuallyAdditionsPlugin.ENERGY_COST);
-                farmer.addToOutputInventory(products, true);
+                farmer.addToOutput(products);
                 return FarmerResult.SUCCESS;
             }
         }
