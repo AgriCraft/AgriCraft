@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.exception.ContextedException;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
@@ -39,8 +40,8 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     @Nonnull
     private final AgriSideMetaMatrix connections;
 
-    protected int fluidAmount;
-    protected int oldFluidAmount;
+    private int fluidAmount;
+    private int oldFluidAmount;
 
     private long last_update;
 
@@ -108,8 +109,10 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
         // Bring the fluid amount into the proper range (in case of old, bad saves).
         if (newFluidAmount < 0) {
+            AgriCore.getLogger("agricraft").warn("Save file has negative fluid amount ({0} mB) for fluid component! Replacing with 0 mB instead!", newFluidAmount);
             newFluidAmount = 0;
         } else if (newFluidAmount > this.fluidCapacity) {
+            AgriCore.getLogger("agricraft").warn("Save file has fluid amount ({0} mB) that exceeds the capacity of a fluid component ({1} mB)! Replacing maximum allowed fluid amount ({1} mB) instead!", newFluidAmount, this.fluidCapacity);
             newFluidAmount = this.fluidCapacity;
         }
 
@@ -163,17 +166,19 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void setFluidAmount(int fluidAmount) {
+    public void setFluidAmount(int newFluidAmount) {
         // Ensure amount is in the proper range.
-        if (fluidAmount < 0) {
-            fluidAmount = 0;
-        } else if (fluidAmount > this.fluidCapacity) {
-            fluidAmount = this.fluidCapacity;
+        if (newFluidAmount < 0) {
+            AgriCore.getLogger("agricraft").warn("Attempted to set fluid amount of a component to a negative number ({0}mB)!", newFluidAmount);
+            newFluidAmount = 0;
+        } else if (newFluidAmount > this.fluidCapacity) {
+            AgriCore.getLogger("agricraft").warn("Attempted to set fluid amount of a component with capacity {0}mB to {1}mB!", this.fluidCapacity, newFluidAmount);
+            newFluidAmount = this.fluidCapacity;
         }
 
         // Update the amounts.
-        this.fluidAmount = fluidAmount;
-        this.oldFluidAmount = fluidAmount;
+        this.fluidAmount = newFluidAmount;
+        this.oldFluidAmount = newFluidAmount;
 
         // Mark the component as dirty as it changed.
         this.world.markChunkDirty(pos, this);
@@ -225,7 +230,15 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
         // Validate everything.
         if (consumedFluid < 0) {
-            throw new AssertionError("With " + totalFluid + "mb of total fluid, somehow consumed " + consumedFluid + "mb, which should be impossible!");
+            throw new RuntimeException(
+                    new ContextedException("With " + totalFluid + "mB of total fluid, somehow consumed " + consumedFluid + "mb, which should be impossible!")
+                            .withContext("Component Fluid Amount", this.fluidAmount + "mB")
+                            .withContext("Component Fluid Capacity", this.fluidCapacity + "mB")
+                            .withContext("Input Fluid Amount", inputAmount + "mB")
+                            .withContext("Total Fluid Amount", totalFluid + "mB")
+                            .withContext("Remaining Fluid Amount", remainingFluid + "mB")
+                            .withContext("Consumed Fluid Amount", consumedFluid + "mB")
+            );
         }
 
         // If there was a remainder, but we aren't allowed to have remainders, abort.

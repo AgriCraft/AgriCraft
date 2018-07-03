@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
-import java.util.HashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import li.cil.oc.api.machine.Arguments;
@@ -13,11 +13,13 @@ import li.cil.oc.api.network.ManagedPeripheral;
 import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
+import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
+import com.infinityraider.agricraft.network.MessageSyncFluidAmount;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 
 @SimpleComponent.SkipInjection
 @Optional.Interface(modid = "open_computers", iface = "li.cil.oc.api.network.SimpleComponent")
@@ -27,6 +29,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
     // ==================================================
     // Constants <editor-fold desc="Constants">
     // --------------------------------------------------
+    public static final long NEIGHBOR_CHECK_TIMEOUT = 500;
     public static final EnumFacing[] VALID_DIRECTIONS = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
     public static final int MAX = 60;
     // --------------------------------------------------
@@ -41,23 +44,28 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
     /**
      * Data to animate the peripheral client side
      */
-    @SideOnly(Side.CLIENT)
-    private int updateCheck;
+    @Nonnull
+    private final AgriSideMetaMatrix connections;
 
-    @SideOnly(Side.CLIENT)
-    private HashMap<EnumFacing, Integer> timers;
+    private long last_update;
 
-    @SideOnly(Side.CLIENT)
-    private HashMap<EnumFacing, Boolean> activeSides;
     // --------------------------------------------------
     // </editor-fold>
     // ==================================================
-
     // ==================================================
     // Constructors <editor-fold desc="Constructors">
     // --------------------------------------------------
     public TileEntityPeripheral() {
+        // Call Super Constructor.
         super();
+
+        // Set Values.
+        this.connections = new AgriSideMetaMatrix();
+        this.last_update = 0;
+        this.last_update = 0;
+
+        // Perform initial refresh.
+        this.refreshConnections();
     }
     // --------------------------------------------------
     // </editor-fold>
@@ -71,18 +79,10 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
     public String getName() {
         return "agricraft_peripheral";
     }
-    
-    @SideOnly(Side.CLIENT)
-    public int getTimer(EnumFacing dir) {
-        if (updateCheck == 0 || timers == null) {
-            checkSides();
-        }
-        return timers.get(dir);
-    }
     // --------------------------------------------------
     // </editor-fold>
     // ==================================================
-    
+
     @Override
     protected void writeRotatableTileNBT(NBTTagCompound tag) {
         super.writeRotatableTileNBT(tag);
@@ -97,6 +97,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
 
     @Override
     public void update() {
+        // Do Analyzing.
         if (mayAnalyze) {
             if (this.hasSpecimen() && !isSpecimenAnalyzed()) {
                 super.update();
@@ -104,50 +105,37 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
                 reset();
             }
         }
-        if (this.getWorld().isRemote) {
-            if (updateCheck == 0) {
-                checkSides();
-            }
-            for (EnumFacing dir : VALID_DIRECTIONS) {
-                int timer = timers.get(dir);
-                timer = timer + (isSideActive(dir) ? 1 : -1);
-                timer = timer < 0 ? 0 : timer;
-                timer = timer > MAX ? MAX : timer;
-                timers.put(dir, timer);
-            }
-            updateCheck = (updateCheck + 1) % 1200;
+        
+        // Check the time.
+        final long currentTime = System.currentTimeMillis();
+        
+        // If time is greater than delta, then do update.
+        if (currentTime - this.last_update > NEIGHBOR_CHECK_TIMEOUT) {
+            // Do the update.
+            this.refreshConnections();
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    private boolean isSideActive(EnumFacing dir) {
-        return activeSides.containsKey(dir) && activeSides.get(dir);
+    public final void refreshConnections() {
+        // Check the connections.
+        for (EnumFacing side : EnumFacing.values()) {
+            // Classify the side.
+            this.connections.set(side, classifyConnection(side));
+        }
+        // Update the timer.
+        this.last_update = System.currentTimeMillis();
     }
 
-    @SideOnly(Side.CLIENT)
-    public void checkSides() {
-        for (EnumFacing dir : VALID_DIRECTIONS) {
-            checkSide(dir);
+    protected byte classifyConnection(@Nonnull EnumFacing side) {
+        if (isCrop(side)) {
+            return 1;
+        } else {
+            return 0;
         }
-        updateCheck = 0;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void checkSide(EnumFacing dir) {
-        if (timers == null) {
-            timers = new HashMap<>();
-        }
-        if (!timers.containsKey(dir)) {
-            timers.put(dir, 0);
-        }
-        if (activeSides == null) {
-            activeSides = new HashMap<>();
-        }
-        activeSides.put(dir, isCrop(dir));
     }
 
     private boolean isCrop(EnumFacing dir) {
-        return this.getWorld().getBlockState(new BlockPos(xCoord() + dir.getFrontOffsetX(), yCoord() + dir.getFrontOffsetY(), zCoord() + dir.getFrontOffsetZ())).getBlock() instanceof BlockCrop;
+        return WorldHelper.getTile(this.world, this.pos.offset(dir), IAgriCrop.class).isPresent();
     }
 
     public void startAnalyzing() {
@@ -169,7 +157,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
             this.markForUpdate();
         }
     }
-    
+
     // ==================================================
     // OpenComputers <editor-fold desc="OpenComputers">
     // --------------------------------------------------
@@ -190,7 +178,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
     @Override
     @Nullable
     @Optional.Method(modid = "opencomputers")
-    public Object[] invoke(@Nullable String methodName, Context context, @Nullable Arguments args) throws Exception {        
+    public Object[] invoke(@Nullable String methodName, Context context, @Nullable Arguments args) throws Exception {
         // Step 0. Fetch the respective method.
         final IAgriPeripheralMethod method = AgriApi.getPeripheralMethodRegistry().get(methodName).orElse(null);
 
@@ -198,7 +186,7 @@ public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements Simp
         if (method == null) {
             return null;
         }
-        
+
         // Step 2. Convert arguments to object array.
         final Object[] argObjects = (args == null) ? null : args.toArray();
 
