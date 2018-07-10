@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.exception.ContextedException;
+import com.agricraft.agricore.exception.ExceptionMessageBuilder;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
@@ -230,15 +230,16 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
 
         // Validate everything.
         if (consumedFluid < 0) {
-            throw new RuntimeException(
-                    new ContextedException("With " + totalFluid + "mB of total fluid, somehow consumed " + consumedFluid + "mb, which should be impossible!")
-                            .withContext("Component Fluid Amount", this.fluidAmount + "mB")
-                            .withContext("Component Fluid Capacity", this.fluidCapacity + "mB")
-                            .withContext("Input Fluid Amount", inputAmount + "mB")
-                            .withContext("Total Fluid Amount", totalFluid + "mB")
-                            .withContext("Remaining Fluid Amount", remainingFluid + "mB")
-                            .withContext("Consumed Fluid Amount", consumedFluid + "mB")
-            );
+            final ExceptionMessageBuilder eb = new ExceptionMessageBuilder();
+            eb.withTitle("Irrigation Component Error");
+            eb.withDescription("With %1$d mB of total fluid, somehow consumed %2$d mB, which should be impossible!", totalFluid, consumedFluid);
+            eb.withContext("Component Fluid Amount", this.fluidAmount + "mB");
+            eb.withContext("Component Fluid Capacity", this.fluidCapacity + "mB");
+            eb.withContext("Input Fluid Amount", inputAmount + "mB");
+            eb.withContext("Total Fluid Amount", totalFluid + "mB");
+            eb.withContext("Remaining Fluid Amount", remainingFluid + "mB");
+            eb.withContext("Consumed Fluid Amount", consumedFluid + "mB");
+            throw new AssertionError(eb.build());
         }
 
         // If there was a remainder, but we aren't allowed to have remainders, abort.

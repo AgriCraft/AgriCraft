@@ -1,5 +1,11 @@
 Changelog
 ---------
+2.12.0a5
+- FIXED: Tanks crashing game when filling up with rainwater [#1128].
+- FIXED: AgriCraft computer perhipheral crashing game [#1141].
+- FIXED: Bad import in IAgriSoil interface that was causing crashes [#1152].
+- FIXED: ActuallyAdditions integration being out-of-date [#1155].
+
 2.12.0a4
 - FIXED: Tooltips not displaying in AgriCraft GUIs [#1108].
 - FIXED: TOP integration not localizing text properly [#1114].
