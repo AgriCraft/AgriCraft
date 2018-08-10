@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.tiles;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.blocks.BlockCrop;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import javax.annotation.Nonnull;
@@ -14,11 +13,8 @@ import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
-import com.infinityraider.agricraft.network.MessageSyncFluidAmount;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
 @SimpleComponent.SkipInjection

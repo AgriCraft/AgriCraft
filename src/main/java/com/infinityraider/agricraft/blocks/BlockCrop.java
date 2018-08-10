@@ -49,8 +49,10 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import vazkii.botania.api.item.IHornHarvestable;
 
-public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
+@net.minecraftforge.fml.common.Optional.Interface(modid = "botania", iface = "vazkii.botania.api.item.IHornHarvestable")
+public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable, IHornHarvestable {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
@@ -562,4 +564,34 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         };
     }
 
+    // ==================================================
+    // Botania <editor-fold desc="OpenComputers">
+    // --------------------------------------------------
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public boolean canHornHarvest(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        return (eht == EnumHornType.WILD);
+    }
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public boolean hasSpecialHornHarvest(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        return (eht == EnumHornType.WILD);
+    }
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public void harvestByHorn(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        if (eht == EnumHornType.WILD) {
+            WorldHelper.getTile(world, pos, TileEntityCrop.class)
+                    .filter(TileEntityCrop::isMature)
+                    .ifPresent(crop -> {
+                        crop.onHarvest((product) -> WorldHelper.spawnItemInWorld(world, pos, product), null);
+                    });
+        }
+    }
+
+    // --------------------------------------------------
+    // </editor-fold>
+    // ==================================================
 }

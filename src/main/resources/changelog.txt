@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.12.0a6
+- ADDED: Botania Horn of the Wild crop harvesting support.
+
 2.12.0a5
 - FIXED: Tanks crashing game when filling up with rainwater [#1128].
 - FIXED: AgriCraft computer perhipheral crashing game [#1141].

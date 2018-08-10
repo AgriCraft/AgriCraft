@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;

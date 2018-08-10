@@ -30,10 +30,6 @@ public class DebugModeClearGrass extends DebugMode {
     )
     private static int radius = 10;
 
-    static {
-        AgriCore.getConfig().addConfigurable(DebugModeClearGrass.class);
-    }
-
     @Override
     public String debugName() {
         return "clear grass";
@@ -61,6 +57,10 @@ public class DebugModeClearGrass extends DebugMode {
     @Override
     public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         // NOP
+    }
+    
+    static {
+        AgriCore.getConfig().addConfigurable(DebugModeClearGrass.class);
     }
 
 }
