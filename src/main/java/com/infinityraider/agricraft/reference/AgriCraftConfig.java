@@ -96,6 +96,7 @@ public class AgriCraftConfig {
     public static boolean enableRakingSeedDrops = false;
 
     // World Generation
+    /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
     public static boolean disableWorldGen = false;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Greenhouse weight", min = "0", max = "100", comment = "The weight for a greenhouse to be generated in a village.")
@@ -110,7 +111,7 @@ public class AgriCraftConfig {
     public static boolean villagerEnabled = true;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Maximum crop tier", min = "1", max = "5", comment = "The maximum tier of plants that will spawn in greenhouses.")
     public static int greenHouseMaxTier = 3;
-
+     */
     // Client
     //@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
     //public static boolean condenseCustomWoodInNei = true;

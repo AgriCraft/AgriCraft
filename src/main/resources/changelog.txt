@@ -1,7 +1,10 @@
 Changelog
 ---------
 2.12.0a6
-- ADDED: Botania Horn of the Wild crop harvesting support.
+- FIXED: Removed old configuration settings relating to removed world generation features [#1146].
+- FIXED: Crash associated with draining AgriCraft Tanks [#1167].
+- FIXED: Fences connecting to crops [#1123].
+- ADDED: Botania Horn of the Wild crop harvesting support [#1145].
 
 2.12.0a5
 - FIXED: Tanks crashing game when filling up with rainwater [#1128].

@@ -50,6 +50,10 @@ repositories {
         url "https://maven.chaosfield.at/"
     }
     maven {
+        name "CodeChicken"
+        url "http://chickenbones.net/maven/"
+    }
+    maven {
         name "Botania"
         url "https://maven.blamejared.com/"
     }
@@ -72,10 +76,12 @@ dependencies {
     
     // Minecraft Mods
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
-    deobfCompile "vazkii.botania:Botania:r1.10-353"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+    deobfCompile "vazkii.botania:Botania:r1.10-353"
     deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.2-r136"
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
+    //deobfCompile "codechicken:CodeChickenLib:1.12.2-3.2.1.351:universal"
+    //deobfCompile ("codechicken:EnderStorage:1.12.2-2.4.5.135:universal") { transitive = false }
     
     // *Special* Minecraft Mods
     // Have to disable transitive deps on this one since stupid stuff is going on...

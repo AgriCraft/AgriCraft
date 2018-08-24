@@ -165,7 +165,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void setFluidAmount(int newFluidAmount) {
         // Ensure amount is in the proper range.
         if (newFluidAmount < 0) {
