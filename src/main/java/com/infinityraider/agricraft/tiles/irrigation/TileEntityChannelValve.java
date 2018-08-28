@@ -93,7 +93,6 @@ public class TileEntityChannelValve extends TileEntityChannel implements IDebugg
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         // Required super call (handles validation for us).
         super.addDisplayInfo(information);

@@ -388,7 +388,6 @@ public class TileEntityChannel extends TileEntityCustomWood implements ITickable
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         //Required call to super (handles validation for us).
         super.addDisplayInfo(information);
