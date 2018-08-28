@@ -572,7 +572,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     }
 
     // ==================================================
-    // Botania <editor-fold desc="OpenComputers">
+    // Botania <editor-fold desc="Botania">
     // --------------------------------------------------
     @Override
     @net.minecraftforge.fml.common.Optional.Method(modid = "botania")

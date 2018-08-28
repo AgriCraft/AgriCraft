@@ -54,6 +54,10 @@ repositories {
         url "http://chickenbones.net/maven/"
     }
     maven {
+        name "Thermal Expansion"
+        url "http://maven.covers1624.net"
+    }
+    maven {
         name "Botania"
         url "https://maven.blamejared.com/"
     }
@@ -75,17 +79,25 @@ dependencies {
     compile 'com.google.guava:guava:24.0-jre'
     
     // Minecraft Mods
-    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
+    deobfCompile "mezz.jei:jei_1.12.2:4.11.0.212:api"
+    runtime "mezz.jei:jei_1.12.2:4.11.0.212"
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
     deobfCompile "vazkii.botania:Botania:r1.10-353"
     deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.2-r136"
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
-    //deobfCompile "codechicken:CodeChickenLib:1.12.2-3.2.1.351:universal"
-    //deobfCompile ("codechicken:EnderStorage:1.12.2-2.4.5.135:universal") { transitive = false }
+    //deobfCompile ("codechicken:CodeChickenLib:1.12.2-3.2.0.+:deobf") { transitive = false }
+    //deobfCompile ("codechicken:EnderStorage:1.12.2-2.4.4.+:deobf") { transitive = false }
+    //deobfCompile "cofh:ThermalExpansion:1.12.2-5.5.0.+:deobf"
+    //deobfCompile "cofh:ThermalDynamics:1.12.2-2.5.0.+:deobf"
     
     // *Special* Minecraft Mods
     // Have to disable transitive deps on this one since stupid stuff is going on...
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
+}
+
+// Delete Old Plants
+task deleteOldJsons(type: Delete) {
+    delete "run/config/agricraft/json"
 }
 
 // Add AgriPlants

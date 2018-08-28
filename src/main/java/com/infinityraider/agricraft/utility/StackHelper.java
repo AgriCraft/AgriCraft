@@ -36,7 +36,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the given ItemStack is considered valid as per the
      * method's description, {@literal false} otherwise.
      */
-    public static boolean isValid(@Nullable ItemStack stack) {
+    public static final boolean isValid(@Nullable ItemStack stack) {
         return (stack != null)
                 && (!stack.isEmpty())
                 && (stack.getItem() != null);
@@ -52,7 +52,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the given ItemStack is considered valid as per the
      * method's description, {@literal false} otherwise.
      */
-    public static boolean isValid(ItemStack stack, Class<?> itemClass) {
+    public static final boolean isValid(ItemStack stack, Class<?> itemClass) {
         return (stack != null)
                 && (!stack.isEmpty())
                 && (TypeHelper.isType(stack.getItem(), itemClass));
@@ -68,7 +68,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the given ItemStack is considered valid as per the
      * method's description, {@literal false} otherwise.
      */
-    public static boolean isValid(ItemStack stack, Class<?>... itemClasses) {
+    public static final boolean isValid(ItemStack stack, Class<?>... itemClasses) {
         return isValid(stack) && TypeHelper.isAllTypes(stack.getItem(), itemClasses);
     }
 
@@ -85,7 +85,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if a is considered to equivalent to b, {@literal false}
      * otherwise.
      */
-    public static boolean areEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
+    public static final boolean areEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         return ItemStack.areItemStacksEqual(a, b);
     }
 
@@ -108,7 +108,7 @@ public final class StackHelper {
      * @param b
      * @return
      */
-    public static boolean areCompatible(@Nonnull ItemStack a, @Nonnull ItemStack b) {
+    public static final boolean areCompatible(@Nonnull ItemStack a, @Nonnull ItemStack b) {
         // Validate
         Preconditions.checkNotNull(a);
         Preconditions.checkNotNull(b);
@@ -143,7 +143,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the item from stack a is considered to equivalent to
      * the item from stack b, {@literal false} otherwise.
      */
-    public static boolean areItemsEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
+    public static final boolean areItemsEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         return ItemStack.areItemsEqual(a, b);
     }
 
@@ -157,7 +157,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the item from stack a is considered to equivalent to
      * the item from stack b, {@literal false} otherwise.
      */
-    public static boolean areItemsEqualIgnoringMeta(@Nullable ItemStack a, @Nullable ItemStack b) {
+    public static final boolean areItemsEqualIgnoringMeta(@Nullable ItemStack a, @Nullable ItemStack b) {
         return ItemStack.areItemsEqualIgnoreDurability(a, b);
     }
 
@@ -168,7 +168,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the given ItemStack is non-null and
      * ItemStack#getTagCompound() returns a non-null value, {@literal false} otherwise.
      */
-    public static boolean hasTag(@Nullable ItemStack stack) {
+    public static final boolean hasTag(@Nullable ItemStack stack) {
         return (stack != null) && (!stack.isEmpty()) && (stack.getTagCompound() != null);
     }
 
@@ -183,7 +183,7 @@ public final class StackHelper {
      * @return {@literal true} if and only if the stack and its tag are non-null and the tag has all
      * of the given keys, {@literal false} otherwise}.
      */
-    public static boolean hasKey(@Nullable ItemStack stack, @Nullable String... keys) {
+    public static final boolean hasKey(@Nullable ItemStack stack, @Nullable String... keys) {
         return (stack != null) && (!stack.isEmpty()) && NBTHelper.hasKey(stack.getTagCompound(), keys);
     }
 
@@ -195,7 +195,7 @@ public final class StackHelper {
      * @return
      */
     @Nonnull
-    public static NBTTagCompound getTag(@Nonnull ItemStack stack) {
+    public static final NBTTagCompound getTag(@Nonnull ItemStack stack) {
         // Ensure the given stack is not null.
         Preconditions.checkNotNull(stack, "The stack to fetch the NBTTagCompound from must not be null!");
 
@@ -221,7 +221,7 @@ public final class StackHelper {
      * proper-sized stacks.
      */
     @Nonnull
-    public static List<ItemStack> fitToMaxSize(@Nonnull ItemStack stack) {
+    public static final List<ItemStack> fitToMaxSize(@Nonnull ItemStack stack) {
         // Skip if the stack is empty.
         if (stack.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -289,7 +289,7 @@ public final class StackHelper {
      * @throws IllegalArgumentException if the given amount was less than zero.
      */
     @Nonnull
-    public static MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nonnull ItemStack stack, @Nonnegative int amount) {
+    public static final MethodResult decreaseStackSize(@Nullable EntityPlayer player, @Nonnull ItemStack stack, @Nonnegative int amount) {
         // Validate arguments.
         Preconditions.checkNotNull(stack, "Null Itemstack Detected!");
         Preconditions.checkArgument(amount > 0, "Cannot decrease ItemStack size by a negative amount! %d", amount);
@@ -307,6 +307,13 @@ public final class StackHelper {
             stack.setCount(stack.getCount() - amount);
             return MethodResult.PASS;
         }
+    }
+    
+    /**
+     * Private constructor to prevent utility class initialization.
+     */
+    private StackHelper() {
+        // Nothing to see here.
     }
 
 }
