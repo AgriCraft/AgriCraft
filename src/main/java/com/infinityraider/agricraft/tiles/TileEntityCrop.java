@@ -153,7 +153,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Drop drops if should drop.
         if (player == null || !player.isCreative()) {
-            this.getDrops(consumer, true, true);
+            this.getDrops(consumer, true, true, true);
         }
 
         // Remove the block.
@@ -172,7 +172,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     // Misc. Methods
     // <editor-fold>
     // =========================================================================
-    public void getDrops(@Nonnull Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds) {
+    public void getDrops(@Nonnull Consumer<ItemStack> consumer, boolean includeCropSticks, boolean includeSeeds, boolean includeProducts) {
         // Check that the consumer is not null.
         Preconditions.checkNotNull(consumer);
 
@@ -184,7 +184,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             if (includeSeeds && this.seed.getPlant().getSeedDropChanceBase() + this.growthStage * this.seed.getPlant().getSeedDropChanceBonus() > this.getRandom().nextDouble()) {
                 consumer.accept(this.getSeed().toStack());
             }
-            if (this.isMature()) {
+            if (includeProducts && this.isMature()) {
                 for (int trials = (this.seed.getStat().getGain() + 3) / 3; trials > 0; trials--) {
                     this.seed.getPlant().getHarvestProducts(consumer, this, this.seed.getStat(), this.getRandom());
                 }
@@ -216,10 +216,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     /**
-     * This sets the seed for this crop. Using null will remove the seed. If this call changes the
-     * value for seed: - It will first reset the growth stage back to zero. - Then it will make sure
-     * that markForUpdate gets called, if setGrowthStage didn't do it already. - And then it will
-     * return true. Otherwise it will return false, indicating there was no change and no update.
+     * This sets the seed for this crop. Using null will remove the seed. If
+     * this call changes the value for seed: - It will first reset the growth
+     * stage back to zero. - Then it will make sure that markForUpdate gets
+     * called, if setGrowthStage didn't do it already. - And then it will return
+     * true. Otherwise it will return false, indicating there was no change and
+     * no update.
      *
      * @param seed the seed to associate with this instance.
      * @return true if this changed the seed and caused an update.
@@ -500,7 +502,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
-            this.getDrops(consumer, false, false);
+            this.getDrops(consumer, false, false, true);
             this.setGrowthStage(0);
             return MethodResult.SUCCESS;
         } else {
@@ -517,9 +519,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         Preconditions.checkNotNull(consumer);
         // Actually do something.
         if (!this.isRemote() && this.canBeRaked()) {
-            if (AgriCraftConfig.enableRakingDrops) {
-                this.getDrops(consumer, false, AgriCraftConfig.enableRakingSeedDrops);
-            }
+            this.getDrops(consumer, false, AgriCraftConfig.enableRakingSeedDrops, AgriCraftConfig.enableRakingItemDrops);
             this.setSeed(null);
             return true;
         } else {

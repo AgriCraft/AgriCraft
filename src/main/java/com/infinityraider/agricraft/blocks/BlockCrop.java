@@ -390,7 +390,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> drops = new ArrayList<>();
-        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add, true, true));
+        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add, true, true, true));
         return drops;
     }
 

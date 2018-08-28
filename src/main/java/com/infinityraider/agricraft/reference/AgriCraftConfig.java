@@ -91,7 +91,7 @@ public class AgriCraftConfig {
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Growth Rate", min = "10", max = "50", comment = "The average number of growth ticks for the weed to grow.")
     public static int defaultGrowthChance = 50;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops items", comment = "Set to false if you wish to disable drops from raking weeds.")
-    public static boolean enableRakingDrops = true;
+    public static boolean enableRakingItemDrops = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops seeds", comment = "Set to false if you wish to disable seed drops from raking weeds.")
     public static boolean enableRakingSeedDrops = false;
 
