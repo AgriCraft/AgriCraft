@@ -1,6 +1,7 @@
 Changelog
 ---------
 2.12.0a6
+- FIXED: Analyzed seeds not stacking properly in some cases [#1037].
 - ADDED: Ars Magica 2 JSON files. Thanks @Baux12!
 - ADDED: Missing custom ore type plants, like Plombean, niccissus, and petinia [#1168].
 - ADDED: Support for custom "oredict" prefix in JSON files to resolve things like "oredict:oreCopper".
