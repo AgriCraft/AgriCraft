@@ -106,6 +106,7 @@ processResources {
         include '**/*.json'
         into 'json/defaults'
     }
+    outputs.upToDateWhen{ false }
 }
 
 // Javadoc
