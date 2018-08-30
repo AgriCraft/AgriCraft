@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.items;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.AgriNuggetType;
-import com.infinityraider.agricraft.utility.OreDictHelper;
+import com.infinityraider.agricraft.utility.OreDictUtil;
 import com.infinityraider.infinitylib.item.IAutoRenderedItem;
 import com.infinityraider.infinitylib.item.ItemBase;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class ItemNugget extends ItemBase implements IAutoRenderedItem, IRecipeRe
             OreDictionary.registerOre(type.nugget, oneNugget);
 
             // 2) Conditional recipes. Only if the ingot exists, because AgriCraft doesn't add its own.
-            ItemStack ingot = OreDictHelper.getIngot(type.ingot);
+            ItemStack ingot = OreDictUtil.getFirstOre(type.ingot).orElse(ItemStack.EMPTY);
             if (!ingot.isEmpty()) {
                 AgriCore.getLogger("agricraft").info("Adding a recipe to convert nine {0} into one {1}", type.nugget, type.ingot);
                 final ResourceLocation group = new ResourceLocation(AgriCraft.instance.getModId(), "combine_nugget");

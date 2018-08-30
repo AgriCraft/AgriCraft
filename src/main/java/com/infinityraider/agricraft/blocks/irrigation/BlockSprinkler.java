@@ -1,12 +1,6 @@
 package com.infinityraider.agricraft.blocks.irrigation;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
-import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.CENTER_BOX;
-import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.EAST_BOX;
-import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.NORTH_BOX;
-import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.SOUTH_BOX;
-import static com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel.WEST_BOX;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;

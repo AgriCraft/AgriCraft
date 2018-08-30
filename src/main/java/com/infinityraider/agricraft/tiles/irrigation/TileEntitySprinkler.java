@@ -349,7 +349,6 @@ public class TileEntitySprinkler extends TileEntityBase implements ITickable, IA
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addDisplayInfo(@Nonnull Consumer<String> information) {
         // Validate
         Preconditions.checkNotNull(information);

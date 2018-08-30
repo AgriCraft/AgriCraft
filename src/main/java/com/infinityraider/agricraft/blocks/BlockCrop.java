@@ -28,6 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -49,8 +50,10 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import vazkii.botania.api.item.IHornHarvestable;
 
-public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable {
+@net.minecraftforge.fml.common.Optional.Interface(modid = "botania", iface = "vazkii.botania.api.item.IHornHarvestable")
+public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> implements IGrowable, IPlantable, IHornHarvestable {
 
     public static final AxisAlignedBB BOX = new AxisAlignedBB(Constants.UNIT * 2, 0, Constants.UNIT * 2, Constants.UNIT * (Constants.WHOLE - 2), Constants.UNIT * (Constants.WHOLE - 3), Constants.UNIT * (Constants.WHOLE - 2));
 
@@ -387,7 +390,7 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> drops = new ArrayList<>();
-        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add, true, true));
+        this.getCrop(world, pos).ifPresent(c -> c.getDrops(drops::add, true, true, true));
         return drops;
     }
 
@@ -467,6 +470,12 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
     @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_getBlockFaceShape_1_, IBlockState p_getBlockFaceShape_2_, BlockPos p_getBlockFaceShape_3_, EnumFacing p_getBlockFaceShape_4_) {
+        // Undefined face shape prevents fence connections.
+        return BlockFaceShape.UNDEFINED;
     }
 
     /**
@@ -562,4 +571,34 @@ public class BlockCrop extends BlockTileCustomRenderedBase<TileEntityCrop> imple
         };
     }
 
+    // ==================================================
+    // Botania <editor-fold desc="Botania">
+    // --------------------------------------------------
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public boolean canHornHarvest(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        return (eht == EnumHornType.WILD);
+    }
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public boolean hasSpecialHornHarvest(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        return (eht == EnumHornType.WILD);
+    }
+
+    @Override
+    @net.minecraftforge.fml.common.Optional.Method(modid = "botania")
+    public void harvestByHorn(World world, BlockPos pos, ItemStack stack, EnumHornType eht) {
+        if (eht == EnumHornType.WILD) {
+            WorldHelper.getTile(world, pos, TileEntityCrop.class)
+                    .filter(TileEntityCrop::isMature)
+                    .ifPresent(crop -> {
+                        crop.onHarvest((product) -> WorldHelper.spawnItemInWorld(world, pos, product), null);
+                    });
+        }
+    }
+
+    // --------------------------------------------------
+    // </editor-fold>
+    // ==================================================
 }

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageFertilizerApplied;
 import com.infinityraider.agricraft.network.MessageCompareLight;
 import com.infinityraider.agricraft.network.MessageGuiSeedStorageClearSeed;
-import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.network.MessageSyncFluidAmount;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
@@ -96,7 +95,6 @@ public class AgriCraft extends InfinityMod {
         wrapper.registerMessage(MessageContainerSeedStorage.class);
         wrapper.registerMessage(MessageFertilizerApplied.class);
         wrapper.registerMessage(MessageGuiSeedStorageClearSeed.class);
-        wrapper.registerMessage(MessagePeripheralCheckNeighbours.class);
         wrapper.registerMessage(MessageSyncFluidAmount.class);
         wrapper.registerMessage(MessageTileEntitySeedStorage.class);
         wrapper.registerMessage(MessageSyncSoilJson.class);

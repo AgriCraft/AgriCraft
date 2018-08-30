@@ -91,11 +91,12 @@ public class AgriCraftConfig {
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Growth Rate", min = "10", max = "50", comment = "The average number of growth ticks for the weed to grow.")
     public static int defaultGrowthChance = 50;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops items", comment = "Set to false if you wish to disable drops from raking weeds.")
-    public static boolean enableRakingDrops = true;
+    public static boolean enableRakingItemDrops = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops seeds", comment = "Set to false if you wish to disable seed drops from raking weeds.")
     public static boolean enableRakingSeedDrops = false;
 
     // World Generation
+    /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
     public static boolean disableWorldGen = false;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Greenhouse weight", min = "0", max = "100", comment = "The weight for a greenhouse to be generated in a village.")
@@ -110,7 +111,7 @@ public class AgriCraftConfig {
     public static boolean villagerEnabled = true;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Maximum crop tier", min = "1", max = "5", comment = "The maximum tier of plants that will spawn in greenhouses.")
     public static int greenHouseMaxTier = 3;
-
+     */
     // Client
     //@AgriConfigurable(category = AgriConfigCategory.CLIENT, key = "Condense custom wood blocks in NEI", comment = "Set to true to condense all entries for custom wood blocks into one entry in NEI.")
     //public static boolean condenseCustomWoodInNei = true;
