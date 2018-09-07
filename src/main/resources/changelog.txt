@@ -1,5 +1,9 @@
 Changelog
 ---------
+2.12.0a7
+- UPDATE: Updated InfinityLib to the latest version.
+- UPDATE: Updated Simplified Chinese Localization [#1179].
+
 2.12.0a6
 - FIXED: Id conflicts, by adding mod domain to front of all plant ids.
 - FIXED: Id conflict with Pam's Harvestcraft Beet plant and Vanilla Beet plant [#1092].

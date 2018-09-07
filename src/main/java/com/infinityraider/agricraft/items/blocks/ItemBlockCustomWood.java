@@ -35,12 +35,6 @@ public class ItemBlockCustomWood extends ItemBlockAgricraft {
         this.hasSubtypes = true;
     }
 
-    @SideOnly(Side.CLIENT)
-    public static TextureAtlasSprite getTextureFromStack(ItemStack stack) {
-        // TODO: Do something with this...
-        return BaseIcons.OAK_PLANKS.getIcon();
-    }
-
     /*
 	 * Populates the sub-item list.
      */
