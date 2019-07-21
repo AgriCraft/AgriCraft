@@ -71,6 +71,8 @@ agricraft_gui.peripheral=Computer Controlled Seed Analyzer
 // Tooltips
 // ========================================
 agricraft_tooltip.unidentified=Unidentified
+agricraft_tooltip.soil=Soil
+agricraft_tooltip.plant=Plant
 agricraft_tooltip.seed=Seed
 agricraft_tooltip.growth=Growth
 agricraft_tooltip.gain=Gain

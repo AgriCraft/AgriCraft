@@ -502,7 +502,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
-            this.getDrops(consumer, false, false, true);
+            this.getDrops(consumer, false, AgriCraftConfig.enableHarvestSeedDrops, true);
             this.setGrowthStage(0);
             return MethodResult.SUCCESS;
         } else {
@@ -639,14 +639,14 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         Preconditions.checkNotNull(information);
 
         // Add Soil Information
-        information.accept("Soil: " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.soil")+": " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
 
         if (this.hasSeed()) {
             // Fetch the plant.
             final IAgriPlant plant = this.getSeed().getPlant();
             // Fetch the stat.
             final IAgriStat stat = this.getSeed().getStat();
-
+            information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.plant") + ": " + plant.getPlantName());
             //Add the SEED name.
             information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + plant.getSeedName());
             //Add the GROWTH.

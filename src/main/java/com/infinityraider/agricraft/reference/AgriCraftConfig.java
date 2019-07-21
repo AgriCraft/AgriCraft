@@ -94,7 +94,9 @@ public class AgriCraftConfig {
     public static boolean enableRakingItemDrops = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops seeds", comment = "Set to false if you wish to disable seed drops from raking weeds.")
     public static boolean enableRakingSeedDrops = false;
-
+    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Harvest drops seeds", comment = "Set to false if you wish to disable seed drops from harvest.")
+    public static boolean enableHarvestSeedDrops = true;
+    
     // World Generation
     /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
