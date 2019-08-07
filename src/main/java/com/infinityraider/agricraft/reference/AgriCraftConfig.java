@@ -88,8 +88,6 @@ public class AgriCraftConfig {
     public static boolean weedsDestroyCropSticks = false;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Crossover Chance", min = "0.05", max = "0.95", comment = "The base chance for a crossover to occur during any given tick. Setting this 95% is of questionable morality.")
     public static float crossOverChance = 0.15f;
-    @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Weed Growth Rate", min = "10", max = "50", comment = "The average number of growth ticks for the weed to grow.")
-    public static int defaultGrowthChance = 50;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops items", comment = "Set to false if you wish to disable drops from raking weeds.")
     public static boolean enableRakingItemDrops = true;
     @AgriConfigurable(category = AgriConfigCategory.FARMING, key = "Raking weeds drops seeds", comment = "Set to false if you wish to disable seed drops from raking weeds.")

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
@@ -7,9 +8,12 @@ import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.init.AgriOreDict;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
+import com.infinityraider.infinitylib.utility.ReflectionHelper;
+import net.minecraft.command.ICommand;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public interface IProxy extends IProxyBase {
@@ -73,4 +77,12 @@ public interface IProxy extends IProxyBase {
         // Whatever...
         return "en_US";
     }
+    
+    @Override
+    default void onServerStarting(FMLServerStartingEvent event) {
+        // This is to be moved to infinity lib in a future version, I would expect.
+        AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
+        ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
+    }
+    
 }

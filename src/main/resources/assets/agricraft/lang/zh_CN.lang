@@ -76,6 +76,7 @@ agricraft_tooltip.growth=生长速度
 agricraft_tooltip.gain=产量
 agricraft_tooltip.strength=抗性
 agricraft_tooltip.analyzed=这种子还未经分析过
+agricraft_tooltip.soil=土壤
 agricraft_tooltip.fertile=这里土壤肥沃，作物可以生长
 agricraft_tooltip.notFertile=这种作物不能种在这里
 agricraft_tooltip.discoveredSeeds=已发现种子

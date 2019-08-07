@@ -639,7 +639,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         Preconditions.checkNotNull(information);
 
         // Add Soil Information
-        information.accept("Soil: " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
+        information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.soil") + ": " + this.getSoil().map(IAgriSoil::getName).orElse("Unknown"));
 
         if (this.hasSeed()) {
             // Fetch the plant.

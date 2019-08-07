@@ -76,6 +76,7 @@ agricraft_tooltip.growth=Croissance
 agricraft_tooltip.gain=Gain
 agricraft_tooltip.strength=Force
 agricraft_tooltip.analyzed=Cette graine n'a pas encore été analysée
+agricraft_tooltip.soil=Sol
 agricraft_tooltip.fertile=Cette plante est fertile et peut croitre
 agricraft_tooltip.notFertile=Cette plante ne peut pas croitre ici
 agricraft_tooltip.discoveredSeeds=Graines découvertes

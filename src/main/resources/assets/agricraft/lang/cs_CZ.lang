@@ -76,6 +76,7 @@ agricraft_tooltip.growth=Růst
 agricraft_tooltip.gain=Zisk
 agricraft_tooltip.strength=Síla
 agricraft_tooltip.analyzed=Toto semínke ještě nebylo analyzováno
+agricraft_tooltip.soil=Půda
 agricraft_tooltip.fertile=Tato rostlina je plodná a může růst
 agricraft_tooltip.notFertile=Tato rostlina zde nemůže růst
 agricraft_tooltip.discoveredSeeds=Objevená semínka
