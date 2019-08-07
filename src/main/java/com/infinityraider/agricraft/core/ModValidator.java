@@ -3,6 +3,7 @@
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.util.AgriValidator;
+import com.infinityraider.agricraft.utility.OreDictUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -19,6 +20,8 @@ public class ModValidator implements AgriValidator {
         String[] parts = block.split(":");
         if (parts.length < 2) {
             return false;
+        } else if (OreDictUtil.isValidOre(block)) {
+            return true;
         } else {
             Block b = Block.getBlockFromName(parts[0] + ":" + parts[1]);
             //AgriCore.getLogger("agricraft").debug(b);
@@ -31,6 +34,8 @@ public class ModValidator implements AgriValidator {
         String[] parts = item.split(":");
         if (parts.length < 2) {
             return false;
+        } else if (OreDictUtil.isValidOre(item)) {
+            return true;
         } else {
             Item i = Item.getByNameOrId(parts[0] + ":" + parts[1]);
             //AgriCore.getLogger("agricraft").debug(i);

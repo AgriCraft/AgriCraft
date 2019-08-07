@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.items;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;
+import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -75,6 +76,11 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem, IItemWith
     @Override
     public boolean isEnabled() {
         return enableClipper;
+    }
+    
+    // Add to Configurator
+    static {
+        AgriCore.getConfig().addConfigurable(ItemClipper.class);
     }
 
 }

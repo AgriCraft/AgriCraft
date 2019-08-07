@@ -6,11 +6,11 @@ import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.handler.GuiHandler;
 import com.infinityraider.agricraft.items.blocks.ItemBlockAgricraft;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.agricraft.network.MessagePeripheralCheckNeighbours;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.block.BlockTileCustomRenderedBase;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.item.IInfinityItem;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +28,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPeripheral> {
-    
+
     private final ItemBlockAgricraft item;
 
     public BlockPeripheral() {
@@ -71,7 +70,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
     @Override
     @Nonnull
     public <T extends ItemBlock & IInfinityItem> Optional<T> getItemBlock() {
-        return Optional.of((T)this.item);
+        return Optional.of((T) this.item);
     }
 
     @Override
@@ -113,8 +112,7 @@ public class BlockPeripheral extends BlockTileCustomRenderedBase<TileEntityPerip
 
     @Override
     public void onNeighborChange(IBlockAccess iba, BlockPos pos, BlockPos neighbor) {
-        NetworkRegistry.TargetPoint point = new NetworkRegistry.TargetPoint(iba.getWorldType().getId(), pos.getX(), pos.getY(), pos.getZ(), 32);
-        new MessagePeripheralCheckNeighbours(pos).sendToAllAround(point);
+        WorldHelper.getTile(iba, pos, TileEntityPeripheral.class).ifPresent(t -> t.refreshConnections());
     }
 
     @Override

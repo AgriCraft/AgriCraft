@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import java.util.Collection;
 import javax.annotation.Nonnull;
-import jline.internal.Preconditions;
+import com.google.common.base.Preconditions;
 import net.minecraft.item.ItemStack;
 
 /**

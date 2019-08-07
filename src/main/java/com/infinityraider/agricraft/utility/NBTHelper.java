@@ -5,21 +5,21 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class NBTHelper {
+public final class NBTHelper {
 
-    public static void addCoordsToNBT(int[] coords, NBTTagCompound tag) {
+    public static final void addCoordsToNBT(int[] coords, NBTTagCompound tag) {
         if (coords != null && coords.length == 3) {
             addCoordsToNBT(coords[0], coords[1], coords[2], tag);
         }
     }
 
-    public static void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
+    public static final void addCoordsToNBT(int x, int y, int z, NBTTagCompound tag) {
         tag.setInteger(AgriNBT.X, x);
         tag.setInteger(AgriNBT.Y, y);
         tag.setInteger(AgriNBT.Z, z);
     }
 
-    public static int[] getCoordsFromNBT(NBTTagCompound tag) {
+    public static final int[] getCoordsFromNBT(NBTTagCompound tag) {
         int[] coords = null;
         if (tag.hasKey(AgriNBT.X) && tag.hasKey(AgriNBT.Y) && tag.hasKey(AgriNBT.Z)) {
             coords = new int[]{tag.getInteger(AgriNBT.X), tag.getInteger(AgriNBT.Y), tag.getInteger(AgriNBT.Z)};
@@ -27,7 +27,7 @@ public abstract class NBTHelper {
         return coords;
     }
 
-    public static boolean hasKey(NBTTagCompound tag, String... keys) {
+    public static final boolean hasKey(NBTTagCompound tag, String... keys) {
         if (tag == null) {
             return false;
         }
@@ -40,7 +40,7 @@ public abstract class NBTHelper {
     }
 
     @Nullable
-    public static NBTTagCompound asTag(Object obj) {
+    public static final NBTTagCompound asTag(Object obj) {
         if (obj instanceof ItemStack) {
             return ((ItemStack) obj).getTagCompound();
         } else if (obj instanceof NBTTagCompound) {
@@ -48,6 +48,13 @@ public abstract class NBTHelper {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Private constructor to prevent utility class initialization.
+     */
+    private NBTHelper() {
+        // Nothing to see here.
     }
 
 }

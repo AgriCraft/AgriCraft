@@ -1,5 +1,24 @@
 Changelog
 ---------
+2.12.0a6
+- FIXED: Id conflicts, by adding mod domain to front of all plant ids.
+- FIXED: Id conflict with Pam's Harvestcraft Beet plant and Vanilla Beet plant [#1092].
+- FIXED: Weed item drop setting in config not behaving in expected manner [#1133].
+- FIXED: Analyzed seeds not stacking properly in some cases [#1037].
+- ADDED: Ars Magica 2 JSON files. Thanks @Baux12!
+- ADDED: Missing custom ore type plants, like Plombean, niccissus, and petinia [#1168].
+- ADDED: Support for custom "oredict" prefix in JSON files to resolve things like "oredict:oreCopper".
+- FIXED: Removed old configuration settings relating to removed world generation features [#1146].
+- FIXED: Crash associated with draining AgriCraft Tanks [#1167].
+- FIXED: Fences connecting to crops [#1123].
+- ADDED: Botania Horn of the Wild crop harvesting support [#1145].
+
+2.12.0a5
+- FIXED: Tanks crashing game when filling up with rainwater [#1128].
+- FIXED: AgriCraft computer perhipheral crashing game [#1141].
+- FIXED: Bad import in IAgriSoil interface that was causing crashes [#1152].
+- FIXED: ActuallyAdditions integration being out-of-date [#1155].
+
 2.12.0a4
 - FIXED: Tooltips not displaying in AgriCraft GUIs [#1108].
 - FIXED: TOP integration not localizing text properly [#1114].

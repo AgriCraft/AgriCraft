@@ -30,15 +30,15 @@ minecraft {
 // Setup Remotes
 repositories {
     maven {
-        name "TehNut Repo"
+        name "TehNut Maven"
         url "http://tehnut.info/maven"
     }
     maven {
-        name "tterrag maven"
+        name "Tterrag Maven"
         url "http://maven.tterrag.com/"
     }
     maven {
-        name "JEI Repo"
+        name "JEI Maven"
         url "http://dvs1.progwml6.com/files/maven"
     }
     maven {
@@ -49,19 +49,55 @@ repositories {
         name "ActuallyAdditions"
         url "https://maven.chaosfield.at/"
     }
+    maven {
+        name "CodeChicken"
+        url "http://chickenbones.net/maven/"
+    }
+    maven {
+        name "Thermal Expansion"
+        url "http://maven.covers1624.net"
+    }
+    maven {
+        name "Botania"
+        url "https://maven.blamejared.com/"
+    }
+    maven {
+        name "Baubles"
+        url "https://maven.thiakil.com/"
+    }
 }
 
 // List Deps.
 dependencies {
-    // Mods (For auto-import)
-    shade project(':lib/AgriCore')
+    // AgriCore
+    shade project(':lib/AgriCore');
+    
+    // InfinityLib
     compile project(':lib/InfinityLib')
+    
+    // Java Libraries
     compile 'com.google.guava:guava:24.0-jre'
-    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.140"
-    // Have to disable transitive deps on this one since stupid stuff is going on...
-    deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.1-r121"
+    
+    // Minecraft Mods
+    deobfCompile "mezz.jei:jei_1.12.2:4.11.0.212:api"
+    runtime "mezz.jei:jei_1.12.2:4.11.0.212"
+    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+    deobfCompile "vazkii.botania:Botania:r1.10-353"
+    deobfCompile "de.ellpeck.actuallyadditions:ActuallyAdditions:1.12.2-r136"
     deobfCompile "li.cil.oc:OpenComputers:MC1.12.2-1.7.1.63"
+    //deobfCompile ("codechicken:CodeChickenLib:1.12.2-3.2.0.+:deobf") { transitive = false }
+    //deobfCompile ("codechicken:EnderStorage:1.12.2-2.4.4.+:deobf") { transitive = false }
+    //deobfCompile "cofh:ThermalExpansion:1.12.2-5.5.0.+:deobf"
+    //deobfCompile "cofh:ThermalDynamics:1.12.2-2.5.0.+:deobf"
+    
+    // *Special* Minecraft Mods
+    // Have to disable transitive deps on this one since stupid stuff is going on...
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
+}
+
+// Delete Old Plants
+task deleteOldJsons(type: Delete) {
+    delete "run/config/agricraft/json"
 }
 
 // Add AgriPlants
@@ -70,6 +106,7 @@ processResources {
         include '**/*.json'
         into 'json/defaults'
     }
+    outputs.upToDateWhen{ false }
 }
 
 // Javadoc
