@@ -70,10 +70,10 @@ repositories {
 // List Deps.
 dependencies {
     // AgriCore
-    shade project(':lib/AgriCore');
+    shade project(':AgriCore');
     
     // InfinityLib
-    compile project(':lib/InfinityLib')
+    compile project(':InfinityLib')
     
     // Java Libraries
     compile 'com.google.guava:guava:24.0-jre'
