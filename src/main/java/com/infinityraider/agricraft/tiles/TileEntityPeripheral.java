@@ -17,7 +17,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
-@SimpleComponent.SkipInjection
 @Optional.Interface(modid = "opencomputers", iface = "li.cil.oc.api.network.SimpleComponent")
 @Optional.Interface(modid = "opencomputers", iface = "li.cil.oc.api.network.ManagedPeripheral")
 public class TileEntityPeripheral extends TileEntitySeedAnalyzer implements SimpleComponent, ManagedPeripheral {
