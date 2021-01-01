@@ -1,11 +1,5 @@
-/*
- */
 package com.infinityraider.agricraft.reference;
 
-/**
- *
- *
- */
 public enum AgriNuggetType {
 
     Emerald("gemEmerald", "oreEmerald"),

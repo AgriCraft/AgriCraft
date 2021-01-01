@@ -8,12 +8,11 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.util.MethodResult;
-import com.infinityraider.agricraft.farming.PlantStats;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -93,18 +92,18 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         }
 
         // If the soil is wrong, report and abort.
-        if (!seed.getPlant().getGrowthRequirement().hasValidSoil(this.getWorld(), pos)) {
+        if (!seed.getPlant().getGrowConditions().hasValidSoil(this.getWorld(), pos)) {
             MessageUtil.messagePlayer(player, "`7The soil is not valid for this seed. You can't plant it here.`r");
             return MethodResult.FAIL;
         }
 
         // If the additional conditions are wrong, warn and continue.
-        if (!seed.getPlant().getGrowthRequirement().hasValidConditions(this.getWorld(), pos)) {
+        if (!seed.getPlant().getGrowConditions().hasValidConditions(this.getWorld(), pos)) {
             MessageUtil.messagePlayer(player, "`7Caution: This plant has additional requirements that are unmet.`r");
         }
 
         // If the lighting is wrong, warn and continue.
-        if (!seed.getPlant().getGrowthRequirement().hasValidLight(this.getWorld(), pos)) {
+        if (!seed.getPlant().getGrowConditions().hasValidLight(this.getWorld(), pos)) {
             MessageUtil.messagePlayer(player, "`7Caution: This plant won't grow with the current light level.`r");
         }
 
@@ -178,7 +177,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
 
         // Perform crop stick drop.
         if (includeCropSticks) {
-            consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, this.isCrossCrop() ? 2 : 1));
+            consumer.accept(new ItemStack(AgriItems.getInstance().crop_sticks, this.isCrossCrop() ? 2 : 1));
         }
         if (this.hasSeed()) {
             if (includeSeeds && this.seed.getPlant().getSeedDropChanceBase() + this.growthStage * this.seed.getPlant().getSeedDropChanceBonus() > this.getRandom().nextDouble()) {
@@ -308,12 +307,12 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     }
 
     @Override
-    public int getGrowthStage() {
+    public IAgriGrowthStage getGrowthStage() {
         return this.growthStage;
     }
 
     @Override
-    public boolean setGrowthStage(int stage) {
+    public boolean setGrowthStage(IAgriGrowthStage stage) {
         // If remote, abort! No change to report.
         if (this.isRemote()) {
             return false;
@@ -344,7 +343,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
     public boolean isFertile(@Nullable IAgriPlant plant) {
         return (plant != null)
                 && this.getWorld().isAirBlock(this.pos.up())
-                && plant.getGrowthRequirement().isMet(this.getWorld(), pos);
+                && plant.getGrowConditions().isMet(this.getWorld(), pos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -405,10 +404,10 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
         final IAgriPlant plant = this.seed.getPlant();
 
         // Try to spread in each direction.
-        for (IAgriCrop crop : WorldHelper.getTileNeighbors(this.getWorld(), pos, IAgriCrop.class)) {
+        for (IAgriCrop crop : WorldHelper.getNeighbourCrops(this.getWorld(), pos, IAgriCrop.class)) {
             // Note: Checking the probability is faster. Also check that this plant can be planted there.
             if (plant.getSpreadChance() > this.getRandom().nextDouble()
-                    && plant.getGrowthRequirement().hasValidSoil(this.getWorld(), crop.getCropPos())) {
+                    && plant.getGrowConditions().hasValidSoil(this.getWorld(), crop.getCropPos())) {
                 final AgriSeed other = crop.getSeed();
                 if (other == null) {
                     if (!crop.isCrossCrop()) {
@@ -498,7 +497,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             return MethodResult.PASS;
         } else if (this.isCrossCrop()) {
             if (this.setCrossCrop(false)) {
-                consumer.accept(new ItemStack(AgriItems.getInstance().CROPS, 1));
+                consumer.accept(new ItemStack(AgriItems.getInstance().crop_sticks, 1));
             }
             return MethodResult.SUCCESS;
         } else if (this.canBeHarvested()) {
@@ -617,7 +616,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             consumer.accept(" - Strength: " + stat.getStrength());
             consumer.accept(" - Fertile: " + this.isFertile());
             consumer.accept(" - Mature: " + this.isMature());
-            consumer.accept(" - AgriSoil: " + plant.getGrowthRequirement().getSoils().stream()
+            consumer.accept(" - AgriSoil: " + plant.getGrowConditions().getSoils().stream()
                     .findFirst().map(IAgriSoil::getId).orElse("None")
             );
         } else {
@@ -657,7 +656,7 @@ public class TileEntityCrop extends TileEntityBase implements IAgriCrop, IDebugg
             }
             //Add the ANALYZED data.
             if (stat.isAnalyzed()) {
-                stat.addStats(information);
+                stat.addStat(information);
             } else {
                 information.accept(AgriCore.getTranslator().translate("agricraft_tooltip.analyzed"));
             }

@@ -6,9 +6,8 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.init.AgriItems;
-import com.infinityraider.agricraft.items.ItemJournal;
+import com.infinityraider.agricraft.items.core.ItemJournal;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.utility.StackHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityRotatableBase;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -65,7 +64,7 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
         if (!this.journal.isEmpty() && this.journal.getItem() != null) {
             NBTTagCompound journalTag = new NBTTagCompound();
             this.journal.writeToNBT(journalTag);
-            tag.setTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName(), journalTag);
+            tag.setTag(AgriItems.getInstance().journal.getUnlocalizedName(), journalTag);
         }
         tag.setInteger("progress", this.progress);
     }
@@ -78,8 +77,8 @@ public class TileEntitySeedAnalyzer extends TileEntityRotatableBase implements I
             //Not certain this is required... Unsure if networking thing?
             this.specimen = ItemStack.EMPTY;
         }
-        if (tag.hasKey(AgriItems.getInstance().JOURNAL.getUnlocalizedName())) {
-            this.journal = new ItemStack(tag.getCompoundTag(AgriItems.getInstance().JOURNAL.getUnlocalizedName()));
+        if (tag.hasKey(AgriItems.getInstance().journal.getUnlocalizedName())) {
+            this.journal = new ItemStack(tag.getCompoundTag(AgriItems.getInstance().journal.getUnlocalizedName()));
         } else {
             this.journal = ItemStack.EMPTY;
         }

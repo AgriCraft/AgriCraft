@@ -1,21 +1,16 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriCrossStrategy;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.util.ResourceLocation;
@@ -105,9 +100,4 @@ public interface IAgriPlugin {
     default void registerTextures(@Nonnull Consumer<ResourceLocation> textureRegistry) {
         // Default Implementation: Do nothing.
     }
-    
-    default void registerPeripheralMethods(@Nonnull IAgriRegistry<IAgriPeripheralMethod> methodRegistry) {
-        // Default Implementation: Do nothing.
-    }
-
 }

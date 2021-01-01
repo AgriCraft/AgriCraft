@@ -1,13 +1,12 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.misc;
 
-import com.infinityraider.agricraft.api.v1.util.MethodResult;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayer;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 
 /**
  * Interface for harvestable objects.
@@ -30,6 +29,6 @@ public interface IAgriHarvestable {
      * @return if the harvest was successful.
      */
     @Nonnull
-    MethodResult onHarvest(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
+    ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, @Nullable PlayerEntity player);
 
 }

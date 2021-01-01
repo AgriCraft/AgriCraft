@@ -1,25 +1,24 @@
 package com.infinityraider.agricraft.handler;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
-import com.infinityraider.agricraft.utility.StackHelper;
-import com.mojang.realmsclient.gui.ChatFormatting;
 import java.text.MessageFormat;
 import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 @SuppressWarnings("unused")
 public class ItemToolTipHandler {
 
@@ -45,9 +44,9 @@ public class ItemToolTipHandler {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
             if (seed != null) {
                 if (seed.getStat().isAnalyzed()) {
-                    seed.getStat().addStats(event.getToolTip()::add);
+                    seed.getStat().addStat(event.getToolTip()::add);
                 } else {
-                    event.getToolTip().add(" " + AgriCore.getTranslator().translate("agricraft_tooltip.unidentified"));
+                    event.getToolTip().add(new TranslationTextComponent("agricraft.tooltip.unidentified"));
                 }
             }
         }
@@ -68,15 +67,15 @@ public class ItemToolTipHandler {
 //        }
 //    }
     private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
-        event.getToolTip().add(ChatFormatting.DARK_AQUA + MessageFormat.format(format, objects));
+        event.getToolTip().add(new StringTextComponent(MessageFormat.format(format, objects)).mergeStyle(TextFormatting.DARK_AQUA));
     }
 
     private static void addCategory(ItemTooltipEvent event, String category) {
-        event.getToolTip().add(ChatFormatting.DARK_AQUA + category + ":");
+        event.getToolTip().add(new StringTextComponent(category + ":").mergeStyle(TextFormatting.DARK_AQUA));
     }
 
     private static void addParameter(ItemTooltipEvent event, String key, Object value) {
-        event.getToolTip().add(ChatFormatting.DARK_AQUA + " - " + key + ": " + Objects.toString(value));
+        event.getToolTip().add(new StringTextComponent(" - " + key + ": " + Objects.toString(value)).mergeStyle(TextFormatting.DARK_AQUA));
     }
 
     @SubscribeEvent
@@ -92,27 +91,13 @@ public class ItemToolTipHandler {
     public void addNbtInfo(ItemTooltipEvent event) {
         if (AgriCraftConfig.enableNBTTooltips) {
             addCategory(event, "NBT");
-            if (StackHelper.hasTag(event.getItemStack())) {
-                final NBTTagCompound tag = StackHelper.getTag(event.getItemStack());
-                for (String key : tag.getKeySet()) {
-                    addParameter(event, key, tag.getTag(key));
+            if (event.getItemStack().hasTag()) {
+                final CompoundNBT tag = event.getItemStack().getTag();
+                for (String key : tag.keySet()) {
+                    addParameter(event, key, tag.get(key));
                 }
             } else {
                 addFormatted(event, " - No NBT Tags");
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void addOreDictInfo(ItemTooltipEvent event) {
-        if (AgriCraftConfig.enableOreDictTooltips && !event.getItemStack().isEmpty()) {
-            addCategory(event, "OreDict");
-            final int[] ids = OreDictionary.getOreIDs(event.getItemStack());
-            for (int id : ids) {
-                addFormatted(event, " - {1} ({0})", id, OreDictionary.getOreName(id));
-            }
-            if (ids.length == 0) {
-                addFormatted(event, " - No OreDict Entries");
             }
         }
     }
@@ -128,9 +113,9 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(event.getItemStack()).orElse(null);
             if (seed != null) {
-                event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.seed") + ": " + seed.getPlant().getSeedName());
+                event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.seed" + ": " + seed.getPlant().getSeedName()));
             } else {
-                event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.trowel"));
+                event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.trowel"));
             }
         }
     }
@@ -143,10 +128,10 @@ public class ItemToolTipHandler {
     @SubscribeEvent
     public void addClipperTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if (StackHelper.isValid(stack, IAgriClipperItem.class)) {
-            event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper1"));
-            event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper2"));
-            event.getToolTip().add(AgriCore.getTranslator().translate("agricraft_tooltip.clipper3"));
+        if (stack.getItem() instanceof IAgriClipperItem) {
+            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper1"));
+            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper2"));
+            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper3"));
         }
     }
 

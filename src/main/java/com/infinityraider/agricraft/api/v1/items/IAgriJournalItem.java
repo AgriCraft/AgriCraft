@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
  * If, for some reason you do not wish to interact with this interface, you can also use methods
  * provided by APIv2
  */
-public interface IAgriJournalItem extends IAgriCraftItem {
+public interface IAgriJournalItem {
 
     /**
      * Checks if a plant is discovered in the journal.

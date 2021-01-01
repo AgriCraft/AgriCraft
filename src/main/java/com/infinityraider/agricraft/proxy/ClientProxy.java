@@ -1,18 +1,22 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
-import com.infinityraider.agricraft.utility.ModelErrorSuppressor;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-@SideOnly(Side.CLIENT)
-@SuppressWarnings("unused")
-public class ClientProxy implements IClientProxyBase, IProxy {
+import java.util.function.Function;
+
+@OnlyIn(Dist.CLIENT)
+public class ClientProxy implements IClientProxyBase<Config>, IProxy {
+    @Override
+    public Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
+        return Config.Client::new;
+    }
 
     @Override
     public void registerEventHandlers() {

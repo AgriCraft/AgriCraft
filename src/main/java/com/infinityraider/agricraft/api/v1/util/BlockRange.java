@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.util;
 
 import java.util.Iterator;

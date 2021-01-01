@@ -1,24 +1,31 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.misc.IAgriPeripheralMethod;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatCalculator;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
-import net.minecraftforge.fml.common.FMLLog;
-import org.apache.logging.log4j.Level;
+
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.apache.logging.log4j.*;
 
 /**
  * The AgriCraft APIv1.
@@ -61,6 +68,32 @@ public final class AgriApi {
     }
 
     /**
+     * Fetches the AgriCraft Weed Registry.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft Weed Registry.
+     */
+    @Nonnull
+    public static IAgriRegistry<IAgriWeed> getWeedRegistry() {
+        return AgriApi.CONNECTOR.connectWeedRegistry();
+    }
+
+    /**
+     * Fetches the AgriCraft Growth Stage Registry.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft Growth Stage Registry.
+     */
+    @Nonnull
+    public static IAgriRegistry<IAgriGrowthStage> getGrowthStageRegistry() {
+        return AgriApi.CONNECTOR.connectGrowthStageRegistry();
+    }
+
+    /**
      * Fetches the AgriCraft Mutation Registry.
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
@@ -71,6 +104,19 @@ public final class AgriApi {
     @Nonnull
     public static IAgriMutationRegistry getMutationRegistry() {
         return AgriApi.CONNECTOR.connectMutationRegistry();
+    }
+
+    /**
+     * Fetches the AgriCraft Gene Registry.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft Gene Registry.
+     */
+    @Nonnull
+    public static IAgriGeneRegistry getGeneRegistry() {
+        return AgriApi.CONNECTOR.connectGeneRegistry();
     }
 
     /**
@@ -95,34 +141,8 @@ public final class AgriApi {
      * @return the AgriCraft Stat Registry.
      */
     @Nonnull
-    public static IAgriAdapterizer<IAgriStat> getStatRegistry() {
+    public static IAgriStatRegistry getStatRegistry() {
         return AgriApi.CONNECTOR.connectStatRegistry();
-    }
-
-    /**
-     * Fetches the AgriCraft StatCalculator Registry.
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
-     *
-     * @return the AgriCraft StatCalculator Registry.
-     */
-    @Nonnull
-    public static IAgriAdapterizer<IAgriStatCalculator> getStatCalculatorRegistry() {
-        return AgriApi.CONNECTOR.connectStatCalculatorRegistry();
-    }
-
-    /**
-     * Fetches the AgriCraft Mutation Engine.
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
-     *
-     * @return the AgriCraft Mutation Engine.
-     */
-    @Nonnull
-    public static IAgriMutationEngine getMutationEngine() {
-        return AgriApi.CONNECTOR.connectMutationEngine();
     }
 
     /**
@@ -150,18 +170,49 @@ public final class AgriApi {
     public static IAgriAdapterizer<IAgriFertilizer> getFertilizerRegistry() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
-    
+
     /**
-     * Fetches the AgriCraft Peripheral Method Registry.
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
+     * Fetches an IAgriCrop instance from a position in the world
      *
-     * @return the AgriCraft Plant Registry.
+     * @param world the World object
+     * @param pos the BlockPos holding the coordinates
+     * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
      */
-    @Nonnull
-    public static IAgriRegistry<IAgriPeripheralMethod> getPeripheralMethodRegistry() {
-        return AgriApi.CONNECTOR.connectPeripheralMethodRegistry();
+    public static Optional<IAgriCrop> getCrop(World world, BlockPos pos) {
+        return AgriApi.CONNECTOR.getCrop(world, pos);
+    }
+
+    /**
+     * Fetches an IAgriCrop instance from a state at a position in the world (more efficient in case the BlockState is already known)
+     *
+     * @param state the BlockState at the given coordinates
+     * @param world the World object
+     * @param pos the BlockPos holding the coordinates
+     * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
+     */
+    public static Optional<IAgriCrop> getCrop(BlockState state, World world, BlockPos pos) {
+        return AgriApi.CONNECTOR.getCrop(state, world, pos);
+    }
+
+    /**
+     * @return the IDefaultGrowConditionFactory which can be used to construct native AgriCraft IGrowConditions
+     */
+    public static IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
+        return AgriApi.CONNECTOR.getDefaultGrowConditionFactory();
+    }
+
+    /**
+     * @return The current IAgriMutationEngine object which controls the mutation logic of crops
+     */
+    public static IAgriMutationHandler getAgriMutationHandler() {
+        return AgriApi.CONNECTOR.getAgriMutationHandler();
+    }
+
+    /**
+     * @return A new IAgriGenome.Builder object to construct AgriCraft IAgriGenome objects
+     */
+    public static IAgriGenome.Builder getAgriGenomeBuilder() {
+        return AgriApi.CONNECTOR.getAgriGenomeBuilder();
     }
 
     /**
@@ -176,12 +227,14 @@ public final class AgriApi {
         final Class<? extends IAgriApiConnector> clazz;
         final Constructor<? extends IAgriApiConnector> constructor;
         final IAgriApiConnector instance;
+        final Logger logger = LogManager.getLogger();
+        final Marker marker = MarkerManager.getMarker(API_ID);
 
         // Step II. Attempt To Find Class
         try {
             clazz = Class.forName("com.infinityraider.agricraft.impl.v1.AgriApiConnector").asSubclass(IAgriApiConnector.class);
         } catch (ClassNotFoundException exception) {
-            FMLLog.log(API_ID, Level.INFO, "The AgriCraft APIv1 was unable find AgriCraft! Is AgriCraft missing from your modpack?");
+            logger.log(Level.INFO, marker, "The AgriCraft APIv1 was unable find AgriCraft! Is AgriCraft missing from your modpack?");
             return IAgriApiConnector.FAKE;
         } catch (ClassCastException exception) {
             throw new RuntimeException("The AgriCraft APIv1 attempted to connect to AgriCraft, but instead found an invalid class! This is a serious error that should never happen! Report this error immediately!", exception);
@@ -210,7 +263,7 @@ public final class AgriApi {
         }
 
         // Step V. Celebrate Connection Success
-        FMLLog.log(API_ID, Level.INFO, "The AgriCraft APIv1 successfully connected to AgriCraft! Thank you for including AgriCraft in your modpack!");
+        logger.log(Level.INFO, marker, "The AgriCraft APIv1 successfully connected to AgriCraft! Thank you for including AgriCraft in your modpack!");
 
         // Step VI. Return The Connector
         return instance;

@@ -1,24 +1,24 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.misc;
 
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayer;
+
+import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 /**
  * Interface for rakeable objects.
  */
 public interface IAgriRakeable {
-
     /**
      * Determines if the object can currently be raked or not.
      *
      * @return if the object may be harvested.
      */
-    boolean canBeRaked();
+    boolean canBeRaked(@Nonnull IAgriRakeItem item, @Nonnull ItemStack stack, @Nullable LivingEntity entity);
 
     /**
      * Rakes the object.
@@ -28,6 +28,6 @@ public interface IAgriRakeable {
      * automation.
      * @return if the harvest was successful.
      */
-    boolean onRaked(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
+    boolean rake(@Nonnull Consumer<ItemStack> consumer, @Nullable PlayerEntity player);
 
 }

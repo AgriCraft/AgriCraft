@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+license="license.txt"
+issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
+
+[[mods]]
+modId="agricraft"
+version="1.16.4-3.0.0"
+displayName="AgriCraft"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
+logoFile="logo.png"
+authors="InfinityRaider"
+description='''
+Agricultural farming extended
+'''
+
+[[dependencies.agricraft]]
+    modId="forge"
+    mandatory=true
+    versionRange="[35,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.agricraft]]
+    modId="infinitylib"
+    mandatory=true
+    versionRange="[1.16.4-2.0.0,)"
+    ordering="AFTER"
+    side="BOTH"

@@ -1,17 +1,11 @@
-/*
- */
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.util.AgriConverter;
 import com.agricraft.agricore.util.TypeHelper;
-import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.agricraft.utility.OreDictUtil;
 import java.util.List;
 import java.util.Optional;
-/**
- *
- *
- */
+
 public class ModConverter implements AgriConverter {
 
     @Override

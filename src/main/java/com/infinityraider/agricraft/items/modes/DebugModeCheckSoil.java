@@ -3,7 +3,6 @@
 package com.infinityraider.agricraft.items.modes;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.util.FuzzyStack;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,7 +29,7 @@ public class DebugModeCheckSoil extends DebugMode {
     public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         FuzzyStack soil = FuzzyStack.from(world.getBlockState(pos)).orElse(null);
         String type = AgriApi.getSoilRegistry().all().stream()
-                .filter(s -> s.isVarient(soil))
+                .filter(s -> s.isVariant(soil))
                 .map(s -> s.getName())
                 .findFirst()
                 .orElse("Unknown Soil");

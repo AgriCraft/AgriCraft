@@ -3,33 +3,22 @@ package com.infinityraider.agricraft.network;
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
 import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
+public class MessageGuiSeedStorageClearSeed extends MessageBase {
+    public MessageGuiSeedStorageClearSeed() {}
 
-    private EntityPlayer player;
-
-    public MessageGuiSeedStorageClearSeed() {
-    }
-
-    public MessageGuiSeedStorageClearSeed(EntityPlayer player) {
-        this();
-        this.player = player;
+    @Override
+    public NetworkDirection getMessageDirection() {
+        return NetworkDirection.PLAY_TO_SERVER;
     }
 
     @Override
-    public Side getMessageHandlerSide() {
-        return Side.SERVER;
-    }
-
-    @Override
-    protected void processMessage(MessageContext ctx) {
-        final Container container = this.player.openContainer;
+    protected void processMessage(NetworkEvent.Context ctx) {
+        final Container container = ctx.getSender().openContainer;
         if (container instanceof ContainerSeedStorageBase) {
             final ContainerSeedStorageBase storage = ((ContainerSeedStorageBase) container);
             final TileEntity tileEntity = storage.getTile();
@@ -37,10 +26,5 @@ public class MessageGuiSeedStorageClearSeed extends MessageBase<IMessage> {
                 ((ISeedStorageControllable) tileEntity).clearLockedSeed();
             }
         }
-    }
-
-    @Override
-    protected IMessage getReply(MessageContext ctx) {
-        return null;
     }
 }

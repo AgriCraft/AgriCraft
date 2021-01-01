@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.impl.v1;
 
 import com.google.common.base.Preconditions;

@@ -1,9 +1,6 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
-import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;

@@ -1,14 +1,8 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.misc;
 
 import javax.annotation.Nonnull;
 
-/**
- *
- * @author Ryan
- */
-public interface IAgriRegisterable {
+public interface IAgriRegisterable<T extends IAgriRegisterable<T>> extends Comparable<T> {
 
     /**
      * The unique id of the AgriRegisterable.
@@ -18,4 +12,8 @@ public interface IAgriRegisterable {
     @Nonnull
     String getId();
 
+    @Override
+    default int compareTo(T other) {
+        return this.getId().compareTo(other.getId());
+    }
 }

@@ -1,5 +1,4 @@
-/*
- */
+
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.util.AgriValidator;
@@ -7,12 +6,7 @@ import com.infinityraider.agricraft.utility.OreDictUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
 
-/**
- *
- *
- */
 public class ModValidator implements AgriValidator {
 
     @Override

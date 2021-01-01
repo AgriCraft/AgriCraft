@@ -1,10 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockCustomWood;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.CustomWoodType;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;

@@ -1,15 +1,9 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.plant;
 
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- *
- *
- */
 public interface IAgriPlantAcceptor {
 
     /**

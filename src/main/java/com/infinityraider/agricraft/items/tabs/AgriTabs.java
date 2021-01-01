@@ -2,23 +2,24 @@ package com.infinityraider.agricraft.items.tabs;
 
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.reference.Reference;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 public class AgriTabs {
+    private static final ItemStack TAB_ICON_MAIN = new ItemStack(AgriItems.getInstance().debugger);
+    private static final ItemStack TAB_ICON_SEED = new ItemStack(AgriItems.getInstance().seed);
 
-    public static final CreativeTabs TAB_AGRICRAFT = new CreativeTabs(Reference.MOD_ID) {
+    public static final ItemGroup TAB_AGRICRAFT = new ItemGroup(Reference.MOD_ID) {
         @Override
-        public ItemStack getTabIconItem() {
-            return new ItemStack(AgriItems.getInstance().DEBUGGER);
+        public ItemStack createIcon() {
+            return TAB_ICON_MAIN;
         }
     };
 
-    public static final CreativeTabs TAB_AGRICRAFT_SEED = new CreativeTabs(Reference.MOD_ID + "_seeds") {
+    public static final ItemGroup TAB_AGRICRAFT_SEED = new ItemGroup(Reference.MOD_ID + "_seeds") {
         @Override
-        public ItemStack getTabIconItem() {
-            return new ItemStack(AgriItems.getInstance().AGRI_SEED);
+        public ItemStack createIcon() {
+            return TAB_ICON_SEED;
         }
     };
-
 }

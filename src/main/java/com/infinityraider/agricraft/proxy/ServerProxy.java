@@ -1,13 +1,14 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import com.infinityraider.infinitylib.proxy.base.IServerProxyBase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.SERVER)
+@OnlyIn(Dist.CLIENT)
 @SuppressWarnings("unused")
-public class ServerProxy implements IServerProxyBase, IProxy {
+public class ServerProxy implements IServerProxyBase<Config>, IProxy {
 
     @Override
     public void registerEventHandlers() {

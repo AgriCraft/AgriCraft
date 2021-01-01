@@ -1,9 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
-import com.infinityraider.agricraft.blocks.BlockWaterPad;
-import com.infinityraider.agricraft.reference.AgriProperties;
-import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;

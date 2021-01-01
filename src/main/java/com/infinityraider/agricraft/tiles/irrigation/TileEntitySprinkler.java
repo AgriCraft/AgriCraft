@@ -4,12 +4,10 @@ import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.renderers.particles.LiquidSprayFX;
-import com.infinityraider.agricraft.utility.BaseIcons;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.Block;
@@ -29,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
-import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class TileEntitySprinkler extends TileEntityBase implements ITickable, IAgriFluidComponent, IAgriDisplayable {

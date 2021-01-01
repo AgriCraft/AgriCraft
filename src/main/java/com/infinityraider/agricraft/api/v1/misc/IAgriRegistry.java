@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.misc;
 
 import java.util.Collection;
@@ -14,7 +12,16 @@ import javax.annotation.Nullable;
  *
  * @param <T> The type of the elements to be stored in the registry.
  */
-public interface IAgriRegistry<T extends IAgriRegisterable> {
+public interface IAgriRegistry<T extends IAgriRegisterable<T>> {
+    /**
+     * @return The name of this registry
+     */
+    String name();
+
+    /**
+     * @return the parent class of all objects held by this registry
+     */
+    Class<T> clazz();
 
     /**
      * Determines if the registry contains an entry with the given id.

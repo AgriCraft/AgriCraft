@@ -1,25 +1,19 @@
-/*
- */
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.log.AgriLogAdapter;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import java.text.MessageFormat;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
-/**
- *
- *
- */
 public class ModLogger implements AgriLogAdapter {
 
     public void log(Level logLevel, Object source, String format, Object... objects) {
         try {
-            FMLLog.log(String.valueOf(source), logLevel, MessageFormat.format(format, objects));
+            AgriCraft.instance.getLogger().log(Level.INFO, String.valueOf(source), MessageFormat.format(format, objects));
         } catch (IllegalArgumentException ex) {
             // This is bad...
-            FMLLog.log(String.valueOf(source), logLevel, format);
+            AgriCraft.instance.getLogger().log(Level.INFO, String.valueOf(source), format);
         }
     }
 

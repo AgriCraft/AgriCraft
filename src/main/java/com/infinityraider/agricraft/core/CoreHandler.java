@@ -11,17 +11,18 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.config.Config;
+import com.infinityraider.agricraft.core.plant.JsonPlant;
+import com.infinityraider.agricraft.core.requirement.JsonSoil;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class CoreHandler {
 
@@ -31,12 +32,12 @@ public final class CoreHandler {
     private static Path configDir;
     private static Path jsonDir;
     private static Path defaultDir;
-    private static Configuration config;
+    private static Config config;
 
     private CoreHandler() {
     }
 
-    public static Configuration getConfig() {
+    public static Config getConfig() {
         return config;
     }
 
@@ -123,13 +124,13 @@ public final class CoreHandler {
         AgriCore.getLogger("agricraft").info("Registering Plants!");
 
         // See if plants are valid...
-        final int raw = AgriCore.getPlants().getAll().size();
+        final int raw = AgriCore.getPlants().getAllElements().size();
         AgriCore.getPlants().validate();
-        final int count = AgriCore.getPlants().getAll().size();
+        final int count = AgriCore.getPlants().getAllElements().size();
 
         // Transfer
         AgriCore.getPlants().validate();
-        AgriCore.getPlants().getAll().stream()
+        AgriCore.getPlants().getAllElements().stream()
                 .filter(AgriPlant::isEnabled)
                 .map(JsonPlant::new)
                 .forEach(AgriApi.getPlantRegistry()::add);
@@ -165,9 +166,9 @@ public final class CoreHandler {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void loadTextures(Consumer<ResourceLocation> consumer) {
-        AgriCore.getPlants().getAll().stream()
+        AgriCore.getPlants().getAllElements().stream()
                 .flatMap(plant -> plant.getTexture().getAllTextures().stream())
                 .distinct()
                 .map(t -> new ResourceLocation(t))

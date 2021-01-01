@@ -30,7 +30,7 @@ public class DebugModeCoreInfo extends DebugMode {
         MessageUtil.messagePlayer(player, "{0} Info:", FMLCommonHandler.instance().getSide());
         MessageUtil.messagePlayer(player, "========================================");
         MessageUtil.messagePlayer(player, "AgriPlants Hash: {0}", AgriCore.getPlants().hashCode());
-        MessageUtil.messagePlayer(player, " - Plant Count: {0}", AgriCore.getPlants().getAll().size());
+        MessageUtil.messagePlayer(player, " - Plant Count: {0}", AgriCore.getPlants().getAllElements().size());
         MessageUtil.messagePlayer(player, "AgriMutations Hash: {0}", AgriCore.getMutations().hashCode());
         MessageUtil.messagePlayer(player, " - Mutation Count: {0}", AgriCore.getMutations().getAll().size());
         MessageUtil.messagePlayer(player, "AgriSoils Hash: {0}", AgriCore.getSoils().hashCode());

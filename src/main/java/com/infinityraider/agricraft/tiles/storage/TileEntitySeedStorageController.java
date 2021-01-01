@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.tiles.storage;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

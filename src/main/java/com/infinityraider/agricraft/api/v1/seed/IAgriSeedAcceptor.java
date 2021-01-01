@@ -1,13 +1,7 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.seed;
 
 import javax.annotation.Nullable;
 
-/**
- *
- *
- */
 public interface IAgriSeedAcceptor {
 
     /**

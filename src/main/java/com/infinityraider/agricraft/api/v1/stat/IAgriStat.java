@@ -3,128 +3,32 @@ package com.infinityraider.agricraft.api.v1.stat;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.nbt.NBTTagCompound;
+
+import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Interface for representing stats. Stats are immutable objects, to aid in overall safety.
- *
- *
  */
-public interface IAgriStat {
+public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
+    /**
+     * Fetches the minimum valid value for a stat of this type.
+     *
+     * @return The minimum value a seed can have of this stat.
+     */
+    byte getMin();
 
     /**
-     * Retrieves the stat's serialization ID.
+     * Fetches the maximum valid value for a stat of this type.
      *
-     * @return the stat's id.
+     * @return The maximum value a seed can have of this stat.
      */
-    @Nonnull
-    default String getId() {
-        return this.getClass().getCanonicalName();
-    }
+    byte getMax();
 
-    /**
-     * Determines if the given instance has been analyzed.
-     *
-     * @return if the seed stats are analyzed
-     */
-    boolean isAnalyzed();
+    void writeValueToNBT(CompoundNBT tag, byte value);
 
-    /**
-     * Fetches the growth value associated with this instance.
-     * <p>
-     * The returned value should <em>always</em> be less than the value returned by
-     * {@link #getMaxGrowth()}.
-     *
-     * @return The growth value of the seed.
-     */
-    byte getGrowth();
-
-    /**
-     * Fetches the gain value associated with this instance.
-     * <p>
-     * The returned value should <em>always</em> be less than the value returned by
-     * {@link #getMaxGain()}.
-     *
-     * @return The gain value of the seed.
-     */
-    byte getGain();
-
-    /**
-     * Fetches the strength value associated with this instance.
-     * <p>
-     * The returned value should <em>always</em> be less than the value returned by
-     * {@link #getMaxStrength()}.
-     *
-     * @return The strength value of the seed.
-     */
-    byte getStrength();
-
-    /**
-     * Fetches the maximum valid growth value for a stat of this type.
-     *
-     * @return The maximum growth value a seed of this kind can have.
-     */
-    byte getMaxGrowth();
-
-    /**
-     * Fetches the maximum valid gain value for a stat of this type.
-     *
-     * @return The maximum gain value a seed of this kind can have.
-     */
-    byte getMaxGain();
-
-    /**
-     * Fetches the maximum valid strength value for a stat of this type.
-     *
-     * @return The maximum strength value a seed of this kind can have.
-     */
-    byte getMaxStrength();
-
-    /**
-     * Sets the analyzed parameter.
-     *
-     * @param analyzed
-     * @return the new stat.
-     */
-    @Nonnull
-    IAgriStat withAnalyzed(boolean analyzed);
-
-    /**
-     * Sets the growth stat.
-     *
-     * @param growth
-     * @return the new stat.
-     */
-    @Nonnull
-    IAgriStat withGrowth(int growth);
-
-    /**
-     * Sets the gain stat.
-     *
-     * @param gain
-     * @return the new stat.
-     */
-    @Nonnull
-    IAgriStat withGain(int gain);
-
-    /**
-     * Sets the strength stat.
-     *
-     * @param strength
-     * @return the new stat.
-     */
-    @Nonnull
-    IAgriStat withStrength(int strength);
-
-    /**
-     * Writes the stat to an NBTTagcompound. Make sure to set the stat id value when implementing
-     * this.
-     *
-     * @param tag The tag to serialize to.
-     * @return if the transcription was successful.
-     */
-    @Nonnull
-    boolean writeToNBT(@Nonnull NBTTagCompound tag);
+    byte readValueFromNBT(CompoundNBT tag);
 
     /**
      * Writes the stat for display.
@@ -133,12 +37,11 @@ public interface IAgriStat {
      * @return If the writing was successful.
      */
     @Nonnull
-    boolean addStats(@Nonnull Consumer<String> consumer);
+    boolean addStat(@Nonnull Consumer<ITextComponent> consumer, byte value);
 
     @Override
-    public boolean equals(@Nullable Object obj);
+    boolean equals(@Nullable Object obj);
 
     @Override
-    public int hashCode();
-
+    int hashCode();
 }

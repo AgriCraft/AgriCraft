@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.BlockPeripheral;
 import com.infinityraider.agricraft.tiles.TileEntityPeripheral;
 import com.infinityraider.agricraft.renderers.models.ModelPeripheralProbe;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.utility.IconHelper;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.model.ModelTechne;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;

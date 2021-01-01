@@ -1,48 +1,54 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
 import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRakeable;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantAcceptor;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.util.MethodResult;
-import java.util.Optional;
-import java.util.function.Consumer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 /**
  * Interface to interact with AgriCraft's crops.
  *
- * To retrieve the ICrop instance use: {@code API.getCrop(World world, int x, int y, int z)}
+ * To retrieve use AgriApi.getCrop()
  */
-public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFertilizable, IAgriHarvestable, IAgriRakeable {
+public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgriSeedProvider, IAgriSeedAcceptor,
+        IAgriGeneCarrier, IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable {
+    /**
+     * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop
+     */
+    boolean isValid();
 
     /**
-     * Retrieves the location of the crop instance.
-     *
-     * @return the crop's position.
+     * @return The World in which this crop exists
      */
-    BlockPos getCropPos();
+    World getWorld();
 
     /**
-     * Retrieves the world that the crop is in.
-     *
-     * @return The world in which the crop is located.
+     * @return The position of this crop in the world
      */
-    World getCropWorld();
+    BlockPos getPosition();
 
     /**
-     * @return The growth stage of the crop, between 0 and 7 (both inclusive).
+     * @return The growth stage of the crop.
      */
-    int getGrowthStage();
+    IAgriGrowthStage getGrowthStage();
 
     /**
      * Sets the growth stage for this crop, normalized to the range of valid values for the plant.
@@ -55,7 +61,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
      * this has a plant.
      * @return true if this changed the value and markForUpdate was called.
      */
-    boolean setGrowthStage(int stage);
+    boolean setGrowthStage(IAgriGrowthStage stage);
 
     /**
      * @return if this crop is a crosscrop
@@ -74,15 +80,7 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     /**
      * @return if this crop is fertile and thus can grow
      */
-    default boolean isFertile() {
-        return this.hasSeed() && this.isFertile(this.getSeed());
-    }
-
-    default boolean isFertile(@Nullable AgriSeed seed) {
-        return (seed != null) && this.isFertile(seed.getPlant());
-    }
-
-    boolean isFertile(@Nullable IAgriPlant plant);
+    boolean isFertile();
 
     /**
      * @return if this crop is fully grown
@@ -92,35 +90,26 @@ public interface IAgriCrop extends IAgriSeedProvider, IAgriSeedAcceptor, IAgriFe
     @Nonnull
     Optional<IAgriSoil> getSoil();
 
-    // =========================================================================
-    // IHarvestable Defaults
-    // =========================================================================
-    @Override
-    default boolean canBeHarvested() {
-        return hasSeed() && isMature();
+    void breakCrop();
+
+    void applyGrowthTick();
+
+    default Stream<IAgriCrop> streamNeighbours() {
+        return Direction.Plane.HORIZONTAL.getDirectionValues()
+                .map(dir -> AgriApi.getCrop(this.getWorld(), this.getPosition().offset(dir)))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
-    // =========================================================================
-    // IRakeable Defaults
-    // =========================================================================
-    @Override
-    default boolean canBeRaked() {
-        return hasSeed();
+    default Stream<IAgriCrop> streamNeighbours(Predicate<IAgriCrop> filter) {
+        return this.streamNeighbours().filter(filter);
     }
 
-    // =========================================================================
-    // Event Methods
-    // =========================================================================
-    @Nonnull
-    public MethodResult onGrowthTick();
+    default List<IAgriCrop> getNeighbours() {
+        return this.streamNeighbours().collect(Collectors.toList());
+    }
 
-    @Nonnull
-    public MethodResult onApplyCrops(@Nullable EntityPlayer player);
-
-    @Nonnull
-    public MethodResult onApplySeeds(@Nonnull AgriSeed seed, @Nullable EntityPlayer player);
-
-    @Nonnull
-    public MethodResult onBroken(@Nonnull Consumer<ItemStack> consumer, @Nullable EntityPlayer player);
-
+    default List<IAgriCrop> getNeighbours(Predicate<IAgriCrop> filter) {
+        return this.streamNeighbours(filter).collect(Collectors.toList());
+    }
 }

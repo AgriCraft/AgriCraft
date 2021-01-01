@@ -1,15 +1,6 @@
 package com.infinityraider.agricraft.init;
 
-import com.infinityraider.agricraft.blocks.BlockCrop;
-import com.infinityraider.agricraft.blocks.BlockGrate;
-import com.infinityraider.agricraft.blocks.BlockSeedAnalyzer;
-import com.infinityraider.agricraft.blocks.BlockPeripheral;
-import com.infinityraider.agricraft.blocks.BlockWaterPad;
-import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannel;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelValve;
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterTank;
+import com.infinityraider.agricraft.blocks.core.BlockCropSticks;
 import com.infinityraider.infinitylib.block.BlockBase;
 import javax.annotation.Nonnull;
 
@@ -22,7 +13,7 @@ public class AgriBlocks {
     }
 
     private AgriBlocks() {
-        CROP = new BlockCrop();
+        CROP_STICKS = new BlockCropSticks();
         SEED_ANALYZER = new BlockSeedAnalyzer();
         PERIPHERAL = new BlockPeripheral();
         WATER_PAD = new BlockWaterPad();
@@ -37,7 +28,7 @@ public class AgriBlocks {
 
     // Crops
     @Nonnull
-    public final BlockBase CROP;
+    public final BlockCropSticks CROP_STICKS;
 
     // Analyzers
     @Nonnull

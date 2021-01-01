@@ -12,15 +12,10 @@ import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageSyncMutationJson extends MessageBase<IMessage> {
-
+public class MessageSyncMutationJson extends MessageBase {
     private AgriMutation plant;
     private int index;
     private int count;
@@ -36,18 +31,12 @@ public class MessageSyncMutationJson extends MessageBase<IMessage> {
     }
 
     @Override
-    public Side getMessageHandlerSide() {
-        return Side.CLIENT;
+    public NetworkDirection getMessageDirection() {
+        return NetworkDirection.PLAY_TO_CLIENT;
     }
 
     @Override
-    protected IMessage getReply(MessageContext ctx) {
-        return null;
-    }
-
-    @Override
-    protected void processMessage(MessageContext ctx) {
-
+    protected void processMessage(NetworkEvent.Context ctx) {
         if (this.index == 0) {
             AgriCore.getMutations().clearElements();
         }
@@ -71,11 +60,4 @@ public class MessageSyncMutationJson extends MessageBase<IMessage> {
     protected List<IMessageSerializer> getNecessarySerializers() {
         return ImmutableList.of(new JsonSerializer<AgriMutation>());
     }
-
-    @SideOnly(Side.CLIENT)
-    public final String getServerId() {
-        final ServerData data = Minecraft.getMinecraft().getCurrentServerData();
-        return "server_" + data.serverIP.replaceAll("\\.", "-").replaceAll(":", "_");
-    }
-
 }

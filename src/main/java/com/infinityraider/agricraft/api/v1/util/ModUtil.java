@@ -1,20 +1,14 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.util;
+
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 
-/**
- *
- * @author Ryan
- */
 public class ModUtil {
-
     /**
      * Finds the mod container for the mod with the given mod id.
      *
@@ -22,12 +16,8 @@ public class ModUtil {
      * @return The container associated with the mod of the given id, or the empty optional.
      */
     @Nonnull
-    public static Optional<ModContainer> resolveModContainer(@Nullable String modId) {
-        return Loader.instance()
-                .getActiveModList()
-                .stream()
-                .filter(c -> Objects.equals(modId, c.getModId()))
-                .findFirst();
+    public static Optional<? extends ModContainer> resolveModContainer(@Nullable String modId) {
+        return ModList.get().getModContainerById(modId);
     }
 
     /**

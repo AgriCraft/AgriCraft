@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.renderers.particles;
 
 //heavily inspired by the OpenBlocks sprinkler
-import com.infinityraider.agricraft.utility.IconHelper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.Vec3d;

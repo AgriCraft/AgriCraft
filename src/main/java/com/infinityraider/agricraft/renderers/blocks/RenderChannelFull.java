@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.irrigation.BlockWaterChannelFull;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityChannelFull;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.block.state.IBlockState;

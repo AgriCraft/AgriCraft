@@ -1,13 +1,13 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.seed;
 
-import javax.annotation.Nullable;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+
+import java.util.Optional;
 
 /**
  * A class for objects containing seeds.
- *
- *
  */
 public interface IAgriSeedProvider {
 
@@ -23,7 +23,6 @@ public interface IAgriSeedProvider {
      *
      * @return the seed associated with the instance or null.
      */
-    @Nullable
-    AgriSeed getSeed();
+    Optional<AgriSeed> getSeed();
 
 }

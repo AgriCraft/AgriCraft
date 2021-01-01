@@ -1,15 +1,12 @@
 /*
  */
 package com.infinityraider.agricraft.api.v1.misc;
+import net.minecraft.util.Direction;
 
-import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import javax.annotation.Nonnull;
-import net.minecraft.util.EnumFacing;
 
 /**
  * Root interface for all connectable blocks.
- *
- *
  */
 public interface IAgriConnectable {
 
@@ -20,7 +17,7 @@ public interface IAgriConnectable {
      * @param connectable the component wishing to connect to this component.
      * @return if the component may connect.
      */
-    boolean canConnectTo(@Nonnull EnumFacing side, @Nonnull IAgriConnectable connectable);
+    boolean canConnectTo(@Nonnull Direction side, @Nonnull IAgriConnectable connectable);
 
     /**
      * Retrieves a copy of the connection matrix for the connectable.

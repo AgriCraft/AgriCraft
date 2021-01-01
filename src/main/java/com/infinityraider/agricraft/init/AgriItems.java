@@ -1,15 +1,15 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.items.ItemAgriSeed;
-import com.infinityraider.agricraft.items.ItemClipper;
-import com.infinityraider.agricraft.items.ItemClipping;
-import com.infinityraider.agricraft.items.ItemCrop;
-import com.infinityraider.agricraft.items.ItemDebugger;
-import com.infinityraider.agricraft.items.ItemJournal;
-import com.infinityraider.agricraft.items.ItemMagnifyingGlass;
+import com.infinityraider.agricraft.items.core.ItemClipper;
+import com.infinityraider.agricraft.items.core.ItemClipping;
+import com.infinityraider.agricraft.items.core.ItemCropSticks;
+import com.infinityraider.agricraft.items.core.ItemDebugger;
+import com.infinityraider.agricraft.items.core.ItemJournal;
+import com.infinityraider.agricraft.items.core.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.items.ItemNugget;
-import com.infinityraider.agricraft.items.ItemRake;
-import com.infinityraider.agricraft.items.ItemTrowel;
+import com.infinityraider.agricraft.items.core.ItemRake;
+import com.infinityraider.agricraft.items.core.ItemTrowel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import javax.annotation.Nonnull;
 
@@ -22,37 +22,37 @@ public class AgriItems {
     }
 
     private AgriItems() {
-        CROPS = new ItemCrop();
-        JOURNAL = new ItemJournal();
-        TROWEL = new ItemTrowel();
-        DEBUGGER = new ItemDebugger();
-        HAND_RAKE = new ItemRake();
-        CLIPPER = new ItemClipper();
-        AGRI_CLIPPING = new ItemClipping();
-        AGRI_SEED = new ItemAgriSeed();
-        AGRI_NUGGET = new ItemNugget();
-        MAGNIFYING_GLASS = new ItemMagnifyingGlass();
+        crop_sticks = new ItemCropSticks();
+        journal = new ItemJournal();
+        trowel = new ItemTrowel();
+        debugger = new ItemDebugger();
+        hand_rake = new ItemRake();
+        clipper = new ItemClipper();
+        clipping = new ItemClipping();
+        seed = new ItemAgriSeed();
+        nugget = new ItemNugget();
+        magnifying_glass = new ItemMagnifyingGlass();
     }
 
     @Nonnull
-    public final ItemBase CROPS;
+    public final ItemBase crop_sticks;
     @Nonnull
-    public final ItemBase JOURNAL;
+    public final ItemBase journal;
     @Nonnull
-    public final ItemBase TROWEL;
+    public final ItemBase trowel;
     @Nonnull
-    public final ItemBase DEBUGGER;
+    public final ItemBase debugger;
     @Nonnull
-    public final ItemBase HAND_RAKE;
+    public final ItemBase hand_rake;
     @Nonnull
-    public final ItemBase CLIPPER;
+    public final ItemBase clipper;
     @Nonnull
-    public final ItemBase AGRI_CLIPPING;
+    public final ItemBase clipping;
     @Nonnull
-    public final ItemBase AGRI_SEED;
+    public final ItemBase seed;
     @Nonnull
-    public final ItemBase AGRI_NUGGET;
+    public final ItemBase nugget;
     @Nonnull
-    public final ItemBase MAGNIFYING_GLASS;
+    public final ItemBase magnifying_glass;
 
 }

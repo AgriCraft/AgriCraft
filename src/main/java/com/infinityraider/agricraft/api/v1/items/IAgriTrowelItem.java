@@ -5,6 +5,6 @@ package com.infinityraider.agricraft.api.v1.items;
  *
  *
  */
-public interface IAgriTrowelItem extends IAgriCraftItem {
+public interface IAgriTrowelItem {
 
 }

@@ -1,35 +1,21 @@
-/*
- */
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.config.AgriConfigAdapter;
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.reference.Reference;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import com.infinityraider.agricraft.config.Config;
 
-/**
- *
- *
- */
 public class ModProvider implements AgriConfigAdapter {
 
-    private final Configuration config;
+    private final Config config;
 
-    public ModProvider(Configuration config) {
+    public ModProvider(Config config) {
         this.config = config;
     }
 
     @Override
-    public void load() {
-        this.config.load();
-    }
+    public void load() {}
 
     @Override
-    public void save() {
-        this.config.save();
-    }
+    public void save() {}
 
     @Override
     public boolean getBoolean(String name, String category, boolean defaultValue, String comment) {
@@ -59,15 +45,6 @@ public class ModProvider implements AgriConfigAdapter {
     @Override
     public String getLocation() {
         return config.toString();
-    }
-
-    @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(Reference.MOD_ID)) {
-            AgriCore.getConfig().save();
-            AgriCore.getConfig().load();
-            AgriCore.getLogger("agricraft").debug("Configuration reloaded.");
-        }
     }
 
 }

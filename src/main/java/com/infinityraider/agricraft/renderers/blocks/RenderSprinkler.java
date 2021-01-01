@@ -1,11 +1,7 @@
 package com.infinityraider.agricraft.renderers.blocks;
 
-import com.infinityraider.agricraft.blocks.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.reference.Constants;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntitySprinkler;
-import com.infinityraider.agricraft.utility.BaseIcons;
-import com.infinityraider.agricraft.utility.CustomWoodType;
-import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
 import com.infinityraider.infinitylib.render.block.RenderBlockWithTileBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import java.util.Collections;

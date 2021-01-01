@@ -4,7 +4,6 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.exception.ExceptionMessageBuilder;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
@@ -15,9 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
-import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.network.MessageSyncFluidAmount;
-import com.infinityraider.agricraft.utility.IAgriFluidComponentSyncable;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 
 public class TileEntityChannel extends TileEntityCustomWood implements ITickable, IAgriFluidComponent, IAgriFluidComponentSyncable, IDebuggable {

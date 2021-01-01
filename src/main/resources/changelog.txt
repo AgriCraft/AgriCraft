@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.0
+- CHANGE: Ported to 1.16.4
+
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].
 - ADDED: AgriCraft testing commands, allows for manipulation of seed stats.

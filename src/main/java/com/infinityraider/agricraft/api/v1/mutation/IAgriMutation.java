@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  * @author AgriCraft
  * @since v2
  */
-public interface IAgriMutation extends IAgriRegisterable {
+public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
 
     /**
      * Retrieves the probability of the mutation occurring. Recommended to be within the normalized

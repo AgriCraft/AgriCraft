@@ -1,12 +1,10 @@
-/*
- */
 package com.infinityraider.agricraft.core;
 
 import com.agricraft.agricore.plant.AgriMutation;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.mutation.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.farming.mutation.Mutation;
+import com.infinityraider.agricraft.core.mutation.Mutation;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

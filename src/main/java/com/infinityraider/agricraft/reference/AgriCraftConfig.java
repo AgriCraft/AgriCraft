@@ -1,9 +1,3 @@
-/*
- * AgriCraft Configuration File
- *
- * This might not be *strictly* cleaner, but it is nicer.
- *
- */
 package com.infinityraider.agricraft.reference;
 
 import com.agricraft.agricore.config.AgriConfigCategory;

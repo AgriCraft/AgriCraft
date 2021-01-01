@@ -7,8 +7,6 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.network.MessageTileEntitySeedStorage;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Reference;
-import com.infinityraider.agricraft.tiles.TileEntityCustomWood;
-import com.infinityraider.agricraft.utility.NBTHelper;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import java.util.ArrayList;
 import java.util.HashMap;

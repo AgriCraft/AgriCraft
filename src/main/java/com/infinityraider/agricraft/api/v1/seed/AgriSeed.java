@@ -1,31 +1,34 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.seed;
 
 import com.google.common.base.Preconditions;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 /**
  * A simple class for representing seeds. Seeds are immutable objects, for safety reasons.
- *
- *
  */
-public final class AgriSeed {
+public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
 
     @Nonnull
     private final IAgriPlant plant;
     @Nonnull
-    private final IAgriStat stat;
+    private final IAgriStatsMap stats;
+    @Nonnull
+    private final IAgriGenome genome;
 
-    public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriStat stat) {
+    public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriStatsMap stats, @Nonnull IAgriGenome genome) {
         this.plant = Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!");
-        this.stat = Preconditions.checkNotNull(stat, "The stat in an AgriSeed may not be null!");
+        this.stats = Preconditions.checkNotNull(stats, "The stat in an AgriSeed may not be null!");
+        this.genome = Preconditions.checkNotNull(genome, "The genome in an AgriSeed may not be null!");
     }
 
     @Nonnull
@@ -34,18 +37,23 @@ public final class AgriSeed {
     }
 
     @Nonnull
-    public IAgriStat getStat() {
-        return this.stat;
+    public IAgriStatsMap getStats() {
+        return this.stats;
     }
 
     @Nonnull
     public AgriSeed withPlant(@Nonnull IAgriPlant plant) {
-        return new AgriSeed(plant, stat);
+        return new AgriSeed(plant, stats, genome);
     }
 
     @Nonnull
-    public AgriSeed withStat(@Nonnull IAgriStat stat) {
-        return new AgriSeed(plant, stat);
+    public AgriSeed withStat(@Nonnull IAgriStatsMap stats) {
+        return new AgriSeed(plant, stats, genome);
+    }
+
+    @Nonnull
+    public AgriSeed withGenome(@Nonnull IAgriGenome genome) {
+        return new AgriSeed(plant, stats, genome);
     }
 
     @Nonnull
@@ -60,18 +68,25 @@ public final class AgriSeed {
         final ItemStack stack = Preconditions.checkNotNull(this.plant.getSeed());
 
         // Get the tag.
-        final NBTTagCompound tag = Optional.ofNullable(stack.getTagCompound())
-                .map(NBTTagCompound::copy)
-                .orElseGet(NBTTagCompound::new);
+        final CompoundNBT tag = Optional.ofNullable(stack.getTag())
+                .map(CompoundNBT::copy)
+                .orElseGet(CompoundNBT::new);
 
-        // Write the stat to the tag.
-        this.stat.writeToNBT(tag);
-
+        // Write the stats and genome to the tag.
+        if(this.genome.equals(this.stats)) {
+            CompoundNBT mixedTag = new CompoundNBT();
+            this.stats.writeToNBT(mixedTag);
+            tag.put("stats_genome", mixedTag);
+        } else {
+            CompoundNBT statTag = new CompoundNBT();
+            this.stats.writeToNBT(statTag);
+            tag.put("stats", statTag);
+            CompoundNBT geneTag = new CompoundNBT();
+            this.genome.writeToNBT(geneTag);
+            tag.put("genome", geneTag);
+        }
         // Return a new stack.
-        // Thanks @darthvader45
-        ItemStack ret = new ItemStack(stack.getItem(), size, stack.getMetadata());
-        ret.setTagCompound(tag);
-        return ret;
+        return new ItemStack(stack.getItem(), size, tag);
     }
 
     @Override
@@ -83,15 +98,21 @@ public final class AgriSeed {
     public final boolean equals(AgriSeed other) {
         return (other != null)
                 && (this.plant.equals(other.plant))
-                && (this.stat.equals(other.stat));
+                && (this.stats.equalStats(other.stats))
+                && (this.genome.equalGenome(other.genome));
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 71 * hash + Objects.hashCode(this.plant);
-        hash = 71 * hash + Objects.hashCode(this.stat);
+        hash = 71 * hash + Objects.hashCode(this.stats);
+        hash = 71 * hash + Objects.hashCode(this.genome);
         return hash;
     }
 
+    @Override
+    public IAgriGenome getGenome() {
+        return this.genome;
+    }
 }
