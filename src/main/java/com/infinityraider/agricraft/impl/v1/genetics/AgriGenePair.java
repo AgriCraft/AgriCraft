@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.core.genetics;
+package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;

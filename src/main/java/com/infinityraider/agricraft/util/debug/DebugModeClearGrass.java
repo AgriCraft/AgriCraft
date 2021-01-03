@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.items.modes;
+package com.infinityraider.agricraft.util.debug;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
 import com.agricraft.agricore.config.AgriConfigurable;

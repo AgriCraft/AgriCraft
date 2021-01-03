@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.core.plant;
+package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;

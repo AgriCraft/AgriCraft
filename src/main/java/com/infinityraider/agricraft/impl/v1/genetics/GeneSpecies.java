@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.core.genetics;
+package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.genetics.IMutator;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.core.plant.NoPlant;
+import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;

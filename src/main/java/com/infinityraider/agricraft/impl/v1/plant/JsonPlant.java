@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.core.plant;
+package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
@@ -10,10 +10,10 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
-import com.infinityraider.agricraft.core.requirement.GrowthRequirement;
-import com.infinityraider.agricraft.core.requirement.JsonSoil;
-import com.infinityraider.agricraft.core.genetics.GeneSpecies;
-import com.infinityraider.agricraft.core.genetics.AgriMutationRegistry;
+import com.infinityraider.agricraft.impl.v1.requirement.GrowthRequirement;
+import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
+import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.init.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 

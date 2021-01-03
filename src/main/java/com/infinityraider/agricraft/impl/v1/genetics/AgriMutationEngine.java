@@ -1,11 +1,11 @@
-package com.infinityraider.agricraft.core.genetics;
+package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.core.stats.AgriStatRegistry;
+import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import net.minecraft.util.Tuple;
 
 import java.util.Comparator;

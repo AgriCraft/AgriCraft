@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.items.modes;
+package com.infinityraider.agricraft.util.debug;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.utility.MessageUtil;

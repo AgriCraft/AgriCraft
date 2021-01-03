@@ -1,6 +1,6 @@
 /*
  */
-package com.infinityraider.agricraft.items.modes;
+package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;

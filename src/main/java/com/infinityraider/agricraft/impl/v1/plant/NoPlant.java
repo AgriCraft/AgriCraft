@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.core.plant;
+package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -7,9 +7,8 @@ import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.core.genetics.GeneSpecies;
+import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

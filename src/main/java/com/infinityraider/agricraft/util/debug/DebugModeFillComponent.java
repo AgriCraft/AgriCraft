@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.infinityraider.agricraft.items.modes;
+package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.infinitylib.utility.WorldHelper;
