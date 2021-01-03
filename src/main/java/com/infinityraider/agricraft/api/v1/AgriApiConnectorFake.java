@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -15,9 +15,8 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -89,13 +88,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IAgriCrop> getCrop(World world, BlockPos pos) {
-        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
-    }
-
-    @Nonnull
-    @Override
-    public Optional<IAgriCrop> getCrop(BlockState state, World world, BlockPos pos) {
+    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

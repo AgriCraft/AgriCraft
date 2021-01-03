@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -17,17 +17,18 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import com.infinityraider.agricraft.core.genetics.AgriGeneRegistry;
-import com.infinityraider.agricraft.core.genetics.AgriGenome;
-import com.infinityraider.agricraft.core.mutation.AgriMutationHandler;
-import com.infinityraider.agricraft.core.mutation.AgriMutationRegistry;
-import com.infinityraider.agricraft.core.plant.AgriGrowthRegistry;
-import com.infinityraider.agricraft.core.requirement.AgriSoilRegistry;
-import com.infinityraider.agricraft.core.requirement.Factory;
-import com.infinityraider.agricraft.core.stats.AgriStatRegistry;
-import net.minecraft.block.BlockState;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
+import com.infinityraider.agricraft.impl.v1.plant.AgriGrowthRegistry;
+import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
+import com.infinityraider.agricraft.impl.v1.requirement.Factory;
+import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
+import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -129,14 +130,9 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IAgriCrop> getCrop(World world, BlockPos pos) {
-        return CropInstance.get(world, pos);
-    }
-
-    @Nonnull
-    @Override
-    public Optional<IAgriCrop> getCrop(BlockState state, World world, BlockPos pos) {
-        return CropInstance.get(state, world, pos);
+    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+        TileEntity tile = world.getTileEntity(pos);
+        return tile instanceof TileEntityCropSticks ? Optional.of((IAgriCrop) tile) : Optional.empty();
     }
 
     @Override

@@ -2,11 +2,13 @@ package com.infinityraider.agricraft.api.v1.stat;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 public interface IAgriStatsMap {
-    byte getValue(IAgriStat stat);
+    int getValue(IAgriStat stat);
 
     boolean writeToNBT(@Nonnull CompoundNBT tag);
 
@@ -22,5 +24,9 @@ public interface IAgriStatsMap {
             }
         }
         return true;
+    }
+
+    default void addTooltips(@Nonnull Consumer<ITextComponent> consumer) {
+        AgriApi.getStatRegistry().stream().forEach(stat -> stat.addTooltip(consumer, this.getValue(stat)));
     }
 }

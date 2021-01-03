@@ -12,6 +12,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,6 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Interface to interact with AgriCraft's crops.
@@ -29,25 +33,28 @@ import javax.annotation.Nonnull;
  * To retrieve use AgriApi.getCrop()
  */
 public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgriSeedProvider, IAgriSeedAcceptor,
-        IAgriGeneCarrier, IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable {
+        IAgriGeneCarrier, IAgriStatProvider, IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable {
     /**
      * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop
      */
     boolean isValid();
 
     /**
-     * @return The World in which this crop exists
+     * @return The World in which this crop exists (may be null if the crop is invalid)
      */
+    @Nullable
     World getWorld();
 
     /**
      * @return The position of this crop in the world
      */
+    @Nonnull
     BlockPos getPosition();
 
     /**
      * @return The growth stage of the crop.
      */
+    @Nonnull
     IAgriGrowthStage getGrowthStage();
 
     /**
@@ -61,7 +68,7 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
      * this has a plant.
      * @return true if this changed the value and markForUpdate was called.
      */
-    boolean setGrowthStage(IAgriGrowthStage stage);
+    boolean setGrowthStage(@Nonnull IAgriGrowthStage stage);
 
     /**
      * @return if this crop is a crosscrop
@@ -87,13 +94,21 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
      */
     boolean isMature();
 
+
     @Nonnull
     Optional<IAgriSoil> getSoil();
 
-    void breakCrop();
+    void breakCrop(@Nullable LivingEntity entity);
 
     void applyGrowthTick();
 
+    @Override
+    @Nonnull
+    default IAgriStatsMap getStats() {
+        return this.getGenome().getStats();
+    }
+
+    @Nonnull
     default Stream<IAgriCrop> streamNeighbours() {
         return Direction.Plane.HORIZONTAL.getDirectionValues()
                 .map(dir -> AgriApi.getCrop(this.getWorld(), this.getPosition().offset(dir)))
@@ -101,14 +116,17 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
                 .map(Optional::get);
     }
 
+    @Nonnull
     default Stream<IAgriCrop> streamNeighbours(Predicate<IAgriCrop> filter) {
         return this.streamNeighbours().filter(filter);
     }
 
+    @Nonnull
     default List<IAgriCrop> getNeighbours() {
         return this.streamNeighbours().collect(Collectors.toList());
     }
 
+    @Nonnull
     default List<IAgriCrop> getNeighbours(Predicate<IAgriCrop> filter) {
         return this.streamNeighbours(filter).collect(Collectors.toList());
     }

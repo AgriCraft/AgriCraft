@@ -18,6 +18,8 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
      */
     boolean canTriggerMutation();
 
+    boolean canTriggerWeeds();
+
     /**
      * This is called when the fertilizer is used on a crop, this only is called if true is returned
      * from hasSpecialBehaviour.

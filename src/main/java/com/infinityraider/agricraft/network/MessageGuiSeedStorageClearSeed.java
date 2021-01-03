@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.container.ContainerSeedStorageBase;
-import com.infinityraider.agricraft.tiles.storage.ISeedStorageControllable;
+import com.infinityraider.agricraft.content.storage.ISeedStorageControllable;
 import com.infinityraider.infinitylib.network.MessageBase;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;

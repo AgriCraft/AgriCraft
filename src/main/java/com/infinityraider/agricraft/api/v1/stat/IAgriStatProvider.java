@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
  * Interface for objects that have AgriStats.
  */
 public interface IAgriStatProvider {
-    @Nonnull IAgriStatsMap getStats();
+    @Nonnull
+    IAgriStatsMap getStats();
 
 }

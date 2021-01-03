@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
-import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.Block;
@@ -129,7 +129,7 @@ public class PlayerInteractEventHandler {
         ItemStack heldItem = event.getEntityLiving().getActiveItemStack();
         if (!heldItem.isEmpty() && heldItem.getItem() == Items.BONE_MEAL) {
             TileEntity te = event.getWorld().getTileEntity(event.getPos());
-            if (te != null && (te instanceof TileEntityCrop)) {
+            if (te != null && (te instanceof TileEntityCropSticks)) {
                 event.setUseItem(Event.Result.DENY);
             }
         }

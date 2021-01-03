@@ -1,7 +1,15 @@
 package com.infinityraider.agricraft.reference;
 
 public interface AgriNBT {
+    // Crop sticks
+    String PLANT = "agri_plant";
+    String GROWTH = "agri_growth";
+    String WEED = "agri_weed";
+    String WEED_GROWTH = "agri_weed_growth";
     String CROSS_CROP = "agri_cross_crop";
+    String SEED = "agri_seed";
+    String GENOME = "agri_genome";
+
     String VINE = "agri_vine";
     String AXIS = "agri_axis";
     String DISCOVERED_SEEDS = "agri_discovered";
@@ -14,7 +22,6 @@ public interface AgriNBT {
     String POWER = "agri_power";
     String INVENTORY = "agri_inventory";
     String COUNT = "agri_count";
-    String SEED = "agri_seed";
     String X = "agri_X";
     String Y = "agri_Y";
     String Z = "agri_Z";

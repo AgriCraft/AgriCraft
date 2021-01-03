@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.network;
 
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.utility.LightHelper;
+import com.infinityraider.agricraft.util.LightHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;

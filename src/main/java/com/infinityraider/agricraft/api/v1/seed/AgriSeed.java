@@ -21,13 +21,10 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     @Nonnull
     private final IAgriPlant plant;
     @Nonnull
-    private final IAgriStatsMap stats;
-    @Nonnull
-    private final IAgriGenome genome;
+    private IAgriGenome genome;
 
-    public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriStatsMap stats, @Nonnull IAgriGenome genome) {
+    public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriGenome genome) {
         this.plant = Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!");
-        this.stats = Preconditions.checkNotNull(stats, "The stat in an AgriSeed may not be null!");
         this.genome = Preconditions.checkNotNull(genome, "The genome in an AgriSeed may not be null!");
     }
 
@@ -37,23 +34,13 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     }
 
     @Nonnull
-    public IAgriStatsMap getStats() {
-        return this.stats;
-    }
-
-    @Nonnull
     public AgriSeed withPlant(@Nonnull IAgriPlant plant) {
-        return new AgriSeed(plant, stats, genome);
-    }
-
-    @Nonnull
-    public AgriSeed withStat(@Nonnull IAgriStatsMap stats) {
-        return new AgriSeed(plant, stats, genome);
+        return new AgriSeed(plant, genome);
     }
 
     @Nonnull
     public AgriSeed withGenome(@Nonnull IAgriGenome genome) {
-        return new AgriSeed(plant, stats, genome);
+        return new AgriSeed(plant, genome);
     }
 
     @Nonnull
@@ -72,19 +59,10 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
                 .map(CompoundNBT::copy)
                 .orElseGet(CompoundNBT::new);
 
-        // Write the stats and genome to the tag.
-        if(this.genome.equals(this.stats)) {
-            CompoundNBT mixedTag = new CompoundNBT();
-            this.stats.writeToNBT(mixedTag);
-            tag.put("stats_genome", mixedTag);
-        } else {
-            CompoundNBT statTag = new CompoundNBT();
-            this.stats.writeToNBT(statTag);
-            tag.put("stats", statTag);
-            CompoundNBT geneTag = new CompoundNBT();
-            this.genome.writeToNBT(geneTag);
-            tag.put("genome", geneTag);
-        }
+        // Write the genome to the tag.
+        CompoundNBT geneTag = new CompoundNBT();
+        this.genome.writeToNBT(geneTag);
+        tag.put("genome", geneTag);
         // Return a new stack.
         return new ItemStack(stack.getItem(), size, tag);
     }
@@ -98,7 +76,6 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     public final boolean equals(AgriSeed other) {
         return (other != null)
                 && (this.plant.equals(other.plant))
-                && (this.stats.equalStats(other.stats))
                 && (this.genome.equalGenome(other.genome));
     }
 
@@ -106,7 +83,6 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     public int hashCode() {
         int hash = 3;
         hash = 71 * hash + Objects.hashCode(this.plant);
-        hash = 71 * hash + Objects.hashCode(this.stats);
         hash = 71 * hash + Objects.hashCode(this.genome);
         return hash;
     }
@@ -114,5 +90,16 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     @Override
     public IAgriGenome getGenome() {
         return this.genome;
+    }
+
+    @Override
+    public void setGenome(@Nonnull IAgriGenome genome) {
+        this.genome = Preconditions.checkNotNull(genome, "The genome in an AgriSeed may not be null!");
+    }
+
+    @Nonnull
+    @Override
+    public IAgriStatsMap getStats() {
+        return this.getGenome().getStats();
     }
 }

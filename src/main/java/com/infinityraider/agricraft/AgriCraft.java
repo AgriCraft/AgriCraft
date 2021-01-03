@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.config.Config;
-import com.infinityraider.agricraft.init.AgriBlocks;
-import com.infinityraider.agricraft.init.AgriCommands;
-import com.infinityraider.agricraft.init.AgriItems;
+import com.infinityraider.agricraft.init.AgriBlockRegistry;
+import com.infinityraider.agricraft.init.AgriItemRegistry;
+import com.infinityraider.agricraft.init.AgriTileRegistry;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageFertilizerApplied;
 import com.infinityraider.agricraft.network.MessageCompareLight;
@@ -46,13 +46,18 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
-    public AgriBlocks getModBlockRegistry() {
-        return AgriBlocks.getInstance();
+    public AgriBlockRegistry getModBlockRegistry() {
+        return AgriBlockRegistry.getInstance();
     }
 
     @Override
-    public AgriItems getModItemRegistry() {
-        return AgriItems.getInstance();
+    public AgriItemRegistry getModItemRegistry() {
+        return AgriItemRegistry.getInstance();
+    }
+
+    @Override
+    public AgriTileRegistry getModTileRegistry() {
+        return AgriTileRegistry.getInstance();
     }
 
     @Override

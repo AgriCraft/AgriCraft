@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.api.v1.misc;
 
+import net.minecraft.util.text.ITextComponent;
+
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
@@ -14,6 +16,6 @@ public interface IAgriDisplayable {
      *
      * @param consumer the list to add the display information to.
      */
-    public void addDisplayInfo(@Nonnull Consumer<String> consumer);
+    void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer);
 
 }

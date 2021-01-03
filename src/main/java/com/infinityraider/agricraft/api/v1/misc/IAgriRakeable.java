@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -24,10 +23,9 @@ public interface IAgriRakeable {
      * Rakes the object.
      *
      * @param consumer a consumer that accepts all the products of raking this rakeable.
-     * @param player the player which harvests the crop, may be null if it is harvested by
-     * automation.
+     * @param entity the entity which is performing the raking, may be null if raked through automation
      * @return if the harvest was successful.
      */
-    boolean rake(@Nonnull Consumer<ItemStack> consumer, @Nullable PlayerEntity player);
+    boolean rake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
 
 }

@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
-import com.infinityraider.agricraft.api.v1.mutation.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
@@ -51,15 +50,15 @@ public interface IAgriMutationHandler {
      * @param mutator the IMutator<Byte> object
      * @return this
      */
-    IAgriMutationHandler setActiveStatMutator(IMutator<Byte> mutator);
+    IAgriMutationHandler setActiveStatMutator(IMutator<Integer> mutator);
 
     /**
      * @return the currently active IMutator<Byte> object
      */
-    IMutator<Byte> getActiveStatMutator();
+    IMutator<Integer> getActiveStatMutator();
 
     /**
      * @return AgriCraft's default IMutator<Byte> object
      */
-    IMutator<Byte> getDefaultStatMutator();
+    IMutator<Integer> getDefaultStatMutator();
 }

@@ -3,6 +3,15 @@ package com.infinityraider.agricraft.api.v1.stat;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 
 public interface IAgriStatRegistry extends IAgriRegistry<IAgriStat> {
+    /**
+     * @return AgriCraft's default minimum value for a stat
+     */
+    int defaultMax();
+
+    /**
+     * @return AgriCraft's default maximum value for a stat
+     */
+    int defaultMin();
 
     /**
      * @return the native AgriCraft gain stat, which controls the amount of fruits obtained when harvesting a crop
@@ -28,4 +37,9 @@ public interface IAgriStatRegistry extends IAgriRegistry<IAgriStat> {
      * @return the native AgriCraft resistance stat, which controls the resistance of a crop against weeds
      */
     IAgriStat resistanceStat();
+
+    /**
+     * @return the native AgriCraft mutativity stat, which controls the probability of positive stats mutations
+     */
+    IAgriStat mutativityStat();
 }

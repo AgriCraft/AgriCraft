@@ -29,7 +29,7 @@ public interface IAgriFertilizable {
     boolean acceptsFertilizer(@Nonnull IAgriFertilizer fertilizer);
 
     /**
-     * Apply the specified fertilizer to this crop. The effects and results may be randomized. The
+     * Called after the specified fertilizer has been applied to this crop. The effects and results may be randomized. The
      * return value signals if any fertilizer should be consumed. It should match up with the
      * results of {@link #acceptsFertilizer(IAgriFertilizer)}
      *

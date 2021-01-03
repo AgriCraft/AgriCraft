@@ -17,18 +17,18 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
      *
      * @return The minimum value a seed can have of this stat.
      */
-    byte getMin();
+    int getMin();
 
     /**
      * Fetches the maximum valid value for a stat of this type.
      *
      * @return The maximum value a seed can have of this stat.
      */
-    byte getMax();
+    int getMax();
 
     void writeValueToNBT(CompoundNBT tag, byte value);
 
-    byte readValueFromNBT(CompoundNBT tag);
+    int readValueFromNBT(CompoundNBT tag);
 
     /**
      * Writes the stat for display.
@@ -37,7 +37,7 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
      * @return If the writing was successful.
      */
     @Nonnull
-    boolean addStat(@Nonnull Consumer<ITextComponent> consumer, byte value);
+    void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value);
 
     @Override
     boolean equals(@Nullable Object obj);

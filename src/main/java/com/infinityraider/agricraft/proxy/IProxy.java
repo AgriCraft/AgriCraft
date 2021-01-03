@@ -4,7 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
-import com.infinityraider.agricraft.core.CoreHandler;
+import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import com.infinityraider.infinitylib.utility.ReflectionHelper;
 import net.minecraft.command.ICommand;

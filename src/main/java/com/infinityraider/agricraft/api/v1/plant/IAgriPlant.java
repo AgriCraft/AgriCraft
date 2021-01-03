@@ -1,16 +1,19 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
 import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -19,35 +22,6 @@ import net.minecraft.item.ItemStack;
  * the ICropPlant object you registered, it will return a different object.
  */
 public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriPlant> {
-    /**
-     * Determines the unique id of the plant. The id should be lowercase, with no special
-     * characters, uses underscores instead of whitespace, and ends in '_plant'.
-     *
-     * @return The unique id of the plant.
-     */
-    @Override
-    @Nonnull
-    String getId();
-
-    /**
-     * Determines the user-friendly name of the plant. This does not have to be unique (although it
-     * might be confusing to players) and has no special restrictions on contained characters. It is
-     * up to the implementer to localize the plant name prior to passing here.
-     *
-     * @return The user-friendly plant name.
-     */
-    @Nonnull
-    String getPlantName();
-
-    /**
-     * Determines the name of seeds that are auto-generated for the plant. Only used when no other
-     * valid seed items are provided.
-     *
-     * @return The default seed name for the plant's seeds.
-     */
-    @Nonnull
-    String getSeedName();
-
     /**
      * Fetches a list of all the items that are considered seeds for this specific plant.
      *
@@ -127,11 +101,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     IAgriGrowthStage getGrowthStageAfterHarvest();
 
     /**
-     * Determines the total number of growth stages that the plant has. Notice, that the number of
-     * growth stages that a plant may have is traditionally less than 16, as the max meta-value of a
-     * block is 15. For AgriCraft specifically, the conventional number of growth stages is 8.
+     * Determines all the growth stages that the plant can have.
+     * For AgriCraft specifically, the conventional number of growth stages is 8.
      *
-     * @return the total number of growth stages that the plant has.
+     * @return a set containing all the possible growth stages of the plant.
      */
     @Nonnull
     Set<IAgriGrowthStage> getGrowthStages();
@@ -201,10 +174,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
      * @param products a consumer for collecting all the possible plant harvest products that should
      * be dropped.
      * @param growthStage the growth stage
-     * @param stat the stats associated with this instance of the plant.
+     * @param stats the stats associated with this instance of the plant.
      * @param rand a random for use in rng.
      */
-    void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStat stat, @Nonnull Random rand);
+    void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand);
 
     /**
      * Checks if this plant allows to be cloned (spreading from a single parent)
@@ -216,11 +189,57 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     /**
      * Checks if a plant can be harvested at the given growth stage
      * @param stage the growth stage
+     * @param entity the entity who wants to harvest the plant (can be null in case it wasn't planted by an entity)
      * @return true if the plant can be harvested
      */
-    default boolean allowsHarvest(IAgriGrowthStage stage) {
+    default boolean allowsHarvest(@Nonnull IAgriGrowthStage stage, @Nullable LivingEntity entity) {
         return stage.isMature();
     }
+
+    /**
+     * Callback for custom actions right after this plant has been planted on crop sticks,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant was planted
+     * @param entity the entity who planted the plant (can be null in case it wasn't planted by an entity)
+     */
+    default void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
+
+    /**
+     * Callback for custom actions right after this plant has been spawned on crop sticks due to a mutation or spread,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant spawned
+     */
+    default void onSpawned(@Nonnull IAgriCrop crop) {}
+
+    /**
+     * Callback for custom actions right after a successful growth tick,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant is planted
+     */
+    default void onGrowthTick(@Nonnull IAgriCrop crop) {}
+
+    /**
+     * Callback for custom actions right after a plant is removed,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant was planted
+     */
+    default void onRemoved(@Nonnull IAgriCrop crop) {}
+
+    /**
+     * Callback for custom actions right after a successful harvest of this plant,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant is planted
+     * @param entity the entity who harvested the plant (can be null in case it wasn't planted by an entity)
+     */
+    default void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
+
+    /**
+     * Callback for custom actions right after crop sticks holding this plant have been broken,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant was planted
+     * @param entity the entity who broke the crop sticks (can be null in case it wasn't broken by an entity)
+     */
+    default void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
 
     /**
      * Internal, do not override, used by AgriCraft to determine the default, no plant implementation

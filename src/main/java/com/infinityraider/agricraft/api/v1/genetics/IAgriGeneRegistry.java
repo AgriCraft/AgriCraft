@@ -13,7 +13,7 @@ public interface IAgriGeneRegistry extends IAgriRegistry<IAgriGene<?>> {
      * @param stat the stat
      * @return an optional containing the gene, or empty (only if no such stat has been registered)
      */
-    Optional<IAgriGene<Byte>> get(@Nullable IAgriStat stat);
+    Optional<IAgriGene<Integer>> get(@Nullable IAgriStat stat);
 
     /**
      * Registers both the gene and stat for the given stat.
@@ -41,5 +41,5 @@ public interface IAgriGeneRegistry extends IAgriRegistry<IAgriGene<?>> {
      * @param gene the IAgriGene
      * @return an Optional containing the stat, or empty if the gene has not been registered
      */
-    Optional<IAgriStat> getStatForGene(@Nullable IAgriGene<Byte> gene);
+    Optional<IAgriStat> getStatForGene(@Nullable IAgriGene<Integer> gene);
 }

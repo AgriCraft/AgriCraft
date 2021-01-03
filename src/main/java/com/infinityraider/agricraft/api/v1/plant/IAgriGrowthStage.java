@@ -17,6 +17,12 @@ public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
     IAgriGrowthStage getNextStage();
 
     /**
+     * @return the growth percentage corresponding to this growth stage, between 0 and 1 (both inclusive),
+     * in which 1 means mature
+     */
+    double growthPercentage();
+
+    /**
      * Internal only, used for the default no growth stage property when no plant is planted
      * @return if this is an actual growth stage
      */
