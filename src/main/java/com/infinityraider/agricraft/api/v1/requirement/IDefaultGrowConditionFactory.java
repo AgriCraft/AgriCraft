@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import net.minecraft.block.Block;

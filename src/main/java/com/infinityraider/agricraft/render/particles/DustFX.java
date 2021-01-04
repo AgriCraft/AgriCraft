@@ -1,17 +1,17 @@
 package com.infinityraider.agricraft.render.particles;
 
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class DustFX extends AgriCraftFX {
 
-    public DustFX(World world, double x, double y, double z, float scale, float gravity, Vec3d vector, ResourceLocation texture) {
+    public DustFX(ClientWorld world, double x, double y, double z, float scale, float gravity, Vector3d vector, ResourceLocation texture) {
         super(world, x, y, z, scale, gravity, vector, texture);
-        this.particleMaxAge = 50;
+        this.maxAge = 50;
         this.setSize(0.2f, 0.2f);
     }
 }

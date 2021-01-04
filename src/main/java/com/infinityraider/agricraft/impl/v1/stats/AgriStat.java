@@ -47,9 +47,8 @@ public class AgriStat implements IAgriStat {
 
     @Nonnull
     @Override
-    public boolean addTooltips(@Nonnull Consumer<ITextComponent> consumer, byte value) {
+    public void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value) {
         consumer.accept(new StringTextComponent("").append(this.tooltip).append(new StringTextComponent(": " + value)));
-        return true;
     }
 
     @Nonnull

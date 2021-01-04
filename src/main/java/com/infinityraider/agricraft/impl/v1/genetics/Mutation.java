@@ -58,10 +58,10 @@ public class Mutation implements IAgriMutation {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.id).append(": ");
         for (IAgriPlant p : this.parents) {
-            sb.append(p.getPlantName()).append(" + ");
+            sb.append(p.getId()).append(" + ");
         }
         sb.replace(sb.length() - 3, sb.length(), " = ");
-        sb.append(this.child.getPlantName());
+        sb.append(this.child.getId());
         return sb.toString();
     }
 

@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 
 import javax.annotation.Nonnull;
 
-public class NoGrowthStage implements IAgriGrowthStage {
-    private static final NoGrowthStage INSTANCE = new NoGrowthStage();
+public class NoGrowth implements IAgriGrowthStage {
+    private static final NoGrowth INSTANCE = new NoGrowth();
 
     public static IAgriGrowthStage getInstance() {
         return INSTANCE;
@@ -13,13 +13,19 @@ public class NoGrowthStage implements IAgriGrowthStage {
 
     private final String id;
 
-    private NoGrowthStage() {
+    private NoGrowth() {
         this.id = "none";
     }
 
     @Override
     public boolean isGrowthStage() {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     @Override
@@ -33,9 +39,8 @@ public class NoGrowthStage implements IAgriGrowthStage {
         return this;
     }
 
-    @Nonnull
     @Override
-    public String getId() {
-        return this.id;
+    public double growthPercentage() {
+        return 0;
     }
 }

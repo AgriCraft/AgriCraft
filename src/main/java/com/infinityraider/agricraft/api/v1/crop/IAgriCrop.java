@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
 import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRakeable;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantAcceptor;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;

@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.impl.v1;
 
-import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.util.ResourceHelper;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -22,7 +22,8 @@ import java.util.regex.Pattern;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 public final class CoreHandler {
 
@@ -49,21 +50,17 @@ public final class CoreHandler {
         return jsonDir;
     }
 
-    public static void preInit(FMLPreInitializationEvent event) {
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
         // Setup Config.
-        configDir = event.getSuggestedConfigurationFile().getParentFile().toPath().resolve(Reference.MOD_ID);
-        config = new Configuration(configDir.resolve("config.cfg").toFile());
+        configDir = FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID);
+        config = AgriCraft.instance.getConfig();
 
         // Setup Plant Dir.
         jsonDir = configDir.resolve("json");
         defaultDir = jsonDir.resolve("defaults");
 
-        // Setup Provider
-        AgriConfigAdapter provider = new ModProvider(config);
-        MinecraftForge.EVENT_BUS.register(provider);
-
         // Initialize AgriCore
-        AgriCore.init(new ModLogger(), new ModTranslator(), new ModValidator(), new ModConverter(), provider);
+        AgriCore.init(new ModLogger(), new ModTranslator(), new ModValidator(), new ModConverter());
 
         // Transfer Defaults
         ResourceHelper.findResources(JSON_FILE_PATTERN.asPredicate()).stream()
@@ -76,9 +73,6 @@ public final class CoreHandler {
     }
 
     public static void init() {
-        // Save settings!
-        AgriCore.getConfig().save();
-
         // Load JSON Stuff
         initSoils();
         initPlants();
@@ -138,7 +132,7 @@ public final class CoreHandler {
         // Display Plants
         AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
         for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
-            AgriCore.getLogger("agricraft").info(" - {0}", plant.getPlantName());
+            AgriCore.getLogger("agricraft").info(" - {0}", plant.getId());
         }
     }
 

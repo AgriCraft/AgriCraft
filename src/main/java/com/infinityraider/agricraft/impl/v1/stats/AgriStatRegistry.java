@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.stats;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
@@ -14,9 +15,6 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         return INSTANCE;
     }
 
-    public static final int MIN = 1;
-    public static final int MAX = 10;
-
     private final IAgriStat gain;
     private final IAgriStat growth;
     private final IAgriStat strength;
@@ -28,12 +26,12 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         //super constructor
         super("stats", IAgriStat.class);
         //initiate default stats
-        this.gain = new AgriStat("gain", MIN, MAX);
-        this.growth = new AgriStat("growth", MIN, MAX);
-        this.strength = new AgriStat("strength", MIN, MAX);
-        this.resistance = new AgriStat("resistance", MIN, MAX);
-        this.fertility = new AgriStat("fertility", MIN, MAX);
-        this.mutativity = new AgriStat("mutativity", MIN, MAX);
+        this.gain = new AgriStat("gain", this.defaultMin(), this.defaultMax());
+        this.growth = new AgriStat("growth", this.defaultMin(), this.defaultMax());
+        this.strength = new AgriStat("strength", this.defaultMin(), this.defaultMax());
+        this.resistance = new AgriStat("resistance", this.defaultMin(), this.defaultMax());
+        this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax());
+        this.mutativity = new AgriStat("mutativity", this.defaultMin(), this.defaultMax());
         //register default stats
         this.add(this.gainStat());
         this.add(this.growthStat());
@@ -69,12 +67,12 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
 
     @Override
     public int defaultMax() {
-        return MAX;
+        return AgriCraft.instance.getConfig().getMaxStatsValue();
     }
 
     @Override
     public int defaultMin() {
-        return MIN;
+        return AgriCraft.instance.getConfig().getMinStatsValue();
     }
 
     @Override

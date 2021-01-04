@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.util.debug;
 
 import com.agricraft.agricore.config.AgriConfigCategory;
@@ -7,19 +5,15 @@ import com.agricraft.agricore.config.AgriConfigurable;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BushBlock;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-/**
- *
- *
- */
 public class DebugModeClearGrass extends DebugMode {
 
     @AgriConfigurable(
@@ -36,26 +30,26 @@ public class DebugModeClearGrass extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        pos = pos.toImmutable();
+    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+        BlockPos pos = context.getPos().toImmutable();
         for (int x = -radius; x < radius; x++) {
             for (int z = -radius; z < radius; z++) {
                 BlockPos loc = pos.add(x, 0, z);
-                Block block = world.getBlockState(loc).getBlock();
-                if (block instanceof BlockBush) {
-                    world.destroyBlock(loc, false);
+                Block block = context.getWorld().getBlockState(loc).getBlock();
+                if (block instanceof BushBlock) {
+                    context.getWorld().destroyBlock(loc, false);
                 }
             }
         }
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
         // NOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         // NOP
     }
     

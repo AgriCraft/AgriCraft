@@ -1,34 +1,28 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.init.AgriTabs;
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.util.debug.*;
-import com.infinityraider.infinitylib.handler.ConfigurationHandler;
-import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDebugger extends ItemDebuggerBase implements IItemWithModel {
+public class ItemDebugger extends ItemDebuggerBase {
+    private static final List<DebugMode> MODES = ImmutableList.of(
+            new DebugModeCheckSoil(),
+            new DebugModeClearGrass(),
+            new DebugModeCoreInfo(),
+            new DebugModeTestBlockRange(), // Just for temporary testing.
+            new DebugModeIGrowable(),
+            new DebugModeDiffLight(),
+            new DebugModeFillComponent()
+    );
 
     public ItemDebugger() {
         super(true);
-        this.setMaxStackSize(1);
-        if (ConfigurationHandler.getInstance().debug) {
-            this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
-        }
     }
 
     @Override
     protected List<DebugMode> getDebugModes() {
-        List<DebugMode> list = new ArrayList<>();
-        list.add(new DebugModeCheckSoil());
-        list.add(new DebugModeClearGrass());
-        list.add(new DebugModeCoreInfo());
-        list.add(new DebugModeTestBlockRange()); // Just for temporary testing.
-        list.add(new DebugModeIGrowable());
-        list.add(new DebugModeDiffLight());
-        list.add(new DebugModeFillComponent());
-        return list;
+        return MODES;
     }
 }

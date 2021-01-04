@@ -2,8 +2,9 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
@@ -19,11 +20,20 @@ public final class NoWeed implements IAgriWeed {
         return INSTANCE;
     }
 
+    private final String id = "none";
+    private final Set<IAgriGrowthStage> stages = ImmutableSet.of(this.getInitialGrowthStage());
+
     private NoWeed() {}
 
     @Override
     public final boolean isWeed() {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    public String getId() {
+        return this.id;
     }
 
 
@@ -35,10 +45,8 @@ public final class NoWeed implements IAgriWeed {
     @Nonnull
     @Override
     public IAgriGrowthStage getInitialGrowthStage() {
-        return NoGrowthStage.getInstance();
+        return NoGrowth.getInstance();
     }
-
-    private final Set<IAgriGrowthStage> stages = ImmutableSet.of(this.getInitialGrowthStage());
 
     @Nonnull
     @Override
@@ -49,13 +57,5 @@ public final class NoWeed implements IAgriWeed {
     @Override
     public void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
         //NOPE
-    }
-
-    private final String id = "none";
-
-    @Nonnull
-    @Override
-    public String getId() {
-        return this.id;
     }
 }

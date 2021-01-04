@@ -4,10 +4,11 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,9 @@ public class NoPlant implements IAgriPlant {
         return INSTANCE;
     }
 
+    private final String id = "none";
+    private final Set<IAgriGrowthStage> stages = ImmutableSet.of(this.getInitialGrowthStage());
+
     private NoPlant() {}
 
     @Override
@@ -31,23 +35,9 @@ public class NoPlant implements IAgriPlant {
         return false;
     }
 
-    private final String id = "none";
-
     @Nonnull
     @Override
     public String getId() {
-        return this.id;
-    }
-
-    @Nonnull
-    @Override
-    public String getPlantName() {
-        return this.id;
-    }
-
-    @Nonnull
-    @Override
-    public String getSeedName() {
         return this.id;
     }
 
@@ -90,7 +80,7 @@ public class NoPlant implements IAgriPlant {
     @Nonnull
     @Override
     public IAgriGrowthStage getInitialGrowthStage() {
-        return NoGrowthStage.getInstance();
+        return NoGrowth.getInstance();
     }
 
     @Nonnull
@@ -98,8 +88,6 @@ public class NoPlant implements IAgriPlant {
     public IAgriGrowthStage getGrowthStageAfterHarvest() {
         return this.getInitialGrowthStage();
     }
-
-    private final Set<IAgriGrowthStage> stages = ImmutableSet.of(this.getInitialGrowthStage());
 
     @Nonnull
     @Override

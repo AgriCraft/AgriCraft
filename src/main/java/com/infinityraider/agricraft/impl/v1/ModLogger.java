@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.log.AgriLogAdapter;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+
 import java.text.MessageFormat;
 import org.apache.logging.log4j.Level;
 

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;

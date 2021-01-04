@@ -25,23 +25,12 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public void initConfiguration(FMLPreInitializationEvent event) {
-        registerEventHandler(new ModelErrorSuppressor());
-    }
-
-    @Override
-    public void initCustomWoodTypes() {
-        CustomWoodTypeRegistry.initClient();
-    }
-
-    @Override
     public String translateToLocal(String string) {
         return I18n.format(string);
     }
 
     @Override
     public String getLocale() {
-        return Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
+        return Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
     }
-
 }

@@ -5,12 +5,13 @@ import com.agricraft.agricore.plant.AgriPlant;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
-import com.infinityraider.agricraft.impl.v1.requirement.GrowthRequirement;
+import com.infinityraider.agricraft.impl.v1.crop.GrowthLogic;
+import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
@@ -44,16 +45,6 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public String getId() {
         return this.plant.getId();
-    }
-
-    @Override
-    public String getPlantName() {
-        return this.plant.getPlantName();
-    }
-
-    @Override
-    public String getSeedName() {
-        return this.plant.getSeedName();
     }
 
     @Nonnull

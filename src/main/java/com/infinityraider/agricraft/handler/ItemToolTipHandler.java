@@ -4,15 +4,16 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
+
 import java.text.MessageFormat;
 import java.util.Objects;
+
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -43,11 +44,9 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty()) {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
             if (seed != null) {
-                if (seed.getStat().isAnalyzed()) {
-                    seed.getStat().addStat(event.getToolTip()::add);
-                } else {
-                    event.getToolTip().add(new TranslationTextComponent("agricraft.tooltip.unidentified"));
-                }
+                seed.getStats().addTooltips(event.getToolTip()::add);
+            } else {
+                event.getToolTip().add(AgriToolTips.getUnknownTooltip(AgriToolTips.SEED));
             }
         }
     }
@@ -66,6 +65,7 @@ public class ItemToolTipHandler {
 //            }
 //        }
 //    }
+
     private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
         event.getToolTip().add(new StringTextComponent(MessageFormat.format(format, objects)).mergeStyle(TextFormatting.DARK_AQUA));
     }
@@ -113,9 +113,9 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
             AgriSeed seed = AgriApi.getSeedRegistry().valueOf(event.getItemStack()).orElse(null);
             if (seed != null) {
-                event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.seed" + ": " + seed.getPlant().getSeedName()));
+                event.getToolTip().add(AgriToolTips.getSeedTooltip(seed));
             } else {
-                event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.trowel"));
+                event.getToolTip().add(AgriToolTips.TROWEL);
             }
         }
     }
@@ -129,9 +129,7 @@ public class ItemToolTipHandler {
     public void addClipperTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof IAgriClipperItem) {
-            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper1"));
-            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper2"));
-            event.getToolTip().add(new TranslationTextComponent("agricraft_tooltip.clipper3"));
+            event.getToolTip().addAll(AgriToolTips.CLIPPER);
         }
     }
 

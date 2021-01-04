@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
@@ -12,8 +10,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
 import java.util.ArrayList;
 import java.util.Deque;
@@ -21,49 +18,53 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
+
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.ModLifecycleEvent;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
+import net.minecraftforge.forgespi.language.ModFileScanData;
+import org.objectweb.asm.Type;
 
-/**
- *
- *
- */
 public final class PluginHandler {
 
     @Nonnull
     private static final Deque<IAgriPlugin> PLUGINS = new ConcurrentLinkedDeque<>();
 
-    public static void preInit(FMLPreInitializationEvent event) {
-        PLUGINS.addAll(getInstances(event.getAsmData(), AgriPlugin.class, IAgriPlugin.class));
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
+        PLUGINS.addAll(getInstances(getScanData(event), AgriPlugin.class, IAgriPlugin.class));
         PLUGINS.stream()
                 .peek(PluginHandler::logPlugin)
                 .filter(IAgriPlugin::isEnabled)
                 .forEach(MinecraftForge.EVENT_BUS::register);
     }
 
-    public static void init() {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::initPlugin);
+    public static void onInterModEnqueueEvent(InterModEnqueueEvent event) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onInterModEnqueueEvent(event));
     }
 
-    public static void postInit() {
+    public static void onInterModProcessEvent(InterModProcessEvent event) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onInterModProcessEvent(event));
+    }
+
+    public static void populateRegistries() {
         registerSoils(AgriApi.getSoilRegistry());
         registerPlants(AgriApi.getPlantRegistry());
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
         registerSeeds(AgriApi.getSeedRegistry());
         registerFertilizers(AgriApi.getFertilizerRegistry());
-        registerStatCalculators(AgriApi.getStatCalculatorRegistry());
-        registerCrossStrategies(AgriApi.getMutationEngine());
-        registerPeripheralMethods(AgriApi.getPeripheralMethodRegistry());
     }
 
     public static void loadTextures(Consumer<ResourceLocation> registry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerTextures(registry));
     }
 
-    public static void registerSoils(IAgriRegistry<IAgriSoil> soilRegistry) {
+    public static void registerSoils(IAgriSoilRegistry soilRegistry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoils(soilRegistry));
     }
 
@@ -75,7 +76,7 @@ public final class PluginHandler {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerMutations(mutationRegistry));
     }
 
-    public static void registerStats(IAgriAdapterizer<IAgriStat> statRegistry) {
+    public static void registerStats(IAgriStatRegistry statRegistry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
     }
 
@@ -87,50 +88,61 @@ public final class PluginHandler {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(fertilizerRegistry));
     }
 
-    public static void registerStatCalculators(IAgriAdapterizer<IAgriStatCalculator> calculatorRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStatCalculators(calculatorRegistry));
-    }
-
-    public static void registerCrossStrategies(IAgriMutationEngine mutationEngine) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(p -> p.registerCrossStrategies(mutationEngine));
-    }
-    
-    public static void registerPeripheralMethods(IAgriRegistry<IAgriPeripheralMethod> methodRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(p -> p.registerPeripheralMethods(methodRegistry));
-    }
-
     /**
-     * Loads classes with a specific annotation from an asm data table.
-     *
-     * Borrowed from JEI's source code, which is licensed under the MIT license.
+     * Loads classes with a specific annotation the modfile's FML scan data
      *
      * @param <T> The type of class to load.
-     * @param asm The asm data table to load classes from.
+     * @param data The modfile FML scan data to load classes from.
      * @param anno The annotation marking classes of interest.
      * @param type The class type to load, as to get around Type erasure.
      * @return A list of the loaded classes, instantiated.
      */
     @Nonnull
-    private static <T> List<T> getInstances(ASMDataTable asm, Class anno, Class<T> type) {
-        final List<T> instances = new ArrayList<>();
-        for (ASMDataTable.ASMData asmData : asm.getAll(anno.getCanonicalName())) {
-            try {
-                T instance = Class.forName(asmData.getClassName()).asSubclass(type).newInstance();
-                instances.add(instance);
-            } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
-                AgriCore.getLogger("agricraft-plugins").debug(
-                        "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
-                        asmData.getClassName(),
-                        anno.getCanonicalName(),
-                        type.getCanonicalName()
-                );
-            }
+    private static <T> List<T> getInstances(ModFileScanData data, Class anno, Class<T> type) {
+        if(data == null) {
+            AgriCore.getLogger("agricraft-plugins").error(
+                    "Failed to load AgriPlugins");
         }
+        final List<T> instances = new ArrayList<>();
+        data.getAnnotations().stream().
+                filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType())).
+                forEach(annotationData -> {
+                    try{
+                        T instance = Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
+                        instances.add(instance);
+                    } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
+                        AgriCore.getLogger("agricraft-plugins").debug(
+                                "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
+                                annotationData.getTargetType(),
+                                anno.getCanonicalName(),
+                                type.getCanonicalName()
+                        );
+                    }
+                });
         return instances;
+    }
+
+    private static ModFileScanData getScanData(FMLCommonSetupEvent event) {
+        FMLModContainer container = null;
+        try {
+            container = (FMLModContainer) ModLifecycleEvent.class.getDeclaredField("container").get(event);
+        } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
+            AgriCore.getLogger("agricraft-plugins").error(
+                    "Failed to fetch ModContainer from FMLCommonSetupEvent");
+        }
+        if(container == null) {
+            return null;
+        }
+        try {
+            return (ModFileScanData) FMLModContainer.class.getDeclaredField("scanResults").get(container);
+        } catch(IllegalAccessException | NoSuchFieldException | ClassCastException e) {
+            AgriCore.getLogger("agricraft-plugins").error(
+                    "Failed to fetch ModFileScanData from FMLModContainer");
+        }
+        return null;
     }
     
     private static void logPlugin(IAgriPlugin plugin) {
         AgriCore.getLogger("agricraft").info("\nFound AgriCraft Plugin:\n\t- Id: {0}\n\t- Name: {1}\n\t- Status: {2}", plugin.getId(), plugin.getName(), plugin.isEnabled() ? "Enabled" : "Disabled");
     }
-
 }

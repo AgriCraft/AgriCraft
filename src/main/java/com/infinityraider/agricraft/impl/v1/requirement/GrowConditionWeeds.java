@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.util.math.BlockPos;
@@ -20,12 +20,8 @@ public class GrowConditionWeeds extends GrowConditionAbstract {
 
     @Override
     public boolean isMet(@Nonnull World world, @Nonnull BlockPos pos) {
-        return AgriApi.getCrop(world, pos).map(crop ->
-                crop.getWeeds().map(weeds ->
-                        crop.getWeedGrowthStage().map((growth) ->
-                                this.predicate.test(weeds, growth)
-                        ).orElse(false)
-                ).orElse(false)
+        return AgriApi.getCrop(world, pos).map(crop
+                -> this.predicate.test(crop.getWeeds(), crop.getWeedGrowthStage())
         ).orElse(false);
     }
 }

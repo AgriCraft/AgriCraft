@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -12,6 +12,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public interface IAgriWeed extends IAgriRegisterable<IAgriWeed> {
+    /**
+     * Defines the chance of spawning on a specific crop
+     * @param crop the crop where this wheat is rolled to spawn
+     * @return the chance to spawn, between 0 and 1, where 0 means it will never spawn, and 1 it will certainly spawn
+     */
     double spawnChance(IAgriCrop crop);
 
     /**
@@ -53,8 +58,17 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed> {
      */
     default void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
 
+    /**
+     * Called when the weed is raked
+     * @param consumer calls to this will add items to the drops list
+     * @param entity the entity who raked the weed (can be null in case it is raked through automation)
+     */
     void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
 
+    /**
+     * Do not override, internally overridden on the no weed implementation
+     * @return true if this is indeed a weed;
+     */
     default boolean isWeed() {
         return true;
     }

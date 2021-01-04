@@ -1,35 +1,29 @@
-/*
- */
 package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.api.v1.util.BlockRange;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-/**
- *
- *
- */
 public class DebugModeTestBlockRange extends DebugMode {
 
     @Override
     public String debugName() {
         return "test BlockRange";
     }
+
 
     /**
      * This method allows the user to test what Block Positions are covered by the BlockRange
@@ -41,27 +35,30 @@ public class DebugModeTestBlockRange extends DebugMode {
      * unexpected locations!
      */
     @Override
-    public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
+    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+        if (context.getWorld().isRemote) {
             return;
         }
+        BlockPos pos = context.getPos();
+        PlayerEntity player = context.getPlayer();
+        World world = context.getWorld();
         Optional<BlockPos> startPos = getStartPos(stack);
         if (!startPos.isPresent()) {
             // This is the first click. Save 'pos' as the starting coordinate.
-            setStartPos(stack, pos);
-            player.sendMessage(new TextComponentString("Starting corner set: (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")"));
-            player.sendMessage(new TextComponentString("Next right click will set the opposite/ending corner."));
-            player.sendMessage(new TextComponentString("WARNING: this mode will destroy blocks, be careful."));
+            setStartPos(stack, context.getPos());
+            player.sendMessage(new StringTextComponent("Starting corner set: (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")"), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("Next right click will set the opposite/ending corner."), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("WARNING: this mode will destroy blocks, be careful."), Util.DUMMY_UUID);
         } else {
             // This is the second click. Load the starting coordinate. Use 'pos' as the ending coordinate. Then fill the cuboid with wool.
             int count = 0;
-            IBlockState wool = Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.BLACK);
+            BlockState wool = Blocks.BLACK_WOOL.getDefaultState();
             //
             // IMPORTANT PART OF THE TEST IS BELOW
             //
             BlockRange range = new BlockRange(startPos.get(), pos);
             for (BlockPos target : range) {                         // <-- Is the iterator giving a complete set?
-                IBlockState old = world.getBlockState(target);
+                BlockState old = world.getBlockState(target);
                 world.destroyBlock(target, true);
                 world.setBlockState(target, wool);
                 world.notifyBlockUpdate(target, old, wool, 2);
@@ -70,9 +67,9 @@ public class DebugModeTestBlockRange extends DebugMode {
             //
             // IMPORTANT PART OF THE TEST IS ABOVE
             //
-            player.sendMessage(new TextComponentString("Volume:     " + range.getVolume()));
-            player.sendMessage(new TextComponentString("Replaced:  " + count));
-            player.sendMessage(new TextComponentString("Coverage: " + (range.getVolume() == count ? "Complete" : "INCOMPLETE")));
+            player.sendMessage(new StringTextComponent("Volume:     " + range.getVolume()), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("Replaced:  " + count), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("Coverage: " + (range.getVolume() == count ? "Complete" : "INCOMPLETE")), Util.DUMMY_UUID);
             setStartPos(stack, null);
         }
     }
@@ -88,16 +85,16 @@ public class DebugModeTestBlockRange extends DebugMode {
      * otherwise.
      */
     private Optional<BlockPos> getStartPos(@Nonnull ItemStack stack) {
-        NBTTagCompound tag;
-        if (!stack.hasTagCompound()) {
-            tag = new NBTTagCompound();
-            stack.setTagCompound(tag);
+        CompoundNBT tag;
+        if (!stack.hasTag()) {
+            tag = new CompoundNBT();
+            stack.setTag(tag);
         } else {
-            tag = stack.getTagCompound();
+            tag = stack.getTag();
         }
         Optional<BlockPos> start = Optional.empty();
         assert tag != null;
-        if (tag.hasKey(NBT_START)) {
+        if (tag.contains(NBT_START)) {
             int[] raw = (tag.getIntArray(NBT_START));
             if (raw.length == 3) {
                 BlockPos p = new BlockPos(raw[0], raw[1], raw[2]);
@@ -112,36 +109,33 @@ public class DebugModeTestBlockRange extends DebugMode {
      * @param p The position to save, or null if you want to delete the tag.
      */
     private void setStartPos(@Nonnull ItemStack stack, BlockPos p) {
-        NBTTagCompound tag;
-        if (!stack.hasTagCompound()) {
-            tag = new NBTTagCompound();
-            stack.setTagCompound(tag);
+        CompoundNBT tag;
+        if (!stack.hasTag()) {
+            tag = new CompoundNBT();
+            stack.setTag(tag);
         } else {
-            tag = stack.getTagCompound();
+            tag = stack.getTag();
         }
         assert tag != null;
         if (p == null) {
-            tag.removeTag(NBT_START);
+            tag.remove(NBT_START);
         } else {
             int[] start = new int[3];
             start[0] = p.getX();
             start[1] = p.getY();
             start[2] = p.getZ();
-            tag.setIntArray(NBT_START, start);
+            tag.putIntArray(NBT_START, start);
         }
     }
 
-    /**
-     * Interface method stubs.
-     */
     @Override
-    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        // NOP
+    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+        // NOOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-        // NOP
+    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+        // NOOP
     }
 
 }

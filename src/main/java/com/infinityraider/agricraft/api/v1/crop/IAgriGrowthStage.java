@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.plant;
+package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 
@@ -9,6 +9,11 @@ public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
      * @return true if this growth stage signifies a mature plant (meaning it does not have any further growth stages
      */
     boolean isMature();
+
+    /**
+     * @return true if a plant of this growth stage will drop its seed when broken
+     */
+    boolean canDropSeed();
 
     /**
      * @return The next growth stage after a successful growth tick (returns itself if this is the final growth stage).

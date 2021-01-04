@@ -20,7 +20,10 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         return INSTANCE;
     }
 
+    // Encapsulates the logic
     private final IAgriMutationEngine defaultEngine;
+
+    // Mutates individual genes
     private final IMutator<IAgriPlant> defaultPlantMutator;
     private final IMutator<Integer> defaultStatMutator;
 
@@ -132,8 +135,9 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         protected IAllel<Integer> rollAndExecuteMutation(IAgriGene<Integer> gene, IAllel<Integer> allel, int stat, Random random) {
             // Mutativity stat of 1 results in 25/50/25 probability of positive/no/negative mutation
             // Mutativity stat of 10 results in 100/0/0 probability of positive/no/negative mutation
-            if(random.nextInt(AgriStatRegistry.MAX) < stat) {
-                int delta = random.nextInt(AgriStatRegistry.MAX) < (AgriStatRegistry.MAX + stat)/2 ? 1 : -1;
+            int max = AgriStatRegistry.getInstance().defaultMax();
+            if(random.nextInt(AgriStatRegistry.getInstance().defaultMax()) < stat) {
+                int delta = random.nextInt(max) < (max + stat)/2 ? 1 : -1;
                 return gene.getAllel(allel.trait() + delta);
             } else {
                 return allel;

@@ -1,22 +1,14 @@
-/*
- */
 package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.network.MessageCompareLight;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-/**
- *
- *
- */
 public class DebugModeDiffLight extends DebugMode {
 
     @Override
@@ -25,19 +17,19 @@ public class DebugModeDiffLight extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
-            new MessageCompareLight(world, pos).sendToServer();
+    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+        if (context.getWorld().isRemote) {
+            new MessageCompareLight(context.getWorld(), context.getPos()).sendToServer();
         }
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
         // NOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         // NOP
     }
 

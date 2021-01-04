@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+
 import javax.annotation.Nonnull;
 
 public interface IAgriWeedSpawnable {

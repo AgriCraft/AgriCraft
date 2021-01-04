@@ -1,23 +1,16 @@
-/*
- */
 package com.infinityraider.agricraft.util.debug;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
-/**
- *
- *
- */
 public class DebugModeCheckSoil extends DebugMode {
 
     @Override
@@ -26,25 +19,23 @@ public class DebugModeCheckSoil extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        FuzzyStack soil = FuzzyStack.from(world.getBlockState(pos)).orElse(null);
+    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
         String type = AgriApi.getSoilRegistry().all().stream()
-                .filter(s -> s.isVariant(soil))
+                .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
                 .map(s -> s.getName())
                 .findFirst()
                 .orElse("Unknown Soil");
-        MessageUtil.messagePlayer(player, "{0} Soil Info:", FMLCommonHandler.instance().getSide());
-        MessageUtil.messagePlayer(player, " - Soil Type: \"{0}\"", type);
+        MessageUtil.messagePlayer(context.getPlayer(), "{0} Soil Info:", AgriCraft.instance.proxy().getLogicalSide());
+        MessageUtil.messagePlayer(context.getPlayer(), " - Soil Type: \"{0}\"", type);
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
         // NOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         // NOP
     }
-
 }

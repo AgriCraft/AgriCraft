@@ -1,16 +1,8 @@
 package com.infinityraider.agricraft.init;
 
 import com.infinityraider.agricraft.content.core.CropStickVariant;
-import com.infinityraider.agricraft.content.plants.ItemAgriSeed;
-import com.infinityraider.agricraft.content.tools.ItemClipper;
-import com.infinityraider.agricraft.content.tools.ItemClipping;
 import com.infinityraider.agricraft.content.core.ItemCropSticks;
 import com.infinityraider.agricraft.content.core.ItemDebugger;
-import com.infinityraider.agricraft.content.genetics.ItemJournal;
-import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
-import com.infinityraider.agricraft.content.plants.ItemNugget;
-import com.infinityraider.agricraft.content.tools.ItemRake;
-import com.infinityraider.agricraft.content.tools.ItemTrowel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.item.Item;
 

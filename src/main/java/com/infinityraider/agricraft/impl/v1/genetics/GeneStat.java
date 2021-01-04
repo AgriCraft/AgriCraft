@@ -38,7 +38,7 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Override
     public IAllel<Integer> getAllel(Integer value) {
-        final int val = Math.max(AgriStatRegistry.MIN, Math.min(AgriStatRegistry.MAX, value));
+        final int val = Math.max(AgriStatRegistry.getInstance().defaultMin(), Math.min(AgriStatRegistry.getInstance().defaultMax(), value));
         return this.allAlleles().stream()
                 .filter(allel -> allel.trait() == val)
                 .findFirst().orElse(this.defaultAllel());

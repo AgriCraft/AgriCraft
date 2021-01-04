@@ -7,35 +7,35 @@ public interface IAgriFluidComponent extends IAgriConnectable {
      *
      * @return the amount of fluid in millibuckets.
      */
-    public int getFluidAmount();
+    int getFluidAmount();
 
     /**
      * Retrieves the height of the fluid in the component, in microblocks.
      *
      * @return the height of the fluid in microblocks.
      */
-    public int getFluidHeight();
+    int getFluidHeight();
 
     /**
      * Retrieves the minimum height, in microblocks, that the component supports.
      *
      * @return the minimum fluid height.
      */
-    public int getMinFluidHeight();
+    int getMinFluidHeight();
 
     /**
      * Retrieves the maximum height, in microblocks, that the component supports.
      *
      * @return the maximum fluid height.
      */
-    public int getMaxFluidHeight();
+    int getMaxFluidHeight();
 
     /**
      * Retrieves the component's maximum fluid capacity, in millibuckets.
      *
      * @return the capacity, in millibuckets.
      */
-    public int getFluidCapacity();
+    int getFluidCapacity();
 
     /**
      * Pushes fluid into the component at the given height, returning the amount not consumed.
@@ -46,6 +46,6 @@ public interface IAgriFluidComponent extends IAgriConnectable {
      * @param simulate if the component should actually update the amount of fluid, or not.
      * @return the amount of fluid that was not accepted by the component.
      */
-    public int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate);
+    int acceptFluid(int inputHeight, int inputAmount, boolean partial, boolean simulate);
 
 }

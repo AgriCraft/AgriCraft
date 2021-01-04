@@ -2,14 +2,11 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
@@ -90,6 +87,7 @@ public class PlayerInteractEventHandler {
      * This is done with an event because else the player will place the vines
      * as a block instead of applying them to the grate
      */
+    /*
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
         // Fetch the ItemStack
@@ -116,6 +114,7 @@ public class PlayerInteractEventHandler {
         // We better deny the event!
         event.setUseItem(Event.Result.DENY);
     }
+     */
 
     /*
      * Event handler to deny bonemeal while sneaking on crops that are not

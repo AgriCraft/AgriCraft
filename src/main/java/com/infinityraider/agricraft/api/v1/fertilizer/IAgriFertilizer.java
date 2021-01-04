@@ -5,6 +5,8 @@ import java.util.Random;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -35,10 +37,9 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
 
     /**
      * Called on the client when the fertilizer is applied, can be used for particles or other
-     * visual effects.
-     *
+     * visual effects.     *
      */
     @OnlyIn(Dist.CLIENT)
-    void performClientAnimations();
+    void performClientAnimations(World world, BlockPos pos, ItemStack stack);
 
 }

@@ -7,9 +7,12 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
+import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
+import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
@@ -47,6 +50,11 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> implements IGrowable, IPlantable {
+    // Default state properties
+    private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
+    private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
+    private static final IAgriWeed NO_WEED = NoWeed.getInstance();
+
     // Excluded classes for Iem usage logic
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
@@ -57,10 +65,10 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
 
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
-    public static final InfProperty<IAgriPlant> PLANT = InfProperty.Creators.create(PropertyAgriRegisterable.getPlantProperty(), null); //TODO: no plant
-    public static final InfProperty<IAgriGrowthStage> GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getGrowthProperty(), null); //TODO: growth stages
-    public static final InfProperty<IAgriWeed> WEED = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedProperty(), null); //TODO: no weed
-    public static final InfProperty<IAgriGrowthStage> WEED_GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedGrowthProperty(), null); //TODO: growth stages
+    public static final InfProperty<IAgriPlant> PLANT = InfProperty.Creators.create(PropertyAgriRegisterable.getPlantProperty(), NO_PLANT);
+    public static final InfProperty<IAgriGrowthStage> GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getGrowthProperty(), NO_GROWTH);
+    public static final InfProperty<IAgriWeed> WEED = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedProperty(), NO_WEED);
+    public static final InfProperty<IAgriGrowthStage> WEED_GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedGrowthProperty(), NO_GROWTH);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(CROSS_CROP)

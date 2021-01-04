@@ -1,19 +1,15 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import com.infinityraider.infinitylib.utility.ReflectionHelper;
-import net.minecraft.command.ICommand;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.function.Function;
 
@@ -21,59 +17,41 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
-        return Config.Common::new;
+        return Config.Server::new;
+    }
+
+
+    @Override
+    default void onCommonSetupEvent(final FMLCommonSetupEvent event) {
+        CoreHandler.onCommonSetup(event);
+        PluginHandler.onCommonSetup(event);
     }
 
     @Override
-    default void preInitStart(FMLPreInitializationEvent event) {
-        CoreHandler.preInit(event);
-        registerEventHandler(AgriCraft.instance);
-        PluginHandler.preInit(event);
+    default void onInterModEnqueueEvent(final InterModEnqueueEvent event) {
+        PluginHandler.onInterModEnqueueEvent(event);
     }
 
     @Override
-    default void initStart(FMLInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(AgriCraft.instance, new GuiHandler());
-        PluginHandler.init();
-        initCustomWoodTypes();
+    default void onInterModProcessEvent(final InterModProcessEvent event) {
+        PluginHandler.onInterModProcessEvent(event);
     }
 
     @Override
-    default void initEnd(FMLInitializationEvent event) {
+    default void onModLoadCompleteEvent(final FMLLoadCompleteEvent event) {
         CoreHandler.init();
+        PluginHandler.populateRegistries();
     }
 
     @Override
-    default void postInitStart(FMLPostInitializationEvent event) {
-        PluginHandler.postInit();
-        AgriOreDict.upgradeOreDict();
-    }
-
-    default void registerVillagerSkin(int id, String resource) {
-    }
-
-    default void initCustomWoodTypes() {
-        CustomWoodTypeRegistry.init();
-    }
+    default void registerCapabilities() {}
 
     @Override
-    default void registerCapabilities() {
-    }
+    default void registerEventHandlers() {}
 
     @Override
-    default void registerEventHandlers() {
-    }
+    default void activateRequiredModules() {}
 
-    @Override
-    default void activateRequiredModules() {
-    }
-
-    @Override
-    default void initConfiguration(FMLPreInitializationEvent event) {
-    }
-
-    // Since apparently translation is now client-side only.
-    // This is why we can't have nice things.
     default String translateToLocal(String string) {
         // The {**} is a hack to get TOP integration to work.
         return "{*" + string + "*}";
@@ -81,13 +59,15 @@ public interface IProxy extends IProxyBase<Config> {
 
     default String getLocale() {
         // Whatever...
-        return "en_US";
+        return "en_us";
     }
     
     @Override
-    default void onServerStarting(FMLServerStartingEvent event) {
+    default void onServerStartingEvent(final FMLServerStartingEvent event) {
+        /*
         // This is to be moved to infinity lib in a future version, I would expect.
         AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
         ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
+         */
     }
 }

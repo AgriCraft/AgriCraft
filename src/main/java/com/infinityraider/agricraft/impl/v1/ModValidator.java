@@ -2,38 +2,36 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.util.AgriValidator;
-import com.infinityraider.agricraft.util.OreDictUtil;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import com.infinityraider.agricraft.util.TagUtil;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModValidator implements AgriValidator {
 
     @Override
     public boolean isValidBlock(String block) {
         String[] parts = block.split(":");
-        if (parts.length < 2) {
+        if (parts.length != 2) {
             return false;
-        } else if (OreDictUtil.isValidOre(block)) {
+        } else if (TagUtil.isValidTag(BlockTags.getCollection(), block)) {
             return true;
         } else {
-            Block b = Block.getBlockFromName(parts[0] + ":" + parts[1]);
-            //AgriCore.getLogger("agricraft").debug(b);
-            return b != null;
+            return ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(parts[0],parts[1]));
         }
     }
 
     @Override
     public boolean isValidItem(String item) {
         String[] parts = item.split(":");
-        if (parts.length < 2) {
+        if (parts.length != 2) {
             return false;
-        } else if (OreDictUtil.isValidOre(item)) {
+        } else if (TagUtil.isValidTag(ItemTags.getCollection(), item)) {
             return true;
         } else {
-            Item i = Item.getByNameOrId(parts[0] + ":" + parts[1]);
-            //AgriCore.getLogger("agricraft").debug(i);
-            return i != null;
+            return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(parts[0],parts[1]));
         }
     }
 
@@ -48,7 +46,7 @@ public class ModValidator implements AgriValidator {
 
     @Override
     public boolean isValidMod(String modid) {
-        return modid.equals("minecraft") || Loader.isModLoaded(modid);
+        return modid.equals("minecraft") || ModList.get().isLoaded(modid);
     }
 
 }

@@ -9,18 +9,18 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.impl.v1.plant.NoGrowthStage;
+import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
-import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 
@@ -40,11 +40,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
-    private static final IAgriGrowthStage NO_GROWTH = NoGrowthStage.getInstance();
+    private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
     private static final IAgriWeed NO_WEED = NoWeed.getInstance();
 
@@ -443,78 +441,35 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         // Add plant information
         if (this.hasPlant()) {
             //Add the plant data.
-            consumer.accept(new StringTextComponent("")
-                    .append(tooltip_plant)
-                    .append(new StringTextComponent(": "))
-                    .append(new TranslationTextComponent(plant.getId()))
-            );
-            if (this.isMature()) {
-                consumer.accept(new StringTextComponent("")
-                        .append(tooltip_growth)
-                        .append(new StringTextComponent(": "))
-                        .append(tooltip_mature)
-                );
-            } else {
-                consumer.accept(new StringTextComponent("")
-                        .append(tooltip_growth)
-                        .append(new StringTextComponent(": " + ((int) (100 * this.getGrowthStage().growthPercentage()) + "%")))
-                );
-            }
+            consumer.accept(AgriToolTips.getPlantTooltip(this.getPlant()));
+            consumer.accept(AgriToolTips.getGrowthTooltip(this.getGrowthStage()));
             //Add the stats
             this.getStats().addTooltips(consumer);
             //Add the fertility information.
             if(this.isFertile()) {
-                consumer.accept(this.tooltip_fertile);
+                consumer.accept(AgriToolTips.FERTILE);
             } else {
-                consumer.accept(this.tooltip_not_fertile);
+                consumer.accept(AgriToolTips.NOT_FERTILE);
             }
         } else {
-            consumer.accept(this.tooltip_no_plant);
+            consumer.accept(AgriToolTips.NO_PLANT);
         }
 
         // Add weed information
         if(this.hasWeeds()) {
-            consumer.accept(new StringTextComponent("")
-                    .append(tooltip_weed)
-                    .append(new StringTextComponent(": "))
-                    .append(new TranslationTextComponent(weed.getId()))
-            );
-            consumer.accept(new StringTextComponent("")
-                    .append(tooltip_weed_growth)
-                    .append(new StringTextComponent(": " + ((int) (100 * this.getWeedGrowthStage().growthPercentage()) + "%")))
-            );
+            consumer.accept(AgriToolTips.getWeedTooltip(this.getWeeds()));
+            consumer.accept(AgriToolTips.getWeedGrowthTooltip(this.getWeedGrowthStage()));
         } else {
-            consumer.accept(this.tooltip_no_weed);
+            consumer.accept(AgriToolTips.NO_WEED);
         }
 
         // Add Soil Information
         this.getSoil().map(soil -> {
-            consumer.accept(new StringTextComponent("")
-                    .append(this.tooltip_soil)
-                    .append(new StringTextComponent(": "))
-                    .append(new TranslationTextComponent(soil.getName()))
-            );
+            consumer.accept(AgriToolTips.getSoilTooltip(soil));
             return null;
         }).orElseGet(() -> {
-            consumer.accept(new StringTextComponent("")
-                    .append(this.tooltip_soil)
-                    .append(new StringTextComponent(": "))
-                    .append(tooltip_unknown)
-            );
+            consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
             return null;
         });
     }
-
-    private final ITextComponent tooltip_plant = new TranslationTextComponent("agricraft.tooltip.plant");
-    private final ITextComponent tooltip_no_plant = new TranslationTextComponent("agricraft.tooltip.no_plant");
-    private final ITextComponent tooltip_growth = new TranslationTextComponent("agricraft.tooltip.growth");
-    private final ITextComponent tooltip_mature = new TranslationTextComponent("agricraft.tooltip.mature");
-    private final ITextComponent tooltip_weed = new TranslationTextComponent("agricraft.tooltip.weed");
-    private final ITextComponent tooltip_no_weed = new TranslationTextComponent("agricraft.tooltip.no_weed");
-    private final ITextComponent tooltip_weed_growth = new TranslationTextComponent("agricraft.tooltip.weed_growth");
-    private final ITextComponent tooltip_fertile = new TranslationTextComponent("agricraft.tooltip.fertile");
-    private final ITextComponent tooltip_not_fertile = new TranslationTextComponent("agricraft.tooltip.not_fertile");
-    private final ITextComponent tooltip_soil = new TranslationTextComponent("agricraft.tooltip.soil");
-    private final ITextComponent tooltip_unknown = new TranslationTextComponent("agricraft.tooltip.unknown");
-
 }

@@ -1,32 +1,23 @@
-/*
- */
 package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-/**
- *
- *
- */
 public class DebugModeIGrowable extends DebugMode {
-
-    @Override
-    public String debugName() {
-        return "test IGrowable blocks";
-    }
 
     // Saved copies of the texts that do not change. Unicode 00A7 is the formatting code squiggle. 'r' is reset.
     private static final String chatTrue =  "`2True  `r";                               // '2' is dark green.
@@ -37,11 +28,18 @@ public class DebugModeIGrowable extends DebugMode {
             + "get called by this mode. It is not mimicking bonemeal's logic.";
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) {
+    public String debugName() {
+        return "test IGrowable blocks";
+    }
+
+    @Override
+    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+        if (context.getWorld().isRemote) {
             return;
         }
-
+        BlockPos pos = context.getPos();
+        PlayerEntity player = context.getPlayer();
+        World world = context.getWorld();
         // Start with the position of the block that was clicked on. '7' is gray. Btw, the chat font is not fixed width. :(
         StringBuilder outputRaw = new StringBuilder(String.format("`7%1$4d,%2$4d,%3$4d`r ", pos.getX(), pos.getY(), pos.getZ()));
 
@@ -50,12 +48,12 @@ public class DebugModeIGrowable extends DebugMode {
         if (crop == null) {
             // If it does not, add a nicely formatted report, then skip onward.
             outputRaw.append(chatNotIG);
-        } else {
+        } else if(world instanceof ServerWorld) {
             // Otherwise run the tests and record the results.
-            IBlockState state = world.getBlockState(pos);
+            BlockState state = world.getBlockState(pos);
             outputRaw.append(crop.canGrow(world, pos, state, false) ? chatTrue : chatFalse); // canGrow
             outputRaw.append(crop.canUseBonemeal(world, world.rand, pos, state) ? chatTrue : chatFalse); // canUseBonemeal
-            crop.grow(world, world.rand, pos, state);                                                    // grow
+            crop.grow((ServerWorld) world, world.rand, pos, state);                                                    // grow
 
             // It's also helpful to also make clear what block was being tested.
             outputRaw.append("`3"); // '3' is dark aqua.
@@ -67,27 +65,26 @@ public class DebugModeIGrowable extends DebugMode {
         outputRaw.append(" `8[...]`r"); // '8' is dark gray.
 
         // Create a hover box with explanatory information.
-        TextComponentString hoverComponent = new TextComponentString(MessageUtil.colorize(chatInfo));
+        StringTextComponent hoverComponent = new StringTextComponent(MessageUtil.colorize(chatInfo));
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent);
 
         // Turn the output String into a chat message.
-        TextComponentString outputComponent = new TextComponentString(MessageUtil.colorize(outputRaw.toString()));
+        StringTextComponent outputComponent = new StringTextComponent(MessageUtil.colorize(outputRaw.toString()));
 
         // Add the hover box to the chat message.
         outputComponent.getStyle().setHoverEvent(hoverEvent);
 
         // Now send the completed chat message.
-        player.sendMessage(outputComponent);
+        player.sendMessage(outputComponent, Util.DUMMY_UUID);
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        // NOP
+    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+        // NOPE
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-        // NOP
+    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+        // NOPE
     }
-
 }
