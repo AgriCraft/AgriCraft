@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.impl.v1.plant;
+package com.infinityraider.agricraft.impl.v1.crop;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;

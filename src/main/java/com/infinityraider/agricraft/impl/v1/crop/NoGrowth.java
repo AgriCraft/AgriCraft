@@ -1,6 +1,6 @@
-package com.infinityraider.agricraft.impl.v1.plant;
+package com.infinityraider.agricraft.impl.v1.crop;
 
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 
 import javax.annotation.Nonnull;
 
@@ -30,6 +30,11 @@ public class NoGrowth implements IAgriGrowthStage {
 
     @Override
     public boolean isMature() {
+        return false;
+    }
+
+    @Override
+    public boolean canDropSeed() {
         return false;
     }
 

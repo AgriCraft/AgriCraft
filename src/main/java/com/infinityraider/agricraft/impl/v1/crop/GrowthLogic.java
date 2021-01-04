@@ -1,6 +1,6 @@
-package com.infinityraider.agricraft.impl.v1.plant;
+package com.infinityraider.agricraft.impl.v1.crop;
 
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 
 import java.util.Set;
 
