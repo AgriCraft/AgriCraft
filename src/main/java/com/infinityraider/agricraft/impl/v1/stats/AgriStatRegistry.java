@@ -15,6 +15,16 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         return INSTANCE;
     }
 
+    // register default stats
+    static {
+        INSTANCE.add(INSTANCE.gain);
+        INSTANCE.add(INSTANCE.growth);
+        INSTANCE.add(INSTANCE.strength);
+        INSTANCE.add(INSTANCE.resistance);
+        INSTANCE.add(INSTANCE.fertility);
+        INSTANCE.add(INSTANCE.mutativity);
+    }
+
     private final IAgriStat gain;
     private final IAgriStat growth;
     private final IAgriStat strength;
@@ -32,13 +42,6 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         this.resistance = new AgriStat("resistance", this.defaultMin(), this.defaultMax());
         this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax());
         this.mutativity = new AgriStat("mutativity", this.defaultMin(), this.defaultMax());
-        //register default stats
-        this.add(this.gainStat());
-        this.add(this.growthStat());
-        this.add(this.strengthStat());
-        this.add(this.fertilityStat());
-        this.add(this.resistanceStat());
-        this.add(this.mutativityStat());
     }
 
     @Override

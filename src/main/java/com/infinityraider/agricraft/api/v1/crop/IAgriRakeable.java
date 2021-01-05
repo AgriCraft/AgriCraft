@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.misc;
+package com.infinityraider.agricraft.api.v1.crop;
 
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;

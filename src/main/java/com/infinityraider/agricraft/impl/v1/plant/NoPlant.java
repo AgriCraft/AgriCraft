@@ -25,10 +25,13 @@ public class NoPlant implements IAgriPlant {
         return INSTANCE;
     }
 
-    private final String id = "none";
-    private final Set<IAgriGrowthStage> stages = ImmutableSet.of(this.getInitialGrowthStage());
+    private final String id;
+    private final Set<IAgriGrowthStage> stages;
 
-    private NoPlant() {}
+    private NoPlant() {
+        this.id = "none";
+        this.stages = ImmutableSet.of(this.getInitialGrowthStage());
+    }
 
     @Override
     public final boolean isPlant() {
@@ -91,7 +94,7 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Set<IAgriGrowthStage> getGrowthStages() {
+    public Collection<IAgriGrowthStage> getGrowthStages() {
         return stages;
     }
 

@@ -23,7 +23,7 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
     private final String name;
     private final Class<T> clazz;
 
-    public AgriRegistry(String name, Class<T> clazz) {
+    protected AgriRegistry(String name, Class<T> clazz) {
         this.registry = new ConcurrentHashMap<>();
         this.name = name;
         this.clazz = clazz;
@@ -60,7 +60,7 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
 
     @Override
     public boolean add(@Nullable T object) {
-        return (this.registry.putIfAbsent(object.getId(), object) == null);
+        return object != null && (this.registry.putIfAbsent(object.getId(), object) == null);
     }
 
     @Override
@@ -82,5 +82,4 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
     public Stream<T> stream() {
         return this.registry.values().stream();
     }
-
 }

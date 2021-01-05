@@ -11,7 +11,6 @@ public class ItemDebugger extends ItemDebuggerBase {
             new DebugModeCheckSoil(),
             new DebugModeClearGrass(),
             new DebugModeCoreInfo(),
-            new DebugModeTestBlockRange(), // Just for temporary testing.
             new DebugModeIGrowable(),
             new DebugModeDiffLight(),
             new DebugModeFillComponent()

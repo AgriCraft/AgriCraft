@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import net.minecraft.util.Tuple;
 
@@ -38,14 +39,6 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         this.setActiveMutationEngine(this.getDefaultMutationEngine())
                 .setActivePlantMutator(this.getDefaultPlantMutator())
                 .setActiveStatMutator(this.getDefaultStatMutator());
-    }
-
-    public IAgriMutationEngine getEngine() {
-        return this.engine;
-    }
-
-    public void setEngine(IAgriMutationEngine engine) {
-        this.engine = engine;
     }
 
     @Override
@@ -126,18 +119,19 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         public IAgriGenePair<Integer> pickOrMutate(IAgriGene<Integer> gene, IAllel<Integer> first, IAllel<Integer> second,
                                                 Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
             // return new gene pair with or without mutations, based on mutativity stat
+            IAgriStat mutativity = AgriStatRegistry.getInstance().mutativityStat();
             return gene.generateGenePair(
-                    this.rollAndExecuteMutation(gene, first, parents.getA().getStats().getValue(AgriStatRegistry.getInstance().mutativityStat()), random),
-                    this.rollAndExecuteMutation(gene, second, parents.getB().getStats().getValue(AgriStatRegistry.getInstance().mutativityStat()), random)
+                    this.rollAndExecuteMutation(gene, first, mutativity, parents.getA().getStats().getValue(mutativity), random),
+                    this.rollAndExecuteMutation(gene, second, mutativity, parents.getB().getStats().getValue(mutativity), random)
             );
         }
 
-        protected IAllel<Integer> rollAndExecuteMutation(IAgriGene<Integer> gene, IAllel<Integer> allel, int stat, Random random) {
+        protected IAllel<Integer> rollAndExecuteMutation(IAgriGene<Integer> gene, IAllel<Integer> allel, IAgriStat mutativity, int statValue, Random random) {
             // Mutativity stat of 1 results in 25/50/25 probability of positive/no/negative mutation
             // Mutativity stat of 10 results in 100/0/0 probability of positive/no/negative mutation
-            int max = AgriStatRegistry.getInstance().defaultMax();
-            if(random.nextInt(AgriStatRegistry.getInstance().defaultMax()) < stat) {
-                int delta = random.nextInt(max) < (max + stat)/2 ? 1 : -1;
+            int max = mutativity.getMax();
+            if(random.nextInt(max) < statValue) {
+                int delta = random.nextInt(max) < (max + statValue)/2 ? 1 : -1;
                 return gene.getAllel(allel.trait() + delta);
             } else {
                 return allel;

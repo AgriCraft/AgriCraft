@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -8,7 +9,9 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
 /**
@@ -44,6 +47,16 @@ public interface IAgriGenome extends IAgriStatProvider {
      * @return the gene pair in this genome for the given gene
      */
     <T> IAgriGenePair<T> getGenePair(IAgriGene<T> gene);
+
+    /**
+     * Fetches the apparent trait for a gene
+     * @param gene the gene
+     * @param <T> the type of the gene
+     * @return the trait this genome results in for the given gene
+     */
+    default <T> T getTrait(IAgriGene<T> gene) {
+        return this.getGenePair(gene).getTrait();
+    }
 
     /**
      * Clones the genome
@@ -121,7 +134,7 @@ public interface IAgriGenome extends IAgriStatProvider {
         }
 
         /**
-         * Fully populates the genome defination based on a single mapping function.
+         * Fully populates the genome definition based on a single mapping function.
          * Uses the mapping function to define gene pairs for all genes registered in the IAgriGeneRegistry.
          * @param mapper the mapping function
          * @return this
@@ -138,6 +151,44 @@ public interface IAgriGenome extends IAgriStatProvider {
         default Builder consumeStream(Stream<IAgriGenePair<?>> stream) {
             stream.forEach(this::put);
             return this;
+        }
+
+        /**
+         * Populates the genome with random stats
+         *
+         * @param random pseudo-random generator
+         * @return this
+         */
+        default Builder randomStats(Random random) {
+            return this.randomStats(IAgriStat::getMax, random);
+        }
+
+        /**
+         * Populates the genome with random stats, based on allowed maximum values
+         *
+         * @param maxFunc Function to limit the maximum value of the stats that can appear in the genome (inclusive)
+         * @param random pseudo-random generator
+         * @return this
+         */
+        default Builder randomStats(ToIntFunction<IAgriStat> maxFunc, Random random) {
+            return this.randomStats(stat -> random.nextInt(maxFunc.applyAsInt(stat)) + 1);
+        }
+
+        /**
+         * Populates the genome with random stats, using a predefined function to randomly generate the stat values
+         *
+         * @param randomizer pre-defined function to randomly generate values for stats
+         * @return this
+         */
+        default Builder randomStats(ToIntFunction<IAgriStat> randomizer) {
+            return this.consumeStream(AgriApi.getStatRegistry().stream()
+                    .map(stat -> AgriApi.getGeneRegistry().get(stat).map(gene -> {
+                        IAllel<Integer> first = gene.getAllel(randomizer.applyAsInt(stat));
+                        IAllel<Integer> second = gene.getAllel(randomizer.applyAsInt(stat));
+                        return gene.generateGenePair(first, second);}))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+            );
         }
     }
 }

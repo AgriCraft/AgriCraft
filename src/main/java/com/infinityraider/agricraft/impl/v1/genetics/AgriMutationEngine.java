@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import net.minecraft.util.Tuple;
 
@@ -21,7 +22,8 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     public AgriMutationEngine() {
         this.selector = this::selectAndSortCandidates;
         this.cloner = (parent, random) -> parent.clone();
-        this.combiner = (parents, random) -> AgriApi.getAgriGenomeBuilder().populate(gene -> this.mutateGene(gene, parents, random)).build();
+        this.combiner = (parents, random) -> AgriApi.getAgriGenomeBuilder(parents.getA().getTrait(GeneSpecies.getInstance()))
+                .populate(gene -> this.mutateGene(gene, parents, random)).build();
     }
 
     protected IParentSelector getSelector() {
@@ -71,12 +73,15 @@ public class AgriMutationEngine implements IAgriMutationEngine {
 
     protected Optional<IAgriPlant> doClone(IAgriCrop target, IAgriCrop parent, Random random) {
         IAgriPlant plant = parent.getPlant();
-        // Spawn a clone if cloning is allowed
+        // Try spawning a clone if cloning is allowed
         if (plant.allowsCloning(parent.getGrowthStage())) {
-            return Optional.of(this.spawnChild(target, plant, this.getCloner().clone(parent.getGenome(), random)));
-        } else {
-            return Optional.empty();
+            // roll for spread chance
+            if(random.nextDouble() < parent.getPlant().getSpreadChance(parent.getGrowthStage())) {
+                return Optional.of(this.spawnChild(target, plant, this.getCloner().clone(parent.getGenome(), random)));
+            }
         }
+        // spreading failed
+        return Optional.empty();
     }
 
     protected Optional<IAgriPlant> doCombine(IAgriCrop target, IAgriCrop a, IAgriCrop b, Random random) {
@@ -89,12 +94,13 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     protected int sorter(IAgriCrop crop) {
-        return AgriStatRegistry.getInstance().defaultMax() - crop.getStats().getValue(AgriStatRegistry.getInstance().fertilityStat());
+        IAgriStat fertility = AgriStatRegistry.getInstance().fertilityStat();
+        return fertility.getMax() - crop.getStats().getValue(fertility);
     }
 
     protected boolean rollFertility(IAgriCrop crop, Random random) {
-        int fertility = crop.getStats().getValue(AgriStatRegistry.getInstance().fertilityStat());
-        return random.nextInt(AgriStatRegistry.getInstance().defaultMax()) < fertility;
+        IAgriStat fertility = AgriStatRegistry.getInstance().fertilityStat();
+        return random.nextInt(fertility.getMax()) < crop.getStats().getValue(fertility);
     }
 
     protected IAgriPlant spawnChild(IAgriCrop target, IAgriPlant plant, IAgriGenome genome) {

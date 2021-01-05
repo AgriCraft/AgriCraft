@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.handler;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
@@ -20,7 +21,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
-@SuppressWarnings("unused")
 public class ItemToolTipHandler {
 
     private static final ItemToolTipHandler INSTANCE = new ItemToolTipHandler();
@@ -38,6 +38,7 @@ public class ItemToolTipHandler {
      * @param event
      */
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void addSeedStatsTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         // Add Seed Information.
@@ -79,8 +80,9 @@ public class ItemToolTipHandler {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void addRegistryInfo(ItemTooltipEvent event) {
-        if (AgriCraftConfig.enableRegistryTooltips) {
+        if (AgriCraft.instance.getConfig().registryTooltips()) {
             final Item item = event.getItemStack().getItem();
             addCategory(event, "Registry");
             addParameter(event, "id", item.getRegistryName());
@@ -88,8 +90,9 @@ public class ItemToolTipHandler {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void addNbtInfo(ItemTooltipEvent event) {
-        if (AgriCraftConfig.enableNBTTooltips) {
+        if (AgriCraft.instance.getConfig().nbtTooltips()) {
             addCategory(event, "NBT");
             if (event.getItemStack().hasTag()) {
                 final CompoundNBT tag = event.getItemStack().getTag();
@@ -108,6 +111,7 @@ public class ItemToolTipHandler {
      * @param event
      */
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
@@ -126,6 +130,7 @@ public class ItemToolTipHandler {
      * @param event
      */
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public void addClipperTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof IAgriClipperItem) {

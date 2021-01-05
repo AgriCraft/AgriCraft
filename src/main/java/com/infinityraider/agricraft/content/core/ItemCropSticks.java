@@ -1,80 +1,89 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.init.AgriBlockRegistry;
 import com.infinityraider.agricraft.init.AgriTabs;
 import com.infinityraider.infinitylib.item.BlockItemBase;
-import com.infinityraider.infinitylib.utility.WorldHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public class ItemCropSticks extends BlockItemBase {
+    private final CropStickVariant variant;
 
     public ItemCropSticks(CropStickVariant variant) {
         super(variant.getBlock(), new Properties().group(AgriTabs.TAB_AGRICRAFT));
+        this.variant = variant;
     }
 
-    //I'm overriding this just to be sure
-    @Override
-    public boolean canItemEditBlocks() {
-        return true;
+    public CropStickVariant getVariant() {
+        return this.variant;
     }
 
-    // This is called when you right click with this item in hand.
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public void onUse(@Nonnull World world, @Nonnull LivingEntity entity, @Nonnull ItemStack stack, int count) {
+        super.onUse(world, entity, stack, count);
+    }
+
+    @Override
+    @Nonnull
+    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         // Skip if remote.
+        World world = context.getWorld();
         if (world.isRemote) {
-            return EnumActionResult.PASS;
+            return ActionResultType.PASS;
         }
 
         // Calculate the target position.
+        BlockPos pos = context.getPos();
+        Direction side = context.getFace();
         final BlockPos cropPos = pos.offset(side);
 
         // Test if placement is valid.
         if (!world.isAirBlock(cropPos)) {
-            return EnumActionResult.FAIL;
+            return ActionResultType.FAIL;
         }
 
-        // Test if soil is valid.
-        if (!AgriApi.getSoilRegistry().contains(world.getBlockState(cropPos.down()))) {
-            return EnumActionResult.FAIL;
+        // Test if the placement is valid
+        BlockState newState = this.getVariant().getBlock().getStateForPlacement(new BlockItemUseContext(context));
+        if(newState == null) {
+            return ActionResultType.FAIL;
         }
 
         // Set the block to a crop.
-        final Boolean success = world.setBlockState(cropPos, AgriBlockRegistry.getInstance().crop_sticks.getDefaultState());
+        final boolean success = world.setBlockState(cropPos, newState);
 
         // If there was trouble, abort.
         if (!success) {
-            AgriCore.getCoreLogger().error("ItemCrop#onItemUse failed to create the BlockCrop!");
-            return EnumActionResult.FAIL;
+            AgriCore.getCoreLogger().debug("ItemCrop#onItemUse failed to create the BlockCrop!");
+            return ActionResultType.FAIL;
         }
 
-        ItemStack stack = player.getHeldItem(hand);
-
-        // Remove the crop used from the stack.
-        StackHelper.decreaseStackSize(player, stack, 1);
-
-        // Handle sneak placing of crosscrops.
-        if (player.isSneaking() && stack.getCount() > 0) {
-            WorldHelper
-                    .getTile(world, cropPos, TileEntityCropSticks.class)
-                    .ifPresent(c -> {
-                        c.setCrossCrop(true);
-                        StackHelper.decreaseStackSize(player, stack, 1);
-                    });
+        PlayerEntity player = context.getPlayer();
+        if(player != null) {
+            ItemStack stack = player.getHeldItem(context.getHand());
+            // Remove the crop used from the stack.
+            if(!player.isCreative()) {
+                stack.shrink(1);
+            }
         }
 
         // Play placement sound.
-        SoundType type = Blocks.LEAVES.getSoundType();
-        world.playSound(null, (double) ((float) cropPos.getX() + 0.5F), (double) ((float) cropPos.getY() + 0.5F), (double) ((float) cropPos.getZ() + 0.5F), type.getPlaceSound(), SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
+        SoundType type = this.getVariant().getSound();
+        world.playSound(null, cropPos.getX() + 0.5, cropPos.getY() + 0.5F, cropPos.getZ() + 0.5F, type.getPlaceSound(),
+                SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
 
         // Action was a success.
-        return EnumActionResult.SUCCESS;
+        return ActionResultType.SUCCESS;
     }
-
 }

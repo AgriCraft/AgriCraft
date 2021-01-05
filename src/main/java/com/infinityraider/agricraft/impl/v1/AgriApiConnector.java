@@ -22,6 +22,8 @@ import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
+import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
+import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
@@ -56,13 +58,13 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final AgriMutationHandler mutator;
 
     public AgriApiConnector() {
-        this.plantRegistry = new AgriRegistry<>("plant", IAgriPlant.class);
+        this.plantRegistry = AgriPlantRegistry.getInstance();
         this.growthStageRegistry = AgriGrowthRegistry.getInstance();
         this.mutationRegistry = AgriMutationRegistry.getInstance();
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry = AgriSoilRegistry.getInstance();
-        this.weedRegistry = new AgriRegistry<>("weed", IAgriWeed.class);
+        this.weedRegistry = AgriWeedRegistry.getInstance();
         this.seedAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.mutator = AgriMutationHandler.getInstance();
@@ -148,7 +150,7 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IAgriGenome.Builder getAgriGenomeBuilder() {
-        return AgriGenome.builder();
+    public IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant) {
+        return AgriGenome.builder(plant);
     }
 }

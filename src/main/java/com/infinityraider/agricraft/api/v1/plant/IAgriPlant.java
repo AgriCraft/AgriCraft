@@ -108,7 +108,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
      * @return a set containing all the possible growth stages of the plant.
      */
     @Nonnull
-    Set<IAgriGrowthStage> getGrowthStages();
+    Collection<IAgriGrowthStage> getGrowthStages();
 
     /**
      * Determines the original BlockState corresponding to a the GrowthStage of this plant on Crop Sticks,
@@ -213,11 +213,11 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     default void onSpawned(@Nonnull IAgriCrop crop) {}
 
     /**
-     * Callback for custom actions right after a successful growth tick,
+     * Callback for custom actions right after a successful growth increment,
      * does nothing by default, but can be overridden for special behaviours
      * @param crop the crop on which this plant is planted
      */
-    default void onGrowthTick(@Nonnull IAgriCrop crop) {}
+    default void onGrowth(@Nonnull IAgriCrop crop) {}
 
     /**
      * Callback for custom actions right after a plant is removed,
@@ -243,7 +243,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     default void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
 
     /**
+     * Method to check if this is an actual plant, or the default, non-null no_plant object
+     *
      * Internal, do not override, used by AgriCraft to determine the default, no plant implementation
+     *
      * @return true
      */
     default boolean isPlant() {

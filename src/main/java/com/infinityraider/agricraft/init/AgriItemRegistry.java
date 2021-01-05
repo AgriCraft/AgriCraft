@@ -15,9 +15,12 @@ public class AgriItemRegistry {
     }
 
     private AgriItemRegistry() {
+        this.debugger = new ItemDebugger();
+
         crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
         crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
         crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
+        /*
         journal = new ItemJournal();
         trowel = new ItemTrowel();
         debugger = new ItemDebugger();
@@ -27,12 +30,16 @@ public class AgriItemRegistry {
         seed = new ItemAgriSeed();
         nugget = new ItemNugget();
         magnifying_glass = new ItemMagnifyingGlass();
+         */
     }
+
+    public final ItemBase debugger;
 
     public final Item crop_sticks_wood;
     public final Item crop_sticks_iron;
     public final Item crop_sticks_obsidian;
 
+    /*
     public final ItemBase journal;
 
     public final ItemBase trowel;
@@ -47,7 +54,6 @@ public class AgriItemRegistry {
     public final ItemBase seed;
 
     public final ItemBase nugget;
-
-    public final ItemBase debugger;
+     */
 
 }

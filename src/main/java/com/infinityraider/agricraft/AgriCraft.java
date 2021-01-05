@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.init.AgriBlockRegistry;
 import com.infinityraider.agricraft.init.AgriItemRegistry;
@@ -63,5 +64,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
         wrapper.registerMessage(MessageSyncPlantJson.class);
         wrapper.registerMessage(MessageSyncMutationJson.class);
         wrapper.registerMessage(MessageCompareLight.class);
+    }
+
+    @Override
+    public void initializeAPI() {
+        // this will load the AgriApi class
+        getLogger().info("Intializing API for " + AgriApi.MOD_ID);
     }
 }

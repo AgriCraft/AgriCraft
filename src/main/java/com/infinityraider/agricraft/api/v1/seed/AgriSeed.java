@@ -53,18 +53,18 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     public ItemStack toStack(int size) {
         // Get the stack.
         final ItemStack stack = Preconditions.checkNotNull(this.plant.getSeed());
-
         // Get the tag.
         final CompoundNBT tag = Optional.ofNullable(stack.getTag())
                 .map(CompoundNBT::copy)
                 .orElseGet(CompoundNBT::new);
-
         // Write the genome to the tag.
         CompoundNBT geneTag = new CompoundNBT();
         this.genome.writeToNBT(geneTag);
         tag.put("genome", geneTag);
         // Return a new stack.
-        return new ItemStack(stack.getItem(), size, tag);
+        ItemStack ret = new ItemStack(stack.getItem(), size);
+        ret.setTag(tag);
+        return ret;
     }
 
     @Override

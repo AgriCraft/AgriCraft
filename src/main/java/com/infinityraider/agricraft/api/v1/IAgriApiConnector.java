@@ -65,5 +65,5 @@ public interface IAgriApiConnector {
     IAgriMutationHandler getAgriMutationHandler();
 
     @Nonnull
-    IAgriGenome.Builder getAgriGenomeBuilder();
+    IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant);
 }

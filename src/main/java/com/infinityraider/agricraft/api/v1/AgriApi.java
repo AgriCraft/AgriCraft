@@ -196,10 +196,11 @@ public final class AgriApi {
     }
 
     /**
+     * @param plant the plant for which to construct a new genome
      * @return A new IAgriGenome.Builder object to construct AgriCraft IAgriGenome objects
      */
-    public static IAgriGenome.Builder getAgriGenomeBuilder() {
-        return AgriApi.CONNECTOR.getAgriGenomeBuilder();
+    public static IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant) {
+        return AgriApi.CONNECTOR.getAgriGenomeBuilder(plant);
     }
 
     /**

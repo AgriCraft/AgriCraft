@@ -105,7 +105,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IAgriGenome.Builder getAgriGenomeBuilder() {
+    public IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 }

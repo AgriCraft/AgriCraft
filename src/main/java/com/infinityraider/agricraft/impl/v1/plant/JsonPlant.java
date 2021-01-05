@@ -2,44 +2,49 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.google.common.collect.ImmutableSet;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.util.BlockRange;
-import com.infinityraider.agricraft.impl.v1.crop.GrowthLogic;
-import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
-import com.infinityraider.agricraft.init.AgriItemRegistry;
-import com.infinityraider.agricraft.reference.AgriNBT;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
 public class JsonPlant implements IAgriPlant {
 
     private final AgriPlant plant;
-    private final GrowthLogic growthLogic;
-    private final GrowthRequirement growthRequirement;
+    private final IncrementalGrowthLogic growthLogic;
+    private final Set<IGrowCondition> growthConditions;
 
     private final List<ItemStack> seedItems;
+    private final AgriSeed defaultSeed;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
-        this.growthLogic = initGrowth(plant);
-        this.growthRequirement = initGrowthRequirement(plant);
+        this.growthLogic = IncrementalGrowthLogic.getOrCreate(this.plant.getGrowthStages(), this.plant.getStageAfterHarvest());
+        this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItemsListJSON(plant);
+        this.defaultSeed = new AgriSeed(this,  AgriApi.getAgriGenomeBuilder(this).build());
     }
 
     @Override
@@ -96,30 +101,19 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public Set<IAgriGrowthStage> getGrowthStages() {
+    public Collection<IAgriGrowthStage> getGrowthStages() {
         return this.growthLogic.all();
     }
 
     @Override
     public final ItemStack getSeed() {
-        ItemStack stack = this.plant.getSeedItems().stream()
-                .map(s -> s.toStack(ItemStack.class))
-                .findFirst()
-                .orElse(new ItemStack(AgriItemRegistry.getInstance().seed, 1, )); //TODO: NBT
-        if(!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
-        }
-        CompoundNBT tag = stack.getTag();
-        tag.putString(AgriNBT.SEED, this.getId());
-        // TODO: stats
-        stack.setTagCompound(tag);
-        return stack;
+        return this.defaultSeed.toStack();
     }
 
     @Nonnull
     @Override
     public Set<IGrowCondition> getGrowConditions(IAgriGrowthStage stage) {
-        return this.growthRequirement.getConditions();
+        return this.growthConditions;
     }
 
     @Override
@@ -143,69 +137,61 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStat stat, @Nonnull Random rand) {
-        this.plant.getProducts().getRandom(rand).stream()
-                .map(p -> p.toStack(ItemStack.class, rand))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(products);
+    public void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand) {
+        if(growthStage.isMature()) {
+            this.plant.getProducts().getRandom(rand).stream()
+                    .map(p -> p.toStack(ItemStack.class, rand))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .forEach(products);
+        }
+    }
+
+    @Override
+    public boolean allowsCloning(IAgriGrowthStage stage) {
+        return this.plant.allowsCloning();
     }
 
     public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {
-        final List<ItemStack> seeds = new ArrayList<>(plant.getSeedItems().size());
-        plant.getSeedItems().stream()
+        return plant.getSeedItems().stream()
                 .map(i -> i.toStack(ItemStack.class))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(seeds::add);
-        if (seeds.isEmpty()) {
-            CompoundNBT;
-            //TODO: NBT
-            seeds.add(new ItemStack(AgriItemRegistry.getInstance().seed, 1, ));
-        }
-        return seeds;
+                .collect(Collectors.toList());
     }
 
-    public static GrowthLogic initGrowth(AgriPlant plant) {
-
-    }
-
-    public static GrowthRequirement initGrowthRequirement(AgriPlant plant) {
-
-        IGrowthReqBuilder builder = new GrowthReqBuilder();
-
+    public static Set<IGrowCondition> initGrowConditions(AgriPlant plant) {
+        // Run checks
         if (plant == null) {
-            return builder.build();
+            return ImmutableSet.of();
         }
-
         if (plant.getRequirement().getSoils().isEmpty()) {
-            AgriCore.getLogger("agricraft").warn("Plant: \"{0}\" has no valid soils to plant on!", plant.getPlantName());
+            AgriCore.getLogger("agricraft").warn("Plant: \"{0}\" has no valid soils to plant on!", plant.getId());
         }
 
+        // Initialize utility objects
+        ImmutableSet.Builder<IGrowCondition> builder = new ImmutableSet.Builder<>();
+        IDefaultGrowConditionFactory growConditionFactory = AgriApi.getDefaultGrowConditionFactory();
+
+        // Define requirement for soil
+        final int maxStrength = AgriApi.getStatRegistry().strengthStat().getMax();
         plant.getRequirement().getSoils().stream()
                 .map(JsonSoil::new)
-                .forEach(builder::addSoil);
+                .map(soil -> growConditionFactory.soil(maxStrength, soil))
+                .forEach(builder::add);
 
-        plant.getRequirement().getConditions().forEach(obj -> {
-            final Optional<FuzzyStack> stack = obj.toStack(FuzzyStack.class);
-            if (stack.isPresent()) {
-                builder.addCondition(
-                        new BlockCondition(
-                                stack.get(),
-                                new BlockRange(
-                                        obj.getMinX(), obj.getMinY(), obj.getMinZ(),
-                                        obj.getMaxX(), obj.getMaxY(), obj.getMaxZ()
-                                )
-                        )
-                );
-            }
-        });
+        // Define requirement for nearby blocks
+        plant.getRequirement().getConditions().forEach(obj -> obj.toStack(Block.class).ifPresent(block -> {
+            BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
+            BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
+            builder.add(growConditionFactory.blocksNearby(obj.getStrength(), obj.getAmount(), min, max, block));
+        }));
 
-        builder.setMinLight(plant.getRequirement().getMinLight());
-        builder.setMaxLight(plant.getRequirement().getMaxLight());
+        // Define requirement for light
+        builder.add(growConditionFactory.light(10, plant.getRequirement().getMinLight(), plant.getRequirement().getMaxLight()));
 
+        // Return the growth requirements
         return builder.build();
-
     }
 
     @Override

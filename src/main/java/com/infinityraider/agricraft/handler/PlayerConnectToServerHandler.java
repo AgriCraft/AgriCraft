@@ -45,7 +45,7 @@ public class PlayerConnectToServerHandler {
         Iterator<AgriPlant> it = AgriCore.getPlants().getAllElements().iterator();
         for (int i = 0; it.hasNext(); i++) {
             AgriPlant plant = it.next();
-            LOG.debug("Sending plant: {0} ({1} of {2})", plant.getPlantName(), i + 1, count);
+            LOG.debug("Sending plant: {0} ({1} of {2})", plant.getId(), i + 1, count);
             new MessageSyncPlantJson(plant, i, count).sendTo(player);
         }
         LOG.debug("Finished sending plants to player: " + player.getDisplayName().getString());

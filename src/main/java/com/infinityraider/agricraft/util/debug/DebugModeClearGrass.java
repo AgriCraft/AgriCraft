@@ -1,8 +1,5 @@
 package com.infinityraider.agricraft.util.debug;
 
-import com.agricraft.agricore.config.AgriConfigCategory;
-import com.agricraft.agricore.config.AgriConfigurable;
-import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BushBlock;
@@ -15,13 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class DebugModeClearGrass extends DebugMode {
-
-    @AgriConfigurable(
-            category = AgriConfigCategory.DEBUG,
-            key = "Grass Breaker Radius",
-            min = "1", max = "50",
-            comment = "The radius of the grass breaking tool."
-    )
     private static int radius = 10;
 
     @Override
@@ -52,9 +42,4 @@ public class DebugModeClearGrass extends DebugMode {
     public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         // NOP
     }
-    
-    static {
-        AgriCore.getConfig().addConfigurable(DebugModeClearGrass.class);
-    }
-
 }

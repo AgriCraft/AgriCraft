@@ -24,7 +24,7 @@ public class ModLogger implements AgriLogAdapter {
 
     @Override
     public void debug(Object source, String format, Object... objects) {
-        if (AgriCraftConfig.debug) {
+        if (AgriCraft.instance.getConfig().debugMode()) {
             log(Level.INFO, source, "[DEBUG]: " + format, objects);
         }
     }

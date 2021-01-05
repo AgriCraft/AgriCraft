@@ -1,5 +1,3 @@
-/*
- */
 package com.infinityraider.agricraft.api.v1.misc;
 import net.minecraft.util.Direction;
 
@@ -24,8 +22,10 @@ public interface IAgriConnectable {
      * 
      * @return a copy of the connection matrix.
      */
+    /*
     @Nonnull
     AgriSideMetaMatrix getConnections();
+    */
 
     /**
      * Called whenever the component should refresh its connections table.

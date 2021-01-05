@@ -2,13 +2,11 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.agricraft.agricore.plant.AgriSoil;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import net.minecraft.block.BlockState;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
@@ -21,12 +19,12 @@ public class JsonSoil implements IAgriSoil {
     @Nonnull
     private final AgriSoil soil;
     @Nonnull
-    private final List<Predicate<BlockState>> variants;
+    private final Collection<BlockState> variants;
 
     @SuppressWarnings("unchecked")
     public JsonSoil(@Nonnull AgriSoil soil) {
         this.soil = Preconditions.checkNotNull(soil);
-        this.variants = ImmutableList.copyOf(Preconditions.checkNotNull(this.soil.getVariants(Predicate.class)));
+        this.variants = Collections.unmodifiableCollection(Preconditions.checkNotNull(this.soil.getVariants(BlockState.class)));
     }
 
     @Override
@@ -43,8 +41,8 @@ public class JsonSoil implements IAgriSoil {
 
     @Override
     @Nonnull
-    public Collection<Predicate<BlockState>> getVariants() {
-        return Collections.unmodifiableCollection(this.variants);
+    public Collection<BlockState> getVariants() {
+        return this.variants;
     }
 
 }

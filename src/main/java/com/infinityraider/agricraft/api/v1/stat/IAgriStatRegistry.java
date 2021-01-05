@@ -4,12 +4,12 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 
 public interface IAgriStatRegistry extends IAgriRegistry<IAgriStat> {
     /**
-     * @return AgriCraft's default minimum value for a stat
+     * @return AgriCraft's default minimum value for its stats
      */
     int defaultMax();
 
     /**
-     * @return AgriCraft's default maximum value for a stat
+     * @return AgriCraft's default maximum value for its stats
      */
     int defaultMin();
 

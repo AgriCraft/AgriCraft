@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
@@ -48,6 +49,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     private IAgriPlant plant;
     private IAgriGrowthStage growth;
+    private GrowthRequirement requirement;
 
     private IAgriWeed weed;
     private IAgriGrowthStage weedGrowth;
@@ -86,7 +88,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         this.growth = stage;
-        this.plant.onGrowthTick(this);
+        this.plant.onGrowth(this);
         return true;
     }
 
@@ -168,7 +170,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             // plant growth tick
             if (!this.isMature()) {
                 int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
-                double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraftConfig.growthMultiplier;
+                double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraft.instance.getConfig().growthMultiplier();
                 if (rate > this.getWorld().getRandom().nextDouble()) {
                     this.setGrowthStage(this.growth.getNextStage());
                 }
@@ -193,7 +195,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     public boolean acceptsFertilizer(@Nonnull IAgriFertilizer fertilizer) {
         Objects.requireNonNull(fertilizer);
         if(this.isCrossCrop()) {
-            return AgriCraftConfig.fertilizerMutation && fertilizer.canTriggerMutation();
+            return AgriCraft.instance.getConfig().allowFertilizerMutations() && fertilizer.canTriggerMutation();
         } else if(this.hasPlant()) {
             return this.plant.isFertilizable(this.getGrowthStage(), fertilizer);
         } else {

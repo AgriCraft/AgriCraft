@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.*;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
@@ -79,19 +80,19 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
                 .orElse(stat.getMin());
     }
 
-    public static IAgriGenome.Builder builder() {
-        return new Builder();
+    public static IAgriGenome.Builder builder(IAgriPlant plant) {
+        return new Builder(plant);
     }
 
     private static class Builder implements IAgriGenome.Builder {
         private final Map<IAgriGene<?>, IAgriGenePair<?>> geneMap;
 
-        private Builder() {
+        private Builder(IAgriPlant plant) {
             this.geneMap = Maps.newIdentityHashMap();
             for(IAgriGene<?> gene : AgriApi.getGeneRegistry().all()) {
                 this.geneMap.put(gene, this.generateDefaultPair(gene));
             }
-
+            this.geneMap.put(GeneSpecies.getInstance(), GeneSpecies.getInstance().generateGenePair(plant, plant));
         }
 
         private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene) {

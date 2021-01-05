@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ModConverter implements AgriConverter {
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Optional<T> toStack(Class<T> token, String element, int amount, String tags, boolean useOreDict, List<String> ignoreTags) {
+    public <T> Optional<T> toStack(Class<T> token, String element, int amount, String tags, boolean useTags, List<String> ignoredTags) {
         return Optional.ofNullable(token)
                 .filter(type -> TypeHelper.isType(ItemStack.class, type))
                 .flatMap(type -> TagUtil.makeItemStack(ItemTags.getCollection(), element, amount, tags))

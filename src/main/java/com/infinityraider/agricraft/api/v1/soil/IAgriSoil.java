@@ -20,10 +20,10 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil> {
     String getName();
 
     @Nonnull
-    Collection<Predicate<BlockState>> getVariants();
+    Collection<BlockState> getVariants();
 
     default boolean isVariant(@Nonnull BlockState state) {
-        return this.getVariants().stream().anyMatch(var -> var.test(state));
+        return this.getVariants().contains(state);
     }
 
 }

@@ -50,11 +50,6 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> implements IGrowable, IPlantable {
-    // Default state properties
-    private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
-    private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
-    private static final IAgriWeed NO_WEED = NoWeed.getInstance();
-
     // Excluded classes for Iem usage logic
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
@@ -62,6 +57,10 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             IAgriTrowelItem.class,
             ItemDebugger.class
     };
+    // Default state properties
+    private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
+    private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
+    private static final IAgriWeed NO_WEED = NoWeed.getInstance();
 
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
