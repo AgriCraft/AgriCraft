@@ -20,23 +20,9 @@ import java.util.stream.Stream;
 public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegistry<T> {
 
     private final ConcurrentMap<String, T> registry;
-    private final String name;
-    private final Class<T> clazz;
 
-    protected AgriRegistry(String name, Class<T> clazz) {
+    protected AgriRegistry() {
         this.registry = new ConcurrentHashMap<>();
-        this.name = name;
-        this.clazz = clazz;
-    }
-
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public Class<T> clazz() {
-        return this.clazz;
     }
 
     @Override

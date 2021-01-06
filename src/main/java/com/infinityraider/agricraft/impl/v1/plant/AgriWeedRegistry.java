@@ -16,7 +16,7 @@ public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> {
     }
 
     private AgriWeedRegistry() {
-        super("weed", IAgriWeed.class);
+        super();
         // Register no weed
         this.add(NO_WEED);
     }

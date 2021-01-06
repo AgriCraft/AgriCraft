@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriStatRegistry {
     private static final AgriStatRegistry INSTANCE = new AgriStatRegistry();
 
-    public static final AgriStatRegistry getInstance() {
+    public static AgriStatRegistry getInstance() {
         return INSTANCE;
     }
 
@@ -34,7 +34,7 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
 
     private AgriStatRegistry() {
         //super constructor
-        super("stats", IAgriStat.class);
+        super();
         //initiate default stats
         this.gain = new AgriStat("gain", this.defaultMin(), this.defaultMax());
         this.growth = new AgriStat("growth", this.defaultMin(), this.defaultMax());

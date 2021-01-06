@@ -13,12 +13,12 @@ import net.minecraft.block.BlockState;
 public class AgriSoilRegistry extends AgriRegistry<IAgriSoil> implements IAgriSoilRegistry {
     private static final AgriSoilRegistry INSTANCE = new AgriSoilRegistry();
 
-    public static final AgriSoilRegistry getInstance() {
+    public static AgriSoilRegistry getInstance() {
         return INSTANCE;
     }
 
     private AgriSoilRegistry() {
-        super("soil", IAgriSoil.class);
+        super();
     }
 
     @Override

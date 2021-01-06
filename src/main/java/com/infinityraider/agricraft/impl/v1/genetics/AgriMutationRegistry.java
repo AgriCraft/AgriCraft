@@ -20,14 +20,14 @@ import javax.annotation.Nonnull;
 public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements IAgriMutationRegistry {
     private static final AgriMutationRegistry INSTANCE = new AgriMutationRegistry();
 
-    public static final AgriMutationRegistry getInstance() {
+    public static AgriMutationRegistry getInstance() {
         return INSTANCE;
     }
 
     private final Map<IAgriPlant, Integer> complexities;
 
     private AgriMutationRegistry() {
-        super("mutation", IAgriMutation.class);
+        super();
         this.complexities = Maps.newIdentityHashMap();
     }
 

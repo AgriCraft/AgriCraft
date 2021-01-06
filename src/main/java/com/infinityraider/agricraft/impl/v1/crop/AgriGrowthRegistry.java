@@ -15,7 +15,7 @@ public class AgriGrowthRegistry extends AgriRegistry<IAgriGrowthStage> {
     }
 
     public AgriGrowthRegistry() {
-        super("growth", IAgriGrowthStage.class);
+        super();
         // register no growth
         this.add(NO_GROWTH);
     }

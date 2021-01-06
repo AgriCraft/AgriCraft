@@ -5,12 +5,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
-import net.minecraft.nbt.CompoundNBT;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.Set;
 
 @SuppressWarnings("Unchecked")
 public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgriGeneRegistry {
@@ -23,7 +20,7 @@ public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgr
     public final IAgriGene<IAgriPlant> gene_species;
 
     private AgriGeneRegistry() {
-        super("gene", getGeneClass());
+        super();
         // Auto populate species gene
         this.gene_species = GeneSpecies.getInstance();
         this.add(gene_species);
@@ -85,48 +82,5 @@ public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgr
     @Override
     public Optional<IAgriStat> getStatForGene(@Nullable IAgriGene<Integer> gene) {
         return Optional.ofNullable(gene).flatMap(g -> AgriStatRegistry.getInstance().get(g.getId()));
-    }
-
-    // I have no idea how else I can get the generics to work here...
-    @SuppressWarnings("Unchecked")
-    private static Class<IAgriGene<?>> getGeneClass() {
-        IAgriGene<Object> temp = new IAgriGene<Object>() {
-            @Override
-            public IAllel<Object> defaultAllel() {
-                return null;
-            }
-
-            @Override
-            public IAllel<Object> getAllel(Object value) {
-                return null;
-            }
-
-            @Override
-            public IAllel<Object> readAllelFromNBT(CompoundNBT tag) {
-                return null;
-            }
-
-            @Override
-            public Set<IAllel<Object>> allAlleles() {
-                return null;
-            }
-
-            @Override
-            public IMutator<Object> mutator() {
-                return null;
-            }
-
-            @Override
-            public IAgriGenePair<Object> generateGenePair(IAllel<Object> first, IAllel<Object> second) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public String getId() {
-                return null;
-            }
-        };
-        return (Class<IAgriGene<?>>) temp.getClass();
     }
 }

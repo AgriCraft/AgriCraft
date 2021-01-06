@@ -14,16 +14,6 @@ import javax.annotation.Nullable;
  */
 public interface IAgriRegistry<T extends IAgriRegisterable<T>> {
     /**
-     * @return The name of this registry
-     */
-    String name();
-
-    /**
-     * @return the parent class of all objects held by this registry
-     */
-    Class<T> clazz();
-
-    /**
      * Determines if the registry contains an entry with the given id.
      *
      * @param id the id to search for in the registry.

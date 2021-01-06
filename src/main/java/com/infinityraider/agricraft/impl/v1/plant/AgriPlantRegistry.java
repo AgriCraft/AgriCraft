@@ -16,7 +16,7 @@ public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     }
 
     private AgriPlantRegistry() {
-        super("plant", IAgriPlant.class);
+        super();
         // Register no plant
         this.add(NO_PLANT);
     }
