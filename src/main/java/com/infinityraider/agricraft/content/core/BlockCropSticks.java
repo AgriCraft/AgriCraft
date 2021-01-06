@@ -2,17 +2,13 @@ package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
-import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
-import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
@@ -27,6 +23,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -57,24 +55,16 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             IAgriTrowelItem.class,
             ItemDebugger.class
     };
-    // Default state properties
-    private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
-    private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
-    private static final IAgriWeed NO_WEED = NoWeed.getInstance();
 
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
-    public static final InfProperty<IAgriPlant> PLANT = InfProperty.Creators.create(PropertyAgriRegisterable.getPlantProperty(), NO_PLANT);
-    public static final InfProperty<IAgriGrowthStage> GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getGrowthProperty(), NO_GROWTH);
-    public static final InfProperty<IAgriWeed> WEED = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedProperty(), NO_WEED);
-    public static final InfProperty<IAgriGrowthStage> WEED_GROWTH = InfProperty.Creators.create(PropertyAgriRegisterable.getWeedGrowthProperty(), NO_GROWTH);
+    public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
+    public static final InfProperty<Boolean> WEEDS = InfProperty.Creators.create("weeds", false);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(CROSS_CROP)
             .add(PLANT)
-            .add(GROWTH)
-            .add(WEED)
-            .add(WEED_GROWTH)
+            .add(WEEDS)
             .waterloggable()
             .build();
 
@@ -82,7 +72,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     private static final BiFunction<BlockState, IBlockReader, TileEntityCropSticks> TILE_FACTORY = (s, w) -> new TileEntityCropSticks();
 
     // VoxelShapes
-
     private static final VoxelShape SHAPE_DEFAULT = Stream.of(
             Block.makeCuboidShape(2, -3, 2, 3, 13, 3),
             Block.makeCuboidShape(13, -3, 2, 14, 13, 3),
@@ -226,14 +215,32 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Deprecated
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
         List<ItemStack> drops = Lists.newArrayList();
-        drops.add(new ItemStack(this.asItem(), 1));
-        if(CROSS_CROP.fetch(state)) {
-            drops.add(new ItemStack(this.asItem(), 1));
+        TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
+        if (tile instanceof IAgriCrop) {
+            IAgriCrop crop = (IAgriCrop) tile;
+            if (crop.hasPlant()) {
+                // add plant fruits
+                crop.getPlant().getHarvestProducts(drops::add, crop.getGrowthStage(), crop.getStats(), context.getWorld().getRandom());
+                // drop the seed
+                if(crop.isMature() || !AgriCraft.instance.getConfig().onlyMatureSeedDrops()) {
+                    crop.getSeed().map(AgriSeed::toStack).ifPresent(drops::add);
+                }
+            }
+            if (!(crop.hasWeeds() && AgriCraft.instance.getConfig().weedsDestroyCropSticks())) {
+                // add crop sticks
+                drops.add(new ItemStack(this.asItem(), crop.isCrossCrop() ? 2 : 1));
+            }
         } else {
-            PLANT.fetch(state).getHarvestProducts(drops::add, GROWTH.fetch(state), null, context.getWorld().getRandom());
+            // The TileEntity no longer exists, use the data that we have to try at least dropping the crop sticks...
+            AgriCraft.instance.getLogger().error("Could not find IAgriCrop instance associated with crop sticks: " + context);
+            drops.add(new ItemStack(this.asItem(), 1));
+            if(CROSS_CROP.fetch(state)) {
+                drops.add(new ItemStack(this.asItem(), 1));
+            }
         }
         return drops;
     }
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public RenderType getRenderType() {
@@ -242,51 +249,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
 
     public void spawnItem(IAgriCrop crop, ItemStack stack) {
         this.spawnItem(crop.getWorld(), crop.getPosition(), stack);
-    }
-
-    /**
-     * ---------------------------------------
-     * BlockState property getters and setters
-     * ---------------------------------------
-     */
-    public boolean isCrossCrop(BlockState state) {
-        return CROSS_CROP.fetch(state);
-    }
-
-    public IAgriPlant getPlant(BlockState state) {
-        return PLANT.fetch(state);
-    }
-
-    public IAgriGrowthStage getGrowthStage(BlockState state) {
-        return GROWTH.fetch(state);
-    }
-
-    public IAgriWeed getWeed(BlockState state) {
-        return WEED.fetch(state);
-    }
-
-    public IAgriGrowthStage getWeedGrowthStage(BlockState state) {
-        return WEED_GROWTH.fetch(state);
-    }
-
-    public BlockState setCrossCrop(BlockState state, boolean value) {
-        return CROSS_CROP.apply(state, value);
-    }
-
-    public BlockState setPlant(BlockState state, IAgriPlant plant) {
-        return PLANT.apply(state, plant);
-    }
-
-    public BlockState setGrowthStage(BlockState state, IAgriGrowthStage stage) {
-        return GROWTH.apply(state, stage);
-    }
-
-    public BlockState setWeed(BlockState state, IAgriWeed weed) {
-        return WEED.apply(state, weed);
-    }
-
-    public BlockState setWeedGrowthStage(BlockState state, IAgriGrowthStage stage) {
-        return WEED_GROWTH.apply(state, stage);
     }
 
     /**
