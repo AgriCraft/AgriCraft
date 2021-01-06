@@ -35,8 +35,7 @@ public final class CoreHandler {
     private static Path defaultDir;
     private static Config config;
 
-    private CoreHandler() {
-    }
+    private CoreHandler() {}
 
     public static Config getConfig() {
         return config;
@@ -60,7 +59,7 @@ public final class CoreHandler {
         defaultDir = jsonDir.resolve("defaults");
 
         // Initialize AgriCore
-        AgriCore.init(new ModLogger(), new ModTranslator(), new ModValidator(), new ModConverter());
+        AgriCore.init(new ModLogger(), new ModTranslator(), new ModValidator(), new ModConverter(), AgriCraft.instance.getConfig());
 
         // Transfer Defaults
         ResourceHelper.findResources(JSON_FILE_PATTERN.asPredicate()).stream()

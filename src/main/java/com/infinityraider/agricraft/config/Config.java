@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.config;
 
+import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.infinityraider.infinitylib.config.ConfigurationHandler;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -7,7 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
-public abstract class Config implements ConfigurationHandler.SidedModConfig {
+public abstract class Config implements ConfigurationHandler.SidedModConfig, AgriConfigAdapter {
 
     private Config(ForgeConfigSpec.Builder builder) {}
 
@@ -51,8 +52,10 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
     public static abstract class Common extends Config {
         // debug
         private final ForgeConfigSpec.ConfigValue<Boolean> debug;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableLogging;
 
         // core
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
         private final ForgeConfigSpec.ConfigValue<Integer> statsMin;
         private final ForgeConfigSpec.ConfigValue<Integer> statsMax;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
@@ -80,9 +83,13 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
             builder.push("debug");
             this.debug = builder.comment("Set to true to enable debug mode")
                     .define("debug", false);
+            this.enableLogging = builder.comment("Set to true to enable logging on the ${log} channel.")
+                    .define("Enable Logging", true);
             builder.pop();
 
             builder.push("core");
+            this.enableJsonWriteBack = builder.comment("Set to false to disable automatic JSON writeback.")
+                    .define("Enable JSON write back", true);
             this.statsMin = builder.comment("Minimum allowed value of stats")
                     .defineInRange("Stats min", 1, 1, 10);
             this.statsMax = builder.comment("Maximum allowed value of stats")
@@ -225,6 +232,16 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
         public ModConfig.Type getSide() {
             return ModConfig.Type.COMMON;
         }
+
+        @Override
+        public boolean enableJsonWriteback() {
+            return this.enableJsonWriteBack.get();
+        }
+
+        @Override
+        public boolean enableLogging() {
+            return this.enableLogging.get();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -340,7 +357,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
 
         @Override
         public ModConfig.Type getSide() {
-            return ModConfig.Type.SERVER;
+            return ModConfig.Type.COMMON;
         }
     }
 }
