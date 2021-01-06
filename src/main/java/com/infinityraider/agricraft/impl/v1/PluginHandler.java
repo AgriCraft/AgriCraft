@@ -99,26 +99,30 @@ public final class PluginHandler {
      */
     @Nonnull
     private static <T> List<T> getInstances(ModFileScanData data, Class anno, Class<T> type) {
+        final List<T> instances = new ArrayList<>();
         if(data == null) {
             AgriCore.getLogger("agricraft-plugins").error(
-                    "Failed to load AgriPlugins");
+                    "Failed to load AgriPlugins, ModFileScanData not found");
+        } else if(data.getAnnotations() == null || data.getAnnotations().size() <= 0) {
+            AgriCore.getLogger("agricraft-plugins").error(
+                    "Failed to load AgriPlugins, no PlugIn Annotations found in ModFileScanData");
+        } else {
+            data.getAnnotations().stream().
+                    filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType())).
+                    forEach(annotationData -> {
+                        try {
+                            T instance = Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
+                            instances.add(instance);
+                        } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
+                            AgriCore.getLogger("agricraft-plugins").debug(
+                                    "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
+                                    annotationData.getTargetType(),
+                                    anno.getCanonicalName(),
+                                    type.getCanonicalName()
+                            );
+                        }
+                    });
         }
-        final List<T> instances = new ArrayList<>();
-        data.getAnnotations().stream().
-                filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType())).
-                forEach(annotationData -> {
-                    try{
-                        T instance = Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
-                        instances.add(instance);
-                    } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
-                        AgriCore.getLogger("agricraft-plugins").debug(
-                                "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
-                                annotationData.getTargetType(),
-                                anno.getCanonicalName(),
-                                type.getCanonicalName()
-                        );
-                    }
-                });
         return instances;
     }
 

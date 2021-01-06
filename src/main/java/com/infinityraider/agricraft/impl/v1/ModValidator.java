@@ -2,6 +2,7 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.util.AgriValidator;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -19,7 +20,13 @@ public class ModValidator implements AgriValidator {
         } else if (TagUtil.isValidTag(BlockTags.getCollection(), block)) {
             return true;
         } else {
-            return ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(parts[0],parts[1]));
+            try {
+                return ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(parts[0], parts[1]));
+            } catch (Exception e) {
+                AgriCraft.instance.getLogger().error("Failed to parse block: " + block + ", encountered Exception");
+                AgriCraft.instance.getLogger().printStackTrace(e);
+                return false;
+            }
         }
     }
 
@@ -31,7 +38,13 @@ public class ModValidator implements AgriValidator {
         } else if (TagUtil.isValidTag(ItemTags.getCollection(), item)) {
             return true;
         } else {
-            return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(parts[0],parts[1]));
+            try {
+                return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(parts[0], parts[1]));
+            } catch(Exception e) {
+                AgriCraft.instance.getLogger().error("Failed to parse item: " + item +", encountered Exception");
+                AgriCraft.instance.getLogger().printStackTrace(e);
+                return false;
+            }
         }
     }
 
