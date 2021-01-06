@@ -169,8 +169,11 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
      * Retrieves the products that would be produced upon harvesting the given plant, with the given
      * stat, at the given position in the given world. This method will always be called on harvest
      * events, including any time that the containing crop is broken. As such, it is important as to
-     * check the actual passed growth value of the plant, given that the plant is not garnteed as to
+     * check the actual passed growth value of the plant, given that the plant is not guaranteed to
      * be mature when this method is called.
+     *
+     * Unless the seed is directly a fruit, it should not be added to the products here,
+     * as AgriCraft will take care of this internally
      *
      * @param products a consumer for collecting all the possible plant harvest products that should
      * be dropped.
@@ -220,7 +223,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     default void onGrowth(@Nonnull IAgriCrop crop) {}
 
     /**
-     * Callback for custom actions right after a plant is removed,
+     * Callback for custom actions right after a plant is removed (for instance by being killed by weeds),
      * does nothing by default, but can be overridden for special behaviours
      * @param crop the crop on which this plant was planted
      */

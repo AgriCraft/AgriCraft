@@ -145,35 +145,97 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public void applyGrowthTick() {
-        if(this.getWorld() == null || this.getWorld().isRemote) {
+        if (this.getWorld() == null || this.getWorld().isRemote) {
             return;
         }
-        if(!this.hasWeeds()) {
-            //try spawn weeds
-            AgriApi.getWeedRegistry().stream()
-                    .filter(IAgriWeed::isWeed)
-                    .filter(weed -> this.getWorld().getRandom().nextDouble() < weed.spawnChance(this))
-                    .findAny()
-                    .ifPresent(weed -> {
-                        this.setWeed(weed, weed.getInitialGrowthStage());
-                    });
-        } else {
-            //weed growth tick
-
-        }
-        if(this.isCrossCrop()) {
+        // Decide if the weeds receives the growth tick or not
+        if (this.rollForWeedAction()) {
+            // Weeds have the word
+            this.executeWeedGrowthTick();
+        } else if(this.isCrossCrop()) {
             // mutation tick
+            this.executeCrossGrowthTick();
+        } else if(this.isFertile()) {
+            // plant growth tick
+            this.executePlantGrowthTick();
+        }
+    }
+
+    protected boolean rollForWeedAction() {
+        if(AgriCraft.instance.getConfig().disableWeeds()) {
+            return false;
+        }
+        if(this.hasPlant()) {
+            int resist = this.getStats().getValue(AgriStatRegistry.getInstance().resistanceStat());
+            int max = AgriStatRegistry.getInstance().resistanceStat().getMax();
+            // At 1 resist, 50/50 chance for weed growth tick
+            // At 10 resist, 0% chance
+            return this.getRandom().nextInt(max) >= (max + resist)/2;
+        }
+        return this.getRandom().nextBoolean();
+    }
+
+    protected void executeWeedGrowthTick() {
+        if (!this.hasWeeds()) {
+            //The aren't weeds yet, try to spawn new weeds
+            this.spawnWeeds();
+        } else {
+            // There are weeds already, apply the growth tick
+            if (this.getWeedGrowthStage().isMature()) {
+                //Weeds are mature, try killing the plant
+                this.tryWeedKillPlant();
+                //Weeds are mature, try spreading
+                this.spreadWeeds();
+            } else {
+                // Weeds are not mature yet, increment their growth
+                this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage());
+            }
+        }
+    }
+
+    protected void spawnWeeds() {
+        AgriApi.getWeedRegistry().stream()
+                .filter(IAgriWeed::isWeed)
+                .filter(weed -> this.getWorld().getRandom().nextDouble() < weed.spawnChance(this))
+                .findAny()
+                .ifPresent(weed -> this.setWeed(weed, weed.getInitialGrowthStage()));
+    }
+
+    protected void spreadWeeds() {
+        if(AgriCraft.instance.getConfig().weedsCanSpread()) {
+            this.streamNeighbours() //TODO: make this more efficient by caching neighbours
+                    .filter(IAgriCrop::isValid)
+                    .filter(crop -> !crop.hasWeeds())
+                    .filter(crop -> this.rollForWeedAction())
+                    .forEach(crop -> crop.setWeed(this.getWeeds(), this.getWeeds().getInitialGrowthStage()));
+        }
+    }
+
+    protected void tryWeedKillPlant() {
+        if(AgriCraft.instance.getConfig().matureWeedsKillPlant()) {
+            if(this.hasPlant() && this.rollForWeedAction()) {
+                IAgriPlant plant = this.getPlant();
+                this.setPlant(NO_PLANT);
+                plant.onRemoved(this);
+            }
+        }
+    }
+
+    protected void executeCrossGrowthTick() {
+        // Do not do mutation growth ticks if the plant has weeds
+        if(!this.hasWeeds()) {
             AgriApi.getAgriMutationHandler().getActiveMutationEngine()
                     .handleMutationTick(this, this.streamNeighbours(), this.getWorld().getRandom())
                     .ifPresent(plant -> plant.onSpawned(this));
-        } else if(this.isFertile()) {
-            // plant growth tick
-            if (!this.isMature()) {
-                int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
-                double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraft.instance.getConfig().growthMultiplier();
-                if (rate > this.getWorld().getRandom().nextDouble()) {
-                    this.setGrowthStage(this.growth.getNextStage());
-                }
+        }
+    }
+
+    protected void executePlantGrowthTick() {
+        if (!this.isMature()) {
+            int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
+            double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraft.instance.getConfig().growthMultiplier();
+            if (rate > this.getWorld().getRandom().nextDouble()) {
+                this.setGrowthStage(this.growth.getNextStage());
             }
         }
     }
