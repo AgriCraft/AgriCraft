@@ -25,8 +25,8 @@ public class IncrementalGrowthLogic {
         Preconditions.checkArgument(stages > 0, "The number of stages must be larger than 0");
         Preconditions.checkArgument(harvestIndex >= 0, "The harvest index can not be negative");
         Preconditions.checkArgument(harvestIndex < stages, "The harvest index must be smaller than the number of stages");
-        this.stages = this.generateStages(stages);
         this.harvestIndex = harvestIndex;
+        this.stages = this.generateStages(stages);
     }
 
     public int getStageCount() {
@@ -49,14 +49,11 @@ public class IncrementalGrowthLogic {
         return this.stages;
     }
 
-    protected String getIdPrefix() {
-        return  "incremental_" + this.getStageCount() + "("+ this.harvestIndex + ")_";
-    }
-
     protected List<IAgriGrowthStage> generateStages(int amount) {
         ImmutableList.Builder<IAgriGrowthStage> builder = new ImmutableList.Builder<>();
+        String prefix = "incremental_" + amount + "(->"+ this.harvestIndex + ")_";
         for(int i = 0; i < amount; i++) {
-            builder.add(new Stage(this, i, i == amount - 1));
+            builder.add(new Stage(this, i, i == amount - 1, prefix));
         }
         return builder.build();
     }
@@ -67,11 +64,11 @@ public class IncrementalGrowthLogic {
         private final boolean mature;
         private final String id;
 
-        private Stage(IncrementalGrowthLogic logic, int stage, boolean mature) {
+        private Stage(IncrementalGrowthLogic logic, int stage, boolean mature, String prefix) {
             this.logic = logic;
             this.stage = stage;
             this.mature = mature;
-            this.id = this.logic.getIdPrefix() + this.getStage();
+            this.id = prefix + this.getStage();
         }
 
         public final IncrementalGrowthLogic getLogic() {
