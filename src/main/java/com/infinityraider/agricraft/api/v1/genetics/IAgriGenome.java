@@ -154,6 +154,15 @@ public interface IAgriGenome extends IAgriStatProvider {
         }
 
         /**
+         * Clones the genes from a different genome
+         * @param genome the genome to clone from
+         * @return this
+         */
+        default Builder cloneFrom(IAgriGenome genome) {
+            return this.populate(gene -> genome.getGenePair(gene).clone());
+        }
+
+        /**
          * Populates the genome with random stats
          *
          * @param random pseudo-random generator
