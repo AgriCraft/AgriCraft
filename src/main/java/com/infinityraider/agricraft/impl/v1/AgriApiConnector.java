@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 public class AgriApiConnector implements IAgriApiConnector {
@@ -140,6 +142,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
         return Factory.getInstance();
+    }
+
+    @Nonnull
+    @Override
+    public List<IAgriGrowthStage> getDefaultGrowthStages(int stages) {
+        return IncrementalGrowthLogic.getOrGenerateStages(stages);
     }
 
     @Nonnull

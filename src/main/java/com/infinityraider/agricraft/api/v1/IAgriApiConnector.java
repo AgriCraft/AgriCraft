@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 public interface IAgriApiConnector {
@@ -60,6 +61,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IDefaultGrowConditionFactory getDefaultGrowConditionFactory();
+
+    @Nonnull
+    List<IAgriGrowthStage> getDefaultGrowthStages(int stages);
 
     @Nonnull
     IAgriMutationHandler getAgriMutationHandler();

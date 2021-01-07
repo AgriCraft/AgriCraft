@@ -3,7 +3,15 @@ package com.infinityraider.agricraft.api.v1.crop;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 
 import javax.annotation.Nonnull;
+import java.util.Random;
 
+/**
+ * Interface governing the growth schemes of plants and weeds.
+ * AgriCraft's default scheme follows an incremental logic, returning each time the next growth stage in a pre-defined list.
+ * Such a list of default AgriCraft IAgriGrowthStage implementations can be obtained with AgriApi.getDefaultGrowthStages().
+ *
+ * More complex behaviour requires a custom implementation
+ */
 public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
     /**
      * @return true if this growth stage signifies a mature plant (meaning it does not have any further growth stages
@@ -16,10 +24,18 @@ public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
     boolean canDropSeed();
 
     /**
+     * The main decision making method which defines the growth scheme.
+     * Can return any growth stage, as long as it is compatible with the growth scheme (defined by the plant or weed)
+     *
+     * This method is called after a successful growth tick for a plant or weed, note that one should not do any checks
+     * on the crop object regarding fertility, as this is already done before this method is fired.
+     *
+     * @param crop the crop which plant or weeds currently have this growth stage for which the growth tick passed
+     * @param random a pseudo-random generator to make decisions
      * @return The next growth stage after a successful growth tick (returns itself if this is the final growth stage).
      */
     @Nonnull
-    IAgriGrowthStage getNextStage();
+    IAgriGrowthStage getNextStage(IAgriCrop crop, Random random);
 
     /**
      * @return the growth percentage corresponding to this growth stage, between 0 and 1 (both inclusive),

@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -94,6 +95,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
     public IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public List<IAgriGrowthStage> getDefaultGrowthStages(int stages) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

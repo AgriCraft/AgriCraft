@@ -1,82 +1,46 @@
 package com.infinityraider.agricraft.impl.v1.crop;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-public class IncrementalGrowthLogic {
-    private static final Map<Integer, Map<Integer, IncrementalGrowthLogic>> CACHE = Maps.newHashMap();
+public final class IncrementalGrowthLogic {
+    private static final Map<Integer, List<IAgriGrowthStage>> CACHE = Maps.newHashMap();
 
-    public static IncrementalGrowthLogic getOrCreate(int stages, int harvestIndex) {
-        Map<Integer, IncrementalGrowthLogic> harvestMap = CACHE.computeIfAbsent(stages, k -> Maps.newHashMap());
-        return harvestMap.computeIfAbsent(harvestIndex, (h) -> new IncrementalGrowthLogic(stages, h));
+    public static List<IAgriGrowthStage> getOrGenerateStages(int amount) {
+        return CACHE.computeIfAbsent(amount, (value) -> {
+            ImmutableList.Builder<IAgriGrowthStage> builder = new ImmutableList.Builder<>();
+            for(int i = 0; i < value; i++) {
+                builder.add(new Stage(i, value));
+            }
+            return builder.build();
+        });
     }
 
-    private final List<IAgriGrowthStage> stages;
-    private final int harvestIndex;
-
-    private IncrementalGrowthLogic(int stages, int harvestIndex) {
-        Preconditions.checkArgument(stages > 0, "The number of stages must be larger than 0");
-        Preconditions.checkArgument(harvestIndex >= 0, "The harvest index can not be negative");
-        Preconditions.checkArgument(harvestIndex < stages, "The harvest index must be smaller than the number of stages");
-        this.harvestIndex = harvestIndex;
-        this.stages = this.generateStages(stages);
-    }
-
-    public int getStageCount() {
-        return this.stages.size();
-    }
-
-    public IAgriGrowthStage getStage(int index) {
-        return this.stages.get(Math.max(0, Math.min(this.getStageCount() - 1, index)));
-    }
-
-    public IAgriGrowthStage initial() {
-        return this.stages.get(0);
-    }
-
-    public IAgriGrowthStage harvest() {
-        return this.getStage(this.harvestIndex);
-    }
-
-    public Collection<IAgriGrowthStage> all() {
-        return this.stages;
-    }
-
-    protected List<IAgriGrowthStage> generateStages(int amount) {
-        ImmutableList.Builder<IAgriGrowthStage> builder = new ImmutableList.Builder<>();
-        String prefix = "incremental_" + amount + "(->"+ this.harvestIndex + ")_";
-        for(int i = 0; i < amount; i++) {
-            builder.add(new Stage(this, i, i == amount - 1, prefix));
-        }
-        return builder.build();
-    }
+    private IncrementalGrowthLogic() {}
 
     private static class Stage implements IAgriGrowthStage {
-        private final IncrementalGrowthLogic logic;
         private final int stage;
+        private final int total;
+        private final double percentage;
         private final boolean mature;
         private final String id;
 
-        private Stage(IncrementalGrowthLogic logic, int stage, boolean mature, String prefix) {
-            this.logic = logic;
+        private IAgriGrowthStage next;
+
+        private Stage(int stage, int total) {
             this.stage = stage;
-            this.mature = mature;
-            this.id = prefix + this.getStage();
-        }
-
-        public final IncrementalGrowthLogic getLogic() {
-            return this.logic;
-        }
-
-        public final int getStage() {
-            return this.stage;
+            this.total = total;
+            this.percentage = (this.stage + 1.0) / ((double) this.total);
+            this.mature = stage >= (total - 1);
+            this.id = "agri_incremental_" + (this.stage + 1) + "/" +this.total;
         }
 
         @Override
@@ -86,18 +50,21 @@ public class IncrementalGrowthLogic {
 
         @Override
         public boolean canDropSeed() {
-            return false;
+            return this.isMature() || !AgriCraft.instance.getConfig().onlyMatureSeedDrops();
         }
 
         @Nonnull
         @Override
-        public IAgriGrowthStage getNextStage() {
-            return this.getLogic().getStage(this.getStage() + 1);
+        public IAgriGrowthStage getNextStage(IAgriCrop crop, Random random) {
+            if(this.next == null) {
+                this.next = this.isMature() ? this : CACHE.get(this.total).get(this.stage + 1);
+            }
+            return this.next;
         }
 
         @Override
         public double growthPercentage() {
-            return (this.getStage() + 1.0) / ((double) this.getLogic().getStageCount());
+            return  this.percentage;
         }
 
         @Nonnull

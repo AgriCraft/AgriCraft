@@ -49,7 +49,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     private IAgriPlant plant;
     private IAgriGrowthStage growth;
-    private GrowthRequirement requirement;
+    private GrowthRequirement requirement;  // TODO: Implement growth requirements and cache their states
 
     private IAgriWeed weed;
     private IAgriGrowthStage weedGrowth;
@@ -188,7 +188,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                 this.spreadWeeds();
             } else {
                 // Weeds are not mature yet, increment their growth
-                this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage());
+                this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage(this, this.getRandom()));
             }
         }
     }
@@ -196,7 +196,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void spawnWeeds() {
         AgriApi.getWeedRegistry().stream()
                 .filter(IAgriWeed::isWeed)
-                .filter(weed -> this.getWorld().getRandom().nextDouble() < weed.spawnChance(this))
+                .filter(weed -> this.getRandom().nextDouble() < weed.spawnChance(this))
                 .findAny()
                 .ifPresent(weed -> this.setWeed(weed, weed.getInitialGrowthStage()));
     }
@@ -234,8 +234,8 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if (!this.isMature()) {
             int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
             double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraft.instance.getConfig().growthMultiplier();
-            if (rate > this.getWorld().getRandom().nextDouble()) {
-                this.setGrowthStage(this.growth.getNextStage());
+            if (rate > this.getRandom().nextDouble()) {
+                this.setGrowthStage(this.growth.getNextStage(this, this.getRandom()));
             }
         }
     }

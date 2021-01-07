@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
@@ -186,6 +187,18 @@ public final class AgriApi {
      */
     public static IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
         return AgriApi.CONNECTOR.getDefaultGrowConditionFactory();
+    }
+
+    /**
+     * Fetches an ordered list containing the predefined amount of stages, following the default, internal AgriCraft growth scheme.
+     * This scheme starts with the first stage in the list (at index 0), which returns the next item in the list from IAgriGrowthStage.getNextStage(),
+     * except for the last stage which returns itself.
+     *
+     * @param stages the number of required stages (must be greater than 0)
+     * @return non-null, ordered list containing the requested amount of growth stages
+     */
+    public static List<IAgriGrowthStage> getDefaultGrowthStages(int stages) {
+        return AgriApi.CONNECTOR.getDefaultGrowthStages(stages);
     }
 
     /**

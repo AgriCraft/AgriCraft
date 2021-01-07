@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.impl.v1.crop;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 
 import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class NoGrowth implements IAgriGrowthStage {
     private static final NoGrowth INSTANCE = new NoGrowth();
@@ -40,7 +42,7 @@ public class NoGrowth implements IAgriGrowthStage {
 
     @Nonnull
     @Override
-    public IAgriGrowthStage getNextStage() {
+    public IAgriGrowthStage getNextStage(IAgriCrop crop, Random random) {
         return this;
     }
 

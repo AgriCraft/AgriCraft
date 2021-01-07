@@ -222,7 +222,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
                 // add plant fruits
                 crop.getPlant().getHarvestProducts(drops::add, crop.getGrowthStage(), crop.getStats(), context.getWorld().getRandom());
                 // drop the seed
-                if(crop.isMature() || !AgriCraft.instance.getConfig().onlyMatureSeedDrops()) {
+                if(crop.getGrowthStage().canDropSeed()) {
                     crop.getSeed().map(AgriSeed::toStack).ifPresent(drops::add);
                 }
             }
