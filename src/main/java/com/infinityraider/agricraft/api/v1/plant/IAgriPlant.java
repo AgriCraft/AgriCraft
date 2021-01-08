@@ -14,15 +14,19 @@ import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
  * If you register your own ICropPlant object, it will be wrapped by the api. Meaning if you query
  * the ICropPlant object you registered, it will return a different object.
  */
-public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriPlant> {
+public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllel<IAgriPlant> {
     /**
      * Fetches a list of all the items that are considered seeds for this specific plant.
      *
@@ -69,7 +73,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     /**
      * Retrieves the base seed drop chance of the given plant. The seed drop chance bonus (from
      * {@link #getSeedDropChanceBonus(IAgriGrowthStage)}) is then multiplied by the plant's growth stage and added
-     * to this value as to get the actual growth chance of the plant.
+     * to this value as to get the actual seed drop chance of the plant.
      *
      * @return The base seed drop chance of the plant.
      */
@@ -86,29 +90,12 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     double getSeedDropChanceBonus(IAgriGrowthStage growthStage);
 
     /**
-     * Determines the initial Growth Stage of the plant when first planted from a seed
-     *
-     * @return the IAgriGrowthStage for the initial growth stage
-     */
-    @Nonnull
-    IAgriGrowthStage getInitialGrowthStage();
-
-    /**
      * Determines the Growth Stage to which the plant returns after being harvested
      *
      * @return the IAgriGrowthStage after harvesting
      */
     @Nonnull
     IAgriGrowthStage getGrowthStageAfterHarvest();
-
-    /**
-     * Determines all the growth stages that the plant can have.
-     * For AgriCraft specifically, the conventional number of growth stages is 8.
-     *
-     * @return a set containing all the possible growth stages of the plant.
-     */
-    @Nonnull
-    Collection<IAgriGrowthStage> getGrowthStages();
 
     /**
      * Determines the original BlockState corresponding to a the GrowthStage of this plant on Crop Sticks,
@@ -255,4 +242,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAllel<IAgriP
     default boolean isPlant() {
         return true;
     }
+    @OnlyIn(Dist.CLIENT)
+    @Nonnull
+    List<BakedQuad> bakeQuads(IAgriGrowthStage stage);
+
+    @Nonnull
+    List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage);
 }

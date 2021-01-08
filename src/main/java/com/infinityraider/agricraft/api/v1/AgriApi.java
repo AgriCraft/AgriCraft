@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -25,6 +26,8 @@ import javax.naming.OperationNotSupportedException;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.*;
 
 /**
@@ -178,6 +181,7 @@ public final class AgriApi {
      * @param pos the BlockPos holding the coordinates
      * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
      */
+    @Nonnull
     public static Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getCrop(world, pos);
     }
@@ -185,6 +189,7 @@ public final class AgriApi {
     /**
      * @return the IDefaultGrowConditionFactory which can be used to construct native AgriCraft IGrowConditions
      */
+    @Nonnull
     public static IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
         return AgriApi.CONNECTOR.getDefaultGrowConditionFactory();
     }
@@ -197,6 +202,7 @@ public final class AgriApi {
      * @param stages the number of required stages (must be greater than 0)
      * @return non-null, ordered list containing the requested amount of growth stages
      */
+    @Nonnull
     public static List<IAgriGrowthStage> getDefaultGrowthStages(int stages) {
         return AgriApi.CONNECTOR.getDefaultGrowthStages(stages);
     }
@@ -204,6 +210,7 @@ public final class AgriApi {
     /**
      * @return The current IAgriMutationEngine object which controls the mutation logic of crops
      */
+    @Nonnull
     public static IAgriMutationHandler getAgriMutationHandler() {
         return AgriApi.CONNECTOR.getAgriMutationHandler();
     }
@@ -212,8 +219,18 @@ public final class AgriApi {
      * @param plant the plant for which to construct a new genome
      * @return A new IAgriGenome.Builder object to construct AgriCraft IAgriGenome objects
      */
-    public static IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant) {
+    @Nonnull
+    public static IAgriGenome.Builder getAgriGenomeBuilder(@Nonnull IAgriPlant plant) {
         return AgriApi.CONNECTOR.getAgriGenomeBuilder(plant);
+    }
+
+    /**
+     * @return AgriCraft's internal quad generator for plant rendering
+     */
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    public static IAgriPlantQuadGenerator getPlantQuadGenerator() {
+        return AgriApi.CONNECTOR.getPlantQuadGenerator();
     }
 
     /**

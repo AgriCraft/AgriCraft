@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft;
 
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.init.AgriBlockRegistry;
@@ -14,9 +15,15 @@ import com.infinityraider.agricraft.proxy.ClientProxy;
 import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.proxy.ServerProxy;
 import com.infinityraider.agricraft.reference.Reference;
+import com.infinityraider.agricraft.render.models.AgriPlantModelLoader;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
+import com.infinityraider.infinitylib.render.model.InfModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod(Reference.MOD_ID)
 public class AgriCraft extends InfinityMod<IProxy, Config> {
@@ -70,5 +77,13 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     public void initializeAPI() {
         // this will load the AgriApi class
         getLogger().info("Intializing API for " + AgriApi.MOD_ID);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<InfModelLoader<?>> getModModelLoaders() {
+        return ImmutableList.of(
+                AgriPlantModelLoader.getInstance()
+        );
     }
 }

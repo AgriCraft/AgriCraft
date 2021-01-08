@@ -20,6 +20,8 @@ public interface IAgriPlantAcceptor {
      *
      * Use when the plant is "planted" conventionally, e.g. by a player or automation from a seed, or other item
      *
+     * Note that this method will not set the genome for the plant
+     *
      * @param plant the plant to associate with this instance.
      * @param entity the entity responsible for planting the plant
      * @return if the plant was successfully associated with the instance.
@@ -31,6 +33,8 @@ public interface IAgriPlantAcceptor {
      * acceptsPlant() if the plant is invalid.
      *
      * Use when the plant "spawns" for some reason, e.g. through mutation, spreading or magic
+     *
+     * Note that this method will not set the genome for the plant
      *
      * @param plant the plant to associate with this instance.
      * @return if the plant was successfully associated with the instance.

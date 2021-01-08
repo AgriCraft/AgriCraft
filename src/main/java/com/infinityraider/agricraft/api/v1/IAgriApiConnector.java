@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -17,6 +18,8 @@ import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -69,5 +72,9 @@ public interface IAgriApiConnector {
     IAgriMutationHandler getAgriMutationHandler();
 
     @Nonnull
-    IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant);
+    IAgriGenome.Builder getAgriGenomeBuilder(@Nonnull IAgriPlant plant);
+
+    @Nonnull
+    @OnlyIn(Dist.CLIENT)
+    IAgriPlantQuadGenerator getPlantQuadGenerator();
 }

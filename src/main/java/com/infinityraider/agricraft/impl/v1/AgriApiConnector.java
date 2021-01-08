@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -29,9 +30,12 @@ import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
+import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -140,6 +144,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
+    @Nonnull
     public IDefaultGrowConditionFactory getDefaultGrowConditionFactory() {
         return Factory.getInstance();
     }
@@ -158,7 +163,14 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IAgriGenome.Builder getAgriGenomeBuilder(IAgriPlant plant) {
+    public IAgriGenome.Builder getAgriGenomeBuilder(@Nonnull IAgriPlant plant) {
         return AgriGenome.builder(plant);
+    }
+
+    @Nonnull
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IAgriPlantQuadGenerator getPlantQuadGenerator() {
+        return AgriPlantQuadGenerator.getInstance();
     }
 }

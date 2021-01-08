@@ -1,0 +1,56 @@
+{
+  "elements": [
+    {
+      "name": "stick_1",
+      "from": [2, -2, 2],
+      "to": [3, 14, 3],
+      "faces": {
+        "north": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "east": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "south": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "west": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "up": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"},
+        "down": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"}
+      }
+    },
+    {
+      "name": "stick_2",
+      "from": [13, -2, 2],
+      "to": [14, 14, 3],
+      "faces": {
+        "north": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "east": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "south": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "west": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "up": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"},
+        "down": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"}
+      }
+    },
+    {
+      "name": "stick_3",
+      "from": [2, -2, 13],
+      "to": [3, 14, 14],
+      "faces": {
+        "north": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "east": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "south": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "west": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "up": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"},
+        "down": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"}
+      }
+    },
+    {
+      "name": "stick_4",
+      "from": [13, -2, 13],
+      "to": [14, 14, 14],
+      "faces": {
+        "north": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "east": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "south": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "west": {"uv": [0, 0, 1, 16], "texture": "#crop_sticks"},
+        "up": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"},
+        "down": {"uv": [0, 0, 1, 1], "texture": "#crop_sticks"}
+      }
+    }
+  ]
+}

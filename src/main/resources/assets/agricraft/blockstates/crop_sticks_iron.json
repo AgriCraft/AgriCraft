@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "crop_sticks": "agricraft:blocks/crop_sticks",
+      "particle": "minecraft:iron_block"
+    }
+  },
+  "variants": {
+    "cross_crop=false,plant=false,weeds=false": [{ "model": "agricraft:block/crop_sticks_empty" }],
+    "cross_crop=false,plant=false,weeds=true": [{ "model": "agricraft:block/crop_sticks_plant" }],
+    "cross_crop=false,plant=true,weeds=false": [{ "model": "agricraft:block/crop_sticks_plant" }],
+    "cross_crop=false,plant=true,weeds=true": [{ "model": "agricraft:block/crop_sticks_plant" }],
+    "cross_crop=true,plant=false,weeds=false": [{ "model": "agricraft:block/crop_sticks_cross_empty" }],
+    "cross_crop=true,plant=false,weeds=true": [{ "model": "agricraft:block/crop_sticks_cross_plant" }],
+    "cross_crop=true,plant=true,weeds=false": [{ "model": "agricraft:block/crop_sticks_cross_plant" }],
+    "cross_crop=true,plant=true,weeds=true": [{ "model": "agricraft:block/crop_sticks_cross_plant" }]
+  }
+}

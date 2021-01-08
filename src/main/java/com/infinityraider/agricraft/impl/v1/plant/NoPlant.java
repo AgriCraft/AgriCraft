@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
@@ -11,8 +12,12 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -152,7 +157,21 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
+    @Nonnull
     public CompoundNBT writeToNBT() {
         return new CompoundNBT();
+    }
+
+    @Nonnull
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+        return ImmutableList.of();
+    }
+
+    @Nonnull
+    @Override
+    public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
+        return ImmutableList.of();
     }
 }

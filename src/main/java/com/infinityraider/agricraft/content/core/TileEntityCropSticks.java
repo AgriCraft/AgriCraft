@@ -413,6 +413,16 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     @Override
+    public boolean removeWeed() {
+        if(this.hasWeeds()) {
+            this.weed = NO_WEED;
+            this.weedGrowth = NO_GROWTH;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean acceptsSeed(@Nonnull AgriSeed seed) {
         return this.acceptsPlant(seed.getPlant());
     }

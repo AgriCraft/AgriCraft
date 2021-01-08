@@ -15,4 +15,6 @@ public interface IAgriWeedSpawnable {
     IAgriGrowthStage getWeedGrowthStage();
 
     boolean setWeed(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage);
+
+    boolean removeWeed();
 }

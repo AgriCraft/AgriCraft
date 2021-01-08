@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -24,16 +25,20 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 public class JsonPlant implements IAgriPlant {
 
     private final AgriPlant plant;
-    private final IncrementalGrowthLogic growthLogic;
+    private final List<IAgriGrowthStage> growthStages;
     private final Set<IGrowCondition> growthConditions;
 
     private final List<ItemStack> seedItems;
@@ -41,7 +46,7 @@ public class JsonPlant implements IAgriPlant {
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
-        this.growthLogic = IncrementalGrowthLogic.getOrCreate(this.plant.getGrowthStages(), this.plant.getStageAfterHarvest());
+        this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItemsListJSON(plant);
         this.defaultSeed = new AgriSeed(this,  AgriApi.getAgriGenomeBuilder(this).build());
@@ -91,18 +96,18 @@ public class JsonPlant implements IAgriPlant {
     @Nonnull
     @Override
     public IAgriGrowthStage getInitialGrowthStage() {
-        return this.growthLogic.initial();
+        return this.growthStages.get(0);
     }
 
     @Nonnull
     @Override
     public IAgriGrowthStage getGrowthStageAfterHarvest() {
-        return this.growthLogic.harvest();
+        return this.growthStages.get(this.plant.getStageAfterHarvest());
     }
 
     @Override
     public Collection<IAgriGrowthStage> getGrowthStages() {
-        return this.growthLogic.all();
+        return this.growthStages;
     }
 
     @Override
@@ -150,6 +155,21 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public boolean allowsCloning(IAgriGrowthStage stage) {
         return this.plant.allowsCloning();
+    }
+
+    @Nonnull
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+        //TODO
+        return ImmutableList.of();
+    }
+
+    @Nonnull
+    @Override
+    public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
+        //TODO
+        return ImmutableList.of();
     }
 
     public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {

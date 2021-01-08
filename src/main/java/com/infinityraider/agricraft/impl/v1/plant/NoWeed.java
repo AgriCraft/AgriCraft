@@ -1,15 +1,21 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
+import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -57,5 +63,18 @@ public final class NoWeed implements IAgriWeed {
     @Override
     public void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
         //NOPE
+    }
+
+    @Nonnull
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+        return ImmutableList.of();
+    }
+
+    @Nonnull
+    @Override
+    public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
+        return ImmutableList.of();
     }
 }

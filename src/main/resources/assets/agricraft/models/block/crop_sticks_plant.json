@@ -1,0 +1,9 @@
+{
+  "loader": "forge:composite",
+  "parts": {
+    "parent": "agricraft:block/crop_sticks"
+  },
+  "plant": {
+    "loader": "agricraft:plant_model_loader"
+  }
+}
