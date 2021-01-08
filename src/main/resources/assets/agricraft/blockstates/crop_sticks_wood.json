@@ -7,7 +7,7 @@
     }
   },
   "variants": {
-    "cross_crop=false,plant=false,weeds=false": [{ "model": "agricraft:block/crop_sticks.json" }],
+    "cross_crop=false,plant=false,weeds=false": [{ "model": "agricraft:block/crop_sticks" }],
     "cross_crop=false,plant=false,weeds=true": [{ "model": "agricraft:block/crop_sticks_plant" }],
     "cross_crop=false,plant=true,weeds=false": [{ "model": "agricraft:block/crop_sticks_plant" }],
     "cross_crop=false,plant=true,weeds=true": [{ "model": "agricraft:block/crop_sticks_plant" }],
