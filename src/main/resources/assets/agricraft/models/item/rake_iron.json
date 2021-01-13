@@ -1,6 +1,0 @@
-{
-	"parent": "agricraft:item/rake",
-	"textures": {
-		"layer0": "agricraft:items/rake_iron"
-	}
-}

@@ -1,4 +1,8 @@
 {
+  "textures":  {
+    "crop_sticks": "agricraft:blocks/crop_sticks_iron",
+    "particle": "minecraft:iron_block"
+  },
   "elements": [
     {
       "name": "stick_1",
