@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +23,7 @@ public class DebugModeCheckSoil extends DebugMode {
     public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
         String type = AgriApi.getSoilRegistry().all().stream()
                 .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
-                .map(s -> s.getName())
+                .map(IAgriSoil::getName)
                 .findFirst()
                 .orElse("Unknown Soil");
         MessageUtil.messagePlayer(context.getPlayer(), "{0} Soil Info:", AgriCraft.instance.proxy().getLogicalSide());

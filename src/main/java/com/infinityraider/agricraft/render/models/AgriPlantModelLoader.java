@@ -25,8 +25,8 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader.Geometry> {
@@ -76,18 +76,16 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
         @Override
         public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
             ImmutableList.Builder<RenderMaterial> builder = new ImmutableList.Builder<>();
-            this.collectTexturesFromRegistry(AgriPlantRegistry.getInstance(), builder);
-            this.collectTexturesFromRegistry(AgriWeedRegistry.getInstance(), builder);
+            this.processRegistryTextures(AgriPlantRegistry.getInstance(), rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
+            this.processRegistryTextures(AgriWeedRegistry.getInstance(), rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
             return builder.build();
         }
 
-        protected <T extends IAgriRegisterable<T> & IAgriGrowable & IAgriRenderable> void collectTexturesFromRegistry(
-                IAgriRegistry<T> registry, ImmutableList.Builder<RenderMaterial> builder) {
-            registry.stream().forEach(element ->
-                    element.getGrowthStages().forEach(stage ->
-                            builder.addAll(element.getTexturesFor(stage).stream().map(rl ->
-                                    new RenderMaterial(this.getTextureAtlasLocation(), rl)).collect(Collectors.toList())))
-            );
+        protected <T extends IAgriRegisterable<T> & IAgriGrowable & IAgriRenderable> void processRegistryTextures(IAgriRegistry<T> registry, Consumer<ResourceLocation> consumer) {
+            registry.stream()
+                    .flatMap((element) -> element.getGrowthStages()
+                            .stream().flatMap(stage -> element.getTexturesFor(stage).stream()))
+                    .forEach(consumer);
         }
     }
 }

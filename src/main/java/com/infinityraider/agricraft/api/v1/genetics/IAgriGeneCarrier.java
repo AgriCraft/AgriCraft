@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  * implemented in objects which hold IAgriGenomes
@@ -11,7 +12,7 @@ public interface IAgriGeneCarrier {
      * @return the genome
      */
     @Nonnull
-    IAgriGenome getGenome();
+    Optional<IAgriGenome> getGenome();
 
     /**
      * Setter for the IAgriGenome

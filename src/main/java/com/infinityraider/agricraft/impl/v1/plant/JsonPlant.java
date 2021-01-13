@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
@@ -135,9 +134,7 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void getAllPossibleProducts(IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> products) {
         this.plant.getProducts().getAll().stream()
-                .map(p -> p.toStack(ItemStack.class))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(p -> p.convertAll(ItemStack.class).stream())
                 .forEach(products);
     }
 
@@ -145,7 +142,7 @@ public class JsonPlant implements IAgriPlant {
     public void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand) {
         if(growthStage.isMature()) {
             this.plant.getProducts().getRandom(rand).stream()
-                    .map(p -> p.toStack(ItemStack.class, rand))
+                    .map(p -> p.convertSingle(ItemStack.class, rand))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(products);
@@ -174,9 +171,7 @@ public class JsonPlant implements IAgriPlant {
 
     public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {
         return plant.getSeedItems().stream()
-                .map(i -> i.toStack(ItemStack.class))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(i -> i.convertAll(ItemStack.class).stream())
                 .collect(Collectors.toList());
     }
 
@@ -201,11 +196,11 @@ public class JsonPlant implements IAgriPlant {
                 .forEach(builder::add);
 
         // Define requirement for nearby blocks
-        plant.getRequirement().getConditions().forEach(obj -> obj.toStack(Block.class).ifPresent(block -> {
+        plant.getRequirement().getConditions().forEach(obj -> {
             BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
             BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.add(growConditionFactory.blocksNearby(obj.getStrength(), obj.getAmount(), min, max, block));
-        }));
+            builder.add(growConditionFactory.statesNearby(obj.getStrength(), obj.getAmount(), min, max, obj.convertAll(BlockState.class)));
+        });
 
         // Define requirement for light
         builder.add(growConditionFactory.light(10, plant.getRequirement().getMinLight(), plant.getRequirement().getMaxLight()));

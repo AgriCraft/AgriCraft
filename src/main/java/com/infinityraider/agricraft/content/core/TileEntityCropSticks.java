@@ -20,6 +20,7 @@ import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
+import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
@@ -46,6 +47,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
     private static final IAgriWeed NO_WEED = NoWeed.getInstance();
+    private static final IAgriStatsMap NO_STATS = NoStats.getInstance();
 
     private IAgriPlant plant;
     private IAgriGrowthStage growth;
@@ -60,6 +62,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     public TileEntityCropSticks() {
         super(AgriCraft.instance.getModTileRegistry().crop_sticks);
+        this.plant = NO_PLANT;
+        this.growth = NO_GROWTH;
+        this.weed = NO_WEED;
+        this.weedGrowth = NO_GROWTH;
     }
 
     @Override
@@ -127,7 +133,8 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public Optional<IAgriSoil> getSoil() {
         return Optional.ofNullable(this.getWorld())
-                .flatMap(world -> AgriApi.getSoilRegistry().get(world.getBlockState(this.getPosition().down())));
+                .map(world -> AgriApi.getSoilRegistry().get(world.getBlockState(this.getPosition().down())))
+                .flatMap(soils -> soils.stream().findAny());
     }
 
     @Override
@@ -242,15 +249,21 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     @Nonnull
-    public IAgriGenome getGenome() {
-        return this.genome;
+    public Optional<IAgriGenome> getGenome() {
+        return Optional.ofNullable(this.genome);
     }
 
     @Override
     public void setGenome(@Nonnull IAgriGenome genome) {
-        if(!genome.equals(this.getGenome())) {
+        if(this.hasPlant() && !genome.equals(this.getGenome())) {
             this.genome = genome;
         }
+    }
+
+    @Nonnull
+    @Override
+    public IAgriStatsMap getStats() {
+        return this.genome == null ? NO_STATS : this.genome.getStats();
     }
 
     @Override
@@ -363,6 +376,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.plant = NO_PLANT;
         this.growth = NO_GROWTH;
         plant.onRemoved(this);
+        this.genome = null;
         return plant;
     }
 
@@ -430,7 +444,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public boolean setSeed(@Nonnull AgriSeed seed) {
         if(this.setPlant(seed.getPlant())) {
-            this.genome = seed.getGenome();
+            this.genome = seed.getGenome().orElseThrow(() -> new IllegalArgumentException("Can not set a plant from a seed with no genome"));
             return true;
         }
         return false;
@@ -448,7 +462,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public Optional<AgriSeed> getSeed() {
-        return Optional.ofNullable(this.hasPlant() ? new AgriSeed(this.getPlant(), this.getGenome()) : null);
+        return Optional.ofNullable(this.hasPlant() ? new AgriSeed(this.getPlant(), this.genome) : null);
     }
 
     @Override
@@ -458,9 +472,11 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         tag.putString(AgriNBT.WEED, this.getWeeds().getId());
         tag.putString(AgriNBT.WEED_GROWTH, this.getWeedGrowthStage().getId());
         tag.putBoolean(AgriNBT.CROSS_CROP, this.isCrossCrop());
-        CompoundNBT geneTag = new CompoundNBT();
-        this.getGenome().writeToNBT(geneTag);
-        tag.put(AgriNBT.GENOME, geneTag);
+        this.getGenome().ifPresent(genome -> {
+            CompoundNBT geneTag = new CompoundNBT();
+            genome.writeToNBT(geneTag);
+            tag.put(AgriNBT.GENOME, geneTag);
+        });
     }
 
     @Override
@@ -470,7 +486,12 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.weed = AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED);
         this.weedGrowth = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH);
         this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
-        this.genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
+        if(tag.contains(AgriNBT.GENOME)) {
+            if(this.genome == null) {
+                this.genome = AgriApi.getAgriGenomeBuilder(this.plant).build();
+            }
+            this.genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
+        }
     }
 
     @Override

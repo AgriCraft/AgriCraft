@@ -7,15 +7,12 @@ import net.minecraft.block.BlockState;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 /**
  * Class wrapping the AgriCore AgriSoil.
  */
 public class JsonSoil implements IAgriSoil {
-    private static final Predicate<BlockState> NO_SOIL = (state) -> false;
-
     @Nonnull
     private final AgriSoil soil;
     @Nonnull

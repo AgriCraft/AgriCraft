@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.seed;
 
 import com.google.common.base.Preconditions;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -22,6 +23,10 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     private final IAgriPlant plant;
     @Nonnull
     private IAgriGenome genome;
+
+    public AgriSeed(@Nonnull IAgriPlant plant) {
+        this(plant, AgriApi.getAgriGenomeBuilder(plant).build());
+    }
 
     public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriGenome genome) {
         this.plant = Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!");
@@ -88,8 +93,8 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     }
 
     @Override
-    public IAgriGenome getGenome() {
-        return this.genome;
+    public Optional<IAgriGenome> getGenome() {
+        return Optional.of(this.genome);
     }
 
     @Override
@@ -100,6 +105,6 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     @Nonnull
     @Override
     public IAgriStatsMap getStats() {
-        return this.getGenome().getStats();
+        return this.genome.getStats();
     }
 }

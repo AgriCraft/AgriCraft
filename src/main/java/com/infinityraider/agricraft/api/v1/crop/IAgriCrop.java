@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -98,12 +97,6 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
     void breakCrop(@Nullable LivingEntity entity);
 
     void applyGrowthTick();
-
-    @Override
-    @Nonnull
-    default IAgriStatsMap getStats() {
-        return this.getGenome().getStats();
-    }
 
     @Nonnull
     default Stream<IAgriCrop> streamNeighbours() {

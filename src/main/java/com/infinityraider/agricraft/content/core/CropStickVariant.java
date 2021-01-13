@@ -11,33 +11,38 @@ import java.util.function.Supplier;
 
 public enum CropStickVariant {
     WOOD(
-            Material.WOOD,
+            Material.PLANTS,
+            3,
             SoundType.WOOD,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_wood,
             () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_wood
     ),
 
     IRON(
-            Material.IRON,
+            Material.PLANTS,
+            7,
             SoundType.ANVIL,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_iron,
             () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_iron
     ),
 
-    OBSIDIAN(Material.ROCK,
+    OBSIDIAN(Material.PLANTS,
+            7,
             SoundType.BASALT,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_obsidian,
             () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian
     );
 
     private final String id;
+    private final int strength;
     private final SoundType sound;
     private final Material material;
     private final Supplier<Supplier<Item>> itemSupplier;
     private final Supplier<Supplier<BlockBase>> blockSupplier;
 
-    CropStickVariant(Material material, SoundType sound, Supplier<Supplier<Item>> itemSupplier, Supplier<Supplier<BlockBase>> blockSupplier) {
+    CropStickVariant(Material material, int strength, SoundType sound, Supplier<Supplier<Item>> itemSupplier, Supplier<Supplier<BlockBase>> blockSupplier) {
         this.id = Names.Blocks.CROP_STICKS + "_" + this.name().toLowerCase();
+        this.strength = strength;
         this.sound = sound;
         this.material = material;
         this.itemSupplier = itemSupplier;
@@ -46,6 +51,10 @@ public enum CropStickVariant {
 
     public final String getId() {
         return this.id;
+    }
+
+    public final int getStrength() {
+        return this.strength;
     }
 
     public final SoundType getSound() {

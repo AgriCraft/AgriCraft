@@ -59,12 +59,12 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
     public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
-    public static final InfProperty<Boolean> WEEDS = InfProperty.Creators.create("weeds", false);
+    public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(CROSS_CROP)
             .add(PLANT)
-            .add(WEEDS)
+            .add(LIGHT)
             .waterloggable()
             .build();
 
@@ -90,7 +90,11 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     private final CropStickVariant variant;
 
     public BlockCropSticks(CropStickVariant variant) {
-        super(variant.getId(), Properties.create(variant.getMaterial()).tickRandomly());
+        super(variant.getId(), Properties.create(variant.getMaterial())
+                .tickRandomly()
+                .notSolid()
+                .setLightLevel(LIGHT::fetch)
+        );
         this.variant = variant;
     }
 

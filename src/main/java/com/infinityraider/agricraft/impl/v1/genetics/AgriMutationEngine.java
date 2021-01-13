@@ -77,7 +77,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         if (plant.allowsCloning(parent.getGrowthStage())) {
             // roll for spread chance
             if(random.nextDouble() < parent.getPlant().getSpreadChance(parent.getGrowthStage())) {
-                return Optional.of(this.spawnChild(target, plant, this.getCloner().clone(parent.getGenome(), random)));
+                return parent.getGenome().map(genome -> this.spawnChild(target, plant, this.getCloner().clone(genome, random)));
             }
         }
         // spreading failed
@@ -85,12 +85,16 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     protected Optional<IAgriPlant> doCombine(IAgriCrop target, IAgriCrop a, IAgriCrop b, Random random) {
-        // Determine the child's genome
-        IAgriGenome genome = this.getCombiner().combine(new Tuple<>(a.getGenome(), b.getGenome()), random);
-        // Fetch the child's species from the genome
-        IAgriPlant plant = genome.getGenePair(AgriGeneRegistry.getInstance().gene_species).getTrait();
-        // Spawn the child
-        return Optional.of(this.spawnChild(target, plant, genome));
+        return a.getGenome().flatMap(genA ->
+                b.getGenome().map(genB -> {
+                    // Determine the child's genome
+                    IAgriGenome genome = this.getCombiner().combine(new Tuple<>(genA, genB), random);
+                    // Fetch the child's species from the genome
+                    IAgriPlant plant = genome.getGenePair(AgriGeneRegistry.getInstance().gene_species).getTrait();
+                    // Spawn the child
+                    return this.spawnChild(target, plant, genome);
+                })
+        );
     }
 
     protected int sorter(IAgriCrop crop) {

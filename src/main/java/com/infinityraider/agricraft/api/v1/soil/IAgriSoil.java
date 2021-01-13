@@ -3,8 +3,9 @@ package com.infinityraider.agricraft.api.v1.soil;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
 /**
@@ -21,6 +22,10 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil> {
 
     @Nonnull
     Collection<BlockState> getVariants();
+
+    default boolean isVariant(@Nonnull Block block) {
+        return this.getVariants().contains(block);
+    }
 
     default boolean isVariant(@Nonnull BlockState state) {
         return this.getVariants().contains(state);
