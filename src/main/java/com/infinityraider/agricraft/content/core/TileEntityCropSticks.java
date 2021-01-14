@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -26,10 +27,12 @@ import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,6 +43,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 
@@ -52,13 +56,13 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     private IAgriPlant plant;
     private IAgriGrowthStage growth;
     private GrowthRequirement requirement;  // TODO: Implement growth requirements and cache their states
-
     private IAgriWeed weed;
     private IAgriGrowthStage weedGrowth;
-
     private IAgriGenome genome;
-
     private boolean crossCrop;
+    // Cache for neighbouring crops
+    private final Map<Direction, Optional<IAgriCrop>> neighbours;
+    private boolean needsCaching;
 
     public TileEntityCropSticks() {
         super(AgriCraft.instance.getModTileRegistry().crop_sticks);
@@ -66,6 +70,40 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.growth = NO_GROWTH;
         this.weed = NO_WEED;
         this.weedGrowth = NO_GROWTH;
+        this.neighbours = Maps.newEnumMap(Direction.class);
+        Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, Optional.empty()));
+        this.needsCaching = true;
+    }
+
+    // Use neighbour cache instead to prevent having to read TileEntities from the world
+    @Nonnull
+    @Override
+    public Stream<IAgriCrop> streamNeighbours() {
+        if(this.needsCaching) {
+            this.readNeighbours();
+        }
+        return this.neighbours.values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
+    // Initialize neighbours cache
+    protected void readNeighbours() {
+        if(this.getWorld() != null) {
+            Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getWorld(), pos)));
+            this.needsCaching = false;
+        }
+    }
+
+    // Update neighbour cache
+    protected void onNeighbourChange(Direction direction, BlockPos pos, BlockState newState) {
+        if(newState.getBlock() instanceof BlockCropSticks) {
+            if(this.getWorld() != null) {
+                this.neighbours.put(direction, AgriApi.getCrop(this.getWorld(), pos));
+            }
+        } else {
+            this.neighbours.put(direction, Optional.empty());
+        }
     }
 
     @Override
@@ -95,6 +133,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         }
         this.growth = stage;
         this.plant.onGrowth(this);
+        this.markForUpdate();
         return true;
     }
 
@@ -115,6 +154,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         this.crossCrop = status;
+        if(this.getWorld() != null) {
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getState(), status));
+        }
+        this.markForUpdate();
         return true;
     }
 
@@ -210,7 +253,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     protected void spreadWeeds() {
         if(AgriCraft.instance.getConfig().weedsCanSpread()) {
-            this.streamNeighbours() //TODO: make this more efficient by caching neighbours
+            this.streamNeighbours()
                     .filter(IAgriCrop::isValid)
                     .filter(crop -> !crop.hasWeeds())
                     .filter(crop -> this.rollForWeedAction())
@@ -232,7 +275,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         // Do not do mutation growth ticks if the plant has weeds
         if(!this.hasWeeds()) {
             AgriApi.getAgriMutationHandler().getActiveMutationEngine()
-                    .handleMutationTick(this, this.streamNeighbours(), this.getWorld().getRandom())
+                    .handleMutationTick(this, this.streamNeighbours(), this.getRandom())
                     .ifPresent(plant -> plant.onSpawned(this));
         }
     }
@@ -255,7 +298,8 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public void setGenome(@Nonnull IAgriGenome genome) {
-        if(this.hasPlant() && !genome.equals(this.getGenome())) {
+        if(this.hasPlant() && !genome.equals(this.genome)) {
+            this.markForUpdate();
             this.genome = genome;
         }
     }
@@ -366,6 +410,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         }
         this.plant = plant;
         this.growth = plant.getInitialGrowthStage();
+        if(this.getWorld() != null) {
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), true));
+        }
+        this.markForUpdate();
         return true;
     }
 
@@ -377,6 +425,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.growth = NO_GROWTH;
         plant.onRemoved(this);
         this.genome = null;
+        if(this.getWorld() != null) {
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), false));
+        }
+        this.markForUpdate();
         return plant;
     }
 
@@ -396,11 +448,13 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         return this.weed.isWeed();
     }
 
+    @Nonnull
     @Override
     public IAgriWeed getWeeds() {
         return this.weed;
     }
 
+    @Nonnull
     @Override
     public IAgriGrowthStage getWeedGrowthStage() {
         return this.weedGrowth;
@@ -415,6 +469,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             if(this.weed.getGrowthStages().contains(stage)) {
                 this.weedGrowth = stage;
                 this.weed.onGrowthTick(this);
+                this.markForUpdate();
                 return true;
             }
             return false;
@@ -422,6 +477,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             this.weed = weed;
             this.weedGrowth = stage;
             this.weed.onSpawned(this);
+            if(this.getWorld() != null) {
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), true));
+            }
+            this.markForUpdate();
         }
         return false;
     }
@@ -431,6 +490,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.hasWeeds()) {
             this.weed = NO_WEED;
             this.weedGrowth = NO_GROWTH;
+            if(this.getWorld() != null) {
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), false));
+            }
+            this.markForUpdate();
             return true;
         }
         return false;
@@ -492,6 +555,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             }
             this.genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
         }
+        this.needsCaching = true;
     }
 
     @Override

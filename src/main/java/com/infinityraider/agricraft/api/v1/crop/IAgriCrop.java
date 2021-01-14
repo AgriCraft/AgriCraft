@@ -99,12 +99,7 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
     void applyGrowthTick();
 
     @Nonnull
-    default Stream<IAgriCrop> streamNeighbours() {
-        return Direction.Plane.HORIZONTAL.getDirectionValues()
-                .map(dir -> AgriApi.getCrop(this.getWorld(), this.getPosition().offset(dir)))
-                .filter(Optional::isPresent)
-                .map(Optional::get);
-    }
+    Stream<IAgriCrop> streamNeighbours();
 
     @Nonnull
     default Stream<IAgriCrop> streamNeighbours(Predicate<IAgriCrop> filter) {
