@@ -164,22 +164,20 @@ public class JsonPlant implements IAgriPlant {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
-        if(this.quads == null) {
+        if (this.quads == null) {
             this.quads = Maps.newConcurrentMap();
         }
         int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        if(index < 0) {
+        if (index < 0) {
             return ImmutableList.of();
         }
         return this.quads.computeIfAbsent(index, i -> {
-            ResourceLocation rl = this.getTextureFor(stage);
-            if(rl != null) {
-                if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
-                    return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
-                }
-                if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
-                    return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
-                }
+            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(i));
+            if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+            }
+            if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
             }
             return ImmutableList.of();
         });

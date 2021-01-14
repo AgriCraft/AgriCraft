@@ -38,6 +38,19 @@ public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
     IAgriGrowthStage getNextStage(IAgriCrop crop, Random random);
 
     /**
+     * Similar as getNextStage(), but returning a previous growth stage instead
+     * Can return any growth stage, as long as it is compatible with the growth scheme (defined by the plant or weed)
+     *
+     * This method is used for reversing growth, such as clipping, or due to certain weeds.
+     *
+     * @param crop the crop which plant or weeds which currently have this growth stage
+     * @param random a pseudo-random generator to make decisions
+     * @return The next growth stage before the current growth stage (returns itself if this is the initial growth stage).
+     */
+    @Nonnull
+    IAgriGrowthStage getPreviousStage(IAgriCrop crop, Random random);
+
+    /**
      * @return the growth percentage corresponding to this growth stage, between 0 and 1 (both inclusive),
      * in which 1 means mature
      */

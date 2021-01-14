@@ -41,6 +41,7 @@ public final class IncrementalGrowthLogic {
         private final String id;
 
         private IAgriGrowthStage next;
+        private IAgriGrowthStage prev;
 
         private Stage(int stage, int total) {
             this.stage = stage;
@@ -67,6 +68,15 @@ public final class IncrementalGrowthLogic {
                 this.next = this.isMature() ? this : CACHE.get(this.total).get(this.stage + 1);
             }
             return this.next;
+        }
+
+        @Nonnull
+        @Override
+        public IAgriGrowthStage getPreviousStage(IAgriCrop crop, Random random) {
+            if(this.prev == null) {
+                this.prev = this.stage <= 0 ? this : CACHE.get(this.total).get(this.stage - 1);
+            }
+            return this.prev;
         }
 
         @Override

@@ -46,6 +46,12 @@ public class NoGrowth implements IAgriGrowthStage {
         return this;
     }
 
+    @Nonnull
+    @Override
+    public IAgriGrowthStage getPreviousStage(IAgriCrop crop, Random random) {
+        return this;
+    }
+
     @Override
     public double growthPercentage() {
         return 0;
