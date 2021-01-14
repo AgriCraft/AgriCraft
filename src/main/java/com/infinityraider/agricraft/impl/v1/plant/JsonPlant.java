@@ -45,6 +45,9 @@ public class JsonPlant implements IAgriPlant {
     private final List<ItemStack> seedItems;
     private final AgriSeed defaultSeed;
 
+    @OnlyIn(Dist.CLIENT)
+    private List<BakedQuad> quads;
+
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
@@ -160,16 +163,19 @@ public class JsonPlant implements IAgriPlant {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
-        ResourceLocation rl = this.getTextureFor(stage);
-        if(rl != null) {
-            if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
-                return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+        if(this.quads == null) {
+            ResourceLocation rl = this.getTextureFor(stage);
+            if(rl != null) {
+                if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
+                    this.quads = AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+                }
+                if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
+                    this.quads = AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
+                }
             }
-            if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
-                return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
-            }
+            this.quads = ImmutableList.of();
         }
-        return ImmutableList.of();
+        return this.quads;
     }
 
     @Nullable
