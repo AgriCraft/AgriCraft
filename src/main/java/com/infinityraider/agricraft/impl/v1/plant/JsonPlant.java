@@ -5,6 +5,7 @@ import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriRenderType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
@@ -46,7 +47,7 @@ public class JsonPlant implements IAgriPlant {
     private final AgriSeed defaultSeed;
 
     @OnlyIn(Dist.CLIENT)
-    private List<BakedQuad> quads;
+    private Map<Integer, List<BakedQuad>> quads;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
@@ -164,18 +165,24 @@ public class JsonPlant implements IAgriPlant {
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
         if(this.quads == null) {
+            this.quads = Maps.newConcurrentMap();
+        }
+        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
+        if(index < 0) {
+            return ImmutableList.of();
+        }
+        return this.quads.computeIfAbsent(index, i -> {
             ResourceLocation rl = this.getTextureFor(stage);
             if(rl != null) {
                 if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
-                    this.quads = AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+                    return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
                 }
                 if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
-                    this.quads = AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
+                    return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
                 }
             }
-            this.quads = ImmutableList.of();
-        }
-        return this.quads;
+            return ImmutableList.of();
+        });
     }
 
     @Nullable
