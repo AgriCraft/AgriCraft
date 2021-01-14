@@ -24,6 +24,13 @@ public final class IncrementalGrowthLogic {
         });
     }
 
+    public static int getGrowthIndex(IAgriGrowthStage stage) {
+        if(stage instanceof Stage) {
+            return ((Stage) stage).stage;
+        }
+        return -1;
+    }
+
     private IncrementalGrowthLogic() {}
 
     private static class Stage implements IAgriGrowthStage {

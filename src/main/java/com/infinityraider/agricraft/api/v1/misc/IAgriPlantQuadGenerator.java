@@ -22,7 +22,7 @@ public interface IAgriPlantQuadGenerator {
      * @return list of BakedQuads
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForCrossPattern(ResourceLocation sprite);
+    List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull ResourceLocation sprite);
 
     /**
      * Use for plants which are normally rendered with a hash pattern in the world (for example wheat)
@@ -33,5 +33,5 @@ public interface IAgriPlantQuadGenerator {
      * @return list of BakedQuads
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForHashPattern(ResourceLocation sprite);
+    List<BakedQuad> bakeQuadsForHashPattern(@Nonnull ResourceLocation sprite);
 }

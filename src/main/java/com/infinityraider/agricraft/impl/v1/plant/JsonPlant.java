@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriRenderType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -33,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JsonPlant implements IAgriPlant {
 
@@ -158,15 +160,29 @@ public class JsonPlant implements IAgriPlant {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
-        //TODO
+        ResourceLocation rl = this.getTextureFor(stage);
+        if(rl != null) {
+            if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+            }
+            if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
+            }
+        }
         return ImmutableList.of();
+    }
+
+    @Nullable
+    protected ResourceLocation getTextureFor(IAgriGrowthStage stage) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
+        return index < 0 ? null : new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
     }
 
     @Nonnull
     @Override
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
-        //TODO
-        return ImmutableList.of();
+        ResourceLocation rl = this.getTextureFor(stage);
+        return rl == null ? ImmutableList.of() : ImmutableList.of(rl);
     }
 
     public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {
