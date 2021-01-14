@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
@@ -53,23 +54,54 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     private static final IAgriWeed NO_WEED = NoWeed.getInstance();
     private static final IAgriStatsMap NO_STATS = NoStats.getInstance();
 
-    private IAgriPlant plant;
-    private IAgriGrowthStage growth;
+    // Auto synced fields
+    private final AutoSyncedField<IAgriPlant> plant;
+    private final AutoSyncedField<IAgriGrowthStage> growth;
+    private final AutoSyncedField<IAgriWeed> weed;
+    private final AutoSyncedField<IAgriGrowthStage> weedGrowth;
+    private final AutoSyncedField<Optional<IAgriGenome>> genome;
+    private final AutoSyncedField<Boolean> crossCrop;
+    // Growth Requirements
     private GrowthRequirement requirement;  // TODO: Implement growth requirements and cache their states
-    private IAgriWeed weed;
-    private IAgriGrowthStage weedGrowth;
-    private IAgriGenome genome;
-    private boolean crossCrop;
     // Cache for neighbouring crops
     private final Map<Direction, Optional<IAgriCrop>> neighbours;
     private boolean needsCaching;
 
     public TileEntityCropSticks() {
+        // Super constructor with appropriate TileEntity Type
         super(AgriCraft.instance.getModTileRegistry().crop_sticks);
-        this.plant = NO_PLANT;
-        this.growth = NO_GROWTH;
-        this.weed = NO_WEED;
-        this.weedGrowth = NO_GROWTH;
+        // Initialize automatically synced fields
+        this.plant = this.createField(NO_PLANT,
+                (plant, tag) -> tag.putString(AgriNBT.PLANT, plant.getId()),
+                (tag) -> AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NO_PLANT));
+        this.growth = this.createField(NO_GROWTH,
+                (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
+                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH));
+        this.weed = this.createField(NO_WEED,
+                (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
+                (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED));
+        this.weedGrowth = this.createField(NO_GROWTH,
+                (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId()),
+                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH));
+        this.genome = this.createField(Optional.empty(),
+                (optional, tag) -> optional.ifPresent(genome -> {
+                    CompoundNBT geneTag = new CompoundNBT();
+                    genome.writeToNBT(geneTag);
+                    tag.put(AgriNBT.GENOME, geneTag);
+                }),
+                (tag) -> {
+                    if(tag.contains(AgriNBT.GENOME)) {
+                        IAgriGenome genome = AgriApi.getAgriGenomeBuilder(this.getPlant()).build();
+                        genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
+                        return Optional.of(genome);
+                    } else {
+                        return Optional.empty();
+                    }
+                });
+        this.crossCrop = this.createField(false,
+                (bool, tag) -> tag.putBoolean(AgriNBT.CROSS_CROP, bool),
+                (tag) -> tag.getBoolean(AgriNBT.CROSS_CROP));
+        // Initialize neighbour cache
         this.neighbours = Maps.newEnumMap(Direction.class);
         Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, Optional.empty()));
         this.needsCaching = true;
@@ -120,26 +152,25 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     @Nonnull
     public IAgriGrowthStage getGrowthStage() {
-        return this.growth;
+        return this.growth.get();
     }
 
     @Override
     public boolean setGrowthStage(@Nonnull IAgriGrowthStage stage) {
-        if(this.growth.equals(stage)) {
+        if(this.growth.get().equals(stage)) {
             return false;
         }
-        if(!this.plant.getGrowthStages().contains(stage)) {
+        if(!this.getPlant().getGrowthStages().contains(stage)) {
             return false;
         }
-        this.growth = stage;
-        this.plant.onGrowth(this);
-        this.markForUpdate();
+        this.growth.set(stage);
+        this.getPlant().onGrowth(this);
         return true;
     }
 
     @Override
     public boolean isCrossCrop() {
-        return this.crossCrop;
+        return this.crossCrop.get();
     }
 
     @Override
@@ -153,11 +184,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.isCrossCrop() == status) {
             return false;
         }
-        this.crossCrop = status;
+        this.crossCrop.set(status);
         if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getState(), status));
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getBlockState(), status));
         }
-        this.markForUpdate();
         return true;
     }
 
@@ -187,7 +217,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         }
         IAgriPlant plant = this.getPlant();
         IAgriWeed weed = this.getWeeds();
-        Block.spawnDrops(this.getState(), this.getWorld(), this.getPosition());
+        Block.spawnDrops(this.getBlockState(), this.getWorld(), this.getPosition());
         this.getWorld().setBlockState(this.getPosition(), Blocks.AIR.getDefaultState());
         plant.onBroken(this, entity);
         weed.onBroken(this, entity);
@@ -283,9 +313,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void executePlantGrowthTick() {
         if (!this.isMature()) {
             int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
-            double rate = plant.getGrowthChanceBase(this.growth) + growth * plant.getGrowthChanceBonus(this.growth) * AgriCraft.instance.getConfig().growthMultiplier();
+            double rate = this.getPlant().getGrowthChanceBase(this.getGrowthStage())
+                    + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier();
             if (rate > this.getRandom().nextDouble()) {
-                this.setGrowthStage(this.growth.getNextStage(this, this.getRandom()));
+                this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
             }
         }
     }
@@ -293,21 +324,21 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     @Nonnull
     public Optional<IAgriGenome> getGenome() {
-        return Optional.ofNullable(this.genome);
+        return this.genome.get();
     }
 
     @Override
     public void setGenome(@Nonnull IAgriGenome genome) {
-        if(this.hasPlant() && !genome.equals(this.genome)) {
-            this.markForUpdate();
-            this.genome = genome;
+        Optional<IAgriGenome> opt = Optional.of(genome);
+        if(this.hasPlant() && !opt.equals(this.getGenome())) {
+            this.genome.set(opt);
         }
     }
 
     @Nonnull
     @Override
     public IAgriStatsMap getStats() {
-        return this.genome == null ? NO_STATS : this.genome.getStats();
+        return this.getGenome().map(IAgriStatProvider::getStats).orElse(NO_STATS);
     }
 
     @Override
@@ -316,7 +347,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.isCrossCrop()) {
             return AgriCraft.instance.getConfig().allowFertilizerMutations() && fertilizer.canTriggerMutation();
         } else if(this.hasPlant()) {
-            return this.plant.isFertilizable(this.getGrowthStage(), fertilizer);
+            return this.getPlant().isFertilizable(this.getGrowthStage(), fertilizer);
         } else {
             return fertilizer.canTriggerWeeds();
         }
@@ -344,16 +375,16 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public boolean canBeHarvested(@Nullable LivingEntity entity) {
-        return plant.allowsHarvest(this.getGrowthStage(), entity);
+        return this.getPlant().allowsHarvest(this.getGrowthStage(), entity);
     }
 
     @Nonnull
     @Override
     public ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, LivingEntity entity) {
         if (this.getWorld() != null && this.canBeHarvested(entity)) {
-            this.plant.getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), this.getWorld().getRandom());
-            this.setGrowthStage(plant.getGrowthStageAfterHarvest());
-            plant.onHarvest(this, entity);
+            this.getPlant().getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), this.getWorld().getRandom());
+            this.setGrowthStage(this.getPlant().getGrowthStageAfterHarvest());
+            this.getPlant().onHarvest(this, entity);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
@@ -408,79 +439,75 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.isCrossCrop()) {
             return false;
         }
-        this.plant = plant;
-        this.growth = plant.getInitialGrowthStage();
+        this.plant.set(plant);
+        this.growth.set(plant.getInitialGrowthStage());
         if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), true));
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), true));
         }
-        this.markForUpdate();
         return true;
     }
 
     @Nonnull
     @Override
     public IAgriPlant removePlant() {
-        IAgriPlant plant = this.plant;
-        this.plant = NO_PLANT;
-        this.growth = NO_GROWTH;
+        IAgriPlant plant = this.plant.get();
+        this.plant.set(NO_PLANT);
+        this.growth.set(NO_GROWTH);
         plant.onRemoved(this);
-        this.genome = null;
+        this.genome.set(Optional.empty());
         if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), false));
+            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), false));
         }
-        this.markForUpdate();
         return plant;
     }
 
     @Override
     public boolean hasPlant() {
-        return this.plant.isPlant();
+        return this.plant.get().isPlant();
     }
 
     @Nonnull
     @Override
     public IAgriPlant getPlant() {
-        return this.plant;
+        return this.plant.get();
     }
 
     @Override
     public boolean hasWeeds() {
-        return this.weed.isWeed();
+        return this.weed.get().isWeed();
     }
 
     @Nonnull
     @Override
     public IAgriWeed getWeeds() {
-        return this.weed;
+        return this.weed.get();
     }
 
     @Nonnull
     @Override
     public IAgriGrowthStage getWeedGrowthStage() {
-        return this.weedGrowth;
+        return this.weedGrowth.get();
     }
 
     @Override
     public boolean setWeed(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage) {
-        if(this.weed.equals(weed)) {
-            if(this.weedGrowth.equals(stage)) {
+        if(this.weed.get().equals(weed)) {
+            if(this.weedGrowth.get().equals(stage)) {
                 return false;
             }
-            if(this.weed.getGrowthStages().contains(stage)) {
-                this.weedGrowth = stage;
-                this.weed.onGrowthTick(this);
-                this.markForUpdate();
+            if(this.weed.get().getGrowthStages().contains(stage)) {
+                this.weedGrowth.set(stage);
+                this.weed.get().onGrowthTick(this);
                 return true;
             }
             return false;
         } else if(weed.getGrowthStages().contains(stage)) {
-            this.weed = weed;
-            this.weedGrowth = stage;
-            this.weed.onSpawned(this);
+            this.weed.set(weed);
+            this.weedGrowth.set(stage);
+            this.weed.get().onSpawned(this);
             if(this.getWorld() != null) {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), true));
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), true));
             }
-            this.markForUpdate();
         }
         return false;
     }
@@ -488,12 +515,11 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public boolean removeWeed() {
         if(this.hasWeeds()) {
-            this.weed = NO_WEED;
-            this.weedGrowth = NO_GROWTH;
+            this.weed.set(NO_WEED);
+            this.weedGrowth.set(NO_GROWTH);
             if(this.getWorld() != null) {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getState(), false));
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), false));
             }
-            this.markForUpdate();
             return true;
         }
         return false;
@@ -507,7 +533,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public boolean setSeed(@Nonnull AgriSeed seed) {
         if(this.setPlant(seed.getPlant())) {
-            this.genome = seed.getGenome().orElseThrow(() -> new IllegalArgumentException("Can not set a plant from a seed with no genome"));
+            this.setGenome(seed.getGenome().orElseThrow(() -> new IllegalArgumentException("Can not set a plant from a seed with no genome")));
             return true;
         }
         return false;
@@ -525,36 +551,18 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public Optional<AgriSeed> getSeed() {
-        return Optional.ofNullable(this.hasPlant() ? new AgriSeed(this.getPlant(), this.genome) : null);
+        return this.getGenome().flatMap(genome -> Optional.ofNullable(this.hasPlant() ? new AgriSeed(this.getPlant(), genome) : null));
     }
 
     @Override
-    protected void writeTileNBT(CompoundNBT tag) {
-        tag.putString(AgriNBT.PLANT, this.getPlant().getId());
-        tag.putString(AgriNBT.GROWTH, this.getGrowthStage().getId());
-        tag.putString(AgriNBT.WEED, this.getWeeds().getId());
-        tag.putString(AgriNBT.WEED_GROWTH, this.getWeedGrowthStage().getId());
-        tag.putBoolean(AgriNBT.CROSS_CROP, this.isCrossCrop());
-        this.getGenome().ifPresent(genome -> {
-            CompoundNBT geneTag = new CompoundNBT();
-            genome.writeToNBT(geneTag);
-            tag.put(AgriNBT.GENOME, geneTag);
-        });
+    protected void writeTileNBT(@Nonnull CompoundNBT tag) {
+        // No need to write anything since everything is covered by the AutoSyncedFields
     }
 
     @Override
-    protected void readTileNBT(BlockState state, CompoundNBT tag) {
-        this.plant = AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NO_PLANT);
-        this.growth = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH);
-        this.weed = AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED);
-        this.weedGrowth = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH);
-        this.crossCrop = tag.getBoolean(AgriNBT.CROSS_CROP);
-        if(tag.contains(AgriNBT.GENOME)) {
-            if(this.genome == null) {
-                this.genome = AgriApi.getAgriGenomeBuilder(this.plant).build();
-            }
-            this.genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
-        }
+    protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+        // No need to read anything since everything is covered by the AutoSyncedFields
+        // A cache update will be required though (either on the client, or on the server after being loaded)
         this.needsCaching = true;
     }
 
@@ -562,7 +570,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     public void addServerDebugInfo(@Nonnull Consumer<String> consumer) {
         Preconditions.checkNotNull(consumer);
         consumer.accept("CROP:");
-        if (this.crossCrop) {
+        if (this.isCrossCrop()) {
             consumer.accept(" - This is a crosscrop");
         } else {
             final IAgriPlant plant = this.getPlant();
