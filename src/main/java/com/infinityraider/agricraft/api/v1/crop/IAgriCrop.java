@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantAcceptor;
@@ -11,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

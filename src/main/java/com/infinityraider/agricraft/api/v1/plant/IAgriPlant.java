@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -231,6 +232,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @param entity the entity who broke the crop sticks (can be null in case it wasn't broken by an entity)
      */
     default void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
+
+    /**
+     * Callback for custom actions when an entity collides with a crop where this plant is planted
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant was planted
+     * @param entity the entity which collided
+     */
+    default void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {}
 
     /**
      * Method to check if this is an actual plant, or the default, non-null no_plant object

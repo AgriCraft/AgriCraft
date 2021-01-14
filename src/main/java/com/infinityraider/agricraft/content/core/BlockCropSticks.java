@@ -4,6 +4,7 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.CropEvent;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
@@ -18,6 +19,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
@@ -43,6 +45,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -249,44 +252,44 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if(world.isRemote()) {
+        if (world.isRemote()) {
             return ActionResultType.PASS;
         }
         Optional<IAgriCrop> optional = this.getCrop(world, pos);
-        if(!optional.isPresent()) {
+        if (!optional.isPresent()) {
             return ActionResultType.PASS;
         }
         IAgriCrop crop = optional.get();
         ItemStack heldItem = player.getHeldItem(hand);
         // Harvesting
-        if(heldItem.isEmpty()) {
+        if (heldItem.isEmpty()) {
             return crop.harvest(stack -> this.spawnItem(crop, stack), player);
         }
         // Specific item interactions
-        if(TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
+        if (TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
             return ActionResultType.PASS;
         }
         // Fertilization
-        if(AgriApi.getFertilizerRegistry().hasAdapter(heldItem)) {
+        if (AgriApi.getFertilizerRegistry().hasAdapter(heldItem)) {
             return AgriApi.getFertilizerRegistry().valueOf(heldItem)
                     .map(f -> f.applyFertilizer(crop, heldItem, world.getRandom()))
                     .orElse(ActionResultType.PASS);
         }
         // Creation of Cross crops
-        if(heldItem.getItem() == this.asItem()) {
-            if(crop.setCrossCrop(true)) {
-                if(!player.isCreative()) {
+        if (heldItem.getItem() == this.asItem()) {
+            if (crop.setCrossCrop(true)) {
+                if (!player.isCreative()) {
                     player.getHeldItem(hand).shrink(1);
                 }
                 return ActionResultType.CONSUME;
             }
         }
         // Planting
-        if(AgriApi.getSeedRegistry().hasAdapter(heldItem)) {
-           return AgriApi.getSeedRegistry().valueOf(heldItem)
+        if (AgriApi.getSeedRegistry().hasAdapter(heldItem)) {
+            return AgriApi.getSeedRegistry().valueOf(heldItem)
                     .map(seed -> {
-                        if(crop.setSeed(seed)) {
-                            if(!player.isCreative()) {
+                        if (crop.setSeed(seed)) {
+                            if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }
                             return ActionResultType.CONSUME;
@@ -305,6 +308,13 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @SuppressWarnings("deprecation")
     public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         this.getCrop(world, pos).ifPresent(crop -> crop.breakCrop(player));
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+        this.getCrop(world, pos).ifPresent(crop -> crop.getPlant().onEntityCollision(crop, entity));
     }
 
     @Override
