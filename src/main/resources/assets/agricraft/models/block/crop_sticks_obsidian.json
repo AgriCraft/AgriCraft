@@ -1,6 +1,6 @@
 {
   "textures":  {
-    "crop_sticks": "agricraft:blocks/crop_sticks_obsidian",
+    "crop_sticks": "agricraft:block/crop_sticks_obsidian",
     "particle": "minecraft:block/obsidian"
   },
   "elements": [
