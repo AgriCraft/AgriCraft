@@ -4,7 +4,6 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.crop.CropEvent;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
@@ -45,7 +44,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -253,17 +251,24 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (world.isRemote()) {
-            return ActionResultType.PASS;
+            return ActionResultType.SUCCESS;
         }
         Optional<IAgriCrop> optional = this.getCrop(world, pos);
         if (!optional.isPresent()) {
-            return ActionResultType.PASS;
+            return ActionResultType.FAIL;
         }
         IAgriCrop crop = optional.get();
         ItemStack heldItem = player.getHeldItem(hand);
-        // Harvesting
+        // Harvesting (or de-cross-crop'ing)
         if (heldItem.isEmpty()) {
-            return crop.harvest(stack -> this.spawnItem(crop, stack), player);
+            if(crop.isCrossCrop()) {
+                if (crop.setCrossCrop(false) && !player.isCreative()) {
+                    this.spawnItem(crop, new ItemStack(this.asItem()));
+                    return ActionResultType.CONSUME;
+                }
+            } else {
+                return crop.harvest(stack -> this.spawnItem(crop, stack), player);
+            }
         }
         // Specific item interactions
         if (TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
