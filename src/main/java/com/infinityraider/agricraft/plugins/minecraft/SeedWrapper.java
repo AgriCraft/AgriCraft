@@ -3,22 +3,27 @@ package com.infinityraider.agricraft.plugins.minecraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IItemProvider;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class SeedWrapper implements IAgriAdapter<AgriSeed> {
-
     @Override
     public boolean accepts(Object obj) {
-        return (obj instanceof ItemStack) && resolve((ItemStack) obj).isPresent();
+        if(obj instanceof IItemProvider) {
+            return accepts(new ItemStack((IItemProvider) obj));
+        }
+        return (obj instanceof ItemStack)  && resolve((ItemStack) obj).isPresent();
     }
 
     @Override
     public Optional<AgriSeed> valueOf(Object obj) {
+        if (obj instanceof IItemProvider) {
+            return valueOf(new ItemStack((IItemProvider) obj));
+        }
         if (obj instanceof ItemStack) {
             return Objects.requireNonNull(resolve((ItemStack) obj));
         } else {
@@ -31,7 +36,7 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
             return Optional.empty();
         }
         return AgriApi.getPlantRegistry().stream()
-                .filter(plant -> ItemStack.areItemsEqual(plant.getSeed(), stack) && doTagsMatch(plant, stack))
+                .filter(plant -> ItemStack.areItemsEqual(plant.getSeed(), stack) && doTagsMatch(plant.getSeed(), stack))
                 .findFirst()
                 .map(plant -> {
                     IAgriGenome genome = AgriApi.getAgriGenomeBuilder(plant).build();
@@ -43,7 +48,7 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
                 });
     }
 
-    private boolean doTagsMatch(IAgriPlant plant, ItemStack test) {
+    private boolean doTagsMatch(ItemStack seed, ItemStack test) {
         // TODO
         return true;
     }
