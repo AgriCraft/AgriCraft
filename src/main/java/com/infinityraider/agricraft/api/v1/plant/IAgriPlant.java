@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,7 +35,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return A list of all the seeds for this plant.
      */
     @Nonnull
-    Collection<ItemStack> getSeeds();
+    Collection<ItemStack> getSeedSubstitutes();
 
     /**
      * Determines if the plant is affected by fertilizers. If false, this setting will prevent any
@@ -117,6 +118,8 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     @Nonnull
     String getInformation(IAgriGrowthStage stage);
 
+    void addTooltip(Consumer<ITextComponent> consumer);
+
     /**
      * Creates a stack of the plant's primary seed item. The plant's primary seed item is the seed
      * item that was registered first for the plant.
@@ -151,7 +154,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @param products a consumer for collecting all the possible plant products that should be
      * listed.
      */
-    void getAllPossibleProducts(IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> products);
+    void getAllPossibleProducts(@Nonnull Consumer<ItemStack> products);
 
     /**
      * Retrieves the products that would be produced upon harvesting the given plant, with the given

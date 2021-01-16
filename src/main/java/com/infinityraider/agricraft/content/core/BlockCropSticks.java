@@ -289,9 +289,9 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
                 return ActionResultType.CONSUME;
             }
         }
-        // Planting
-        if (AgriApi.getSeedRegistry().hasAdapter(heldItem)) {
-            return AgriApi.getSeedRegistry().valueOf(heldItem)
+        // Planting from seed (copying the stats)
+        if (AgriApi.getSeedAdapterizer().hasAdapter(heldItem)) {
+            return AgriApi.getSeedAdapterizer().valueOf(heldItem)
                     .map(seed -> {
                         if (crop.setSeed(seed)) {
                             if (!player.isCreative()) {
@@ -300,8 +300,22 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
                             return ActionResultType.CONSUME;
                         } else {
                             return ActionResultType.PASS;
-                        }
-                    })
+                        }})
+                    .orElse(ActionResultType.PASS);
+        }
+        // Planting from seed substitute (new stats)
+        if(AgriApi.getSeedSubstituteAdapterizer().hasAdapter(heldItem)) {
+            return AgriApi.getSeedSubstituteAdapterizer().valueOf(heldItem)
+                    .map(plant -> {
+                        if(crop.setPlant(plant)) {
+                            crop.setGenome(AgriApi.getAgriGenomeBuilder(plant).build());
+                            if (!player.isCreative()) {
+                                player.getHeldItem(hand).shrink(1);
+                            }
+                            return ActionResultType.CONSUME;
+                        } else {
+                            return ActionResultType.PASS;
+                        }})
                     .orElse(ActionResultType.PASS);
         }
         // Fall Back to harvesting

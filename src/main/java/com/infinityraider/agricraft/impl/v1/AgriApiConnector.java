@@ -59,6 +59,8 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
     @Nonnull
+    private final IAgriAdapterizer<IAgriPlant> seedSubstituteAdapterizer;
+    @Nonnull
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     @Nonnull
     private final AgriMutationHandler mutator;
@@ -72,6 +74,7 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.soilRegistry = AgriSoilRegistry.getInstance();
         this.weedRegistry = AgriWeedRegistry.getInstance();
         this.seedAdapterizer = new AgriAdapterizer<>();
+        this.seedSubstituteAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.mutator = AgriMutationHandler.getInstance();
     }
@@ -126,8 +129,14 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriAdapterizer<AgriSeed> connectSeedRegistry() {
+    public IAgriAdapterizer<AgriSeed> connectSeedAdapterizer() {
         return this.seedAdapterizer;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriAdapterizer<IAgriPlant> connectSeedSubstituteAdapterizer() {
+        return this.seedSubstituteAdapterizer;
     }
 
     @Override

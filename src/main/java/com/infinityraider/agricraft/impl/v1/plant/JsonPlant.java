@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
@@ -32,6 +31,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -44,8 +45,8 @@ public class JsonPlant implements IAgriPlant {
     private final List<IAgriGrowthStage> growthStages;
     private final Set<IGrowCondition> growthConditions;
 
-    private final List<ItemStack> seedItems;
-    private final AgriSeed defaultSeed;
+    private final ItemStack seed;
+    private final List<ItemStack> seedSubstitutes;
 
     @OnlyIn(Dist.CLIENT)
     private Map<Integer, List<BakedQuad>> quads;
@@ -54,8 +55,8 @@ public class JsonPlant implements IAgriPlant {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
-        this.seedItems = initSeedItemsListJSON(plant);
-        this.defaultSeed = new AgriSeed(this,  AgriApi.getAgriGenomeBuilder(this).build());
+        this.seed = plant.getSeed().convertSingle(ItemStack.class).orElseThrow(() -> new IllegalArgumentException("No valid seed items defined for plant " + plant.getPlantName()));
+        this.seedSubstitutes = plant.getSeed().convertSubstitutes(ItemStack.class);
     }
 
     @Override
@@ -65,8 +66,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeeds() {
-        return this.seedItems;
+    public Collection<ItemStack> getSeedSubstitutes() {
+        return this.seedSubstitutes;
     }
 
     @Override
@@ -118,7 +119,7 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public final ItemStack getSeed() {
-        return this.defaultSeed.toStack();
+        return this.seed.copy();
     }
 
     @Nonnull
@@ -139,7 +140,13 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public void getAllPossibleProducts(IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> products) {
+    public void addTooltip(Consumer<ITextComponent> consumer) {
+        consumer.accept(new StringTextComponent(this.plant.getPlantName()));
+        consumer.accept(new StringTextComponent(this.plant.getDescription().toString()));
+    }
+
+    @Override
+    public void getAllPossibleProducts(@Nonnull Consumer<ItemStack> products) {
         this.plant.getProducts().getAll().stream()
                 .flatMap(p -> p.convertAll(ItemStack.class).stream())
                 .forEach(products);

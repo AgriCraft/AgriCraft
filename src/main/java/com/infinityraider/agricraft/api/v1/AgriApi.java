@@ -149,7 +149,10 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Seed Registry.
+     * Fetches the AgriCraft Seed Adapterizer.
+     *
+     * Seeds are ItemStacks which can be planted on crops, and carry genes.
+     * Each plant corresponds to exactly one seed
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
@@ -157,8 +160,25 @@ public final class AgriApi {
      * @return the AgriCraft Seed Registry.
      */
     @Nonnull
-    public static IAgriAdapterizer<AgriSeed> getSeedRegistry() {
-        return AgriApi.CONNECTOR.connectSeedRegistry();
+    public static IAgriAdapterizer<AgriSeed> getSeedAdapterizer() {
+        return AgriApi.CONNECTOR.connectSeedAdapterizer();
+    }
+
+
+    /**
+     * Fetches the AgriCraft Seed substitute Adapterizer.
+     *
+     * Seed substitutes are ItemStacks which can be planted on crops as well, but can not carry genes
+     * Each plant can correspond to multiple seed substitutes
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft Seed Registry.
+     */
+    @Nonnull
+    public static IAgriAdapterizer<IAgriPlant> getSeedSubstituteAdapterizer() {
+        return AgriApi.CONNECTOR.connectSeedSubstituteAdapterizer();
     }
 
     /**

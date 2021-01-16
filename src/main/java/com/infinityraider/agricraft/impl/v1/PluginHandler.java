@@ -57,7 +57,8 @@ public final class PluginHandler {
         registerPlants(AgriApi.getPlantRegistry());
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
-        registerSeeds(AgriApi.getSeedRegistry());
+        registerSeeds(AgriApi.getSeedAdapterizer());;
+        registerSeedSubstitutes(AgriApi.getSeedSubstituteAdapterizer());
         registerFertilizers(AgriApi.getFertilizerRegistry());
     }
 
@@ -81,12 +82,16 @@ public final class PluginHandler {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
     }
 
-    public static void registerSeeds(IAgriAdapterizer<AgriSeed> seedRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(seedRegistry));
+    public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(adapterizer));
     }
 
-    public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> fertilizerRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(fertilizerRegistry));
+    public static void registerSeedSubstitutes(IAgriAdapterizer<IAgriPlant> adapterizer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeedSubstitutes(adapterizer));
+    }
+
+    public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(adapterizer));
     }
 
     /**

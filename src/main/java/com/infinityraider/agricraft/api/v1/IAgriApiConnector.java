@@ -54,7 +54,10 @@ public interface IAgriApiConnector {
     IAgriStatRegistry connectStatRegistry();
 
     @Nonnull
-    IAgriAdapterizer<AgriSeed> connectSeedRegistry();
+    IAgriAdapterizer<AgriSeed> connectSeedAdapterizer();
+
+    @Nonnull
+    IAgriAdapterizer<IAgriPlant> connectSeedSubstituteAdapterizer();
 
     @Nonnull
     IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();

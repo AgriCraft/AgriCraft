@@ -16,6 +16,8 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,7 +53,7 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeeds() {
+    public Collection<ItemStack> getSeedSubstitutes() {
         return Collections.emptySet();
     }
 
@@ -108,10 +110,18 @@ public class NoPlant implements IAgriPlant {
         return Optional.empty();
     }
 
+    private final String info = "Damnations! This is not a plant";
+    private final ITextComponent tooltip = new StringTextComponent(this.info);
+
     @Nonnull
     @Override
     public String getInformation(IAgriGrowthStage stage) {
-        return "";
+        return info;
+    }
+
+    @Override
+    public void addTooltip(Consumer<ITextComponent> consumer) {
+        consumer.accept(tooltip);
     }
 
     @Nonnull
@@ -127,7 +137,7 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public void getAllPossibleProducts(IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> products) {
+    public void getAllPossibleProducts(@Nonnull Consumer<ItemStack> products) {
         //NOPE
     }
 
