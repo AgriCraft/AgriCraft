@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
@@ -42,33 +43,36 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         int index = 0;
         for(IAgriGenePair<?> pair : this.geneMap.values()) {
             CompoundNBT geneTag = new CompoundNBT();
-            geneTag.putString("gene", pair.getGene().getId());
-            geneTag.put("dominant", pair.getDominant().writeToNBT());
-            geneTag.put("recessive", pair.getRecessive().writeToNBT());
+            geneTag.putString(AgriNBT.GENE, pair.getGene().getId());
+            geneTag.put(AgriNBT.DOMINANT, pair.getDominant().writeToNBT());
+            geneTag.put(AgriNBT.RECESSIVE, pair.getRecessive().writeToNBT());
             list.addNBTByIndex(index, geneTag);
             index++;
         }
-        tag.put("genome", list);
+        tag.put(AgriNBT.GENOME, list);
         return true;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean readFromNBT(@Nonnull CompoundNBT tag) {
-        ListNBT list = tag.getList("genome", 9);
-        for(int i = 0; i < list.size(); i++) {
-            CompoundNBT geneTag = list.getCompound(i);
-            AgriGeneRegistry.getInstance().get(geneTag.getString("gene"))
-                    .ifPresent(gene -> {
-                        this.geneMap.put(gene, this.generateGenePairFromNBT(gene, tag));
-                    });
+        if(tag.contains(AgriNBT.GENOME)) {
+            ListNBT list = tag.getList(AgriNBT.GENOME, 9);
+            for (int i = 0; i < list.size(); i++) {
+                CompoundNBT geneTag = list.getCompound(i);
+                AgriGeneRegistry.getInstance().get(geneTag.getString(AgriNBT.GENE))
+                        .ifPresent(gene -> {
+                            this.geneMap.put(gene, this.generateGenePairFromNBT(gene, tag));
+                        });
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     private <T> IAgriGenePair<T> generateGenePairFromNBT(IAgriGene<T> gene, CompoundNBT tag) {
-        IAllel<T> dominant = gene.readAllelFromNBT(tag.getCompound("dominant"));
-        IAllel<T> recessive = gene.readAllelFromNBT(tag.getCompound("recessive"));
+        IAllel<T> dominant = gene.readAllelFromNBT(tag.getCompound(AgriNBT.DOMINANT));
+        IAllel<T> recessive = gene.readAllelFromNBT(tag.getCompound(AgriNBT.RECESSIVE));
         return  gene.generateGenePair(dominant, recessive);
     }
 

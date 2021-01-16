@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
@@ -265,7 +266,7 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public CompoundNBT writeToNBT() {
         CompoundNBT tag = new CompoundNBT();
-        tag.putString("agri_plant", this.getId());
+        tag.putString(AgriNBT.PLANT, this.getId());
         return tag;
     }
 }

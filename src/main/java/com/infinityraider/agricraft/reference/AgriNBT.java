@@ -1,12 +1,13 @@
 package com.infinityraider.agricraft.reference;
 
 public interface AgriNBT {
-    // Crop sticks
-    String PLANT = "agri_plant";
+    String CROSS_CROP = "agri_cross_crop";
+    String DOMINANT = "agri_dominant";
+    String GENE = "agri_gene";
+    String GENOME = "agri_genome";
     String GROWTH = "agri_growth";
+    String PLANT = "agri_plant";
+    String RECESSIVE = "agri_recessive";
     String WEED = "agri_weed";
     String WEED_GROWTH = "agri_weed_growth";
-    String CROSS_CROP = "agri_cross_crop";
-    String SEED = "agri_seed";
-    String GENOME = "agri_genome";
 }

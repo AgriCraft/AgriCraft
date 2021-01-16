@@ -12,6 +12,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
@@ -129,7 +130,9 @@ public final class PluginHandler {
     private static ModFileScanData getScanData(FMLCommonSetupEvent event) {
         FMLModContainer container = null;
         try {
-            container = (FMLModContainer) ModLifecycleEvent.class.getDeclaredField("container").get(event);
+            Field field = ModLifecycleEvent.class.getDeclaredField("container");
+            field.setAccessible(true);
+            container = (FMLModContainer) field.get(event);
         } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
             AgriCore.getLogger("agricraft-plugins").error(
                     "Failed to fetch ModContainer from FMLCommonSetupEvent");
@@ -138,7 +141,9 @@ public final class PluginHandler {
             return null;
         }
         try {
-            return (ModFileScanData) FMLModContainer.class.getDeclaredField("scanResults").get(container);
+            Field field = FMLModContainer.class.getDeclaredField("scanResults");
+            field.setAccessible(true);
+            return (ModFileScanData) field.get(container);
         } catch(IllegalAccessException | NoSuchFieldException | ClassCastException e) {
             AgriCore.getLogger("agricraft-plugins").error(
                     "Failed to fetch ModFileScanData from FMLModContainer");
