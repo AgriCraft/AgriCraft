@@ -1,24 +1,44 @@
 package com.infinityraider.agricraft.plugins.jei;
 
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.agricraft.AgriCraft;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@AgriPlugin
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@mezz.jei.api.JeiPlugin
+@OnlyIn(Dist.CLIENT)
 @SuppressWarnings("unused")
-public class JeiPlugin implements IAgriPlugin {
+@ParametersAreNonnullByDefault
+public class JeiPlugin implements IModPlugin {
+    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "compat_jei");
+
+    @Nonnull
     @Override
-    public boolean isEnabled() {
-        return true;
+    public ResourceLocation getPluginUid() {
+        return ID;
     }
 
     @Override
-    public String getId() {
-        return Names.Mods.JEI;
+    public void registerIngredients(IModIngredientRegistration registration) {
+        AgriPlantIngredient.register(registration);
     }
 
     @Override
-    public String getName() {
-        return "AgriCraft JEI Integration";
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        AgriMutationRecipe.registerCategory(registration);
+        AgriProduceRecipe.registerCategory(registration);
+    }
+
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        AgriMutationRecipe.registerRecipes(registration);
+        AgriProduceRecipe.registerRecipes(registration);
     }
 }
