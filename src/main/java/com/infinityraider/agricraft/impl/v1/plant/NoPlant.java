@@ -51,6 +51,16 @@ public class NoPlant implements IAgriPlant {
         return this.id;
     }
 
+    @Override
+    public String getPlantName() {
+        return this.getId();
+    }
+
+    @Override
+    public String getSeedName() {
+        return this.getId();
+    }
+
     @Nonnull
     @Override
     public Collection<ItemStack> getSeedSubstitutes() {

@@ -13,13 +13,17 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@OnlyIn(Dist.CLIENT)
 public class AgriProduceRecipe {
     public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "produce");
 
@@ -65,26 +69,30 @@ public class AgriProduceRecipe {
         }
     };
 
+    private static final ResourceLocation BG_TEXTURE = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_produce.png");
+
     // TODO
-    private static final IDrawable BACKGROUND = new IDrawable() {
+    private static final IAgriDrawable BACKGROUND = new IAgriDrawable() {
         @Override
         public int getWidth() {
-            return 0;
+            return 128;
         }
 
         @Override
         public int getHeight() {
-            return 0;
+            return 128;
         }
 
         @Override
-        public void draw(MatrixStack matrixStack, int x, int y) {
-
+        public void draw(MatrixStack transform, int x, int y) {
+            this.bindTexture(BG_TEXTURE);
+            Screen.blit(transform, x, y, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
         }
     };
 
-    // TODO
-    private static final IDrawable ICON = new IDrawable() {
+    private static final ResourceLocation ICON_TEXTURE = new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/debugger.png");
+
+    private static final IAgriDrawable ICON = new IAgriDrawable() {
         @Override
         public int getWidth() {
             return 16;
@@ -96,8 +104,9 @@ public class AgriProduceRecipe {
         }
 
         @Override
-        public void draw(MatrixStack matrixStack, int i, int i1) {
-
+        public void draw(MatrixStack transform, int x, int y) {
+            this.bindTexture(ICON_TEXTURE);
+            Screen.blit(transform, x, y, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
         }
     };
 

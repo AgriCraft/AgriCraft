@@ -29,6 +29,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * the ICropPlant object you registered, it will return a different object.
  */
 public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllel<IAgriPlant> {
+
+    String getPlantName();
+
+    String getSeedName();
+
     /**
      * Fetches a list of all the items that are considered seeds for this specific plant.
      *

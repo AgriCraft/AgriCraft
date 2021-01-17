@@ -4,7 +4,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     public static final IAgriPlant NO_PLANT = NoPlant.getInstance();
@@ -35,5 +37,12 @@ public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     public boolean remove(@Nullable IAgriPlant element) {
         // do not allow removal of the default no plant implementation
         return NO_PLANT != element && super.remove(element);
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IAgriPlant> stream() {
+        // Filter the No plant out of the stream
+        return super.stream().filter(IAgriPlant::isPlant);
     }
 }

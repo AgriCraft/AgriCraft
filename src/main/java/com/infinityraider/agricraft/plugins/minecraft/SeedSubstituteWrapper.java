@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.plugins.minecraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.core.CapabilityDynamicSeed;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 
@@ -43,6 +45,9 @@ public class SeedSubstituteWrapper implements IAgriAdapter<IAgriPlant> {
     }
 
     private boolean doTagsMatch(ItemStack seed, ItemStack test) {
+        if(seed.getItem() instanceof ItemDynamicAgriSeed) {
+            return CapabilityDynamicSeed.getPlant(seed) == CapabilityDynamicSeed.getPlant(test);
+        }
         // TODO
         return true;
     }

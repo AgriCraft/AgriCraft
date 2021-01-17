@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
+import com.infinityraider.agricraft.content.core.CapabilityDynamicSeed;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -44,7 +45,9 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
-    default void registerCapabilities() {}
+    default void registerCapabilities() {
+        this.registerCapability(CapabilityDynamicSeed.getInstance());
+    }
 
     @Override
     default void registerEventHandlers() {}

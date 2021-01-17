@@ -38,7 +38,7 @@ public class PlayerInteractEventHandler {
         final ItemStack stack = event.getItemStack();
 
         // If the item in the player's hand is not a seed, who cares?
-        if (!AgriApi.getSeedRegistry().hasAdapter(stack)) {
+        if (!AgriApi.getSeedAdapterizer().hasAdapter(stack)) {
             return;
         }
 

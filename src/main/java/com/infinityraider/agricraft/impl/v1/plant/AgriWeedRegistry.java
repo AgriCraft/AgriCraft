@@ -4,7 +4,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> {
     public static final IAgriWeed NO_WEED = NoWeed.getInstance();
@@ -35,5 +37,12 @@ public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> {
     public boolean remove(@Nullable IAgriWeed element) {
         // do not allow removal of the default no weed implementation
         return NO_WEED != element && super.remove(element);
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IAgriWeed> stream() {
+        // Filter the No weed out of the stream
+        return super.stream().filter(IAgriWeed::isWeed);
     }
 }

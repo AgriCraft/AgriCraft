@@ -43,7 +43,7 @@ public class ItemToolTipHandler {
         ItemStack stack = event.getItemStack();
         // Add Seed Information.
         if (!stack.isEmpty()) {
-            AgriSeed seed = AgriApi.getSeedRegistry().valueOf(stack).orElse(null);
+            AgriSeed seed = AgriApi.getSeedAdapterizer().valueOf(stack).orElse(null);
             if (seed != null) {
                 seed.getStats().addTooltips(event.getToolTip()::add);
             } else {
@@ -115,7 +115,7 @@ public class ItemToolTipHandler {
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
-            AgriSeed seed = AgriApi.getSeedRegistry().valueOf(event.getItemStack()).orElse(null);
+            AgriSeed seed = AgriApi.getSeedAdapterizer().valueOf(event.getItemStack()).orElse(null);
             if (seed != null) {
                 event.getToolTip().add(AgriToolTips.getSeedTooltip(seed));
             } else {

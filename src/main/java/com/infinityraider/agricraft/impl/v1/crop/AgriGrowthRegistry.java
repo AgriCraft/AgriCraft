@@ -3,7 +3,9 @@ package com.infinityraider.agricraft.impl.v1.crop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public class AgriGrowthRegistry extends AgriRegistry<IAgriGrowthStage> {
     public static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
@@ -24,5 +26,12 @@ public class AgriGrowthRegistry extends AgriRegistry<IAgriGrowthStage> {
     public boolean remove(@Nullable IAgriGrowthStage element) {
         // do not allow removal of the default no growth implementation
         return NO_GROWTH != element && super.remove(element);
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IAgriGrowthStage> stream() {
+        // Filter the No growth out of the stream
+        return super.stream().filter(IAgriGrowthStage::isGrowthStage);
     }
 }

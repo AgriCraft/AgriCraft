@@ -15,6 +15,8 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.core.CapabilityDynamicSeed;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
@@ -55,13 +57,32 @@ public class JsonPlant implements IAgriPlant {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
-        this.seed = plant.getSeed().convertSingle(ItemStack.class).orElseThrow(() -> new IllegalArgumentException("No valid seed items defined for plant " + plant.getPlantName()));
+        this.seed = this.initSeed(plant);
         this.seedSubstitutes = plant.getSeed().convertSubstitutes(ItemStack.class);
+    }
+
+    private ItemStack initSeed(AgriPlant plant) {
+        ItemStack seed = plant.getSeed().convertSingle(ItemStack.class)
+                .orElseThrow(() -> new IllegalArgumentException("No valid seed items defined for plant " + plant.getPlantName()));
+        if(seed.getItem() instanceof ItemDynamicAgriSeed) {
+            CapabilityDynamicSeed.setSeed(this, seed);
+        }
+        return seed;
     }
 
     @Override
     public String getId() {
         return this.plant.getId();
+    }
+
+    @Override
+    public String getPlantName() {
+        return this.plant.getPlantName();
+    }
+
+    @Override
+    public String getSeedName() {
+        return this.plant.getSeedName();
     }
 
     @Nonnull

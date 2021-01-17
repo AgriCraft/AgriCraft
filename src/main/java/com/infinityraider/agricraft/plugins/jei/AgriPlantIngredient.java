@@ -4,10 +4,8 @@ import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.ingredients.IIngredientHelper;
-import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import net.minecraft.client.gui.screen.Screen;
@@ -65,7 +63,7 @@ public class AgriPlantIngredient {
         }
     };
 
-    private static final IIngredientRenderer<IAgriPlant> RENDERER = new IAgriPlantRenderer() {
+    private static final IAgriIngredientRenderer<IAgriPlant> RENDERER = new IAgriIngredientRenderer<IAgriPlant>() {
         @Override
         public void render(MatrixStack transform, int x, int y, @Nullable IAgriPlant plant) {
             if(plant == null) {
@@ -90,6 +88,4 @@ public class AgriPlantIngredient {
     public static void register(IModIngredientRegistration registration) {
         registration.register(TYPE, AgriApi.getPlantRegistry().all(), HELPER, RENDERER);
     }
-
-    private interface IAgriPlantRenderer extends IIngredientRenderer<IAgriPlant>, IRenderUtilities {}
 }

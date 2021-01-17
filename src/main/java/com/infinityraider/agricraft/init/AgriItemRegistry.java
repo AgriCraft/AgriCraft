@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.init;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.core.ItemCropSticks;
 import com.infinityraider.agricraft.content.core.ItemDebugger;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.item.Item;
 
@@ -14,30 +15,13 @@ public class AgriItemRegistry {
         return INSTANCE;
     }
 
-    private AgriItemRegistry() {
-        this.debugger = new ItemDebugger();
-
-        crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
-        crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
-        crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
-        /*
-        journal = new ItemJournal();
-        trowel = new ItemTrowel();
-        debugger = new ItemDebugger();
-        hand_rake = new ItemRake();
-        clipper = new ItemClipper();
-        clipping = new ItemClipping();
-        seed = new ItemAgriSeed();
-        nugget = new ItemNugget();
-        magnifying_glass = new ItemMagnifyingGlass();
-         */
-    }
-
     public final ItemBase debugger;
 
     public final Item crop_sticks_wood;
     public final Item crop_sticks_iron;
     public final Item crop_sticks_obsidian;
+
+    public final ItemBase seed;
 
     /*
     public final ItemBase journal;
@@ -51,9 +35,29 @@ public class AgriItemRegistry {
     public final ItemBase clipper;
     public final ItemBase clipping;
 
-    public final ItemBase seed;
 
     public final ItemBase nugget;
      */
+
+    private AgriItemRegistry() {
+        this.debugger = new ItemDebugger();
+
+        crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
+        crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
+        crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
+
+        this.seed = new ItemDynamicAgriSeed();
+        /*
+        journal = new ItemJournal();
+        trowel = new ItemTrowel();
+        debugger = new ItemDebugger();
+        hand_rake = new ItemRake();
+        clipper = new ItemClipper();
+        clipping = new ItemClipping();
+        seed = new ItemAgriSeed();
+        nugget = new ItemNugget();
+        magnifying_glass = new ItemMagnifyingGlass();
+         */
+    }
 
 }
