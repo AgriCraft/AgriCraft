@@ -42,14 +42,8 @@ public class ItemToolTipHandler {
     public void addSeedStatsTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         // Add Seed Information.
-        if (!stack.isEmpty()) {
-            AgriSeed seed = AgriApi.getSeedAdapterizer().valueOf(stack).orElse(null);
-            if (seed != null) {
-                seed.getStats().addTooltips(event.getToolTip()::add);
-            } else {
-                event.getToolTip().add(AgriToolTips.getUnknownTooltip(AgriToolTips.SEED));
-            }
-        }
+        AgriApi.getSeedAdapterizer().valueOf(stack).ifPresent(seed ->
+                seed.getStats().addTooltips(event.getToolTip()::add));
     }
 
 //    @SubscribeEvent

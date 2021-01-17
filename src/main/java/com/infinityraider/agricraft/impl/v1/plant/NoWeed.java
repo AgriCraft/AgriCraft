@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -68,7 +69,7 @@ public final class NoWeed implements IAgriWeed {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
         return ImmutableList.of();
     }
 

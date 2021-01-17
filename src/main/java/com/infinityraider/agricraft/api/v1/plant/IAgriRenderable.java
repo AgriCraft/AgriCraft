@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,11 +27,12 @@ public interface IAgriRenderable {
      * default crop patterns.
      *
      * @param stage the current growth stage of the plant
+     * @param face the face to get quads for
      * @return a list of quads for rendering the plant
      */
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    List<BakedQuad> bakeQuads(IAgriGrowthStage stage);
+    List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage);
 
     /**
      * Method which fetches all required texture to render a plant or weed for a certain growth stage,

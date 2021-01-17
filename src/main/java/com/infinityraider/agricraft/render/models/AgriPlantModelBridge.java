@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
+import com.infinityraider.infinitylib.render.QuadCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -40,8 +41,8 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     private final ItemOverrideList overrides;
     private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
 
-    private final Map<IAgriPlant, Map<IAgriGrowthStage, List<BakedQuad>>> plantQuads;
-    private final Map<IAgriWeed, Map<IAgriGrowthStage, List<BakedQuad>>> weedQuads;
+    private final Map<IAgriPlant, Map<IAgriGrowthStage, QuadCache>> plantQuads;
+    private final Map<IAgriWeed, Map<IAgriGrowthStage, QuadCache>> weedQuads;
 
     protected AgriPlantModelBridge(IModelConfiguration config, ItemOverrideList overrides, Function<RenderMaterial, TextureAtlasSprite> spriteGetter) {
         this.config = config;
@@ -52,16 +53,18 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
         this.weedQuads = Maps.newConcurrentMap();
     }
 
-    protected List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage) {
+    protected List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage, Direction face) {
         return this.plantQuads
                 .computeIfAbsent(plant, (aPlant) -> Maps.newConcurrentMap())
-                .computeIfAbsent(stage, (aStage) -> this.getTransformer().processMany(plant.bakeQuads(aStage)));
+                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> /*this.getTransformer().processMany(*/plant.bakeQuads(dir, stage)))//)
+                .getQuads(face);
     }
 
-    protected List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage) {
+    protected List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage, Direction face) {
         return this.weedQuads
                 .computeIfAbsent(weed, (aPlant) -> Maps.newConcurrentMap())
-                .computeIfAbsent(stage, (aStage) -> this.getTransformer().processMany(weed.bakeQuads(aStage)));
+                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> this.getTransformer().processMany(weed.bakeQuads(dir, stage))))
+                .getQuads(face);
     }
 
     protected IModelConfiguration getModelConfig() {
@@ -90,10 +93,10 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
         // Fetch quads based on the plant and weed in the data
         ImmutableList.Builder<BakedQuad> quads = new ImmutableList.Builder<>();
         if(data.hasProperty(PROPERTY_PLANT) && data.hasProperty(PROPERTY_PLANT_GROWTH)) {
-            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_PLANT), data.getData(PROPERTY_PLANT_GROWTH)));
+            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_PLANT), data.getData(PROPERTY_PLANT_GROWTH), side));
         }
         if(data.hasProperty(PROPERTY_WEED) && data.hasProperty(PROPERTY_WEED_GROWTH)) {
-            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_WEED), data.getData(PROPERTY_WEED_GROWTH)));
+            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_WEED), data.getData(PROPERTY_WEED_GROWTH), side));
         }
         return quads.build();
     }

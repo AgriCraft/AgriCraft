@@ -1,0 +1,17 @@
+{
+  "itemGroup.agricraft": "AgriCraft",
+  "itemGroup.agricraft_seeds": "AgriCraft Seeds",
+
+  "block.agricraft.crop_sticks_wood": "Crop Sticks",
+  "block.agricraft.crop_sticks_iron": "Iron Crop Sticks",
+  "block.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
+
+  "item.agricraft.debugger": "Debugger",
+
+  "agricraft.stat.gain": "Gain",
+  "agricraft.stat.growth": "Growth",
+  "agricraft.stat.strength": "Strength",
+  "agricraft.stat.resistance": "Resistance",
+  "agricraft.stat.fertility": "Fertility",
+  "agricraft.stat.mutativity": "Mutativity"
+}

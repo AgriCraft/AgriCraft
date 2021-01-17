@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.render.plant;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
-import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import com.infinityraider.infinitylib.render.tessellation.TessellatorBakedQuad;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -22,7 +22,7 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
         return INSTANCE;
     }
 
-    private final ThreadLocal<ITessellator> tess;
+    private final ThreadLocal<TessellatorBakedQuad> tess;
 
     private AgriPlantQuadGenerator() {
         this.tess = ThreadLocal.withInitial(this::getQuadTessellator);
@@ -30,11 +30,12 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @Nonnull
     @Override
-    public List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull ResourceLocation sprite) {
+    public List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        ITessellator tessellator = this.tess.get();
+        TessellatorBakedQuad tessellator = this.tess.get();
 
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+        tessellator.setCurrentFace(direction);
 
         tessellator.pushMatrix();
         tessellator.translate(0.5f, 0, 0.5f);
@@ -51,11 +52,12 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @Nonnull
     @Override
-    public List<BakedQuad> bakeQuadsForHashPattern(@Nonnull ResourceLocation sprite) {
+    public List<BakedQuad> bakeQuadsForHashPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        ITessellator tessellator = this.tess.get();
+        TessellatorBakedQuad tessellator = this.tess.get();
 
         tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
+        tessellator.setCurrentFace(direction);
 
         tessellator.drawScaledFaceDouble(0, 0, 16, 16, Direction.NORTH, icon, 4);
         tessellator.drawScaledFaceDouble(0, 0, 16, 16, Direction.EAST, icon, 4);

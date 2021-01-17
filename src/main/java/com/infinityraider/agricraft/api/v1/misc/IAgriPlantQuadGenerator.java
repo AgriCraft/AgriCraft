@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.misc;
 
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +23,7 @@ public interface IAgriPlantQuadGenerator {
      * @return list of BakedQuads
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull ResourceLocation sprite);
+    List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite);
 
     /**
      * Use for plants which are normally rendered with a hash pattern in the world (for example wheat)
@@ -33,5 +34,5 @@ public interface IAgriPlantQuadGenerator {
      * @return list of BakedQuads
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForHashPattern(@Nonnull ResourceLocation sprite);
+    List<BakedQuad> bakeQuadsForHashPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite);
 }

@@ -15,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -185,7 +186,7 @@ public class NoPlant implements IAgriPlant {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
         return ImmutableList.of();
     }
 

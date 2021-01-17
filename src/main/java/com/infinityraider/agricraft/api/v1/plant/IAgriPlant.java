@@ -14,14 +14,10 @@ import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
@@ -259,10 +255,4 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     default boolean isPlant() {
         return true;
     }
-    @OnlyIn(Dist.CLIENT)
-    @Nonnull
-    List<BakedQuad> bakeQuads(IAgriGrowthStage stage);
-
-    @Nonnull
-    List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage);
 }

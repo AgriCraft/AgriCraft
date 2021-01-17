@@ -26,10 +26,12 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.infinitylib.render.QuadCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -50,7 +52,7 @@ public class JsonPlant implements IAgriPlant {
     private final List<ItemStack> seedSubstitutes;
 
     @OnlyIn(Dist.CLIENT)
-    private Map<Integer, List<BakedQuad>> quads;
+    private Map<Integer, QuadCache> quads;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
@@ -205,7 +207,7 @@ public class JsonPlant implements IAgriPlant {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
         if (this.quads == null) {
             this.quads = Maps.newConcurrentMap();
         }
@@ -213,16 +215,16 @@ public class JsonPlant implements IAgriPlant {
         if (index < 0) {
             return ImmutableList.of();
         }
-        return this.quads.computeIfAbsent(index, i -> {
-            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(i));
+        return this.quads.computeIfAbsent(index, i -> new QuadCache(dir -> {
+            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
             if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
-                return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(rl);
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(dir, rl);
             }
             if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
-                return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(rl);
+                return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(dir, rl);
             }
             return ImmutableList.of();
-        });
+        })).getQuads(face);
     }
 
     @Nullable
