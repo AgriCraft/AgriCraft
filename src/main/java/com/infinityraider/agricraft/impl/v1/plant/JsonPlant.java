@@ -15,7 +15,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.content.core.CapabilityDynamicSeed;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
@@ -58,14 +57,28 @@ public class JsonPlant implements IAgriPlant {
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seed = this.initSeed(plant);
-        this.seedSubstitutes = plant.getSeed().convertSubstitutes(ItemStack.class);
+        this.seedSubstitutes = initSeedSubstitutes(plant);
     }
 
     private ItemStack initSeed(AgriPlant plant) {
         ItemStack seed = plant.getSeed().convertSingle(ItemStack.class)
                 .orElseThrow(() -> new IllegalArgumentException("No valid seed items defined for plant " + plant.getPlantName()));
+        return this.initDynamicTag(seed);
+    }
+
+    private List<ItemStack> initSeedSubstitutes(AgriPlant plant) {
+        return plant.getSeed().convertSubstitutes(ItemStack.class)
+                .stream()
+                .map(this::initDynamicTag)
+                .collect(Collectors.toList());
+    }
+
+    private ItemStack initDynamicTag(ItemStack seed) {
         if(seed.getItem() instanceof ItemDynamicAgriSeed) {
-            CapabilityDynamicSeed.setSeed(this, seed);
+            if(!seed.hasTag()) {
+                seed.setTag(new CompoundNBT());
+            }
+            seed.getTag().putString(AgriNBT.PLANT, plant.getId());
         }
         return seed;
     }

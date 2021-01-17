@@ -4,15 +4,14 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.content.core.CapabilityDynamicSeed;
-import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.util.ISeedNBTChecker;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class SeedWrapper implements IAgriAdapter<AgriSeed> {
+public class SeedWrapper implements IAgriAdapter<AgriSeed>, ISeedNBTChecker {
     @Override
     public boolean accepts(Object obj) {
         if(obj instanceof IItemProvider) {
@@ -48,13 +47,5 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
                     }
                     return new AgriSeed(plant, genome);
                 });
-    }
-
-    private boolean doTagsMatch(ItemStack seed, ItemStack test) {
-        if(seed.getItem() instanceof ItemDynamicAgriSeed) {
-            return CapabilityDynamicSeed.getPlant(seed) == CapabilityDynamicSeed.getPlant(test);
-        }
-        // TODO
-        return true;
     }
 }
