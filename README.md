@@ -24,11 +24,28 @@ However before reporting a bug please update to the latest version of the mod to
 If you want to post bug reports for older versions, make sure to tell me what version you are using and the version of Forge you are using.
 If you report a bug and I request more feedback, the label 'Awaiting reply' will be added, if I have had no response for 5 days after adding that label, the issue will be closed.
 
-
 ## Technical Documentation [![wiki]][wiki-link]
 
 AgriCraft is documented in the official GitHub wiki. Note that
 this kind of information is, most of the time, only needed by pack creators and not the average user.
+
+## Compilation Notes
+
+The latest versions of ForgeGradle require some tweaking to get builds working. The two most important things to note are as follows:
+
+1. ForgeGradle does not like JDKs newer than JDK8. To develop install [openjdk8](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot), and update `gradle.propeties` to contain the following:
+```
+org.gradle.java.home = C:\\Program Files\\AdoptOpenJDK\\jdk-8.0.275.1-hotspot
+```
+
+2. The default JVM heap size is too small to handle decompilation of MineCraft. Builds fail without increasing the heap size that Gradle allocates for the build. Update `gradle.propeties` to contain the following:
+```
+# Sets default memory used for gradle commands. Can be overridden by user or command line properties.
+# This is required to provide enough memory for the Minecraft decompilation process.
+org.gradle.jvmargs=-Xmx3G
+```
+
+> Note: We do not provide a default `gradle.properties` file as it is discouraged by the Gradle documentation, given that the file may contain maven login information and the likes.
 
 [branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
 
