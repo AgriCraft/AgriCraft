@@ -20,11 +20,11 @@ before_install:
 
 # Prepare the workspace.
 install:
-  - ./gradlew setupCIWorkspace -S
+  - ./gradlew assemble -S
 
 # Build the Project.
 script:
-  - ./gradlew build -S
+  - ./gradlew check -S
 
 # Push success to CurseForge for release.
 # after_success:

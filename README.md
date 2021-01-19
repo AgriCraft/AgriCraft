@@ -1,4 +1,4 @@
-# AgriCraft [![build]][build-link] ![branch][] ![minecraft][] [![curse]][curse-link]
+# AgriCraft ![branch] [![build]][build-link] [![coverage]][coverage-link] [![curse]][curse-link]
 
 Agricultural farming extended.
 
@@ -30,12 +30,19 @@ If you report a bug and I request more feedback, the label 'Awaiting reply' will
 AgriCraft is documented in the official GitHub wiki. Note that
 this kind of information is, most of the time, only needed by pack creators and not the average user.
 
+[branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
+
 [build-link]:https://travis-ci.org/AgriCraft/AgriCraft
 [build]:https://travis-ci.org/AgriCraft/AgriCraft.svg?branch=master "Travis-CI Build Status"
-[branch]:https://img.shields.io/badge/branch-master-aaaaff.svg "GitHub Branch"
+
+[coverage]:https://codecov.io/gh/AgriCraft/AgriCore/branch/master/graph/badge.svg?token=DIEBA4U1AH
+[coverage-link]:https://codecov.io/gh/AgriCraft/AgriCore
+
 [minecraft]:https://agricraft.github.io/versions/1.12/minecraft.svg "Minecraft Version"
-[curse-link]:http://agricraft.github.io/curse
+
+[curse-link]:https://agricraft.github.io/curse
 [curse]:http://cf.way2muchnoise.eu/full_agricraft_downloads.svg "CurseForge"
+
 [contact-link]:https://agricraft.github.io/contact
 [contact]:https://agricraft.github.io/images/contact.svg "InfinityRaider Contact"
 

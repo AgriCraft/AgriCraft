@@ -1,21 +1,36 @@
-# Ignore Rundirs.
-run/
 
-# Ignore IDE Files.
+# =============================================================================
+# AgriCraft .gitignore
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# IDE Ignores
+# -----------------------------------------------------------------------------
+
+# Eclipse
 eclipse/
-.nb-gradle/
+
+# JetBrains
 .idea/
+
+# Netbeans
+.nb-gradle
 .nb-gradle-properties
+nbproject
+
+# VSCode
+.vscode
 .classpath
 .project
-.settings/
+.settings
+
+# -----------------------------------------------------------------------------
+# Gradle Ignores
+# -----------------------------------------------------------------------------
 
 # Ignore Gradle Stuff
 gradle.properties
 .gradle/
-
-# Ignore Git
-.git/
 
 # Ignore Build Files
 build/
@@ -24,14 +39,39 @@ out/
 logs/
 bin/
 
-*.iml
-*.ipr
-*.iws
-Schematic_to_Java*
-schematics/
+# -----------------------------------------------------------------------------
+# ForgeGradle Ignores
+# -----------------------------------------------------------------------------
+
+# Ignore Rundirs.
+run/
+
+# -----------------------------------------------------------------------------
+# AgriCraft Ignores
+# -----------------------------------------------------------------------------
 
 # Ignore Dependencies
 libs/
 AgriCraft_Dependencies.rar
 dependencies.zip
 *.bak
+
+# -----------------------------------------------------------------------------
+# General Ignores
+# -----------------------------------------------------------------------------
+
+# Ignore Git
+.git/
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac Junk
+.DS_Store
+
+# Unknown Ignores
+*.iml
+*.ipr
+*.iws
+Schematic_to_Java*
+schematics/
