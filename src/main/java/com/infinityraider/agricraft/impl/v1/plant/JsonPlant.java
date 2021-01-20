@@ -50,6 +50,7 @@ public class JsonPlant implements IAgriPlant {
 
     private final ItemStack seed;
     private final List<ItemStack> seedSubstitutes;
+    private final ResourceLocation seedTexture;
 
     @OnlyIn(Dist.CLIENT)
     private Map<Integer, QuadCache> quads;
@@ -60,6 +61,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthConditions = initGrowConditions(plant);
         this.seed = this.initSeed(plant);
         this.seedSubstitutes = initSeedSubstitutes(plant);
+        this.seedTexture = new ResourceLocation(plant.getTexture().getSeedTexture());
     }
 
     private ItemStack initSeed(AgriPlant plant) {
@@ -238,6 +240,12 @@ public class JsonPlant implements IAgriPlant {
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
         ResourceLocation rl = this.getTextureFor(stage);
         return rl == null ? ImmutableList.of() : ImmutableList.of(rl);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getSeedTexture() {
+        return this.seedTexture;
     }
 
     public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {

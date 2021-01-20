@@ -17,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -181,6 +182,12 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return true if this plant can single spread
      */
     boolean allowsCloning(IAgriGrowthStage stage);
+
+    /**
+     * @return The texture of the seed
+     */
+    @Nonnull
+    ResourceLocation getSeedTexture();
 
     /**
      * Checks if a plant can be harvested at the given growth stage

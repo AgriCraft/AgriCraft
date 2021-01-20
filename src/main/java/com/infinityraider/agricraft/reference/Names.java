@@ -14,4 +14,8 @@ public abstract class Names {
     public static final class Mods {
         public static final String JEI = "jei";
     }
+
+    public static final class Objects {
+        public static final String PLANT = "plant";
+    }
 }

@@ -1,18 +1,23 @@
 package com.infinityraider.agricraft.content.core;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.agricraft.render.items.AgriSeedRenderer;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
@@ -20,8 +25,8 @@ public class ItemDynamicAgriSeed extends ItemBase {
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
 
     public ItemDynamicAgriSeed() {
-        super(Names.Items.SEED, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT_SEED)
+        super(Names.Items.SEED, AgriCraft.instance.proxy().setItemRenderer(new Properties()
+                .group(AgriTabs.TAB_AGRICRAFT_SEED))
         );
     }
 
@@ -53,5 +58,10 @@ public class ItemDynamicAgriSeed extends ItemBase {
         }
         CompoundNBT tag = stack.getTag();
         return tag.contains(AgriNBT.PLANT) ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NO_PLANT) : NO_PLANT;
+    }
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public InfItemRenderer getItemRenderer() {
+        return AgriSeedRenderer.getInstance();
     }
 }

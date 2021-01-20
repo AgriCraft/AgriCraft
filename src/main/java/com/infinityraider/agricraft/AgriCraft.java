@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.proxy.ServerProxy;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.agricraft.render.models.AgriPlantModelLoader;
+import com.infinityraider.agricraft.render.models.AgriSeedModelLoader;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
@@ -83,7 +84,8 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     @OnlyIn(Dist.CLIENT)
     public List<InfModelLoader<?>> getModModelLoaders() {
         return ImmutableList.of(
-                AgriPlantModelLoader.getInstance()
+                AgriPlantModelLoader.getInstance(),
+                AgriSeedModelLoader.getInstance()
         );
     }
 }

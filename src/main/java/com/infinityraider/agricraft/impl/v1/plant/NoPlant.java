@@ -35,10 +35,12 @@ public class NoPlant implements IAgriPlant {
 
     private final String id;
     private final Set<IAgriGrowthStage> stages;
+    private final ResourceLocation texture;
 
     private NoPlant() {
         this.id = "none";
         this.stages = ImmutableSet.of(this.getInitialGrowthStage());
+        this.texture = new ResourceLocation("minecraft", "missingno");
     }
 
     @Override
@@ -160,6 +162,12 @@ public class NoPlant implements IAgriPlant {
     @Override
     public boolean allowsCloning(IAgriGrowthStage stage) {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    public ResourceLocation getSeedTexture() {
+        return this.texture;
     }
 
     @Override
