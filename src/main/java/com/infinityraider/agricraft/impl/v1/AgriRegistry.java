@@ -34,7 +34,7 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
     public boolean has(T element) {
         return Optional.ofNullable(element)
                 .map(IAgriRegisterable::getId)
-                .filter(registry::containsValue)
+                .filter(registry::containsKey)
                 .isPresent();
     }
 
