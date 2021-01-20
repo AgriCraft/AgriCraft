@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.init;
+package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.CropStickVariant;

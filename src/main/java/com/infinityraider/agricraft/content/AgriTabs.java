@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.init;
+package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.item.ItemGroup;

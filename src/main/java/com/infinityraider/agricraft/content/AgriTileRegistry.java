@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.init;
+package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.Names;

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.init.AgriTabs;
+import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.infinitylib.item.BlockItemBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
