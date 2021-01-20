@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
+import com.infinityraider.agricraft.render.items.AgriSeedRenderer;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
@@ -26,10 +27,7 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -74,7 +72,8 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
 
         @Override
         public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+                                IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
+            AgriSeedRenderer.getInstance().bakeModels(bakery, spriteGetter, transforms, false);
             return new BakedModel(overrides);
         }
 

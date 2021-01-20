@@ -1,3 +1,4 @@
 {
+  "parent": "minecraft:item/wheat_seeds",
   "loader": "agricraft:seed_model_loader"
 }
