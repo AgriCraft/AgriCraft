@@ -6,16 +6,15 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
-import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 
@@ -25,24 +24,12 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
  * All classes implementing this interface <em>must</em> have a valid no-args constructor, with
  * which AgriCraft may create the plugin instance.
  * <p>
- * Plugin instantiation occurs during the pre-init phase of FML, at which time very little of
- * AgriCraft has been initialized. It is strongly recommended that you do not attempt to AgriCraft
- * in this method, as AgriCraft will be in an indeterminate state.
- * <p>
- * Plugin initialization occurs during the init phase of FML, at which point, AgriCraft is only
- * partially initialized. Consequently, proceed with extreme caution in referencing other parts of
- * the mod at such time, given that AgriCraft will still be in an indeterminate state.
- * <p>
- * Registrations occur during the post-init phase of FML, at which point AgriCraft is considered
- * functionally initialized. Thereby, this is the first phase during which it is considered
- * relatively safe to access AgriCraft, so attempt to make connections to AgriCraft following the
- * registration process.
- * <p>
  * Note, registrations proceed in a very specific order, as to minimize the possibility of
  * out-of-order cross-references between the registries (i.e. plants depend on soils, therefore
  * soils must be registered first). The registration order is as follows:
  * <ol>
  * <li> All {@link IAgriSoil}s are registered using {@link #registerSoils(IAgriSoilRegistry)}
+ * <li> All {@link IAgriWeed}s are registered using {@link #registerWeeds(IAgriRegistry<IAgriWeed)}
  * <li> All {@link IAgriPlant}s are registered using {@link #registerPlants(IAgriRegistry<IAgriPlant>)}
  * <li> All {@link IAgriMutation}s are registered using
  * {@link #registerMutations(IAgriMutationRegistry)}
@@ -73,6 +60,10 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
+    default void registerWeeds(@Nonnull IAgriRegistry<IAgriWeed> weedRegistry) {
+        // Default Implementation: Do nothing.
+    }
+
     default void registerPlants(@Nonnull IAgriRegistry<IAgriPlant> plantRegistry) {
         // Default Implementation: Do nothing.
     }
@@ -94,10 +85,6 @@ public interface IAgriPlugin {
     }
 
     default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
-        // Default Implementation: Do nothing.
-    }
-
-    default void registerTextures(@Nonnull Consumer<ResourceLocation> textureRegistry) {
         // Default Implementation: Do nothing.
     }
 }

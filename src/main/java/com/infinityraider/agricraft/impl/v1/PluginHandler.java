@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
@@ -17,11 +18,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -54,6 +53,7 @@ public final class PluginHandler {
 
     public static void populateRegistries() {
         registerSoils(AgriApi.getSoilRegistry());
+        registerWeeds(AgriApi.getWeedRegistry());
         registerPlants(AgriApi.getPlantRegistry());
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
@@ -62,12 +62,12 @@ public final class PluginHandler {
         registerFertilizers(AgriApi.getFertilizerRegistry());
     }
 
-    public static void loadTextures(Consumer<ResourceLocation> registry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerTextures(registry));
-    }
-
     public static void registerSoils(IAgriSoilRegistry soilRegistry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoils(soilRegistry));
+    }
+
+    public static void registerWeeds(IAgriRegistry<IAgriWeed> weedRegistry) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerWeeds(weedRegistry));
     }
 
     public static void registerPlants(IAgriRegistry<IAgriPlant> plantRegistry) {
