@@ -2,56 +2,48 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import java.util.stream.Collectors;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.screen.Screen;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation> {
 
-    public final ResourceLocation id;
-    private final IAgriDrawable icon;
-    private final IAgriDrawable background;
+    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "gui/mutation");
 
-    public static IAgriDrawable createAgriDrawable(ResourceLocation location, int x, int y, int u, int v, int w, int h, int textureWidth, int textureHeight) {
-        return new IAgriDrawable() {
-            @Override
-            public int getWidth() {
-                return w;
-            }
-    
-            @Override
-            public int getHeight() {
-                return h;
-            }
-    
-            @Override
-            public void draw(MatrixStack transform, int x, int y) {
-                this.bindTexture(location);
-                Screen.blit(transform, x, y, u, v, getWidth(), getHeight(), textureWidth, textureHeight);
-            }
-        };
+    public final IAgriDrawable icon;
+    public final IAgriDrawable background;
+
+    public static void registerRecipes(IRecipeRegistration registration) {
+        registration.addRecipes(AgriApi.getMutationRegistry().all(), ID);
     }
 
-    public AgriMutationRecipeCategory(IJeiHelpers jeiHelpers, ResourceLocation id) {
-        this.id = id;
-        this.icon = createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/debugger.png"), 0, 0, 0, 0, 16, 16, 16, 16);
-        this.background = createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_mutation.png"), 0, 0, 0, 0, 128, 128, 128, 128);
+    public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriMutationRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriMutationRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriMutationRecipeCategory.ID);
+    }
+
+    public AgriMutationRecipeCategory(IRecipeCategoryRegistration registration) {
+        this.icon = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/debugger.png"), 0, 0, 16, 16, 16, 16);
+        this.background = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_mutation.png"), 0, 0, 128, 128, 128, 128);
     }
 
     @Override
     public ResourceLocation getUid() {
-        return this.id;
+        return ID;
     }
 
     @Override
@@ -61,7 +53,7 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
 
     @Override
     public String getTitle() {
-        return AgriCore.getTranslator().translate("agricraft_nei.mutation.title");
+        return I18n.format("agricraft.gui.mutation");
     }
 
     @Override
@@ -83,13 +75,22 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
 
     @Override
     public void setRecipe(IRecipeLayout layout, IAgriMutation mutation, IIngredients ingredients) {
+        // Denote that this is a shapeless recipe.
         layout.setShapeless();
-        layout.getItemStacks().init(0, true, 24, 39);
-        layout.getItemStacks().init(1, true, 86, 39);
-        layout.getItemStacks().init(2, true, 55, 65);
-        layout.getItemStacks().init(3, true, 55, 86);
-        layout.getItemStacks().init(4, false, 55, 39);
-        layout.getItemStacks().set(ingredients);
+
+        // Setup Recipe Parents
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(0, true, 24, 39);
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(1, true, 86, 39);
+
+        // Setup Recipe Child
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(2, true, 55, 65);
+
+        // Setup Recipe Requirements
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(3, true, 55, 86);
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(4, false, 55, 39);
+
+        // Register Recipe Elements
+        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).set(ingredients);
     }
 
 }
