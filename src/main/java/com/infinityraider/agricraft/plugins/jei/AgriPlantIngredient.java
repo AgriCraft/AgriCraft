@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.Lists;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -25,9 +26,8 @@ public class AgriPlantIngredient {
     public static final IIngredientType<IAgriPlant> TYPE = () -> IAgriPlant.class;
 
     private static final IIngredientHelper<IAgriPlant> HELPER = new IIngredientHelper<IAgriPlant>() {
-        @Nullable
         @Override
-        public IAgriPlant getMatch(Iterable<IAgriPlant> iterable, IAgriPlant plant) {
+        public IAgriPlant getMatch(Iterable<IAgriPlant> iterable, @Nonnull IAgriPlant plant) {
             return StreamSupport.stream(iterable.spliterator(), false)
                     .filter(aPlant -> aPlant == plant)
                     .findFirst().orElse(plant);
@@ -43,9 +43,11 @@ public class AgriPlantIngredient {
             return plant.getId();
         }
 
+        @Nonnull
         @Override
         public String getModId(IAgriPlant plant) {
-            return plant.getSeed().getItem().getRegistryName().getNamespace();
+            ResourceLocation id = plant.getSeed().getItem().getRegistryName();
+            return id == null ? AgriCraft.instance.getModId() : id.getNamespace();
         }
 
         @Override
@@ -61,7 +63,7 @@ public class AgriPlantIngredient {
 
         @Override
         public String getErrorInfo(@Nullable IAgriPlant plant) {
-            return plant.getId();
+            return plant == null ? "UNKNOWN PLANT" : plant.getId();
         }
     };
 

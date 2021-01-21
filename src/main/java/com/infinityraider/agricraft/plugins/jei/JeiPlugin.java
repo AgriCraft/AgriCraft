@@ -49,8 +49,8 @@ public class JeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new AgriMutationRecipeCategory(registration));
-        registration.addRecipeCategories(new AgriProduceRecipeCategory(registration));
+        registration.addRecipeCategories(new AgriMutationRecipeCategory());
+        registration.addRecipeCategories(new AgriProduceRecipeCategory());
     }
 
     @Override
