@@ -13,7 +13,6 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,12 +72,12 @@ public class JeiPlugin implements IModPlugin {
         return new IAgriDrawable() {
             @Override
             public int getWidth() {
-                return w < 128 ? w : w - 8;
+                return w;
             }
     
             @Override
             public int getHeight() {
-                return h < 128 ? h : h - 8;
+                return h;
             }
     
             @Override

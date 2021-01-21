@@ -15,6 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -52,8 +53,9 @@ public class AgriPlantIngredient {
             return plant.getId();
         }
 
+        @Nonnull
         @Override
-        public IAgriPlant copyIngredient(IAgriPlant plant) {
+        public IAgriPlant copyIngredient(@Nonnull IAgriPlant plant) {
             return plant;
         }
 
@@ -65,21 +67,21 @@ public class AgriPlantIngredient {
 
     private static final IAgriIngredientRenderer<IAgriPlant> RENDERER = new IAgriIngredientRenderer<IAgriPlant>() {
         @Override
-        public void render(MatrixStack transform, int x, int y, @Nullable IAgriPlant plant) {
+        public void render(@Nonnull MatrixStack transform, int x, int y, @Nullable IAgriPlant plant) {
             if(plant == null) {
                 return;
             }
             plant.getGrowthStages().stream().filter(IAgriGrowthStage::isMature).findFirst().ifPresent(stage -> {
                 List<ResourceLocation> tex = plant.getTexturesFor(stage);
                 if(tex.size() > 0) {
-                    this.bindTexture(tex.get(0));
+                    this.bindTextureAtlas();
                     Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(0)));
                 }
             });
         }
 
         @Override
-        public List<ITextComponent> getTooltip(IAgriPlant plant, ITooltipFlag iTooltipFlag) {
+        public List<ITextComponent> getTooltip(IAgriPlant plant, @Nonnull ITooltipFlag iTooltipFlag) {
             List<ITextComponent> tooltip = Lists.newArrayList();
             plant.addTooltip(tooltip::add);
             return tooltip;
