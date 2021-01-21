@@ -1,13 +1,20 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.init.AgriItemRegistry;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -17,7 +24,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 public class JeiPlugin implements IModPlugin {
-    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "compat_jei");
+
+    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "compat_jei");
 
     @Nonnull
     @Override
@@ -41,4 +49,14 @@ public class JeiPlugin implements IModPlugin {
         AgriMutationRecipe.registerRecipes(registration);
         AgriProduceRecipe.registerRecipes(registration);
     }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        // Register All The Seeds.
+        registration.registerSubtypeInterpreter(AgriItemRegistry.getInstance().seed, (stack) -> {
+            Optional<AgriSeed> seed = AgriApi.getSeedAdapterizer().valueOf(stack);
+            return seed.map(s -> s.getPlant().getId()).orElse("generic");
+        });
+    }
+
 }
