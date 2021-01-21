@@ -69,8 +69,8 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
                     ResourceLocation texture = plant.getSeedTexture();
                     ResourceLocation modelLocation = new ResourceLocation(plant.getId());
                     Map<String, Either<RenderMaterial, String>> textures = Maps.newHashMap();
-                    textures.put("particle", Either.right(texture.toString()));
-                    textures.put("layer0", Either.right(texture.toString()));
+                    textures.put("particle", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
+                    textures.put("layer0", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
                     BlockModel blockModel = new BlockModel(
                             GENERATED,
                             ImmutableList.of(),
