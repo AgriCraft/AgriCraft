@@ -79,8 +79,7 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
                             BlockModel.GuiLight.FRONT,
                             ItemCameraTransforms.DEFAULT,
                             ImmutableList.of());
-                    this.models.put(texture, blockModel.bakeModel(bakery, blockModel, spriteGetter, transforms, modelLocation, guiLight3d));
+                    this.models.put(texture, this.getItemModelGenerator().makeItemModel(spriteGetter, blockModel).bakeModel(bakery, blockModel, spriteGetter, transforms, modelLocation, guiLight3d));
                 });
-
     }
 }
