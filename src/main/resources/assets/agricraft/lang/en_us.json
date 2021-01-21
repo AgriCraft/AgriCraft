@@ -13,5 +13,8 @@
   "agricraft.stat.strength": "Strength",
   "agricraft.stat.resistance": "Resistance",
   "agricraft.stat.fertility": "Fertility",
-  "agricraft.stat.mutativity": "Mutativity"
+  "agricraft.stat.mutativity": "Mutativity",
+
+  "agricraft.gui.mutation": "Plant Mutation",
+  "agricraft.gui.produce": "Plant Products"
 }

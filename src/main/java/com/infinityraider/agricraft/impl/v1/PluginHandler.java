@@ -97,6 +97,7 @@ public final class PluginHandler {
     /**
      * Loads classes with a specific annotation the modfile's FML scan data
      *
+     * @param <A> The annotation type to load.
      * @param <T> The type of class to load.
      * @param data The modfile FML scan data to load classes from.
      * @param anno The annotation marking classes of interest.
@@ -104,7 +105,7 @@ public final class PluginHandler {
      * @return A list of the loaded classes, instantiated.
      */
     @Nonnull
-    private static <T> List<T> getInstances(ModFileScanData data, Class anno, Class<T> type) {
+    private static <A, T> List<T> getInstances(ModFileScanData data, Class<A> anno, Class<T> type) {
         final List<T> instances = new ArrayList<>();
         if(data == null) {
             AgriCore.getLogger("agricraft-plugins").error(

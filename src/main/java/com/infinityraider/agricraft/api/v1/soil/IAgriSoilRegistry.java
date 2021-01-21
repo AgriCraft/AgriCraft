@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.api.v1.soil;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 
 import java.util.Collection;
-import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

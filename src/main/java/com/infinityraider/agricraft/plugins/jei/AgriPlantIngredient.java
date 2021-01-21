@@ -72,6 +72,7 @@ public class AgriPlantIngredient {
             plant.getGrowthStages().stream().filter(IAgriGrowthStage::isMature).findFirst().ifPresent(stage -> {
                 List<ResourceLocation> tex = plant.getTexturesFor(stage);
                 if(tex.size() > 0) {
+                    this.bindTexture(tex.get(0));
                     Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(0)));
                 }
             });

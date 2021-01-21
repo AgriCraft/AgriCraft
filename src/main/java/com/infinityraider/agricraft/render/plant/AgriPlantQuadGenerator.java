@@ -12,6 +12,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -30,7 +32,7 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @Nonnull
     @Override
-    public List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite) {
+    public List<BakedQuad> bakeQuadsForCrossPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite) {
         TextureAtlasSprite icon = this.getSprite(sprite);
         TessellatorBakedQuad tessellator = this.tess.get();
 
@@ -52,7 +54,7 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @Nonnull
     @Override
-    public List<BakedQuad> bakeQuadsForHashPattern(@Nonnull Direction direction, @Nonnull ResourceLocation sprite) {
+    public List<BakedQuad> bakeQuadsForHashPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite) {
         TextureAtlasSprite icon = this.getSprite(sprite);
         TessellatorBakedQuad tessellator = this.tess.get();
 
