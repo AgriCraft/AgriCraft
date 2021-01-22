@@ -75,7 +75,7 @@ minecraft {
                     source sourceSets.main
                 }
                 infinitylib {
-                    //This still grabs the sourceSets from the main project, therefore one must manually correct it in runClient afterwards
+                    //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
                     source project(":InfinityLib").sourceSets.main
                 }
             }
@@ -108,7 +108,11 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'agricraft', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'agricraft', '--all',
+                '--input', file('lib/AgriPlants'),
+                '--existing', file('src/main/resources/'),
+                '--existing', project(":InfinityLib").file('src/main/resources/'),
+                '--output', file('src/generated/resources/')
 
             mods {
                 agricraft {
@@ -152,31 +156,6 @@ dependencies {
 // Delete Old Plants
 task deleteOldJsons(type: Delete) {
     delete "run/config/agricraft/json"
-}
-
-subprojects { Project subProject ->
-    task copyArtifacts {
-        doLast {
-            def baseName = subProject.archivesBaseName
-            def version = subProject.version
-            def group = subProject.group
-            def TO_DIR = "${rootDir}/run/mods"
-            def FROM_DIR = "${buildDir}/libs"
-
-            ant.mkdir(dir: TO_DIR)
-            ant.copy(todir: TO_DIR) {
-                fileset(dir: FROM_DIR,
-                includes: "${baseName}*${version}*.jar")
-            }
-        }
-    }
-
-    afterEvaluate {
-        def jarTask = subProject.tasks.find { it.name == 'jar' }
-        if (jarTask) { 
-            jarTask.finalizedBy(copyArtifacts)
-        }
-    }
 }
 
 processResources {
