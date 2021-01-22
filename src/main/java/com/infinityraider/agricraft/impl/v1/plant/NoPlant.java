@@ -64,6 +64,11 @@ public class NoPlant implements IAgriPlant {
         return this.getId();
     }
 
+    @Override
+    public int getTier() {
+        return 0;
+    }
+
     @Nonnull
     @Override
     public Collection<ItemStack> getSeedSubstitutes() {

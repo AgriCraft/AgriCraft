@@ -77,6 +77,7 @@ public class JsonPlant implements IAgriPlant {
             if(!seed.hasTag()) {
                 seed.setTag(new CompoundNBT());
             }
+            // TODO: Figure out if we should use the genome here already or not
             seed.getTag().putString(AgriNBT.PLANT, plant.getId());
         }
         return seed;
@@ -95,6 +96,11 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public String getSeedName() {
         return this.plant.getSeedName();
+    }
+
+    @Override
+    public int getTier() {
+        return this.plant.getTier();
     }
 
     @Nonnull
@@ -297,8 +303,19 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public boolean isDominant(IAllel<IAgriPlant> other) {
-        return AgriMutationRegistry.getInstance().complexity(this)
-                <= AgriMutationRegistry.getInstance().complexity(other.trait());
+        // If the plants are equal, it doesn't matter which one is dominant and we can simply return true
+        if(this.equals(other)) {
+            return true;
+        }
+        // Fetch complexity of both plants
+        int a = AgriMutationRegistry.getInstance().complexity(this);
+        int b = AgriMutationRegistry.getInstance().complexity(other.trait());
+        if(a == b) {
+            // Equal complexity, therefore we use an arbitrary definition for dominance, which we will base on the plant id
+            return this.getId().compareTo(other.trait().getId()) < 0;
+        }
+        // Having more difficult obtain plants be dominant will be more challenging to deal with than having them recessive
+        return a > b;
     }
 
     @Override

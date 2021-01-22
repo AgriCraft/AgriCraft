@@ -24,6 +24,7 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
         return INSTANCE;
     }
 
+    // TODO: Update complexities as mutations are added
     private final Map<IAgriPlant, Integer> complexities;
 
     private AgriMutationRegistry() {
@@ -71,7 +72,7 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
         // Step VII. Create the new mutation.
         final IAgriMutation mutation = new Mutation(id, chance, childPlant, parentPlants);
 
-        // Step VIII. Register the new muation.
+        // Step VIII. Register the new mutation.
         return this.add(mutation);
     }
 
@@ -84,15 +85,19 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
     }
 
     private int calculateComplexity(IAgriPlant plant) {
+        // Plants which are not the child of any mutation are assumed to be easily obtainable e.g. from grass drops.
+        // The complexity of such, easily obtainable plants is set to 1, which will be the lowest possible value.
+        // Complexity of plants obtained through mutations is set equal to the sum of the complexity of the parents.
+        // In case a plant can be obtained through multiple different mutations, the lowest complexity value is used.
         return this.stream()
                 .filter(mutation -> mutation.getChild().equals(plant))
-                .min(Comparator.comparingInt(this::sumParentsComplexity))
-                .flatMap(mut -> mut.getParents().stream().min(Comparator.comparingInt(this::complexity)))
-                .map(parent -> this.complexity(parent) + 1)
-                .orElse(0);
+                .mapToInt(this::sumParentsComplexity)
+                .min()
+                .orElse(1);
     }
 
     private int sumParentsComplexity(IAgriMutation mutation) {
+        // TODO: Ensure no infinite loops can originate here
         return mutation.getParents().stream().mapToInt(this::complexity).sum();
     }
 }

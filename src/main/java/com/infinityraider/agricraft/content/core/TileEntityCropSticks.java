@@ -585,7 +585,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public Optional<AgriSeed> getSeed() {
-        return this.getGenome().flatMap(genome -> Optional.ofNullable(this.hasPlant() ? new AgriSeed(this.getPlant(), genome) : null));
+        return this.getGenome().map(AgriSeed::new);
     }
 
     @Override

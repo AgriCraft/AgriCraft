@@ -11,6 +11,7 @@ public interface ISeedNBTChecker {
         if(seed.getItem() instanceof ItemDynamicAgriSeed) {
             return seed.hasTag()
                     && test.hasTag()
+                    // TODO: This could be governed by the genome instead
                     && seed.getTag().contains(AgriNBT.PLANT)
                     && test.getTag().contains(AgriNBT.PLANT)
                     && seed.getTag().getString(AgriNBT.PLANT).equals(test.getTag().getString(AgriNBT.PLANT));

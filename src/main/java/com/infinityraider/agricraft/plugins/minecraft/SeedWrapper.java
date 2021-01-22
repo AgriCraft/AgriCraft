@@ -45,7 +45,8 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed>, ISeedNBTChecker {
                         assert stack.getTag() != null;
                         genome.readFromNBT(stack.getTag());
                     }
-                    return new AgriSeed(plant, genome);
-                });
+                    return genome;
+                })
+                .map(AgriSeed::new);
     }
 }

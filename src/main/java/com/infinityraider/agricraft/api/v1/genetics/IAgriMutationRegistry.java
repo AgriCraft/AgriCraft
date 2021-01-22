@@ -38,7 +38,10 @@ public interface IAgriMutationRegistry extends IAgriRegistry<IAgriMutation> {
     boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull List<String> parentIds);
 
     /**
-     * Calculates the complexity for a plant, the deeper down the mutation tree, the complexer a plant is
+     * Calculates the complexity for a plant, the deeper down the mutation tree, the complexer a plant is.
+     * By default, plants with higher complexity are implemented to be dominant, from a genetics point of view,
+     * relative to plants with lower complexities.
+     *
      * @param plant the plant
      * @return integer value representing the complexity
      */

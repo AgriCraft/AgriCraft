@@ -18,34 +18,20 @@ import net.minecraft.nbt.CompoundNBT;
  * A simple class for representing seeds. Seeds are immutable objects, for safety reasons.
  */
 public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
-
     @Nonnull
-    private final IAgriPlant plant;
-    @Nonnull
-    private IAgriGenome genome;
+    private final IAgriGenome genome;
 
     public AgriSeed(@Nonnull IAgriPlant plant) {
-        this(plant, AgriApi.getAgriGenomeBuilder(plant).build());
+        this(AgriApi.getAgriGenomeBuilder(Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!")).build());
     }
 
-    public AgriSeed(@Nonnull IAgriPlant plant, @Nonnull IAgriGenome genome) {
-        this.plant = Preconditions.checkNotNull(plant, "The plant in an AgriSeed may not be null!");
+    public AgriSeed(@Nonnull IAgriGenome genome) {
         this.genome = Preconditions.checkNotNull(genome, "The genome in an AgriSeed may not be null!");
     }
 
     @Nonnull
     public IAgriPlant getPlant() {
-        return this.plant;
-    }
-
-    @Nonnull
-    public AgriSeed withPlant(@Nonnull IAgriPlant plant) {
-        return new AgriSeed(plant, genome);
-    }
-
-    @Nonnull
-    public AgriSeed withGenome(@Nonnull IAgriGenome genome) {
-        return new AgriSeed(plant, genome);
+        return this.genome.getTrait(AgriApi.getGeneRegistry().getPlantGene()).trait();
     }
 
     @Nonnull
@@ -57,7 +43,7 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     @Nonnull
     public ItemStack toStack(int size) {
         // Get the stack.
-        final ItemStack stack = Preconditions.checkNotNull(this.plant.getSeed());
+        final ItemStack stack = Preconditions.checkNotNull(this.getPlant().getSeed());
         // Get the tag.
         final CompoundNBT tag = Optional.ofNullable(stack.getTag())
                 .map(CompoundNBT::copy)
@@ -79,15 +65,12 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
     }
 
     public final boolean equals(AgriSeed other) {
-        return (other != null)
-                && (this.plant.equals(other.plant))
-                && (this.genome.equalGenome(other.genome));
+        return (other != null) && (this.genome.equalGenome(other.genome));
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.plant);
         hash = 71 * hash + Objects.hashCode(this.genome);
         return hash;
     }
@@ -99,7 +82,7 @@ public final class AgriSeed implements IAgriStatProvider, IAgriGeneCarrier {
 
     @Override
     public void setGenome(@Nonnull IAgriGenome genome) {
-        this.genome = Preconditions.checkNotNull(genome, "The genome in an AgriSeed may not be null!");
+        // UNSUPPORTED
     }
 
     @Nonnull

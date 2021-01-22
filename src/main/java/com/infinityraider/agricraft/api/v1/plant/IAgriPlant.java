@@ -31,6 +31,8 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
 
     String getSeedName();
 
+    int getTier();
+
     /**
      * Fetches a list of all the items that are considered seeds for this specific plant.
      *

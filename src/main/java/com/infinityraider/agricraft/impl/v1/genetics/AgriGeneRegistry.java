@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -46,6 +47,12 @@ public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgr
             return this.removeGeneForStat(((GeneStat) element).getStat());
         }
         return super.remove(element);
+    }
+
+    @Nonnull
+    @Override
+    public IAgriGene<IAgriPlant> getPlantGene() {
+        return this.gene_species;
     }
 
     @Override
