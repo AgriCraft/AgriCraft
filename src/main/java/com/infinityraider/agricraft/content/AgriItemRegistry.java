@@ -1,9 +1,7 @@
 package com.infinityraider.agricraft.content;
 
-import com.infinityraider.agricraft.content.core.CropStickVariant;
-import com.infinityraider.agricraft.content.core.ItemCropSticks;
-import com.infinityraider.agricraft.content.core.ItemDebugger;
-import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.content.core.*;
+import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.item.Item;
 
@@ -23,6 +21,10 @@ public class AgriItemRegistry {
 
     public final ItemBase seed;
 
+    public final ItemBase nugget_diamond;
+    public final ItemBase nugget_emerald;
+    public final ItemBase nugget_quartz;
+
     /*
     public final ItemBase journal;
 
@@ -33,10 +35,6 @@ public class AgriItemRegistry {
     public final ItemBase magnifying_glass;
 
     public final ItemBase clipper;
-    public final ItemBase clipping;
-
-
-    public final ItemBase nugget;
      */
 
     private AgriItemRegistry() {
@@ -47,15 +45,17 @@ public class AgriItemRegistry {
         crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
 
         this.seed = new ItemDynamicAgriSeed();
+
+        this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
+        this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
+        this.nugget_quartz = new ItemAgriNugget(Names.Nuggets.QUARTZ);
+
         /*
         journal = new ItemJournal();
         trowel = new ItemTrowel();
         debugger = new ItemDebugger();
         hand_rake = new ItemRake();
         clipper = new ItemClipper();
-        clipping = new ItemClipping();
-        seed = new ItemAgriSeed();
-        nugget = new ItemNugget();
         magnifying_glass = new ItemMagnifyingGlass();
          */
     }

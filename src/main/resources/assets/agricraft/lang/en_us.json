@@ -8,6 +8,10 @@
 
   "item.agricraft.debugger": "Debugger",
 
+  "item.agricraft.agri_nugget_diamond": "Diamond Shard",
+  "item.agricraft.agri_nugget_emerald": "Emerald Shard",
+  "item.agricraft.agri_nugget_quartz": "Quartz Shard",
+
   "agricraft.stat.gain": "Gain",
   "agricraft.stat.growth": "Growth",
   "agricraft.stat.strength": "Strength",

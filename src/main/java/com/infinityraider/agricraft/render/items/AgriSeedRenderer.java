@@ -27,7 +27,6 @@ import java.util.function.Function;
 @OnlyIn(Dist.CLIENT)
 public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
     private static final AgriSeedRenderer INSTANCE = new AgriSeedRenderer();
-    private static final ResourceLocation GENERATED = new ResourceLocation("builtin/generated");
 
     public static AgriSeedRenderer getInstance() {
         return INSTANCE;
@@ -72,7 +71,7 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
                     textures.put("particle", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
                     textures.put("layer0", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
                     BlockModel blockModel = new BlockModel(
-                            GENERATED,
+                            new ResourceLocation("builtin/generated"),
                             ImmutableList.of(),
                             textures,
                             false,

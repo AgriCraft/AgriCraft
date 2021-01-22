@@ -57,8 +57,9 @@ public class ItemDynamicAgriSeed extends ItemBase {
             return NO_PLANT;
         }
         CompoundNBT tag = stack.getTag();
-        return tag.contains(AgriNBT.PLANT) ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NO_PLANT) : NO_PLANT;
+        return (tag != null && tag.contains(AgriNBT.PLANT)) ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NO_PLANT) : NO_PLANT;
     }
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public InfItemRenderer getItemRenderer() {
