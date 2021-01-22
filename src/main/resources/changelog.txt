@@ -1,6 +1,8 @@
 Changelog
 ---------
 2.12.0a7
+- UPDATE: Updated InfinityLib to the latest version.
+- UPDATE: Updated Simplified Chinese Localization [#1179].
 - FIXED: Moving plants with trowel resets growth stage [#1231].
 - ADDED: AgriCraft testing commands, allows for manipulation of seed stats.
 - FIXED: Tooltip translation for soil type [#1234].

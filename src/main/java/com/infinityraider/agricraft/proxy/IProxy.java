@@ -62,10 +62,6 @@ public interface IProxy extends IProxyBase {
     default void activateRequiredModules() {
     }
 
-    @Override
-    default void initConfiguration(FMLPreInitializationEvent event) {
-    }
-
     // Since apparently translation is now client-side only.
     // This is why we can't have nice things.
     default String translateToLocal(String string) {

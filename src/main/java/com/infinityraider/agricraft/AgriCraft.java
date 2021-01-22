@@ -16,6 +16,8 @@ import com.infinityraider.agricraft.proxy.IProxy;
 import com.infinityraider.agricraft.reference.AgriAlphaWarnings;
 import com.infinityraider.agricraft.reference.Reference;
 import com.infinityraider.infinitylib.InfinityMod;
+import com.infinityraider.infinitylib.config.IModConfiguration;
+import com.infinityraider.infinitylib.config.ModConfiguration;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Mod;
@@ -114,4 +116,10 @@ public class AgriCraft extends InfinityMod {
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
         AgriAlphaWarnings.chooseMessage(l -> e.player.sendMessage(ForgeHooks.newChatWithLinks(l)));
     }
+
+    @Override
+    public IModConfiguration getConfiguration() {
+        return ModConfiguration.getInstance();
+    }
+    
 }

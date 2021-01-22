@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -54,7 +56,7 @@ public final class IconHelper {
      */
     private static class DefaultIcon extends TextureAtlasSprite {
 
-        public static final TextureAtlasSprite instance = new DefaultIcon("missingno");
+        public static final TextureAtlasSprite INSTANCE = new DefaultIcon("missingno");
 
         private DefaultIcon(String location) {
             super(location);
@@ -67,7 +69,7 @@ public final class IconHelper {
     }
 
     public static TextureAtlasSprite getDefaultIcon() {
-        return DefaultIcon.instance;
+        return DefaultIcon.INSTANCE;
     }
 
     public static TextureAtlasSprite getIcon(final String resourceLocation) {
@@ -90,12 +92,18 @@ public final class IconHelper {
         return getIcon(path.replaceFirst(EXPANSION_POINT, expansion).concat(postfix));
     }
 
-    public static TextureAtlasSprite getIcon(final Block block) {
-        return (block == null) ? getDefaultIcon() : getIcon(block.getRegistryName().toString(), EXPANSION_BLOCK);
+    public static TextureAtlasSprite getIcon(@Nullable final Block block) {
+        return Optional.ofNullable(block)
+                .map(Block::getRegistryName)
+                .map(loc -> getIcon(loc.toString(), EXPANSION_BLOCK))
+                .orElseGet(IconHelper::getDefaultIcon);
     }
 
-    public static TextureAtlasSprite getIcon(final Item item) {
-        return (item == null) ? getDefaultIcon() : getIcon(item.getRegistryName().toString(), EXPANSION_ITEM);
+    public static TextureAtlasSprite getIcon(@Nullable final Item item) {
+        return Optional.ofNullable(item)
+                .map(Item::getRegistryName)
+                .map(loc -> getIcon(loc.toString(), EXPANSION_ITEM))
+                .orElseGet(IconHelper::getDefaultIcon);
     }
     
     public static TextureAtlasSprite getIcon(final FluidStack stack) {

@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.items;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.items.modes.*;
 import com.infinityraider.agricraft.items.tabs.AgriTabs;
-import com.infinityraider.infinitylib.handler.ConfigurationHandler;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemDebuggerBase;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
@@ -14,7 +15,7 @@ public class ItemDebugger extends ItemDebuggerBase implements IItemWithModel {
     public ItemDebugger() {
         super(true);
         this.setMaxStackSize(1);
-        if (ConfigurationHandler.getInstance().debug) {
+        if (AgriCraftConfig.debug) {
             this.setCreativeTab(AgriTabs.TAB_AGRICRAFT);
         }
     }

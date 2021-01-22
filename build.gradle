@@ -29,6 +29,8 @@ minecraft {
 
 // Setup Remotes
 repositories {
+    mavenLocal()
+    mavenCentral()
     maven {
         name "TehNut Maven"
         url "http://tehnut.info/maven"
@@ -68,6 +70,10 @@ repositories {
     maven {
         name "Baubles"
         url "https://maven.thiakil.com/"
+    }
+    maven {
+        name "JitPack"
+        url "https://jitpack.io"
     }
 }
 

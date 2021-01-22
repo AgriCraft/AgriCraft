@@ -15,14 +15,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ClientProxy implements IClientProxyBase, IProxy {
 
     @Override
-    public void registerEventHandlers() {
-        IProxy.super.registerEventHandlers();
-        registerEventHandler(ItemToolTipHandler.getInstance());
+    public void preInitStart(FMLPreInitializationEvent event) {
+        IProxy.super.preInitStart(event);
+        registerEventHandler(new ModelErrorSuppressor());
     }
 
     @Override
-    public void initConfiguration(FMLPreInitializationEvent event) {
-        registerEventHandler(new ModelErrorSuppressor());
+    public void registerEventHandlers() {
+        IProxy.super.registerEventHandlers();
+        registerEventHandler(ItemToolTipHandler.getInstance());
     }
 
     @Override

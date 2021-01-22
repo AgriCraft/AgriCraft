@@ -41,7 +41,7 @@ public enum BaseIcons {
             AgriCore.getLogger("agricraft").debug("Load Icon " + this.name() + " STARTED...");
             isLoaded = attemptLoad();
             AgriCore.getLogger("agricraft").debug("Load Icon " + this.name() + ": " + (isLoaded ? "SUCEEDED!" : "FAILED!"));
-        }
+}
         return cachedIcon;
     }
 
