@@ -75,7 +75,7 @@ public interface IProxy extends IProxyBase {
 
     default String getLocale() {
         // Whatever...
-        return "en_US";
+        return "en_us";
     }
     
     @Override
