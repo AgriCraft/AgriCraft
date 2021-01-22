@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft;
 
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.init.AgriCommands;
 import com.infinityraider.agricraft.init.AgriItems;
 import com.infinityraider.agricraft.network.MessageContainerSeedStorage;
 import com.infinityraider.agricraft.network.MessageFertilizerApplied;
@@ -21,6 +22,7 @@ import com.infinityraider.infinitylib.network.INetworkWrapper;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -90,6 +92,10 @@ public class AgriCraft extends InfinityMod {
     @Override
     public Object getModItemRegistry() {
         return AgriItems.getInstance();
+    }
+    
+    public Object getModCommandRegistry() {
+        return AgriCommands.getInstance();
     }
 
     @Override

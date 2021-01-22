@@ -3,6 +3,19 @@ Changelog
 2.12.0a7
 - UPDATE: Updated InfinityLib to the latest version.
 - UPDATE: Updated Simplified Chinese Localization [#1179].
+- FIXED: Moving plants with trowel resets growth stage [#1231].
+- ADDED: AgriCraft testing commands, allows for manipulation of seed stats.
+- FIXED: Tooltip translation for soil type [#1234].
+- ADDED: Traditional Chinese Translation [#1234].
+- ADDED: Czech Translation [#1197].
+- FIXED: Russian Translation [#1136].
+- FIXED: Updated translation files.
+- FIXED: Botania plants missing as a result of Botania fixing its mod id [#1222].
+- ADDED: Additional pam's harvestcraft plants.
+- ADDED: Support for xlfood.
+- ADDED: Support for Silent Gems Fluffypuff seeds.
+- FIXED: Removed old Weed Growth Rate setting from main config [#1225].
+- FIXED: Crash caused by external abuse of IFluidHandler interface [#1184].
 
 2.12.0a6
 - FIXED: Id conflicts, by adding mod domain to front of all plant ids.

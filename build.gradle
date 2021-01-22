@@ -40,6 +40,10 @@ repositories {
         url "http://maven.tterrag.com/"
     }
     maven {
+        name "Tterrag Maven2"
+        url "http://maven2.tterrag.com/"
+    }
+    maven {
         name "JEI Maven"
         url "http://dvs1.progwml6.com/files/maven"
     }
@@ -76,10 +80,10 @@ repositories {
 // List Deps.
 dependencies {
     // AgriCore
-    shade project(':lib/AgriCore');
+    shade project(':AgriCore');
     
     // InfinityLib
-    compile project(':lib/InfinityLib')
+    compile project(':InfinityLib')
     
     // Java Libraries
     compile 'com.google.guava:guava:24.0-jre'
@@ -99,6 +103,7 @@ dependencies {
     // *Special* Minecraft Mods
     // Have to disable transitive deps on this one since stupid stuff is going on...
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
+    deobfCompile ("com.enderio:EnderIO:1.12.2-5.0.44:api") { transitive = false }
 }
 
 // Delete Old Plants

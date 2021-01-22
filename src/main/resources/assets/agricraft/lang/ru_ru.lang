@@ -1,0 +1,159 @@
+// ========================================
+// Creative Tabs
+// ========================================
+itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=AgriCraft: Семена
+
+// ========================================
+// Items
+// ========================================
+item.agricraft:crop_sticks.name=Жёрдочки
+item.agricraft:journal.name=Сельскохозяйственный журнал
+item.agricraft:trowel.name=Садовый совок
+item.agricraft:magnifying_glass.name=Лупа
+item.agricraft:debugger.name=Отладчик
+item.agricraft:rake.wood.name=Деревянные ручные грабли
+item.agricraft:rake.iron.name=Железные ручные грабли
+item.agricraft:clipper.name=Садовые ножницы
+item.agricraft:clipping.name=Обрезок
+
+// ========================================
+// Nuggets
+// ========================================
+item.agricraft:nugget_diamond.name=Алмазный самородок
+item.agricraft:nugget_iron.name=Железный самородок
+item.agricraft:nugget_emerald.name=Изумрудный самородок
+item.agricraft:nugget_tin.name=Оловянный самородок
+item.agricraft:nugget_lead.name=Свинцовый самородок
+item.agricraft:nugget_copper.name=Медный самородок
+item.agricraft:nugget_silver.name=Серебряный самородок
+item.agricraft:nugget_aluminum.name=Алюминиевый самородок
+item.agricraft:nugget_nickel.name=Никелевый самородок
+item.agricraft:nugget_platinum.name=Платиновый самородок
+item.agricraft:nugget_osmium.name=Осмиевый самородок
+item.agricraft:nugget_quartz.name=Кварцевый осколок
+item.agricraft:nugget_unknown.name=Неизвестный фрагмент
+
+// ========================================
+// Blocks
+// ========================================
+tile.agricraft:crops.name=Жёрдочки
+tile.agricraft:seed_analyzer.name=Анализатор семян
+tile.agricraft:water_pad.name=Водная площадка
+tile.agricraft:water_tank.0.name=Деревянный бак для воды
+tile.agricraft:water_tank.1.name=Железный бак для воды
+tile.agricraft:water_channel_normal.0.name=Деревянный оросительный канал
+tile.agricraft:water_channel_full.0.name=Деревянный оросительный канал
+tile.agricraft:water_channel.1.name=Железная оросительная труба
+tile.agricraft:water_channel_valve.0.name=Деревянный канальный клапан
+tile.agricraft:water_channel_valve.1.name=Железный клапан трубы
+tile.agricraft:sprinkler.name=Разбрызгиватель
+tile.agricraft:seed_storage.0.name=Хранилище семян
+tile.agricraft:seed_storage_controller.0.name=Контроллер хранилища семян
+tile.agricraft:fence.0.name=Забор
+tile.agricraft:fence_gate.0.name=Калитка
+tile.agricraft:grate.0.name=Деревянная решетка
+tile.agricraft:peripheral.name=Компьютер контролируемый анализатор семян
+
+// ========================================
+// Entities
+// ========================================
+entity.AgriCraft.villager_farmer.name=Сельский житель
+entity.AgriCraft.villager.farmer.agricraft=Сельскохозяйственный фермер
+
+// ========================================
+// GUI
+// ========================================
+agricraft_gui.seedAnalyzer=Анализатор семян
+agricraft_gui.peripheral=Компьютер контролируемый анализатор семян
+
+// ========================================
+// Tooltips
+// ========================================
+agricraft_tooltip.unidentified=Неопознанный
+agricraft_tooltip.seed=Семя
+agricraft_tooltip.growth=Рост
+agricraft_tooltip.gain=Урожай
+agricraft_tooltip.strength=Сила
+agricraft_tooltip.analyzed=Это семя еще не проанализировано
+agricraft_tooltip.soil=Почва
+agricraft_tooltip.fertile=Это растение плодоносно и может вырасти
+agricraft_tooltip.notFertile=Это растение не может здесь расти
+agricraft_tooltip.discoveredSeeds=Обнаруженные семена
+agricraft_tooltip.material=Материал
+agricraft_tooltip.waterLevel=Уровень воды
+agricraft_tooltip.cropWithPlant=На этих жёрдочках есть растение
+agricraft_tooltip.crossCrop=Это скрещенные жёрдочки
+agricraft_tooltip.weeds=Здесь проросли сорняки
+agricraft_tooltip.cropWithoutPlant=На этих жёрдочках нет растений
+agricraft_tooltip.notCrop=Это не жёрдочки
+agricraft_tooltip.trowel=Используется для перемещения растений между жёрдочками
+agricraft_tooltip.magnifyingGlass=Используется для проверки жёрдочек
+agricraft_tooltip.rake=Используются для удаления сорняков с жёрдочек
+agricraft_tooltip.closed=Закрыто
+agricraft_tooltip.open=Открыто
+agricraft_tooltip.state=Состояние
+agricraft_tooltip.empty=Нет посаженных семян
+agricraft_tooltip.waterPadDry=Выкопайте лопатой сельскохозяйственные угодья, чтобы создать небольшую яму
+agricraft_tooltip.waterPadWet= а затем используйте ведро с водой, чтобы заполнить его
+agricraft_tooltip.growthStage=Стадия роста
+agricraft_tooltip.mature=Созрело
+agricraft_tooltip.valve=Переключается с помощью сигнала красного камня 
+agricraft_tooltip.grate=ПКМ с лозами, чтобы применить лозы
+agricraft_tooltip.clipper1=ПКМ на посевы, чтобы получить обрезок
+agricraft_tooltip.clipper2=Обрезок можно высаживать на другие культуры
+agricraft_tooltip.clipper3=Успех посадки зависит от силы
+agricraft_tooltip.analyzer=Образец
+agricraft_tooltip.storage=Заблокированное семя
+agricraft_tooltip.none=нет
+
+// ========================================
+// Method Descriptions
+// ========================================
+agricraft_description.peripheralHelp=Методы помощи
+agricraft_description.method.analyze=Приказывает, чтобы анализатор проанализировал текущий образец
+agricraft_description.method.getBaseBlock=Возвращает необходимый базовый блок для жёрдочки в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.getBaseBlockType=Возвращает базовый тип блока (нет, ниже, рядом) для жёрдочки в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.getBrightness=Возвращает текущий уровень освещенности для жёрдочки в указанном направлении
+agricraft_description.method.getBrightnessRange=Возвращает требуемый диапазон уровня освещенности для жёрдочки в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.getCurrentSoil=Возвращает текущую почву под жёрдочкой в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.getGrowthStage=Возвращает процент роста жёрдочки в указанном направлении
+agricraft_description.method.getNeededSoil=Возвращает требуемую почву для жёрдочки в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.getPlant=Возвращает семя, которое в настоящее время посажено на жёрдочке в указанном направлении
+agricraft_description.method.getSpecimen=Возвращает образец, который в настоящее время находится в анализаторе
+agricraft_description.method.getStats=Возвращает статистику [рост, урожай, сила] жёрдочки в указанном направлении или образец в анализаторе, если направление не указано
+agricraft_description.method.hasJournal=Возвращает, если анализатор имеет журнал
+agricraft_description.method.hasPlant=Возвращает, если есть растение на жёрдочках в указанном направлении
+agricraft_description.method.hasWeeds=Возвращает, если есть сорняки на жёрдочке в указанном направлении
+agricraft_description.method.isAnalyzed=Возвращает, если анализируется жёрдочка в указанном направлении или образец в анализаторе (если направление не указано)
+agricraft_description.method.isCrossCrop=Возвращает, если жёрдочка в указанном направлении является перекрестной
+agricraft_description.method.isFertile=Возвращает, если жёрдочка в указанном направлении является плодородным и может расти
+agricraft_description.method.isMature=Возвращает, если жёрдочка в указанном направлении является зрелой
+agricraft_description.method.needsBaseBlock=Возвращает, если для жёрдочки в указанном направлении требуется базовый блок
+
+// ========================================
+// Misc
+// ========================================
+agricraft_arg.direction=направление
+agricraft_arg.direction.optional=(опционально) направление
+
+// ========================================
+// NEI GUI
+// ========================================
+agricraft_nei.mutation.title=Мутации растений
+agricraft_nei.cropProduct.title=Продукция жёрдочек
+agricraft_nei.soil=Почва
+agricraft_nei.needs=Необходимо
+agricraft_nei.below=Ниже
+agricraft_nei.nearby=Рядом
+
+// ========================================
+// Journal
+// ========================================
+agricraft_journal.introduction=Добро пожаловать в аграрное земледелие, сегодня я научу вас основам огородничества. Для начала вам потребуется положить 4 палочки в сетку крафта для получения жёрдочек. Жёрдочки можно установить на пашню и посадить на них семена. Также можно установить жёрдочки на уже установленные жёрдочки поперёк и получить скрещенные жёрдочки. Если посадить два и более растения вокруг скрещенных жёрдочек, есть вероятность возникновения мутации. В этом журнале вы можете отслеживать найденные мутации растений. Для регистрации обнаруженных семян положите журнал в анализатор семян и проведите анализ семян. Так вы сможете увидеть свойства семян и запишете их в журнал. Если вам захочется скопировать журнал, положите его в сетку крафта с чистой книгой с пером.
+agricraft_journal.information=Информация
+agricraft_journal.tier=Уровень
+agricraft_journal.brightness=Диапазон яркости
+agricraft_journal.fruits=Фрукты
+agricraft_journal.growthStages=Стадии роста
+agricraft_journal.mutations=Обнаруженные мутации

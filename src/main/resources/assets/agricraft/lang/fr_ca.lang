@@ -2,7 +2,6 @@
 // Creative Tabs
 // ========================================
 itemGroup.agricraft=AgriCraft
-itemGroup.agricraft_seeds=Graines AgriCraft
 
 // ========================================
 // Items
@@ -20,35 +19,33 @@ item.agricraft:clipping.name=Bouture
 // ========================================
 // Nuggets
 // ========================================
-item.agricraft:nugget_diamond.name=Pépite de diamant
-item.agricraft:nugget_iron.name=Pépite de fer
-item.agricraft:nugget_emerald.name=Pépite d'émeraude
-item.agricraft:nugget_tin.name=Pépite d'étain
-item.agricraft:nugget_lead.name=Pépite de plomb
-item.agricraft:nugget_silver.name=Pépite d'argent
-item.agricraft:nugget_copper.name=Pépite d'cuivre
-item.agricraft:nugget_aluminum.name=Pépite d'aluminium
-item.agricraft:nugget_nickel.name=Pépite de nickel
-item.agricraft:nugget_platinum.name=Pépite de platine
-item.agricraft:nugget_osmium.name=Pépite d'osmium 
-item.agricraft:nugget_quartz.name=Éclat de quartz
-item.agricraft:nugget_unknown.name=Fragment Inconnu
+item.agricraft:nuggetDiamond.name=Pépite de diamant
+item.agricraft:nuggetIron.name=Pépite de fer
+item.agricraft:nuggetEmerald.name=Pépite d'émeraude
+item.agricraft:nuggetTin.name=Pépite d'étain
+item.agricraft:nuggetLead.name=Pépite de plomb
+item.agricraft:nuggetSilver.name=Pépite d'argent
+item.agricraft:nuggetAluminum.name=Pépite d'aluminium
+item.agricraft:nuggetNickel.name=Pépite de nickel
+item.agricraft:nuggetPlatinum.name=Pépite de platine
+item.agricraft:nuggetOsmium.name=Pépite d'osmium 
+item.agricraft:nuggetQuartz.name=Éclat de quartz
 
 // ========================================
 // Blocks
 // ========================================
 tile.agricraft:crops.name=Tuteurs
-tile.agricraft:seedAnalyzer.name=Analyseur de graines
+tile.agricraft:seed_analyzer.name=Analyseur de graines
 tile.agricraft:water_pad.name=Protection d'eau
 tile.agricraft:water_tank.0.name=Réservoir d'eau en bois
 tile.agricraft:water_tank.1.name=Réservoir d'eau en fer
 tile.agricraft:water_channel_normal.0.name=Cannal d'irrigation en bois
-tile.agricraft:water_channel_normal.1.name=Cannal d'irrigation en fer
+tile.agricraft:water_channel_full.0.name=Cannal d'irrigation en fer
 tile.agricraft:water_channel_normal.1.name=Tuyau d'irrigation en fer
 tile.agricraft:water_channel_valve.0.name=Vanne de cannal en bois
 tile.agricraft:water_channel_valve.1.name=Vanne de cannal en fer
 tile.agricraft:sprinkler.name=Arroseur
-tile.agricraft:seed_Storage.0.name=Stockage de graines
+tile.agricraft:seed_storage.0.name=Stockage de graines
 tile.agricraft:seed_storage_controller.0.name=Contrôleur de stockage de graines
 tile.agricraft:fence.0.name=Barrière
 tile.agricraft:fence_gate.0.name=Portillon
@@ -76,6 +73,7 @@ agricraft_tooltip.growth=Croissance
 agricraft_tooltip.gain=Gain
 agricraft_tooltip.strength=Force
 agricraft_tooltip.analyzed=Cette graine n'a pas encore été analysée
+agricraft_tooltip.soil=Sol
 agricraft_tooltip.fertile=Cette plante est fertile et peut croitre
 agricraft_tooltip.notFertile=Cette plante ne peut pas croitre ici
 agricraft_tooltip.discoveredSeeds=Graines découvertes

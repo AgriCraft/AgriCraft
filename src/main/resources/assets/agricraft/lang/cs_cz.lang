@@ -1,0 +1,158 @@
+// ========================================
+// Creative Tabs
+// ========================================
+itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=AgriCraft Semínka
+
+// ========================================
+// Items
+// ========================================
+item.agricraft:crop_sticks.name=Korigující tyčky
+item.agricraft:journal.name=Zemědělský deník
+item.agricraft:trowel.name=Zahradnická lopata
+item.agricraft:magnifying_glass.name=Lupa
+item.agricraft:debugger.name=Debugger
+item.agricraft:rake.wood.name=Dřevěné ruční hrábě
+item.agricraft:rake.iron.name=Železné ruční hrábě
+item.agricraft:clipper.name=Zahradní kleště
+item.agricraft:clipping.name=zastřihávání
+
+// ========================================
+// Nuggets
+// ========================================
+item.agricraft:nugget_diamond.name=Diamantový nuget
+item.agricraft:nugget_iron.name=Železný nuget
+item.agricraft:nugget_emerald.name=Emeraldový nuget
+item.agricraft:nugget_tin.name=Cínový nuget
+item.agricraft:nugget_lead.name=Olověný nuget
+item.agricraft:nugget_copper.name=Měďěný nuget
+item.agricraft:nugget_silver.name=Stříbrný nuget
+item.agricraft:nugget_aluminum.name=Hliníkový nuget
+item.agricraft:nugget_nickel.name=Niklový nuget
+item.agricraft:nugget_platinum.name=Platinový nuget
+item.agricraft:nugget_osmium.name=Osmiový nuget
+item.agricraft:nugget_quartz.name=Úlomek křemíku
+item.agricraft:nugget_unknown.name=Neznámý fragment
+
+// ========================================
+// Blocks
+// ========================================
+tile.agricraft:crops.name=Korigující tyčky
+tile.agricraft:seed_analyzer.name=Analyzér semínek
+tile.agricraft:water_pad.name=Vodní podložka
+tile.agricraft:water_tank.0.name=Dřevěný zásobník na vodu
+tile.agricraft:water_tank.1.name=Železný zásobník na vodu
+tile.agricraft:water_channel_normal.0.name=Wooden Irrigation Channel
+tile.agricraft:water_channel_full.0.name=Wooden Irrigation Channel
+tile.agricraft:water_channel.1.name=Železná zavažovací trubka
+tile.agricraft:water_channel_valve.0.name=Dřevěný ventil
+tile.agricraft:water_channel_valve.1.name=Železný ventil
+tile.agricraft:sprinkler.name=Zavlažovač
+tile.agricraft:seed_storage.0.name=Zásobník na semínka
+tile.agricraft:seed_storage_controller.0.name=Ovladač zásobníku na semínka
+tile.agricraft:fence.0.name=Plot
+tile.agricraft:fence_gate.0.name=Vrata
+tile.agricraft:grate.0.name=Dřevěný rošt
+tile.agricraft:peripheral.name=Počítačem řízený analyzátor semínek
+
+// ========================================
+// Entities
+// ========================================
+entity.AgriCraft.villager_farmer.name=Vesničan
+entity.AgriCraft.villager.farmer.agricraft=Zeměělský farmář
+
+// ========================================
+// GUI
+// ========================================
+agricraft_gui.seedAnalyzer=Analyzátor semínek
+agricraft_gui.peripheral=Počítačem řízený analyzátor semínek
+
+// ========================================
+// Tooltips
+// ========================================
+agricraft_tooltip.unidentified=Neidentifikováno
+agricraft_tooltip.seed=Semínko
+agricraft_tooltip.growth=Růst
+agricraft_tooltip.gain=Zisk
+agricraft_tooltip.strength=Síla
+agricraft_tooltip.analyzed=Toto semínke ještě nebylo analyzováno
+agricraft_tooltip.soil=Půda
+agricraft_tooltip.fertile=Tato rostlina je plodná a může růst
+agricraft_tooltip.notFertile=Tato rostlina zde nemůže růst
+agricraft_tooltip.discoveredSeeds=Objevená semínka
+agricraft_tooltip.material=Materiál
+agricraft_tooltip.waterLevel=Úroveň vody
+agricraft_tooltip.cropWithPlant=Tato rostlina má plod
+agricraft_tooltip.crossCrop=Toto je křížená rostlina
+agricraft_tooltip.weeds=Zde vyklíčil plevel
+agricraft_tooltip.cropWithoutPlant=Tato rostlina na sobě nemá plod
+agricraft_tooltip.notCrop=Toto není rostlina
+agricraft_tooltip.trowel=Použijte toto pro přesunutí rostliny z jednoho políčka na druhé
+agricraft_tooltip.magnifyingGlass=Použijte toto pro inspekci rostliny
+agricraft_tooltip.rake=Použijte toto pro odstranění plevelu
+agricraft_tooltip.closed=Zavřeno
+agricraft_tooltip.open=Otevřeno
+agricraft_tooltip.state=Stav
+agricraft_tooltip.empty=Není zasazené žádné semínko
+agricraft_tooltip.waterPadDry=Kopejte z lopatou do zoraného políčka pro vytvoření menší jamky.
+agricraft_tooltip.waterPadWet=Poté použijte kýbl pro její zaplnění vodou.
+agricraft_tooltip.growthStage=STádium růstu
+agricraft_tooltip.mature=Zralý
+agricraft_tooltip.valve=Přepnuto ruditovým signálem
+agricraft_tooltip.grate=Klikněte pravým pro aplikování psího vína
+agricraft_tooltip.clipper1=Klikněte pravým na plod pro získání ústřižků
+agricraft_tooltip.clipper2=Ústřižky mohou být zasazeny na jiné rostliny.
+agricraft_tooltip.clipper3=Úspěch zasazení závisí na síle rostliny.
+agricraft_tooltip.analyzer=Vzorek
+agricraft_tooltip.storage=Zamknuté semínko
+agricraft_tooltip.none=nic
+
+// ========================================
+// Method Descriptions
+// ========================================
+agricraft_description.peripheralHelp=Pomoc s metodami
+agricraft_description.method.analyze=Nakáže analyzátoru analyzovat aktuální vzorek
+agricraft_description.method.getBaseBlock=Vrací potřebnou základní kostku pro rostlinu ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr.
+agricraft_description.method.getBaseBlockType=Vrací typ základní kostky (žádná, Níže, Blízký) pro rostlinu ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr.
+agricraft_description.method.getBrightness=Vrací aktuální úroveň světla pro rostlinu ve specifikovaném směru.
+agricraft_description.method.getBrightnessRange=Vrací potřebný rozsah úrovně světla pro rostlinu ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr
+agricraft_description.method.getCurrentSoil=Vrací aktuální půdu pod rostlinou ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr.
+agricraft_description.method.getGrowthStage=Vrací procenta růstu rostiny ve specifikovaném směru.
+agricraft_description.method.getNeededSoil=Vrací potřebnou půdu pro rostlinu ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr.
+agricraft_description.method.getPlant=Vrací semínko právě zasazené na políčku ve specifikovaném směru.
+agricraft_description.method.getSpecimen=Vrací vzorek právě umístění v analyzéru
+agricraft_description.method.getStats=rací vlastnosti [růst, zisk, síla] rostliny ve specifkovaném směru nebo vzorku v analyzéru když není specifikován směr
+agricraft_description.method.hasJournal=Vrací zda je v analyzéru deník.
+agricraft_description.method.hasPlant=Vrací zda je v určeném směru je rostlina v korigačních tyčkách.
+agricraft_description.method.hasWeeds=Vrací zda v určeném směru není plevel.
+agricraft_description.method.isAnalyzed=Vrací zda rostlina v určeném směru , nebo vzorek v analyzéru (když není specifikován směr) je analyzován.
+agricraft_description.method.isFertile=Vrací zda rostlina v určeném směru je plodná a můž růst.
+agricraft_description.method.isMature=Vrací zda rostlina v určeném směru je zralá.
+agricraft_description.method.needsBaseBlock=Vrací zda rostlina v určeném směru potřebuje základní kostku.
+
+// ========================================
+// Misc
+// ========================================
+agricraft_arg.direction=směr
+agricraft_arg.direction.optional=(volitelné) směr
+
+// ========================================
+// NEI GUI
+// ========================================
+agricraft_nei.mutation.title=Mutace rostliny
+agricraft_nei.cropProduct.title=Produkt rostliny
+agricraft_nei.soil=Půda
+agricraft_nei.needs=Potřeby
+agricraft_nei.below=Níže
+agricraft_nei.nearby=Blízký
+
+// ========================================
+// Journal
+// ========================================
+agricraft_journal.introduction=Vitej u zemědělského farmaření! Dnes tě naučím základy zacházení z rostlinami. Na začátek, musíš vložit 4 tyčky do pracovního stolu;to vytvoří korigační tyčky. Ty mohou být položeny na zoranou půdu, a do nich mohou být zasazeny semínka. Můžeš také do políčka dát druhé tyčky to ti umožní křížit rostliny. Když zasadíš dvě nebo více rostlin do korigačních tyček přilehlých k již existujícím tyčkám máš šanci na mutaci. V tomto deníku si můžete vést záznamy o všech objevených mutacích. Pro registraci objeveného semínka vložte tento deník do analyzátoru semínek a analyzujte semínko. Toto vám odhalí vlastnosti semína, a také je registruje do deníku. Pokuddsi budete přát zkopírovat tento deník vložte jej do pacovního stolu vedle prázdné knihy s brkem.
+agricraft_journal.information=Informace
+agricraft_journal.tier=Stupeň
+agricraft_journal.brightness=Dosah jasnosti
+agricraft_journal.fruits=Ovoce
+agricraft_journal.growthStages=Stádia růstu
+agricraft_journal.mutations=Objevené mutace

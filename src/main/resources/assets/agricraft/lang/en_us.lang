@@ -2,31 +2,37 @@
 // Creative Tabs
 // ========================================
 itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=AgriCraft Seeds
 
 // ========================================
 // Items
 // ========================================
-item.agricraft:crop_sticks.name=Ställning
-item.agricraft:journal.name=Agricraft-journal
-item.agricraft:trowel.name=Trädgårdsspade
-item.agricraft:magnifying_glass.name=Förstorningsglas
-item.agricraft:debugger.name=Felsökare
-item.agricraft:rake.wood.name=Träkratta
-item.agricraft:rake.iron.name=Järnkratta
+item.agricraft:crop_sticks.name=Crop Sticks
+item.agricraft:journal.name=Agricultural Journal
+item.agricraft:trowel.name=Gardening Trowel
+item.agricraft:magnifying_glass.name=Magnifying Glass
+item.agricraft:debugger.name=Debugger
+item.agricraft:rake.wood.name=Wooden Hand Rake
+item.agricraft:rake.iron.name=Iron Hand Rake
+item.agricraft:clipper.name=Clipper
+item.agricraft:clipping.name=Clipping
 
 // ========================================
 // Nuggets
 // ========================================
-item.agricraft:nuggetDiamond.name=Diamantflisa
-item.agricraft:nuggetIron.name=Järnklimp
-item.agricraft:nuggetEmerald.name=Smaragdflisa
-item.agricraft:nuggetTin.name=Tennklimp
-item.agricraft:nuggetLead.name=Blyklimp
-item.agricraft:nuggetSilver.name=Silverklimp
-item.agricraft:nuggetAluminum.name=Aluminiumklimp
-item.agricraft:nuggetNickel.name=Nickelklimp
-item.agricraft:nuggetPlatinum.name=Platinaklimp
-item.agricraft:nuggetOsmium.name=Osmiumklimp
+item.agricraft:nugget_diamond.name=Diamond Nugget
+item.agricraft:nugget_iron.name=Iron Nugget
+item.agricraft:nugget_emerald.name=Emerald Nugget
+item.agricraft:nugget_tin.name=Tin Nugget
+item.agricraft:nugget_lead.name=Lead Nugget
+item.agricraft:nugget_copper.name=Copper Nugget
+item.agricraft:nugget_silver.name=Silver Nugget
+item.agricraft:nugget_aluminum.name=Aluminum Nugget
+item.agricraft:nugget_nickel.name=Nickel Nugget
+item.agricraft:nugget_platinum.name=Platinum Nugget
+item.agricraft:nugget_osmium.name=Osmium Nugget
+item.agricraft:nugget_quartz.name=Quartz Shard
+item.agricraft:nugget_unknown.name=Unknown Fragment
 
 // ========================================
 // Blocks
@@ -70,6 +76,7 @@ agricraft_tooltip.growth=Growth
 agricraft_tooltip.gain=Gain
 agricraft_tooltip.strength=Strength
 agricraft_tooltip.analyzed=This seed is not yet analyzed
+agricraft_tooltip.soil=Soil
 agricraft_tooltip.fertile=This plant is fertile and can grow
 agricraft_tooltip.notFertile=This plant can not grow here
 agricraft_tooltip.discoveredSeeds=Discovered Seeds

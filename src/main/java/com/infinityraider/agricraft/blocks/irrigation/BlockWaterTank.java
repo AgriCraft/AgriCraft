@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.util.AgriSideMetaMatrix;
 import com.infinityraider.agricraft.blocks.BlockCustomWood;
 import com.infinityraider.agricraft.items.blocks.ItemBlockCustomWood;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.renderers.blocks.RenderTank;
 import com.infinityraider.agricraft.tiles.irrigation.TileEntityTank;
 import com.infinityraider.infinitylib.utility.WorldHelper;
@@ -106,4 +107,9 @@ public class BlockWaterTank extends BlockCustomWood<TileEntityTank> {
         return 0;
     }
 
+    @Override
+    public boolean isEnabled() {
+        return AgriCraftConfig.enableIrrigation;
+    }
+    
 }

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.tiles.irrigation;
 
 // Imports would go here, if there were any.
+import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.misc.IAgriFluidComponent;
 import com.infinityraider.agricraft.reference.AgriCraftConfig;
@@ -91,7 +92,13 @@ public class TileEntityTank extends TileEntityChannel implements IFluidHandler {
     @Override
     public FluidStack drain(int amount, boolean doDrain) {
         // Validate input.
-        Preconditions.checkArgument(amount >= 0, "Cannot drain a negative amount (%s mB) from a fluid component!", amount);
+        if (amount < 0) {
+            // Apparently this can happen, if the IFluidHandler interface is abused.
+            AgriCore.getLogger("agricraft").error("Cannot drain a negative amount ({0} mB) from a fluid component!", amount);
+            
+            // Do nothing and return an empty fluid stack.
+            return new FluidStack(FluidRegistry.WATER, 0);
+        }
         
         // The amount consumed.
         final int drainedAmount;

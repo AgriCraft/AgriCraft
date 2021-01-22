@@ -1,0 +1,159 @@
+//Translation by KH79
+// ========================================
+// Creative Tabs
+// ========================================
+itemGroup.agricraft=AgriCraft
+itemGroup.agricraft_seeds=AgriCraft Sementes
+
+// ========================================
+// Items
+// ========================================
+item.agricraft:crop_sticks.name=Gravetos de Colheita
+item.agricraft:journal.name=Jornal Agrícola
+item.agricraft:trowel.name=Espátula de jardinagem
+item.agricraft:magnifying_glass.name=Lupa
+item.agricraft:debugger.name=Debugger
+item.agricraft:rake.wood.name=Ancinho de Madeira
+item.agricraft:rake.iron.name=Ancinho de Ferro
+item.agricraft:clipper.name=Cortador
+item.agricraft:clipping.name=Cortado
+
+// ========================================
+// Nuggets
+// ========================================
+item.agricraft:nugget_diamond.name=Pepita de diamante
+item.agricraft:nugget_iron.name=Pepita de Ferro
+item.agricraft:nugget_emerald.name=Pepita de Esmeralda
+item.agricraft:nugget_tin.name=Pepita de Estanho
+item.agricraft:nugget_lead.name=Pepita de Chumbo
+item.agricraft:nugget_copper.name=Pepita de Cobre
+item.agricraft:nugget_silver.name=Pepita de Prata
+item.agricraft:nugget_aluminum.name=Pepita de Alumínio
+item.agricraft:nugget_nickel.name=Pepita de Níquel
+item.agricraft:nugget_platinum.name=Pepita de Platina
+item.agricraft:nugget_osmium.name=Pepita de Ósmio
+item.agricraft:nugget_quartz.name=Estilhaço de Quartzo
+item.agricraft:nugget_unknown.name=Fragmento desconhecido
+
+// ========================================
+// Blocks
+// ========================================
+tile.agricraft:crops.name=Gravetos de Colheita
+tile.agricraft:seed_analyzer.name=Analisador de Sementes
+tile.agricraft:water_pad.name=Almofada de água
+tile.agricraft:water_tank.0.name=Tanque de água de madeira
+tile.agricraft:water_tank.1.name=Tanque de água de ferro
+tile.agricraft:water_channel_normal.0.name=Canal de irrigação de madeira
+tile.agricraft:water_channel_full.0.name=Canal de irrigação de madeira
+tile.agricraft:water_channel.1.name=Tubo de irrigação de ferro
+tile.agricraft:water_channel_valve.0.name=Válvula de canal de madeira
+tile.agricraft:water_channel_valve.1.name=Válvula de canal de ferro
+tile.agricraft:sprinkler.name=Aspersor
+tile.agricraft:seed_storage.0.name=Armazenamento de sementes
+tile.agricraft:seed_storage_controller.0.name=Controlador de armazenamento de sementes
+tile.agricraft:fence.0.name=Cerca
+tile.agricraft:fence_gate.0.name=Portão
+tile.agricraft:grate.0.name=Grelha de madeira
+tile.agricraft:peripheral.name=Computador Controlador de Analisador de Sementes
+
+// ========================================
+// Entities
+// ========================================
+entity.AgriCraft.villager_farmer.name=Aldeão
+entity.AgriCraft.villager.farmer.agricraft=Agricultor agrícola
+
+// ========================================
+// GUI
+// ========================================
+agricraft_gui.seedAnalyzer=Analisador de Sementes
+agricraft_gui.peripheral=Computador Controlador de Analisador de Sementes
+
+// ========================================
+// Tooltips
+// ========================================
+agricraft_tooltip.unidentified=Não identificado
+agricraft_tooltip.seed=Semente
+agricraft_tooltip.growth=Crescimento
+agricraft_tooltip.gain=Ganho
+agricraft_tooltip.strength=Força
+agricraft_tooltip.analyzed=Essa semente ainda não foi analisada
+agricraft_tooltip.fertile=Essa planta é fértil e pode crescer
+agricraft_tooltip.notFertile=Essa planta não pode crescer aqui
+agricraft_tooltip.discoveredSeeds=Sementes Descobertas
+agricraft_tooltip.material=Material
+agricraft_tooltip.waterLevel=Nível de água
+agricraft_tooltip.cropWithPlant=Aqui já tem uma planta
+agricraft_tooltip.crossCrop=Esta é uma colheita cruzada
+agricraft_tooltip.weeds=As ervas daninhas brotaram aqui
+agricraft_tooltip.cropWithoutPlant=Aqui não tem uma planta
+agricraft_tooltip.notCrop=Isso não é uma colheita
+agricraft_tooltip.trowel=Use isso para mover plantas de uma colheita para outra
+agricraft_tooltip.magnifyingGlass=Use isso para inspecionar os gravetos
+agricraft_tooltip.rake=Use isso para remover ervas daninhas
+agricraft_tooltip.closed=Fechado
+agricraft_tooltip.open=Aberto
+agricraft_tooltip.state=Estado
+agricraft_tooltip.empty=Sem semente plantada
+agricraft_tooltip.waterPadDry=Caver com uma pá em terras aradas para criar um pequeno poço
+agricraft_tooltip.waterPadWet=depois use um balde de água para encher
+agricraft_tooltip.growthStage=Estágio de crescimento
+agricraft_tooltip.mature=Maduro
+agricraft_tooltip.valve=Altera com um sinal de redstone
+agricraft_tooltip.grate=Clique com o botão direito com trepadeiras para aplicar
+agricraft_tooltip.clipper1=Clique com o botão direito nas colheitas para obter recortes
+agricraft_tooltip.clipper2=Recortes podem ser plantados em outros gravetos
+agricraft_tooltip.clipper3=O sucesso do plantio é baseado na força
+agricraft_tooltip.analyzer=Amostra
+agricraft_tooltip.storage=Semente bloqueada
+agricraft_tooltip.none=Nenhum
+
+// ========================================
+// Method Descriptions
+// ========================================
+agricraft_description.peripheralHelp=Método de Ajuda
+agricraft_description.method.analyze=Solicita que o analisador analise a amostra atual
+agricraft_description.method.getBaseBlock=Retorne o bloco base necessário para a colheita na direção especificada ou a amostra no analisador se nenhuma direção for especificada
+agricraft_description.method.getBaseBlockType=Retorne o tipo de bloco base (NENHUM, ABAIXO, PERTO) para a colheita na direção especificada ou a amostra no analisador, se nenhuma direção for especificada.d
+agricraft_description.method.getBrightness=Retorne o nível de luz atual para a colheita na direção especificada
+agricraft_description.method.getBrightnessRange=Retorne o nível de luz necessária para a colheita na direção especificada ou a amostra no analisador se nenhuma direção for especificada
+agricraft_description.method.getCurrentSoil=Retorne o solo atual abaixo da colheita na direção especificada ou na amostra no analisador se nenhuma direção for especificada
+agricraft_description.method.getGrowthStage=Retorne a porcentagem de crescimento da colheita na direção especificada
+agricraft_description.method.getNeededSoil=Retorne o solo necessário para a colheita na direção especificada ou a amostra no analisador se nenhuma direção for especificada
+agricraft_description.method.getPlant=Retorne a semente atualmente plantada na colheita na direção especificada
+agricraft_description.method.getSpecimen=Retorne a amostra atualmente no analisador
+agricraft_description.method.getStats=Retorne as estatísticas [crescimento, ganho, força] da colheita na direção especificada ou na amostra no analisador se nenhuma direção for especificada
+agricraft_description.method.hasJournal=Retorne se o analisador tiver um jornal
+agricraft_description.method.hasPlant=Retorne se houver uma planta nos gravetos de colheita na direção especificada
+agricraft_description.method.hasWeeds=Retorne se houver ervas daninhas na colheita na direção especificada
+agricraft_description.method.isAnalyzed=Retorne se a colheita na direção especificada ou a amostra no analisador (se nenhuma direção for especificada) for analisada
+agricraft_description.method.isCrossCrop=Retorne se a colheita na direção especificada for um cruzamento
+agricraft_description.method.isFertile=Retorne se a colheita na direção especificada for fértil e puder crescer
+agricraft_description.method.isMature=Retorne se a colheita na direção especificada estiver madura
+agricraft_description.method.needsBaseBlock=Retorne-se na colheita da direção especificada, precisar de um bloco base
+
+// ========================================
+// Misc
+// ========================================
+agricraft_arg.direction=Direção
+agricraft_arg.direction.optional=Direção (opcional)
+
+// ========================================
+// NEI GUI
+// ========================================
+agricraft_nei.mutation.title=Mutação na Colheitas
+agricraft_nei.cropProduct.title=Produção na Colheita
+agricraft_nei.soil=Solo
+agricraft_nei.needs=Necessidades
+agricraft_nei.below=Abaixo
+agricraft_nei.nearby=Perto
+
+// ========================================
+// Journal
+// ========================================
+agricraft_journal.introduction=Bem-vindo à agricultura! Hoje eu vou te ensinar o básico da agricultura com os gravetos de colheitas. Para começar, você precisará colocar 4 gravetos em uma bancada de trabalho; Isso criará gravetos de colheita. Eles podem ser colocadas em terras aradas e as sementes podem ser plantadas neles. Você também pode aplicar um segundo conjunto de gravetos em um já existente; isso criará um cruzamento de gravetos. Se você plantar duas ou mais plantas em gravetos adjacentes a um cruzamento de gravetos, há uma chance de uma mutação ocorrer. Neste jornal, você pode acompanhar todas as suas mutações de sementes descobertas. Para registrar uma semente descoberta, coloque o jornal em um Analisador de Sementes e analise a semente. Isso revelará a você as propriedades da semente, como também irá registrá-lo neste jornal. Se você deseja copiar o jornal, coloque-o em uma bancada de trabalho junto com o livro e pena.
+agricraft_journal.information=Informação
+agricraft_journal.tier=Grau
+agricraft_journal.brightness=Nível de Luminosidade
+agricraft_journal.fruits=Frutos
+agricraft_journal.growthStages=Estágios de crescimento
+agricraft_journal.mutations=Mutações Descobertas
