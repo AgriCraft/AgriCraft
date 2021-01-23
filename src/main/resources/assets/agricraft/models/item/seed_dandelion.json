@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/wheat_seeds",
   "textures": {
-    "layer0": "agricraft:item/seed_dandelion",
+    "layer0": "agricraft:item/seed_dandelion"
   }
 }
