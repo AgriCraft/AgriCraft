@@ -23,7 +23,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
     private GeneSpecies() {}
 
     @Override
-    public IAgriPlant defaultAllel() {
+    public IAgriPlant defaultAllel(IAgriPlant plant) {
         return NoPlant.getInstance();
     }
 
@@ -34,7 +34,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Override
     public IAgriPlant readAllelFromNBT(CompoundNBT tag) {
-        return AgriApi.getPlantRegistry().get(tag.getString("agri_plant")).orElse(this.defaultAllel());
+        return AgriApi.getPlantRegistry().get(tag.getString("agri_plant")).orElse(NoPlant.getInstance());
     }
 
     @Override

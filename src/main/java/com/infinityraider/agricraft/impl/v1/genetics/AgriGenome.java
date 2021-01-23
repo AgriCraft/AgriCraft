@@ -100,7 +100,8 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         }
 
         private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene) {
-            return gene.generateGenePair(gene.defaultAllel(), gene.defaultAllel());
+            IAgriPlant plant = (IAgriPlant) this.geneMap.get(AgriApi.getGeneRegistry().getPlantGene()).getTrait();
+            return gene.generateGenePair(gene.defaultAllel(plant), gene.defaultAllel(plant));
         }
 
         @Override

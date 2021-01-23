@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
@@ -15,10 +16,12 @@ import java.util.Set;
 public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
     /**
      * Gets the default fallback trait for the gene, used when genomes are constructed without explicitly assigning alleles
+     *
+     * @param plant the plant for which to fetch the default allel
      * @return the default allel for this gene
      */
     @Nonnull
-    IAllel<A> defaultAllel();
+    IAllel<A> defaultAllel(IAgriPlant plant);
 
     /**
      * Maps a value of the gene to an allel, it is possible that this value falls out of the set of acceptable values,
