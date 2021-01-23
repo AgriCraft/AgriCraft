@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.handler;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,7 +43,15 @@ public class ModelAndTextureHandler {
         AgriCore.getPlants().getAllElements()
                 .stream()
                 .map(plant -> plant.getTexture().getSeedModel())
-                .map(ResourceLocation::new)
+                .map(this::toResourceLocation)
                 .forEach(ModelLoader::addSpecialModel);
+    }
+
+    private ResourceLocation toResourceLocation(String string) {
+        if(string.contains("#")) {
+            return new ModelResourceLocation(string);
+        } else {
+            return new ResourceLocation(string);
+        }
     }
 }
