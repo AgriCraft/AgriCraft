@@ -71,7 +71,7 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedSubstitutes() {
+    public Collection<ItemStack> getSeedItems() {
         return Collections.emptySet();
     }
 
@@ -144,12 +144,6 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ItemStack getSeed() {
-        return ItemStack.EMPTY;
-    }
-
-    @Nonnull
-    @Override
     public Set<IGrowCondition> getGrowConditions(IAgriGrowthStage stage) {
         return ImmutableSet.of();
     }
@@ -171,7 +165,7 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ResourceLocation getSeedTexture() {
+    public ResourceLocation getSeedModel() {
         return this.texture;
     }
 

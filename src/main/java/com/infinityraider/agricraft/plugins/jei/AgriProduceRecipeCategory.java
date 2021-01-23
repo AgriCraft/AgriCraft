@@ -78,7 +78,7 @@ public class AgriProduceRecipeCategory implements IRecipeCategory<IAgriPlant> {
     @Override
     public void setIngredients(IAgriPlant plant, IIngredients ingredients) {
         // Seed input
-        ingredients.setInputLists(VanillaTypes.ITEM, plant.getSeedSubstitutes().stream().map(ImmutableList::of).collect(Collectors.toList()));
+        ingredients.setInputLists(VanillaTypes.ITEM, plant.getSeedItems().stream().map(ImmutableList::of).collect(Collectors.toList()));
         // Plant input
         ingredients.setInputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(plant)));
         // Outputs

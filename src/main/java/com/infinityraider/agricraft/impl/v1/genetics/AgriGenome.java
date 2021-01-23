@@ -94,13 +94,12 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         private Builder(IAgriPlant plant) {
             this.geneMap = Maps.newIdentityHashMap();
             for(IAgriGene<?> gene : AgriApi.getGeneRegistry().all()) {
-                this.geneMap.put(gene, this.generateDefaultPair(gene));
+                this.geneMap.put(gene, this.generateDefaultPair(gene, plant));
             }
             this.geneMap.put(GeneSpecies.getInstance(), GeneSpecies.getInstance().generateGenePair(plant, plant));
         }
 
-        private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene) {
-            IAgriPlant plant = (IAgriPlant) this.geneMap.get(AgriApi.getGeneRegistry().getPlantGene()).getTrait();
+        private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene, IAgriPlant plant) {
             return gene.generateGenePair(gene.defaultAllel(plant), gene.defaultAllel(plant));
         }
 

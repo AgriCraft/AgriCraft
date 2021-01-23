@@ -12,11 +12,5 @@ public interface IAgriGeneCarrier {
      * @return the genome
      */
     @Nonnull
-    Optional<IAgriGenome> getGenome();
-
-    /**
-     * Setter for the IAgriGenome
-     * @param genome the genome
-     */
-    void setGenome(@Nonnull IAgriGenome genome);
+    IAgriGenome getGenome();
 }

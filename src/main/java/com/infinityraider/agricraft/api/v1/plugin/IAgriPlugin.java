@@ -86,10 +86,6 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerSeedSubstitutes(@Nonnull IAgriAdapterizer<IAgriPlant> adapterizer) {
-        // Default Implementation: Do nothing.
-    }
-
     default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
         // Default Implementation: Do nothing.
     }

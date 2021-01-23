@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
+import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -21,7 +22,8 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
-        registerEventHandler(ItemToolTipHandler.getInstance());
+        this.registerEventHandler(ItemToolTipHandler.getInstance());
+        this.registerEventHandler(ModelAndTextureHandler.getInstance());
     }
 
     @Override

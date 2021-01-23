@@ -564,7 +564,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     public boolean setSeed(@Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
         if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Plant.Pre(this, seed, entity))) {
             if (this.setPlant(seed.getPlant(), entity)) {
-                this.setGenome(seed.getGenome().orElseThrow(() -> new IllegalArgumentException("Can not set a plant from a seed with no genome")));
+                this.setGenome(seed.getGenome());
                 MinecraftForge.EVENT_BUS.post(new CropEvent.Plant.Post(this, seed, entity));
                 return true;
             }

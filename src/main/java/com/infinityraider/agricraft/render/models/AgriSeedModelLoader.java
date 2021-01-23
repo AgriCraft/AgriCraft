@@ -88,7 +88,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
             registry.stream()
                     .filter(element -> element instanceof JsonPlant)
                     .map(element -> (JsonPlant) element)
-                    .map(JsonPlant::getSeedTexture)
+                    .map(JsonPlant::getSeedModel)
                     .forEach(consumer);
         }
     }

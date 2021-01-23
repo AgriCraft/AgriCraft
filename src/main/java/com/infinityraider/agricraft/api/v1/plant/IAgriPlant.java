@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -12,6 +13,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -26,20 +28,28 @@ import net.minecraft.util.text.ITextComponent;
  * the ICropPlant object you registered, it will return a different object.
  */
 public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllel<IAgriPlant> {
+    /**
+     * Creates a new AgriSeed object for this plant with default genes
+     * @return the AgriSeed
+     */
+    default AgriSeed toAgriSeed() {
+        return new AgriSeed(this);
+    }
+
+    /**
+     * Creates a new ItemStack object holding the specified amount of seed items for this plant with default genes
+     * @param amount the desired stack size
+     * @return the ItemStack
+     */
+    default ItemStack toItemStack(int amount) {
+        return AgriApi.plantToSeedStack(this, amount);
+    }
 
     String getPlantName();
 
     String getSeedName();
 
     int getTier();
-
-    /**
-     * Fetches a list of all the items that are considered seeds for this specific plant.
-     *
-     * @return A list of all the seeds for this plant.
-     */
-    @Nonnull
-    Collection<ItemStack> getSeedSubstitutes();
 
     /**
      * Determines if the plant is affected by fertilizers. If false, this setting will prevent any
@@ -124,14 +134,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
 
     void addTooltip(Consumer<ITextComponent> consumer);
 
+
     /**
-     * Creates a stack of the plant's primary seed item. The plant's primary seed item is the seed
-     * item that was registered first for the plant.
+     * Fetches a list of all the items that are considered seeds for this specific plant.
      *
-     * @return A stack of the plant's seeds.
+     * @return A list of all the seeds for this plant.
      */
     @Nonnull
-    ItemStack getSeed();
+    Collection<ItemStack> getSeedItems();
 
     /**
      * Gets the growth requirements for this plant, this is used to check if the plant can be planted
@@ -186,10 +196,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     boolean allowsCloning(IAgriGrowthStage stage);
 
     /**
-     * @return The texture of the seed
+     * @return The resource location for the model of the seed
      */
     @Nonnull
-    ResourceLocation getSeedTexture();
+    ResourceLocation getSeedModel();
 
     /**
      * Checks if a plant can be harvested at the given growth stage

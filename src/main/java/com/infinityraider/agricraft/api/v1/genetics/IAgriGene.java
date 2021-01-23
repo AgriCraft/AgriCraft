@@ -61,4 +61,16 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return gene pair for this gene for the two alleles
      */
     IAgriGenePair<A> generateGenePair(IAllel<A> first, IAllel<A> second);
+
+    /**
+     * AgriCraft provides the possibility to have genes completely hidden.
+     * Hidden genes will not be revealed in any regular gameplay mechanics (for instance the seed analyzer).
+     *
+     * Note that hidden genes will be visible if someone analyzes the nbt data of the ItemStacks though.
+     *
+     * @return true if this is a hidden gene
+     */
+    default boolean isHidden() {
+        return false;
+    }
 }

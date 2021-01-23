@@ -46,7 +46,7 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
         }
         ItemDynamicAgriSeed seed = (ItemDynamicAgriSeed) stack.getItem();
         IAgriPlant plant = seed.getPlant(stack);
-        ResourceLocation texture = plant.getSeedTexture();
+        ResourceLocation texture = plant.getSeedModel();
         IBakedModel model = this.getModel(texture, transforms, perspective);
         IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderTypeLookup.func_239219_a_(stack, true), true, stack.hasEffect());
         this.getItemRenderer().renderModel(model, stack, light, overlay, transforms, vertexBuilder);
@@ -65,7 +65,7 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
     public void bakeModels(ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform transforms, boolean guiLight3d) {
         AgriApi.getPlantRegistry().stream()
                 .forEach(plant -> {
-                    ResourceLocation texture = plant.getSeedTexture();
+                    ResourceLocation texture = plant.getSeedModel();
                     ResourceLocation modelLocation = new ResourceLocation(plant.getId());
                     Map<String, Either<RenderMaterial, String>> textures = Maps.newHashMap();
                     textures.put("particle", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));

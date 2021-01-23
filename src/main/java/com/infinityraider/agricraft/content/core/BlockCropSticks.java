@@ -275,8 +275,8 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             return ActionResultType.PASS;
         }
         // Fertilization
-        if (AgriApi.getFertilizerRegistry().hasAdapter(heldItem)) {
-            return AgriApi.getFertilizerRegistry().valueOf(heldItem)
+        if (AgriApi.getFertilizerAdapterizer().hasAdapter(heldItem)) {
+            return AgriApi.getFertilizerAdapterizer().valueOf(heldItem)
                     .map(f -> f.applyFertilizer(crop, heldItem, world.getRandom()))
                     .orElse(ActionResultType.PASS);
         }
@@ -294,21 +294,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             return AgriApi.getSeedAdapterizer().valueOf(heldItem)
                     .map(seed -> {
                         if (crop.setSeed(seed)) {
-                            if (!player.isCreative()) {
-                                player.getHeldItem(hand).shrink(1);
-                            }
-                            return ActionResultType.CONSUME;
-                        } else {
-                            return ActionResultType.PASS;
-                        }})
-                    .orElse(ActionResultType.PASS);
-        }
-        // Planting from seed substitute (new stats)
-        if(AgriApi.getSeedSubstituteAdapterizer().hasAdapter(heldItem)) {
-            return AgriApi.getSeedSubstituteAdapterizer().valueOf(heldItem)
-                    .map(plant -> {
-                        if(crop.setPlant(plant)) {
-                            crop.setGenome(AgriApi.getAgriGenomeBuilder(plant).build());
                             if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }
@@ -395,7 +380,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
 
     @Override
     public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-        return AgriApi.getFertilizerRegistry().valueOf(BONE_MEAL)
+        return AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL)
                 .flatMap(fertilizer ->
                         this.getCrop(world, pos).map(crop ->
                                 crop.acceptsFertilizer(fertilizer)))
@@ -404,7 +389,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
 
     @Override
     public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-        AgriApi.getFertilizerRegistry().valueOf(BONE_MEAL).ifPresent(fertilizer ->
+        AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL).ifPresent(fertilizer ->
                this.getCrop(world, pos).ifPresent(crop ->
                         fertilizer.applyFertilizer(crop, BONE_MEAL, rand)));
     }

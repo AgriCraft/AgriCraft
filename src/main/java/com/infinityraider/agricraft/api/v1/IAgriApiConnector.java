@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -57,10 +58,13 @@ public interface IAgriApiConnector {
     IAgriAdapterizer<AgriSeed> connectSeedAdapterizer();
 
     @Nonnull
-    IAgriAdapterizer<IAgriPlant> connectSeedSubstituteAdapterizer();
+    IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
 
     @Nonnull
-    IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
+    ItemStack seedToStack(AgriSeed seed, int amount);
+
+    @Nonnull
+    ItemStack plantToSeedStack(IAgriPlant plant, int amount);
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);

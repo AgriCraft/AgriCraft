@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
@@ -46,41 +45,21 @@ public class JsonPlant implements IAgriPlant {
     private final List<IAgriGrowthStage> growthStages;
     private final Set<IGrowCondition> growthConditions;
 
-    private final ItemStack seed;
-    private final List<ItemStack> seedSubstitutes;
+    private final List<ItemStack> seedItems;
     private final ResourceLocation seedTexture;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
-        this.seed = this.initSeed(plant);
-        this.seedSubstitutes = initSeedSubstitutes(plant);
-        this.seedTexture = new ResourceLocation(plant.getTexture().getSeedTexture());
+        this.seedItems = initSeedItems(plant);
+        this.seedTexture = new ResourceLocation(plant.getTexture().getSeedModel());
     }
 
-    private ItemStack initSeed(AgriPlant plant) {
-        ItemStack seed = plant.getSeed().convertSingle(ItemStack.class)
-                .orElseThrow(() -> new IllegalArgumentException("No valid seed items defined for plant " + plant.getPlantName()));
-        return this.initDynamicTag(seed);
-    }
-
-    private List<ItemStack> initSeedSubstitutes(AgriPlant plant) {
-        return plant.getSeed().convertSubstitutes(ItemStack.class)
-                .stream()
-                .map(this::initDynamicTag)
+    private List<ItemStack> initSeedItems(AgriPlant plant) {
+        return plant.getSeeds().stream()
+                .flatMap(seed -> seed.convertAll(ItemStack.class).stream())
                 .collect(Collectors.toList());
-    }
-
-    private ItemStack initDynamicTag(ItemStack seed) {
-        if(seed.getItem() instanceof ItemDynamicAgriSeed) {
-            if(!seed.hasTag()) {
-                seed.setTag(new CompoundNBT());
-            }
-            // TODO: Figure out if we should use the genome here already or not
-            seed.getTag().putString(AgriNBT.PLANT, plant.getId());
-        }
-        return seed;
     }
 
     @Override
@@ -105,8 +84,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedSubstitutes() {
-        return this.seedSubstitutes;
+    public Collection<ItemStack> getSeedItems() {
+        return this.seedItems;
     }
 
     @Override
@@ -154,11 +133,6 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public Collection<IAgriGrowthStage> getGrowthStages() {
         return this.growthStages;
-    }
-
-    @Override
-    public final ItemStack getSeed() {
-        return this.seed.copy();
     }
 
     @Nonnull
@@ -237,14 +211,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Nullable
     @Override
-    public ResourceLocation getSeedTexture() {
+    public ResourceLocation getSeedModel() {
         return this.seedTexture;
-    }
-
-    public static final List<ItemStack> initSeedItemsListJSON(AgriPlant plant) {
-        return plant.getSeedItems().stream()
-                .flatMap(i -> i.convertAll(ItemStack.class).stream())
-                .collect(Collectors.toList());
     }
 
     public static Set<IGrowCondition> initGrowConditions(AgriPlant plant) {
