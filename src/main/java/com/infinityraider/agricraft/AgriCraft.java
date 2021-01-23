@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.AgriTileRegistry;
+import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.network.MessageFertilizerApplied;
 import com.infinityraider.agricraft.network.MessageCompareLight;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
@@ -78,6 +79,8 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     public void initializeAPI() {
         // this will load the AgriApi class
         getLogger().info("Intializing API for " + AgriApi.MOD_ID);
+        // load jsons
+        CoreHandler.loadJsons();
     }
 
     @Override

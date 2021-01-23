@@ -23,7 +23,6 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void onCommonSetupEvent(final FMLCommonSetupEvent event) {
-        CoreHandler.onCommonSetup(event);
         PluginHandler.onCommonSetup(event);
     }
 
