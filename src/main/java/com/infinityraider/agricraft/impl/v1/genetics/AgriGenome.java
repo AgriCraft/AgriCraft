@@ -57,12 +57,12 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     @SuppressWarnings("unchecked")
     public boolean readFromNBT(@Nonnull CompoundNBT tag) {
         if(tag.contains(AgriNBT.GENOME)) {
-            ListNBT list = tag.getList(AgriNBT.GENOME, 9);
+            ListNBT list = tag.getList(AgriNBT.GENOME, 10);
             for (int i = 0; i < list.size(); i++) {
                 CompoundNBT geneTag = list.getCompound(i);
                 AgriGeneRegistry.getInstance().get(geneTag.getString(AgriNBT.GENE))
                         .ifPresent(gene -> {
-                            this.geneMap.put(gene, this.generateGenePairFromNBT(gene, tag));
+                            this.geneMap.put(gene, this.generateGenePairFromNBT(gene, geneTag));
                         });
             }
             return true;

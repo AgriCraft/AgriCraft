@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.function.Function;
 
@@ -23,7 +24,13 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
-        this.registerEventHandler(ModelAndTextureHandler.getInstance());
+    }
+
+    @Override
+    public void registerFMLEventHandlers(IEventBus bus) {
+        IProxy.super.registerFMLEventHandlers(bus);
+        bus.addListener(ModelAndTextureHandler.getInstance()::onModelLoadEvent);
+        bus.addListener(ModelAndTextureHandler.getInstance()::onTextureStitchEvent);
     }
 
     @Override
