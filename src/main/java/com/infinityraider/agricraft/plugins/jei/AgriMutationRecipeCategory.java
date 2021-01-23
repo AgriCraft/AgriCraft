@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 
 import mezz.jei.api.constants.VanillaTypes;
@@ -80,11 +81,11 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
                 mutation.getParents().stream().map(ImmutableList::of).collect(Collectors.toList()));
         // Parents as seeds
         ingredients.setInputLists(VanillaTypes.ITEM,
-                mutation.getParents().stream().map(plant -> plant.toItemStack(1)).map(ImmutableList::of).collect(Collectors.toList()));
+                mutation.getParents().stream().map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
         // Child as plant
         ingredients.setOutputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
         // Child as seed
-        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack(1))));
+        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack())));
         // TODO: soils and requirements
     }
 

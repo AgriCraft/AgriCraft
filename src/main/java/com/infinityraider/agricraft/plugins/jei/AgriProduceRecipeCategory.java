@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
@@ -78,7 +77,7 @@ public class AgriProduceRecipeCategory implements IRecipeCategory<IAgriPlant> {
     @Override
     public void setIngredients(IAgriPlant plant, IIngredients ingredients) {
         // Seed input
-        ingredients.setInputLists(VanillaTypes.ITEM, plant.getSeedItems().stream().map(ImmutableList::of).collect(Collectors.toList()));
+        ingredients.setInputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(plant.toItemStack())));
         // Plant input
         ingredients.setInputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(plant)));
         // Outputs

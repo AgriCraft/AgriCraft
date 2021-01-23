@@ -37,6 +37,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     }
 
     /**
+     * Creates a new ItemStack object holding one seed item for this plant with default genes
+     * @return the ItemStack
+     */
+    default ItemStack toItemStack() {
+        return this.toItemStack(1);
+    }
+
+    /**
      * Creates a new ItemStack object holding the specified amount of seed items for this plant with default genes
      * @param amount the desired stack size
      * @return the ItemStack
