@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
@@ -57,7 +58,8 @@ public final class PluginHandler {
         registerPlants(AgriApi.getPlantRegistry());
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
-        registerSeeds(AgriApi.getSeedAdapterizer());;
+        registerGenes(AgriApi.getGeneRegistry());
+        registerSeeds(AgriApi.getSeedAdapterizer());
         registerSeedSubstitutes(AgriApi.getSeedSubstituteAdapterizer());
         registerFertilizers(AgriApi.getFertilizerRegistry());
     }
@@ -80,6 +82,10 @@ public final class PluginHandler {
 
     public static void registerStats(IAgriStatRegistry statRegistry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
+    }
+
+    public static void registerGenes(IAgriGeneRegistry geneRegistry) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerGenes(geneRegistry));
     }
 
     public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
@@ -11,6 +12,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 
 import javax.annotation.Nonnull;
 
@@ -31,9 +33,9 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
  * <li> All {@link IAgriSoil}s are registered using {@link #registerSoils(IAgriSoilRegistry)}
  * <li> All {@link IAgriWeed}s are registered using {@link #registerWeeds(IAgriRegistry<IAgriWeed)}
  * <li> All {@link IAgriPlant}s are registered using {@link #registerPlants(IAgriRegistry<IAgriPlant>)}
- * <li> All {@link IAgriMutation}s are registered using
- * {@link #registerMutations(IAgriMutationRegistry)}
+ * <li> All {@link IAgriMutation}s are registered using {@link #registerMutations(IAgriMutationRegistry)}
  * <li> All {@link IAgriStat}s are registered using {@link #registerStats(IAgriStatRegistry)}
+ * <li> All {@link IAgriGene}s are registered using {@link #registerGenes(IAgriGeneRegistry)}
  * <li> All {@link AgriSeed} adapters are registered using
  * {@link #registerSeeds(IAgriAdapterizer<AgriSeed>)}
  * <li> All {@link IAgriFertilizer} adapters are registered using
@@ -73,6 +75,10 @@ public interface IAgriPlugin {
     }
 
     default void registerStats(@Nonnull IAgriStatRegistry statRegistry) {
+        // Default Implementation: Do nothing.
+    }
+
+    default void registerGenes(@Nonnull IAgriGeneRegistry geneRegistry) {
         // Default Implementation: Do nothing.
     }
 

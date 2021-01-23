@@ -25,8 +25,6 @@ public interface IProxy extends IProxyBase<Config> {
     default void onCommonSetupEvent(final FMLCommonSetupEvent event) {
         CoreHandler.onCommonSetup(event);
         PluginHandler.onCommonSetup(event);
-        CoreHandler.init();
-        PluginHandler.populateRegistries();
     }
 
     @Override
@@ -41,6 +39,8 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void onModLoadCompleteEvent(final FMLLoadCompleteEvent event) {
+        CoreHandler.init();
+        PluginHandler.populateRegistries();
     }
 
     @Override
