@@ -1,28 +1,24 @@
 package com.infinityraider.agricraft.render.items;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
@@ -32,11 +28,7 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
         return INSTANCE;
     }
 
-    private final Map<ResourceLocation, IBakedModel> models;
-
-    private AgriSeedRenderer() {
-        this.models = Maps.newConcurrentMap();
-    }
+    private AgriSeedRenderer() {}
 
     @Override
     public void render(ItemStack stack, ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
@@ -46,39 +38,31 @@ public class AgriSeedRenderer implements InfItemRenderer, IRenderUtilities {
         }
         ItemDynamicAgriSeed seed = (ItemDynamicAgriSeed) stack.getItem();
         IAgriPlant plant = seed.getPlant(stack);
-        ResourceLocation texture = plant.getSeedModel();
-        IBakedModel model = this.getModel(texture, transforms, perspective);
+        ResourceLocation rl = plant.getSeedModel();
+        if(rl.toString().contains("wheat")) {
+            this.debug();
+        }
+        IBakedModel model = this.getModelManager().getModel(rl);
         IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderTypeLookup.func_239219_a_(stack, true), true, stack.hasEffect());
         this.getItemRenderer().renderModel(model, stack, light, overlay, transforms, vertexBuilder);
     }
 
-    private IBakedModel getModel(ResourceLocation texture, MatrixStack transforms, ItemCameraTransforms.TransformType perspective) {
-        IBakedModel model = models.getOrDefault(texture, this.getModelManager().getMissingModel());
-        return ForgeHooksClient.handleCameraTransforms(transforms, model, perspective, this.isLeftHand(perspective));
-    }
+    private Map<ResourceLocation, IBakedModel> modelRegistry;
 
-    private boolean isLeftHand(ItemCameraTransforms.TransformType perspective) {
-        return perspective == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND
-                || perspective == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND;
-    }
-
-    public void bakeModels(ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform transforms, boolean guiLight3d) {
-        AgriApi.getPlantRegistry().stream()
-                .forEach(plant -> {
-                    ResourceLocation texture = plant.getSeedModel();
-                    ResourceLocation modelLocation = new ResourceLocation(plant.getId());
-                    Map<String, Either<RenderMaterial, String>> textures = Maps.newHashMap();
-                    textures.put("particle", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
-                    textures.put("layer0", Either.left(new RenderMaterial(this.getTextureAtlasLocation(), texture)));
-                    BlockModel blockModel = new BlockModel(
-                            new ResourceLocation("builtin/generated"),
-                            ImmutableList.of(),
-                            textures,
-                            false,
-                            BlockModel.GuiLight.FRONT,
-                            ItemCameraTransforms.DEFAULT,
-                            ImmutableList.of());
-                    this.models.put(texture, this.getItemModelGenerator().makeItemModel(spriteGetter, blockModel).bakeModel(bakery, blockModel, spriteGetter, transforms, modelLocation, guiLight3d));
-                });
+    @SuppressWarnings("unchecked")
+    private void debug() {
+        if(this.modelRegistry == null) {
+            try {
+                Field field = ModelManager.class.getDeclaredField("modelRegistry");
+                field.setAccessible(true);
+                this.modelRegistry = (Map<ResourceLocation, IBakedModel>) field.get(this.getModelManager());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        List<Map.Entry<ResourceLocation, IBakedModel>> filtered = this.modelRegistry.entrySet().stream()
+                .filter(entry -> entry.getKey().toString().contains("wheat"))
+                .collect(Collectors.toList());
+        boolean debug = true;
     }
 }

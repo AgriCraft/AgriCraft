@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -46,20 +47,28 @@ public class JsonPlant implements IAgriPlant {
     private final Set<IGrowCondition> growthConditions;
 
     private final List<ItemStack> seedItems;
-    private final ResourceLocation seedTexture;
+    private final ResourceLocation seedModel;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
-        this.seedTexture = new ResourceLocation(plant.getTexture().getSeedModel());
+        this.seedModel = this.initSeedModel(plant.getTexture().getSeedModel());
     }
 
     private List<ItemStack> initSeedItems(AgriPlant plant) {
         return plant.getSeeds().stream()
                 .flatMap(seed -> seed.convertAll(ItemStack.class).stream())
                 .collect(Collectors.toList());
+    }
+
+    private ResourceLocation initSeedModel(String model) {
+        if(model.contains("#")) {
+            return new ModelResourceLocation(model);
+        } else {
+            return new ResourceLocation(plant.getTexture().getSeedModel());
+        }
     }
 
     @Override
@@ -212,7 +221,7 @@ public class JsonPlant implements IAgriPlant {
     @Nullable
     @Override
     public ResourceLocation getSeedModel() {
-        return this.seedTexture;
+        return this.seedModel;
     }
 
     public static Set<IGrowCondition> initGrowConditions(AgriPlant plant) {

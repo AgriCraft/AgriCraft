@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
-import com.infinityraider.agricraft.render.items.AgriSeedRenderer;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
@@ -73,7 +72,6 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         @Override
         public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                                 IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            AgriSeedRenderer.getInstance().bakeModels(bakery, spriteGetter, transforms, false);
             return new BakedModel(overrides);
         }
 

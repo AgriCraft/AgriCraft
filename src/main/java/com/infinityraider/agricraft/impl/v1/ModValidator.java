@@ -6,6 +6,7 @@ import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -102,9 +103,13 @@ public class ModValidator implements AgriValidator {
     }
 
     @Override
-    public boolean isValidTexture(String texture) {
+    public boolean isValidResource(String resource) {
         try {
-            return new ResourceLocation(texture).toString().equalsIgnoreCase(texture);
+            if(resource.contains("#")) {
+                return new ModelResourceLocation(resource).toString().equalsIgnoreCase(resource);
+            } else {
+                return new ResourceLocation(resource).toString().equalsIgnoreCase(resource);
+            }
         } catch (NullPointerException e) {
             return false;
         }
