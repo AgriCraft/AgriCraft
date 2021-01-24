@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import java.util.Collection;
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
 /**
