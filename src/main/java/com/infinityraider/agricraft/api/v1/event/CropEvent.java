@@ -1,5 +1,7 @@
-package com.infinityraider.agricraft.api.v1.crop;
+package com.infinityraider.agricraft.api.v1.event;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -266,18 +268,25 @@ public abstract class CropEvent extends Event {
          * Fired when a plant spawns
          */
         public static abstract class Plant extends CropEvent.Spawn {
-            private final IAgriPlant plant;
+            private final IAgriGenome genome;
 
-            protected Plant(@Nonnull IAgriCrop crop, @Nonnull IAgriPlant plant) {
+            protected Plant(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome genome) {
                 super(crop, Type.PLANT);
-                this.plant = plant;
+                this.genome = genome;
+            }
+
+            /**
+             * @return The genome being spawned
+             */
+            public IAgriGenome getGenome() {
+                return this.genome;
             }
 
             /**
              * @return The plant being spawned
              */
             public IAgriPlant getPlant() {
-                return this.plant;
+                return this.getGenome().getPlant();
             }
 
             /**
@@ -285,8 +294,8 @@ public abstract class CropEvent extends Event {
              */
             @Cancelable
             public static final class Pre extends CropEvent.Spawn.Plant {
-                public Pre(@Nonnull IAgriCrop crop, @Nonnull IAgriPlant plant) {
-                    super(crop, plant);
+                public Pre(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome genome) {
+                    super(crop, genome);
                 }
             }
 
@@ -294,8 +303,8 @@ public abstract class CropEvent extends Event {
              * Fired after the spawning
              */
             public static final class Post extends CropEvent.Spawn.Plant {
-                public Post(@Nonnull IAgriCrop crop, @Nonnull IAgriPlant plant) {
-                    super(crop, plant);
+                public Post(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome genome) {
+                    super(crop, genome);
                 }
             }
         }

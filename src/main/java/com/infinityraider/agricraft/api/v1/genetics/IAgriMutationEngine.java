@@ -29,9 +29,9 @@ public interface IAgriMutationEngine {
      * @param crop the crop for which the mutation tick has been fired
      * @param neighbours A stream of the crop's neighbouring crops (this includes all crops, regardless if these contain plants, weeds, are fertile, or mature)
      * @param random pseudo-random generator to take decisions
-     * @return optional holding the plant which was spawned on the crop sticks, or empty in case the mutation / spread failed
+     * @return true if the mutation / spread succeeded, false if it failed
      */
-    Optional<IAgriPlant> handleMutationTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random);
+    boolean handleMutationTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random);
 
     /**
      * Sets the selection logic to be used by the mutation engine

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,10 +30,19 @@ import java.util.stream.Stream;
  *  - When a new gene pair is formed, it is possible for one of the alleles to mutate,
  *    resulting in properties which differ slightly from its parents
  */
-public interface IAgriGenome extends IAgriStatProvider {
+public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider  {
+    /**
+     * @return if this genome holds a plant, if this returns false, the genome is invalid and should be discarded
+     */
+    @Override
+    default boolean hasPlant() {
+        return this.getPlant().isPlant();
+    }
+
     /**
      * @return the plant species for this genome
      */
+    @Override
     default IAgriPlant getPlant() {
         return this.getGenePair(AgriApi.getGeneRegistry().getPlantGene()).getTrait();
     }

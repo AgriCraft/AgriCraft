@@ -293,7 +293,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
         if (AgriApi.getSeedAdapterizer().hasAdapter(heldItem)) {
             return AgriApi.getSeedAdapterizer().valueOf(heldItem)
                     .map(seed -> {
-                        if (crop.setSeed(seed)) {
+                        if (crop.plantSeed(seed)) {
                             if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }

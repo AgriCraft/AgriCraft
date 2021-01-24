@@ -39,12 +39,12 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     @Override
-    public Optional<IAgriPlant> handleMutationTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random) {
+    public boolean handleMutationTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random) {
         // select candidate parents from the neighbours
         List<IAgriCrop> candidates = this.getSelector().selectAndOrder(neighbours, random);
         // No candidates: do nothing
         if(candidates.size() <= 0) {
-            return Optional.empty();
+            return false;
         }
         // Only one candidate: clone
         if(candidates.size() == 1) {
@@ -71,30 +71,28 @@ public class AgriMutationEngine implements IAgriMutationEngine {
                 .collect(Collectors.toList());
     }
 
-    protected Optional<IAgriPlant> doClone(IAgriCrop target, IAgriCrop parent, Random random) {
+    protected boolean doClone(IAgriCrop target, IAgriCrop parent, Random random) {
         IAgriPlant plant = parent.getPlant();
         // Try spawning a clone if cloning is allowed
         if (plant.allowsCloning(parent.getGrowthStage())) {
             // roll for spread chance
             if(random.nextDouble() < parent.getPlant().getSpreadChance(parent.getGrowthStage())) {
-                return parent.getGenome().map(genome -> this.spawnChild(target, plant, this.getCloner().clone(genome, random)));
+                return parent.getGenome().map(genome -> this.spawnChild(target, this.getCloner().clone(genome, random))).orElse(false);
             }
         }
         // spreading failed
-        return Optional.empty();
+        return false;
     }
 
-    protected Optional<IAgriPlant> doCombine(IAgriCrop target, IAgriCrop a, IAgriCrop b, Random random) {
+    protected boolean doCombine(IAgriCrop target, IAgriCrop a, IAgriCrop b, Random random) {
         return a.getGenome().flatMap(genA ->
                 b.getGenome().map(genB -> {
                     // Determine the child's genome
                     IAgriGenome genome = this.getCombiner().combine(new Tuple<>(genA, genB), random);
-                    // Fetch the child's species from the genome
-                    IAgriPlant plant = genome.getGenePair(AgriGeneRegistry.getInstance().gene_species).getTrait();
                     // Spawn the child
-                    return this.spawnChild(target, plant, genome);
+                    return this.spawnChild(target, genome);
                 })
-        );
+        ).orElse(false);
     }
 
     protected int sorter(IAgriCrop crop) {
@@ -107,11 +105,9 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         return random.nextInt(fertility.getMax()) < crop.getStats().getValue(fertility);
     }
 
-    protected IAgriPlant spawnChild(IAgriCrop target, IAgriPlant plant, IAgriGenome genome) {
+    protected boolean spawnChild(IAgriCrop target, IAgriGenome genome) {
         target.setCrossCrop(false);
-        target.setPlant(plant);
-        target.setGenome(genome);
-        return plant;
+        return target.setGenome(genome);
     }
 
     protected <T> IAgriGenePair<T> mutateGene(IAgriGene<T> gene, Tuple<IAgriGenome, IAgriGenome> parents, Random rand) {

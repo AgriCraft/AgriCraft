@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlantAcceptor;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
@@ -26,8 +24,8 @@ import javax.annotation.Nullable;
  *
  * To retrieve use AgriApi.getCrop()
  */
-public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgriSeedProvider, IAgriSeedAcceptor,
-        IAgriStatProvider, IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable {
+public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriSeedAcceptor, IAgriStatProvider,
+        IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable {
     /**
      * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop
      */
@@ -87,15 +85,6 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriPlantAcceptor, IAgri
      * @return if this crop is fully grown
      */
     boolean isMature();
-
-    /**
-     * Getter for the IAgriGenome
-     * @return optional containing the genome of the plant, or empty if no plant is planted
-     */
-    @Nonnull
-    Optional<IAgriGenome> getGenome();
-
-    void setGenome(@Nonnull IAgriGenome genome);
 
     @Nonnull
     Optional<IAgriSoil> getSoil();
