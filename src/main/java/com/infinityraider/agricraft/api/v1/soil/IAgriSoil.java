@@ -23,11 +23,6 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil> {
     @Nonnull
     Collection<BlockState> getVariants();
 
-    // TODO: Replace with proper method as this one makes no sense.
-    default boolean isVariant(@Nonnull Block block) {
-        return this.getVariants().contains(block);
-    }
-
     default boolean isVariant(@Nonnull BlockState state) {
         return this.getVariants().contains(state);
     }

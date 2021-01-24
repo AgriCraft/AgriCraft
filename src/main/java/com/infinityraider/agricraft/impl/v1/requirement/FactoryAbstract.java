@@ -40,7 +40,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IGrowCondition soil(int strength, IAgriSoil soil) {
-        return this.statesInRange(strength, RequirementType.SOIL, 1, 1, OFFSET_SOIL, OFFSET_SOIL, state -> soil.isVariant(state.getBlock()));
+        return this.statesInRange(strength, RequirementType.SOIL, 1, 1, OFFSET_SOIL, OFFSET_SOIL, soil::isVariant);
     }
 
     @Override
@@ -51,7 +51,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IGrowCondition soil(int strength, Collection<IAgriSoil> soils) {
         return this.statesInRange(strength, RequirementType.SOIL, 1, 1, OFFSET_SOIL, OFFSET_SOIL,
-                (state) -> soils.stream().anyMatch(soil -> soil.isVariant(state.getBlock()))
+                (state) -> soils.stream().anyMatch(soil -> soil.isVariant(state))
         );
     }
 
