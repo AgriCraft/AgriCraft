@@ -38,7 +38,6 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void onModLoadCompleteEvent(final FMLLoadCompleteEvent event) {
-        CoreHandler.init();
         PluginHandler.populateRegistries();
     }
 
@@ -63,6 +62,7 @@ public interface IProxy extends IProxyBase<Config> {
     
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {
+        CoreHandler.init();
         /*
         // This is to be moved to infinity lib in a future version, I would expect.
         AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
