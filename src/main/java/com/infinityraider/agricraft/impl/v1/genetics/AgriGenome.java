@@ -80,7 +80,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     public int getValue(IAgriStat stat) {
         return AgriGeneRegistry.getInstance().get(stat)
                 .map(this::getGenePair)
-                .map(pair -> pair.getDominant().trait())
+                .map(IAgriGenePair::getTrait)
                 .orElse(stat.getMin());
     }
 
