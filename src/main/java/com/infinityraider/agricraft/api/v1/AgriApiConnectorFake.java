@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -86,13 +87,19 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriAdapterizer<IAgriPlant> connectSeedSubstituteAdapterizer() {
+    public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
-    @Override
     @Nonnull
-    public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
+    @Override
+    public ItemStack seedToStack(AgriSeed seed, int amount) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

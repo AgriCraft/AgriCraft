@@ -17,12 +17,7 @@ import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public final class CoreHandler {
@@ -49,7 +44,7 @@ public final class CoreHandler {
         return jsonDir;
     }
 
-    public static void onCommonSetup(FMLCommonSetupEvent event) {
+    public static void loadJsons() {
         // Setup Config.
         configDir = FMLPaths.CONFIGDIR.get().resolve(Reference.MOD_ID);
         config = AgriCraft.instance.getConfig();
@@ -68,18 +63,6 @@ public final class CoreHandler {
                 );
 
         // Load the JSON files.
-        loadJsons();
-    }
-
-    public static void init() {
-        // Load JSON Stuff
-        initSoils();
-        initPlants();
-        initMutations();
-    }
-
-    public static void loadJsons() {
-        // Load the core!
         AgriCore.getLogger("agricraft").info("Attempting to read AgriCraft JSONs!");
         AgriLoader.loadDirectory(
                 defaultDir,
@@ -90,7 +73,14 @@ public final class CoreHandler {
         AgriCore.getLogger("agricraft").info("Finished trying to read AgriCraft JSONs!");
     }
 
-    public static void initSoils() {
+    public static void init() {
+        // Load JSON Stuff
+        initSoils();
+        initPlants();
+        initMutations();
+    }
+
+    private static void initSoils() {
         // Announce Progress
         AgriCore.getLogger("agricraft").info("Registering Soils!");
 
@@ -112,7 +102,7 @@ public final class CoreHandler {
         }
     }
 
-    public static void initPlants() {
+    private static void initPlants() {
         // Announce Progress
         AgriCore.getLogger("agricraft").info("Registering Plants!");
 
@@ -135,7 +125,7 @@ public final class CoreHandler {
         }
     }
 
-    public static void initMutations() {
+    private static void initMutations() {
         // Announce Progress
         AgriCore.getLogger("agricraft").info("Registering Mutations!");
 
@@ -158,14 +148,4 @@ public final class CoreHandler {
             AgriCore.getLogger("agricraft").info(" - {0}", mutation);
         }
     }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void loadTextures(Consumer<ResourceLocation> consumer) {
-        AgriCore.getPlants().getAllElements().stream()
-                .flatMap(plant -> plant.getTexture().getAllTextures().stream())
-                .distinct()
-                .map(t -> new ResourceLocation(t))
-                .forEach(consumer);
-    }
-
 }

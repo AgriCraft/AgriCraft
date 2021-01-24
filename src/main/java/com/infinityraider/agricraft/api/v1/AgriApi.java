@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -164,23 +165,6 @@ public final class AgriApi {
         return AgriApi.CONNECTOR.connectSeedAdapterizer();
     }
 
-
-    /**
-     * Fetches the AgriCraft Seed substitute Adapterizer.
-     *
-     * Seed substitutes are ItemStacks which can be planted on crops as well, but can not carry genes
-     * Each plant can correspond to multiple seed substitutes
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
-     *
-     * @return the AgriCraft Seed Registry.
-     */
-    @Nonnull
-    public static IAgriAdapterizer<IAgriPlant> getSeedSubstituteAdapterizer() {
-        return AgriApi.CONNECTOR.connectSeedSubstituteAdapterizer();
-    }
-
     /**
      * Fetches the AgriCraft Fertilizer Registry.
      * <p>
@@ -190,8 +174,18 @@ public final class AgriApi {
      * @return the AgriCraft Fertilizer Registry.
      */
     @Nonnull
-    public static IAgriAdapterizer<IAgriFertilizer> getFertilizerRegistry() {
+    public static IAgriAdapterizer<IAgriFertilizer> getFertilizerAdapterizer() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
+    }
+
+    @Nonnull
+    public static ItemStack seedToStack(AgriSeed seed, int amount) {
+        return AgriApi.CONNECTOR.seedToStack(seed, amount);
+    }
+
+    @Nonnull
+    public static ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
+        return AgriApi.CONNECTOR.plantToSeedStack(plant, amount);
     }
 
     /**

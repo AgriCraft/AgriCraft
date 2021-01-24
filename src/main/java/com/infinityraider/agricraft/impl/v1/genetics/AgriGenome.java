@@ -57,12 +57,12 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     @SuppressWarnings("unchecked")
     public boolean readFromNBT(@Nonnull CompoundNBT tag) {
         if(tag.contains(AgriNBT.GENOME)) {
-            ListNBT list = tag.getList(AgriNBT.GENOME, 9);
+            ListNBT list = tag.getList(AgriNBT.GENOME, 10);
             for (int i = 0; i < list.size(); i++) {
                 CompoundNBT geneTag = list.getCompound(i);
                 AgriGeneRegistry.getInstance().get(geneTag.getString(AgriNBT.GENE))
                         .ifPresent(gene -> {
-                            this.geneMap.put(gene, this.generateGenePairFromNBT(gene, tag));
+                            this.geneMap.put(gene, this.generateGenePairFromNBT(gene, geneTag));
                         });
             }
             return true;
@@ -94,13 +94,13 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         private Builder(IAgriPlant plant) {
             this.geneMap = Maps.newIdentityHashMap();
             for(IAgriGene<?> gene : AgriApi.getGeneRegistry().all()) {
-                this.geneMap.put(gene, this.generateDefaultPair(gene));
+                this.geneMap.put(gene, this.generateDefaultPair(gene, plant));
             }
             this.geneMap.put(GeneSpecies.getInstance(), GeneSpecies.getInstance().generateGenePair(plant, plant));
         }
 
-        private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene) {
-            return gene.generateGenePair(gene.defaultAllel(), gene.defaultAllel());
+        private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene, IAgriPlant plant) {
+            return gene.generateGenePair(gene.defaultAllel(plant), gene.defaultAllel(plant));
         }
 
         @Override

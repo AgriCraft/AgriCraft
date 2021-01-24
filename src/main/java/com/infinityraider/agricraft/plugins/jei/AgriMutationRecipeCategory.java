@@ -81,11 +81,11 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
                 mutation.getParents().stream().map(ImmutableList::of).collect(Collectors.toList()));
         // Parents as seeds
         ingredients.setInputLists(VanillaTypes.ITEM,
-                mutation.getParents().stream().map(IAgriPlant::getSeed).map(ImmutableList::of).collect(Collectors.toList()));
+                mutation.getParents().stream().map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
         // Child as plant
         ingredients.setOutputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
         // Child as seed
-        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().getSeed())));
+        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack())));
         // TODO: soils and requirements
     }
 

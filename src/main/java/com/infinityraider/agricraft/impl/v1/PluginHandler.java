@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
@@ -57,9 +58,9 @@ public final class PluginHandler {
         registerPlants(AgriApi.getPlantRegistry());
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
-        registerSeeds(AgriApi.getSeedAdapterizer());;
-        registerSeedSubstitutes(AgriApi.getSeedSubstituteAdapterizer());
-        registerFertilizers(AgriApi.getFertilizerRegistry());
+        registerGenes(AgriApi.getGeneRegistry());
+        registerSeeds(AgriApi.getSeedAdapterizer());
+        registerFertilizers(AgriApi.getFertilizerAdapterizer());
     }
 
     public static void registerSoils(IAgriSoilRegistry soilRegistry) {
@@ -82,12 +83,12 @@ public final class PluginHandler {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
     }
 
-    public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(adapterizer));
+    public static void registerGenes(IAgriGeneRegistry geneRegistry) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerGenes(geneRegistry));
     }
 
-    public static void registerSeedSubstitutes(IAgriAdapterizer<IAgriPlant> adapterizer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeedSubstitutes(adapterizer));
+    public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(adapterizer));
     }
 
     public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {

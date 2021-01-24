@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAllel;
 import com.infinityraider.agricraft.api.v1.genetics.IMutator;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -38,9 +39,13 @@ public class GeneStat implements IAgriGene<Integer> {
         return this.getStat().getMax();
     }
 
-    @Override
     public IAllel<Integer> defaultAllel() {
         return this.defaultAllel;
+    }
+
+    @Override
+    public IAllel<Integer> defaultAllel(IAgriPlant plant) {
+        return this.defaultAllel();
     }
 
     @Override

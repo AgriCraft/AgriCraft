@@ -2,12 +2,14 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
+import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 
 import java.util.function.Function;
 
@@ -21,7 +23,14 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
-        registerEventHandler(ItemToolTipHandler.getInstance());
+        this.registerEventHandler(ItemToolTipHandler.getInstance());
+    }
+
+    @Override
+    public void registerFMLEventHandlers(IEventBus bus) {
+        IProxy.super.registerFMLEventHandlers(bus);
+        bus.addListener(ModelAndTextureHandler.getInstance()::onModelLoadEvent);
+        bus.addListener(ModelAndTextureHandler.getInstance()::onTextureStitchEvent);
     }
 
     @Override

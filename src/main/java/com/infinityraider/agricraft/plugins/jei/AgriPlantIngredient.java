@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.Lists;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -46,8 +45,7 @@ public class AgriPlantIngredient {
         @Nonnull
         @Override
         public String getModId(IAgriPlant plant) {
-            ResourceLocation id = plant.getSeed().getItem().getRegistryName();
-            return id == null ? AgriCraft.instance.getModId() : id.getNamespace();
+            return plant.getSeedModel().getNamespace();
         }
 
         @Override

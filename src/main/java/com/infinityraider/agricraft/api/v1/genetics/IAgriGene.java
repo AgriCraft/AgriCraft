@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
@@ -15,10 +16,12 @@ import java.util.Set;
 public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
     /**
      * Gets the default fallback trait for the gene, used when genomes are constructed without explicitly assigning alleles
+     *
+     * @param plant the plant for which to fetch the default allel
      * @return the default allel for this gene
      */
     @Nonnull
-    IAllel<A> defaultAllel();
+    IAllel<A> defaultAllel(IAgriPlant plant);
 
     /**
      * Maps a value of the gene to an allel, it is possible that this value falls out of the set of acceptable values,
@@ -58,4 +61,16 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return gene pair for this gene for the two alleles
      */
     IAgriGenePair<A> generateGenePair(IAllel<A> first, IAllel<A> second);
+
+    /**
+     * AgriCraft provides the possibility to have genes completely hidden.
+     * Hidden genes will not be revealed in any regular gameplay mechanics (for instance the seed analyzer).
+     *
+     * Note that hidden genes will be visible if someone analyzes the nbt data of the ItemStacks though.
+     *
+     * @return true if this is a hidden gene
+     */
+    default boolean isHidden() {
+        return false;
+    }
 }

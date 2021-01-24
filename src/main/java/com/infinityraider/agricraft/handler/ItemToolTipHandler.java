@@ -29,37 +29,7 @@ public class ItemToolTipHandler {
         return INSTANCE;
     }
 
-    private ItemToolTipHandler() {
-    }
-
-    /**
-     * Adds tooltips for SEED stats.
-     *
-     * @param event
-     */
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void addSeedStatsTooltip(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        // Add Seed Information.
-        AgriApi.getSeedAdapterizer().valueOf(stack).ifPresent(seed ->
-                seed.getStats().addTooltips(event.getToolTip()::add));
-    }
-
-//    @SubscribeEvent
-//    public void addProductInfo(ItemTooltipEvent event) {
-//        if (StackHelper.hasTag(event.getItemStack())) {
-//            final NBTTagCompound tag = StackHelper.getTag(event.getItemStack());
-//            if (tag.hasKey(IAgriHarvestProduct.PRODUCT_MARKER_TAG)) {
-//                final int minAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MIN_TAG);
-//                final int maxAmount = tag.getInteger(IAgriHarvestProduct.PRODUCT_MAX_TAG);
-//                final double chance = tag.getDouble(IAgriHarvestProduct.PRODUCT_CHANCE_TAG);
-//                event.getToolTip().add(ChatFormatting.GRAY + "Chance: " + DecimalFormat.getPercentInstance().format(chance));
-//                event.getToolTip().add(ChatFormatting.GRAY + "Min. Amount: " + minAmount);
-//                event.getToolTip().add(ChatFormatting.GRAY + "Max. Amount: " + maxAmount);
-//            }
-//        }
-//    }
+    private ItemToolTipHandler() {}
 
     private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
         event.getToolTip().add(new StringTextComponent(MessageFormat.format(format, objects)).mergeStyle(TextFormatting.DARK_AQUA));

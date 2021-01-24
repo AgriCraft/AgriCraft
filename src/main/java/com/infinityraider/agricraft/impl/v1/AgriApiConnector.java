@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
@@ -31,6 +32,7 @@ import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -133,16 +135,22 @@ public class AgriApiConnector implements IAgriApiConnector {
         return this.seedAdapterizer;
     }
 
-    @Nonnull
-    @Override
-    public IAgriAdapterizer<IAgriPlant> connectSeedSubstituteAdapterizer() {
-        return this.seedSubstituteAdapterizer;
-    }
-
     @Override
     @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerAdapterizer;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack seedToStack(AgriSeed seed, int amount) {
+        return ItemDynamicAgriSeed.toStack(seed, amount);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
+        return ItemDynamicAgriSeed.toStack(plant, amount);
     }
 
     @Nonnull

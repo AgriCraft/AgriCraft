@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,6 +30,13 @@ import java.util.stream.Stream;
  *    resulting in properties which differ slightly from its parents
  */
 public interface IAgriGenome extends IAgriStatProvider {
+    /**
+     * @return the plant species for this genome
+     */
+    default IAgriPlant getPlant() {
+        return this.getGenePair(AgriApi.getGeneRegistry().getPlantGene()).getTrait();
+    }
+
     /**
      * Fetches the gene pair for a given gene id (as registered in the IAgriGeneRegistry)
      * @param geneId the id of the gene

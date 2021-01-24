@@ -24,10 +24,7 @@ public class WorldGenerationHelper {
      */
     public static AgriSeed getRandomSeed(Random rand, List<IAgriPlant> plants) {
         IAgriPlant plant = plants.get(rand.nextInt(plants.size()));
-        return new AgriSeed(
-                plant,
-                generateRandomGenome(plant, rand)
-        );
+        return new AgriSeed(generateRandomGenome(plant, rand));
     }
 
     public static IAgriGenome generateRandomGenome(IAgriPlant plant, Random rand) {

@@ -1,12 +1,20 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public interface IAgriGeneRegistry extends IAgriRegistry<IAgriGene<?>> {
+    /**
+     * @return The gene responsible for the plant species
+     */
+    @Nonnull
+    IAgriGene<IAgriPlant> getPlantGene();
+
     /**
      * Every stat will automatically get a gene associated with it, this method can be used to obtain the corresponding
      * gene for a given stat
