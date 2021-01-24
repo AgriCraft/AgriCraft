@@ -161,6 +161,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         this.growth.set(stage);
+        this.handlePlantUpdate();
         return true;
     }
 
@@ -314,7 +315,6 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if (!this.isMature()) {
             if (this.calculateGrowthRate() > this.getRandom().nextDouble()
                     && !MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Plant.Pre(this))) {
-
                 this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
                 this.getPlant().onGrowth(this);
                 MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Plant.Post(this));
@@ -432,6 +432,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             if(this.weed.get().getGrowthStages().contains(stage)) {
                 this.weedGrowth.set(stage);
                 this.weed.get().onGrowthTick(this);
+                this.handlePlantUpdate();
                 return true;
             }
             return false;
@@ -440,9 +441,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                 this.weed.set(weed);
                 this.weedGrowth.set(stage);
                 this.weed.get().onSpawned(this);
-                if (this.getWorld() != null) {
-                    this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), true));
-                }
+                this.handlePlantUpdate();
                 MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Weed.Post(this, weed));
                 return true;
             }
@@ -455,9 +454,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.hasWeeds()) {
             this.weed.set(NO_WEED);
             this.weedGrowth.set(NO_GROWTH);
-            if(this.getWorld() != null) {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), false));
-            }
+            this.handlePlantUpdate();
             return true;
         }
         return false;
@@ -498,9 +495,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void setGenomeImpl(@Nonnull IAgriGenome genome) {
         this.genome.set(Optional.of(genome));
         this.growth.set(genome.getPlant().getInitialGrowthStage());
-        if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), true));
-        }
+        this.handlePlantUpdate();
     }
 
     @Override
@@ -508,9 +503,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.hasSeed()) {
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
-            if(this.getWorld() != null) {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(this.getBlockState(), false));
-            }
+            this.handlePlantUpdate();
             return true;
         }
         return false;
@@ -536,6 +529,18 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         // No need to read anything since everything is covered by the AutoSyncedFields
         // A cache update will be required though (either on the client, or on the server after being loaded)
         this.needsCaching = true;
+    }
+
+    protected void handlePlantUpdate()  {
+        if(this.getWorld() != null) {
+            BlockState state = this.getBlockState();
+            boolean plant = this.hasPlant() || this.hasWeeds();
+            if (BlockCropSticks.PLANT.fetch(state) == plant) {
+                this.forceRenderUpdate();
+            } else {
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
+            }
+        }
     }
 
     @Override
