@@ -276,9 +276,17 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
         }
         // Fertilization
         if (AgriApi.getFertilizerAdapterizer().hasAdapter(heldItem)) {
-            return AgriApi.getFertilizerAdapterizer().valueOf(heldItem)
-                    .map(f -> f.applyFertilizer(crop, heldItem, world.getRandom()))
-                    .orElse(ActionResultType.PASS);
+            return AgriApi.getFertilizerAdapterizer().valueOf(heldItem).map(fertilizer -> {
+                if(crop.acceptsFertilizer(fertilizer)) {
+                    ActionResultType result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
+                    if(result.isSuccessOrConsume()) {
+                        crop.onApplyFertilizer(fertilizer, world.getRandom());
+                    }
+                    return result;
+                } else {
+                    return ActionResultType.PASS;
+                }
+            }).orElse(ActionResultType.PASS);
         }
         // Creation of Cross crops
         if (heldItem.getItem() == this.asItem()) {
@@ -391,7 +399,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
         AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL).ifPresent(fertilizer ->
                this.getCrop(world, pos).ifPresent(crop ->
-                        fertilizer.applyFertilizer(crop, BONE_MEAL, rand)));
+                        fertilizer.applyFertilizer(world, pos, crop, BONE_MEAL, rand, null)));
     }
 
     /**

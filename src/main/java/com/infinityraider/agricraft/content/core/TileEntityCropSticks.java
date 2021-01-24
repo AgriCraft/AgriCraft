@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
@@ -250,7 +249,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             int max = AgriStatRegistry.getInstance().resistanceStat().getMax();
             // At 1 resist, 50/50 chance for weed growth tick
             // At 10 resist, 0% chance
-            return this.getRandom().nextInt(max) >= (max + resist)/2;
+            return  this.getRandom().nextInt(max) >= (max + resist)/2;
         }
         return this.getRandom().nextBoolean();
     }
@@ -353,23 +352,8 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     @Override
-    @Nonnull
-    public ActionResultType onApplyFertilizer(@Nonnull IAgriFertilizer fertilizer, @Nonnull Random rand) {
-        // Validate
-        Preconditions.checkNotNull(rand);
+    public void onApplyFertilizer(@Nonnull IAgriFertilizer fertilizer, @Nonnull Random rand) {
 
-        // Do stuff
-        if (this.isRemote()) {
-            // The client doesn't need to do anything special.
-            return ActionResultType.PASS;
-        } else if (!this.acceptsFertilizer(fertilizer)) {
-            // This method has been called in error. Make a note and block the tick.
-            AgriCore.getCoreLogger().warn("onApplyFertilizer should not be called if acceptFertilizer is false!");
-            return ActionResultType.FAIL;
-        } else {
-            // The regular growth tick method handles the rest, now that the special cases have been filtered out
-            return ActionResultType.SUCCESS;
-        }
     }
 
     @Override

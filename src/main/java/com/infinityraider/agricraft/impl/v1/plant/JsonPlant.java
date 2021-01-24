@@ -99,7 +99,7 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer) {
-        return false;
+        return this.plant.canBonemeal();
     }
 
     @Override

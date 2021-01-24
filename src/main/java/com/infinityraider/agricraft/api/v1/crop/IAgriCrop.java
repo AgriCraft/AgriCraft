@@ -91,8 +91,6 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
 
     void breakCrop(@Nullable LivingEntity entity);
 
-    void applyGrowthTick();
-
     @Nonnull
     Stream<IAgriCrop> streamNeighbours();
 

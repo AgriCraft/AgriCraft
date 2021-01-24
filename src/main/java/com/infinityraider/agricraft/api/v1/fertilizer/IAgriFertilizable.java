@@ -1,7 +1,5 @@
 package com.infinityraider.agricraft.api.v1.fertilizer;
 
-import net.minecraft.util.ActionResultType;
-
 import java.util.Random;
 import javax.annotation.Nonnull;
 
@@ -29,17 +27,15 @@ public interface IAgriFertilizable {
     boolean acceptsFertilizer(@Nonnull IAgriFertilizer fertilizer);
 
     /**
-     * Called after the specified fertilizer has been applied to this crop. The effects and results may be randomized. The
-     * return value signals if any fertilizer should be consumed. It should match up with the
-     * results of {@link #acceptsFertilizer(IAgriFertilizer)}
+     * Called after the specified fertilizer has been applied to this crop. The effects and results may be randomized.
      *
      * @param fertilizer the fertilizer to be applied.
      * @param rand the random number generator to be used.
-     * @return PASS if this is the client and nothing should be done in this thread. SUCCESS if this
-     * operation is allowed, and fertilizer should be consumed. (Even if no growth happened.) FAIL
-     * if this this operation isn't allowed, and fertilizer should NOT be consumed.
      */
-    @Nonnull
-    ActionResultType onApplyFertilizer(@Nonnull IAgriFertilizer fertilizer, @Nonnull Random rand);
+    void onApplyFertilizer(@Nonnull IAgriFertilizer fertilizer, @Nonnull Random rand);
 
+    /**
+     * Applies a growth tick
+     */
+    void applyGrowthTick();
 }
