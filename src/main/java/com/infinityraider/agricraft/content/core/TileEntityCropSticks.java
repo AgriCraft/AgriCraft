@@ -126,7 +126,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     // Initialize neighbours cache
     protected void readNeighbours() {
         if(this.getWorld() != null) {
-            Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getWorld(), pos)));
+            Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getWorld(), this.getPos().offset(dir))));
             this.needsCaching = false;
         }
     }
