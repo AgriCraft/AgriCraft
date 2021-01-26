@@ -1,5 +1,8 @@
 {
   "loader": "forge:composite",
+  "textures":  {
+    "particle": "minecraft:block/oak_planks"
+  },
   "parts": {
     "crop_sticks": {
       "parent": "agricraft:block/crop_sticks_wood_cross"
