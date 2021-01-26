@@ -234,7 +234,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
         if(!world.isRemote()) {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             if(doDrops) {
-                spawnDrops(state, world, pos);
+                spawnDrops(state, world, pos, world.getTileEntity(pos));
             }
         }
     }

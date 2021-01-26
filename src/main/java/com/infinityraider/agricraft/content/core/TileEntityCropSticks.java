@@ -222,7 +222,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Break.Pre(this, entity))) {
             IAgriPlant plant = this.getPlant();
             IAgriWeed weed = this.getWeeds();
-            Block.spawnDrops(this.getBlockState(), this.getWorld(), this.getPosition());
+            Block.spawnDrops(this.getBlockState(), this.getWorld(), this.getPosition(), this);
             this.getWorld().setBlockState(this.getPosition(), Blocks.AIR.getDefaultState());
             plant.onBroken(this, entity);
             weed.onBroken(this, entity);
