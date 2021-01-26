@@ -3,7 +3,9 @@ package com.infinityraider.agricraft.api.v1.genetics;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 /**
@@ -36,6 +38,22 @@ public interface IAgriMutationRegistry extends IAgriRegistry<IAgriMutation> {
      * otherwise.
      */
     boolean add(@Nonnull String id, double chance, @Nonnull String childId, @Nonnull List<String> parentIds);
+
+    /**
+     * Fetches a stream of all mutations for which the passed plants are parents
+     * @param plants the plants
+     * @return Stream of all mutations which can occur from the passed parents
+     */
+    default Stream<IAgriMutation> getMutationsFromParents(IAgriPlant... plants) {
+        return this.getMutationsFromParents(Arrays.asList(plants));
+    }
+
+    /**
+     * Fetches a stream of all mutations for which the passed plants are parents
+     * @param plants the plants
+     * @return Stream of all mutations which can occur from the passed parents
+     */
+    Stream<IAgriMutation> getMutationsFromParents(List<IAgriPlant> plants);
 
     /**
      * Calculates the complexity for a plant, the deeper down the mutation tree, the complexer a plant is.

@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 
 import java.util.*;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 /**
@@ -74,6 +75,11 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
 
         // Step VIII. Register the new mutation.
         return this.add(mutation);
+    }
+
+    @Override
+    public Stream<IAgriMutation> getMutationsFromParents(List<IAgriPlant> plants) {
+        return this.stream().filter(mutation -> mutation.areParentsIn(plants));
     }
 
     @Override

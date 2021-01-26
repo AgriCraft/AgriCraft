@@ -97,10 +97,11 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         public IAgriGenePair<IAgriPlant> pickOrMutate(IAgriGene<IAgriPlant> gene, IAllel<IAgriPlant> first, IAllel<IAgriPlant> second,
                                                       Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
 
-            return AgriMutationRegistry.getInstance().stream()
-                    // scan the mutation registry
-                    .filter(mut -> mut.hasParent(first.trait()) && mut.hasParent(second.trait()))
-                    // find a matching mutation
+            // Search for matching mutations
+            return AgriMutationRegistry.getInstance().getMutationsFromParents(first.trait(), second.trait())
+                    // order them randomly
+                    .sorted((m1, m2) -> random.nextBoolean() ? -1 : 1)
+                    // fetch one
                     .findAny()
                     // map it to its child, or to nothing based on the mutation success rate
                     .flatMap(mutation -> Optional.ofNullable(mutation.getChance() > random.nextDouble() ? mutation.getChild() : null))
