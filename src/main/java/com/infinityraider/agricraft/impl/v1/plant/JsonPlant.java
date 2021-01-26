@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriRenderType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -199,13 +198,13 @@ public class JsonPlant implements IAgriPlant {
         }
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
         ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
-        if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {
-            return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl);
+        switch (this.plant.getTexture().getRenderType()) {
+            case HASH: return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl);
+            case CROSS: return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl);
+            case PLUS: return AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl);
+            case RHOMBUS:return AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl);
+            default: return AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl);
         }
-        if (this.plant.getTexture().getRenderType() == AgriRenderType.HASH) {
-            return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl);
-        }
-        return AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl);
     }
 
     @Nullable
