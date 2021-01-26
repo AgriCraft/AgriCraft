@@ -1,10 +1,12 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
+import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -46,6 +48,11 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void registerEventHandlers() {}
+
+    @Override
+    default void registerFMLEventHandlers(IEventBus bus) {
+        bus.addListener(DataHandler.getInstance()::onGatherDataEvent);
+    }
 
     @Override
     default void activateRequiredModules() {}
