@@ -17,6 +17,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -71,30 +72,36 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         // Super constructor with appropriate TileEntity Type
         super(AgriCraft.instance.getModTileRegistry().crop_sticks);
         // Initialize automatically synced fields
-        this.growth = this.createField(NO_GROWTH,
-                (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
-                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH));
-        this.weed = this.createField(NO_WEED,
-                (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
-                (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED));
-        this.weedGrowth = this.createField(NO_GROWTH,
-                (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId()),
-                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH));
         this.genome = this.createField(Optional.empty(),
                 (optional, tag) -> optional.ifPresent(genome -> {
                     CompoundNBT geneTag = new CompoundNBT();
                     genome.writeToNBT(geneTag);
-                    tag.put(AgriNBT.GENOME, geneTag);
-                }),
+                    tag.put(AgriNBT.GENOME, geneTag);}),
                 (tag) -> {
-                    if(tag.contains(AgriNBT.GENOME)) {
-                        IAgriGenome genome = AgriApi.getAgriGenomeBuilder(this.getPlant()).build();
+                    if (tag.contains(AgriNBT.GENOME)) {
+                        IAgriGenome genome = AgriApi.getAgriGenomeBuilder(NO_PLANT).build();
                         genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
                         return Optional.of(genome);
                     } else {
                         return Optional.empty();
-                    }
-                });
+                    }},
+                CoreHandler::isInitialized,
+                Optional.empty());
+        this.growth = this.createField(NO_GROWTH,
+                (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
+                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH),
+                CoreHandler::isInitialized,
+                NO_GROWTH);
+        this.weed = this.createField(NO_WEED,
+                (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
+                (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED),
+                CoreHandler::isInitialized,
+                NO_WEED);
+        this.weedGrowth = this.createField(NO_GROWTH,
+                (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId()),
+                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH),
+                CoreHandler::isInitialized,
+                NO_GROWTH);
         this.crossCrop = this.createField(false,
                 (bool, tag) -> tag.putBoolean(AgriNBT.CROSS_CROP, bool),
                 (tag) -> tag.getBoolean(AgriNBT.CROSS_CROP));

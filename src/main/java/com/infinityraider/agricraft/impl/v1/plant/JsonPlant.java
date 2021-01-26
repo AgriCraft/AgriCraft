@@ -194,6 +194,9 @@ public class JsonPlant implements IAgriPlant {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
+        if(!stage.isGrowthStage()) {
+            return ImmutableList.of();
+        }
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
         ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
         if (this.plant.getTexture().getRenderType() == AgriRenderType.CROSS) {

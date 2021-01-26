@@ -65,7 +65,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
                             this.geneMap.put(gene, this.generateGenePairFromNBT(gene, geneTag));
                         });
             }
-            return true;
+            return this.getPlant().isPlant();
         }
         return false;
     }

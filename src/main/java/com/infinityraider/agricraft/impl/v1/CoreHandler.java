@@ -30,7 +30,13 @@ public final class CoreHandler {
     private static Path defaultDir;
     private static Config config;
 
+    private static boolean initialized = false;
+
     private CoreHandler() {}
+
+    public static boolean isInitialized() {
+        return initialized;
+    }
 
     public static Config getConfig() {
         return config;
@@ -78,6 +84,8 @@ public final class CoreHandler {
         initSoils();
         initPlants();
         initMutations();
+        // Set flag
+        initialized = true;
     }
 
     private static void initSoils() {
