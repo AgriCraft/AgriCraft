@@ -54,7 +54,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
-        this.seedModel = this.initSeedModel(plant.getTexture().getSeedModel());
+        this.seedModel = this.initSeedModel(plant.getSeedModel());
     }
 
     private List<ItemStack> initSeedItems(AgriPlant plant) {
@@ -67,7 +67,7 @@ public class JsonPlant implements IAgriPlant {
         if(model.contains("#")) {
             return new ModelResourceLocation(model);
         } else {
-            return new ResourceLocation(plant.getTexture().getSeedModel());
+            return new ResourceLocation(plant.getSeedModel());
         }
     }
 

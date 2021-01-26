@@ -42,7 +42,7 @@ public class ModelAndTextureHandler {
         ModelLoader loader = ModelLoader.instance();
         AgriCore.getPlants().getAllElements()
                 .stream()
-                .map(plant -> plant.getTexture().getSeedModel())
+                .map(AgriPlant::getSeedModel)
                 .map(this::toResourceLocation)
                 .forEach(ModelLoader::addSpecialModel);
     }
