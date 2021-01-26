@@ -5,9 +5,11 @@ import com.agricraft.agricore.log.AgriLogger;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
+import com.agricraft.agricore.plant.AgriWeed;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
+import com.infinityraider.agricraft.network.json.MessageSyncWeedJson;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,6 +26,7 @@ public class PlayerConnectToServerHandler {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         syncSoils(player);
         syncPlants(player);
+        syncWeeds(player);
         syncMutations(player);
     }
 
@@ -47,6 +50,18 @@ public class PlayerConnectToServerHandler {
             AgriPlant plant = it.next();
             LOG.debug("Sending plant: {0} ({1} of {2})", plant.getId(), i + 1, count);
             new MessageSyncPlantJson(plant, i, count).sendTo(player);
+        }
+        LOG.debug("Finished sending plants to player: " + player.getDisplayName().getString());
+    }
+
+    private void syncWeeds(ServerPlayerEntity player) {
+        LOG.debug("Sending weeds to player: " + player.getDisplayName().getString());
+        final int count = AgriCore.getWeeds().getAllElements().size();
+        Iterator<AgriWeed> it = AgriCore.getWeeds().getAllElements().iterator();
+        for (int i = 0; it.hasNext(); i++) {
+            AgriWeed weed = it.next();
+            LOG.debug("Sending weed: {0} ({1} of {2})", weed.getId(), i + 1, count);
+            new MessageSyncWeedJson(weed, i, count).sendTo(player);
         }
         LOG.debug("Finished sending plants to player: " + player.getDisplayName().getString());
     }

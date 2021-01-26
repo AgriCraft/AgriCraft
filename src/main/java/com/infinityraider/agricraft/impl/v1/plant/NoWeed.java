@@ -11,6 +11,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -64,6 +66,14 @@ public final class NoWeed implements IAgriWeed {
     @Override
     public void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
         //NOPE
+    }
+
+    private final String info = "Damnations! This is not a weed";
+    private final ITextComponent tooltip = new StringTextComponent(this.info);
+
+    @Override
+    public void addTooltip(Consumer<ITextComponent> consumer) {
+        consumer.accept(tooltip);
     }
 
     @Nonnull

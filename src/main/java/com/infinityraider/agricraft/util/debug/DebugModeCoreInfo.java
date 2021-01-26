@@ -24,6 +24,8 @@ public class DebugModeCoreInfo extends DebugMode {
         MessageUtil.messagePlayer(context.getPlayer(), "========================================");
         MessageUtil.messagePlayer(context.getPlayer(), "AgriPlants Hash: {0}", AgriCore.getPlants().hashCode());
         MessageUtil.messagePlayer(context.getPlayer(), " - Plant Count: {0}", AgriCore.getPlants().getAllElements().size());
+        MessageUtil.messagePlayer(context.getPlayer(), "AgriWeeds Hash: {0}", AgriCore.getWeeds().hashCode());
+        MessageUtil.messagePlayer(context.getPlayer(), " - Weed Count: {0}", AgriCore.getWeeds().getAllElements().size());
         MessageUtil.messagePlayer(context.getPlayer(), "AgriMutations Hash: {0}", AgriCore.getMutations().hashCode());
         MessageUtil.messagePlayer(context.getPlayer(), " - Mutation Count: {0}", AgriCore.getMutations().getAll().size());
         MessageUtil.messagePlayer(context.getPlayer(), "AgriSoils Hash: {0}", AgriCore.getSoils().hashCode());

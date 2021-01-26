@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,6 +46,8 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, 
      * @param entity the entity who raked the weed (can be null in case it is raked through automation)
      */
     void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
+
+    void addTooltip(Consumer<ITextComponent> consumer);
 
     /**
      * Do not override, internally overridden on the no weed implementation

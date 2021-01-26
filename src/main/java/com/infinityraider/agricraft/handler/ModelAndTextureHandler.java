@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.handler;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
+import com.agricraft.agricore.plant.AgriWeed;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
@@ -11,6 +12,8 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelAndTextureHandler {
@@ -27,9 +30,10 @@ public class ModelAndTextureHandler {
     @SuppressWarnings("unused")
     public void onTextureStitchEvent(TextureStitchEvent.Pre event) {
         if(event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) {
-            AgriCore.getPlants().getAllElements().stream()
-                    .map(AgriPlant::getTexture)
-                    .flatMap(tex -> tex.getAllTextures().stream().distinct())
+            Stream.concat(
+                    AgriCore.getPlants().getAllElements().stream().map(AgriPlant::getTexture),
+                    AgriCore.getWeeds().getAllElements().stream().map(AgriWeed::getTexture)
+            ).flatMap(tex -> tex.getAllTextures().stream().distinct())
                     .map(ResourceLocation::new)
                     .forEach(event::addSprite);
         }

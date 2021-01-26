@@ -5,14 +5,17 @@ import com.agricraft.agricore.json.AgriLoader;
 import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
+import com.agricraft.agricore.plant.AgriWeed;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
+import com.infinityraider.agricraft.impl.v1.plant.JsonWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.reference.Reference;
 import java.nio.file.Path;
@@ -74,6 +77,7 @@ public final class CoreHandler {
                 defaultDir,
                 AgriCore.getSoils(),
                 AgriCore.getPlants(),
+                AgriCore.getWeeds(),
                 AgriCore.getMutations()
         );
         AgriCore.getLogger("agricraft").info("Finished trying to read AgriCraft JSONs!");
@@ -83,6 +87,7 @@ public final class CoreHandler {
         // Load JSON Stuff
         initSoils();
         initPlants();
+        initWeeds();
         initMutations();
         // Set flag
         initialized = true;
@@ -130,6 +135,29 @@ public final class CoreHandler {
         AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
         for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", plant.getId());
+        }
+    }
+
+    private static void initWeeds() {
+        // Announce Progress
+        AgriCore.getLogger("agricraft").info("Registering Weeds!");
+
+        // See if plants are valid...
+        final int raw = AgriCore.getWeeds().getAllElements().size();
+        AgriCore.getWeeds().validate();
+        final int count = AgriCore.getWeeds().getAllElements().size();
+
+        // Transfer
+        AgriCore.getWeeds().validate();
+        AgriCore.getWeeds().getAllElements().stream()
+                .filter(AgriWeed::isEnabled)
+                .map(JsonWeed::new)
+                .forEach(AgriApi.getWeedRegistry()::add);
+
+        // Display Plants
+        AgriCore.getLogger("agricraft").info("Registered Weeds ({0}/{1}):", count, raw);
+        for (IAgriWeed weed : AgriApi.getWeedRegistry().all()) {
+            AgriCore.getLogger("agricraft").info(" - {0}", weed.getId());
         }
     }
 
