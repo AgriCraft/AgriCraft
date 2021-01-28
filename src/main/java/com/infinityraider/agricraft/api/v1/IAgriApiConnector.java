@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -32,6 +33,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     AgriApiState getState();
+
+    @Nonnull
+    IAgriConfig connectAgriConfig();
 
     @Nonnull
     IAgriRegistry<IAgriPlant> connectPlantRegistry();

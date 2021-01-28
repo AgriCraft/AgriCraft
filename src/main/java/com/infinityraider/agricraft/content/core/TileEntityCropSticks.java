@@ -294,7 +294,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void spreadWeeds() {
-        if(AgriCraft.instance.getConfig().weedsCanSpread() && this.getWeeds().isAggressive()) {
+        if(AgriCraft.instance.getConfig().allowAggressiveWeeds() && this.getWeeds().isAggressive()) {
             this.streamNeighbours()
                     .filter(IAgriCrop::isValid)
                     .filter(crop -> !crop.hasWeeds())
@@ -304,7 +304,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void tryWeedKillPlant() {
-        if(AgriCraft.instance.getConfig().matureWeedsKillPlant() && this.getWeeds().isLethal()) {
+        if(AgriCraft.instance.getConfig().allowLethalWeeds() && this.getWeeds().isLethal()) {
             if(this.hasPlant() && this.rollForWeedAction()) {
                 this.removeSeed();
             }

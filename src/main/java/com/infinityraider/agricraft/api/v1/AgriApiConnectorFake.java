@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -35,6 +36,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Nonnull
     public AgriApiState getState() {
         return AgriApiState.INVALID;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriConfig connectAgriConfig() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override

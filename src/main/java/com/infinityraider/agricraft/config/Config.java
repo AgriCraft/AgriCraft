@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.config;
 
 import com.agricraft.agricore.config.AgriConfigAdapter;
+import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.infinitylib.config.ConfigurationHandler;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -8,46 +9,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
-public abstract class Config implements ConfigurationHandler.SidedModConfig, AgriConfigAdapter {
+public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedModConfig, AgriConfigAdapter {
 
-    private Config(ForgeConfigSpec.Builder builder) {}
-
-    // debug
-    public abstract boolean debugMode();
-    @OnlyIn(Dist.CLIENT)
-    public abstract boolean registryTooltips();
-    @OnlyIn(Dist.CLIENT)
-    public abstract boolean tagTooltips();
-    @OnlyIn(Dist.CLIENT)
-    public abstract boolean nbtTooltips();
-
-    // core
-    public abstract int getMinStatsValue();
-    public abstract int getMaxStatsValue();
-    public abstract boolean allowFertilizerMutations();
-    public abstract boolean disableVanillaFarming();
-    public abstract double growthMultiplier();
-    public abstract boolean onlyMatureSeedDrops();
-    public abstract boolean overwriteGrassDrops();
-    public abstract boolean disableWeeds();
-    public abstract boolean matureWeedsKillPlant();
-    public abstract boolean weedsCanSpread();
-    public abstract boolean weedsDestroyCropSticks();
-    public abstract boolean rakingDropsItems();
-    @OnlyIn(Dist.CLIENT)
-    public abstract boolean vanillaFarmingWarning();
-    @OnlyIn(Dist.CLIENT)
-    public abstract String statDisplayFormat();
-    @OnlyIn(Dist.CLIENT)
-    public abstract boolean disableParticles();
-
-    // irrigation
-    public abstract int tankCapacity();
-    public abstract int channelCapacity();
-    public abstract int rainFillRate();
-    public abstract int sprinkleInterval();
-    public abstract double sprinkleGrowthChance();
-    public abstract int sprinklerWaterConsumption();
+    private Config() {}
 
     public static abstract class Common extends Config {
         // debug
@@ -78,7 +42,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig, Agr
         private final ForgeConfigSpec.ConfigValue<Integer> sprinklerWaterConsumption;
 
         public Common(ForgeConfigSpec.Builder builder) {
-            super(builder);
+            super();
 
             builder.push("debug");
             this.debug = builder.comment("Set to true to enable debug mode")
@@ -179,12 +143,12 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig, Agr
         }
 
         @Override
-        public boolean matureWeedsKillPlant() {
+        public boolean allowLethalWeeds() {
             return this.matureWeedsKillPlants.get();
         }
 
         @Override
-        public boolean weedsCanSpread() {
+        public boolean allowAggressiveWeeds() {
             return this.weedSpreading.get();
         }
 

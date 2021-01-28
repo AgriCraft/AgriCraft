@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -56,6 +57,19 @@ public final class AgriApi {
     @Nonnull
     AgriApiState getState() {
         return AgriApi.CONNECTOR.getState();
+    }
+
+    /**
+     * Fetches the AgriCraft IAgriConfig implementation, giving read access to the config options as defined by the end user.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     *
+     * @return the AgriCraft configuration
+     */
+    @Nonnull
+    IAgriConfig getAgriConfig() {
+        return AgriApi.CONNECTOR.connectAgriConfig();
     }
 
     /**

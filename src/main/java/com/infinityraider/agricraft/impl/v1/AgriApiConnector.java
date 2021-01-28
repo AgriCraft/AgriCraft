@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.impl.v1;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApiState;
 import com.infinityraider.agricraft.api.v1.IAgriApiConnector;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -85,6 +87,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public AgriApiState getState() {
         return AgriApiState.VALID;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriConfig connectAgriConfig() {
+        return AgriCraft.instance.getConfig();
     }
 
     @Override
