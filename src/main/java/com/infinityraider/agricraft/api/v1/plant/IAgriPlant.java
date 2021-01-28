@@ -140,8 +140,13 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     @Nonnull
     String getInformation(IAgriGrowthStage stage);
 
+    /**
+     * Fetches the user-friendly plant description for use in tooltips. Notice, any
+     * localization of this information is left for the implementer to handle.
+     *
+     * @return Information about the plant to be displayed in tooltips.
+     */
     void addTooltip(Consumer<ITextComponent> consumer);
-
 
     /**
      * Fetches a list of all the items that are considered seeds for this specific plant.

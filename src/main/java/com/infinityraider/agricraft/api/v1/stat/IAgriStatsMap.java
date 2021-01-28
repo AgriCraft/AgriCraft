@@ -10,6 +10,18 @@ import java.util.function.Consumer;
 public interface IAgriStatsMap {
     int getValue(IAgriStat stat);
 
+    default int getSum() {
+        int sum = 0;
+        for(IAgriStat stat : AgriApi.getStatRegistry().all()) {
+            sum += this.getValue(stat);
+        }
+        return sum;
+    }
+
+    default double getAverage() {
+        return (this.getSum() + 0.0) / AgriApi.getStatRegistry().all().size();
+    }
+
     boolean writeToNBT(@Nonnull CompoundNBT tag);
 
     boolean readFromNBT(@Nonnull CompoundNBT tag);

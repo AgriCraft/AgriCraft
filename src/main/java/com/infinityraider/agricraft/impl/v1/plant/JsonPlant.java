@@ -5,6 +5,7 @@ import com.agricraft.agricore.plant.AgriPlant;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
@@ -26,6 +27,8 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -47,6 +50,7 @@ public class JsonPlant implements IAgriPlant {
     private final Set<IGrowCondition> growthConditions;
 
     private final List<ItemStack> seedItems;
+    private final List<PlantCallback> callbacks;
     private final ResourceLocation seedModel;
     private final ITextComponent tooltip;
 
@@ -55,6 +59,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
+        this.callbacks = PlantCallback.get(plant.getCallbacks());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
         this.tooltip = new TranslationTextComponent(this.getId());
     }
@@ -227,6 +232,41 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public ResourceLocation getSeedModel() {
         return this.seedModel;
+    }
+
+    @Override
+    public void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
+        this.callbacks.forEach(callback -> callback.onPlanted(crop, entity));
+    }
+
+    @Override
+    public void onSpawned(@Nonnull IAgriCrop crop) {
+        this.callbacks.forEach(callback -> callback.onSpawned(crop));
+    }
+
+    @Override
+    public void onGrowth(@Nonnull IAgriCrop crop) {
+        this.callbacks.forEach(callback -> callback.onGrowth(crop));
+    }
+
+    @Override
+    public void onRemoved(@Nonnull IAgriCrop crop) {
+        this.callbacks.forEach(callback -> callback.onRemoved(crop));
+    }
+
+    @Override
+    public void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
+        this.callbacks.forEach(callback -> callback.onHarvest(crop, entity));
+    }
+
+    @Override
+    public void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
+        this.callbacks.forEach(callback -> callback.onBroken(crop, entity));
+    }
+
+    @Override
+    public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
+        this.callbacks.forEach(callback -> callback.onEntityCollision(crop, entity));
     }
 
     public static Set<IGrowCondition> initGrowConditions(AgriPlant plant) {

@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.util.AgriValidator;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.impl.v1.plant.PlantCallback;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -113,6 +114,11 @@ public class ModValidator implements AgriValidator {
         } catch (NullPointerException e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean isValidCallback(String callback) {
+        return PlantCallback.get(callback).isPresent();
     }
 
     @Override
