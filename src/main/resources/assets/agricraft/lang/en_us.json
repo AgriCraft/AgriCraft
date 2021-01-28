@@ -20,5 +20,19 @@
   "agricraft.stat.mutativity": "Mutativity",
 
   "agricraft.gui.mutation": "Plant Mutation",
-  "agricraft.gui.produce": "Plant Products"
+  "agricraft.gui.produce": "Plant Products",
+
+  "agricraft.tooltip.unknown": "Unknown",
+  "agricraft.tooltip.plant": "Plant",
+  "agricraft.tooltip.genome": "Genome",
+  "agricraft.tooltip.growth": "Growth",
+  "agricraft.tooltip.mature": "Mature",
+  "agricraft.tooltip.fertile": "Fertile",
+  "agricraft.tooltip.weed": "Weeds",
+  "agricraft.tooltip.weed_growth": "Weed Growth",
+  "agricraft.tooltip.soil": "Soil",
+
+
+  "vanilla:wheat_plant": "Wheat",
+  "agricraft:weed_weed": "Weeds"
 }

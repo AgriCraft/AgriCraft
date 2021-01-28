@@ -94,6 +94,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     @Override
     public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
         this.geneMap.values().stream()
+                .filter(gene -> !gene.getGene().isHidden())
                 .map(AgriToolTips::getGeneTooltip)
                 .forEach(consumer);
     }

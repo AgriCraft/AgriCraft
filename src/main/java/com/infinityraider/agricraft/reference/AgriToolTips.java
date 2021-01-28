@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.Collection;
 public class AgriToolTips {
     public static final ITextComponent SEED = new TranslationTextComponent("agricraft.tooltip.seed");
     public static final ITextComponent PLANT = new TranslationTextComponent("agricraft.tooltip.plant");
-    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome");
+    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome").mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);
     public static final ITextComponent NO_PLANT = new TranslationTextComponent("agricraft.tooltip.no_plant");
     public static final ITextComponent GROWTH = new TranslationTextComponent("agricraft.tooltip.growth");
     public static final ITextComponent MATURE = new TranslationTextComponent("agricraft.tooltip.mature");

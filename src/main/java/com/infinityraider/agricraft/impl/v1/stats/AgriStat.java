@@ -3,9 +3,7 @@ package com.infinityraider.agricraft.impl.v1.stats;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -48,7 +46,10 @@ public class AgriStat implements IAgriStat {
     @Nonnull
     @Override
     public void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value) {
-        consumer.accept(new StringTextComponent("").append(this.tooltip).append(new StringTextComponent(": " + value)));
+        consumer.accept(new StringTextComponent("")
+                .append(this.tooltip)
+                .append(new StringTextComponent(": " + value))
+                .mergeStyle(TextFormatting.DARK_GRAY));
     }
 
     @Nonnull
