@@ -108,7 +108,7 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
         tessellator.setCurrentFace(direction);
 
         tessellator.pushMatrix();
-        tessellator.translate(0.5f, 0, 0);
+        tessellator.translate(0, 0, 0.5f);
         tessellator.rotate(45, 0, 1, 0);
 
         float d = MathHelper.sqrt(128);

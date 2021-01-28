@@ -199,8 +199,8 @@ public class JsonPlant implements IAgriPlant {
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
         ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
         switch (this.plant.getTexture().getRenderType()) {
-            case HASH: return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl);
-            case CROSS: return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl);
+            case HASH: return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl);
+            case CROSS: return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl);
             case PLUS: return AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl);
             case RHOMBUS:return AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl);
             default: return AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl);
