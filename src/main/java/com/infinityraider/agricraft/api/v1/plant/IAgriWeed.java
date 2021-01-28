@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,31 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, 
      * @return the chance to spawn, between 0 and 1, where 0 means it will never spawn, and 1 it will certainly spawn
      */
     double spawnChance(IAgriCrop crop);
+
+    /**
+     * Retrieves the base growth chance of the weed each tick.
+     *
+     * @return The growth chance of the weed.
+     */
+    double getGrowthChance(IAgriGrowthStage growthStage);
+
+    /**
+     * Defines if a weed is aggressive, aggressive weeds will try to spread to adjacent crops when mature.
+     *
+     * Note that this will be globally overridden for all weeds if the end user disables aggressive weeds in the config
+     *
+     * @return true if this weed is aggressive
+     */
+    boolean isAggressive() ;
+
+    /**
+     * Defines if a weed is lethal, lethal weeds will try to kill the host plant when mature.
+     *
+     * Note that this will be globally overridden for all weeds if the end user disables lethal weeds in the config
+     *
+     * @return true if this weed is lethal
+     */
+    boolean isLethal();
 
     /**
      * Callback for custom actions right after this weed has been spawned on crop sticks,

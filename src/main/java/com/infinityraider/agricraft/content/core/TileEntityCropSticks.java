@@ -276,7 +276,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                     this.spreadWeeds();
                 } else {
                     // Weeds are not mature yet, increment their growth
-                    this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage(this, this.getRandom()));
+                    if(this.getRandom().nextDouble() < this.getWeeds().getGrowthChance(this.getWeedGrowthStage())) {
+                        this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage(this, this.getRandom()));
+                    }
                 }
             }
             MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Weeds.Post(this));
@@ -292,7 +294,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void spreadWeeds() {
-        if(AgriCraft.instance.getConfig().weedsCanSpread()) {
+        if(AgriCraft.instance.getConfig().weedsCanSpread() && this.getWeeds().isAggressive()) {
             this.streamNeighbours()
                     .filter(IAgriCrop::isValid)
                     .filter(crop -> !crop.hasWeeds())
@@ -302,7 +304,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void tryWeedKillPlant() {
-        if(AgriCraft.instance.getConfig().matureWeedsKillPlant()) {
+        if(AgriCraft.instance.getConfig().matureWeedsKillPlant() && this.getWeeds().isLethal()) {
             if(this.hasPlant() && this.rollForWeedAction()) {
                 this.removeSeed();
             }

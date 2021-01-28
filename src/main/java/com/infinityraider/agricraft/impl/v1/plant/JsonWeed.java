@@ -33,7 +33,22 @@ public class JsonWeed implements IAgriWeed {
 
     @Override
     public double spawnChance(IAgriCrop crop) {
-        return 0;
+        return this.weed.getSpawnChance();
+    }
+
+    @Override
+    public double getGrowthChance(IAgriGrowthStage growthStage) {
+        return this.weed.getGrowthChance();
+    }
+
+    @Override
+    public boolean isAggressive() {
+        return this.weed.isAggressive();
+    }
+
+    @Override
+    public boolean isLethal() {
+        return weed.isLethal();
     }
 
     @Override

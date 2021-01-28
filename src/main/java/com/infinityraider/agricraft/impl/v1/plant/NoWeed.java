@@ -51,6 +51,21 @@ public final class NoWeed implements IAgriWeed {
         return 0;
     }
 
+    @Override
+    public double getGrowthChance(IAgriGrowthStage growthStage) {
+        return 0;
+    }
+
+    @Override
+    public boolean isAggressive() {
+        return false;
+    }
+
+    @Override
+    public boolean isLethal() {
+        return false;
+    }
+
     @Nonnull
     @Override
     public IAgriGrowthStage getInitialGrowthStage() {
