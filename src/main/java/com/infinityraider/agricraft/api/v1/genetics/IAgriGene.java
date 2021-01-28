@@ -21,7 +21,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return the default allel for this gene
      */
     @Nonnull
-    IAllel<A> defaultAllel(IAgriPlant plant);
+    IAllele<A> defaultAllele(IAgriPlant plant);
 
     /**
      * Maps a value of the gene to an allel, it is possible that this value falls out of the set of acceptable values,
@@ -31,7 +31,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return the allel for a value
      */
     @Nonnull
-    IAllel<A> getAllel(A value);
+    IAllele<A> getAllele(A value);
 
     /**
      * Used when deserializing genomes, reads an allel from NBT.
@@ -41,13 +41,13 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return the allel
      */
     @Nonnull
-    IAllel<A> readAllelFromNBT(@Nonnull CompoundNBT tag);
+    IAllele<A> readAlleleFromNBT(@Nonnull CompoundNBT tag);
 
     /**
      * @return the set of all allowed alleles for this gene.
      */
     @Nonnull
-    Set<IAllel<A>> allAlleles();
+    Set<IAllele<A>> allAlleles();
 
     /**
      * @return The mutator object which controls mutations for this gene
@@ -60,7 +60,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @param second the second allel
      * @return gene pair for this gene for the two alleles
      */
-    IAgriGenePair<A> generateGenePair(IAllel<A> first, IAllel<A> second);
+    IAgriGenePair<A> generateGenePair(IAllele<A> first, IAllele<A> second);
 
     /**
      * AgriCraft provides the possibility to have genes completely hidden.

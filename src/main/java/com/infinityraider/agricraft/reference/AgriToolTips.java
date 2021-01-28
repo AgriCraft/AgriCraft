@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.reference;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -15,6 +16,7 @@ import java.util.Collection;
 public class AgriToolTips {
     public static final ITextComponent SEED = new TranslationTextComponent("agricraft.tooltip.seed");
     public static final ITextComponent PLANT = new TranslationTextComponent("agricraft.tooltip.plant");
+    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome");
     public static final ITextComponent NO_PLANT = new TranslationTextComponent("agricraft.tooltip.no_plant");
     public static final ITextComponent GROWTH = new TranslationTextComponent("agricraft.tooltip.growth");
     public static final ITextComponent MATURE = new TranslationTextComponent("agricraft.tooltip.mature");
@@ -83,5 +85,14 @@ public class AgriToolTips {
                 .append(source)
                 .append(new StringTextComponent(": "))
                 .append(UNKNOWN);
+    }
+
+    public static ITextComponent getGeneTooltip(IAgriGenePair<?> genePair) {
+        return new StringTextComponent("")
+                .append(new TranslationTextComponent(genePair.getGene().getId()))
+                .append(new StringTextComponent(": "))
+                .append(genePair.getDominant().getTooltip())
+                .append(new StringTextComponent( " - "))
+                .append(genePair.getRecessive().getTooltip());
     }
 }

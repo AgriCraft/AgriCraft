@@ -2,14 +2,14 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
-import com.infinityraider.agricraft.api.v1.genetics.IAllel;
+import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 
 public class AgriGenePair<A> implements IAgriGenePair<A> {
     private final IAgriGene<A> gene;
-    private final IAllel<A> dominant;
-    private final IAllel<A> recessive;
+    private final IAllele<A> dominant;
+    private final IAllele<A> recessive;
 
-    public AgriGenePair(IAgriGene<A> gene, IAllel<A> first, IAllel<A> second) {
+    public AgriGenePair(IAgriGene<A> gene, IAllele<A> first, IAllele<A> second) {
         this.gene = gene;
         if (first.isDominant(second)) {
             this.dominant = first;
@@ -26,12 +26,12 @@ public class AgriGenePair<A> implements IAgriGenePair<A> {
     }
 
     @Override
-    public final IAllel<A> getDominant() {
+    public final IAllele<A> getDominant() {
         return this.dominant;
     }
 
     @Override
-    public final IAllel<A> getRecessive() {
+    public final IAllele<A> getRecessive() {
         return this.recessive;
     }
 

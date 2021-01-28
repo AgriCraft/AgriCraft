@@ -18,5 +18,5 @@ public interface IMutator<A> {
      * @param random pseudo-random generator to take decisions
      * @return a new gene pair for the offspring
      */
-    IAgriGenePair<A> pickOrMutate(IAgriGene<A> gene, IAllel<A> first, IAllel<A> second, Tuple<IAgriGenome, IAgriGenome> parents, Random random);
+    IAgriGenePair<A> pickOrMutate(IAgriGene<A> gene, IAllele<A> first, IAllele<A> second, Tuple<IAgriGenome, IAgriGenome> parents, Random random);
 }

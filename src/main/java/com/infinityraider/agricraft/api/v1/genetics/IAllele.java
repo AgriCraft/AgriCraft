@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 
@@ -10,7 +11,7 @@ import javax.annotation.Nonnull;
  * Implementations of IAllel should be bijective between their trait and themselves
  * @param <A> the type of the gene / allel
  */
-public interface IAllel<A> {
+public interface IAllele<A> {
     /**
      * @return the gene for which this is an allel
      */
@@ -26,7 +27,12 @@ public interface IAllel<A> {
      * @param other an other allel of the same gene
      * @return true if this is the dominant trait (or if the alleles are equal)
      */
-    boolean isDominant(IAllel<A> other);
+    boolean isDominant(IAllele<A> other);
+
+    /**
+     * @return A text component representing this allele in a tooltip
+     */
+    ITextComponent getTooltip();
 
     /**
      * Writes this allel to NBT
@@ -38,7 +44,7 @@ public interface IAllel<A> {
     /**
      * Alleles should be defined unique per gene, therefore two alleles can only be equal if they are identical
      */
-    default boolean equals(IAllel<A> other) {
+    default boolean equals(IAllele<A> other) {
         return this == other;
     }
 }

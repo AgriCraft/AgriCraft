@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
-import com.infinityraider.agricraft.api.v1.genetics.IAllel;
+import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.genetics.IMutator;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -23,23 +23,23 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
     private GeneSpecies() {}
 
     @Override
-    public IAgriPlant defaultAllel(IAgriPlant plant) {
+    public IAgriPlant defaultAllele(IAgriPlant plant) {
         return NoPlant.getInstance();
     }
 
     @Override
-    public IAllel<IAgriPlant> getAllel(IAgriPlant value) {
+    public IAllele<IAgriPlant> getAllele(IAgriPlant value) {
         return value;
     }
 
     @Override
-    public IAgriPlant readAllelFromNBT(CompoundNBT tag) {
+    public IAgriPlant readAlleleFromNBT(CompoundNBT tag) {
         return AgriApi.getPlantRegistry().get(tag.getString("agri_plant")).orElse(NoPlant.getInstance());
     }
 
     @Override
-    public Set<IAllel<IAgriPlant>> allAlleles() {
-        return AgriApi.getPlantRegistry().all().stream().map(plant -> (IAllel<IAgriPlant>) plant).collect(Collectors.toSet());
+    public Set<IAllele<IAgriPlant>> allAlleles() {
+        return AgriApi.getPlantRegistry().all().stream().map(plant -> (IAllele<IAgriPlant>) plant).collect(Collectors.toSet());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
     }
 
     @Override
-    public IAgriGenePair<IAgriPlant> generateGenePair(IAllel<IAgriPlant> first, IAllel<IAgriPlant> second) {
+    public IAgriGenePair<IAgriPlant> generateGenePair(IAllele<IAgriPlant> first, IAllele<IAgriPlant> second) {
         return new AgriGenePair<>(this, first, second);
     }
 

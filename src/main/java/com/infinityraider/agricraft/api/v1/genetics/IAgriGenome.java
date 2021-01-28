@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
  *  - When a new gene pair is formed, it is possible for one of the alleles to mutate,
  *    resulting in properties which differ slightly from its parents
  */
-public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider  {
+public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgriDisplayable {
     /**
      * @return if this genome holds a plant, if this returns false, the genome is invalid and should be discarded
      */
@@ -210,8 +211,8 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider  {
         default Builder randomStats(ToIntFunction<IAgriStat> randomizer) {
             return this.consumeStream(AgriApi.getStatRegistry().stream()
                     .map(stat -> AgriApi.getGeneRegistry().get(stat).map(gene -> {
-                        IAllel<Integer> first = gene.getAllel(randomizer.applyAsInt(stat));
-                        IAllel<Integer> second = gene.getAllel(randomizer.applyAsInt(stat));
+                        IAllele<Integer> first = gene.getAllele(randomizer.applyAsInt(stat));
+                        IAllele<Integer> second = gene.getAllele(randomizer.applyAsInt(stat));
                         return gene.generateGenePair(first, second);}))
                     .filter(Optional::isPresent)
                     .map(Optional::get)

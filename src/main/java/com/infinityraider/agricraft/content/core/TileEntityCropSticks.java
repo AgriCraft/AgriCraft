@@ -50,7 +50,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, IDebuggable, IAgriDisplayable {
+public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, IDebuggable {
     private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
     private static final IAgriWeed NO_WEED = NoWeed.getInstance();
@@ -306,7 +306,13 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void tryWeedKillPlant() {
         if(AgriCraft.instance.getConfig().allowLethalWeeds() && this.getWeeds().isLethal()) {
             if(this.hasPlant() && this.rollForWeedAction()) {
-                this.removeSeed();
+                IAgriGrowthStage current = this.getGrowthStage();
+                IAgriGrowthStage previous = current.getPreviousStage(this, this.getRandom());
+                if(current.equals(previous)) {
+                    this.removeSeed();
+                } else {
+                    this.setGrowthStage(previous);
+                }
             }
         }
     }

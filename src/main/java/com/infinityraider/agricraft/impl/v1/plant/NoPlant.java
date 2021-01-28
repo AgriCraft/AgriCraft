@@ -4,13 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
-import com.infinityraider.agricraft.api.v1.genetics.IAllel;
+import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
@@ -180,8 +181,13 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public boolean isDominant(IAllel<IAgriPlant> other) {
+    public boolean isDominant(IAllele<IAgriPlant> other) {
         return false;
+    }
+
+    @Override
+    public ITextComponent getTooltip() {
+        return AgriToolTips.UNKNOWN;
     }
 
     @Override

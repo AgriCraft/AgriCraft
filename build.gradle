@@ -135,6 +135,12 @@ repositories {
         // for JEI
         url "https://dvs1.progwml6.com/files/maven"
     }
+
+    maven {
+        // for TOP
+        name 'tterrag maven'
+        url "https://maven.tterrag.com/"
+    }
 }
 
 // List Deps.
@@ -151,6 +157,11 @@ dependencies {
 	//JEI
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")
+
+    //TOP
+    compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.3-beta-6") {
+        transitive = false
+    })
 }
 
 // Delete Old Plants

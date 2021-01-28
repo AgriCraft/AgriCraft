@@ -20,12 +20,12 @@ public interface IAgriGenePair<T> {
     /**
      * @return the dominant allel
      */
-    IAllel<T> getDominant();
+    IAllele<T> getDominant();
 
     /**
      * @return the recessive allel
      */
-    IAllel<T> getRecessive();
+    IAllele<T> getRecessive();
 
     /**
      * Clones this gene pair

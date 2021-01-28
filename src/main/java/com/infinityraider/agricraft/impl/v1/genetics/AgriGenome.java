@@ -8,11 +8,14 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider {
     private final Map<IAgriGene<?>, IAgriGenePair<?>> geneMap;
@@ -71,8 +74,8 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     }
 
     private <T> IAgriGenePair<T> generateGenePairFromNBT(IAgriGene<T> gene, CompoundNBT tag) {
-        IAllel<T> dominant = gene.readAllelFromNBT(tag.getCompound(AgriNBT.DOMINANT));
-        IAllel<T> recessive = gene.readAllelFromNBT(tag.getCompound(AgriNBT.RECESSIVE));
+        IAllele<T> dominant = gene.readAlleleFromNBT(tag.getCompound(AgriNBT.DOMINANT));
+        IAllele<T> recessive = gene.readAlleleFromNBT(tag.getCompound(AgriNBT.RECESSIVE));
         return  gene.generateGenePair(dominant, recessive);
     }
 
@@ -88,6 +91,13 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         return new Builder(plant);
     }
 
+    @Override
+    public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
+        this.geneMap.values().stream()
+                .map(AgriToolTips::getGeneTooltip)
+                .forEach(consumer);
+    }
+
     private static class Builder implements IAgriGenome.Builder {
         private final Map<IAgriGene<?>, IAgriGenePair<?>> geneMap;
 
@@ -100,7 +110,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         }
 
         private <T> IAgriGenePair<T> generateDefaultPair(IAgriGene<T> gene, IAgriPlant plant) {
-            return gene.generateGenePair(gene.defaultAllel(plant), gene.defaultAllel(plant));
+            return gene.generateGenePair(gene.defaultAllele(plant), gene.defaultAllele(plant));
         }
 
         @Override

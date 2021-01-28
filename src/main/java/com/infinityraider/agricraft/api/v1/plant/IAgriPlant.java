@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAllel;
+import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 
@@ -27,7 +27,7 @@ import net.minecraft.util.text.ITextComponent;
  * If you register your own ICropPlant object, it will be wrapped by the api. Meaning if you query
  * the ICropPlant object you registered, it will return a different object.
  */
-public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllel<IAgriPlant> {
+public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllele<IAgriPlant> {
     /**
      * Creates a new AgriSeed object for this plant with default genes
      * @return the AgriSeed

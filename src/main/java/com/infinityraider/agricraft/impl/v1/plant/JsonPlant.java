@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
-import com.infinityraider.agricraft.api.v1.genetics.IAllel;
+import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
@@ -33,6 +33,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,6 +48,7 @@ public class JsonPlant implements IAgriPlant {
 
     private final List<ItemStack> seedItems;
     private final ResourceLocation seedModel;
+    private final ITextComponent tooltip;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
@@ -54,6 +56,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
         this.seedModel = this.initSeedModel(plant.getSeedModel());
+        this.tooltip = new TranslationTextComponent(this.getId());
     }
 
     private List<ItemStack> initSeedItems(AgriPlant plant) {
@@ -281,7 +284,7 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public boolean isDominant(IAllel<IAgriPlant> other) {
+    public boolean isDominant(IAllele<IAgriPlant> other) {
         // If the plants are equal, it doesn't matter which one is dominant and we can simply return true
         if(this.equals(other)) {
             return true;
@@ -295,6 +298,11 @@ public class JsonPlant implements IAgriPlant {
         }
         // Having more difficult obtain plants be dominant will be more challenging to deal with than having them recessive
         return a > b;
+    }
+
+    @Override
+    public ITextComponent getTooltip() {
+        return this.tooltip;
     }
 
     @Override

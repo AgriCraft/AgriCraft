@@ -113,12 +113,12 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     protected <T> IAgriGenePair<T> mutateGene(IAgriGene<T> gene, Tuple<IAgriGenome, IAgriGenome> parents, Random rand) {
         return gene.mutator().pickOrMutate(
                 gene,
-                this.pickRandomAllel(parents.getA().getGenePair(gene), rand),
-                this.pickRandomAllel(parents.getB().getGenePair(gene), rand),
+                this.pickRandomAllele(parents.getA().getGenePair(gene), rand),
+                this.pickRandomAllele(parents.getB().getGenePair(gene), rand),
                 parents, rand);
     }
 
-    protected  <T> IAllel<T> pickRandomAllel(IAgriGenePair<T> pair, Random random) {
+    protected  <T> IAllele<T> pickRandomAllele(IAgriGenePair<T> pair, Random random) {
         return random.nextBoolean() ? pair.getDominant() : pair.getRecessive();
     }
 
