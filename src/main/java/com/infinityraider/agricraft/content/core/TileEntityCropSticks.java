@@ -397,8 +397,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         }
         IAgriWeed weed = this.getWeeds();
         if (weed.isWeed()) {
+            IAgriGrowthStage stage = this.getWeedGrowthStage();
             this.setWeed(NO_WEED, NO_GROWTH);
-            weed.onRake(consumer, entity);
+            weed.onRake(stage, consumer, this.getRandom(), entity);
             return true;
         }
         return false;

@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -79,7 +80,7 @@ public final class NoWeed implements IAgriWeed {
     }
 
     @Override
-    public void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
+    public void onRake(@Nonnull IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> consumer, @Nonnull Random rand, @Nullable LivingEntity entity) {
         //NOPE
     }
 

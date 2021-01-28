@@ -9,6 +9,7 @@ import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, IAgriRenderable {
@@ -68,10 +69,11 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, 
 
     /**
      * Called when the weed is raked
+     * @param stage the growth stage the weed had when raked
      * @param consumer calls to this will add items to the drops list
      * @param entity the entity who raked the weed (can be null in case it is raked through automation)
      */
-    void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
+    void onRake(@Nonnull IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> consumer, @Nonnull Random rand, @Nullable LivingEntity entity);
 
     void addTooltip(Consumer<ITextComponent> consumer);
 

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.plant.AgriWeed;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -19,6 +20,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Consumer;
 
 public class JsonWeed implements IAgriWeed {
@@ -52,8 +55,21 @@ public class JsonWeed implements IAgriWeed {
     }
 
     @Override
-    public void onRake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
-
+    public void onRake(@Nonnull IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> consumer, @Nonnull Random rand, @Nullable LivingEntity entity) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
+        if (index < 0) {
+            return;
+        }
+        if (AgriCraft.instance.getConfig().rakingDropsItems()) {
+            final double probability = (index + 0.0) / (this.weed.getGrowthStages() - 1.0);
+            if(rand.nextDouble() < probability) {
+                this.weed.getRakeDrops().getRandom(rand).stream()
+                        .map(p -> p.convertSingle(ItemStack.class, rand))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .forEach(consumer);
+            }
+        }
     }
 
     @Nonnull
