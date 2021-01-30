@@ -90,7 +90,7 @@ public class AgriToolTips {
 
     public static ITextComponent getGeneTooltip(IAgriGenePair<?> genePair) {
         return new StringTextComponent("")
-                .append(new TranslationTextComponent(genePair.getGene().getId()))
+                .append(genePair.getGene().getDescription())
                 .append(new StringTextComponent(": "))
                 .append(genePair.getDominant().getTooltip())
                 .append(new StringTextComponent( " - "))

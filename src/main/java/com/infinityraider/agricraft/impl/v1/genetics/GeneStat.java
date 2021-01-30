@@ -78,6 +78,11 @@ public class GeneStat implements IAgriGene<Integer> {
         return new AgriGenePair<>(this, first, second);
     }
 
+    @Override
+    public ITextComponent getDescription() {
+        return this.getStat().getDescription();
+    }
+
     @Nonnull
     @Override
     public String getId() {

@@ -39,6 +39,11 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
     @Nonnull
     void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value);
 
+    /**
+     * @return an ITextComponent to describe this stat on the client
+     */
+    ITextComponent getDescription();
+
     @Override
     boolean equals(@Nullable Object obj);
 

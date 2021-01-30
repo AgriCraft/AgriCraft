@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.api.v1.genetics;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -61,6 +62,11 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return gene pair for this gene for the two alleles
      */
     IAgriGenePair<A> generateGenePair(IAllele<A> first, IAllele<A> second);
+
+    /**
+     * @return an ITextComponent to describe this gene on the client
+     */
+    ITextComponent getDescription();
 
     /**
      * AgriCraft provides the possibility to have genes completely hidden.

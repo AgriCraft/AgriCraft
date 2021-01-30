@@ -19,6 +19,8 @@
   "agricraft.stat.fertility": "Fertility",
   "agricraft.stat.mutativity": "Mutativity",
 
+  "agricraft.gene.agri_species": "Species",
+
   "agricraft.gui.mutation": "Plant Mutation",
   "agricraft.gui.produce": "Plant Products",
 
@@ -28,11 +30,49 @@
   "agricraft.tooltip.growth": "Growth",
   "agricraft.tooltip.mature": "Mature",
   "agricraft.tooltip.fertile": "Fertile",
+  "agricraft.tooltip.not_fertile": "Not Fertile",
   "agricraft.tooltip.weed": "Weeds",
+  "agricraft.tooltip.no_weed": "No Weeds",
   "agricraft.tooltip.weed_growth": "Weed Growth",
   "agricraft.tooltip.soil": "Soil",
 
 
+  "vanilla:allium_plant": "Allium",
+  "vanilla:beet_root_plant": "Beet Root",
+  "vanilla:brown_mushroom_plant": "Brown Mushroom",
+  "vanilla:cactus_plant": "Cactus",
+  "vanilla:carrot_plant": "Carrot",
+  "vanilla:daisy_plant": "Daisy",
+  "vanilla:dandelion_plant": "Dandelion",
+  "vanilla:melon_plant": "Melon",
+  "vanilla:nether_wart_plant": "Nether Wart",
+  "vanilla:orange_tulip_plant": "Orange Tulip",
+  "vanilla:orchid_plant": "Orchid",
+  "vanilla:pink_tulip_plant": "Pink Tulip",
+  "vanilla:poppy_plant": "Poppy",
+  "vanilla:potato_plant": "Potato",
+  "vanilla:pumpkin_plant": "Pumpkin",
+  "vanilla:red_mushroom_plant": "Red Mushroom",
+  "vanilla:red_tulip_plant": "Red Tulip",
+  "vanilla:sugarcane_plant": "sugarcane",
   "vanilla:wheat_plant": "Wheat",
+  "vanilla:white_tulip_plant": "White Tulip",
+
+  "vanilla:aurigold_plant": "Aurigold",
+  "vanilla:cuprosia_plant": "Cuprosia",
+  "vanilla:diamahlia_plant": "Diamahlia",
+  "vanilla:emeryllis_plant": "Emeryllis",
+  "vanilla:ferranium_plant": "Ferranium",
+  "vanilla:jaslumine_plant": "Jaslumine",
+  "vanilla:lapender_plant": "Lapender",
+  "vanilla:niccissus_plant": "Niccissus",
+  "resource:nitorwart_plant": "Nitor Wart",
+  "vanilla:osmonium_plant": "Osmonium",
+  "vanilla:petinia_plant": "Petinia",
+  "vanilla:platiolus_plant": "Platiolus",
+  "vanilla:plombean_plant": "Plombean",
+  "vanilla:quartzanthemum_plant": "Quartzanthemum",
+  "vanilla:redstodendron_plant": "Redstodendron",
+
   "agricraft:weed_weed": "Weeds"
 }
