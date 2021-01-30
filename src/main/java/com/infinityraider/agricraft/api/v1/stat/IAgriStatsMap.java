@@ -7,9 +7,21 @@ import net.minecraft.util.text.ITextComponent;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+/**
+ * Interface representing the AgriCraft stats of a crop or seed, can be retrieved from any IAgriStatProvider.
+ * Examples of IAgriStatProviders are IAgriCrops, AgriSeeds, and IAgriGenomes
+ */
 public interface IAgriStatsMap {
+    /**
+     * Fetches the value of a certain stat
+     * @param stat the stat
+     * @return the value
+     */
     int getValue(IAgriStat stat);
 
+    /**
+     * @return the sum of all values of all stats
+     */
     default int getSum() {
         int sum = 0;
         for(IAgriStat stat : AgriApi.getStatRegistry().all()) {
@@ -18,14 +30,33 @@ public interface IAgriStatsMap {
         return sum;
     }
 
+    /**
+     * @return the average of all values of all stats
+     */
     default double getAverage() {
         return (this.getSum() + 0.0) / AgriApi.getStatRegistry().all().size();
     }
 
+    /**
+     * Serializes the stats map to an NBT tag
+     * @param tag the tag to write to
+     * @return true if the serialization was successful
+     */
     boolean writeToNBT(@Nonnull CompoundNBT tag);
 
+
+    /**
+     * Deserializes the stats map from an NBT tag
+     * @param tag the tag to read from
+     * @return true if the deserialization was successful
+     */
     boolean readFromNBT(@Nonnull CompoundNBT tag);
 
+    /**
+     * Checks if the stats are equal
+     * @param other another stats map
+     * @return true if all stats contain equal values in both stats maps
+     */
     default boolean equalStats(IAgriStatsMap other) {
         if(this == other) {
             return true;
@@ -38,6 +69,10 @@ public interface IAgriStatsMap {
         return true;
     }
 
+    /**
+     * Adds tooltips for the stats
+     * @param consumer function to consume the tooltips
+     */
     default void addTooltips(@Nonnull Consumer<ITextComponent> consumer) {
         AgriApi.getStatRegistry().stream().forEach(stat -> stat.addTooltip(consumer, this.getValue(stat)));
     }
