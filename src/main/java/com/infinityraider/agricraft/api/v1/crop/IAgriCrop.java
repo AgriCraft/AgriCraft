@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,6 +44,12 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
      */
     @Nonnull
     BlockPos getPosition();
+
+    /**
+     * @return The block state of this crop in the world
+     */
+    @Nonnull
+    BlockState getBlockState();
 
     /**
      * @return The growth stage of the crop.

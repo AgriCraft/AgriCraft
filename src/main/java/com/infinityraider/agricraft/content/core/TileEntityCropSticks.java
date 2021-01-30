@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -168,7 +167,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         this.growth.set(stage);
-        this.handlePlantUpdate();
+        this.handlePlantUpdate(false);
         return true;
     }
 
@@ -448,7 +447,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             if(this.weed.get().getGrowthStages().contains(stage)) {
                 this.weedGrowth.set(stage);
                 this.weed.get().onGrowthTick(this);
-                this.handlePlantUpdate();
+                this.handlePlantUpdate(false);
                 return true;
             }
             return false;
@@ -457,7 +456,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                 this.weed.set(weed);
                 this.weedGrowth.set(stage);
                 this.weed.get().onSpawned(this);
-                this.handlePlantUpdate();
+                this.handlePlantUpdate(false);
                 MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Weed.Post(this, weed));
                 return true;
             }
@@ -470,7 +469,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.hasWeeds()) {
             this.weed.set(NO_WEED);
             this.weedGrowth.set(NO_GROWTH);
-            this.handlePlantUpdate();
+            this.handlePlantUpdate(false);
             return true;
         }
         return false;
@@ -511,7 +510,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void setGenomeImpl(@Nonnull IAgriGenome genome) {
         this.genome.set(Optional.of(genome));
         this.growth.set(genome.getPlant().getInitialGrowthStage());
-        this.handlePlantUpdate();
+        this.handlePlantUpdate(true);
     }
 
     @Override
@@ -519,7 +518,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.hasSeed()) {
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
-            this.handlePlantUpdate();
+            this.handlePlantUpdate(true);
             return true;
         }
         return false;
@@ -547,14 +546,18 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.needsCaching = true;
     }
 
-    protected void handlePlantUpdate()  {
+    protected void handlePlantUpdate(boolean resetBrightness)  {
         if(this.getWorld() != null) {
             BlockState state = this.getBlockState();
             boolean plant = this.hasPlant() || this.hasWeeds();
-            if (BlockCropSticks.PLANT.fetch(state) == plant) {
-                this.forceRenderUpdate();
+            if(resetBrightness && BlockCropSticks.LIGHT.fetch(state) > 0) {
+                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(BlockCropSticks.LIGHT.apply(state), plant));
             } else {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
+                if (BlockCropSticks.PLANT.fetch(state) == plant) {
+                    this.forceRenderUpdate();
+                } else {
+                    this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
+                }
             }
         }
     }
@@ -590,7 +593,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public void addClientDebugInfo(@Nonnull Consumer<String> consumer) {
-
+        this.addServerDebugInfo(consumer);
     }
 
     @Override
