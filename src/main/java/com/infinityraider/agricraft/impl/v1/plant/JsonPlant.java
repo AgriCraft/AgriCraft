@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
@@ -50,7 +51,7 @@ public class JsonPlant implements IAgriPlant {
     private final Set<IGrowCondition> growthConditions;
 
     private final List<ItemStack> seedItems;
-    private final List<PlantCallback> callbacks;
+    private final List<IJsonPlantCallback> callbacks;
     private final ResourceLocation seedModel;
     private final ITextComponent tooltip;
 
@@ -59,7 +60,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
-        this.callbacks = PlantCallback.get(plant.getCallbacks());
+        this.callbacks = JsonPlantCallback.get(plant.getCallbacks());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
         this.tooltip = new TranslationTextComponent(this.getId());
     }

@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -144,6 +145,17 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Override
     @OnlyIn(Dist.CLIENT)
     public IAgriPlantQuadGenerator getPlantQuadGenerator() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 }

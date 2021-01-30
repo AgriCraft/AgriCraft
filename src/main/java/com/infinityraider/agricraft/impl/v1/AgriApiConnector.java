@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -29,6 +30,7 @@ import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
@@ -197,5 +199,16 @@ public class AgriApiConnector implements IAgriApiConnector {
     @OnlyIn(Dist.CLIENT)
     public IAgriPlantQuadGenerator getPlantQuadGenerator() {
         return AgriPlantQuadGenerator.getInstance();
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
+        return JsonPlantCallback.get(id);
+    }
+
+    @Override
+    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
+        return JsonPlantCallback.register(callback);
     }
 }

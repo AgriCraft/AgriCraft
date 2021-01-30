@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
-import com.infinityraider.agricraft.impl.v1.plant.PlantCallback;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
@@ -13,15 +13,15 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class PlantCallBackBrightness extends PlantCallback {
+public class JsonPlantCallBackBrightness extends JsonPlantCallback {
     public static final String ID = AgriCraft.instance.getModId() + ":" + "brightness";
-    private static final PlantCallback INSTANCE = new PlantCallBackBrightness();
+    private static final JsonPlantCallback INSTANCE = new JsonPlantCallBackBrightness();
 
-    public static PlantCallback getInstance() {
+    public static JsonPlantCallback getInstance() {
         return INSTANCE;
     }
 
-    private PlantCallBackBrightness() {
+    private JsonPlantCallBackBrightness() {
         super(ID);
     }
 

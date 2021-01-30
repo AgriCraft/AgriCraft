@@ -2,21 +2,21 @@ package com.infinityraider.agricraft.plugins.minecraft;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.impl.v1.plant.PlantCallback;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 
 import javax.annotation.Nonnull;
 
-public class PlantCallBackThorns extends PlantCallback {
+public class JsonPlantCallBackThorns extends JsonPlantCallback {
     public static final String ID = AgriCraft.instance.getModId() + ":" + "thorns";
-    private static final PlantCallback INSTANCE = new PlantCallBackThorns();
+    private static final JsonPlantCallback INSTANCE = new JsonPlantCallBackThorns();
 
-    public static PlantCallback getInstance() {
+    public static JsonPlantCallback getInstance() {
         return INSTANCE;
     }
 
-    private PlantCallBackThorns() {
+    private JsonPlantCallBackThorns() {
         super(ID);
     }
 

@@ -5,17 +5,17 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.impl.v1.plant.PlantCallback;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 
 @AgriPlugin
 @SuppressWarnings("unused")
 public class MinecraftPlugin implements IAgriPlugin {
-    public final PlantCallback thorns;
-    public final PlantCallback brightness;
+    public final JsonPlantCallback thorns;
+    public final JsonPlantCallback brightness;
 
     public MinecraftPlugin() {
-        this.thorns = PlantCallBackThorns.getInstance();
-        this.brightness = PlantCallBackBrightness.getInstance();
+        this.thorns = JsonPlantCallBackThorns.getInstance();
+        this.brightness = JsonPlantCallBackBrightness.getInstance();
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -259,6 +260,25 @@ public final class AgriApi {
     @OnlyIn(Dist.CLIENT)
     public static IAgriPlantQuadGenerator getPlantQuadGenerator() {
         return AgriApi.CONNECTOR.getPlantQuadGenerator();
+    }
+
+    /**
+     * Finds a registered json plant callback from their id
+     * @param id the id
+     * @return optional containing the callback, or empty if no such callback is registered
+     */
+    @Nonnull
+    public static Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
+        return AgriApi.CONNECTOR.getJsonPlantCallback(id);
+    }
+
+    /**
+     * Tries to register a json plant callback behaviour
+     * @param callback the callback to register
+     * @return true if successful (will fail in case a callback with the same id is already registered)
+     */
+    public static boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
+        return AgriApi.CONNECTOR.registerJsonPlantCallback(callback);
     }
 
     /**
