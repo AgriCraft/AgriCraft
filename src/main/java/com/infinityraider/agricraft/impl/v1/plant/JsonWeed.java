@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,11 +27,21 @@ import java.util.function.Consumer;
 public class JsonWeed implements IAgriWeed {
     private final AgriWeed weed;
 
+    private final ITextComponent name;
+    private final ITextComponent description;
     private final List<IAgriGrowthStage> growthStages;
 
     public JsonWeed(AgriWeed weed) {
         this.weed = weed;
+        this.name = new TranslationTextComponent(weed.getWeedLangKey());
+        this.description = new TranslationTextComponent(weed.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.weed.getGrowthStages());
+    }
+
+    @Nonnull
+    @Override
+    public ITextComponent getWeedName() {
+        return this.name;
     }
 
     @Override
@@ -92,8 +102,7 @@ public class JsonWeed implements IAgriWeed {
 
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
-        consumer.accept(new StringTextComponent(this.weed.getWeedName()));
-        consumer.accept(new StringTextComponent(this.weed.getDescription().toString()));
+        consumer.accept(this.description);
     }
 
     @Nonnull

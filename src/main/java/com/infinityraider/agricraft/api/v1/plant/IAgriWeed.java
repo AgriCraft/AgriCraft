@@ -14,6 +14,12 @@ import java.util.function.Consumer;
 
 public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, IAgriRenderable {
     /**
+     * @return a text component representing the name of this weed for use in tooltips, etc.
+     */
+    @Nonnull
+    ITextComponent getWeedName();
+
+    /**
      * Defines the chance of spawning on a specific crop
      * @param crop the crop where this wheat is rolled to spawn
      * @return the chance to spawn, between 0 and 1, where 0 means it will never spawn, and 1 it will certainly spawn

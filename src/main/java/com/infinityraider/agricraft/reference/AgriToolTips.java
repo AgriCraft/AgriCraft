@@ -45,14 +45,14 @@ public class AgriToolTips {
         return new StringTextComponent("")
                 .append(PLANT)
                 .append(new StringTextComponent(": "))
-                .append(new TranslationTextComponent(plant.getId()));
+                .append(plant.getPlantName());
     }
 
     public static ITextComponent getWeedTooltip(IAgriWeed weed) {
         return new StringTextComponent("")
                 .append(WEED)
                 .append(new StringTextComponent(": "))
-                .append(new TranslationTextComponent(weed.getId()));
+                .append(weed.getWeedName());
     }
 
     public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth) {
@@ -78,7 +78,7 @@ public class AgriToolTips {
         return new StringTextComponent("")
                 .append(SOIL)
                 .append(new StringTextComponent(": "))
-                .append(new TranslationTextComponent(soil.getName()));
+                .append(soil.getName());
     }
 
     public static ITextComponent getUnknownTooltip(ITextComponent source) {

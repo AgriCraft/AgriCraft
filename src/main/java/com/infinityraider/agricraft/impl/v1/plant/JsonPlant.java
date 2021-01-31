@@ -47,6 +47,11 @@ import javax.annotation.Nullable;
 public class JsonPlant implements IAgriPlant {
 
     private final AgriPlant plant;
+
+    private final ITextComponent plantName;
+    private final ITextComponent seedName;
+    private final ITextComponent description;
+
     private final List<IAgriGrowthStage> growthStages;
     private final Set<IGrowCondition> growthConditions;
 
@@ -57,6 +62,9 @@ public class JsonPlant implements IAgriPlant {
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
+        this.plantName = new TranslationTextComponent(plant.getPlantLangKey());
+        this.seedName = new TranslationTextComponent(plant.getSeedLangKey());
+        this.description = new TranslationTextComponent(plant.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthConditions = initGrowConditions(plant);
         this.seedItems = initSeedItems(plant);
@@ -85,13 +93,13 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public String getPlantName() {
-        return this.plant.getPlantName();
+    public ITextComponent getPlantName() {
+        return this.plantName;
     }
 
     @Override
-    public String getSeedName() {
-        return this.plant.getSeedName();
+    public ITextComponent getSeedName() {
+        return this.seedName;
     }
 
     @Override
@@ -165,14 +173,14 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public String getInformation(IAgriGrowthStage stage) {
-        return this.plant.getDescription().toString();
+    public ITextComponent getInformation(IAgriGrowthStage stage) {
+        return this.description;
     }
 
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
-        consumer.accept(new StringTextComponent(this.plant.getPlantName()));
-        consumer.accept(new StringTextComponent(this.plant.getDescription().toString()));
+        consumer.accept(this.getPlantName());
+        consumer.accept(this.description);
     }
 
     @Override
