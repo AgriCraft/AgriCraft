@@ -56,13 +56,13 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public String getPlantName() {
-        return this.getId();
+    public ITextComponent getPlantName() {
+        return AgriToolTips.UNKNOWN;
     }
 
     @Override
-    public String getSeedName() {
-        return this.getId();
+    public ITextComponent getSeedName() {
+        return AgriToolTips.UNKNOWN;
     }
 
     @Override
@@ -129,14 +129,14 @@ public class NoPlant implements IAgriPlant {
         return Optional.empty();
     }
 
-    private final String info = "Damnations! This is not a plant";
-    private final ITextComponent tooltip = new StringTextComponent(this.info);
-
     @Nonnull
     @Override
-    public String getInformation(IAgriGrowthStage stage) {
-        return info;
+    public ITextComponent getInformation(IAgriGrowthStage stage) {
+        return AgriToolTips.UNKNOWN;
     }
+
+    private final String info = "Damnations! This is not a plant";
+    private final ITextComponent tooltip = new StringTextComponent(this.info);
 
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {

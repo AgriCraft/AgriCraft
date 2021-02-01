@@ -26,6 +26,7 @@
 
   "agricraft.tooltip.unknown": "Unknown",
   "agricraft.tooltip.plant": "Plant",
+  "agricraft.tooltip.no_plant": "No Plant",
   "agricraft.tooltip.genome": "Genome",
   "agricraft.tooltip.growth": "Growth",
   "agricraft.tooltip.mature": "Mature",
@@ -37,42 +38,156 @@
   "agricraft.tooltip.soil": "Soil",
 
 
-  "vanilla:allium_plant": "Allium",
-  "vanilla:beet_root_plant": "Beet Root",
-  "vanilla:brown_mushroom_plant": "Brown Mushroom",
-  "vanilla:cactus_plant": "Cactus",
-  "vanilla:carrot_plant": "Carrot",
-  "vanilla:daisy_plant": "Daisy",
-  "vanilla:dandelion_plant": "Dandelion",
-  "vanilla:melon_plant": "Melon",
-  "vanilla:nether_wart_plant": "Nether Wart",
-  "vanilla:orange_tulip_plant": "Orange Tulip",
-  "vanilla:orchid_plant": "Orchid",
-  "vanilla:pink_tulip_plant": "Pink Tulip",
-  "vanilla:poppy_plant": "Poppy",
-  "vanilla:potato_plant": "Potato",
-  "vanilla:pumpkin_plant": "Pumpkin",
-  "vanilla:red_mushroom_plant": "Red Mushroom",
-  "vanilla:red_tulip_plant": "Red Tulip",
-  "vanilla:sugarcane_plant": "sugarcane",
-  "vanilla:wheat_plant": "Wheat",
-  "vanilla:white_tulip_plant": "White Tulip",
+  "agricraft.plant.allium.name": "Allium",
+  "agricraft.plant.allium.seed": "Allium",
+  "agricraft.plant.allium.desc": "From the family of plants including the garlic, onion, and chive this plant produces a beautiful umbel consisting of many small purple blooms.",
 
-  "vanilla:aurigold_plant": "Aurigold",
-  "vanilla:cuprosia_plant": "Cuprosia",
-  "vanilla:diamahlia_plant": "Diamahlia",
-  "vanilla:emeryllis_plant": "Emeryllis",
-  "vanilla:ferranium_plant": "Ferranium",
-  "vanilla:jaslumine_plant": "Jaslumine",
-  "vanilla:lapender_plant": "Lapender",
-  "vanilla:niccissus_plant": "Niccissus",
-  "resource:nitorwart_plant": "Nitor Wart",
-  "vanilla:osmonium_plant": "Osmonium",
-  "vanilla:petinia_plant": "Petinia",
-  "vanilla:platiolus_plant": "Platiolus",
-  "vanilla:plombean_plant": "Plombean",
-  "vanilla:quartzanthemum_plant": "Quartzanthemum",
-  "vanilla:redstodendron_plant": "Redstodendron",
+  "agricraft.plant.beet_root.name": "Beet Root",
+  "agricraft.plant.beet_root.seed": "Beet Root Seeds",
+  "agricraft.plant.beet_root.desc": "Beet. It\\u0027s what\\u0027s for dinner.",
 
-  "agricraft:weed_weed": "Weeds"
+  "agricraft.plant.brown_mushroom.name": "Brown Mushroom",
+  "agricraft.plant.brown_mushroom.seed": "Brown Mushroom Spores",
+  "agricraft.plant.brown_mushroom.desc": "A simple decomposer.",
+
+  "agricraft.plant.cactus.name": "Cactus",
+  "agricraft.plant.cactus.seed": "Cactus Seeds",
+  "agricraft.plant.cactus.desc": "A very prickly plant.",
+
+  "agricraft.plant.carrot.name": "Carrot",
+  "agricraft.plant.carrot.seed": "Carrot Seeds",
+  "agricraft.plant.carrot.desc": "Rabbit attractant.",
+
+  "agricraft.plant.daisy.name": "Daisy",
+  "agricraft.plant.daisy.seed": "Daisy Seeds",
+  "agricraft.plant.daisy.desc": "A rarity by any measure.",
+
+  "agricraft.plant.dandelion.name": "Dandelion",
+  "agricraft.plant.dandelion.seed": "Dandelion Seeds",
+  "agricraft.plant.dandelion.desc": "While colloquially considered a weed, this yellow-flowering plant is one of unspoken value. Having a deep-rooting taproot, the plant brings up nutrients from lower levels of soil, making it a good companion plant for shallow rooting plants.",
+
+  "agricraft.plant.melon.name": "Melon",
+  "agricraft.plant.melon.seed": "Melon Seeds",
+  "agricraft.plant.melon.desc": "Sweet \\u0026 Juicy.",
+
+  "agricraft.plant.nether_wart.name": "Nether Wart",
+  "agricraft.plant.nether_wart.seed": "Nether Wart Spores",
+  "agricraft.plant.nether_wart.desc": "An oddity from the nether, said to have somewhat mystical properties. The fungus appears to have a strong aptitude for heat, yet oddly cannot withstand the burning of the sun. Its fruit makes a covetable prize for the aspiring young brewer.",
+
+  "agricraft.plant.orange_tulip.name": "Orange Tulip",
+  "agricraft.plant.orange_tulip.seed": "Orange Tulip Seeds",
+  "agricraft.plant.orange_tulip.desc": "A rarity by any measure.",
+
+  "agricraft.plant.orchid.name": "Orchid",
+  "agricraft.plant.orchid.seed": "Orchid Seeds",
+  "agricraft.plant.orchid.desc": "A rarity by any measure.",
+
+  "agricraft.plant.pink_tulip.name": "Pink Tulip",
+  "agricraft.plant.pink_tulip.seed": "Pink Tulip Seeds",
+  "agricraft.plant.pink_tulip.desc": "A pink varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+
+  "agricraft.plant.poppy.name": "Poppy",
+  "agricraft.plant.poppy.seed": "Poppy Seeds",
+  "agricraft.plant.poppy.desc": "Producing colorful blooms, this plant has gained a reputation for certain medicinal uses. A better use, perhaps, this plant produces seeds that go well with baked goods, particularly for lemon-flavored ones.",
+
+  "agricraft.plant.potato.name": "Potato",
+  "agricraft.plant.potato.seed": "Potato Seeds",
+  "agricraft.plant.potato.desc": "Po-ta-toes! Boil them, mash them, stick them in a stew.",
+
+  "agricraft.plant.pumpkin.name": "Pumpkin",
+  "agricraft.plant.pumpkin.seed": "Pumpkin Seeds",
+  "agricraft.plant.pumpkin.desc": "If I eat enough of these will I turn orange?",
+
+  "agricraft.plant.red_mushroom.name": "Red Mushroom",
+  "agricraft.plant.red_mushroom.seed": "Red Mushroom Spores",
+  "agricraft.plant.red_mushroom.desc": "Shrooms, ever so trippy.",
+
+  "agricraft.plant.red_tulip.name": "Red Tulip",
+  "agricraft.plant.red_tulip.seed": "Red Tulip Seeds",
+  "agricraft.plant.red_tulip.desc": "A vibrant red varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+
+  "agricraft.plant.sugarcane.name": "Sugarcane",
+  "agricraft.plant.sugarcane.seed": "Sugarcane Seeds",
+  "agricraft.plant.sugarcane.desc": "High in fructose, a healthy part of your daily breakfast.",
+
+  "agricraft.plant.wheat.name": "Wheat",
+  "agricraft.plant.wheat.seed": "Wheat Seeds",
+  "agricraft.plant.wheat.desc": "The cornerstone of the Agriculutural Revolution.",
+
+  "agricraft.plant.white_tulip.name": "White Tulip",
+  "agricraft.plant.white_tulip.seed": "White Tulip Seeds",
+  "agricraft.plant.white_tulip.desc": "A snow-white varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+
+  "agricraft.plant.aurigold.name": "Aurigold",
+  "agricraft.plant.aurigold.seed": "Aurigold Seeds",
+  "agricraft.plant.aurigold.desc": "A golden delight.",
+
+  "agricraft.plant.cuprosia.name": "Cuprosia",
+  "agricraft.plant.cuprosia.seed": "Cuprosia Seeds",
+  "agricraft.plant.cuprosia.desc": "Known as the engineer\\u0027s delight, this plant produces a substance of incredible utility.",
+
+  "agricraft.plant.diamahlia.name": "Diamahlia",
+  "agricraft.plant.diamahlia.seed": "Diamahlia Seeds",
+  "agricraft.plant.diamahlia.desc": "A rarity by any measure.",
+
+  "agricraft.plant.emeryllis.name": "Emeryllis",
+  "agricraft.plant.emeryllis.seed": "Emeryllis Seeds",
+  "agricraft.plant.emeryllis.desc": "A truely green gem.",
+
+  "agricraft.plant.ferranium.name": "Ferranium",
+  "agricraft.plant.ferranium.seed": "Ferranium Seeds",
+  "agricraft.plant.ferranium.desc": "A strong plant.",
+
+  "agricraft.plant.jaslumine.name": "Jaslumine",
+  "agricraft.plant.jaslumine.seed": "Jaslumine Seeds",
+  "agricraft.plant.jaslumine.desc": "Jaslumine to some, Jaluminium to me. Shines like silver, but not all that valuable of a plant.",
+
+  "agricraft.plant.lapender.name": "Lapender",
+  "agricraft.plant.lapender.seed": "Lapender Seeds",
+  "agricraft.plant.lapender.desc": "A regal plant.",
+
+  "agricraft.plant.niccissus.name": "Niccissus",
+  "agricraft.plant.niccissus.seed": "Niccissus Seeds",
+  "agricraft.plant.niccissus.desc": "While there is much debate over which is the best plant, we can all agree that the Niccissus plant is by far the most self-absorbed.",
+
+  "agricraft.plant.nitorwart.name": "Nitor Wart",
+  "agricraft.plant.nitorwart.seed": "Nitor Wart Spores",
+  "agricraft.plant.nitorwart.desc": "It sure seems to like to glow.",
+
+  "agricraft.plant.osmonium.name": "Osmonium",
+  "agricraft.plant.osmonium.seed": "Osmonium Seeds",
+  "agricraft.plant.osmonium.desc": "An unusually rare plant, thought to originate from outer space.",
+
+  "agricraft.plant.petinia.name": "Petinia",
+  "agricraft.plant.petinia.seed": "Petinia Seeds",
+  "agricraft.plant.petinia.desc": "A distant cousin of the familiar petunia flower, this plant produces a substance frequently used to plate metal cans.",
+
+  "agricraft.plant.platiolus.name": "Platiolus",
+  "agricraft.plant.platiolus.seed": "Platiolus Seeds",
+  "agricraft.plant.platiolus.desc": "The unquestioned king among the metal-bearing plants, this plant has a gleam to it that puts even the aurigold flower to shame.",
+
+  "agricraft.plant.plombean.name": "Plombean",
+  "agricraft.plant.plombean.seed": "Plombean Seeds",
+  "agricraft.plant.plombean.desc": "In ancient times this plant was thought to bear a lifegiving fruit. Nowadays we know better.",
+
+  "agricraft.plant.quartzanthemum.name": "Quartzanthemum",
+  "agricraft.plant.quartzanthemum.seed": "Quartzanthemum Seeds",
+  "agricraft.plant.quartzanthemum.desc": "A suprisingly crystalline plant.",
+
+  "agricraft.plant.redstodendron.name": "Redstodendron",
+  "agricraft.plant.redstodendron.seed": "Redstodendron Seeds",
+  "agricraft.plant.redstodendron.desc": "Much more complex than the average red algea.",
+
+
+  "agricraft.weed.weed.name": "Weeds",
+  "agricraft.weed.weed.desc": "A nuisance to deal with.",
+
+
+  "agricraft.soil.farmland.name": "Farmland Soil",
+  "agricraft.soil.grass.name": "Grass Soil",
+  "agricraft.soil.mycelium.name": "Mycelium Soil",
+  "agricraft.soil.sand.name": "Sand Soil",
+  "agricraft.soil.soul_sand.name": "Soul Sand Soil",
+  "agricraft.soil.gravel.name": "Gravel Soil",
+  "agricraft.soil.stone.name": "Stone Soil"
 }

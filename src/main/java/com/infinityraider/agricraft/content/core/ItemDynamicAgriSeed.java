@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -60,15 +59,8 @@ public class ItemDynamicAgriSeed extends ItemBase {
     }
 
     @Nonnull
-    public String getTranslationKey(@Nonnull ItemStack stack) {
-        return AgriApi.getSeedAdapterizer().valueOf(stack)
-                .map(seed -> seed.getPlant().getSeedName())
-                .orElse("unknown seed");
-    }
-
-    @Nonnull
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return new StringTextComponent(this.getTranslationKey(stack));
+        return this.getPlant(stack).getSeedName();
     }
 
     @Override

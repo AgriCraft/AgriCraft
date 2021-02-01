@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,12 @@ public final class NoWeed implements IAgriWeed {
         return this.id;
     }
 
+
+    @Nonnull
+    @Override
+    public ITextComponent getWeedName() {
+        return AgriToolTips.UNKNOWN;
+    }
 
     @Override
     public double spawnChance(IAgriCrop crop) {

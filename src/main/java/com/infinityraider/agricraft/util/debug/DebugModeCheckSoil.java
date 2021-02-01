@@ -23,7 +23,7 @@ public class DebugModeCheckSoil extends DebugMode {
     public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
         String type = AgriApi.getSoilRegistry().all().stream()
                 .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
-                .map(IAgriSoil::getName)
+                .map(IAgriSoil::getId)
                 .findFirst()
                 .orElse("Unknown Soil");
         MessageUtil.messagePlayer(context.getPlayer(), "{0} Soil Info:", AgriCraft.instance.proxy().getLogicalSide());

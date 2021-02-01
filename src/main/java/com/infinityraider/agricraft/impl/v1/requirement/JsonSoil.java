@@ -4,6 +4,8 @@ import com.agricraft.agricore.plant.AgriSoil;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,14 +15,14 @@ import javax.annotation.Nonnull;
  * Class wrapping the AgriCore AgriSoil.
  */
 public class JsonSoil implements IAgriSoil {
-    @Nonnull
     private final AgriSoil soil;
-    @Nonnull
+    private final ITextComponent name;
     private final Collection<BlockState> variants;
 
     @SuppressWarnings("unchecked")
     public JsonSoil(@Nonnull AgriSoil soil) {
         this.soil = Preconditions.checkNotNull(soil);
+        this.name = new TranslationTextComponent(soil.getLangKey());
         this.variants = Collections.unmodifiableCollection(Preconditions.checkNotNull(this.soil.getVariants(BlockState.class)));
     }
 
@@ -32,8 +34,8 @@ public class JsonSoil implements IAgriSoil {
 
     @Override
     @Nonnull
-    public String getName() {
-        return this.soil.getName();
+    public ITextComponent getName() {
+        return this.name;
     }
 
     @Override

@@ -53,9 +53,17 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
         return AgriApi.plantToSeedStack(this, amount);
     }
 
-    String getPlantName();
+    /**
+     * @return a text component representing the name of this plant for use in tooltips, agricultural journal, genome, etc.
+     */
+    @Nonnull
+    ITextComponent getPlantName();
 
-    String getSeedName();
+    /**
+     * @return a text component representing the name of the seed of this plant for use in tooltips, agricultural journal, etc.
+     */
+    @Nonnull
+    ITextComponent getSeedName();
 
     int getTier();
 
@@ -138,7 +146,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return Information about the plant to be displayed in the Seed Journal.
      */
     @Nonnull
-    String getInformation(IAgriGrowthStage stage);
+    ITextComponent getInformation(IAgriGrowthStage stage);
 
     /**
      * Fetches the user-friendly plant description for use in tooltips. Notice, any

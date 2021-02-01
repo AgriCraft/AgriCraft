@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Class for interacting with AgriCraft soil definitions.
@@ -17,7 +18,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil> {
     String getId();
 
     @Nonnull
-    String getName();
+    ITextComponent getName();
 
     @Nonnull
     Collection<BlockState> getVariants();

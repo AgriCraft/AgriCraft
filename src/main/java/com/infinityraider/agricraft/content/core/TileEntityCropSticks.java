@@ -629,10 +629,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         // Add Soil Information
         this.getSoil().map(soil -> {
             consumer.accept(AgriToolTips.getSoilTooltip(soil));
-            return null;
+            return true;
         }).orElseGet(() -> {
             consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
-            return null;
+            return false;
         });
     }
 }
