@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.event.CropEvent;
+import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
@@ -218,14 +218,14 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.getWorld() == null) {
             return;
         }
-        if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Break.Pre(this, entity))) {
+        if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Pre(this, entity))) {
             IAgriPlant plant = this.getPlant();
             IAgriWeed weed = this.getWeeds();
             Block.spawnDrops(this.getBlockState(), this.getWorld(), this.getPosition(), this);
             this.getWorld().setBlockState(this.getPosition(), Blocks.AIR.getDefaultState());
             plant.onBroken(this, entity);
             weed.onBroken(this, entity);
-            MinecraftForge.EVENT_BUS.post(new CropEvent.Break.Post(this, entity));
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Post(this, entity));
         }
     }
 
@@ -262,7 +262,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void executeWeedGrowthTick() {
-        if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Weeds.Pre(this))) {
+        if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Weeds.Pre(this))) {
             if (!this.hasWeeds()) {
                 //The aren't weeds yet, try to spawn new weeds
                 this.spawnWeeds();
@@ -280,7 +280,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                     }
                 }
             }
-            MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Weeds.Post(this));
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Weeds.Post(this));
         }
     }
 
@@ -318,9 +318,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     protected void executeCrossGrowthTick() {
         // Do not do mutation growth ticks if the plant has weeds
-        if(!this.hasWeeds() && !MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Cross.Pre(this))) {
+        if(!this.hasWeeds() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Cross.Pre(this))) {
             if(AgriApi.getAgriMutationHandler().getActiveMutationEngine().handleMutationTick(this, this.streamNeighbours(), this.getRandom())) {
-                MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Cross.Post(this));
+                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Cross.Post(this));
             }
         }
     }
@@ -328,10 +328,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     protected void executePlantGrowthTick() {
         if (!this.isMature()) {
             if (this.calculateGrowthRate() > this.getRandom().nextDouble()
-                    && !MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Plant.Pre(this))) {
+                    && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Pre(this))) {
                 this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
                 this.getPlant().onGrowth(this);
-                MinecraftForge.EVENT_BUS.post(new CropEvent.Grow.Plant.Post(this));
+                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Post(this));
             }
         }
     }
@@ -379,11 +379,11 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, LivingEntity entity) {
         if (this.getWorld() != null && this.canBeHarvested(entity)) {
-            if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Harvest.Pre(this, entity))) {
+            if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Pre(this, entity))) {
                 this.getPlant().getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), this.getWorld().getRandom());
                 this.setGrowthStage(this.getPlant().getGrowthStageAfterHarvest());
                 this.getPlant().onHarvest(this, entity);
-                MinecraftForge.EVENT_BUS.post(new CropEvent.Harvest.Post(this, entity));
+                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));
                 return ActionResultType.SUCCESS;
             }
         }
@@ -452,12 +452,12 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             }
             return false;
         } else if(weed.getGrowthStages().contains(stage)) {
-            if(!MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Weed.Pre(this, weed))) {
+            if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
                 this.weed.set(weed);
                 this.weedGrowth.set(stage);
                 this.weed.get().onSpawned(this);
                 this.handlePlantUpdate(false);
-                MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Weed.Post(this, weed));
+                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
                 return true;
             }
         }
@@ -482,10 +482,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public boolean setGenome(@Nonnull IAgriGenome genome) {
-        if(!this.hasPlant() && !this.isCrossCrop() && !MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Plant.Pre(this, genome))) {
+        if(!this.hasPlant() && !this.isCrossCrop() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
             this.setGenomeImpl(genome);
             this.getPlant().onSpawned(this);
-            MinecraftForge.EVENT_BUS.post(new CropEvent.Spawn.Plant.Post(this, genome));
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Post(this, genome));
             return true;
         }
         return false;
@@ -498,10 +498,10 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public boolean plantSeed(@Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
-        if (this.acceptsSeed(seed) && !MinecraftForge.EVENT_BUS.post(new CropEvent.Plant.Pre(this, seed, entity))) {
+        if (this.acceptsSeed(seed) && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Pre(this, seed, entity))) {
             this.setGenomeImpl(seed.getGenome());
             this.getPlant().onPlanted(this, entity);
-            MinecraftForge.EVENT_BUS.post(new CropEvent.Plant.Post(this, seed, entity));
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Post(this, seed, entity));
             return true;
         }
         return false;
