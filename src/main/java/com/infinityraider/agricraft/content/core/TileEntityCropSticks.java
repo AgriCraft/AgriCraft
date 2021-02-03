@@ -205,6 +205,11 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         return this.getGrowthStage().isMature();
     }
 
+    @Override
+    public boolean isFullyGrown() {
+        return this.getGrowthStage().isFinal();
+    }
+
     @Nonnull
     @Override
     public Optional<IAgriSoil> getSoil() {
@@ -268,7 +273,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                 this.spawnWeeds();
             } else {
                 // There are weeds already, apply the growth tick
-                if (this.getWeedGrowthStage().isMature()) {
+                if (this.getWeedGrowthStage().isFinal()) {
                     //Weeds are mature, try killing the plant
                     this.tryWeedKillPlant();
                     //Weeds are mature, try spreading
@@ -326,7 +331,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected void executePlantGrowthTick() {
-        if (!this.isMature()) {
+        if (!this.getGrowthStage().isFinal()) {
             if (this.calculateGrowthRate() > this.getRandom().nextDouble()
                     && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Pre(this))) {
                 this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
@@ -587,6 +592,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             consumer.accept(" - stats: " + stats);
             consumer.accept(" - Fertile: " + this.isFertile());
             consumer.accept(" - Mature: " + this.isMature());
+            consumer.accept(" - Fully Grown: " + this.isFullyGrown());
             consumer.accept(" - AgriSoil: " + this.getSoil());
         }
     }

@@ -53,19 +53,24 @@ public final class IncrementalGrowthLogic {
 
         @Override
         public boolean isMature() {
+            return this.isFinal();
+        }
+
+        @Override
+        public boolean isFinal() {
             return this.mature;
         }
 
         @Override
         public boolean canDropSeed() {
-            return this.isMature() || !AgriCraft.instance.getConfig().onlyMatureSeedDrops();
+            return this.isFinal() || !AgriCraft.instance.getConfig().onlyMatureSeedDrops();
         }
 
         @Nonnull
         @Override
         public IAgriGrowthStage getNextStage(IAgriCrop crop, Random random) {
             if(this.next == null) {
-                this.next = this.isMature() ? this : CACHE.get(this.total).get(this.stage + 1);
+                this.next = this.isFinal() ? this : CACHE.get(this.total).get(this.stage + 1);
             }
             return this.next;
         }

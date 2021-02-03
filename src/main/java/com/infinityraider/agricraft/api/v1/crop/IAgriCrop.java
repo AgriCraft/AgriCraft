@@ -90,9 +90,14 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
     boolean isFertile();
 
     /**
-     * @return if this crop is fully grown
+     * @return if this crop can be harvested
      */
     boolean isMature();
+
+    /**
+     * @return true if this crop is fully grown (has no more growth stages)
+     */
+    boolean isFullyGrown();
 
     @Nonnull
     Optional<IAgriSoil> getSoil();

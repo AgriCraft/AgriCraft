@@ -36,6 +36,11 @@ public class NoGrowth implements IAgriGrowthStage {
     }
 
     @Override
+    public boolean isFinal() {
+        return false;
+    }
+
+    @Override
     public boolean canDropSeed() {
         return false;
     }

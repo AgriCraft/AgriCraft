@@ -14,9 +14,14 @@ import java.util.Random;
  */
 public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
     /**
-     * @return true if this growth stage signifies a mature plant (meaning it does not have any further growth stages
+     * @return true if the plant can be harvested at this growth stage
      */
     boolean isMature();
+
+    /**
+     * @return true if this is a final growth stage (meaning it does not have any further growth stages)
+     */
+    boolean isFinal();
 
     /**
      * @return true if a plant of this growth stage will drop its seed when broken

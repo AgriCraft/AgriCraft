@@ -56,7 +56,7 @@ public class AgriToolTips {
     }
 
     public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth) {
-        if (growth.isMature()) {
+        if (growth.isFinal()) {
             return new StringTextComponent("")
                     .append(GROWTH)
                     .append(new StringTextComponent(": "))
