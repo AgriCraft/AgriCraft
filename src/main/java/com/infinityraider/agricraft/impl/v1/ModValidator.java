@@ -4,6 +4,7 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.util.AgriValidator;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.misc.AgriSeason;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.block.BlockState;
@@ -50,6 +51,11 @@ public class ModValidator implements AgriValidator {
         }
         AgriCraft.instance.getLogger().error("Invalid token class: " + token + ", encountered, check your jsons");
         return (Class<T>) Object.class;
+    }
+
+    @Override
+    public boolean isValidSeason(String season) {
+        return AgriSeason.fromString(season).isPresent();
     }
 
     protected boolean isValidItem(String item) {
