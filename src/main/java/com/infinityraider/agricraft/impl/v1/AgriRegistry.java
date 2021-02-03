@@ -1,8 +1,11 @@
 package com.infinityraider.agricraft.impl.v1;
 
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import net.minecraftforge.common.MinecraftForge;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +20,7 @@ import java.util.stream.Stream;
  *
  * @param <T> The type of the registry.
  */
-public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegistry<T> {
+public abstract class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegistry<T> {
 
     private final ConcurrentMap<String, T> registry;
 
@@ -46,7 +49,11 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
 
     @Override
     public boolean add(@Nullable T object) {
-        return object != null && (this.registry.putIfAbsent(object.getId(), object) == null);
+        return object != null && this.directAdd(this.fireEvent(object));
+    }
+
+    protected final boolean directAdd(@Nonnull T object) {
+        return this.registry.putIfAbsent(object.getId(), object) == null;
     }
 
     @Override
@@ -67,5 +74,19 @@ public class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegist
     @Override
     public Stream<T> stream() {
         return this.registry.values().stream();
+    }
+
+    private T fireEvent(T element) {
+        AgriRegistryEvent<T> event = this.createEvent(element);
+        if(event == null) {
+            return element;
+        }
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getSubstitute();
+    }
+
+    @Nullable
+    protected AgriRegistryEvent<T> createEvent(T element) {
+        return null;
     }
 }

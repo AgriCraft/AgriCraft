@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
@@ -38,6 +39,12 @@ public class AgriSoilRegistry extends AgriRegistry<IAgriSoil> implements IAgriSo
             return Collections.emptyList();
         }
         return this.stream().filter(soil -> soil.isVariant(state)).collect(Collectors.toList());
+    }
+
+    @Nullable
+    @Override
+    protected AgriRegistryEvent<IAgriSoil> createEvent(IAgriSoil element) {
+        return new AgriRegistryEvent.Soil(this, element);
     }
 
 }

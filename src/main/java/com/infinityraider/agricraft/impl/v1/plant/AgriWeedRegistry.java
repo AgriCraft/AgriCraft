@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
@@ -20,7 +21,7 @@ public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> {
     private AgriWeedRegistry() {
         super();
         // Register no weed
-        this.add(NO_WEED);
+        this.directAdd(NO_WEED);
     }
 
     @Override
@@ -44,5 +45,11 @@ public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> {
     public Stream<IAgriWeed> stream() {
         // Filter the No weed out of the stream
         return super.stream().filter(IAgriWeed::isWeed);
+    }
+
+    @Nullable
+    @Override
+    protected AgriRegistryEvent<IAgriWeed> createEvent(IAgriWeed element) {
+        return new AgriRegistryEvent.Weed(this, element);
     }
 }

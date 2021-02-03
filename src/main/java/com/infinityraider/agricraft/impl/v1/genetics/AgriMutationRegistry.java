@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -10,6 +11,7 @@ import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The mutation registry implementation.
@@ -105,5 +107,11 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
     private int sumParentsComplexity(IAgriMutation mutation) {
         // TODO: Ensure no infinite loops can originate here
         return mutation.getParents().stream().mapToInt(this::complexity).sum();
+    }
+
+    @Nullable
+    @Override
+    protected AgriRegistryEvent<IAgriMutation> createEvent(IAgriMutation element) {
+        return new AgriRegistryEvent.Mutation(this, element);
     }
 }

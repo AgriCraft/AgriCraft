@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
@@ -24,7 +25,7 @@ public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgr
         super();
         // Auto populate species gene
         this.gene_species = GeneSpecies.getInstance();
-        this.add(gene_species);
+        this.directAdd(gene_species);
     }
 
     @Override
@@ -89,5 +90,11 @@ public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgr
     @Override
     public Optional<IAgriStat> getStatForGene(@Nullable IAgriGene<Integer> gene) {
         return Optional.ofNullable(gene).flatMap(g -> AgriStatRegistry.getInstance().get(g.getId()));
+    }
+
+    @Nullable
+    @Override
+    protected AgriRegistryEvent<IAgriGene<?>> createEvent(IAgriGene<?> element) {
+        return new AgriRegistryEvent.Gene(this, element);
     }
 }

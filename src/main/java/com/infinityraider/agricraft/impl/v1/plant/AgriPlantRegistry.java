@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
@@ -20,14 +21,17 @@ public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     private AgriPlantRegistry() {
         super();
         // Register no plant
-        this.add(NO_PLANT);
+        this.directAdd(NO_PLANT);
     }
 
     @Override
     public boolean add(@Nullable IAgriPlant object) {
+        if(object == null) {
+            return false;
+        }
         boolean result = super.add(object);
         // also register the plant's growth stages
-        if(object != null && result) {
+        if(result) {
             object.getGrowthStages().forEach(stage -> AgriGrowthRegistry.getInstance().add(stage));
         }
         return result;
@@ -44,5 +48,11 @@ public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     public Stream<IAgriPlant> stream() {
         // Filter the No plant out of the stream
         return super.stream().filter(IAgriPlant::isPlant);
+    }
+
+    @Nullable
+    @Override
+    protected AgriRegistryEvent<IAgriPlant> createEvent(IAgriPlant element) {
+        return new AgriRegistryEvent.Plant(this, element);
     }
 }
