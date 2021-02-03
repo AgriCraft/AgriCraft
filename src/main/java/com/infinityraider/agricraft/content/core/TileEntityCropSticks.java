@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -166,8 +167,29 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(!this.getPlant().getGrowthStages().contains(stage)) {
             return false;
         }
+        if(!this.checkGrowthSpace(this.getPlant(), stage)) {
+            return false;
+        }
         this.growth.set(stage);
         this.handlePlantUpdate(false);
+        return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    private boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
+        if(this.getWorld() == null) {
+            return false;
+        }
+        int height = plant.getPlantHeight(stage);
+        while(height > 16) {
+            int offset = height / 16;
+            BlockPos pos = this.getPos().up(offset);
+            BlockState state = this.getWorld().getBlockState(pos);
+            if(!state.isAir(this.getWorld(), pos)) {
+                return false;
+            }
+            height -= 16;
+        }
         return true;
     }
 
@@ -197,6 +219,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public boolean isFertile() {
         return this.getWorld() != null
+                && this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())
                 && this.getPlant().getGrowConditions(this.getGrowthStage()).stream().allMatch(c -> c.isMet(this.getWorld(), this.getPosition()));
     }
 
@@ -445,22 +468,22 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     @Override
     public boolean setWeed(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage) {
-        if(this.weed.get().equals(weed)) {
+        if(this.getWeeds().equals(weed)) {
             if(this.weedGrowth.get().equals(stage)) {
                 return false;
             }
-            if(this.weed.get().getGrowthStages().contains(stage)) {
+            if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
                 this.weedGrowth.set(stage);
-                this.weed.get().onGrowthTick(this);
+                this.getWeeds().onGrowthTick(this);
                 this.handlePlantUpdate(false);
                 return true;
             }
             return false;
-        } else if(weed.getGrowthStages().contains(stage)) {
+        } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
                 this.weed.set(weed);
                 this.weedGrowth.set(stage);
-                this.weed.get().onSpawned(this);
+                this.getWeeds().onSpawned(this);
                 this.handlePlantUpdate(false);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
                 return true;

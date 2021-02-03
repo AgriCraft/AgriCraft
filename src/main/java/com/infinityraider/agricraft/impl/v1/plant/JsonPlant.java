@@ -159,6 +159,15 @@ public class JsonPlant implements IAgriPlant {
         return this.growthStages;
     }
 
+    @Override
+    public int getPlantHeight(IAgriGrowthStage stage) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
+        if(index < 0 || index >= this.plant.getGrowthStages()) {
+            return 0;
+        }
+        return this.plant.getGrowthStageHeight(index);
+    }
+
     @Nonnull
     @Override
     public Set<IGrowCondition> getGrowConditions(IAgriGrowthStage stage) {

@@ -87,6 +87,11 @@ public final class NoWeed implements IAgriWeed {
     }
 
     @Override
+    public int getPlantHeight(IAgriGrowthStage stage) {
+        return 0;
+    }
+
+    @Override
     public void onRake(@Nonnull IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> consumer, @Nonnull Random rand, @Nullable LivingEntity entity) {
         //NOPE
     }

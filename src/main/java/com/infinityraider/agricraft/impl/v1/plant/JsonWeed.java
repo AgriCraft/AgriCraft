@@ -101,6 +101,15 @@ public class JsonWeed implements IAgriWeed {
     }
 
     @Override
+    public int getPlantHeight(IAgriGrowthStage stage) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
+        if(index < 0 || index >= this.weed.getGrowthStages()) {
+            return 0;
+        }
+        return this.weed.getGrowthStageHeight(index);
+    }
+
+    @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
         consumer.accept(this.description);
     }

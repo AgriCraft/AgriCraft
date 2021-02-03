@@ -125,6 +125,11 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
+    public int getPlantHeight(IAgriGrowthStage stage) {
+        return 0;
+    }
+
+    @Override
     public Optional<BlockState> asBlockState(IAgriGrowthStage stage) {
         return Optional.empty();
     }

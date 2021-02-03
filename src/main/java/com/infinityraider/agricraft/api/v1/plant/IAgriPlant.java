@@ -65,6 +65,9 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     @Nonnull
     ITextComponent getSeedName();
 
+    /**
+     * @return the tier of the plant, the higher the number, the higher the tier
+     */
     int getTier();
 
     /**

@@ -26,4 +26,17 @@ public interface IAgriGrowable {
      */
     @Nonnull
     Collection<IAgriGrowthStage> getGrowthStages();
+
+    /**
+     * Fetches the height of the plant at the given growth stage in 1/16ths of a block.
+     * Note that it is possible to return heights taller than 16
+     *
+     * For instance, returning 8 corresponds to a plant half a block high,
+     * while returning 16 corresponds to a full block high,
+     * and returning 32 corresponds to a plant which is two blocks high.     *
+     *
+     * @param stage the growth stage
+     * @return height of the plant in 1/16ths of a block
+     */
+    int getPlantHeight(IAgriGrowthStage stage);
 }

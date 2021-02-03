@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -13,10 +14,7 @@ import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
+import net.minecraft.block.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -48,6 +46,7 @@ import net.minecraftforge.common.IPlantable;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiFunction;
@@ -55,7 +54,7 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> implements IGrowable, IPlantable {
+public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> implements IWaterLoggable, IGrowable, IPlantable {
     // Excluded classes for Iem usage logic
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
@@ -87,11 +86,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             Block.makeCuboidShape(13, -3, 13, 14, 14, 14)
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
-    private static final VoxelShape SHAPE_PLANT = Stream.of(
-            SHAPE_DEFAULT,
-            Block.makeCuboidShape(4, 0, 4, 12, 16, 12)
-            ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
-
     private static final VoxelShape SHAPE_CROSS_CROP = Stream.of(
             SHAPE_DEFAULT,
             Block.makeCuboidShape(0, 11, 2, 16, 12, 3),
@@ -100,10 +94,23 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             Block.makeCuboidShape(13, 11, 0, 14, 12, 16)
             ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
-    private static final VoxelShape SHAPE_CROSS_PLANT = Stream.of(
-            SHAPE_CROSS_CROP,
-            Block.makeCuboidShape(4, 0, 4, 12, 16, 12)
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+    private static final Map<Integer, VoxelShape> PLANT_SHAPES = Maps.newHashMap();
+
+    private static final Map<Integer, VoxelShape> CROSS_PLANT_SHAPES = Maps.newHashMap();
+
+    public static VoxelShape getPlantShape(int height) {
+        return PLANT_SHAPES.computeIfAbsent(height, h -> Stream.of(
+                SHAPE_DEFAULT,
+                Block.makeCuboidShape(3, 0, 3, 13, h, 13)
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get());
+    }
+
+    public static VoxelShape getCrossPlantShape(int height) {
+        return CROSS_PLANT_SHAPES.computeIfAbsent(height, h -> Stream.of(
+                SHAPE_CROSS_CROP,
+                Block.makeCuboidShape(3, 0, 3, 13, h, 13)
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get());
+    }
 
     private final CropStickVariant variant;
 
@@ -153,7 +160,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
     }
 
     @Override
@@ -162,13 +169,21 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         if(CROSS_CROP.fetch(state)) {
             if(PLANT.fetch(state)) {
-                return SHAPE_CROSS_PLANT;
+                return getCrossPlantShape(this.getCrop(world, pos)
+                        .map(crop -> Math.max(
+                                crop.getPlant().getPlantHeight(crop.getGrowthStage()),
+                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())
+                        )).orElse(0));
             } else {
                 return SHAPE_CROSS_CROP;
             }
         } else {
             if(PLANT.fetch(state)) {
-                return SHAPE_PLANT;
+                return getPlantShape(this.getCrop(world, pos)
+                        .map(crop -> Math.max(
+                                crop.getPlant().getPlantHeight(crop.getGrowthStage()),
+                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())
+                        )).orElse(0));
             } else {
                 return SHAPE_DEFAULT;
             }
