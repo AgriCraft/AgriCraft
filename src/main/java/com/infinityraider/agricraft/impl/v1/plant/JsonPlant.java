@@ -222,14 +222,33 @@ public class JsonPlant implements IAgriPlant {
             return ImmutableList.of();
         }
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
-        switch (this.plant.getTexture().getRenderType()) {
-            case HASH: return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl);
-            case CROSS: return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl);
-            case PLUS: return AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl);
-            case RHOMBUS:return AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl);
-            default: return AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl);
+        final int height = this.plant.getGrowthStageHeight(index);
+        ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
+        int layer = 0;
+        while((16*layer) < height) {
+            ResourceLocation rl = layer == 0
+                    ? new ResourceLocation(this.plant.getTexture().getPlantTexture(index))
+                    : new ResourceLocation(this.plant.getTexture().getPlantTexture(this.plant.getGrowthStages() + layer - 1));
+            switch (this.plant.getTexture().getRenderType()) {
+                case HASH:
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layer));
+                    break;
+                case CROSS:
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl, layer));
+                    break;
+                case PLUS:
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl, layer));
+                    break;
+                case RHOMBUS:
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl, layer));
+                    break;
+                default:
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl, layer));
+                    break;
+            }
+            layer++;
         }
+        return listBuilder.build();
     }
 
     @Nullable

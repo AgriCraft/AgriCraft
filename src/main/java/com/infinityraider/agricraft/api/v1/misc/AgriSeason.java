@@ -6,6 +6,8 @@ import java.util.Optional;
 
 /**
  * Enum to refer to seasonality for AgriCraft plants
+ *
+ * Only used for compatibility with mods introducing seasons
  */
 public enum AgriSeason {
     SPRING("spring"),
