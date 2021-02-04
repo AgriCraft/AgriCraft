@@ -23,6 +23,8 @@ public class AgriItemRegistry {
     public final Item crop_sticks_iron;
     public final Item crop_sticks_obsidian;
 
+    public final Item seed_analyzer;
+
     public final ItemBase seed;
 
     public final ItemBase clipper;
@@ -37,7 +39,6 @@ public class AgriItemRegistry {
 
     /*
     public final ItemBase journal;
-
      */
 
     private AgriItemRegistry() {
@@ -46,6 +47,8 @@ public class AgriItemRegistry {
         this.crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
         this.crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
         this.crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
+
+        this.seed_analyzer = new ItemSeedAnalyzer();
 
         this.seed = new ItemDynamicAgriSeed();
 

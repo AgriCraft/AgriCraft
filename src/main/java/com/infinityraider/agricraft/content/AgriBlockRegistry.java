@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
+import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.infinitylib.block.BlockBase;
 
@@ -18,7 +19,7 @@ public class AgriBlockRegistry {
     public final BlockBase crop_sticks_obsidian;
 
     // analyzer
-    //public final BlockBase seed_analyzer;
+    public final BlockBase seed_analyzer;
 
     // irrigation
     /*
@@ -44,8 +45,9 @@ public class AgriBlockRegistry {
         this.crop_sticks_wood = new BlockCropSticks(CropStickVariant.WOOD);
         this.crop_sticks_iron = new BlockCropSticks(CropStickVariant.IRON);
         this.crop_sticks_obsidian = new BlockCropSticks(CropStickVariant.OBSIDIAN);
-        /*
+
         this.seed_analyzer = new BlockSeedAnalyzer();
+        /*
 
         this.tank = new BlockWaterTank();
         this.channel = new BlockWaterChannel();
