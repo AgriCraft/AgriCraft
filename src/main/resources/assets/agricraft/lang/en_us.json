@@ -9,9 +9,10 @@
   "item.agricraft.debugger": "Debugger",
 
   "item.agricraft.agri_clipper": "Plant Clipper",
+  "item.agricraft.agri_magnifying_glass": "Magnifying Glass",
   "item.agricraft.agri_rake_iron": "Iron Hand Rake",
   "item.agricraft.agri_rake_wood": "Wooden Hand Rake",
-  "item.agricraft.agri_trowel": "Hand Trowel",
+  "item.agricraft.agri_trowel": "Gardening Trowel",
 
   "item.agricraft.agri_nugget_diamond": "Diamond Shard",
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
@@ -41,6 +42,7 @@
   "agricraft.tooltip.no_weed": "No Weeds",
   "agricraft.tooltip.weed_growth": "Weed Growth",
   "agricraft.tooltip.soil": "Soil",
+  "agricraft.tooltip.magnifying_glass": "A tool to inspect the genome of crops",
   "agricraft.tooltip.clipper": "A tool to clip flowers or leaves of plants",
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",

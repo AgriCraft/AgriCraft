@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.tools.ItemClipper;
+import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.content.tools.ItemRake;
 import com.infinityraider.agricraft.content.tools.ItemTrowel;
 import com.infinityraider.agricraft.reference.Names;
@@ -25,6 +26,7 @@ public class AgriItemRegistry {
     public final ItemBase seed;
 
     public final ItemBase clipper;
+    public final ItemBase magnifying_glass;
     public final ItemBase rake_wood;
     public final ItemBase rake_iron;
     public final ItemBase trowel;
@@ -36,7 +38,6 @@ public class AgriItemRegistry {
     /*
     public final ItemBase journal;
 
-    public final ItemBase magnifying_glass;
      */
 
     private AgriItemRegistry() {
@@ -49,6 +50,7 @@ public class AgriItemRegistry {
         this.seed = new ItemDynamicAgriSeed();
 
         this.clipper = new ItemClipper();
+        this.magnifying_glass = new ItemMagnifyingGlass();
         this.rake_wood = new ItemRake(ItemRake.WOOD_LOGIC);
         this.rake_iron = new ItemRake(ItemRake.IRON_LOGIC);
         this.trowel = new ItemTrowel();
@@ -59,7 +61,6 @@ public class AgriItemRegistry {
 
         /*
         journal = new ItemJournal();
-        magnifying_glass = new ItemMagnifyingGlass();
          */
     }
 

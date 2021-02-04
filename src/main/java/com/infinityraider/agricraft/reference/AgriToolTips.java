@@ -12,22 +12,29 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class AgriToolTips {
+    public static final ITextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
+
+    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome")
+            .mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);
+
     public static final ITextComponent SEED = new TranslationTextComponent("agricraft.tooltip.seed");
     public static final ITextComponent PLANT = new TranslationTextComponent("agricraft.tooltip.plant");
-    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome").mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);
     public static final ITextComponent NO_PLANT = new TranslationTextComponent("agricraft.tooltip.no_plant");
     public static final ITextComponent GROWTH = new TranslationTextComponent("agricraft.tooltip.growth");
     public static final ITextComponent MATURE = new TranslationTextComponent("agricraft.tooltip.mature");
+
     public static final ITextComponent WEED = new TranslationTextComponent("agricraft.tooltip.weed");
     public static final ITextComponent NO_WEED = new TranslationTextComponent("agricraft.tooltip.no_weed");
     public static final ITextComponent WEED_GROWTH = new TranslationTextComponent("agricraft.tooltip.weed_growth");
+
     public static final ITextComponent FERTILE = new TranslationTextComponent("agricraft.tooltip.fertile");
     public static final ITextComponent NOT_FERTILE = new TranslationTextComponent("agricraft.tooltip.not_fertile");
+
     public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
-    public static final ITextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
+    public static final ITextComponent CLIPPER = new TranslationTextComponent("agricraft.tooltip.clipper");
+    public static final ITextComponent MAGNIFYING_GLASS = new TranslationTextComponent("agricraft.tooltip.magnifying_glass");
     public static final ITextComponent RAKE = new TranslationTextComponent("agricraft.tooltip.rake");
     public static final ITextComponent TROWEL = new TranslationTextComponent("agricraft.tooltip.trowel");
-    public static final ITextComponent CLIPPER = new TranslationTextComponent("agricraft.tooltip.clipper");
 
     public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.tooltip.trowel_weed");
     public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.tooltip.trowel_plant");

@@ -9,6 +9,7 @@ public abstract class Names {
 
     public static final class Items {
         public static final String CLIPPER = "agri_clipper";
+        public static final String MAGNIFYING_GLASS = "agri_magnifying_glass";
         public static final String NUGGET = "agri_nugget";
         public static final String RAKE_IRON = "agri_rake_iron";
         public static final String RAKE_WOOD = "agri_rake_wood";
