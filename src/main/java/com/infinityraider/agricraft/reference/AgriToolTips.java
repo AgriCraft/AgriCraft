@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.reference;
 
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -11,8 +10,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.Collection;
 
 public class AgriToolTips {
     public static final ITextComponent SEED = new TranslationTextComponent("agricraft.tooltip.seed");
@@ -28,11 +25,13 @@ public class AgriToolTips {
     public static final ITextComponent NOT_FERTILE = new TranslationTextComponent("agricraft.tooltip.not_fertile");
     public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
     public static final ITextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
+    public static final ITextComponent RAKE = new TranslationTextComponent("agricraft.tooltip.rake");
     public static final ITextComponent TROWEL = new TranslationTextComponent("agricraft.tooltip.trowel");
-    public static final Collection<ITextComponent> CLIPPER = ImmutableList.of(
-            new TranslationTextComponent("agricraft.tooltip.clipper1"),
-            new TranslationTextComponent("agricraft.tooltip.clipper2"),
-            new TranslationTextComponent("agricraft.tooltip.clipper3"));
+    public static final ITextComponent CLIPPER = new TranslationTextComponent("agricraft.tooltip.clipper");
+
+    public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.tooltip.trowel_weed");
+    public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.tooltip.trowel_plant");
+    public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.tooltip.trowel_no_plant");
 
     public static ITextComponent getSeedTooltip(AgriSeed seed) {
         return new StringTextComponent("")

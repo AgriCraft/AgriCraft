@@ -1,0 +1,16 @@
+{
+	"overrides": [
+		{
+			"predicate": {
+				"agricraft:plant": 0
+			},
+			"model": "agricraft:item/agri_trowel_empty"
+		},
+		{
+			"predicate": {
+				"agricraft:plant": 1
+			},
+			"model": "agricraft:item/agri_trowel_plant"
+		}
+	]
+}

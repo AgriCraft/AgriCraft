@@ -12,6 +12,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -439,8 +440,19 @@ public abstract class AgriCropEvent extends Event {
          * Fired right after the rake action
          */
         public static final class Post extends AgriCropEvent.Rake {
-            public Post(@Nonnull IAgriCrop crop, @Nonnull ItemStack rake, @Nullable LivingEntity entity) {
+            private final List<ItemStack> drops;
+
+            public Post(@Nonnull IAgriCrop crop, @Nonnull ItemStack rake, @Nonnull List<ItemStack> drops, @Nullable LivingEntity entity) {
                 super(crop, rake, entity);
+                this.drops = drops;
+            }
+
+            /**
+             * @return A modifiable list of all drops that will be dropped from raking
+             */
+            @Nonnull
+            public List<ItemStack> getDrops() {
+                return this.drops;
             }
         }
     }

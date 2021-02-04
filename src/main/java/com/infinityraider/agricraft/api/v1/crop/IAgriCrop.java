@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -121,4 +122,6 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
     default List<IAgriCrop> getNeighbours(Predicate<IAgriCrop> filter) {
         return this.streamNeighbours(filter).collect(Collectors.toList());
     }
+
+    void dropItem(ItemStack item);
 }

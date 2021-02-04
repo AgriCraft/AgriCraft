@@ -1,6 +1,9 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.*;
+import com.infinityraider.agricraft.content.tools.ItemClipper;
+import com.infinityraider.agricraft.content.tools.ItemRake;
+import com.infinityraider.agricraft.content.tools.ItemTrowel;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.item.Item;
@@ -21,6 +24,11 @@ public class AgriItemRegistry {
 
     public final ItemBase seed;
 
+    public final ItemBase clipper;
+    public final ItemBase rake_wood;
+    public final ItemBase rake_iron;
+    public final ItemBase trowel;
+
     public final ItemBase nugget_diamond;
     public final ItemBase nugget_emerald;
     public final ItemBase nugget_quartz;
@@ -28,23 +36,22 @@ public class AgriItemRegistry {
     /*
     public final ItemBase journal;
 
-    public final ItemBase trowel;
-
-    public final ItemBase hand_rake;
-
     public final ItemBase magnifying_glass;
-
-    public final ItemBase clipper;
      */
 
     private AgriItemRegistry() {
         this.debugger = new ItemDebugger();
 
-        crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
-        crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
-        crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
+        this.crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
+        this.crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
+        this.crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
 
         this.seed = new ItemDynamicAgriSeed();
+
+        this.clipper = new ItemClipper();
+        this.rake_wood = new ItemRake(ItemRake.WOOD_LOGIC);
+        this.rake_iron = new ItemRake(ItemRake.IRON_LOGIC);
+        this.trowel = new ItemTrowel();
 
         this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
         this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
@@ -52,10 +59,6 @@ public class AgriItemRegistry {
 
         /*
         journal = new ItemJournal();
-        trowel = new ItemTrowel();
-        debugger = new ItemDebugger();
-        hand_rake = new ItemRake();
-        clipper = new ItemClipper();
         magnifying_glass = new ItemMagnifyingGlass();
          */
     }

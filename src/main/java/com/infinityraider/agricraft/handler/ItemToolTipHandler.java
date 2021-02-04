@@ -1,10 +1,9 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
 import java.text.MessageFormat;
 import java.util.Objects;
@@ -79,17 +78,18 @@ public class ItemToolTipHandler {
     public void addTrowelTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriTrowelItem) {
-            AgriSeed seed = AgriApi.getSeedAdapterizer().valueOf(event.getItemStack()).orElse(null);
-            if (seed != null) {
-                event.getToolTip().add(AgriToolTips.getSeedTooltip(seed));
-            } else {
-                event.getToolTip().add(AgriToolTips.TROWEL);
-            }
+            event.getToolTip().add(AgriToolTips.TROWEL);
+            IAgriTrowelItem trowel = (IAgriTrowelItem) stack.getItem();
+            trowel.getGenome(stack).map(genome -> {
+                event.getToolTip().add(AgriToolTips.getPlantTooltip(genome.getPlant()));
+                trowel.getGrowthStage(stack).ifPresent(stage -> event.getToolTip().add(AgriToolTips.getGrowthTooltip(stage)));
+                return genome.getStats();
+            }).ifPresent(stats -> stats.addTooltips(text -> event.getToolTip().add(text)));
         }
     }
 
     /**
-     * Adds tooltips to items that are clippers (implementing IClipper).
+     * Adds tooltips to items that are clippers (implementing IAgriClipperItem).
      *
      * @param event
      */
@@ -98,7 +98,21 @@ public class ItemToolTipHandler {
     public void addClipperTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof IAgriClipperItem) {
-            event.getToolTip().addAll(AgriToolTips.CLIPPER);
+            event.getToolTip().add(AgriToolTips.CLIPPER);
+        }
+    }
+
+    /**
+     * Adds tooltips to items that are rakes (implementing IAgriRakeItem).
+     *
+     * @param event
+     */
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addRakeTooltip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (stack.getItem() instanceof IAgriRakeItem) {
+            event.getToolTip().add(AgriToolTips.RAKE);
         }
     }
 

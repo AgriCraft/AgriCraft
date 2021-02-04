@@ -42,6 +42,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
@@ -121,6 +122,19 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         return this.neighbours.values().stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get);
+    }
+
+    @Override
+    public void dropItem(ItemStack item) {
+        if(this.getWorld() == null || this.getWorld().isRemote) {
+            return;
+        }
+        this.getWorld().addEntity(new ItemEntity(
+                this.getWorld(),
+                this.getPos().getX(),
+                this.getPos().getY(),
+                this.getPos().getZ(),
+                item));
     }
 
     // Initialize neighbours cache
