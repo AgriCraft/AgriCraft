@@ -4,21 +4,23 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 
 import java.util.*;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
@@ -342,5 +344,56 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      */
     default boolean isPlant() {
         return true;
+    }
+
+
+
+    /* ------------------------------------------------------------------- */
+    /* Default IAllele<IAgriPlant> method implementations, do not override */
+    /* ------------------------------------------------------------------- */
+
+    @Override
+    default IAgriGene<IAgriPlant> gene() {
+        return AgriApi.getGeneRegistry().getPlantGene();
+    }
+
+    @Override
+    default IAgriPlant trait() {
+        return this;
+    }
+
+    @Override
+    default boolean isDominant(IAllele<IAgriPlant> other) {
+        // If the plants are equal, it doesn't matter which one is dominant and we can simply return true
+        if(!this.isPlant()) {
+            return false;
+        }
+        if(!other.trait().isPlant()) {
+            return true;
+        }
+        if(this.equals(other)) {
+            return true;
+        }
+        // Fetch complexity of both plants
+        int a = AgriApi.getMutationRegistry().complexity(this);
+        int b = AgriApi.getMutationRegistry().complexity(other.trait());
+        if(a == b) {
+            // Equal complexity, therefore we use an arbitrary definition for dominance, which we will base on the plant id
+            return this.getId().compareTo(other.trait().getId()) < 0;
+        }
+        // Having more difficult obtain plants be dominant will be more challenging to deal with than having them recessive
+        return a > b;
+    }
+
+    @Override
+    default CompoundNBT writeToNBT() {
+        CompoundNBT tag = new CompoundNBT();
+        tag.putString("agri_plant", this.getId());
+        return tag;
+    }
+
+    @Override
+    default ITextComponent getTooltip() {
+        return this.getPlantName();
     }
 }

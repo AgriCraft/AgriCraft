@@ -7,8 +7,6 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
-import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
@@ -17,21 +15,17 @@ import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
-import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
-import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +51,6 @@ public class JsonPlant implements IAgriPlant {
     private final List<ItemStack> seedItems;
     private final List<IJsonPlantCallback> callbacks;
     private final ResourceLocation seedModel;
-    private final ITextComponent tooltip;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
@@ -69,7 +62,6 @@ public class JsonPlant implements IAgriPlant {
         this.seedItems = initSeedItems(plant);
         this.callbacks = JsonPlantCallback.get(plant.getCallbacks());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
-        this.tooltip = new TranslationTextComponent(this.getId());
     }
 
     private List<ItemStack> initSeedItems(AgriPlant plant) {
@@ -86,16 +78,19 @@ public class JsonPlant implements IAgriPlant {
         }
     }
 
+    @Nonnull
     @Override
     public String getId() {
         return this.plant.getId();
     }
 
+    @Nonnull
     @Override
     public ITextComponent getPlantName() {
         return this.plantName;
     }
 
+    @Nonnull
     @Override
     public ITextComponent getSeedName() {
         return this.seedName;
@@ -154,6 +149,7 @@ public class JsonPlant implements IAgriPlant {
         return this.growthStages.get(this.plant.getStageAfterHarvest());
     }
 
+    @Nonnull
     @Override
     public Collection<IAgriGrowthStage> getGrowthStages() {
         return this.growthStages;
@@ -282,7 +278,7 @@ public class JsonPlant implements IAgriPlant {
         return rl == null ? ImmutableList.of() : ImmutableList.of(rl);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ResourceLocation getSeedModel() {
         return this.seedModel;
@@ -290,12 +286,12 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public boolean allowsHarvest(@Nonnull IAgriGrowthStage stage, @Nullable LivingEntity entity) {
-        return false;
+        return stage.isMature();
     }
 
     @Override
     public boolean allowsClipping(@Nonnull IAgriGrowthStage stage, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {
-        return false;
+        return stage.isMature() && this.plant.getClipProducts().getAll().size() > 0;
     }
 
     @Override
@@ -380,44 +376,5 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public int hashCode() {
         return this.getId().hashCode();
-    }
-
-    @Override
-    public IAgriGene<IAgriPlant> gene() {
-        return GeneSpecies.getInstance();
-    }
-
-    @Override
-    public IAgriPlant trait() {
-        return this;
-    }
-
-    @Override
-    public boolean isDominant(IAllele<IAgriPlant> other) {
-        // If the plants are equal, it doesn't matter which one is dominant and we can simply return true
-        if(this.equals(other)) {
-            return true;
-        }
-        // Fetch complexity of both plants
-        int a = AgriMutationRegistry.getInstance().complexity(this);
-        int b = AgriMutationRegistry.getInstance().complexity(other.trait());
-        if(a == b) {
-            // Equal complexity, therefore we use an arbitrary definition for dominance, which we will base on the plant id
-            return this.getId().compareTo(other.trait().getId()) < 0;
-        }
-        // Having more difficult obtain plants be dominant will be more challenging to deal with than having them recessive
-        return a > b;
-    }
-
-    @Override
-    public ITextComponent getTooltip() {
-        return this.tooltip;
-    }
-
-    @Override
-    public CompoundNBT writeToNBT() {
-        CompoundNBT tag = new CompoundNBT();
-        tag.putString(AgriNBT.PLANT, this.getId());
-        return tag;
     }
 }
