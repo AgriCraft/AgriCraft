@@ -210,6 +210,24 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
+    public void getAllPossibleClipProducts(@Nonnull Consumer<ItemStack> products) {
+        this.plant.getClipProducts().getAll().stream()
+                .flatMap(p -> p.convertAll(ItemStack.class).stream())
+                .forEach(products);
+    }
+
+    @Override
+    public void getClipProducts(@Nonnull Consumer<ItemStack> products, @Nonnull ItemStack clipper, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand) {
+        if(growthStage.isMature()) {
+            this.plant.getClipProducts().getRandom(rand).stream()
+                    .map(p -> p.convertSingle(ItemStack.class, rand))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .forEach(products);
+        }
+    }
+
+    @Override
     public boolean allowsCloning(IAgriGrowthStage stage) {
         return this.plant.allowsCloning();
     }
@@ -271,6 +289,16 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
+    public boolean allowsHarvest(@Nonnull IAgriGrowthStage stage, @Nullable LivingEntity entity) {
+        return false;
+    }
+
+    @Override
+    public boolean allowsClipping(@Nonnull IAgriGrowthStage stage, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {
+        return false;
+    }
+
+    @Override
     public void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
         this.callbacks.forEach(callback -> callback.onPlanted(crop, entity));
     }
@@ -293,6 +321,11 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
         this.callbacks.forEach(callback -> callback.onHarvest(crop, entity));
+    }
+
+    @Override
+    public void onClipped(@Nonnull IAgriCrop crop, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {
+        this.callbacks.forEach(callback -> callback.onClipped(crop, clipper, entity));
     }
 
     @Override

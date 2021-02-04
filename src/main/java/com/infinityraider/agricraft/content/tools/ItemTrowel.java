@@ -115,10 +115,11 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         return tag;
     }
 
+    @Nonnull
     @Override
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         World world = context.getWorld();
-        if(world.isRemote()) {
+        if (world.isRemote()) {
             return ActionResultType.PASS;
         }
         BlockPos pos = context.getPos();
@@ -128,7 +129,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                 .map(crop -> {
                     if (crop.hasWeeds()) {
                         // send message
-                        if(player != null) {
+                        if (player != null) {
                             player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, Util.DUMMY_UUID);
                         }
                     } else {
@@ -149,13 +150,12 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                                 }
                             } else {
                                 if (this.hasPlant(stack)) {
-                                    this.getGenome(stack).ifPresent(genome -> {
-                                        this.getGrowthStage(stack).ifPresent(growth -> {
-                                            this.removePlant(stack);
-                                            crop.setGenome(genome);
-                                            crop.setGrowthStage(growth);
-                                        });
-                                    });
+                                    this.getGenome(stack).ifPresent(genome ->
+                                            this.getGrowthStage(stack).ifPresent(growth -> {
+                                                this.removePlant(stack);
+                                                crop.setGenome(genome);
+                                                crop.setGrowthStage(growth);
+                                            }));
                                     MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
                                     return ActionResultType.SUCCESS;
                                 } else {

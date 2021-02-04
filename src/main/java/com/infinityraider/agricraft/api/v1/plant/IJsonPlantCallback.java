@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.api.v1.plant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,6 +59,15 @@ public interface IJsonPlantCallback {
      * @param entity the entity who harvested the plant (can be null in case it wasn't planted by an entity)
      */
     default void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
+
+    /**
+     * Callback for custom actions right after a successful clipping of this plant,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant is planted
+     * @param clipper the ItemStack holding the clipper item
+     * @param entity the entity who clipped the plant (can be null in case it wasn't clipped by an entity)
+     */
+    default void onClipped(@Nonnull IAgriCrop crop, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {}
 
     /**
      * Callback for custom actions right after crop sticks holding this plant have been broken,

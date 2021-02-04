@@ -165,6 +165,16 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
+    public void getAllPossibleClipProducts(@Nonnull Consumer<ItemStack> products) {
+        //NOPE
+    }
+
+    @Override
+    public void getClipProducts(@Nonnull Consumer<ItemStack> products, @Nonnull ItemStack clipper, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand) {
+        //NOPE
+    }
+
+    @Override
     public boolean allowsCloning(IAgriGrowthStage stage) {
         return false;
     }

@@ -74,6 +74,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
         return this.logic;
     }
 
+    @Nonnull
     @Override
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         return AgriApi.getCrop(context.getWorld(), context.getPos())

@@ -195,22 +195,47 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     void getAllPossibleProducts(@Nonnull Consumer<ItemStack> products);
 
     /**
-     * Retrieves the products that would be produced upon harvesting the given plant, with the given
-     * stat, at the given position in the given world. This method will always be called on harvest
-     * events, including any time that the containing crop is broken. As such, it is important as to
-     * check the actual passed growth value of the plant, given that the plant is not guaranteed to
-     * be mature when this method is called.
+     * Retrieves the products that would be produced upon harvesting the given plant, with the given stats.
+     * This method will always be called on harvest events, including any time that the containing crop is broken.
+     * As such, it is important as to check the actual passed growth value of the plant,
+     * given that the plant is not guaranteed to be mature when this method is called.
      *
      * Unless the seed is directly a fruit, it should not be added to the products here,
      * as AgriCraft will take care of this internally
      *
-     * @param products a consumer for collecting all the possible plant harvest products that should
-     * be dropped.
+     * @param products a consumer for collecting all the possible plant harvest products that should be dropped.
      * @param growthStage the growth stage
      * @param stats the stats associated with this instance of the plant.
      * @param rand a random for use in rng.
      */
     void getHarvestProducts(@Nonnull Consumer<ItemStack> products, @Nonnull IAgriGrowthStage growthStage, @Nonnull IAgriStatsMap stats, @Nonnull Random rand);
+
+    /**
+     * Retrieves all possible products of clipping this plant. Note, this function is to be used
+     * for informational purposes only, i.e. for display in the seed journal and JEI. As such, this
+     * method is not required as to provide the complete set of all items that this plant could
+     * actually drop on a clip event, but rather is required to list all the products that should
+     * show up in the journal. Consequently, if you wish for your plant to produce a hidden
+     * easter-egg style product, it should not be listed here!
+     *
+     * @param products a consumer for collecting all the possible clip products that should be listed.
+     */
+    void getAllPossibleClipProducts(@Nonnull Consumer<ItemStack> products);
+
+    /**
+     * Retrieves the products that would be produced upon clipping the given plant, with the given stats.
+     * This method will always be called on clip events.
+     * As such, it is important as to check the actual passed growth value of the plant,
+     * given that the plant is not guaranteed to be mature when this method is called.
+     *
+     * @param products a consumer for collecting all the possible plant clip products that should be dropped.
+     * @param clipper the ItemStack holding the clipper
+     * @param growthStage the growth stage
+     * @param stats the stats associated with this instance of the plant.
+     * @param rand a random for use in rng.
+     */
+    void getClipProducts(@Nonnull Consumer<ItemStack> products, @Nonnull ItemStack clipper, @Nonnull IAgriGrowthStage growthStage,
+                         @Nonnull IAgriStatsMap stats, @Nonnull Random rand);
 
     /**
      * Checks if this plant allows to be cloned (spreading from a single parent)
@@ -228,10 +253,21 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     /**
      * Checks if a plant can be harvested at the given growth stage
      * @param stage the growth stage
-     * @param entity the entity who wants to harvest the plant (can be null in case it wasn't planted by an entity)
+     * @param entity the entity who wants to harvest the plant (can be null in case it isn't harvested by an entity)
      * @return true if the plant can be harvested
      */
     default boolean allowsHarvest(@Nonnull IAgriGrowthStage stage, @Nullable LivingEntity entity) {
+        return stage.isMature();
+    }
+
+    /**
+     * Checks if a plant can be clipped at the given growth stage
+     * @param stage the growth stage
+     * @param clipper the ItemStack holding the clipper
+     * @param entity the entity who wants to clip the plant (can be null in case it isn't harvested by an entity)
+     * @return true if the plant can be harvested
+     */
+    default boolean allowsClipping(@Nonnull IAgriGrowthStage stage, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {
         return stage.isMature();
     }
 
@@ -271,6 +307,15 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @param entity the entity who harvested the plant (can be null in case it wasn't planted by an entity)
      */
     default void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {}
+
+    /**
+     * Callback for custom actions right after a successful clipping of this plant,
+     * does nothing by default, but can be overridden for special behaviours
+     * @param crop the crop on which this plant is planted
+     * @param clipper the ItemStack holding the clipper item
+     * @param entity the entity who clipped the plant (can be null in case it wasn't clipped by an entity)
+     */
+    default void onClipped(@Nonnull IAgriCrop crop, @Nonnull ItemStack clipper, @Nullable LivingEntity entity) {}
 
     /**
      * Callback for custom actions right after crop sticks holding this plant have been broken,

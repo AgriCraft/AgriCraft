@@ -499,18 +499,18 @@ public abstract class AgriCropEvent extends Event {
          * Fired right after the clipping action
          */
         public static final class Post extends AgriCropEvent.Clip {
-            private final ItemStack clipping;
+            private final List<ItemStack> drops;
             
-            public Post(@Nonnull IAgriCrop crop, @Nonnull ItemStack clipper, @Nullable LivingEntity entity, @Nonnull ItemStack clipping) {
+            public Post(@Nonnull IAgriCrop crop, @Nonnull ItemStack clipper, @Nonnull List<ItemStack> drops, @Nullable LivingEntity entity) {
                 super(crop, clipper, entity);
-                this.clipping = clipping;
+                this.drops = drops;
             }
 
             /**
-             * @return The clipping item obtained from clipping the crop
+             * @return A modifiable list of the drops obtained from clipping the crop
              */
-            public ItemStack getClipping() {
-                return this.clipping;
+            public List<ItemStack> getDrops() {
+                return this.drops;
             }
         }
     }

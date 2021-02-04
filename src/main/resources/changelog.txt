@@ -7,6 +7,7 @@ Changelog
 - CHANGE: The Strength stat now defines resilience with regard to growth conditions (for instance soil, light, etc)
 - CHANGE: Seed and plant stats are always visible, and no longer need analyzing
 - CHANGE: The seed analyzer and magnifying glass are now used to inspect the genomes of seeds and plants respectively
+- CHANGE: Clipper no longer allows to clone plants, but provides an alternative harvest method instead (e.g. to obtain flowers)
 - ADDED: Genomes; plants and seeds now have genomes in according with Mendelian genetics
 - ADDED: Fertility stat: this governs the probability of generating offspring (meaning participating in spreading / mutating)
 - ADDED: Resistance stat: this governs the resistance of the plant against weeds (probability of spawning weeds, and gaining preferential growth compared to weeds)
