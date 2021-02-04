@@ -36,9 +36,10 @@ public class AgriToolTips {
     public static final ITextComponent RAKE = new TranslationTextComponent("agricraft.tooltip.rake");
     public static final ITextComponent TROWEL = new TranslationTextComponent("agricraft.tooltip.trowel");
 
-    public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.tooltip.trowel_weed");
-    public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.tooltip.trowel_plant");
-    public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.tooltip.trowel_no_plant");
+    public static final ITextComponent MSG_CLIPPING_IMPOSSIBLE = new TranslationTextComponent("agricraft.message.clipping_impossible");
+    public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.message.trowel_weed");
+    public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");
+    public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.message.trowel_no_plant");
 
     public static ITextComponent getSeedTooltip(AgriSeed seed) {
         return new StringTextComponent("")

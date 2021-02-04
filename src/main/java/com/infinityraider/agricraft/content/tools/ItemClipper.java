@@ -5,12 +5,14 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,10 +39,10 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
         ItemStack stack = context.getItem();
         PlayerEntity player = context.getPlayer();
         return AgriApi.getCrop(world, pos).map(crop -> {
-            if(!crop.hasPlant()) {
-                return ActionResultType.FAIL;
-            }
-            if(!crop.getPlant().allowsClipping(crop.getGrowthStage(), stack, player)) {
+            if(!crop.hasPlant() || !crop.getPlant().allowsClipping(crop.getGrowthStage(), stack, player)) {
+                if(player != null) {
+                    player.sendMessage(AgriToolTips.MSG_CLIPPING_IMPOSSIBLE, player.getUniqueID());
+                }
                 return ActionResultType.FAIL;
             }
             if(MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Clip.Pre(crop, stack, player))) {

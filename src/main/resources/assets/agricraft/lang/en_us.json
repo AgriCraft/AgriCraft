@@ -46,9 +46,11 @@
   "agricraft.tooltip.clipper": "A tool to clip flowers or leaves of plants",
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",
-  "agricraft.tooltip.trowel_weed": "I can not reach well, I should remove the weeds first.",
-  "agricraft.tooltip.trowel_plant": "There already is a plant here.",
-  "agricraft.tooltip.trowel_no_plant": "There is nothing here to grab.",
+
+  "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
+  "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
+  "agricraft.message.trowel_plant": "There already is a plant here.",
+  "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
 
   "agricraft.plant.allium.name": "Allium",
   "agricraft.plant.allium.seed": "Allium",

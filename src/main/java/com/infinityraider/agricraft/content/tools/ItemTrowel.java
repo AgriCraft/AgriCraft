@@ -23,7 +23,6 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -130,7 +129,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                     if (crop.hasWeeds()) {
                         // send message
                         if (player != null) {
-                            player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, Util.DUMMY_UUID);
+                            player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUniqueID());
                         }
                     } else {
                         if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
@@ -138,7 +137,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                                 if (this.hasPlant(stack)) {
                                     // send message
                                     if (player != null) {
-                                        player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, Util.DUMMY_UUID);
+                                        player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, player.getUniqueID());
                                     }
                                 } else {
                                     crop.getGenome().ifPresent(genome -> {
@@ -161,7 +160,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                                 } else {
                                     // send message
                                     if (player != null) {
-                                        player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, Util.DUMMY_UUID);
+                                        player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, player.getUniqueID());
                                     }
                                 }
                             }
