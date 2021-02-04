@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.core;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
+import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemDynamicAgriSeed extends ItemBase {
+public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
 
     public static ItemStack toStack(AgriSeed seed, int amount) {
@@ -87,6 +88,7 @@ public class ItemDynamicAgriSeed extends ItemBase {
         });
     }
 
+    @Override
     public Optional<IAgriGenome> getGenome(ItemStack stack) {
         CompoundNBT tag = stack.getTag();
         if(tag == null) {
@@ -101,14 +103,17 @@ public class ItemDynamicAgriSeed extends ItemBase {
         return Optional.of(genome);
     }
 
+    @Override
     public Optional<AgriSeed> getSeed(ItemStack stack) {
         return this.getGenome(stack).map(AgriSeed::new);
     }
 
+    @Override
     public IAgriPlant getPlant(ItemStack stack) {
         return this.getGenome(stack).map(IAgriGenome::getPlant).orElse(NO_PLANT);
     }
 
+    @Override
     public Optional<IAgriStatsMap> getStats(ItemStack stack) {
         return this.getGenome(stack).map(IAgriStatProvider::getStats);
     }
