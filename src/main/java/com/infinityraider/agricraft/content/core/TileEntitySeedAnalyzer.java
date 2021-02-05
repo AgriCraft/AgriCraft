@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.core;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import mcp.MethodsReturnNonnullByDefault;
@@ -170,8 +171,27 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public void setInventorySlotContents(int index, ItemStack stack) {
         if(this.isItemValidForSlot(index, stack)) {
             switch (index) {
-                case 0: this.seed.set(stack); break;
-                case 1: this.journal.set(stack); break;
+                case 0:
+                    if(stack.getItem() instanceof IAgriSeedItem) {
+                        if (this.getSeed().isEmpty() && !this.getJournal().isEmpty()) {
+                            // should always be the case, but it's still modded minecraft
+                            if (this.getJournal().getItem() instanceof IAgriJournalItem) {
+                                // Add seed to journal if not yet discovered
+                                IAgriJournalItem journal = (IAgriJournalItem) this.getJournal().getItem();
+                                IAgriPlant plant = ((IAgriSeedItem) stack.getItem()).getPlant(stack);
+                                if(!journal.isPlantDiscovered(this.getJournal(), plant)) {
+                                    ItemStack newJournal = this.getJournal();
+                                    journal.addEntry(newJournal, plant);
+                                    this.journal.set(newJournal);
+                                }
+                            }
+                        }
+                        this.seed.set(stack);
+                    }
+                    break;
+                case 1:
+                    this.journal.set(stack);
+                    break;
             }
         }
     }
