@@ -17,49 +17,49 @@
 			"y": 270
 		}],
 		"journal=true,orientation=north,seed=false": [{
-			"model": "agricraft:block/seed_analyzer"
+			"model": "agricraft:block/seed_analyzer_journal"
 		}],
 		"journal=true,orientation=east,seed=false": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal",
 			"y": 90
 		}],
 		"journal=true,orientation=south,seed=false": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal",
 			"y": 180
 		}],
 		"journal=true,orientation=west,seed=false": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal",
 			"y": 270
 		}],
 
 		"journal=false,orientation=north,seed=true": [{
-			"model": "agricraft:block/seed_analyzer"
+			"model": "agricraft:block/seed_analyzer_seed"
 		}],
 		"journal=false,orientation=east,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_seed",
 			"y": 90
 		}],
 		"journal=false,orientation=south,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_seed",
 			"y": 180
 		}],
 		"journal=false,orientation=west,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_seed",
 			"y": 270
 		}],
 		"journal=true,orientation=north,seed=true": [{
-			"model": "agricraft:block/seed_analyzer"
+			"model": "agricraft:block/seed_analyzer_journal_seed"
 		}],
 		"journal=true,orientation=east,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal_seed",
 			"y": 90
 		}],
 		"journal=true,orientation=south,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal_seed",
 			"y": 180
 		}],
 		"journal=true,orientation=west,seed=true": [{
-			"model": "agricraft:block/seed_analyzer",
+			"model": "agricraft:block/seed_analyzer_journal_seed",
 			"y": 270
 		}]
 	}

@@ -1,0 +1,60 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"4": "agricraft:block/seed_analyzer_pane"
+	},
+	"elements": [
+		{
+			"name": "book",
+			"from": [11.5, 4, 6.5],
+			"to": [15.5, 5, 11.5],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [19, 12, 14]},
+			"faces": {
+				"north": {"uv": [11, 5, 15, 6], "texture": "#4"},
+				"east": {"uv": [11, 0, 12, 5], "rotation": 90, "texture": "#4"},
+				"south": {"uv": [11, 5, 15, 6], "texture": "#4"},
+				"west": {"uv": [11, 5, 16, 6], "texture": "#4"},
+				"up": {"uv": [11, 0, 15, 5], "texture": "#4"},
+				"down": {"uv": [11, 0, 15, 5], "texture": "#4"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.75, 0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.75, 0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [22.5, 135, -13],
+			"translation": [0.5, 3.5, -0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [22.5, 135, -13],
+			"translation": [0.5, 3.5, -0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [45, 135, 0],
+			"translation": [-0.25, 2, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"head": {
+			"translation": [0, 11, 0]
+		},
+		"fixed": {
+			"rotation": [-30, 0, 0],
+			"translation": [0, 2.5, -3.5]
+		}
+	}
+}

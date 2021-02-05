@@ -1,0 +1,49 @@
+{
+	"loader":"forge:composite",
+	"parts": {
+		"analyzer": {
+			"parent": "agricraft:block/seed_analyzer"
+		},
+		"journal": {
+			"parent": "agricraft:block/seed_analyzer_book"
+		}
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.75, 0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.75, 0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [22.5, 135, -13],
+			"translation": [0.5, 3.5, -0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [22.5, 135, -13],
+			"translation": [0.5, 3.5, -0.5],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [45, 135, 0],
+			"translation": [-0.25, 2, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"head": {
+			"translation": [0, 11, 0]
+		},
+		"fixed": {
+			"rotation": [-30, 0, 0],
+			"translation": [0, 2.5, -3.5]
+		}
+	}
+}
