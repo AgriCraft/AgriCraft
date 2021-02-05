@@ -146,6 +146,9 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         if (world.isRemote()) {
             return ActionResultType.PASS;
         }
+        if(hand == Hand.OFF_HAND) {
+            return ActionResultType.PASS;
+        }
         TileEntity tile = world.getTileEntity(pos);
         if(!(tile instanceof TileEntitySeedAnalyzer)) {
             return ActionResultType.FAIL;
@@ -153,24 +156,23 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
         ItemStack heldItem = player.getHeldItem(hand);
         // Player is sneaking: insertion / extraction logic
-        boolean sneak = player.isSneaking();
         if(player.isSneaking()) {
             // Try extracting the seed
             if(analyzer.hasSeed()) {
                 this.extractSeed(analyzer, player);
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
             // Try inserting a seed
             if(heldItem.getItem() instanceof IAgriSeedItem) {
                 player.getHeldItem(hand).setCount(analyzer.insertSeed(heldItem).getCount());
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
             // Try extracting the journal
             if(analyzer.hasJournal()) {
                 // Only allow extraction of journal with empty hand
                 if(heldItem.isEmpty()) {
                     this.extractJournal(analyzer, player);
-                    return ActionResultType.SUCCESS;
+                    return ActionResultType.CONSUME;
                 }
                 return ActionResultType.FAIL;
             }
@@ -179,7 +181,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                 if (analyzer.insertJournal(heldItem).isEmpty()) {
                     heldItem.shrink(1);
                 }
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
             return ActionResultType.FAIL;
         } else {
