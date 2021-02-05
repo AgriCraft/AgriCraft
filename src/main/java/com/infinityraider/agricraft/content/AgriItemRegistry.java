@@ -24,6 +24,7 @@ public class AgriItemRegistry {
     public final Item crop_sticks_obsidian;
 
     public final Item seed_analyzer;
+    public final ItemBase journal;
 
     public final ItemBase seed;
 
@@ -37,10 +38,6 @@ public class AgriItemRegistry {
     public final ItemBase nugget_emerald;
     public final ItemBase nugget_quartz;
 
-    /*
-    public final ItemBase journal;
-     */
-
     private AgriItemRegistry() {
         this.debugger = new ItemDebugger();
 
@@ -49,6 +46,7 @@ public class AgriItemRegistry {
         this.crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
 
         this.seed_analyzer = new ItemSeedAnalyzer();
+        this.journal = new ItemJournal();
 
         this.seed = new ItemDynamicAgriSeed();
 
@@ -61,10 +59,6 @@ public class AgriItemRegistry {
         this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
         this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
         this.nugget_quartz = new ItemAgriNugget(Names.Nuggets.QUARTZ);
-
-        /*
-        journal = new ItemJournal();
-         */
     }
 
 }
