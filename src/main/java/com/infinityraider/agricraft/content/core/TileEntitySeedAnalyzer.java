@@ -48,6 +48,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return this.seed.get();
     }
 
+    protected void setSeed(ItemStack seed) {
+        this.seed.set(seed);
+        if(this.getWorld() != null) {
+            this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.SEED.apply(this.getBlockState(), !seed.isEmpty()));
+        }
+    }
+
     @Nonnull
     public boolean canInsertSeed(ItemStack seed) {
         return this.isItemValidForSlot(SLOT_SEED, seed);
@@ -65,6 +72,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     public boolean hasJournal() {
         return !this.getJournal().isEmpty();
+    }
+
+    protected void setJournal(ItemStack journal) {
+        this.journal.set(journal);
+        if(this.getWorld() != null) {
+            this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()));
+        }
     }
 
     @Nonnull
@@ -175,14 +189,14 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                     stack.setCount(count);
                     ItemStack seed = this.getSeed();
                     seed.setCount(seed.getCount() - count);
-                    this.seed.set(seed);
+                    this.setSeed(seed);
                 } else {
-                    this.seed.set(ItemStack.EMPTY);
+                    this.setSeed(ItemStack.EMPTY);
                 }
                 return stack;
             case SLOT_JOURNAL:
                 stack = this.getJournal().copy();
-                this.journal.set(ItemStack.EMPTY);
+                this.setJournal(ItemStack.EMPTY);
                 return stack;
             default:
                 return stack;
@@ -195,11 +209,11 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         switch (index) {
             case SLOT_SEED:
                 stack = this.getSeed().copy();
-                this.seed.set(ItemStack.EMPTY);
+                this.setSeed(ItemStack.EMPTY);
                 return stack;
             case SLOT_JOURNAL:
                 stack = this.getJournal().copy();
-                this.journal.set(ItemStack.EMPTY);
+                this.setJournal(ItemStack.EMPTY);
                 return stack;
             default:
                 return stack;
@@ -221,15 +235,15 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                                 if(!journal.isPlantDiscovered(this.getJournal(), plant)) {
                                     ItemStack newJournal = this.getJournal();
                                     journal.addEntry(newJournal, plant);
-                                    this.journal.set(newJournal);
+                                    this.setJournal(newJournal);
                                 }
                             }
                         }
-                        this.seed.set(stack);
+                        this.setSeed(stack);
                     }
                     break;
                 case SLOT_JOURNAL:
-                    this.journal.set(stack);
+                    this.setJournal(stack);
                     break;
             }
         }
@@ -247,8 +261,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public void clear() {
-        this.seed.set(ItemStack.EMPTY);
-        this.journal.set(ItemStack.EMPTY);
+        this.setSeed(ItemStack.EMPTY);
+        this.setJournal(ItemStack.EMPTY);
     }
 
     @Override
