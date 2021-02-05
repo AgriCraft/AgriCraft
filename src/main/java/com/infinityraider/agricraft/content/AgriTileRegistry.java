@@ -23,6 +23,7 @@ public class AgriTileRegistry {
                 .build();
         this.seed_analyzer = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
                 .addBlock(AgriCraft.instance.getModBlockRegistry().seed_analyzer)
+                .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
                 .build();
     }
 }

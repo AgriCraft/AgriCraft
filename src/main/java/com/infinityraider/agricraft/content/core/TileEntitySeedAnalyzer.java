@@ -4,6 +4,8 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
+import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import mcp.MethodsReturnNonnullByDefault;
@@ -14,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -279,5 +283,17 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             return this.capability.cast();
         }
         return super.getCapability(capability, facing);
+    }
+
+    public static RenderFactory createRenderFactory() {
+        return new RenderFactory();
+    }
+
+    private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntitySeedAnalyzer> {
+        @Nullable
+        @OnlyIn(Dist.CLIENT)
+        public TileEntitySeedAnalyzerSeedRenderer createRenderer() {
+            return new TileEntitySeedAnalyzerSeedRenderer();
+        }
     }
 }
