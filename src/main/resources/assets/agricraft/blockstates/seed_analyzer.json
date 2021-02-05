@@ -2,68 +2,64 @@
 	"forge_marker": 1,
 	"variants": {
 		"journal=false,orientation=north,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
-			"y": 0
+			"model": "agricraft:block/seed_analyzer"
 		}],
 		"journal=false,orientation=east,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 90
 		}],
 		"journal=false,orientation=south,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 180
 		}],
 		"journal=false,orientation=west,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 270
 		}],
 		"journal=true,orientation=north,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
-			"y": 0
+			"model": "agricraft:block/seed_analyzer"
 		}],
 		"journal=true,orientation=east,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 90
 		}],
 		"journal=true,orientation=south,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 180
 		}],
 		"journal=true,orientation=west,seed=false": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 270
 		}],
 
 		"journal=false,orientation=north,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
-			"y": 0
+			"model": "agricraft:block/seed_analyzer"
 		}],
 		"journal=false,orientation=east,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 90
 		}],
 		"journal=false,orientation=south,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 180
 		}],
 		"journal=false,orientation=west,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 270
 		}],
 		"journal=true,orientation=north,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
-			"y": 0
+			"model": "agricraft:block/seed_analyzer"
 		}],
 		"journal=true,orientation=east,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 90
 		}],
 		"journal=true,orientation=south,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 180
 		}],
 		"journal=true,orientation=west,seed=true": [{
-			"model": "agricraft/block:seed_analyzer",
+			"model": "agricraft:block/seed_analyzer",
 			"y": 270
 		}]
 	}

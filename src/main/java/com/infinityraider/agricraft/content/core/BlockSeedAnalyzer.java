@@ -8,9 +8,12 @@ import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.BiFunction;
 
@@ -49,5 +52,11 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     @Override
     public BiFunction<BlockState, IBlockReader, TileEntitySeedAnalyzer> getTileEntityFactory() {
         return TILE_FACTORY;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.getCutout();
     }
 }
