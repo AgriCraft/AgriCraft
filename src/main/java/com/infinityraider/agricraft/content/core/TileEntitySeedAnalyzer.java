@@ -64,12 +64,43 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public boolean canInsertItem(int index, ItemStack stack, @Nullable Direction direction) {
-        return false;
+        switch (index) {
+            case 0:
+                if(this.getSeed().isEmpty()) {
+                    return stack.isEmpty() || stack.getItem() instanceof IAgriSeedItem;
+                } else {
+                    if(ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed())) {
+                        return this.getSeed().getCount() + stack.getCount() <= stack.getMaxStackSize();
+                    } else {
+                        return false;
+                    }
+                }
+            case 1:
+                if(this.getJournal().isEmpty()) {
+                    return stack.isEmpty() || stack.getItem() instanceof IAgriJournalItem;
+                } else {
+                    return stack.isEmpty();
+                }
+            default: return false;
+        }
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
+        if(stack.isEmpty()) {
+            // Doesn't make sense extracting empty stacks
+            return false;
+        }
+        switch(index) {
+            case 0:
+                if(this.getSeed().isEmpty() || this.getSeed().getCount() < stack.getCount()) {
+                    return false;
+                }
+                return ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed());
+            case 1:
+                // Do not allow automated extraction of the journal
+            default: return false;
+        }
     }
 
     @Override
@@ -152,11 +183,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        switch (index) {
-            case 0: return stack.isEmpty() || stack.getItem() instanceof IAgriSeedItem;
-            case 1: return stack.isEmpty() || stack.getItem() instanceof IAgriJournalItem;
-            default: return false;
-        }
+        return this.canInsertItem(index, stack, null);
     }
 
     @Override
