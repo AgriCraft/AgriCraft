@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundNBT;
 import javax.annotation.Nonnull;
 
 public class TileEntitySeedAnalyzer extends TileEntityBase {
+
+
     public TileEntitySeedAnalyzer() {
         super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
     }

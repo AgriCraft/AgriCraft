@@ -5,6 +5,7 @@
   "block.agricraft.crop_sticks_wood": "Crop Sticks",
   "block.agricraft.crop_sticks_iron": "Iron Crop Sticks",
   "block.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
+  "block.agricraft.seed_analyzer": "Seed Analyzer",
 
   "item.agricraft.debugger": "Debugger",
 
@@ -53,7 +54,7 @@
   "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
 
   "agricraft.plant.allium.name": "Allium",
-  "agricraft.plant.allium.seed": "Allium",
+  "agricraft.plant.allium.seed": "Allium Seeds",
   "agricraft.plant.allium.desc": "From the family of plants including the garlic, onion, and chive this plant produces a beautiful umbel consisting of many small purple blooms.",
 
   "agricraft.plant.beet_root.name": "Beet Root",
