@@ -7,9 +7,12 @@ import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,5 +96,10 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             tag.put(AgriNBT.ENTRIES, new ListNBT());
         }
         return tag;
+    }
+
+    @Override
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+        return true;
     }
 }

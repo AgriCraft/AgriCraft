@@ -16,11 +16,14 @@ import com.infinityraider.agricraft.render.items.AgriSeedRenderer;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -116,6 +119,11 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     @Override
     public Optional<IAgriStatsMap> getStats(ItemStack stack) {
         return this.getGenome(stack).map(IAgriStatProvider::getStats);
+    }
+
+    @Override
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+        return true;
     }
 
     @Override
