@@ -24,12 +24,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, IInventoryItemHandler {
+    public static final int SLOT_SEED = 0;
+    public static final int SLOT_JOURNAL = 1;
+    private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
 
     private final AutoSyncedField<ItemStack> seed;
     private final AutoSyncedField<ItemStack> journal;
     private final LazyOptional<TileEntitySeedAnalyzer> capability;
-
-    private static final int[] SLOTS = new int[]{0,1};
 
     public TileEntitySeedAnalyzer() {
         super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
@@ -38,14 +39,52 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         this.capability = LazyOptional.of(() -> this);
     }
 
+    public boolean hasSeed() {
+        return !this.getSeed().isEmpty();
+    }
+
     @Nonnull
     public ItemStack getSeed() {
         return this.seed.get();
     }
 
     @Nonnull
+    public boolean canInsertSeed(ItemStack seed) {
+        return this.isItemValidForSlot(SLOT_SEED, seed);
+    }
+
+    @Nonnull
+    public ItemStack insertSeed(ItemStack seed) {
+        return this.insertItem(SLOT_SEED, seed, false);
+    }
+
+    @Nonnull
+    public ItemStack extractSeed() {
+        return this.removeStackFromSlot(SLOT_SEED);
+    }
+
+    public boolean hasJournal() {
+        return !this.getJournal().isEmpty();
+    }
+
+    @Nonnull
     public ItemStack getJournal() {
         return this.journal.get();
+    }
+
+    @Nonnull
+    public boolean canInsertJournal(ItemStack journal) {
+        return this.isItemValidForSlot(SLOT_JOURNAL, journal);
+    }
+
+    @Nonnull
+    public ItemStack insertJournal(ItemStack journal) {
+        return this.insertItem(SLOT_JOURNAL, journal, false);
+    }
+
+    @Nonnull
+    public ItemStack extractJournal() {
+        return this.removeStackFromSlot(SLOT_JOURNAL);
     }
 
     @Override
@@ -66,7 +105,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     @Override
     public boolean canInsertItem(int index, ItemStack stack, @Nullable Direction direction) {
         switch (index) {
-            case 0:
+            case SLOT_SEED:
                 if(this.getSeed().isEmpty()) {
                     return stack.isEmpty() || stack.getItem() instanceof IAgriSeedItem;
                 } else {
@@ -76,7 +115,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                         return false;
                     }
                 }
-            case 1:
+            case SLOT_JOURNAL:
                 if(this.getJournal().isEmpty()) {
                     return stack.isEmpty() || stack.getItem() instanceof IAgriJournalItem;
                 } else {
@@ -93,12 +132,12 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             return false;
         }
         switch(index) {
-            case 0:
+            case SLOT_SEED:
                 if(this.getSeed().isEmpty() || this.getSeed().getCount() < stack.getCount()) {
                     return false;
                 }
                 return ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed());
-            case 1:
+            case SLOT_JOURNAL:
                 // Do not allow automated extraction of the journal
             default: return false;
         }
@@ -106,7 +145,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public int getSizeInventory() {
-        return 2;
+        return SLOTS.length;
     }
 
     @Override
@@ -117,8 +156,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     @Override
     public ItemStack getStackInSlot(int index) {
         switch (index) {
-            case 0: return this.getSeed();
-            case 1: return this.getJournal();
+            case SLOT_SEED: return this.getSeed();
+            case SLOT_JOURNAL: return this.getJournal();
             default: return ItemStack.EMPTY;
         }
     }
@@ -130,7 +169,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             return stack;
         }
         switch (index) {
-            case 0:
+            case SLOT_SEED:
                 stack = this.getSeed().copy();
                 if(stack.getCount() > count) {
                     stack.setCount(count);
@@ -141,7 +180,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                     this.seed.set(ItemStack.EMPTY);
                 }
                 return stack;
-            case 1:
+            case SLOT_JOURNAL:
                 stack = this.getJournal().copy();
                 this.journal.set(ItemStack.EMPTY);
                 return stack;
@@ -154,11 +193,11 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = ItemStack.EMPTY;
         switch (index) {
-            case 0:
+            case SLOT_SEED:
                 stack = this.getSeed().copy();
                 this.seed.set(ItemStack.EMPTY);
                 return stack;
-            case 1:
+            case SLOT_JOURNAL:
                 stack = this.getJournal().copy();
                 this.journal.set(ItemStack.EMPTY);
                 return stack;
@@ -171,7 +210,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public void setInventorySlotContents(int index, ItemStack stack) {
         if(this.isItemValidForSlot(index, stack)) {
             switch (index) {
-                case 0:
+                case SLOT_SEED:
                     if(stack.getItem() instanceof IAgriSeedItem) {
                         if (this.getSeed().isEmpty() && !this.getJournal().isEmpty()) {
                             // should always be the case, but it's still modded minecraft
@@ -189,7 +228,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                         this.seed.set(stack);
                     }
                     break;
-                case 1:
+                case SLOT_JOURNAL:
                     this.journal.set(stack);
                     break;
             }

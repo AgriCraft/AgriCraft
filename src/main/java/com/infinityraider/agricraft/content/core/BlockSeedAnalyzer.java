@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -12,14 +13,21 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -116,7 +124,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     @SuppressWarnings("deprecation")
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable() && AgriApi.getSoilRegistry().contains(world.getBlockState(pos.down()));
+        return current.getMaterial().isReplaceable();
     }
 
     @Override
@@ -124,9 +132,81 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         BlockState state = this.getDefaultState();
         if(state.isValidPosition(context.getWorld(), context.getPos())) {
-            return this.waterlog(state, context.getWorld(), context.getPos());
+            return ORIENTATION.apply(
+                    this.waterlog(state, context.getWorld(), context.getPos()),
+                    context.getPlacementHorizontalFacing().getOpposite());
         }
         return null;
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if (world.isRemote()) {
+            return ActionResultType.PASS;
+        }
+        TileEntity tile = world.getTileEntity(pos);
+        if(!(tile instanceof TileEntitySeedAnalyzer)) {
+            return ActionResultType.FAIL;
+        }
+        TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
+        ItemStack heldItem = player.getHeldItem(hand);
+        // Player is sneaking: insertion / extraction logic
+        if(player.isSneaking()) {
+            // Try extracting the seed
+            if(analyzer.hasSeed()) {
+                this.extractSeed(analyzer, player);
+                return ActionResultType.SUCCESS;
+            }
+            // Try inserting a seed
+            if(heldItem.getItem() instanceof IAgriSeedItem) {
+                player.getHeldItem(hand).setCount(analyzer.insertSeed(heldItem).getCount());
+                return ActionResultType.SUCCESS;
+            }
+            // Try extracting the journal
+            if(analyzer.hasJournal()) {
+                // Only allow extraction of journal with empty hand
+                if(heldItem.isEmpty()) {
+                    this.extractJournal(analyzer, player);
+                    return ActionResultType.SUCCESS;
+                }
+                return ActionResultType.FAIL;
+            }
+            // Try inserting a journal
+            if(heldItem.getItem() instanceof IAgriJournalItem) {
+                if (analyzer.insertJournal(heldItem).isEmpty()) {
+                    heldItem.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
+            }
+            return ActionResultType.FAIL;
+        } else {
+            // TODO: genome inspection logic
+        }
+        return ActionResultType.PASS;
+    }
+
+    public void extractSeed(TileEntitySeedAnalyzer analyzer, @Nullable PlayerEntity player) {
+        if(analyzer.hasSeed()) {
+            ItemStack seed = analyzer.extractSeed();
+            if(player == null || !player.addItemStackToInventory(seed)) {
+                if(analyzer.getWorld() != null) {
+                    this.spawnItem(analyzer.getWorld(), analyzer.getPos(), seed);
+                }
+            }
+        }
+    }
+
+    public void extractJournal(TileEntitySeedAnalyzer analyzer, @Nullable PlayerEntity player) {
+        if(analyzer.hasJournal()) {
+            ItemStack journal = analyzer.extractJournal();
+            if(player == null || !player.addItemStackToInventory(journal)) {
+                if(analyzer.getWorld() != null) {
+                    this.spawnItem(analyzer.getWorld(), analyzer.getPos(), journal);
+                }
+            }
+        }
     }
 
     @Override

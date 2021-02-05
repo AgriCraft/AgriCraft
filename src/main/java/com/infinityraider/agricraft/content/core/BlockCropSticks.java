@@ -266,7 +266,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (world.isRemote()) {
-            return ActionResultType.SUCCESS;
+            return ActionResultType.PASS;
         }
         Optional<IAgriCrop> optional = this.getCrop(world, pos);
         if (!optional.isPresent()) {
