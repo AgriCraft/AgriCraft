@@ -24,7 +24,7 @@ public interface IAgriJournalItem {
      * @param plant the plant to check for in the journal.
      * @return if the seed is discovered in the journal.
      */
-    boolean isSeedDiscovered(@Nonnull ItemStack journal, @Nullable IAgriPlant plant);
+    boolean isPlantDiscovered(@Nonnull ItemStack journal, @Nullable IAgriPlant plant);
 
     /**
      * This adds an entry the journal, for example when a seed is analyzed in the seed analyzer this
