@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.network.MessageSeedAnalyzerUpdate;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
@@ -58,6 +59,10 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         Item prevSeed = this.getSeed().getItem();
         this.seed.set(seed);
         if(this.getWorld() != null) {
+            // Tell clients that are watching this that the seed has changed
+            new MessageSeedAnalyzerUpdate(this).sendToAllAround(
+                    this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 16);
+            // Update the block state
             BlockState state = this.getBlockState();
             if(hadSeed != BlockSeedAnalyzer.SEED.fetch(state)) {
                 this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.SEED.apply(state, !seed.isEmpty()));

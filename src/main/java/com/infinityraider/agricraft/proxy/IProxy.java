@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -76,4 +77,6 @@ public interface IProxy extends IProxyBase<Config> {
         ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
          */
     }
+
+    default void updateSeedAnalyzerOverlay(BlockPos pos) {}
 }

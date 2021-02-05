@@ -3,9 +3,11 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
+import com.infinityraider.agricraft.render.overlay.SeedAnalyzerOverlayRenderer;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -24,6 +26,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
+        this.registerEventHandler(SeedAnalyzerOverlayRenderer.getInstance());
     }
 
     @Override
@@ -41,5 +44,10 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public String getLocale() {
         return Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
+    }
+
+    @Override
+    public void updateSeedAnalyzerOverlay(BlockPos pos) {
+        SeedAnalyzerOverlayRenderer.getInstance().onSeedAnalyzerUpdate(pos);
     }
 }
