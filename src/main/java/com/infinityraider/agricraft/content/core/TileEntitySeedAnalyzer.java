@@ -10,6 +10,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -49,9 +50,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     protected void setSeed(ItemStack seed) {
+        boolean hadSeed = this.hasSeed();
+        Item prevSeed = this.getSeed().getItem();
         this.seed.set(seed);
         if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.SEED.apply(this.getBlockState(), !seed.isEmpty()));
+            BlockState state = this.getBlockState();
+            if(hadSeed != BlockSeedAnalyzer.SEED.fetch(state)) {
+                this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.SEED.apply(state, !seed.isEmpty()));
+            } else if(prevSeed != this.getSeed().getItem()) {
+                this.forceRenderUpdate();
+            }
         }
     }
 
