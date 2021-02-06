@@ -49,7 +49,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Override
     public Set<IAllele<IAgriPlant>> allAlleles() {
-        return AgriApi.getPlantRegistry().all().stream().map(plant -> (IAllele<IAgriPlant>) plant).collect(Collectors.toSet());
+        return AgriApi.getPlantRegistry().stream().map(plant -> (IAllele<IAgriPlant>) plant).collect(Collectors.toSet());
     }
 
     @Override

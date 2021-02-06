@@ -21,7 +21,7 @@ public class DebugModeCheckSoil extends DebugMode {
 
     @Override
     public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
-        String type = AgriApi.getSoilRegistry().all().stream()
+        String type = AgriApi.getSoilRegistry().stream()
                 .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
                 .map(IAgriSoil::getId)
                 .findFirst()

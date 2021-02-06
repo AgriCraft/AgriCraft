@@ -70,6 +70,11 @@ public interface IAgriRegistry<T extends IAgriRegisterable<T>> {
     Collection<T> all();
 
     /**
+     * @return The amount of elements currently registered
+     */
+    int count();
+
+    /**
      * Fetches an unmodifiable view of all the ids registered in the registry.
      *
      * @return an unmodifiable view of all the ids registered in the registry.

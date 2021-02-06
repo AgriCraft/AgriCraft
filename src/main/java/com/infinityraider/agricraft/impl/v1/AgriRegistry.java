@@ -67,6 +67,11 @@ public abstract class AgriRegistry<T extends IAgriRegisterable<T>> implements IA
     }
 
     @Override
+    public int count() {
+        return this.registry.size();
+    }
+
+    @Override
     public Set<String> ids() {
         return Collections.unmodifiableSet(this.registry.keySet());
     }

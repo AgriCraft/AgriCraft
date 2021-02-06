@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
-import com.infinityraider.agricraft.render.overlay.SeedAnalyzerOverlayRenderer;
+import com.infinityraider.agricraft.handler.SeedAnalyzerGenomeOverlayHandler;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -26,7 +26,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
-        this.registerEventHandler(SeedAnalyzerOverlayRenderer.getInstance());
+        this.registerEventHandler(SeedAnalyzerGenomeOverlayHandler.getInstance());
     }
 
     @Override
@@ -48,6 +48,6 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
 
     @Override
     public void updateSeedAnalyzerOverlay(BlockPos pos) {
-        SeedAnalyzerOverlayRenderer.getInstance().onSeedAnalyzerUpdate(pos);
+        SeedAnalyzerGenomeOverlayHandler.getInstance().onSeedAnalyzerUpdate(pos);
     }
 }

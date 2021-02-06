@@ -34,7 +34,7 @@ public interface IAgriStatsMap {
      * @return the average of all values of all stats
      */
     default double getAverage() {
-        return (this.getSum() + 0.0) / AgriApi.getStatRegistry().all().size();
+        return (this.getSum() + 0.0) / AgriApi.getStatRegistry().count();
     }
 
     /**
