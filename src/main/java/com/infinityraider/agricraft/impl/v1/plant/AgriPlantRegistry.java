@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 
@@ -9,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
+public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> implements IAgriPlantRegistry {
     public static final IAgriPlant NO_PLANT = NoPlant.getInstance();
 
     private static final AgriPlantRegistry INSTANCE = new AgriPlantRegistry();
@@ -54,5 +55,10 @@ public class AgriPlantRegistry extends AgriRegistry<IAgriPlant> {
     @Override
     protected AgriRegistryEvent<IAgriPlant> createEvent(IAgriPlant element) {
         return new AgriRegistryEvent.Plant(this, element);
+    }
+
+    @Override
+    public IAgriPlant getNoPlant() {
+        return NO_PLANT;
     }
 }

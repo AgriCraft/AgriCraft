@@ -8,12 +8,9 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
+import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -39,13 +36,13 @@ public interface IAgriApiConnector {
     IAgriConfig connectAgriConfig();
 
     @Nonnull
-    IAgriRegistry<IAgriPlant> connectPlantRegistry();
+    IAgriPlantRegistry connectPlantRegistry();
 
     @Nonnull
-    IAgriRegistry<IAgriGrowthStage> connectGrowthStageRegistry();
+    IAgriGrowthRegistry connectGrowthStageRegistry();
 
     @Nonnull
-    IAgriRegistry<IAgriWeed> connectWeedRegistry();
+    IAgriWeedRegistry connectWeedRegistry();
 
     @Nonnull
     IAgriMutationRegistry connectMutationRegistry();

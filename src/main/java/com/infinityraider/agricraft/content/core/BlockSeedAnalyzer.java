@@ -143,9 +143,6 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (world.isRemote()) {
-            return ActionResultType.PASS;
-        }
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;
         }
@@ -157,6 +154,10 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         ItemStack heldItem = player.getHeldItem(hand);
         // Player is sneaking: insertion / extraction logic
         if(player.isSneaking()) {
+            // No sneak-action on the server
+            if (world.isRemote()) {
+                return ActionResultType.PASS;
+            }
             // Try extracting the seed
             if(analyzer.hasSeed()) {
                 this.extractSeed(analyzer, player);
@@ -185,7 +186,11 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
             }
             return ActionResultType.FAIL;
         } else {
-            // TODO: genome inspection logic
+            // On the client, inspect the genome
+            if(world.isRemote()) {
+                analyzer.setObserving(true);
+                return ActionResultType.CONSUME;
+            }
         }
         return ActionResultType.PASS;
     }

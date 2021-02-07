@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrier;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.network.MessageSeedAnalyzerUpdate;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
@@ -26,6 +27,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -37,6 +39,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     private final AutoSyncedField<ItemStack> seed;
     private final AutoSyncedField<ItemStack> journal;
     private final LazyOptional<TileEntitySeedAnalyzer> capability;
+
+    private boolean observing;
 
     public TileEntitySeedAnalyzer() {
         super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
@@ -59,6 +63,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         Item prevSeed = this.getSeed().getItem();
         this.seed.set(seed);
         if(this.getWorld() != null) {
+            // Add the seed to the journal
+            addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal);
             // Tell clients that are watching this that the seed has changed
             new MessageSeedAnalyzerUpdate(this).sendToAllAround(
                     this.getWorld(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 16);
@@ -92,6 +98,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     protected void setJournal(ItemStack journal) {
+        // Add the current seed to the journal
+        journal = addSeedToJournal(this.getSeed(), journal).orElse(journal);
         this.journal.set(journal);
         if(this.getWorld() != null) {
             this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()));
@@ -118,6 +126,15 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return this.removeStackFromSlot(SLOT_JOURNAL);
     }
 
+    public boolean isBeingObserved() {
+        return this.observing;
+    }
+
+    public void setObserving(boolean value) {
+        this.observing = value;
+        //TODO: handler logic
+    }
+
     @Override
     protected void writeTileNBT(@Nonnull CompoundNBT tag) {
         // NOOP (everything is handled by auto synced fields)
@@ -138,7 +155,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         switch (index) {
             case SLOT_SEED:
                 if(this.getSeed().isEmpty()) {
-                    return stack.isEmpty() || stack.getItem() instanceof IAgriSeedItem;
+                    return stack.isEmpty() || stack.getItem() instanceof IAgriGeneCarrierItem;
                 } else {
                     if(ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed())) {
                         return this.getSeed().getCount() + stack.getCount() <= stack.getMaxStackSize();
@@ -242,22 +259,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         if(this.isItemValidForSlot(index, stack)) {
             switch (index) {
                 case SLOT_SEED:
-                    if(stack.getItem() instanceof IAgriSeedItem) {
-                        if (this.getSeed().isEmpty() && !this.getJournal().isEmpty()) {
-                            // should always be the case, but it's still modded minecraft
-                            if (this.getJournal().getItem() instanceof IAgriJournalItem) {
-                                // Add seed to journal if not yet discovered
-                                IAgriJournalItem journal = (IAgriJournalItem) this.getJournal().getItem();
-                                IAgriPlant plant = ((IAgriSeedItem) stack.getItem()).getPlant(stack);
-                                if(!journal.isPlantDiscovered(this.getJournal(), plant)) {
-                                    ItemStack newJournal = this.getJournal();
-                                    journal.addEntry(newJournal, plant);
-                                    this.setJournal(newJournal);
-                                }
-                            }
-                        }
-                        this.setSeed(stack);
-                    }
+                    this.setSeed(stack);
                     break;
                 case SLOT_JOURNAL:
                     this.setJournal(stack);
@@ -288,6 +290,24 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             return this.capability.cast();
         }
         return super.getCapability(capability, facing);
+    }
+
+    public static Optional<ItemStack> addSeedToJournal(ItemStack seed, ItemStack journal) {
+        // Check if the items are a seed and a journal respectively
+        if(!seed.isEmpty() && !journal.isEmpty()
+                && seed.getItem() instanceof IAgriGeneCarrier
+                && journal.getItem() instanceof IAgriJournalItem) {
+            // Fetch plant from seed
+            IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
+            IAgriPlant plant = ((IAgriGeneCarrierItem) seed.getItem()).getPlant(seed);
+            // If the plant is not yet discovered, add it to the journal
+            if (!journalItem.isPlantDiscovered(journal, plant)) {
+                ItemStack newJournal = journal.copy();
+                journalItem.addEntry(newJournal, plant);
+                return Optional.of(newJournal);
+            }
+        }
+        return Optional.empty();
     }
 
     public static RenderFactory createRenderFactory() {

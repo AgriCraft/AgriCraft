@@ -8,12 +8,9 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
+import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -47,19 +44,19 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriRegistry<IAgriPlant> connectPlantRegistry() {
+    public IAgriPlantRegistry connectPlantRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Nonnull
     @Override
-    public IAgriRegistry<IAgriGrowthStage> connectGrowthStageRegistry() {
+    public IAgriGrowthRegistry connectGrowthStageRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Nonnull
     @Override
-    public IAgriRegistry<IAgriWeed> connectWeedRegistry() {
+    public IAgriWeedRegistry connectWeedRegistry() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

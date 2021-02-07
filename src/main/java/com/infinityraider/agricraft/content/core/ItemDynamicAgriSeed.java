@@ -6,8 +6,6 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
-import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
@@ -104,21 +102,6 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             return Optional.empty();
         }
         return Optional.of(genome);
-    }
-
-    @Override
-    public Optional<AgriSeed> getSeed(ItemStack stack) {
-        return this.getGenome(stack).map(AgriSeed::new);
-    }
-
-    @Override
-    public IAgriPlant getPlant(ItemStack stack) {
-        return this.getGenome(stack).map(IAgriGenome::getPlant).orElse(NO_PLANT);
-    }
-
-    @Override
-    public Optional<IAgriStatsMap> getStats(ItemStack stack) {
-        return this.getGenome(stack).map(IAgriStatProvider::getStats);
     }
 
     @Override

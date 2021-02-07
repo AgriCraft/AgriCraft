@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import net.minecraft.item.ItemStack;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 /**
  * Marker interface for trowel items.
  */
-public interface IAgriTrowelItem {
+public interface IAgriTrowelItem extends IAgriGeneCarrierItem {
     /**
      * Checks if the trowel is carrying a plant
      * @param stack the stack
@@ -33,13 +34,6 @@ public interface IAgriTrowelItem {
      * @return true if success (can fail if the trowel was not carrying a plant)
      */
     boolean removePlant(ItemStack stack);
-
-    /**
-     * Fetches the IAgriGenome from a stack
-     * @param stack the stack
-     * @return Optional holding the genome, or empty if invalid
-     */
-    Optional<IAgriGenome> getGenome(ItemStack stack);
 
 
     /**

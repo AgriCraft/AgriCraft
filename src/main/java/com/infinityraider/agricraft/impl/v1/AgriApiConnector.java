@@ -14,9 +14,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
+import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -49,9 +47,11 @@ import java.util.Optional;
 
 public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
-    private final IAgriRegistry<IAgriPlant> plantRegistry;
+    private final IAgriPlantRegistry plantRegistry;
     @Nonnull
-    private final IAgriRegistry<IAgriGrowthStage> growthStageRegistry;
+    private final IAgriGrowthRegistry growthStageRegistry;
+    @Nonnull
+    private final IAgriWeedRegistry weedRegistry;
     @Nonnull
     private final IAgriMutationRegistry mutationRegistry;
     @Nonnull
@@ -60,8 +60,6 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriGeneRegistry geneRegistry;
     @Nonnull
     private final IAgriSoilRegistry soilRegistry;
-    @Nonnull
-    private final IAgriRegistry<IAgriWeed> weedRegistry;
     @Nonnull
     private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
     @Nonnull
@@ -74,11 +72,11 @@ public class AgriApiConnector implements IAgriApiConnector {
     public AgriApiConnector() {
         this.plantRegistry = AgriPlantRegistry.getInstance();
         this.growthStageRegistry = AgriGrowthRegistry.getInstance();
+        this.weedRegistry = AgriWeedRegistry.getInstance();
         this.mutationRegistry = AgriMutationRegistry.getInstance();
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry = AgriSoilRegistry.getInstance();
-        this.weedRegistry = AgriWeedRegistry.getInstance();
         this.seedAdapterizer = new AgriAdapterizer<>();
         this.seedSubstituteAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
@@ -99,19 +97,19 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriRegistry<IAgriPlant> connectPlantRegistry() {
+    public IAgriPlantRegistry connectPlantRegistry() {
         return this.plantRegistry;
     }
 
     @Nonnull
     @Override
-    public IAgriRegistry<IAgriGrowthStage> connectGrowthStageRegistry() {
+    public IAgriGrowthRegistry connectGrowthStageRegistry() {
         return this.growthStageRegistry;
     }
 
     @Nonnull
     @Override
-    public IAgriRegistry<IAgriWeed> connectWeedRegistry() {
+    public IAgriWeedRegistry connectWeedRegistry() {
         return this.weedRegistry;
     }
 
