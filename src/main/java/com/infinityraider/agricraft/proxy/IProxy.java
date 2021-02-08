@@ -57,16 +57,6 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void activateRequiredModules() {}
-
-    default String translateToLocal(String string) {
-        // The {**} is a hack to get TOP integration to work.
-        return "{*" + string + "*}";
-    }
-
-    default String getLocale() {
-        // Whatever...
-        return "en_us";
-    }
     
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {

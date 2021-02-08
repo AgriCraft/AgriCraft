@@ -4,9 +4,8 @@ import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
 import com.infinityraider.agricraft.handler.SeedAnalyzerGenomeOverlayHandler;
+import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,13 +36,9 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public String translateToLocal(String string) {
-        return I18n.format(string);
-    }
-
-    @Override
-    public String getLocale() {
-        return Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
+    public void activateRequiredModules() {
+        IProxy.super.activateRequiredModules();
+        ModuleDynamicCamera.getInstance().activate();
     }
 
     @Override
