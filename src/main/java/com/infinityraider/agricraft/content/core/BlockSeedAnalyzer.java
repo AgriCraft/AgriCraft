@@ -188,7 +188,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         } else {
             // On the client, inspect the genome
             if(world.isRemote()) {
-                analyzer.setObserving(true);
+                analyzer.setObserving(player,true);
                 return ActionResultType.CONSUME;
             }
         }

@@ -9,6 +9,8 @@ import com.infinityraider.agricraft.network.MessageSeedAnalyzerUpdate;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
+import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
+import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
@@ -18,6 +20,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -31,16 +35,22 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, IInventoryItemHandler {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, IInventoryItemHandler, IDynamicCameraController {
     public static final int SLOT_SEED = 0;
     public static final int SLOT_JOURNAL = 1;
     private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
+
+    public static final int TRANSITION_DURATION = 15;
 
     private final AutoSyncedField<ItemStack> seed;
     private final AutoSyncedField<ItemStack> journal;
     private final LazyOptional<TileEntitySeedAnalyzer> capability;
 
-    private boolean observing;
+    private PlayerEntity observer;
+    private Vector3d observerStart;
+
+    private Vector3d observerPosition;
+    private Vector2f observerOrientation;
 
     public TileEntitySeedAnalyzer() {
         super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
@@ -78,7 +88,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         }
     }
 
-    @Nonnull
     public boolean canInsertSeed(ItemStack seed) {
         return this.isItemValidForSlot(SLOT_SEED, seed);
     }
@@ -111,7 +120,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return this.journal.get();
     }
 
-    @Nonnull
     public boolean canInsertJournal(ItemStack journal) {
         return this.isItemValidForSlot(SLOT_JOURNAL, journal);
     }
@@ -126,13 +134,55 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return this.removeStackFromSlot(SLOT_JOURNAL);
     }
 
-    public boolean isBeingObserved() {
-        return this.observing;
+    @Override
+    public int getTransitionDuration() {
+        return TRANSITION_DURATION;
     }
 
-    public void setObserving(boolean value) {
-        this.observing = value;
-        //TODO: handler logic
+    @Override
+    public void setObserving(PlayerEntity player, boolean value) {
+        if (this.getWorld() != null && this.getWorld().isRemote()) {
+            if (this.observer != null) {
+                this.observerStart = null;
+                this.observer = null;
+                ModuleDynamicCamera.getInstance().stopObserving();
+            }
+            if(value) {
+                this.observer = player;
+                this.observerStart = player.getPositionVec();
+                ModuleDynamicCamera.getInstance().startObserving(this);
+            }
+        }
+    }
+
+    @Override
+    public boolean continueObserving() {
+        return this.observer != null && this.observerStart != null && !this.observerStart.equals(this.observer.getPositionVec());
+    }
+
+    @Override
+    public Vector3d getObserverPosition() {
+        if(this.observerPosition == null) {
+            BlockState state = this.getBlockState();
+            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+            this.observerPosition = new Vector3d(
+                    this.getPos().getX() + 0.5 + dir.getXOffset()/2.0,
+                    this.getPos().getY() + 1,
+                    this.getPos().getZ() + 0.5 + dir.getZOffset()/2.0
+            );
+        }
+        return this.observerPosition;
+    }
+
+    @Override
+    public Vector2f getObserverOrientation() {
+        if(this.observerOrientation == null) {
+            BlockState state = this.getBlockState();
+            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+            // The analyzer looking glass is tilted 22.5 degrees, therefore we have to pitch down 67.5 degrees
+            this.observerOrientation = new Vector2f(67.5F, dir.getOpposite().getHorizontalAngle());
+        }
+        return this.observerOrientation;
     }
 
     @Override
