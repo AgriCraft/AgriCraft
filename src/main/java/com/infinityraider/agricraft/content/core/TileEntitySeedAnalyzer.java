@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
@@ -163,15 +164,25 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     @Override
     public Vector3d getObserverPosition() {
         if(this.observerPosition == null) {
-            BlockState state = this.getBlockState();
-            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
-            this.observerPosition = new Vector3d(
-                    this.getPos().getX() + 0.5 + dir.getXOffset()/2.0,
-                    this.getPos().getY() + 1,
-                    this.getPos().getZ() + 0.5 + dir.getZOffset()/2.0
-            );
+            this.observerPosition = this.calculateObserverPosition(AgriCraft.instance.proxy().getFieldOfView());
         }
         return this.observerPosition;
+    }
+
+    protected Vector3d calculateObserverPosition(double fov) {
+        // calculate offset from the center of the looking glass based on fov
+        double d = 0.75 * (0.5/Math.tan(Math.PI * fov / 360));
+        double dy = d*MathHelper.sin((float) Math.PI * 67.5F / 180);
+        double dx = d*MathHelper.cos((float) Math.PI * 67.5F / 180);
+        // fetch orientation, to determine the center of the looking glass
+        BlockState state = this.getBlockState();
+        Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+        // apply observer position (center of looking glass + fov offset)
+        return this.observerPosition = new Vector3d(
+                this.getPos().getX() + 0.5 + (dx + 0.3125) * dir.getXOffset(),
+                this.getPos().getY() + 0.6875 + dy,
+                this.getPos().getZ() + 0.5 + (dx + 0.3125) * dir.getZOffset()
+        );
     }
 
     @Override
@@ -183,6 +194,11 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
             this.observerOrientation = new Vector2f(67.5F, dir.getOpposite().getHorizontalAngle());
         }
         return this.observerOrientation;
+    }
+
+    @Override
+    public void onFieldOfViewChanged(float fov) {
+        this.observerPosition = this.calculateObserverPosition(fov);
     }
 
     @Override
