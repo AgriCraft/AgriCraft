@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -61,12 +60,7 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {
         CoreHandler.init();
-        /*
-        // This is to be moved to infinity lib in a future version, I would expect.
-        AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
-        ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
-         */
     }
 
-    default void updateSeedAnalyzerOverlay(BlockPos pos) {}
+    default void notifySeedAnalyzerViewHandler(boolean status) {}
 }

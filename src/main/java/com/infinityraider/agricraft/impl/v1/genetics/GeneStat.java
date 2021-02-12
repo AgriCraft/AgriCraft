@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IMutator;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -18,6 +19,8 @@ public class GeneStat implements IAgriGene<Integer> {
     private final IAgriStat stat;
     private final IAllele<Integer> defaultAllele;
     private final Set<IAllele<Integer>> alleles;
+    private final Vector3f colorDominant;
+    private final Vector3f colorRecessive;
 
     public GeneStat(IAgriStat stat) {
         this.stat = stat;
@@ -27,6 +30,8 @@ public class GeneStat implements IAgriGene<Integer> {
             builder.add(i == this.getStat().getMin() ? this.defaultAllele : new StatAllele(this, i));
         }
         this.alleles = builder.build();
+        this.colorDominant = stat.getColor();
+        this.colorRecessive = getRecessiveVector(stat.getColor());
     }
 
     public IAgriStat getStat() {
@@ -45,11 +50,13 @@ public class GeneStat implements IAgriGene<Integer> {
         return this.defaultAllele;
     }
 
+    @Nonnull
     @Override
     public IAllele<Integer> defaultAllele(IAgriPlant plant) {
         return this.defaultAllele();
     }
 
+    @Nonnull
     @Override
     public IAllele<Integer> getAllele(Integer value) {
         final int val = Math.max(this.getMin(), Math.min(this.getMax(), value));
@@ -58,26 +65,31 @@ public class GeneStat implements IAgriGene<Integer> {
                 .findFirst().orElse(this.defaultAllele());
     }
 
+    @Nonnull
     @Override
-    public IAllele<Integer> readAlleleFromNBT(CompoundNBT tag) {
+    public IAllele<Integer> readAlleleFromNBT(@Nonnull CompoundNBT tag) {
         return this.getAllele(tag.getInt(this.getStat().getId()));
     }
 
+    @Nonnull
     @Override
     public Set<IAllele<Integer>> allAlleles() {
         return this.alleles;
     }
 
+    @Nonnull
     @Override
     public IMutator<Integer> mutator() {
         return AgriMutationHandler.getInstance().getActiveStatMutator();
     }
 
+    @Nonnull
     @Override
     public IAgriGenePair<Integer> generateGenePair(IAllele<Integer> first, IAllele<Integer> second) {
         return new AgriGenePair<>(this, first, second);
     }
 
+    @Nonnull
     @Override
     public ITextComponent getDescription() {
         return this.getStat().getDescription();
@@ -85,8 +97,30 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Nonnull
     @Override
+    public Vector3f getDominantColor() {
+        return this.colorDominant;
+    }
+
+    @Nonnull
+    @Override
+    public Vector3f getRecessiveColor() {
+        return this.colorRecessive;
+    }
+
+    @Nonnull
+    @Override
     public String getId() {
         return this.stat.getId();
+    }
+
+    private static final float COLOR_FACTOR = 0.60F;
+
+    protected static Vector3f getRecessiveVector(Vector3f dominant) {
+        return new Vector3f(
+                COLOR_FACTOR * dominant.getX(),
+                COLOR_FACTOR * dominant.getY(),
+                COLOR_FACTOR * dominant.getZ()
+        );
     }
 
     private static final class StatAllele implements IAllele<Integer> {
@@ -128,4 +162,5 @@ public class GeneStat implements IAgriGene<Integer> {
             return tag;
         }
     }
+
 }

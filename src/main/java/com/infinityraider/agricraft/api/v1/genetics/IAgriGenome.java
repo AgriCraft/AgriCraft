@@ -9,12 +9,10 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -114,6 +112,24 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
             }
         }
         return true;
+    }
+
+    /**
+     * @return A new, modifiable list of all gene pairs in this genome, except the hidden genes
+     */
+    default List<IAgriGenePair<?>> getGeneList() {
+        return this.getGeneList(false);
+    }
+
+    /**
+     * @param hidden Pass true if the hidden genes should also be put in the list
+     * @return A new, modifiable list of all gene pairs in this genome, including the hidden if the argument is true
+     */
+    default List<IAgriGenePair<?>> getGeneList(final boolean hidden) {
+        return AgriApi.getGeneRegistry().stream()
+                .filter(gene -> hidden || !gene.isHidden())
+                .map(this::getGenePair)
+                .collect(Collectors.toList());
     }
 
     /**

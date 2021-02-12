@@ -3,10 +3,9 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
-import com.infinityraider.agricraft.handler.SeedAnalyzerGenomeOverlayHandler;
+import com.infinityraider.agricraft.handler.SeedAnalyzerViewPointHandler;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -25,7 +24,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
-        this.registerEventHandler(SeedAnalyzerGenomeOverlayHandler.getInstance());
+        this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
     }
 
     @Override
@@ -42,7 +41,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public void updateSeedAnalyzerOverlay(BlockPos pos) {
-        SeedAnalyzerGenomeOverlayHandler.getInstance().onSeedAnalyzerUpdate(pos);
+    public void notifySeedAnalyzerViewHandler(boolean status) {
+        SeedAnalyzerViewPointHandler.getInstance().setActive(status);
     }
 }

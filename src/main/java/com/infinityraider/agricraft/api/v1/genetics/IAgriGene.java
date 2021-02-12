@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.api.v1.genetics;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
@@ -53,6 +54,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
     /**
      * @return The mutator object which controls mutations for this gene
      */
+    @Nonnull
     IMutator<A> mutator();
 
     /**
@@ -61,12 +63,26 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @param second the second allel
      * @return gene pair for this gene for the two alleles
      */
+    @Nonnull
     IAgriGenePair<A> generateGenePair(IAllele<A> first, IAllele<A> second);
 
     /**
      * @return an ITextComponent to describe this gene on the client
      */
+    @Nonnull
     ITextComponent getDescription();
+
+    /**
+     * @return the RGB values to color the dominant part of the DNA helix for this gene, only used client side
+     */
+    @Nonnull
+    Vector3f getDominantColor();
+
+    /**
+     * @return the RGB values to color the recessive part of the DNA helix for this gene, only used client side
+     */
+    @Nonnull
+    Vector3f getRecessiveColor();
 
     /**
      * AgriCraft provides the possibility to have genes completely hidden.

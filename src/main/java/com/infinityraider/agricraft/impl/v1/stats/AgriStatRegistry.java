@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nullable;
 
@@ -36,12 +37,12 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         //super constructor
         super();
         //initiate default stats
-        this.gain = new AgriStat("gain", this.defaultMin(), this.defaultMax());
-        this.growth = new AgriStat("growth", this.defaultMin(), this.defaultMax());
-        this.strength = new AgriStat("strength", this.defaultMin(), this.defaultMax());
-        this.resistance = new AgriStat("resistance", this.defaultMin(), this.defaultMax());
-        this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax());
-        this.mutativity = new AgriStat("mutativity", this.defaultMin(), this.defaultMax());
+        this.gain = new AgriStat("gain", this.defaultMin(), this.defaultMax(), new Vector3f(0, 0, 1));
+        this.growth = new AgriStat("growth", this.defaultMin(), this.defaultMax(), new Vector3f(0, 1, 0));
+        this.strength = new AgriStat("strength", this.defaultMin(), this.defaultMax(), new Vector3f(1, 0, 0));
+        this.resistance = new AgriStat("resistance", this.defaultMin(), this.defaultMax(), new Vector3f(1, 1, 0));
+        this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax(), new Vector3f(1, 0, 1));
+        this.mutativity = new AgriStat("mutativity", this.defaultMin(), this.defaultMax(), new Vector3f(0, 1, 1));
     }
 
     @Override
