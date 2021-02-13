@@ -68,7 +68,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     public boolean canProvideGenesForObserver() {
         return this.getGenesToRender() != null;
-
     }
 
     @Nullable
@@ -95,7 +94,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public void onCameraActivated() {}
+    public void onCameraActivated() {
+        AgriCraft.instance.proxy().toggleSeedAnalyzerActive(true);
+    }
 
     @Override
     public void onObservationStart() {
@@ -106,13 +107,14 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         } else {
             this.genesToRender = Collections.emptyList();
         }
-        AgriCraft.instance.proxy().notifySeedAnalyzerViewHandler(true);
+        AgriCraft.instance.proxy().toggleSeedAnalyzerObserving(true);
     }
 
     @Override
     public void onObservationEnd() {
         this.genesToRender = null;
-        AgriCraft.instance.proxy().notifySeedAnalyzerViewHandler(false);
+        AgriCraft.instance.proxy().toggleSeedAnalyzerObserving(false);
+        AgriCraft.instance.proxy().toggleSeedAnalyzerActive(false);
     }
 
     @Override

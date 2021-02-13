@@ -62,5 +62,7 @@ public interface IProxy extends IProxyBase<Config> {
         CoreHandler.init();
     }
 
-    default void notifySeedAnalyzerViewHandler(boolean status) {}
+    default void toggleSeedAnalyzerActive(boolean status) {}
+
+    default void toggleSeedAnalyzerObserving(boolean status) {}
 }

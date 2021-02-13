@@ -41,7 +41,12 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public void notifySeedAnalyzerViewHandler(boolean status) {
+    public void toggleSeedAnalyzerActive(boolean status) {
         SeedAnalyzerViewPointHandler.getInstance().setActive(status);
+    }
+
+    @Override
+    public void toggleSeedAnalyzerObserving(boolean status) {
+        SeedAnalyzerViewPointHandler.getInstance().setObserved(status);
     }
 }

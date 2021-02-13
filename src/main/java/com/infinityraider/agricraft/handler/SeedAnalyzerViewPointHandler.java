@@ -1,8 +1,17 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
+import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
+import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -21,16 +30,21 @@ public class SeedAnalyzerViewPointHandler {
         return INSTANCE;
     }
 
-    /** Activity tracker  */
+    /** Status flags  */
     private boolean active;
+    private boolean observed;
 
     /** Smooth scroll progress tracker */
     private int scrollDuration;
     private final AnimatedScrollPosition scrollPosition;
 
+    /** Seed animator helper */
+    private final SeedAnimator seedAnimator;
+
     private SeedAnalyzerViewPointHandler() {
         this.setScrollDuration(10);
         this.scrollPosition = new AnimatedScrollPosition(this::getScrollDuration, () -> AgriApi.getGeneRegistry().count());
+        this.seedAnimator = new SeedAnimator();
     }
     public int getScrollDuration() {
         return this.scrollDuration;
@@ -40,17 +54,31 @@ public class SeedAnalyzerViewPointHandler {
         this.scrollDuration = duration;
     }
 
-    public AnimatedScrollPosition getScrollPosition() {
+    protected AnimatedScrollPosition getScrollPosition() {
         return this.scrollPosition;
+    }
+
+    protected SeedAnimator getSeedAnimator() {
+        return this.seedAnimator;
     }
 
     public void setActive(boolean active) {
         this.active = active;
-        this.scrollPosition.reset();
+        this.getScrollPosition().reset();
+        this.getSeedAnimator().onActivation(active);
+    }
+
+    public void setObserved(boolean observed) {
+        this.observed = observed;
+        this.getScrollPosition().reset();
     }
 
     public boolean isActive() {
         return this.active;
+    }
+
+    public boolean isObserved() {
+        return this.observed;
     }
 
     public int getScrollIndex() {
@@ -59,6 +87,10 @@ public class SeedAnalyzerViewPointHandler {
 
     public float getScrollProgress() {
         return this.getScrollPosition().getProgress();
+    }
+
+    public void applySeedAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+        this.getSeedAnimator().applyAnimation(analyzer, partialTicks, transforms);
     }
 
     @SuppressWarnings("unused")
@@ -76,7 +108,9 @@ public class SeedAnalyzerViewPointHandler {
                 ModuleDynamicCamera.getInstance().stopObserving();
             } else {
                 // Tick the scroll position to increment its animation timer
-                this.getScrollPosition().tick();
+                if(this.isObserved()) {
+                    this.getScrollPosition().tick();
+                }
             }
         }
     }
@@ -147,6 +181,116 @@ public class SeedAnalyzerViewPointHandler {
             this.current = 0;
             this.target = 0;
             this.counter = 0;
+        }
+    }
+
+    /**
+     * Utility class which helps animate the seed in a seed analyzer
+     */
+    public static class SeedAnimator {
+        private static final float HALF = 0.5F;
+        private static final float DY = 0.25F - HALF;
+        private static final int PITCH = 90;
+        private static final Quaternion ROTATION_PITCH = new Quaternion(Vector3f.XP, PITCH, true);
+
+        private float angle;
+
+        protected void onActivation(boolean status) {
+            if(status) {
+                // Keep track of the angle on which the analyzer was activated
+                this.angle = this.calculateAngle();
+            } else {
+                // Reset
+                this.angle = 0;
+            }
+        }
+
+        protected void applyAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+            // translate to center of block
+            transforms.translate(HALF, HALF, HALF);
+            // animate according to observation status
+            switch (this.getObservationStatus(analyzer)) {
+                case IDLE:
+                    this.applyIdleTransformation(transforms);
+                    break;
+                case POSITIONING:
+                    this.applyPositioningTransformation(analyzer, partialTicks, transforms);
+                    break;
+                case OBSERVING:
+                    this.applyObservingTransformation(analyzer, transforms);
+                    break;
+                case RETURNING:
+                    this.applyReturningTransformation(analyzer, partialTicks, transforms);
+                    break;
+            }
+            // scale down the seed
+            transforms.scale(HALF, HALF, HALF);
+        }
+
+        protected void applyIdleTransformation(MatrixStack transforms) {
+            // define rotation angle in function of system time
+            transforms.rotate(new Quaternion(Vector3f.YP, this.calculateAngle(), true));
+        }
+
+        protected void applyPositioningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+            // fetch orientation
+            BlockState state = analyzer.getBlockState();
+            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+            // fetch animation progress
+            float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
+            // translate
+            transforms.translate(0, MathHelper.lerp(f,0, DY), 0);
+            // rotate yaw
+            float yaw = MathHelper.interpolateAngle(f, this.angle, dir.getHorizontalAngle());
+            transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            // rotate pitch
+            float pitch = MathHelper.lerp(f,0, PITCH);
+            transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
+        }
+
+        protected void applyObservingTransformation(TileEntitySeedAnalyzer analyzer, MatrixStack transforms) {
+            // fetch orientation
+            BlockState state = analyzer.getBlockState();
+            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+            // translate
+            transforms.translate(0, DY, 0);
+            // rotate yaw
+            transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
+            // rotate pitch
+            transforms.rotate(ROTATION_PITCH);
+        }
+
+        protected void applyReturningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+            // fetch orientation
+            BlockState state = analyzer.getBlockState();
+            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
+            // fetch animation progress
+            float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
+            // translate
+            transforms.translate(0, MathHelper.lerp(f,DY, 0), 0);
+            // rotate yaw
+            float yaw = MathHelper.interpolateAngle(f, dir.getHorizontalAngle(), this.calculateAngle());
+            transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            float pitch = MathHelper.lerp(f,PITCH, 0);
+            transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
+        }
+
+        protected DynamicCamera.Status getObservationStatus(TileEntitySeedAnalyzer analyzer) {
+            if(analyzer.isObserved()) {
+                return ModuleDynamicCamera.getInstance().getCameraStatus();
+            }
+            return DynamicCamera.Status.IDLE;
+        }
+
+        protected int getAnimationFrame(TileEntitySeedAnalyzer analyzer) {
+            if(analyzer.isObserved()) {
+                return ModuleDynamicCamera.getInstance().getCameraAnimationFrame();
+            }
+            return 0;
+        }
+
+        protected float calculateAngle() {
+            return (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
         }
     }
 }

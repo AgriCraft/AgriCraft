@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.handler.SeedAnalyzerViewPointHandler;
 import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
+import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tile.ITileRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -22,46 +23,41 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEntitySeedAnalyzer>, IRenderUtilities {
-
-    private static final Quaternion ROTATION_TILT = new Quaternion(Vector3f.XP, 45.0F, true);
-
     public TileEntitySeedAnalyzerSeedRenderer() {}
 
     @Override
     public void render(TileEntitySeedAnalyzer tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
+        // Render the seed
+        if(this.renderSeed(tile, partialTicks, transforms, buffer, light, overlay)) {
+            // Render the genome if a seed is rendered and if the tile is observed
+            if (tile.canProvideGenesForObserver()) {
+                this.renderGenome(tile, transforms);
+            }
+        }
+    }
+
+    protected boolean renderSeed(TileEntitySeedAnalyzer tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
         // Fetch the seed
         ItemStack seed = tile.getSeed();
         // If there is no seed, not much more to do here
         if(seed.isEmpty()) {
-            return;
+            return false;
         }
-        // Render the seed
-        this.renderSeed(seed, transforms, buffer, light, overlay);
-        // Render the genome if observed
-        if(tile.canProvideGenesForObserver()) {
-            this.renderGenome(tile, transforms);
-        }
-    }
 
-    protected void renderSeed(ItemStack seed, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
         // push a new matrix to the stack
         transforms.push();
 
-        // translate to center of block
-        transforms.translate(0.5, 0.5, 0.5);
-
-        // define rotation angle in function of system time
-        float angle = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
-        transforms.rotate(new Quaternion(Vector3f.YP, angle, true));
-
-        // scale down the seed
-        transforms.scale(0.5F, 0.5F, 0.5F);
+        // Apply animation
+        SeedAnalyzerViewPointHandler.getInstance().applySeedAnimation(tile, partialTicks, transforms);
 
         // draw the seed
         this.renderItem(seed, ItemCameraTransforms.TransformType.GROUND, light, overlay, transforms, buffer);
 
         // pop the matrix off the stack
         transforms.pop();
+
+        // return true
+        return true;
     }
 
     protected void renderGenome(TileEntitySeedAnalyzer tile, MatrixStack transforms) {
@@ -88,16 +84,12 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
 
         // helix dimensions
-        float h = 1.500F;
-        float r = 0.125F;
+        float h = 0.50F;
+        float r = 0.05F;
 
         // transform to the desired position
-        transforms.translate(0.5, 0, 0.5);
+        transforms.translate(0.5, 5* Constants.UNIT, 0.5);
         transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
-        //transforms.translate(0.25, 0, 0.25);
-        transforms.rotate(ROTATION_TILT);
-        transforms.scale(1, -1, 1);
-        //transforms.translate(0, h*((index + partial) - count)/count, 0);
 
         // render the helix
         renderer.renderDoubleHelix(genes, transforms, index, partial, r, h,1.0F);
