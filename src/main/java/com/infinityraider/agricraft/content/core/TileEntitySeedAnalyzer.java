@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRend
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
-import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
@@ -80,21 +79,17 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         return TRANSITION_DURATION;
     }
 
-    public void setObserving(PlayerEntity player, boolean value) {
+    public boolean setObserving(boolean value) {
         if (this.getWorld() != null && this.getWorld().isRemote()) {
-            if (this.isObserved()) {
-                return;
-            }
-            if(value) {
-                ModuleDynamicCamera.getInstance().startObserving(this);
-                this.observer = player;
-                this.observerStart = player.getPositionVec();
-            }
+            return AgriCraft.instance.proxy().toggleDynamicCamera(this, value);
         }
+        return false;
     }
 
     @Override
     public void onCameraActivated() {
+        this.observer = AgriCraft.instance.getClientPlayer();
+        this.observerStart = this.observer == null ? null : this.observer.getPositionVec();
         AgriCraft.instance.proxy().toggleSeedAnalyzerActive(true);
     }
 

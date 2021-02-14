@@ -88,7 +88,7 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         float r = 0.05F;
 
         // transform to the desired position
-        transforms.translate(0.5, 5* Constants.UNIT, 0.5);
+        transforms.translate(0.5, 4 * Constants.UNIT, 0.5);
         transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
 
         // render the helix
