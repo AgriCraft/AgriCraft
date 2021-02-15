@@ -14,7 +14,7 @@ public class AgriStat implements IAgriStat {
     private final int min;
     private final int max;
     private final String key;
-    private final ITextComponent tooltip;
+    private final TranslationTextComponent tooltip;
     private final Vector3f color;
 
     protected AgriStat(String name, int min, int max, Vector3f color) {
@@ -56,7 +56,7 @@ public class AgriStat implements IAgriStat {
 
     @Nonnull
     @Override
-    public ITextComponent getDescription() {
+    public TranslationTextComponent getDescription() {
         return this.tooltip;
     }
 

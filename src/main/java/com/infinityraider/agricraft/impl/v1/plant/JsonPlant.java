@@ -41,9 +41,9 @@ public class JsonPlant implements IAgriPlant {
 
     private final AgriPlant plant;
 
-    private final ITextComponent plantName;
-    private final ITextComponent seedName;
-    private final ITextComponent description;
+    private final TranslationTextComponent plantName;
+    private final TranslationTextComponent seedName;
+    private final TranslationTextComponent description;
 
     private final List<IAgriGrowthStage> growthStages;
     private final Set<IGrowCondition> growthConditions;
@@ -86,13 +86,13 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ITextComponent getPlantName() {
+    public TranslationTextComponent getPlantName() {
         return this.plantName;
     }
 
     @Nonnull
     @Override
-    public ITextComponent getSeedName() {
+    public TranslationTextComponent getSeedName() {
         return this.seedName;
     }
 
@@ -177,7 +177,7 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ITextComponent getInformation(IAgriGrowthStage stage) {
+    public TranslationTextComponent getInformation(IAgriGrowthStage stage) {
         return this.description;
     }
 

@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
@@ -33,7 +32,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
     }
 
     private final String id;
-    private final ITextComponent descr;
+    private final TranslationTextComponent descr;
 
     private GeneSpecies() {
         this.id = "agri_species";
@@ -78,7 +77,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Nonnull
     @Override
-    public ITextComponent getDescription() {
+    public TranslationTextComponent getDescription() {
         return this.descr;
     }
 

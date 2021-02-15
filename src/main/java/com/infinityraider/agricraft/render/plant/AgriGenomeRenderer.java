@@ -1,25 +1,32 @@
 package com.infinityraider.agricraft.render.plant;
 
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 @OnlyIn(Dist.CLIENT)
@@ -42,7 +49,17 @@ public class AgriGenomeRenderer implements IRenderUtilities {
     /** Color of inactive genes */
     public static final Vector3f COLOR_INACTIVE = new Vector3f(0.15F, 0.15F, 0.15F);
 
-    private AgriGenomeRenderer() {}
+    /** Gene text style */
+    public static final Style STYLE_GENE = Style.EMPTY.setBold(true).setUnderlined(true);
+
+    /** Dominant and recessive separator */
+    public static final IReorderingProcessor TEXT_SEPARATOR = new StringTextComponent(" - ").mergeStyle(Style.EMPTY.setBold(true)).func_241878_f();
+
+    private final Map<IAgriGene<?>, Tuple<Style, Style>> textFormats;
+
+    private AgriGenomeRenderer() {
+        this.textFormats = Maps.newIdentityHashMap();
+    }
 
     /**
      * Renders an AgriCraft genome.
@@ -98,6 +115,36 @@ public class AgriGenomeRenderer implements IRenderUtilities {
 
         // Pop transformation matrix from the stack
         transforms.pop();
+    }
+
+    public void renderTextOverlay(MatrixStack transforms, IAgriGenePair<?> genePair) {
+        // Fetch font renderer
+        FontRenderer fontRenderer = this.getFontRenderer();
+        // Fetch styles
+        Tuple<Style, Style> textFormats = this.getTextFormats(genePair.getGene());
+        // Fetch colors
+        int blackColor = STYLE_GENE.getColor() == null ? 0 : STYLE_GENE.getColor().getColor();
+        int domColor = textFormats.getA().getColor() == null ? 0 : textFormats.getA().getColor().getColor();
+        int recColor = textFormats.getB().getColor() == null ? 0 : textFormats.getB().getColor().getColor();
+        // Fetch text components
+        IReorderingProcessor geneText = genePair.getGene().getDescription().mergeStyle(STYLE_GENE).func_241878_f();
+        IReorderingProcessor domText = genePair.getDominant().getTooltip()/*.mergeStyle(textFormats.getA())*/.func_241878_f();
+        IReorderingProcessor recText = genePair.getRecessive().getTooltip()/*.mergeStyle(textFormats.getB())*/.func_241878_f();
+        // Calculate positions
+        int width = this.getScaledWindowWidth();
+        int height = this.getScaledWindowHeight();
+        float y1 = (3.0F * height) / 5;
+        float x1 = (width - fontRenderer.func_243245_a(geneText) + 0.0F)/2;
+        float y2 = y1 + 1.5F * fontRenderer.FONT_HEIGHT;
+        float x2 = (width - fontRenderer.func_243245_a(TEXT_SEPARATOR) + 0.0F)/2;
+        float delta = 1.0F;
+        float dx_d = delta + fontRenderer.func_243245_a(domText);
+        float dx_r = delta + fontRenderer.func_243245_a(TEXT_SEPARATOR);
+        // Render text
+        this.getFontRenderer().func_238422_b_(transforms, geneText, x1, y1, blackColor);
+        this.getFontRenderer().func_238422_b_(transforms, TEXT_SEPARATOR, x2, y2, blackColor);
+        this.getFontRenderer().func_238422_b_(transforms, domText, x2 - dx_d, y2, domColor);
+        this.getFontRenderer().func_238422_b_(transforms, recText, x2 + dx_r, y2, recColor);
     }
 
     protected void drawHelix(List<IAgriGenePair<?>> genePairs, int active, float radius, float phase, float dHeight, float dAngle,
@@ -195,6 +242,14 @@ public class AgriGenomeRenderer implements IRenderUtilities {
 
     protected RenderType getRenderType() {
         return LineRenderType.INSTANCE;
+    }
+
+    protected Tuple<Style, Style> getTextFormats(IAgriGene<?> gene) {
+        return this.textFormats.computeIfAbsent(gene, aGene ->
+            new Tuple<>(
+                    Style.EMPTY.setColor(this.convertColor(aGene.getDominantColor())),
+                    Style.EMPTY.setColor(this.convertColor(aGene.getRecessiveColor()))
+            ));
     }
 
     public static class LineRenderType extends RenderType {

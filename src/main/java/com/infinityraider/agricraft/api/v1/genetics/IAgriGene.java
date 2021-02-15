@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -70,7 +70,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return an ITextComponent to describe this gene on the client
      */
     @Nonnull
-    ITextComponent getDescription();
+    IFormattableTextComponent getDescription();
 
     /**
      * @return the RGB values to color the dominant part of the DNA helix for this gene, only used client side

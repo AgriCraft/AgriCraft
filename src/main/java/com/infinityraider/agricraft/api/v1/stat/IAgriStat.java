@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -42,7 +43,7 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
      * @return an ITextComponent to describe this stat on the client
      */
     @Nonnull
-    ITextComponent getDescription();
+    IFormattableTextComponent getDescription();
 
     /**
      * @return a color indicative of this stat

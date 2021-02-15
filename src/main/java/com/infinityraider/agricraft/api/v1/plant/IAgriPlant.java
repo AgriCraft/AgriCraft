@@ -22,6 +22,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
 /**
@@ -59,13 +60,13 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return a text component representing the name of this plant for use in tooltips, agricultural journal, genome, etc.
      */
     @Nonnull
-    ITextComponent getPlantName();
+    IFormattableTextComponent getPlantName();
 
     /**
      * @return a text component representing the name of the seed of this plant for use in tooltips, agricultural journal, etc.
      */
     @Nonnull
-    ITextComponent getSeedName();
+    IFormattableTextComponent getSeedName();
 
     /**
      * @return the tier of the plant, the higher the number, the higher the tier
@@ -151,7 +152,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return Information about the plant to be displayed in the Seed Journal.
      */
     @Nonnull
-    ITextComponent getInformation(IAgriGrowthStage stage);
+    IFormattableTextComponent getInformation(IAgriGrowthStage stage);
 
     /**
      * Fetches the user-friendly plant description for use in tooltips. Notice, any
@@ -393,7 +394,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     }
 
     @Override
-    default ITextComponent getTooltip() {
+    default IFormattableTextComponent getTooltip() {
         return this.getPlantName();
     }
 }

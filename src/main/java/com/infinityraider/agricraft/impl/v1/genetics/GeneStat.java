@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nonnull;
@@ -91,7 +91,7 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Nonnull
     @Override
-    public ITextComponent getDescription() {
+    public IFormattableTextComponent getDescription() {
         return this.getStat().getDescription();
     }
 
@@ -126,7 +126,7 @@ public class GeneStat implements IAgriGene<Integer> {
     private static final class StatAllele implements IAllele<Integer> {
         private final GeneStat gene;
         private final int value;
-        private final ITextComponent tooltip;
+        private final StringTextComponent tooltip;
 
         private StatAllele(GeneStat gene, int value) {
             this.gene = gene;
@@ -150,7 +150,7 @@ public class GeneStat implements IAgriGene<Integer> {
         }
 
         @Override
-        public ITextComponent getTooltip() {
+        public StringTextComponent getTooltip() {
             // TODO: format tooltip according to config
             return this.tooltip;
         }

@@ -16,6 +16,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -53,13 +54,13 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ITextComponent getPlantName() {
+    public TranslationTextComponent getPlantName() {
         return AgriToolTips.UNKNOWN;
     }
 
     @Nonnull
     @Override
-    public ITextComponent getSeedName() {
+    public TranslationTextComponent getSeedName() {
         return AgriToolTips.UNKNOWN;
     }
 
@@ -134,12 +135,12 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public ITextComponent getInformation(IAgriGrowthStage stage) {
+    public TranslationTextComponent getInformation(IAgriGrowthStage stage) {
         return AgriToolTips.UNKNOWN;
     }
 
     private final String info = "Damnations! This is not a plant";
-    private final ITextComponent tooltip = new StringTextComponent(this.info);
+    private final StringTextComponent tooltip = new StringTextComponent(this.info);
 
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
@@ -184,7 +185,7 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public ITextComponent getTooltip() {
+    public TranslationTextComponent getTooltip() {
         return AgriToolTips.UNKNOWN;
     }
 

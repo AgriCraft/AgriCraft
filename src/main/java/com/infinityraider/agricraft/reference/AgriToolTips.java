@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class AgriToolTips {
-    public static final ITextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
+    public static final TranslationTextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
 
     public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome")
             .mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);

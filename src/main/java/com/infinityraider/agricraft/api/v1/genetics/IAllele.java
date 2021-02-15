@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
@@ -32,7 +33,7 @@ public interface IAllele<A> {
     /**
      * @return A text component representing this allele in a tooltip
      */
-    ITextComponent getTooltip();
+    IFormattableTextComponent getTooltip();
 
     /**
      * Writes this allel to NBT
