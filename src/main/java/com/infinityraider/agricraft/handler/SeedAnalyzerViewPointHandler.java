@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
+import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -85,8 +86,8 @@ public class SeedAnalyzerViewPointHandler {
         return this.getScrollPosition().getIndex();
     }
 
-    public float getScrollProgress() {
-        return this.getScrollPosition().getProgress();
+    public float getPartialScrollProgress(float partialTick) {
+        return this.getScrollPosition().getProgress(partialTick);
     }
 
     public void applySeedAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
@@ -149,8 +150,11 @@ public class SeedAnalyzerViewPointHandler {
             return this.current;
         }
 
-        public float getProgress() {
-            return (this.target > this.current ? 1 : -1) * ((this.counter + 0.0F) / this.getDuration());
+        public float getProgress(float partialTick) {
+            if(this.target == this.current) {
+                return 0;
+            }
+            return (this.target > this.current ? 1 : -1) * ((this.counter + partialTick) / this.getDuration());
         }
 
         public int getDuration() {
@@ -174,7 +178,7 @@ public class SeedAnalyzerViewPointHandler {
         }
 
         public void scroll(int delta) {
-            this.target = Math.min(this.getMax(), Math.max(0, this.target - delta));
+            this.target = Math.min(this.getMax() - 1, Math.max(0, this.target - delta));
         }
 
         public void reset() {
@@ -188,8 +192,12 @@ public class SeedAnalyzerViewPointHandler {
      * Utility class which helps animate the seed in a seed analyzer
      */
     public static class SeedAnimator {
-        private static final float HALF = 0.5F;
+        private static final float HALF = Constants.HALF;
+
+        private static final float DX = 0;
         private static final float DY = 0.25F - HALF;
+        private static final float DZ = -1 * Constants.UNIT;
+
         private static final int PITCH = 90;
         private static final Quaternion ROTATION_PITCH = new Quaternion(Vector3f.XP, PITCH, true);
 
@@ -238,11 +246,11 @@ public class SeedAnalyzerViewPointHandler {
             Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
-            // translate
-            transforms.translate(0, MathHelper.lerp(f,0, DY), 0);
             // rotate yaw
             float yaw = MathHelper.interpolateAngle(f, this.angle, dir.getHorizontalAngle());
             transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            // translate
+            transforms.translate(MathHelper.lerp(f,0, DX), MathHelper.lerp(f,0, DY), MathHelper.lerp(f,0, DZ));
             // rotate pitch
             float pitch = MathHelper.lerp(f,0, PITCH);
             transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
@@ -252,10 +260,10 @@ public class SeedAnalyzerViewPointHandler {
             // fetch orientation
             BlockState state = analyzer.getBlockState();
             Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
-            // translate
-            transforms.translate(0, DY, 0);
             // rotate yaw
             transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
+            // translate
+            transforms.translate(DX, DY, DZ);
             // rotate pitch
             transforms.rotate(ROTATION_PITCH);
         }
@@ -266,11 +274,12 @@ public class SeedAnalyzerViewPointHandler {
             Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
-            // translate
-            transforms.translate(0, MathHelper.lerp(f,DY, 0), 0);
             // rotate yaw
             float yaw = MathHelper.interpolateAngle(f, dir.getHorizontalAngle(), this.calculateAngle());
             transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            // translate
+            transforms.translate(MathHelper.lerp(f, DX, 0), MathHelper.lerp(f, DY, 0), MathHelper.lerp(f, DZ, 0));
+            // rotate pitch
             float pitch = MathHelper.lerp(f,PITCH, 0);
             transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
         }

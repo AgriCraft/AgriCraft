@@ -41,7 +41,7 @@ public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriSt
         this.growth = new AgriStat("growth", this.defaultMin(), this.defaultMax(), new Vector3f(0, 1, 0));
         this.strength = new AgriStat("strength", this.defaultMin(), this.defaultMax(), new Vector3f(1, 0, 0));
         this.resistance = new AgriStat("resistance", this.defaultMin(), this.defaultMax(), new Vector3f(1, 1, 0));
-        this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax(), new Vector3f(1, 0, 1));
+        this.fertility = new AgriStat("fertility", this.defaultMin(), this.defaultMax(), new Vector3f(1, 0.5F, 0));
         this.mutativity = new AgriStat("mutativity", this.defaultMin(), this.defaultMax(), new Vector3f(0, 1, 1));
     }
 

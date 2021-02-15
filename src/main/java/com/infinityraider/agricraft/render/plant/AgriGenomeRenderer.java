@@ -55,8 +55,8 @@ public class AgriGenomeRenderer implements IRenderUtilities {
      * @param height the height of the double helix
      * @param alpha the transparency of the helix
      */
-    public void renderDoubleHelix(List<IAgriGenePair<?>> genePairs, MatrixStack transforms, int index, float transition,
-                                  float radius, float height, float alpha) {
+    public void renderDoubleHelix(List<IAgriGenePair<?>> genePairs, MatrixStack transforms, IRenderTypeBuffer buffer,
+                                  int index, float transition, float radius, float height, float alpha) {
 
         // Define helix properties
         int count = genePairs.size();
@@ -64,7 +64,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
             // Should never happen
             return;
         }
-        int points = POINTS_PER_GENE * (count + 1);
+        int points = POINTS_PER_GENE * count;
         float heightStep = (height + 0.0F)/points;
         float angleStep = -(RADIANS_PER_GENE + 0.0F)/POINTS_PER_GENE;
         float angleOffset = RADIANS_PER_GENE/2;
@@ -76,33 +76,28 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         transforms.rotate(new Quaternion(Vector3f.YP, rotation, false));
 
         // Fetch vertex buffer, builder and transformation matrix
-        IRenderTypeBuffer.Impl buffer = this.getRenderTypeBuffer();
-        IVertexBuilder builder = this.getVertexBuilder(buffer, LineRenderType.INSTANCE);
+        IVertexBuilder builder = this.getVertexBuilder(buffer, this.getRenderType());
         Matrix4f matrix = transforms.getLast().getMatrix();
 
         // First helix
-        this.drawHelix(genePairs, radius, PI - angleOffset, heightStep, angleStep, points, builder, matrix, true, alpha);
+        this.drawHelix(genePairs, radius, angleOffset, heightStep, angleStep, points, builder, matrix, true, alpha);
         // Second helix
-        this.drawHelix(genePairs, radius, - angleOffset, heightStep, angleStep, points, builder, matrix, false, alpha);
+        this.drawHelix(genePairs, radius, PI + angleOffset, heightStep, angleStep, points, builder, matrix, false, alpha);
         // Spokes
-        this.drawSpokes(genePairs, radius, PI - angleOffset, - angleOffset, heightStep, angleStep, builder, matrix,alpha);
+        this.drawSpokes(genePairs, radius, angleOffset, PI + angleOffset, heightStep, angleStep, builder, matrix,alpha);
 
         // Pop transformation matrix from the stack
         transforms.pop();
-
-        // Finalize rendering
-        buffer.finish(LineRenderType.INSTANCE);
     }
 
     protected void drawHelix(List<IAgriGenePair<?>> genePairs, float radius, float phase, float dHeight, float dAngle, int points,
                              IVertexBuilder builder, Matrix4f matrix, boolean dominant, float alpha) {
-        float x_1 = radius * MathHelper.cos(phase);
-        float y_1 = 0;
-        float z_1 = radius * MathHelper.sin(phase);
+        float x_1 = radius * MathHelper.cos(-phase);
+        float y_1 = dHeight*points;
+        float z_1 = radius * MathHelper.sin(-phase);
         for(int i = 0; i < points; i++) {
             // Determine color
             int index = i/POINTS_PER_GENE;
-            index = index >= genePairs.size() ? genePairs.size() - 1 : index;
             int partial = i % POINTS_PER_GENE;
             IAgriGene<?> gene = genePairs.get(index).getGene();
             float r = dominant ? gene.getDominantColor().getX() : gene.getRecessiveColor().getX();
@@ -122,9 +117,9 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                 b = MathHelper.lerp(f, b, dominant ? nextGene.getDominantColor().getZ() : nextGene.getRecessiveColor().getZ());
             }
             // Determine coordinates
-            float x_2 = radius * MathHelper.cos((1 + i)*dAngle + phase);
-            float y_2 = (1 + i) * dHeight;
-            float z_2 = radius * MathHelper.sin((1 + i)*dAngle + phase);
+            float x_2 = radius * MathHelper.cos(-((1 + i)*dAngle + phase));
+            float y_2 = dHeight*(points - i);
+            float z_2 = radius * MathHelper.sin(-((1 + i)*dAngle + phase));
             // Add vertices for line segment
             this.addVertex(builder, matrix, x_1, y_1, z_1, r, g, b, alpha);
             this.addVertex(builder, matrix, x_2, y_2, z_2, r, g, b, alpha);
@@ -142,11 +137,11 @@ public class AgriGenomeRenderer implements IRenderUtilities {
             int i = spoke*POINTS_PER_GENE + POINTS_PER_GENE/2;
             float angle = i*dAngle;
             // Find positions
-            float x1 = radius*MathHelper.cos(angle + phase1);
-            float x2 = radius*MathHelper.cos(angle + phase2);
-            float y = i * dHeight;
-            float z1 = radius*MathHelper.sin(angle + phase1);
-            float z2 = radius*MathHelper.sin(angle + phase2);
+            float x1 = radius*MathHelper.cos(-(angle + phase1));
+            float x2 = radius*MathHelper.cos(-(angle + phase2));
+            float y = dHeight * (POINTS_PER_GENE * genePairs.size() - i);
+            float z1 = radius*MathHelper.sin(-(angle + phase1));
+            float z2 = radius*MathHelper.sin(-(angle + phase2));
             // find colors
             IAgriGene<?> gene = genePairs.get(spoke).getGene();
             float r1 = gene.getDominantColor().getX();
@@ -177,7 +172,10 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         builder.pos(matrix, x, y, z)
                 .color(r, g, b, a)
                 .endVertex();
+    }
 
+    protected RenderType getRenderType() {
+        return LineRenderType.INSTANCE;
     }
 
     public static class LineRenderType extends RenderType {
@@ -189,11 +187,12 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         }
 
         public static final String RENDER_TYPE_KEY = AgriCraft.instance.getModId() + ":genome_lines";
-        public static final Double LINE_THICKNESS = 5.0;
+        public static final Double LINE_THICKNESS = 2.5;
 
         public static final RenderType INSTANCE = makeType(RENDER_TYPE_KEY,
                 DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256,
-                LineRenderType.State.getBuilder().line(new RenderState.LineState(OptionalDouble.of(LINE_THICKNESS)))
+                LineRenderType.State.getBuilder()
+                        .line(new RenderState.LineState(OptionalDouble.of(LINE_THICKNESS)))
                         .layer(LineRenderType.field_239235_M_)
                         .transparency(TRANSLUCENT_TRANSPARENCY)
                         .texture(NO_TEXTURE)
