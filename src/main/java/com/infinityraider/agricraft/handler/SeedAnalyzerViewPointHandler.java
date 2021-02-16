@@ -1,34 +1,26 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
-import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.List;
 import java.util.function.IntSupplier;
 
 @OnlyIn(Dist.CLIENT)
@@ -135,38 +127,6 @@ public class SeedAnalyzerViewPointHandler {
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
         }
-    }
-
-    @SuppressWarnings("unused")
-    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onRenderOverlay(RenderGameOverlayEvent.Pre event) {
-        // Check event type
-        if(event.getType() != RenderGameOverlayEvent.ElementType.ALL) {
-            return;
-        }
-        // Check player target
-        RayTraceResult target = Minecraft.getInstance().objectMouseOver;
-        if(!(target instanceof BlockRayTraceResult)) {
-            return;
-        }
-        // Check tile entity
-        TileEntity tile = AgriCraft.instance.getClientWorld().getTileEntity(((BlockRayTraceResult) target).getPos());
-        if(!(tile instanceof TileEntitySeedAnalyzer)) {
-            return;
-        }
-        // Check observation state
-        TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
-        if(!analyzer.canProvideGenesForObserver()) {
-            return;
-        }
-        List<IAgriGenePair<?>> genes = analyzer.getGenesToRender();
-        int index = this.getScrollIndex();
-        // Safety check, should always pass
-        if(genes == null || index < 0 || index>= genes.size()) {
-            return;
-        }
-        // Render text overlay
-        AgriGenomeRenderer.getInstance().renderTextOverlay(event.getMatrixStack(), genes.get(index));
     }
 
     /**

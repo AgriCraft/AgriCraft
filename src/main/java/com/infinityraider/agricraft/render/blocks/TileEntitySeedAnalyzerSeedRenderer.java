@@ -23,6 +23,13 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEntitySeedAnalyzer>, IRenderUtilities {
+    private static final Quaternion TEXT_ROTATION = new Quaternion(Vector3f.XP, 90, true);
+
+    static {
+        TEXT_ROTATION.multiply(new Quaternion(Vector3f.ZP, 180, true));
+        TEXT_ROTATION.multiply(new Quaternion(Vector3f.XP, 22.5F, true));
+    }
+
     public TileEntitySeedAnalyzerSeedRenderer() {}
 
     @Override
@@ -95,7 +102,18 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
 
         // render the helix
-        renderer.renderDoubleHelix(genes, transforms, buffer, index, partial, r, h,1.0F);
+        renderer.renderDoubleHelix(genes, transforms, buffer, index, partial, r, h,1.0F, false);
+
+        // render the text
+        if(index >= 0 && index < genes.size()) {
+            transforms.push();
+            transforms.translate(0, 0, -3*Constants.UNIT);
+            transforms.rotate(TEXT_ROTATION);
+            float scale = 2.0F/Math.max(this.getScaledWindowWidth(), this.getScaledWindowHeight());
+            transforms.scale(scale, scale, 1);
+            renderer.renderTextOverlay(transforms, genes.get(index));
+            transforms.pop();
+        }
 
         // pop the matrix off the stack
         transforms.pop();
