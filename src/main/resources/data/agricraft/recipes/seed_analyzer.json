@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sgs",
+    " bs",
+    "pwp"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "g": {
+      "tag": "forge:glass_panes/colorless"
+    },
+    "b": {
+      "item": "minecraft:stone_slab"
+    },
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "w": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "result": {
+    "item": "agricraft:seed_analyzer",
+    "count": 1
+  }
+}

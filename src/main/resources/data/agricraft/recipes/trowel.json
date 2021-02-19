@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  s",
+    "ii "
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "agricraft:agri_trowel",
+    "count": 1
+  }
+}

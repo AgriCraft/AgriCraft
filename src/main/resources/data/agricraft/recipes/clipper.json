@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "sr ",
+    " s "
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "item": "minecraft:shears"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "agricraft:agri_clipper",
+    "count": 1
+  }
+}

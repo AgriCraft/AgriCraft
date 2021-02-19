@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "tag": "forge:rods/wooden"
+    },
+    {
+      "tag": "forge:rods/wooden"
+    }
+  ],
+  "result":
+  {
+    "item": "agricraft:crop_sticks_wood",
+    "count": 8
+  }
+}

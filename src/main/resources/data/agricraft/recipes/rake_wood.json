@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "f",
+    "s"
+  ],
+  "key": {
+    "f": {
+      "tag": "forge:fences/wooden"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "agricraft:agri_rake_wood",
+    "count": 1
+  }
+}

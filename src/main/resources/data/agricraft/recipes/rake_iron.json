@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b",
+    "s"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:iron_bars"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "agricraft:agri_rake_iron",
+    "count": 1
+  }
+}
