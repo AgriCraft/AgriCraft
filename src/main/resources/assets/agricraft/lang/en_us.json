@@ -48,6 +48,8 @@
   "agricraft.tooltip.clipper": "A tool to clip flowers or leaves of plants",
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",
+  "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
+  "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
 
   "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
