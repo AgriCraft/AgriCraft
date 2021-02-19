@@ -1,0 +1,21 @@
+{
+  "type": "infinitylib:crafting_shaped_dynamic_texture",
+  "pattern":
+  [
+    "p p",
+    " p ",
+    "p p"
+  ],
+  "key":
+  {
+    "p": {
+      "type": "infinitylib:dynamic_material",
+      "material": "minecraft:planks"
+    }
+  },
+  "result":
+  {
+    "item": "agricraft:grate",
+    "count": 15
+  }
+}
