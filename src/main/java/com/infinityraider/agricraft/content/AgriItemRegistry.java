@@ -1,13 +1,12 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.*;
+import com.infinityraider.agricraft.content.decoration.ItemGrate;
 import com.infinityraider.agricraft.content.tools.ItemClipper;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.content.tools.ItemRake;
 import com.infinityraider.agricraft.content.tools.ItemTrowel;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.item.Item;
 
 public class AgriItemRegistry {
 
@@ -17,26 +16,28 @@ public class AgriItemRegistry {
         return INSTANCE;
     }
 
-    public final ItemBase debugger;
+    public final ItemDebugger debugger;
 
-    public final Item crop_sticks_wood;
-    public final Item crop_sticks_iron;
-    public final Item crop_sticks_obsidian;
+    public final ItemCropSticks crop_sticks_wood;
+    public final ItemCropSticks crop_sticks_iron;
+    public final ItemCropSticks crop_sticks_obsidian;
 
-    public final Item seed_analyzer;
-    public final ItemBase journal;
+    public final ItemSeedAnalyzer seed_analyzer;
+    public final ItemJournal journal;
 
-    public final ItemBase seed;
+    public final ItemDynamicAgriSeed seed;
 
-    public final ItemBase clipper;
-    public final ItemBase magnifying_glass;
-    public final ItemBase rake_wood;
-    public final ItemBase rake_iron;
-    public final ItemBase trowel;
+    public final ItemClipper clipper;
+    public final ItemMagnifyingGlass magnifying_glass;
+    public final ItemRake rake_wood;
+    public final ItemRake rake_iron;
+    public final ItemTrowel trowel;
 
-    public final ItemBase nugget_diamond;
-    public final ItemBase nugget_emerald;
-    public final ItemBase nugget_quartz;
+    public final ItemAgriNugget nugget_diamond;
+    public final ItemAgriNugget nugget_emerald;
+    public final ItemAgriNugget nugget_quartz;
+
+    public final ItemGrate grate;
 
     private AgriItemRegistry() {
         this.debugger = new ItemDebugger();
@@ -59,6 +60,8 @@ public class AgriItemRegistry {
         this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
         this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
         this.nugget_quartz = new ItemAgriNugget(Names.Nuggets.QUARTZ);
+
+        this.grate = new ItemGrate();
     }
 
 }

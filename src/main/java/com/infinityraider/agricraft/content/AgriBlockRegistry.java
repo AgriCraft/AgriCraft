@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
-import com.infinityraider.infinitylib.block.BlockBase;
+import com.infinityraider.agricraft.content.decoration.BlockGrate;
 
 public class AgriBlockRegistry {
 
@@ -14,12 +14,12 @@ public class AgriBlockRegistry {
     }
 
     // crop sticks
-    public final BlockBase crop_sticks_wood;
-    public final BlockBase crop_sticks_iron;
-    public final BlockBase crop_sticks_obsidian;
+    public final BlockCropSticks crop_sticks_wood;
+    public final BlockCropSticks crop_sticks_iron;
+    public final BlockCropSticks crop_sticks_obsidian;
 
     // analyzer
-    public final BlockBase seed_analyzer;
+    public final BlockSeedAnalyzer seed_analyzer;
 
     // irrigation
     /*
@@ -37,9 +37,7 @@ public class AgriBlockRegistry {
     */
 
     // Decoration
-    /*
-    public final BlockBase grate;
-    */
+    public final BlockGrate grate;
 
     private AgriBlockRegistry() {
         this.crop_sticks_wood = new BlockCropSticks(CropStickVariant.WOOD);
@@ -47,8 +45,10 @@ public class AgriBlockRegistry {
         this.crop_sticks_obsidian = new BlockCropSticks(CropStickVariant.OBSIDIAN);
 
         this.seed_analyzer = new BlockSeedAnalyzer();
-        /*
 
+        this.grate = new BlockGrate();
+
+        /*
         this.tank = new BlockWaterTank();
         this.channel = new BlockWaterChannel();
         this.channel_valve = new BlockWaterChannelValve();
@@ -57,7 +57,6 @@ public class AgriBlockRegistry {
         this.sprinkler = new BlockSprinkler();
 
         this.seed_storage = new BlockSeedStorage();
-        this.grate = new BlockGrate();
         */
     }
 
