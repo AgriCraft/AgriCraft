@@ -201,7 +201,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+        return this.getShape(state, world, pos, context);
     }
 
     @Override
