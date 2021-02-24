@@ -1,0 +1,13 @@
+{
+	"loader": "infinitylib:composite",
+	"parts": {
+		"grate": {
+			"parent": "agricraft:block/grate"
+		}
+	},
+	"transformations": {
+		"grate": {
+			"translation": [7, 0, 0]
+		}
+	}
+}

@@ -5,7 +5,7 @@
   },
   "parts": {
     "crop_sticks": {
-      "parent": "agricraft:block/crop_sticks_obsidian"
+      "parent": "agricraft:block/crop_sticks/obsidian_cross"
     },
     "plant": {
       "loader": "agricraft:plant_model_loader"

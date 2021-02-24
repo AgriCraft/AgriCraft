@@ -1,11 +1,11 @@
 {
   "loader": "forge:composite",
   "textures":  {
-    "particle": "minecraft:block/oak_planks"
+    "particle": "minecraft:block/iron_block"
   },
   "parts": {
     "crop_sticks": {
-      "parent": "agricraft:block/crop_sticks_wood"
+      "parent": "agricraft:block/crop_sticks/iron"
     },
     "plant": {
       "loader": "agricraft:plant_model_loader"

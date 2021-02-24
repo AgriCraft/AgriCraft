@@ -1,24 +1,13 @@
 {
-	"credit": "Made with Blockbench",
-	"textures": {
-		"4": "agricraft:block/seed_analyzer_pane"
-	},
-	"elements": [
-		{
-			"name": "book",
-			"from": [11.5, 4, 6.5],
-			"to": [15.5, 5, 11.5],
-			"rotation": {"angle": 22.5, "axis": "y", "origin": [19, 12, 14]},
-			"faces": {
-				"north": {"uv": [11, 5, 15, 6], "texture": "#4"},
-				"east": {"uv": [11, 0, 12, 5], "rotation": 90, "texture": "#4"},
-				"south": {"uv": [11, 5, 15, 6], "texture": "#4"},
-				"west": {"uv": [11, 5, 16, 6], "texture": "#4"},
-				"up": {"uv": [11, 0, 15, 5], "texture": "#4"},
-				"down": {"uv": [11, 0, 15, 5], "texture": "#4"}
-			}
+	"loader":"forge:composite",
+	"parts": {
+		"analyzer": {
+			"parent": "agricraft:block/seed_analyzer/analyzer"
+		},
+		"journal": {
+			"parent": "agricraft:block/seed_analyzer/book"
 		}
-	],
+	},
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [45, 0, 0],
