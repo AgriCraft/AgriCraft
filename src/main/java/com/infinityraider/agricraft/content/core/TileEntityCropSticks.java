@@ -72,12 +72,15 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     public TileEntityCropSticks() {
         // Super constructor with appropriate TileEntity Type
         super(AgriCraft.instance.getModTileRegistry().crop_sticks);
+
         // Initialize automatically synced fields
-        this.genome = this.createField(Optional.empty(),
+        this.genome = this.createAutoSyncedField(
+                Optional.empty(),
                 (optional, tag) -> optional.ifPresent(genome -> {
                     CompoundNBT geneTag = new CompoundNBT();
                     genome.writeToNBT(geneTag);
-                    tag.put(AgriNBT.GENOME, geneTag);}),
+                    tag.put(AgriNBT.GENOME, geneTag);
+                }),
                 (tag) -> {
                     if (tag.contains(AgriNBT.GENOME)) {
                         IAgriGenome genome = AgriApi.getAgriGenomeBuilder(NO_PLANT).build();
@@ -85,27 +88,37 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                         return Optional.of(genome);
                     } else {
                         return Optional.empty();
-                    }},
+                    }
+                },
                 CoreHandler::isInitialized,
                 Optional.empty());
-        this.growth = this.createField(NO_GROWTH,
+
+        this.growth = this.getAutoSyncedFieldBuilder(NO_GROWTH,
                 (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
                 (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH),
                 CoreHandler::isInitialized,
-                NO_GROWTH);
-        this.weed = this.createField(NO_WEED,
+                NO_GROWTH).withRenderUpdate().build();
+
+        this.weed = this.getAutoSyncedFieldBuilder(NO_WEED,
                 (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
                 (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED),
                 CoreHandler::isInitialized,
-                NO_WEED);
-        this.weedGrowth = this.createField(NO_GROWTH,
+                NO_WEED).withRenderUpdate().build();
+
+        this.weedGrowth = this.getAutoSyncedFieldBuilder(NO_GROWTH,
                 (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId()),
                 (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH),
                 CoreHandler::isInitialized,
-                NO_GROWTH);
-        this.crossCrop = this.createField(false,
-                (bool, tag) -> tag.putBoolean(AgriNBT.CROSS_CROP, bool),
-                (tag) -> tag.getBoolean(AgriNBT.CROSS_CROP));
+                NO_GROWTH).withRenderUpdate().build();
+
+        this.crossCrop = this.getAutoSyncedFieldBuilder(false)
+                .withCallBack(status -> {
+                    if (this.getWorld() != null) {
+                        this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getBlockState(), status));
+                    }})
+                .withRenderUpdate()
+                .build();
+
         // Initialize neighbour cache
         this.neighbours = Maps.newEnumMap(Direction.class);
         Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, Optional.empty()));
@@ -224,9 +237,6 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         this.crossCrop.set(status);
-        if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getBlockState(), status));
-        }
         return true;
     }
 
@@ -595,9 +605,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             if(resetBrightness && BlockCropSticks.LIGHT.fetch(state) > 0) {
                 this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(BlockCropSticks.LIGHT.apply(state), plant));
             } else {
-                if (BlockCropSticks.PLANT.fetch(state) == plant) {
-                    this.forceRenderUpdate();
-                } else {
+                if (BlockCropSticks.PLANT.fetch(state) != plant) {
                     this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
                 }
             }

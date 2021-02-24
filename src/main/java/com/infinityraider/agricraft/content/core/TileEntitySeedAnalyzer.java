@@ -13,7 +13,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -56,8 +55,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     public TileEntitySeedAnalyzer() {
         super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
-        this.seed = createField(ItemStack.EMPTY, ItemStack::write, ItemStack::read);
-        this.journal = createField(ItemStack.EMPTY, ItemStack::write, ItemStack::read);
+        this.seed = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
+                .withCallBack(seed -> addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal))
+                .build();
+        this.journal = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
+                .withCallBack(journal -> {
+                    if (this.getWorld() != null) {
+                        this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()));
+                    }})
+                .withRenderUpdate()
+                .build();
         this.capability = LazyOptional.of(() -> this);
     }
 
@@ -173,20 +180,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     protected void setSeed(ItemStack seed) {
-        boolean hadSeed = this.hasSeed();
-        Item prevSeed = this.getSeed().getItem();
         this.seed.set(seed);
-        if(this.getWorld() != null) {
-            // Add the seed to the journal
-            addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal);
-            // Update the block state
-            BlockState state = this.getBlockState();
-            if(hadSeed != BlockSeedAnalyzer.SEED.fetch(state)) {
-                this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.SEED.apply(state, !seed.isEmpty()));
-            } else if(prevSeed != this.getSeed().getItem()) {
-                this.forceRenderUpdate();
-            }
-        }
     }
 
     public boolean canInsertSeed(ItemStack seed) {
@@ -208,12 +202,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     protected void setJournal(ItemStack journal) {
-        // Add the current seed to the journal
-        journal = addSeedToJournal(this.getSeed(), journal).orElse(journal);
-        this.journal.set(journal);
-        if(this.getWorld() != null) {
-            this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()));
-        }
+        this.journal.set(addSeedToJournal(this.getSeed(), journal).orElse(journal));
     }
 
     @Nonnull

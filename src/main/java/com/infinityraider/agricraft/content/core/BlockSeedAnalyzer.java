@@ -41,12 +41,10 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     // Properties
     public static final InfProperty<Direction> ORIENTATION = InfProperty.Creators.createHorizontals("orientation", Direction.NORTH);
     public static final InfProperty<Boolean> JOURNAL = InfProperty.Creators.create("journal", false);
-    public static final InfProperty<Boolean> SEED = InfProperty.Creators.create("seed", false);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(ORIENTATION)
             .add(JOURNAL)
-            .add(SEED)
             .waterloggable()
             .build();
 

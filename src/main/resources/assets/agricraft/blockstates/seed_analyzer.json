@@ -1,65 +1,34 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"journal=false,orientation=north,seed=false": [{
+		"journal=false,orientation=north": [{
 			"model": "agricraft:block/seed_analyzer"
 		}],
-		"journal=false,orientation=east,seed=false": [{
+		"journal=false,orientation=east": [{
 			"model": "agricraft:block/seed_analyzer",
 			"y": 90
 		}],
-		"journal=false,orientation=south,seed=false": [{
+		"journal=false,orientation=south": [{
 			"model": "agricraft:block/seed_analyzer",
 			"y": 180
 		}],
-		"journal=false,orientation=west,seed=false": [{
+		"journal=false,orientation=west": [{
 			"model": "agricraft:block/seed_analyzer",
 			"y": 270
 		}],
-		"journal=true,orientation=north,seed=false": [{
+		"journal=true,orientation=north": [{
 			"model": "agricraft:block/seed_analyzer_journal"
 		}],
-		"journal=true,orientation=east,seed=false": [{
+		"journal=true,orientation=east": [{
 			"model": "agricraft:block/seed_analyzer_journal",
 			"y": 90
 		}],
-		"journal=true,orientation=south,seed=false": [{
+		"journal=true,orientation=south": [{
 			"model": "agricraft:block/seed_analyzer_journal",
 			"y": 180
 		}],
-		"journal=true,orientation=west,seed=false": [{
+		"journal=true,orientation=west": [{
 			"model": "agricraft:block/seed_analyzer_journal",
-			"y": 270
-		}],
-
-		"journal=false,orientation=north,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_seed"
-		}],
-		"journal=false,orientation=east,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_seed",
-			"y": 90
-		}],
-		"journal=false,orientation=south,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_seed",
-			"y": 180
-		}],
-		"journal=false,orientation=west,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_seed",
-			"y": 270
-		}],
-		"journal=true,orientation=north,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_journal_seed"
-		}],
-		"journal=true,orientation=east,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_journal_seed",
-			"y": 90
-		}],
-		"journal=true,orientation=south,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_journal_seed",
-			"y": 180
-		}],
-		"journal=true,orientation=west,seed=true": [{
-			"model": "agricraft:block/seed_analyzer_journal_seed",
 			"y": 270
 		}]
 	}
