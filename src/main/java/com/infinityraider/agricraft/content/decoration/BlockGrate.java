@@ -5,11 +5,13 @@ import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
+import com.infinityraider.infinitylib.reference.Constants;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -20,7 +22,9 @@ import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -54,6 +58,16 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     }
 
     // VoxelShapes
+    protected static VoxelShape getShape(Direction.Axis axis, Offset offset) {
+        switch (axis) {
+            case X: return getShape(X_SHAPES, offset);
+            case Y: return getShape(Y_SHAPES, offset);
+            case Z: return getShape(Z_SHAPES, offset);
+            // Should never happen
+            default: return VoxelShapes.empty();
+        }
+    }
+
     public static final VoxelShape X_DEFAULT = Stream.of(
             Block.makeCuboidShape(7, 1, 0, 9, 3, 16),
             Block.makeCuboidShape(7, 5, 0, 9, 7, 16),
@@ -128,6 +142,75 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+        BlockState current = world.getBlockState(pos);
+        return current.getMaterial().isReplaceable();
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        BlockState state = this.getDefaultState();
+        if(state.isValidPosition(context.getWorld(), context.getPos())) {
+            BlockPos clicked = context.getPos().offset(context.getFace().getOpposite());
+            BlockState target = context.getWorld().getBlockState(clicked);
+            if(target.getBlock() instanceof BlockGrate) {
+                // If a grate is clicked on a grate, mimic its placement
+                return AXIS.apply(
+                        OFFSET.apply(
+                                this.waterlog(state, context.getWorld(), context.getPos()),
+                                OFFSET.fetch(target)
+                        ),
+                        AXIS.fetch(target)
+                );
+            } else {
+                // If not, determine the axis according to the face the player clicked and his look vector
+                Vector3d hit = context.getHitVec();
+                double offset;
+                if(context.getFace().getAxis() == Direction.Axis.Y) {
+                    // The player clicked a horizontal face, determine the axis based on the player's orientation
+                    if(context.getPlacementHorizontalFacing().getAxis() == Direction.Axis.X) {
+                        // player is looking in the X direction
+                        state = AXIS.apply(state, Direction.Axis.X);
+                        offset = hit.getX() - ((int) hit.getX());
+                    } else {
+                        // player is looking in the Z direction
+                        state = AXIS.apply(state, Direction.Axis.Z);
+                        offset = hit.getZ() - ((int) hit.getZ());
+                    }
+                } else {
+                    // The player clicked a vertical face, the axis will be Y
+                    state = AXIS.apply(state, Direction.Axis.Y);
+                    offset = hit.getY() - ((int) hit.getY());
+                }
+                // Finally, determine the offset by how far along the block the player clicked
+                offset += offset < 0 ? 1 : 0;
+                if(offset >= 11*Constants.UNIT) {
+                    return OFFSET.apply(
+                            this.waterlog(state, context.getWorld(), context.getPos()),
+                            Offset.FAR);
+                } else if(offset <= 5*Constants.UNIT) {
+                    return OFFSET.apply(
+                            this.waterlog(state, context.getWorld(), context.getPos()),
+                            Offset.NEAR);
+                } else {
+                    return OFFSET.apply(
+                            this.waterlog(state, context.getWorld(), context.getPos()),
+                            Offset.MID);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
+        return AgriCraft.instance.getConfig().areGratesClimbable() && (AXIS.fetch(state) != Direction.Axis.Y);
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
         return this.getShape(state, world, pos, ISelectionContext.dummy());
     }
@@ -167,28 +250,18 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         return this.getShape(state, world, pos, context);
     }
 
-    protected static VoxelShape getShape(Direction.Axis axis, Offset offset) {
-        switch (axis) {
-            case X: return getShape(X_SHAPES, offset);
-            case Y: return getShape(Y_SHAPES, offset);
-            case Z: return getShape(Z_SHAPES, offset);
-            // Should never happen
-            default: return VoxelShapes.empty();
-        }
-    }
-
     protected static VoxelShape getShape(VoxelShape[] shapes, Offset offset) {
         return shapes[offset.ordinal()];
     }
 
     public enum Offset implements IStringSerializable {
-        NEAR(-7),
+        NEAR(-7*Constants.UNIT),
         MID(0),
-        FAR(7);
+        FAR(7*Constants.UNIT);
 
-        private final int offset;
+        private final double offset;
 
-        Offset(int offset) {
+        Offset(double offset) {
             this.offset = offset;
         }
 
@@ -197,7 +270,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
             return this.name().toLowerCase();
         }
 
-        public int getOffset() {
+        public double getOffset() {
             return this.offset;
         }
     }

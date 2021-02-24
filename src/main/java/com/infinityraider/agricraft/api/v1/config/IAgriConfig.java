@@ -159,4 +159,16 @@ public interface IAgriConfig {
      */
     int sprinklerWaterConsumption();
 
+
+    /*
+     * -------------------------
+     * DECORATION CONFIG OPTIONS
+     * ------------------------
+     */
+
+    /**
+     * @return true if grates can be climbed
+     */
+    boolean areGratesClimbable();
+
 }

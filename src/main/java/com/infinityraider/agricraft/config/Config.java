@@ -41,6 +41,9 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Double> sprinkleGrowthChance;
         private final ForgeConfigSpec.ConfigValue<Integer> sprinklerWaterConsumption;
 
+        // decoration
+        private final ForgeConfigSpec.ConfigValue<Boolean> climbableGrate;
+
         public Common(ForgeConfigSpec.Builder builder) {
             super();
 
@@ -93,6 +96,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Sprinkler growth chance", 0.2, 0, 1.0);
             this.sprinklerWaterConsumption = builder.comment("Defined in terms of mB per second. The irrigation loop progress will pause when there is insufficient water.")
                     .defineInRange("Sprinkler water usage", 10, 0, 1000);
+            builder.pop();
+
+            builder.push("decoration");
+            this.climbableGrate = builder.comment("When true, entities will be able to climb on grates")
+                    .define("Grates always climbable", true);
             builder.pop();
         }
 
@@ -190,6 +198,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public int sprinklerWaterConsumption() {
             return this.sprinklerWaterConsumption.get();
+        }
+
+        @Override
+        public boolean areGratesClimbable() {
+            return this.climbableGrate.get();
         }
 
         @Override

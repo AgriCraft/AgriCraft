@@ -39,6 +39,9 @@ public class AgriToolTips {
     public static final ITextComponent SEED_ANALYZER_L1 = new TranslationTextComponent("agricraft.tooltip.analyzer.l1");
     public static final ITextComponent SEED_ANALYZER_L2 = new TranslationTextComponent("agricraft.tooltip.analyzer.l2");
 
+    public static final ITextComponent GRATE_L1 = new TranslationTextComponent("agricraft.tooltip.grate.l1");
+    public static final ITextComponent GRATE_L2 = new TranslationTextComponent("agricraft.tooltip.grate.l2");
+
     public static final ITextComponent MSG_CLIPPING_IMPOSSIBLE = new TranslationTextComponent("agricraft.message.clipping_impossible");
     public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.message.trowel_weed");
     public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");

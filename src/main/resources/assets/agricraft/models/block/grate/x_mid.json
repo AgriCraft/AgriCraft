@@ -2,7 +2,7 @@
 	"loader": "infinitylib:composite",
 	"parts": {
 		"grate": {
-			"parent": "agricraft:block/grate"
+			"parent": "agricraft:block/grate/grate"
 		}
 	},
 	"transformations": {
