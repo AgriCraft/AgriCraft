@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.client.model.data.ModelDataMap;
 
 import javax.annotation.Nonnull;
 
@@ -20,11 +19,6 @@ public class TileEntityGrate extends TileEntityDynamicTexture {
 
     @Override
     protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
-        // NOOP
-    }
-
-    @Override
-    protected void populateModelData(ModelDataMap.Builder modelDataBuilder) {
         // NOOP
     }
 }

@@ -158,53 +158,54 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         BlockState state = this.getDefaultState();
-        if(state.isValidPosition(context.getWorld(), context.getPos())) {
+        if (state.isValidPosition(context.getWorld(), context.getPos())) {
             BlockPos clicked = context.getPos().offset(context.getFace().getOpposite());
             BlockState target = context.getWorld().getBlockState(clicked);
-            if(target.getBlock() instanceof BlockGrate) {
-                // If a grate is clicked on a grate, mimic its placement
-                return AXIS.apply(
-                        OFFSET.apply(
-                                this.waterlog(state, context.getWorld(), context.getPos()),
-                                OFFSET.fetch(target)
-                        ),
-                        AXIS.fetch(target)
-                );
+            // If a grate is clicked on a grate, mimic its placement if a side face is clicked
+            if (target.getBlock() instanceof BlockGrate) {
+                if (context.getFace().getAxis() != AXIS.fetch(target)) {
+                    return AXIS.apply(
+                            OFFSET.apply(
+                                    this.waterlog(state, context.getWorld(), context.getPos()),
+                                    OFFSET.fetch(target)
+                            ),
+                            AXIS.fetch(target)
+                    );
+                }
+            }
+            // Determine the axis according to the face the player clicked and his look vector
+            Vector3d hit = context.getHitVec();
+            double offset;
+            if (context.getFace().getAxis() == Direction.Axis.Y) {
+                // The player clicked a horizontal face, determine the axis based on the player's orientation
+                if (context.getPlacementHorizontalFacing().getAxis() == Direction.Axis.X) {
+                    // player is looking in the X direction
+                    state = AXIS.apply(state, Direction.Axis.X);
+                    offset = hit.getX() - ((int) hit.getX());
+                } else {
+                    // player is looking in the Z direction
+                    state = AXIS.apply(state, Direction.Axis.Z);
+                    offset = hit.getZ() - ((int) hit.getZ());
+                }
             } else {
-                // If not, determine the axis according to the face the player clicked and his look vector
-                Vector3d hit = context.getHitVec();
-                double offset;
-                if(context.getFace().getAxis() == Direction.Axis.Y) {
-                    // The player clicked a horizontal face, determine the axis based on the player's orientation
-                    if(context.getPlacementHorizontalFacing().getAxis() == Direction.Axis.X) {
-                        // player is looking in the X direction
-                        state = AXIS.apply(state, Direction.Axis.X);
-                        offset = hit.getX() - ((int) hit.getX());
-                    } else {
-                        // player is looking in the Z direction
-                        state = AXIS.apply(state, Direction.Axis.Z);
-                        offset = hit.getZ() - ((int) hit.getZ());
-                    }
-                } else {
-                    // The player clicked a vertical face, the axis will be Y
-                    state = AXIS.apply(state, Direction.Axis.Y);
-                    offset = hit.getY() - ((int) hit.getY());
-                }
-                // Finally, determine the offset by how far along the block the player clicked
-                offset += offset < 0 ? 1 : 0;
-                if(offset >= 11*Constants.UNIT) {
-                    return OFFSET.apply(
-                            this.waterlog(state, context.getWorld(), context.getPos()),
-                            Offset.FAR);
-                } else if(offset <= 5*Constants.UNIT) {
-                    return OFFSET.apply(
-                            this.waterlog(state, context.getWorld(), context.getPos()),
-                            Offset.NEAR);
-                } else {
-                    return OFFSET.apply(
-                            this.waterlog(state, context.getWorld(), context.getPos()),
-                            Offset.MID);
-                }
+                // The player clicked a vertical face, the axis will be Y
+                state = AXIS.apply(state, Direction.Axis.Y);
+                offset = hit.getY() - ((int) hit.getY());
+            }
+            // Finally, determine the offset by how far along the block the player clicked
+            offset += offset < 0 ? 1 : 0;
+            if (offset >= 11 * Constants.UNIT) {
+                return OFFSET.apply(
+                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        Offset.FAR);
+            } else if (offset <= 5 * Constants.UNIT) {
+                return OFFSET.apply(
+                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        Offset.NEAR);
+            } else {
+                return OFFSET.apply(
+                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        Offset.MID);
             }
         }
         return null;
