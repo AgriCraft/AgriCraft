@@ -1,0 +1,13 @@
+{
+  "loader": "infinitylib:composite",
+  "parts": {
+    "front": {
+      "parent": "minecraft:block/vine_1"
+    }
+  },
+  "transformations": {
+    "front": {
+      "translation": [0, 0, -15.21]
+    }
+  }
+}

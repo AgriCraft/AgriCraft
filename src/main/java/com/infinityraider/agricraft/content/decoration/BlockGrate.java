@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.decoration;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -11,13 +12,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -31,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -130,7 +137,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     }
 
     @Override
-    public Item asItem() {
+    public ItemGrate asItem() {
         return AgriCraft.instance.getModItemRegistry().grate;
     }
 
@@ -204,6 +211,35 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if(!world.isRemote()) {
+            ItemStack item = player.getHeldItem(hand);
+            if(!item.isEmpty()) {
+                if(item.getItem() == Items.VINE) {
+                    Vines vines = VINES.fetch(state);
+                    if (!vines.hasVines(hit)) {
+                        world.setBlockState(pos, VINES.apply(state, vines.addVines(hit)));
+                        if(!player.isCreative()) {
+                            item.shrink(1);
+                        }
+                    }
+                } else if(item.getItem() instanceof IAgriClipperItem) {
+                    Vines vines = VINES.fetch(state);
+                    if (vines.hasVines(hit)) {
+                        world.setBlockState(pos, VINES.apply(state, vines.removeVines(hit)));
+                        if(!player.isCreative()) {
+                            this.addToInventoryOrDrop(new ItemStack(Items.VINE, 1), world, pos, player);
+                        }
+                    }
+                }
+            }
+        }
+        return ActionResultType.PASS;
+    }
+
+    @Override
     public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
         return AgriCraft.instance.getConfig().areGratesClimbable() && (AXIS.fetch(state) != Direction.Axis.Y);
     }
@@ -254,10 +290,18 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         return shapes[offset.ordinal()];
     }
 
+    @Override
+    public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityGrate tile, LootContext.Builder context) {
+        int vineCount = VINES.fetch(state).getVineCount();
+        if(vineCount > 0) {
+            dropAcceptor.accept(new ItemStack(Items.VINE, vineCount));
+        }
+    }
+
     public enum Offset implements IStringSerializable {
-        NEAR(-7*Constants.UNIT),
+        NEAR(-6.99*Constants.UNIT),
         MID(0),
-        FAR(7*Constants.UNIT);
+        FAR(6.99*Constants.UNIT);
 
         private final double offset;
 
@@ -276,10 +320,71 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     }
 
     public enum Vines implements IStringSerializable {
-        NONE,
-        FRONT,
-        BACK,
-        BOTH;
+        NONE(0),
+        FRONT(1),
+        BACK(1),
+        BOTH(2);
+
+        private final int vineCount;
+
+        Vines(int vineCount) {
+            this.vineCount = vineCount;
+        }
+
+        public int getVineCount() {
+            return this.vineCount;
+        }
+
+        public boolean hasVines(BlockRayTraceResult hit) {
+            return this.hasVines(hit.getFace());
+        }
+
+        public boolean hasVines(Direction direction) {
+            return this.hasVines(direction.getAxisDirection());
+        }
+
+        public boolean hasVines(Direction.AxisDirection direction) {
+            switch (this) {
+                case FRONT: return direction == Direction.AxisDirection.POSITIVE;
+                case BACK: return direction == Direction.AxisDirection.NEGATIVE;
+                case BOTH: return true;
+            }
+            return false;
+        }
+
+        public Vines addVines(BlockRayTraceResult hit) {
+            return this.addVines(hit.getFace());
+        }
+
+        public Vines addVines(Direction direction) {
+            return this.addVines(direction.getAxisDirection());
+        }
+
+        public Vines addVines(Direction.AxisDirection direction) {
+            switch (this) {
+                case NONE: return direction == Direction.AxisDirection.POSITIVE ? FRONT : BACK;
+                case FRONT: return direction == Direction.AxisDirection.POSITIVE ? FRONT : BOTH;
+                case BACK: return direction == Direction.AxisDirection.POSITIVE ? BOTH : BACK;
+            }
+            return BOTH;
+        }
+
+        public Vines removeVines(BlockRayTraceResult hit) {
+            return this.removeVines(hit.getFace());
+        }
+
+        public Vines removeVines(Direction direction) {
+            return this.removeVines(direction.getAxisDirection());
+        }
+
+        public Vines removeVines(Direction.AxisDirection direction) {
+            switch (this) {
+                case FRONT: return direction == Direction.AxisDirection.POSITIVE ? NONE : FRONT;
+                case BACK: return direction == Direction.AxisDirection.POSITIVE ? BACK : NONE;
+                case BOTH: return direction == Direction.AxisDirection.POSITIVE ? BACK : FRONT;
+            }
+            return NONE;
+        }
 
         @Override
         public String getString() {

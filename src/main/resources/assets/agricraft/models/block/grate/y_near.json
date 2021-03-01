@@ -6,5 +6,6 @@
 		}
 	},
 	"transformations": {
-	}
+	},
+	"particle": "grate"
 }

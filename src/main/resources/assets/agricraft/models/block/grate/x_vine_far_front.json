@@ -1,0 +1,14 @@
+{
+  "loader": "infinitylib:composite",
+  "parts": {
+    "front": {
+      "parent": "minecraft:block/vine_1"
+    }
+  },
+  "transformations": {
+    "front": {
+      "translation": [0, 0, -1.21],
+      "rotation": [0, 270, 0]
+    }
+  }
+}

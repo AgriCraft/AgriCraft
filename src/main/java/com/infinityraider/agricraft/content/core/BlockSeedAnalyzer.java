@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.core;
 
+import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
@@ -17,6 +18,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -33,6 +36,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.function.BiFunction;
 
 @ParametersAreNonnullByDefault
@@ -215,6 +219,25 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                 }
             }
         }
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
+        List<ItemStack> drops = Lists.newArrayList();
+        drops.add(new ItemStack(AgriCraft.instance.getModItemRegistry().seed_analyzer));
+        TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
+        if(tile instanceof TileEntitySeedAnalyzer) {
+            TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
+            if(analyzer.hasSeed()) {
+                drops.add(analyzer.getSeed());
+            }
+            if(analyzer.hasJournal()) {
+                drops.add(analyzer.getJournal());
+            }
+        }
+        return drops;
     }
 
     @Override

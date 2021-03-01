@@ -9,5 +9,6 @@
 		"grate": {
 			"translation": [14, 0, 0]
 		}
-	}
+	},
+	"particle": "grate"
 }
