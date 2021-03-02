@@ -32,112 +32,112 @@
 		},
 		{
 			"when": {"OR": [
-				{"direction":  "x", "offset": "near", "vine":  "front"},
-				{"direction":  "x", "offset": "near", "vine":  "both"}
+				{"direction":  "x", "offset": "near", "vines":  "front"},
+				{"direction":  "x", "offset": "near", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_near_front"}
+			"apply": {"model": "agricraft:block/grate/x_vine_near_front", "y":  270}
 		},{
 			"when": {"OR": [
-				{"direction":  "x", "offset": "near", "vine":  "back"},
-				{"direction":  "x", "offset": "near", "vine":  "both"}
+				{"direction":  "x", "offset": "near", "vines":  "back"},
+				{"direction":  "x", "offset": "near", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_near_back"}
+			"apply": {"model": "agricraft:block/grate/x_vine_near_back", "y":  270}
 		}, {
 			"when": {"OR": [
-				{"direction":  "x", "offset": "mid", "vine":  "front"},
-				{"direction":  "x", "offset": "mid", "vine":  "both"}
+				{"direction":  "x", "offset": "mid", "vines":  "front"},
+				{"direction":  "x", "offset": "mid", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_mid_front"}
+			"apply": {"model": "agricraft:block/grate/x_vine_mid_front", "y":  270}
 		},{
 			"when": {"OR": [
-				{"direction":  "x", "offset": "mid", "vine":  "back"},
-				{"direction":  "x", "offset": "mid", "vine":  "both"}
+				{"direction":  "x", "offset": "mid", "vines":  "back"},
+				{"direction":  "x", "offset": "mid", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_mid_back"}
+			"apply": {"model": "agricraft:block/grate/x_vine_mid_back", "y":  270}
 		}, {
 			"when": {"OR": [
-				{"direction":  "z", "offset": "mid", "vine":  "front"},
-				{"direction":  "z", "offset": "mid", "vine":  "both"}
+				{"direction":  "x", "offset": "far", "vines":  "front"},
+				{"direction":  "x", "offset": "far", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_far_front"}
+			"apply": {"model": "agricraft:block/grate/x_vine_far_front", "y":  270}
 		},{
 			"when": {"OR": [
-				{"direction":  "x", "offset": "far", "vine":  "back"},
-				{"direction":  "x", "offset": "far", "vine":  "both"}
+				{"direction":  "x", "offset": "far", "vines":  "back"},
+				{"direction":  "x", "offset": "far", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/x_vine_far_back"}
+			"apply": {"model": "agricraft:block/grate/x_vine_far_back", "y":  270}
 		},
 		{
 			"when": {"OR": [
-				{"direction":  "y", "offset": "near", "vine":  "front"},
-				{"direction":  "y", "offset": "near", "vine":  "both"}
+				{"direction":  "y", "offset": "near", "vines":  "front"},
+				{"direction":  "y", "offset": "near", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_near_front"}
+			"apply": {"model": "agricraft:block/grate/y_vine_near_front", "x":  90}
 		},{
 			"when": {"OR": [
-				{"direction":  "y", "offset": "near", "vine":  "back"},
-				{"direction":  "y", "offset": "near", "vine":  "both"}
+				{"direction":  "y", "offset": "near", "vines":  "back"},
+				{"direction":  "y", "offset": "near", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_near_back"}
+			"apply": {"model": "agricraft:block/grate/y_vine_near_back", "x":  90}
 		}, {
 			"when": {"OR": [
-				{"direction":  "y", "offset": "mid", "vine":  "front"},
-				{"direction":  "y", "offset": "mid", "vine":  "both"}
+				{"direction":  "y", "offset": "mid", "vines":  "front"},
+				{"direction":  "y", "offset": "mid", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_mid_front"}
+			"apply": {"model": "agricraft:block/grate/y_vine_mid_front", "x":  90}
 		},{
 			"when": {"OR": [
-				{"direction":  "y", "offset": "mid", "vine":  "back"},
-				{"direction":  "y", "offset": "mid", "vine":  "both"}
+				{"direction":  "y", "offset": "mid", "vines":  "back"},
+				{"direction":  "y", "offset": "mid", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_mid_back"}
+			"apply": {"model": "agricraft:block/grate/y_vine_mid_back", "x":  90}
 		}, {
 			"when": {"OR": [
-				{"direction":  "y", "offset": "mid", "vine":  "front"},
-				{"direction":  "y", "offset": "mid", "vine":  "both"}
+				{"direction":  "y", "offset": "far", "vines":  "front"},
+				{"direction":  "y", "offset": "far", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_far_front"}
+			"apply": {"model": "agricraft:block/grate/y_vine_far_front", "x":  90}
 		},{
 			"when": {"OR": [
-				{"direction":  "y", "offset": "far", "vine":  "back"},
-				{"direction":  "y", "offset": "far", "vine":  "both"}
+				{"direction":  "y", "offset": "far", "vines":  "back"},
+				{"direction":  "y", "offset": "far", "vines":  "both"}
 			]},
-			"apply": {"model": "agricraft:block/grate/y_vine_far_back"}
+			"apply": {"model": "agricraft:block/grate/y_vine_far_back", "x":  90}
 		},
 		{
 			"when": {"OR": [
-				{"direction":  "z", "offset": "near", "vine":  "front"},
-				{"direction":  "z", "offset": "near", "vine":  "both"}
+				{"direction":  "z", "offset": "near", "vines":  "front"},
+				{"direction":  "z", "offset": "near", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_near_front"}
 		},{
 			"when": {"OR": [
-				{"direction":  "z", "offset": "near", "vine":  "back"},
-				{"direction":  "z", "offset": "near", "vine":  "both"}
+				{"direction":  "z", "offset": "near", "vines":  "back"},
+				{"direction":  "z", "offset": "near", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_near_back"}
 		}, {
 			"when": {"OR": [
-				{"direction":  "z", "offset": "mid", "vine":  "front"},
-				{"direction":  "z", "offset": "mid", "vine":  "both"}
+				{"direction":  "z", "offset": "mid", "vines":  "front"},
+				{"direction":  "z", "offset": "mid", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_mid_front"}
 		},{
 			"when": {"OR": [
-				{"direction":  "z", "offset": "mid", "vine":  "back"},
-				{"direction":  "z", "offset": "mid", "vine":  "both"}
+				{"direction":  "z", "offset": "mid", "vines":  "back"},
+				{"direction":  "z", "offset": "mid", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_mid_back"}
 		}, {
 			"when": {"OR": [
-				{"direction":  "z", "offset": "mid", "vine":  "front"},
-				{"direction":  "z", "offset": "mid", "vine":  "both"}
+				{"direction":  "z", "offset": "far", "vines":  "front"},
+				{"direction":  "z", "offset": "far", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_far_front"}
 		},{
 			"when": {"OR": [
-				{"direction":  "z", "offset": "far", "vine":  "back"},
-				{"direction":  "z", "offset": "far", "vine":  "both"}
+				{"direction":  "z", "offset": "far", "vines":  "back"},
+				{"direction":  "z", "offset": "far", "vines":  "both"}
 			]},
 			"apply": {"model": "agricraft:block/grate/z_vine_far_back"}
 		}

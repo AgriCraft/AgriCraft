@@ -2,7 +2,7 @@
   "loader": "infinitylib:composite",
   "parts": {
     "front": {
-      "parent": "minecraft:block/vine_1"
+      "parent": "agricraft:block/grate/vine"
     }
   },
   "transformations": {

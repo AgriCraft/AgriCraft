@@ -11,6 +11,8 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -29,9 +31,13 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.FoliageColors;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColors;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -299,6 +305,24 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         }
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.getCutout();
+    }
+
+    @Nullable
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public IBlockColor getColor() {
+        return (state, reader, pos, color) -> {
+            if(color == 0) {
+                return 0xFFFFFF;
+            }
+            return reader != null && pos != null ? BiomeColors.getFoliageColor(reader, pos) : FoliageColors.getDefault();
+        };
+    }
+
     public enum Offset implements IStringSerializable {
         NEAR(-6.99*Constants.UNIT),
         MID(0),
@@ -337,7 +361,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         }
 
         public boolean hasVines(BlockRayTraceResult hit) {
-            return this.hasVines(hit.getFace());
+            return this.hasVines(hit.getFace().getOpposite());
         }
 
         public boolean hasVines(Direction direction) {
@@ -354,7 +378,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         }
 
         public Vines addVines(BlockRayTraceResult hit) {
-            return this.addVines(hit.getFace());
+            return this.addVines(hit.getFace().getOpposite());
         }
 
         public Vines addVines(Direction direction) {
@@ -371,7 +395,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         }
 
         public Vines removeVines(BlockRayTraceResult hit) {
-            return this.removeVines(hit.getFace());
+            return this.removeVines(hit.getFace().getOpposite());
         }
 
         public Vines removeVines(Direction direction) {

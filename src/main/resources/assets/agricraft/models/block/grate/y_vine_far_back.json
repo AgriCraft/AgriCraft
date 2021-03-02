@@ -2,13 +2,12 @@
   "loader": "infinitylib:composite",
   "parts": {
     "back": {
-      "parent": "minecraft:block/vine_1"
+      "parent": "agricraft:block/grate/vine"
     }
   },
   "transformations": {
     "back": {
-      "translation": [0, 0, 0.81],
-      "rotation": [90, 0, 0]
+      "translation": [0, 0.81, 0]
     }
   }
 }
