@@ -10,9 +10,7 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.agricraft.render.items.AgriSeedRenderer;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -89,6 +87,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         });
     }
 
+    @Nonnull
     @Override
     public Optional<IAgriGenome> getGenome(ItemStack stack) {
         CompoundNBT tag = stack.getTag();
@@ -107,11 +106,5 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
         return true;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public InfItemRenderer getItemRenderer() {
-        return AgriSeedRenderer.getInstance();
     }
 }
