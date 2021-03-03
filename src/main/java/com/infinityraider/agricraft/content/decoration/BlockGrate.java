@@ -64,12 +64,6 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     // TileEntity factory
     private static final BiFunction<BlockState, IBlockReader, TileEntityGrate> TILE_FACTORY = (s, w) -> new TileEntityGrate();
 
-    public BlockGrate() {
-        super(Names.Blocks.GRATE, Properties.create(Material.WOOD)
-                .notSolid()
-        );
-    }
-
     // VoxelShapes
     protected static VoxelShape getShape(Direction.Axis axis, Offset offset) {
         switch (axis) {
@@ -131,6 +125,12 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     public static final VoxelShape Z_FAR = Z_DEFAULT.withOffset(0, 0, Offset.FAR.getOffset());
 
     public static final VoxelShape[] Z_SHAPES = {Z_NEAR, Z_DEFAULT, Z_FAR};
+
+    public BlockGrate() {
+        super(Names.Blocks.GRATE, Properties.create(Material.WOOD)
+                .notSolid()
+        );
+    }
 
     @Override
     protected InfPropertyConfiguration getPropertyConfiguration() {

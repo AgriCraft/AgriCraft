@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.decoration.BlockGrate;
+import com.infinityraider.agricraft.content.irrigation.BlockIrrigationTank;
 
 public class AgriBlockRegistry {
 
@@ -22,8 +23,8 @@ public class AgriBlockRegistry {
     public final BlockSeedAnalyzer seed_analyzer;
 
     // irrigation
+    public final BlockIrrigationTank tank;
     /*
-    public final BlockBase tank;
     public final BlockBase channel;
     public final BlockBase channel_valve;
     public final BlockBase channel_hollow;
@@ -46,10 +47,11 @@ public class AgriBlockRegistry {
 
         this.seed_analyzer = new BlockSeedAnalyzer();
 
+        this.tank = new BlockIrrigationTank();
+
         this.grate = new BlockGrate();
 
         /*
-        this.tank = new BlockWaterTank();
         this.channel = new BlockWaterChannel();
         this.channel_valve = new BlockWaterChannelValve();
         this.channel_hollow = new BlockWaterChannelHollow();
