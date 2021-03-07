@@ -1,6 +1,120 @@
 {
-  "forge_marker": 1,
-  "variants": {
-    "": [{ "model": "agricraft:block/tank/tank" }]
-  }
+  "multipart": [
+    {
+      "when": {"north": "none"},
+      "apply": {"model": "agricraft:block/tank/north_mid_none"}
+    }, {
+      "when": {"north": "channel"},
+      "apply": {"model": "agricraft:block/tank/north_mid_channel"}
+    }, {
+      "when": {"OR": [
+        {"north": "none"},
+        {"north": "channel"},
+        {"west": "none"},
+        {"west": "channel"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west"}
+    },
+    {
+      "when": {"east": "none"},
+      "apply": {"model": "agricraft:block/tank/north_mid_none", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"east": "channel"},
+      "apply": {"model": "agricraft:block/tank/north_mid_channel", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"OR": [
+        {"east": "none"},
+        {"east": "channel"},
+        {"north": "none"},
+        {"north": "channel"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west", "y":  90, "uvlock":  true}
+    },
+    {
+      "when": {"south": "none"},
+      "apply": {"model": "agricraft:block/tank/north_mid_none", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"south": "channel"},
+      "apply": {"model": "agricraft:block/tank/north_mid_channel", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"OR": [
+        {"south": "none"},
+        {"south": "channel"},
+        {"east": "none"},
+        {"east": "channel"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west", "y":  180, "uvlock":  true}
+    },
+    {
+      "when": {"west": "none"},
+      "apply": {"model": "agricraft:block/tank/north_mid_none", "y":  270, "uvlock":  true}
+    }, {
+      "when": {"west": "channel"},
+      "apply": {"model": "agricraft:block/tank/north_mid_channel", "y":  270, "uvlock":  true}
+    }, {
+      "when": {"OR": [
+        {"west": "none"},
+        {"west": "channel"},
+        {"south": "none"},
+        {"south": "channel"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west", "y":  270, "uvlock":  true}
+    },
+    {
+      "when": {"down": "false"},
+      "apply": {"model": "agricraft:block/tank/bottom_mid"}
+    }, {
+      "when": {"down": "false", "north": "none"},
+      "apply": {"model": "agricraft:block/tank/bottom_north"}
+    }, {
+      "when": {"down": "false", "east": "none"},
+      "apply": {"model": "agricraft:block/tank/bottom_north", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"down": "false", "south": "none"},
+      "apply": {"model": "agricraft:block/tank/bottom_north", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"down": "false", "west": "none"},
+      "apply": {"model": "agricraft:block/tank/bottom_north", "y":  270, "uvlock":  true}
+    },
+    {
+      "when": {"OR": [
+        {"down": "false"},
+        {"down": "true", "north":  "none", "west": "tank"},
+        {"down": "true", "north":  "none", "west": "channel"},
+        {"down": "true", "north":  "tank", "west": "none"},
+        {"down": "true", "north":  "channel", "west": "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west_down"}
+    },
+    {
+      "when": {"OR": [
+        {"down": "false"},
+        {"down": "true", "east":  "none", "north": "tank"},
+        {"down": "true", "east":  "none", "north": "channel"},
+        {"down": "true", "east":  "tank", "north": "none"},
+        {"down": "true", "east":  "channel", "north": "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west_down", "y":  90, "uvlock":  true}
+    },
+    {
+      "when": {"OR": [
+        {"down": "false"},
+        {"down": "true", "south":  "none", "east": "tank"},
+        {"down": "true", "south":  "none", "east": "channel"},
+        {"down": "true", "south":  "tank", "east": "none"},
+        {"down": "true", "south":  "channel", "east": "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west_down", "y":  180, "uvlock":  true}
+    },
+    {
+      "when": {"OR": [
+        {"down": "false"},
+        {"down": "true", "west":  "none", "south": "tank"},
+        {"down": "true", "west":  "none", "south": "channel"},
+        {"down": "true", "west":  "tank", "south": "none"},
+        {"down": "true", "west":  "channel", "south": "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/north_west_down", "y":  270, "uvlock":  true}
+    }
+  ]
 }

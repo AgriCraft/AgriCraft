@@ -2,20 +2,20 @@
   "type": "infinitylib:crafting_shaped_dynamic_texture",
   "pattern":
   [
-    "s s",
-    "s s",
-    "sss"
+    "p p",
+    "p p",
+    "ppp"
   ],
   "key":
   {
     "p": {
       "type": "infinitylib:dynamic_material",
-      "material": "minecraft:wooden_slabs"
+      "material": "minecraft:planks"
     }
   },
   "result":
   {
     "item": "agricraft:irrigation_tank",
-    "count": 1
+    "count": 4
   }
 }

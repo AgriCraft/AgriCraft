@@ -1,0 +1,101 @@
+{
+	"loader": "infinitylib:dynamic_texture",
+	"textures": {
+		"default": "minecraft:block/oak_planks"
+	},
+	"elements": [
+		{
+			"name": "north",
+			"from": [0, 0, 0],
+			"to": [16, 16, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "dynamic"},
+				"east": {"uv": [14, 0, 16, 16], "texture": "dynamic"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "dynamic"},
+				"west": {"uv": [0, 0, 2, 16], "texture": "dynamic"},
+				"up": {"uv": [0, 0, 16, 2], "texture": "dynamic"},
+				"down": {"uv": [0, 14, 16, 16], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "east",
+			"from": [14, 0, 2],
+			"to": [16, 16, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"east": {"uv": [2, 0, 14, 16], "texture": "dynamic"},
+				"west": {"uv": [2, 0, 14, 16], "texture": "dynamic"},
+				"up": {"uv": [14, 2, 16, 14], "texture": "dynamic"},
+				"down": {"uv": [0, 2, 2, 14], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "south",
+			"from": [0, 0, 14],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "dynamic"},
+				"east": {"uv": [0, 0, 2, 16], "texture": "dynamic"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "dynamic"},
+				"west": {"uv": [14, 0, 16, 16], "texture": "dynamic"},
+				"up": {"uv": [0, 14, 16, 16], "texture": "dynamic"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "west",
+			"from": [0, 0, 2],
+			"to": [2, 16, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"east": {"uv": [2, 0, 14, 16], "texture": "dynamic"},
+				"west": {"uv": [2, 0, 14, 16], "texture": "dynamic"},
+				"up": {"uv": [0, 2, 2, 14], "texture": "dynamic"},
+				"down": {"uv": [14, 2, 16, 14], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "down",
+			"from": [2, 0, 2],
+			"to": [14, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"up": {"uv": [2, 2, 14, 14], "texture": "dynamic"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "dynamic"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 45, 0],
+			"translation": [0, 0, -4.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"translation": [0, 0, -4.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"translation": [2.5, 0.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [2.5, 0.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0]
+		},
+		"gui": {
+			"rotation": [22.5, 45, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"head": {
+			"translation": [0, 12.25, 0],
+			"scale": [0.75, 0.75, 0.75]
+		}
+	}
+}

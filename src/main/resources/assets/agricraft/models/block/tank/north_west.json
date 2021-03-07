@@ -1,0 +1,18 @@
+{
+  "loader": "infinitylib:dynamic_texture",
+  "textures": {
+    "default": "minecraft:block/oak_planks"
+  },
+  "elements": [{
+    "name": "north_west",
+    "from": [0, 2, 0],
+    "to": [2, 16, 2],
+    "rotation": {"angle": 0, "axis": "y", "origin": [8, 10, 8]},
+    "faces": {
+      "north": {"uv": [14, 0, 16, 14], "texture": "dynamic", "cullface": "north"},
+      "south": {"uv": [0, 0, 2, 14], "texture": "dynamic"},
+      "west": {"uv": [0, 0, 2, 14], "texture": "dynamic", "cullface": "west"},
+      "up": {"uv": [0, 0, 2, 2], "texture": "dynamic", "cullface": "up"}
+    }
+    }]
+}

@@ -1,0 +1,16 @@
+{
+  "loader": "infinitylib:dynamic_texture",
+  "textures": {
+    "default": "minecraft:block/oak_planks"
+  },
+  "elements": [{
+    "name": "bottom_mid",
+    "from": [2, 0, 0],
+    "to": [14, 2, 2],
+    "rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 8]},
+    "faces": {
+      "up": {"uv": [2, 0, 14, 2], "texture": "dynamic"},
+      "down": {"uv": [2, 14, 14, 16], "texture": "dynamic", "cullface": "down"}
+    }
+  }]
+}
