@@ -8,6 +8,8 @@ public abstract class Names {
         public static final String GRATE = "grate";
         public static final String SEED_ANALYZER = "seed_analyzer";
         public static final String TANK = "irrigation_tank";
+        public static final String CHANNEL = "irrigation_channel";
+        public static final String CHANNEL_HOLLOW = "irrigation_channel_hollow";
     }
 
     public static final class Items {

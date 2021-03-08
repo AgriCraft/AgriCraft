@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
+import com.infinityraider.agricraft.content.irrigation.TileEntityChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityTank;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
@@ -19,6 +20,7 @@ public class AgriTileRegistry {
     public final TileEntityType<TileEntityCropSticks> crop_sticks;
     public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
     public final TileEntityType<TileEntityTank> irrigation_tank;
+    public final TileEntityType<TileEntityChannel> irrigation_channel;
     public final TileEntityType<TileEntityGrate> grate;
 
     private AgriTileRegistry() {
@@ -33,6 +35,13 @@ public class AgriTileRegistry {
 
         this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityTank::new)
                 .addBlock(AgriCraft.instance.getModBlockRegistry().tank)
+                .build();
+
+        this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityChannel::new)
+                .addBlocks(
+                        AgriCraft.instance.getModBlockRegistry().channel,
+                        AgriCraft.instance.getModBlockRegistry().channel_hollow
+                )
                 .build();
 
         this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)

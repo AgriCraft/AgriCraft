@@ -4,6 +4,8 @@ import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.decoration.BlockGrate;
+import com.infinityraider.agricraft.content.irrigation.BlockIrrigationChannelHollow;
+import com.infinityraider.agricraft.content.irrigation.BlockIrrigationChannelNormal;
 import com.infinityraider.agricraft.content.irrigation.BlockIrrigationTank;
 
 public class AgriBlockRegistry {
@@ -24,18 +26,12 @@ public class AgriBlockRegistry {
 
     // irrigation
     public final BlockIrrigationTank tank;
-    /*
-    public final BlockBase channel;
-    public final BlockBase channel_valve;
-    public final BlockBase channel_hollow;
-    public final BlockBase channel_hollow_valve;
-    public final BlockBase sprinkler;
-    */
+    public final BlockIrrigationChannelNormal channel;
+    public final BlockIrrigationChannelHollow channel_hollow;
+    //public final BlockSprinkler sprinkler;
 
     // storage
-    /*
-    public final BlockBase seed_storage;
-    */
+    //public final BlockBase seed_storage;
 
     // Decoration
     public final BlockGrate grate;
@@ -48,18 +44,12 @@ public class AgriBlockRegistry {
         this.seed_analyzer = new BlockSeedAnalyzer();
 
         this.tank = new BlockIrrigationTank();
+        this.channel = new BlockIrrigationChannelNormal();
+        this.channel_hollow = new BlockIrrigationChannelHollow();
+        //this.sprinkler = new BlockSprinkler();
 
         this.grate = new BlockGrate();
 
-        /*
-        this.channel = new BlockWaterChannel();
-        this.channel_valve = new BlockWaterChannelValve();
-        this.channel_hollow = new BlockWaterChannelHollow();
-        this.channel_hollow_valve = new BlockWaterChannelHollowValve();
-        this.sprinkler = new BlockSprinkler();
-
-        this.seed_storage = new BlockSeedStorage();
-        */
+        //this.seed_storage = new BlockSeedStorage();
     }
-
 }
