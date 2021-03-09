@@ -1,0 +1,25 @@
+{
+  "type": "infinitylib:crafting_shaped_dynamic_texture",
+  "pattern":
+  [
+    "ccc",
+    "cpc",
+    "ccc"
+  ],
+  "key":
+  {
+    "p": {
+      "type": "infinitylib:dynamic_material",
+      "material": "minecraft:planks"
+    },
+    "c": {
+      "type": "infinitylib:dynamic_material_parent",
+      "parent": "agricraft:irrigation_channel"
+    }
+  },
+  "result":
+  {
+    "item": "agricraft:irrigation_channel_hollow",
+    "count": 8
+  }
+}

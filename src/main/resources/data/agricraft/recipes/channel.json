@@ -1,0 +1,19 @@
+{
+  "type": "infinitylib:crafting_shaped_dynamic_texture",
+  "pattern":
+  [
+    "c"
+  ],
+  "key":
+  {
+    "c": {
+      "type": "infinitylib:dynamic_material_parent",
+      "parent": "agricraft:irrigation_tank"
+    }
+  },
+  "result":
+  {
+    "item": "agricraft:irrigation_channel",
+    "count": 8
+  }
+}
