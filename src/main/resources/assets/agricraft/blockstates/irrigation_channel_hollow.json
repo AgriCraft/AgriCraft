@@ -1,0 +1,20 @@
+{
+  "multipart": [
+    {
+      "apply": {"model": "agricraft:block/channel_hollow/base"}
+    },
+    {
+      "when": {"north": "false"},
+      "apply": {"model": "agricraft:block/channel_hollow/none_north"}
+    }, {
+      "when": {"east": "false"},
+      "apply": {"model": "agricraft:block/channel_hollow/none_north", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"south": "false"},
+      "apply": {"model": "agricraft:block/channel_hollow/none_north", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"west": "false"},
+      "apply": {"model": "agricraft:block/channel_hollow/none_north", "y":  270, "uvlock":  true}
+    }
+  ]
+}

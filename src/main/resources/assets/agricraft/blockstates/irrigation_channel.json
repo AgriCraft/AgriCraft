@@ -1,0 +1,33 @@
+{
+  "multipart": [
+    {
+      "apply": {"model": "agricraft:block/channel/base"}
+    },
+    {
+      "when": {"north": "false"},
+      "apply": {"model": "agricraft:block/channel/none_north"}
+    }, {
+      "when": {"east": "false"},
+      "apply": {"model": "agricraft:block/channel/none_north", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"south": "false"},
+      "apply": {"model": "agricraft:block/channel/none_north", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"west": "false"},
+      "apply": {"model": "agricraft:block/channel/none_north", "y":  270, "uvlock":  true}
+    },
+    {
+      "when": {"north": "true"},
+      "apply": {"model": "agricraft:block/channel/connection_north"}
+    }, {
+      "when": {"east": "true"},
+      "apply": {"model": "agricraft:block/channel/connection_north", "y":  90, "uvlock":  true}
+    }, {
+      "when": {"south": "true"},
+      "apply": {"model": "agricraft:block/channel/connection_north", "y":  180, "uvlock":  true}
+    }, {
+      "when": {"west": "true"},
+      "apply": {"model": "agricraft:block/channel/connection_north", "y":  270, "uvlock":  true}
+    }
+  ]
+}

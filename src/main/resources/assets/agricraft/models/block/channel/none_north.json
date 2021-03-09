@@ -1,0 +1,19 @@
+{
+  "loader": "infinitylib:dynamic_texture",
+  "textures": {
+    "default": "minecraft:block/oak_planks"
+  },
+  "elements": [
+    {
+      "name": "none_north",
+      "from": [6, 6, 5],
+      "to": [10, 10, 6],
+      "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 0]},
+      "faces": {
+        "north": {"uv": [6, 6, 10, 10], "texture": "dynamic"},
+        "south": {"uv": [6, 6, 10, 10], "texture": "dynamic"},
+        "up": {"uv": [6, 5, 10, 6], "texture": "dynamic"}
+      }
+    }
+  ]
+}

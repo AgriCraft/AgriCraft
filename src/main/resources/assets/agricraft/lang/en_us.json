@@ -8,6 +8,7 @@
   "block.agricraft.seed_analyzer": "Seed Analyzer",
   "block.agricraft.irrigation_tank": "Wooden Irrigation Tank",
   "block.agricraft.irrigation_channel": "Wooden Irrigation Channel",
+  "block.agricraft.irrigation_channel_hollow": "Wooden Irrigation Channel (Hollow)",
   "block.agricraft.grate": "Wooden Grate",
 
   "item.agricraft.debugger": "Debugger",

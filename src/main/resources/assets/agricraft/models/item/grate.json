@@ -309,6 +309,7 @@
 			}
 		}
 	],
+	"gui_light": "side",
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [45, 90, 0],
