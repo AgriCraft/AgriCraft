@@ -13,7 +13,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityTank> {
+public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigationTank> {
     // Properties
     public static final InfProperty<Connection> NORTH = InfProperty.Creators.create("north", Connection.class, Connection.NONE);
     public static final InfProperty<Connection> EAST = InfProperty.Creators.create("east", Connection.class, Connection.NONE);
@@ -68,7 +67,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityTank> {
     }
 
     // TileEntity factory
-    private static final BiFunction<BlockState, IBlockReader, TileEntityTank> TILE_FACTORY = (s, w) -> new TileEntityTank();
+    private static final BiFunction<BlockState, IBlockReader, TileEntityIrrigationTank> TILE_FACTORY = (s, w) -> new TileEntityIrrigationTank();
 
     // VoxelShapes
     public static final VoxelShape SHAPE_NORTH_NONE = Block.makeCuboidShape(0, 0, 0, 16, 16, 2);
@@ -129,7 +128,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityTank> {
     }
 
     @Override
-    public BiFunction<BlockState, IBlockReader, TileEntityTank> getTileEntityFactory() {
+    public BiFunction<BlockState, IBlockReader, TileEntityIrrigationTank> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 
@@ -142,40 +141,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityTank> {
     }
 
     @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        // Fetch default state
-        BlockState state = this.getDefaultState();
-        // Fetch item stack
-        ItemStack stack = context.getItem();
-        // Safety check for item instance
-        if(stack.getItem() instanceof ItemIrrigationTank) {
-            // Fetch material of the item
-            ItemStack material = ((ItemIrrigationTank) stack.getItem()).getMaterial(stack);
-            // Iterate over the horizontal neighbours
-            Arrays.stream(Direction.values())
-                    .filter(direction -> direction.getAxis().isHorizontal())
-                    .forEach(dir -> getConnection(dir).ifPresent(connection -> {
-                        // Check if neighbouring tile a channel
-                        BlockPos posAt = context.getPos().offset(dir);
-                        TileEntity tile = context.getWorld().getTileEntity(posAt);
-                        if(tile instanceof TileEntityChannel) {
-                            if(ItemStack.areItemsEqual(material, ((TileEntityChannel) tile).getMaterial())) {
-                                // Define connection type based on neighbour block state
-                                BlockState stateAt = context.getWorld().getBlockState(posAt);
-                                if (stateAt.getBlock() instanceof BlockIrrigationChannelAbstract) {
-                                    connection.apply(state, Connection.CHANNEL);
-                                }
-                            }
-                        }
-                    }));
-        }
-        return state;
-    }
-
-    @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
                                 ItemStack stack, @Nullable TileEntity tile) {
+        if(tile instanceof TileEntityIrrigationTank) {
+            ((TileEntityIrrigationTank) tile).checkAndFormMultiBlock();
+        }
         //TODO: irrigation logic
     }
 
@@ -222,7 +192,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityTank> {
     }
 
     @Override
-    public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityTank tile, LootContext.Builder context) {
+    public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityIrrigationTank tile, LootContext.Builder context) {
     }
 
     public enum Connection implements IStringSerializable {

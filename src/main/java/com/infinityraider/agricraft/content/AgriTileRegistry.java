@@ -3,8 +3,8 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
-import com.infinityraider.agricraft.content.irrigation.TileEntityChannel;
-import com.infinityraider.agricraft.content.irrigation.TileEntityTank;
+import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
+import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
@@ -19,8 +19,8 @@ public class AgriTileRegistry {
 
     public final TileEntityType<TileEntityCropSticks> crop_sticks;
     public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
-    public final TileEntityType<TileEntityTank> irrigation_tank;
-    public final TileEntityType<TileEntityChannel> irrigation_channel;
+    public final TileEntityType<TileEntityIrrigationTank> irrigation_tank;
+    public final TileEntityType<TileEntityIrrigationChannel> irrigation_channel;
     public final TileEntityType<TileEntityGrate> grate;
 
     private AgriTileRegistry() {
@@ -33,11 +33,11 @@ public class AgriTileRegistry {
                 .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
                 .build();
 
-        this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityTank::new)
+        this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
                 .addBlock(AgriCraft.instance.getModBlockRegistry().tank)
                 .build();
 
-        this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityChannel::new)
+        this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
                 .addBlocks(
                         AgriCraft.instance.getModBlockRegistry().channel,
                         AgriCraft.instance.getModBlockRegistry().channel_hollow

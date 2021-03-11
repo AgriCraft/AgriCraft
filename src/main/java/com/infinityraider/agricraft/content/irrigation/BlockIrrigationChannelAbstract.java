@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -16,12 +17,13 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture<TileEntityChannel> {
+public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture<TileEntityIrrigationChannel> {
     // Properties
     public static final InfProperty<Boolean> NORTH = InfProperty.Creators.create("north", false);
     public static final InfProperty<Boolean> EAST = InfProperty.Creators.create("east", false);
@@ -30,21 +32,34 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
 
     public static final InfProperty<Valve> VALVE = InfProperty.Creators.create("valve", Valve.class, Valve.NONE);
 
-
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(NORTH).add(EAST).add(SOUTH).add(WEST)
             .add(VALVE)
             .build();
 
+    public static Optional<InfProperty<Boolean>> getConnection(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return Optional.of(NORTH);
+            case SOUTH:
+                return Optional.of(SOUTH);
+            case EAST:
+                return Optional.of(EAST);
+            case WEST:
+                return Optional.of(WEST);
+        }
+        return Optional.empty();
+    }
+
     // TileEntity factory
-    private static final BiFunction<BlockState, IBlockReader, TileEntityChannel> TILE_FACTORY = (s, w) -> new TileEntityChannel();
+    private static final BiFunction<BlockState, IBlockReader, TileEntityIrrigationChannel> TILE_FACTORY = (s, w) -> new TileEntityIrrigationChannel();
 
     public BlockIrrigationChannelAbstract(String name, Properties properties) {
         super(name, properties);
     }
 
     @Override
-    public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityChannel tile, LootContext.Builder context) {
+    public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityIrrigationChannel tile, LootContext.Builder context) {
 
     }
 
@@ -59,7 +74,7 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     }
 
     @Override
-    public BiFunction<BlockState, IBlockReader, TileEntityChannel> getTileEntityFactory() {
+    public BiFunction<BlockState, IBlockReader, TileEntityIrrigationChannel> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 

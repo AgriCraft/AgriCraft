@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 
-public class TileEntityChannel extends TileEntityIrrigationComponent {
-    public TileEntityChannel() {
+public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
+    public TileEntityIrrigationChannel() {
         super(AgriCraft.instance.getModTileRegistry().irrigation_channel);
     }
 
