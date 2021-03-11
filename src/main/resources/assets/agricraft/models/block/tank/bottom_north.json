@@ -4,7 +4,7 @@
     "default": "minecraft:block/oak_planks"
   },
   "elements": [{
-    "name": "bottom_mid",
+    "name": "bottom_north",
     "from": [2, 0, 0],
     "to": [14, 2, 2],
     "rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 8]},

@@ -10,6 +10,7 @@
     "rotation": {"angle": 0, "axis": "y", "origin": [8, 10, 8]},
     "faces": {
       "north": {"uv": [14, 0, 16, 14], "texture": "dynamic", "cullface": "north"},
+      "east": {"uv": [14, 0, 16, 14], "texture": "dynamic"},
       "south": {"uv": [0, 0, 2, 14], "texture": "dynamic"},
       "west": {"uv": [0, 0, 2, 14], "texture": "dynamic", "cullface": "west"},
       "up": {"uv": [0, 0, 2, 2], "texture": "dynamic", "cullface": "up"}

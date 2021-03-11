@@ -70,26 +70,6 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     private static final BiFunction<BlockState, IBlockReader, TileEntityIrrigationTank> TILE_FACTORY = (s, w) -> new TileEntityIrrigationTank();
 
     // VoxelShapes
-    public static final VoxelShape SHAPE_NORTH_NONE = Block.makeCuboidShape(0, 0, 0, 16, 16, 2);
-    public static final VoxelShape SHAPE_WEST_NONE = Block.makeCuboidShape(0, 0, 0, 2, 16, 16);
-    public static final VoxelShape SHAPE_SOUTH_NONE = SHAPE_NORTH_NONE.withOffset(0, 0, 14 * Constants.UNIT);
-    public static final VoxelShape SHAPE_EAST_NONE = SHAPE_WEST_NONE.withOffset(14 * Constants.UNIT, 0, 0);
-
-    public static final VoxelShape SHAPE_NORTH_CHANNEL = Stream.of(
-            Block.makeCuboidShape(0, 0, 0, 16, 6, 2),
-            Block.makeCuboidShape(0, 6, 0, 6, 10, 2),
-            Block.makeCuboidShape(10, 6, 0, 16, 10, 2),
-            Block.makeCuboidShape(0, 10, 0, 16, 16, 2)
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
-    public static final VoxelShape SHAPE_WEST_CHANNEL = Stream.of(
-            Block.makeCuboidShape(0, 0, 0, 2, 6, 16),
-            Block.makeCuboidShape(0, 6, 0, 2, 10, 6),
-            Block.makeCuboidShape(0, 6, 10, 2, 10, 16),
-            Block.makeCuboidShape(0, 10, 0, 2, 16, 16)
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
-    public static final VoxelShape SHAPE_SOUTH_CHANNEL = SHAPE_NORTH_CHANNEL.withOffset(0, 0, 14 * Constants.UNIT);
-    public static final VoxelShape SHAPE_EAST_CHANNEL = SHAPE_WEST_CHANNEL.withOffset(14 * Constants.UNIT, 0, 0);
-
     public static final VoxelShape SHAPE_DOWN = Block.makeCuboidShape(0, 0, 0, 16, 2, 16);
 
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newConcurrentMap();
@@ -103,7 +83,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                         Arrays.stream(Direction.values())
                                 .filter(direction -> direction.getAxis().isHorizontal())
                                 .map(direction -> getConnection(direction)
-                                        .map(connection -> connection.fetch(state))
+                                        .map(connection -> connection.fetch(aState))
                                         .map(connection -> connection.getShape(direction)))
                                 .filter(Optional::isPresent)
                                 .map(Optional::get),
@@ -196,20 +176,41 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     public enum Connection implements IStringSerializable {
-        NONE(SHAPE_NORTH_NONE, SHAPE_EAST_NONE, SHAPE_SOUTH_NONE, SHAPE_WEST_NONE),
-        TANK(VoxelShapes.empty(), VoxelShapes.empty(), VoxelShapes.empty(), VoxelShapes.empty()),
-        CHANNEL(SHAPE_NORTH_CHANNEL, SHAPE_EAST_CHANNEL, SHAPE_SOUTH_CHANNEL, SHAPE_SOUTH_CHANNEL);
+        NONE(
+                Block.makeCuboidShape(0, 0, 0, 16, 16, 2),
+                Block.makeCuboidShape(0, 0, 0, 2, 16, 16)
+        ),
+
+        TANK(
+                VoxelShapes.empty(),
+                VoxelShapes.empty()
+        ),
+
+        CHANNEL(
+                Stream.of(
+                        Block.makeCuboidShape(0, 0, 0, 16, 6, 2),
+                        Block.makeCuboidShape(0, 6, 0, 6, 10, 2),
+                        Block.makeCuboidShape(10, 6, 0, 16, 10, 2),
+                        Block.makeCuboidShape(0, 10, 0, 16, 16, 2)
+                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get(),
+                Stream.of(
+                        Block.makeCuboidShape(0, 0, 0, 2, 6, 16),
+                        Block.makeCuboidShape(0, 6, 0, 2, 10, 6),
+                        Block.makeCuboidShape(0, 6, 10, 2, 10, 16),
+                        Block.makeCuboidShape(0, 10, 0, 2, 16, 16)
+                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get()
+        );
 
         private final VoxelShape north;
         private final VoxelShape east;
         private final VoxelShape south;
         private final VoxelShape west;
 
-        Connection(VoxelShape north, VoxelShape east, VoxelShape south, VoxelShape west) {
+        Connection(VoxelShape north, VoxelShape west) {
             this.north = north;
-            this.east = east;
-            this.south = south;
+            this.south = north.withOffset(0, 0, 14 * Constants.UNIT);
             this.west = west;
+            this.east = west.withOffset(14 * Constants.UNIT, 0, 0);
         }
 
         public VoxelShape getShape(Direction direction) {

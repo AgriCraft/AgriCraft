@@ -64,16 +64,16 @@
       "when": {"down": "false"},
       "apply": {"model": "agricraft:block/tank/bottom_mid"}
     }, {
-      "when": {"down": "false", "north": "none"},
+      "when": {"down": "false", "north": "tank"},
       "apply": {"model": "agricraft:block/tank/bottom_north"}
     }, {
-      "when": {"down": "false", "east": "none"},
+      "when": {"down": "false", "east": "tank"},
       "apply": {"model": "agricraft:block/tank/bottom_north", "y":  90, "uvlock":  true}
     }, {
-      "when": {"down": "false", "south": "none"},
+      "when": {"down": "false", "south": "tank"},
       "apply": {"model": "agricraft:block/tank/bottom_north", "y":  180, "uvlock":  true}
     }, {
-      "when": {"down": "false", "west": "none"},
+      "when": {"down": "false", "west": "tank"},
       "apply": {"model": "agricraft:block/tank/bottom_north", "y":  270, "uvlock":  true}
     },
     {
