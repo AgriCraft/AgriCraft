@@ -129,6 +129,15 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
         //TODO: irrigation logic
     }
 
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+        //TODO: De-multiblockify
+        super.onReplaced(state, world, pos, newState, isMoving);
+    }
+
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
