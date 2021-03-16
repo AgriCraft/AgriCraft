@@ -9,6 +9,8 @@
     "to": [2, 2, 2],
     "faces": {
       "north": {"uv": [14, 14, 16, 16], "texture": "dynamic", "cullface": "north"},
+      "east": {"uv": [14, 14, 16, 16], "texture": "dynamic"},
+      "south": {"uv": [0, 14, 2, 16], "texture": "dynamic"},
       "west": {"uv": [0, 14, 2, 16], "texture": "dynamic", "cullface": "west"},
       "up": {"uv": [0, 0, 2, 2], "texture": "dynamic"},
       "down": {"uv": [0, 14, 2, 16], "texture": "dynamic"}
