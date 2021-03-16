@@ -15,7 +15,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 
@@ -67,7 +67,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -76,7 +76,7 @@ minecraft {
                 }
                 infinitylib {
                     //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
-                    source project(":InfinityLib").sourceSets.main
+                    source project("InfinityLib").sourceSets.main
                 }
             }
         }
@@ -84,7 +84,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -93,7 +93,7 @@ minecraft {
                 }
                 infinitylib {
                     //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
-                    source project(":InfinityLib").sourceSets.main
+                    source project("InfinityLib").sourceSets.main
                 }
             }
         }
@@ -102,7 +102,7 @@ minecraft {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -111,7 +111,7 @@ minecraft {
             args '--mod', 'agricraft', '--all',
                 '--input', file('lib/AgriPlants'),
                 '--existing', file('src/main/resources/'),
-                '--existing', project(":InfinityLib").file('src/main/resources/'),
+                '--existing', project("InfinityLib").file('src/main/resources/'),
                 '--output', file('src/generated/resources/')
 
             mods {
@@ -120,7 +120,7 @@ minecraft {
                 }
                 infinitylib {
                     //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
-                    source project(":InfinityLib").sourceSets.main
+                    source project("InfinityLib").sourceSets.main
                 }
             }
         }
@@ -149,14 +149,14 @@ dependencies {
     minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 	
     // AgriCore
-    compile project(':AgriCore');
+    compile project('AgriCore');
     
     // InfinityLib
-    compile project(':InfinityLib')
+    compile project('InfinityLib')
 
 	//JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
 
     //TOP
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.3-beta-6") {

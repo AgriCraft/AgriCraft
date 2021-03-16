@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[35,)"
+loaderVersion="[36,)"
 license="license.txt"
 issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
 [[mods]]
 modId="agricraft"
-version="1.16.4-3.0.0"
+version="1.16.5-3.0.0"
 displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
 logoFile="logo.png"
@@ -17,13 +17,13 @@ Agricultural farming extended
 [[dependencies.agricraft]]
     modId="forge"
     mandatory=true
-    versionRange="[35,)"
+    versionRange="[36,)"
     ordering="AFTER"
     side="BOTH"
 
 [[dependencies.agricraft]]
     modId="infinitylib"
     mandatory=true
-    versionRange="[1.16.4-2.0.0,)"
+    versionRange="[1.16.5-2.0.2,)"
     ordering="AFTER"
     side="BOTH"

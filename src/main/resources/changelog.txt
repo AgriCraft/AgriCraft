@@ -1,7 +1,7 @@
 Changelog
 ---------
 3.0.0
-- CHANGE: Ported to 1.16.4
+- CHANGE: Ported to 1.16.5
 - CHANGE: Crop breeding now follows Mendelian genetics instead of arbitrary logic based on parent/child relations
 - CHANGE: Weeds are no longer plant implementations, but can grow parallel with plants, affecting their growth, and possibly killing them when they reach maturity
 - CHANGE: The Strength stat now defines resilience with regard to growth conditions (for instance soil, light, etc)
