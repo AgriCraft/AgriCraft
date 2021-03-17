@@ -126,7 +126,6 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
         if(tile instanceof TileEntityIrrigationTank) {
             ((TileEntityIrrigationTank) tile).checkAndFormMultiBlock();
         }
-        //TODO: irrigation logic
     }
 
 
@@ -134,7 +133,12 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Deprecated
     @SuppressWarnings("deprecation")
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-        //TODO: De-multiblockify
+        if(!world.isRemote() && !state.isIn(newState.getBlock())) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof TileEntityIrrigationTank) {
+                ((TileEntityIrrigationTank) tile).unFormMultiBlock();
+            }
+        }
         super.onReplaced(state, world, pos, newState, isMoving);
     }
 

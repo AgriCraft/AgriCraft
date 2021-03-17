@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
@@ -44,7 +45,9 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
-    default void registerCapabilities() {}
+    default void registerCapabilities() {
+        this.registerCapability(CapabilityMultiBlockData.getInstance());
+    }
 
     @Override
     default void registerEventHandlers() {}
