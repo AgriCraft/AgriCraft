@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -33,7 +31,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     private final AutoSyncedField<BlockPos> max;
 
     public TileEntityIrrigationTank() {
-        super(AgriCraft.instance.getModTileRegistry().irrigation_tank, MIN_Y, MAX_Y);
+        super(AgriCraft.instance.getModTileRegistry().irrigation_tank, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
         this.min = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
         this.max = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
     }
@@ -441,15 +439,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         }
 
         @Override
-        public int getFluidVolume(double fluidHeight) {
-            return (int) MathHelper.lerp(
-                    (fluidHeight - this.getMinFluidHeight()) / (this.getMaxFluidHeight() - this.getMinFluidHeight()),
-                    0, this.getTankCount()*AgriCraft.instance.getConfig().tankCapacity()
-            );
+        public int getFluidCapacity() {
+            return this.getTankCount() * AgriCraft.instance.getConfig().tankCapacity();
         }
 
         @Override
-        public boolean canConnect(IAgriIrrigationComponent other) {
+        public boolean canConnect(IAgriIrrigationNode other) {
             if(other instanceof TileEntityIrrigationComponent) {
                 return ((TileEntityIrrigationComponent) other).isSameMaterial(this.getMaterial());
             }
@@ -483,17 +478,6 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         @Override
         public boolean isSink() {
             return false;
-        }
-
-        @Override
-        public CompoundNBT serializeData() {
-            //TODO: serialize water level
-            return new CompoundNBT();
-        }
-
-        @Override
-        public void deserializeData(CompoundNBT tag) {
-            //TODO: deserialize water level
         }
     }
 }

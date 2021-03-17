@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.irrigation;
 
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Collection;
 
@@ -17,17 +17,34 @@ public interface IAgriIrrigationNode {
     double getMaxFluidHeight();
 
     /**
+     * @return the total fluid capacity in mB for this node
+     */
+    int getFluidCapacity() ;
+
+    /**
      * Fetches the volume of fluid for a given fluid height, relative to the world coordinates
      * @param fluidHeight the fluid height
      * @return the volume of fluid in mB
      */
-    int getFluidVolume(double fluidHeight);
+    default int getFluidVolume(double fluidHeight) {
+        double f = (fluidHeight - this.getMinFluidHeight())/(this.getMaxFluidHeight() - this.getMinFluidHeight());
+        return (int) MathHelper.lerp(f, 0, this.getFluidCapacity());
+    }
 
     /**
-     * @return the total fluid capacity in mB for this node
+     * Fetches the height of the fluid, relative to the world coordinates as a function of the content in the tank
+     * @param content the volume content of fluid in the node
+     * @return the height of the fluid level in world coordinates
      */
-    default int getFluidCapacity() {
-        return this.getFluidVolume(this.getMaxFluidHeight());
+    default double getFluidHeight(int content) {
+        if(content <= 0) {
+            return this.getMinFluidHeight();
+        }
+        if(content >= this.getFluidCapacity()) {
+            return this.getMaxFluidHeight();
+        }
+        double f = (content + 0.0D)/this.getFluidCapacity();
+        return MathHelper.lerp(f, this.getMinFluidHeight(), this.getMaxFluidHeight());
     }
 
     /**
@@ -37,7 +54,7 @@ public interface IAgriIrrigationNode {
      * @param other the other node
      * @return true if this can connect to the other
      */
-    boolean canConnect(IAgriIrrigationComponent other);
+    boolean canConnect(IAgriIrrigationNode other);
 
     /**
      * @return a collection of all positions to which this node can connect to
@@ -57,8 +74,4 @@ public interface IAgriIrrigationNode {
      * @return true if this component acts as a sink
      */
     boolean isSink();
-
-    CompoundNBT serializeData();
-
-    void deserializeData(CompoundNBT tag);
 }

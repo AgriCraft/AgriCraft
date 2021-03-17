@@ -143,7 +143,7 @@ public class CapabilityMultiBlockData implements IInfCapabilityImplementation<Ch
                                     TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
                                     if(!tank.getMultiBlockMin().equals(tank.getMultiBlockMax())) {
                                         IAgriIrrigationNode node = tank.createNewMultiBlockNode();
-                                        this.nodeMap.put(pos, tank.createNewMultiBlockNode());
+                                        this.nodeMap.put(pos, node);
                                     }
                                 }
                             }

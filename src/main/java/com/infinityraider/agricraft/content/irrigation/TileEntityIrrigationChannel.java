@@ -13,7 +13,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent i
     private static final double MAX_Y = Constants.UNIT*10;
 
     public TileEntityIrrigationChannel() {
-        super(AgriCraft.instance.getModTileRegistry().irrigation_channel, MIN_Y, MAX_Y);
+        super(AgriCraft.instance.getModTileRegistry().irrigation_channel, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
     }
 
     @Override

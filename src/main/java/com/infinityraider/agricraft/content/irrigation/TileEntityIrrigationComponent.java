@@ -5,11 +5,9 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -19,13 +17,15 @@ import java.util.Set;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTexture implements IAgriIrrigationComponent, IAgriIrrigationNode {
+    private final int capacity;
     private final double minY;
     private final double maxY;
 
     private Set<BlockPos> neighbours;
 
-    public TileEntityIrrigationComponent(TileEntityType<?> type, double minY, double maxY) {
+    public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, double minY, double maxY) {
         super(type);
+        this.capacity = capacity;
         this.minY = minY;
         this.maxY = maxY;
     }
@@ -41,21 +41,18 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     }
 
     @Override
-    public int getFluidVolume(double fluidHeight) {
-        return (int) MathHelper.lerp(
-                (fluidHeight - this.getMinFluidHeight()) / (this.getMaxFluidHeight() - this.getMinFluidHeight()),
-                0, this.getSingleCapacity()
-        );
+    public int getFluidCapacity() {
+        return this.capacity;
     }
 
     protected abstract int getSingleCapacity();
 
     @Override
-    public boolean canConnect(@Nonnull IAgriIrrigationComponent other) {
+    public boolean canConnect(@Nonnull IAgriIrrigationNode other) {
         if(other instanceof TileEntityIrrigationComponent) {
-            return this.isSameMaterial(other.castToTile());
+            return this.isSameMaterial((TileEntityIrrigationComponent) other);
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -69,16 +66,5 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
             );
         }
         return this.neighbours;
-    }
-
-    @Override
-    public CompoundNBT serializeData() {
-        //TODO: serialize water level
-        return new CompoundNBT();
-    }
-
-    @Override
-    public void deserializeData(CompoundNBT tag) {
-        //TODO: deserialize water level
     }
 }
