@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.irrigation;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import net.minecraft.tileentity.TileEntity;
 
 public interface IAgriIrrigationComponent {
@@ -7,5 +8,9 @@ public interface IAgriIrrigationComponent {
 
     default TileEntity castToTile() {
         return (TileEntity) this;
+    }
+
+    default IAgriIrrigationNetwork getNetwork() {
+        return AgriApi.getIrrigationNetwork(this);
     }
 }

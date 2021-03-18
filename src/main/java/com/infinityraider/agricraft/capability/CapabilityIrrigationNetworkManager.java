@@ -1,23 +1,27 @@
 package com.infinityraider.agricraft.capability;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
 import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class CapabilityIrrigationNetworkManager implements IInfCapabilityImplementation<World, CapabilityIrrigationNetworkManager.Impl> {
     private static final CapabilityIrrigationNetworkManager INSTANCE = new CapabilityIrrigationNetworkManager();
@@ -33,7 +37,19 @@ public class CapabilityIrrigationNetworkManager implements IInfCapabilityImpleme
     public static final Capability<CapabilityIrrigationNetworkManager.Impl> CAPABILITY = null;
 
     public int addNetworkToWorld(IrrigationNetwork network) {
-        return network.getWorld().getCapability(this.getCapability()).map(impl -> impl.addNetwork(network)).orElse(-1);
+        World world = network.getWorld();
+        if(world == null) {
+            // Shouldn't ever happen
+            return -1;
+        }
+        return world.getCapability(this.getCapability()).map(impl -> impl.addNetwork(network)).orElse(-1);
+    }
+
+    public IAgriIrrigationNetwork getNetwork(World world, int id) {
+        return world.getCapability(this.getCapability())
+                .map(impl -> impl)
+                .flatMap(impl -> impl.getNetwork(id))
+                .orElse(IrrigationNetworkInvalid.getInstance());
     }
 
     @Override
@@ -66,18 +82,36 @@ public class CapabilityIrrigationNetworkManager implements IInfCapabilityImpleme
         return World.class;
     }
 
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkLoaded(ChunkEvent.Load event) {
+        IChunk iChunk = event.getChunk();
+        if(iChunk instanceof Chunk) {
+            Chunk chunk = (Chunk) iChunk;
+            chunk.getWorld().getCapability(this.getCapability()).ifPresent(impl -> impl.onChunkLoaded(chunk));
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkUnloaded(ChunkEvent.Unload event) {
+        IChunk iChunk = event.getChunk();
+        if(iChunk instanceof Chunk) {
+            Chunk chunk = (Chunk) iChunk;
+            chunk.getWorld().getCapability(this.getCapability()).ifPresent(impl -> impl.onChunkUnloaded(chunk));
+        }
+    }
+
     public static class Impl implements ISerializable {
         private final World world;
 
-        private final Map<Integer, IrrigationNetwork> loaded;
-        private final Set<Integer> all;
+        private final Map<Integer, IrrigationNetwork> networks;
 
         private int nextId;
 
         private Impl(World world) {
             this.world = world;
-            this.loaded = Maps.newHashMap();
-            this.all = Sets.newHashSet();
+            this.networks = Maps.newHashMap();
             this.nextId = 0;
         }
 
@@ -85,51 +119,57 @@ public class CapabilityIrrigationNetworkManager implements IInfCapabilityImpleme
             return this.world;
         }
 
-        public boolean hasNetwork(int id) {
-            return this.all.contains(id);
-        }
-
-        public boolean isNetworkLoaded(int id) {
-            return this.loaded.containsKey(id);
-        }
-
-        public Optional<IrrigationNetwork> getNetwork(int id) {
-            return Optional.ofNullable(this.loaded.get(id));
+        public Optional<IAgriIrrigationNetwork> getNetwork(int id) {
+            return Optional.ofNullable(this.networks.get(id));
         }
 
         public int addNetwork(IrrigationNetwork network) {
             int id = this.nextId;
             this.nextId++;
-            this.loaded.put(id, network);
-            this.all.add(id);
+            this.networks.put(id, network);
             return id;
+        }
+
+        public void onChunkLoaded(Chunk chunk) {
+            this.networks.values().forEach(network -> network.onChunkLoaded(chunk));
+        }
+
+        public void onChunkUnloaded(Chunk chunk) {
+            this.networks.values().forEach(network -> network.onChunkUnloaded(chunk));
         }
 
         @Override
         public void readFromNBT(CompoundNBT tag) {
+            if(tag.contains(AgriNBT.ENTRIES)) {
+                this.networks.clear();
+                ListNBT entryList = tag.getList(AgriNBT.ENTRIES, 10);
+                entryList.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
+                        .map(entryTag -> (CompoundNBT) entryTag)
+                        .forEach(entryTag -> {
+                            if(entryTag.contains(AgriNBT.NETWORK) && entryTag.contains(AgriNBT.KEY)) {
+                                int id = entryTag.getInt(AgriNBT.KEY);
+                                this.networks.put(id, IrrigationNetwork.readFromNbt(this.getWorld(), id, entryTag.getCompound(AgriNBT.NETWORK)));
+                            }
+                        });
+            }
             if(tag.contains(AgriNBT.KEY)) {
                 this.nextId = tag.getInt(AgriNBT.KEY);
-            }
-            if(tag.contains(AgriNBT.ENTRIES)) {
-                this.all.clear();
-                Arrays.stream(tag.getIntArray(AgriNBT.ENTRIES)).forEach(this.all::add);
             }
         }
 
         @Override
         public CompoundNBT writeToNBT() {
             CompoundNBT tag = new CompoundNBT();
+            ListNBT entryList = new ListNBT();
+            this.networks.values().forEach(network -> {
+                CompoundNBT entryTag = new CompoundNBT();
+                entryTag.putInt(AgriNBT.KEY, network.getId());
+                entryTag.put(AgriNBT.NETWORK, network.writeToNBT());
+                entryList.add(entryTag);
+            });
+            tag.put(AgriNBT.ENTRIES, entryList);
             tag.putInt(AgriNBT.KEY, this.nextId);
-            tag.putIntArray(AgriNBT.ENTRIES, this.all.stream().mapToInt(Integer::intValue).toArray());
             return tag;
-        }
-
-        public void unloadNetwork(IrrigationNetwork network) {
-            this.unloadNetwork(network.getId());
-        }
-
-        public void unloadNetwork(int id) {
-            this.loaded.remove(id);
         }
     }
 }

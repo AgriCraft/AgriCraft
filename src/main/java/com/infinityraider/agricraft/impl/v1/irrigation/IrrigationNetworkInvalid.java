@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -14,19 +13,14 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
-class IrrigationNetworkInvalid implements IAgriIrrigationNetwork {
-    private final IAgriIrrigationNode node;
-    private final Set<IAgriIrrigationNode> nodes;
-    private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
+public class IrrigationNetworkInvalid implements IAgriIrrigationNetwork {
+    private static final IrrigationNetworkInvalid INSTANCE = new IrrigationNetworkInvalid();
 
-    private int contents;
-
-    public IrrigationNetworkInvalid(IAgriIrrigationNode node) {
-        this.node = node;
-        this.nodes = ImmutableSet.of(node);
-        ImmutableMap.Builder<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> mapBuilder = new ImmutableMap.Builder<>();
-        this.connections = mapBuilder.put(node, ImmutableSet.of()).build();
+    public static IAgriIrrigationNetwork getInstance() {
+        return INSTANCE;
     }
+
+    private IrrigationNetworkInvalid() {}
 
     @Nullable
     @Override
@@ -42,38 +36,36 @@ class IrrigationNetworkInvalid implements IAgriIrrigationNetwork {
     @Nonnull
     @Override
     public Set<IAgriIrrigationNode> nodes() {
-        return this.nodes;
+        return ImmutableSet.of();
     }
 
     @Nonnull
     @Override
     public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections() {
-        return this.connections;
+        return ImmutableMap.of();
     }
 
     @Override
     public int capacity() {
-        return this.node.getFluidCapacity();
+        return 0;
     }
 
     @Override
     public double fluidHeight() {
-        return this.node.getFluidHeight(this.contents());
+        return 0;
     }
 
     @Override
     public int contents() {
-        return this.contents;
+        return 0;
     }
 
     @Override
-    public void setContents(int value) {
-        this.contents = value;
-    }
+    public void setContents(int value) {}
 
     @Nonnull
     @Override
     public FluidStack contentAsFluidStack() {
-        return new FluidStack(Fluids.WATER, this.contents());
+        return FluidStack.EMPTY;
     }
 }

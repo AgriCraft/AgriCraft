@@ -7,6 +7,8 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -276,6 +278,11 @@ public final class AgriApi {
      */
     public static boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
         return AgriApi.CONNECTOR.registerJsonPlantCallback(callback);
+    }
+
+    @Nonnull
+    public static IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component) {
+        return AgriApi.CONNECTOR.getIrrigationNetwork(component);
     }
 
     /**

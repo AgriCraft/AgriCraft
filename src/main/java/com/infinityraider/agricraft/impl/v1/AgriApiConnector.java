@@ -10,8 +10,9 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
@@ -19,6 +20,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkComponent;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
@@ -63,8 +65,6 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
     @Nonnull
-    private final IAgriAdapterizer<IAgriPlant> seedSubstituteAdapterizer;
-    @Nonnull
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     @Nonnull
     private final AgriMutationHandler mutator;
@@ -78,7 +78,6 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry = AgriSoilRegistry.getInstance();
         this.seedAdapterizer = new AgriAdapterizer<>();
-        this.seedSubstituteAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.mutator = AgriMutationHandler.getInstance();
     }
@@ -208,5 +207,11 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
         return JsonPlantCallback.register(callback);
+    }
+
+    @Nonnull
+    @Override
+    public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component) {
+        return CapabilityIrrigationNetworkComponent.getInstance().getIrrigationNetwork(component);
     }
 }

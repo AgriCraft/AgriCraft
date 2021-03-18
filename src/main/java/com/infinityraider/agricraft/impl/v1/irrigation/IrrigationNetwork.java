@@ -1,41 +1,67 @@
 package com.infinityraider.agricraft.impl.v1.irrigation;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkData;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
+import com.infinityraider.agricraft.reference.AgriNBT;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class IrrigationNetwork implements IAgriIrrigationNetwork {
+    public static IAgriIrrigationNetwork createNewNetwork(IAgriIrrigationComponent component) {
+        World world = component.castToTile().getWorld();
+        if(world == null) {
+            return IrrigationNetworkInvalid.getInstance();
+        }
+        return new Builder(world).build(component);
+    }
+
+    public static IrrigationNetwork readFromNbt(World world, int id, CompoundNBT tag) {
+        IrrigationNetwork network = new IrrigationNetwork(world, (nw) -> id, Maps.newIdentityHashMap());
+        network.readFromNBT(tag);
+        return network;
+    }
 
     private final World world;
     private final int id;
 
     // Per chunk network parts
-    private final Map<Chunk, IrrigationNetworkPart> parts;
+    private final Map<ChunkPos, IrrigationNetworkPart> parts;
 
-    // Cross chunk connections
-    private final Map<Chunk, Set<IrrigationNetworkConnection>> crossChunkConnections;
+    // Caches
+    private Set<IAgriIrrigationNode> nodeCache;
+    private Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connectionCache;
 
-    private IrrigationNetwork(@Nonnull World world,
-                              Map<Chunk, Function<IrrigationNetwork, IrrigationNetworkPart>> partFactories,
-                              Map<Chunk, Set<IrrigationNetworkConnection>> crossChunkConnections
-                              ) {
+    // Fluid data
+    private final List<IrrigationNetworkLayer> layers;
+    private int capacity;
+    private int contents;
+
+    private IrrigationNetwork(@Nonnull World world, Function<IrrigationNetwork, Integer> idDefinition,
+                              Map<Chunk, Function<IrrigationNetwork, IrrigationNetworkPart>> partFactories) {
         this.world = world;
-        this.id = CapabilityIrrigationNetworkManager.getInstance().addNetworkToWorld(this);
-        this.parts = Maps.transformValues(partFactories, factory -> Objects.requireNonNull(factory).apply(this));
-        this.crossChunkConnections = crossChunkConnections;
+        this.id = idDefinition.apply(this);
+        this.parts = Maps.newHashMap();
+        Maps.transformValues(partFactories, (factory) -> Objects.requireNonNull(factory).apply(this))
+                .forEach((key, value) -> this.parts.put(key.getPos(), value));
+        this.layers = this.compileLayers();
     }
 
     public final int getId() {
@@ -47,6 +73,106 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
      * NETWORK MANAGEMENT METHODS
      * --------------------------
      */
+
+    protected List<IrrigationNetworkLayer> compileLayers() {
+        double[] limits = this.parts.values().stream()
+                .flatMap(part -> part.getLayers().stream())
+                .flatMap(layer -> Stream.of(layer.getMin(), layer.getMax()))
+                .mapToDouble(Double::doubleValue)
+                .sorted()
+                .distinct()
+                .toArray();
+        List<IrrigationNetworkLayer> layers = Lists.newArrayList();
+        int capacity = 0;
+        for(int i = 0; i < limits.length - 1; i++) {
+            double y1 = limits[i];
+            double y2 = limits[1 + 1];
+            int volume = this.parts.values().stream().mapToInt(part -> part.getCapacity(y2 - y1)).sum();
+            capacity += volume;
+            layers.add(new IrrigationNetworkLayer(y2, y1, volume));
+        }
+        this.capacity = capacity;
+        return layers;
+    }
+
+    public void onChunkLoaded(Chunk chunk) {
+        if(this.parts.containsKey(chunk.getPos())) {
+            IrrigationNetworkPart part = CapabilityIrrigationNetworkData.getInstance().getPart(chunk, this.getId());
+            this.parts.put(chunk.getPos(), part);
+            this.nodeCache = null;
+            this.connectionCache = null;
+        }
+    }
+
+    public void onChunkUnloaded(Chunk chunk) {
+        if(this.parts.containsKey(chunk.getPos())) {
+            this.parts.put(chunk.getPos(), null);
+            this.nodeCache = null;
+            this.connectionCache = null;
+        }
+    }
+
+    public CompoundNBT writeToNBT() {
+        // Create new tag
+        CompoundNBT tag = new CompoundNBT();
+        // Write Chunk positions
+        ListNBT chunkTags = new ListNBT();
+        this.parts.keySet().forEach(pos -> {
+            CompoundNBT chunkTag = new CompoundNBT();
+            chunkTag.putInt(AgriNBT.X1, pos.x);
+            chunkTag.putInt(AgriNBT.Z1, pos.z);
+            chunkTags.add(chunkTag);
+        });
+        tag.put(AgriNBT.ENTRIES, chunkTags);
+        // Write layers
+        ListNBT layerTags = new ListNBT();
+        this.layers.forEach(layer -> layerTags.add(layer.writeToTag()));
+        tag.put(AgriNBT.LAYERS, layerTags);
+        // Write capacity and contents
+        tag.putInt(AgriNBT.CAPACITY, this.capacity);
+        tag.putInt(AgriNBT.LEVEL, this.contents);
+        // Return tag
+        return tag;
+    }
+
+    public boolean readFromNBT(CompoundNBT tag) {
+        boolean valid = true;
+        this.parts.clear();
+        // Read Chunk positions
+        if(this.getWorld() != null && tag.contains(AgriNBT.ENTRIES)) {
+            ListNBT chunkTags = tag.getList(AgriNBT.ENTRIES, 10);
+            for(int i = 0; i < chunkTags.size(); i++) {
+                CompoundNBT chunkTag = chunkTags.getCompound(i);
+                if(chunkTag.contains(AgriNBT.X1) && chunkTag.contains(AgriNBT.Z1)) {
+                    ChunkPos pos = new ChunkPos(chunkTag.getInt(AgriNBT.X1), chunkTag.getInt(AgriNBT.Z1));
+                    this.parts.put(pos, null);
+                } else {
+                    valid = false;
+                }
+            }
+        } else {
+            valid = false;
+        }
+        // Read layers
+        this.layers.clear();
+        if(tag.contains(AgriNBT.LAYERS)) {
+            ListNBT layerTags = tag.getList(AgriNBT.LAYERS, 10);
+            for(int i = 0; i < layerTags.size(); i++) {
+                IrrigationNetworkLayer layer = new IrrigationNetworkLayer(layerTags.getCompound(i));
+                this.layers.add(i, layer);
+                if(layer.getVolume() <= 0 || layer.getMin() >= layer.getMax()) {
+                    valid = false;
+                }
+            }
+        }
+        // Read capacity and contents
+        this.capacity = tag.contains(AgriNBT.CAPACITY) ? tag.getInt(AgriNBT.CAPACITY) : 0;
+        this.contents = tag.contains(AgriNBT.LEVEL) ? tag.getInt(AgriNBT.LEVEL) : 0;
+        if(this.capacity <= 0) {
+            valid = false;
+        }
+        return valid;
+    }
 
     /**
      * -----------
@@ -61,44 +187,65 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override
     public Set<IAgriIrrigationNode> nodes() {
-        return null;
+        if(this.nodeCache == null) {
+            //TODO: build node cache
+        }
+        return this.nodeCache;
     }
 
     @Override
     public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections() {
-        return null;
+        if(this.connectionCache == null) {
+            //TODO: build connection cache
+        }
+        return this.connectionCache;
     }
 
     @Override
     public int capacity() {
-        return 0;
+        return this.capacity;
     }
 
     @Override
     public double fluidHeight() {
-        return 0;
+        int remaining = this.capacity();
+        IrrigationNetworkLayer last = null;
+        for(IrrigationNetworkLayer layer : this.layers) {
+            if(remaining <= layer.getVolume()) {
+                return layer.getHeight(remaining);
+            }
+            remaining -= layer.getVolume();
+            last = layer;
+        }
+        return last == null ? 0 : last.getMax();
     }
 
     @Override
     public int contents() {
-        return 0;
+        return this.contents;
     }
 
     @Override
     public void setContents(int value) {
-
+        this.contents = Math.min(this.capacity(), Math.max(0, value));
     }
 
     @Nonnull
     @Override
     public FluidStack contentAsFluidStack() {
-        return null;
+        return this.contents() > 0 ? new FluidStack(Fluids.WATER, this.contents()) : FluidStack.EMPTY;
     }
+
+    /**
+     * -------
+     * BUILDER
+     * -------
+     */
 
     protected static class Builder {
         private final World world;
@@ -114,18 +261,27 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
             this.potentialConnections = Maps.newIdentityHashMap();
         }
 
-        protected IrrigationNetwork build(IAgriIrrigationComponent part) {
+        protected IrrigationNetwork build(IAgriIrrigationComponent component) {
             // Initialize the first part builder
-            Chunk chunk = this.getWorld().getChunkAt(part.castToTile().getPos());
+            Chunk chunk = this.getWorld().getChunkAt(component.castToTile().getPos());
             IrrigationNetworkPart.Builder partBuilder = new IrrigationNetworkPart.Builder(this, chunk);
             this.partBuilders.put(chunk, partBuilder);
             // Add the node to the first part builder and start iterating
-            partBuilder.addNodeAndIterate(part.getNode());
+            partBuilder.addNodeAndIterate(component.getNode());
             // Iterations are finished, compile the network
             return new IrrigationNetwork(
                     this.getWorld(),
-                    Maps.transformValues(this.partBuilders, builder -> (Objects.requireNonNull(builder)::build)),
-                    this.crossChunkConnections
+                    (network) -> CapabilityIrrigationNetworkManager.getInstance().addNetworkToWorld(network),
+                    Maps.transformEntries(this.partBuilders, (aChunk, builder) -> {
+                        Map<Direction, Set<IAgriIrrigationConnection>> connectionMap = Maps.newEnumMap(Direction.class);
+                        Set<IrrigationNetworkConnection> connections = this.crossChunkConnections.getOrDefault(aChunk, Collections.emptySet());
+                        Arrays.stream(Direction.values()).forEach(direction ->
+                                connections.stream()
+                                        .filter(connection -> connection.direction() == direction)
+                                        .forEach(connection -> connectionMap.computeIfAbsent(direction, (aDir) -> Sets.newHashSet())
+                                                .add(connection)));
+                        return (network) -> Objects.requireNonNull(builder).build(network, connectionMap);
+                    })
             );
         }
 

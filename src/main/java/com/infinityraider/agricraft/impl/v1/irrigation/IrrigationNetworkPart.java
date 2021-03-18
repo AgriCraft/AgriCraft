@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,17 +21,18 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     private final IrrigationNetwork network;
 
     private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
+    private final Map<Direction, Set<IAgriIrrigationConnection>> crossChunkConnections;
     private final List<IrrigationNetworkLayer> layers;
-    private int capacity;
 
-    private IrrigationNetworkPart(IrrigationNetwork network, Chunk chunk, int capacity,
-                                 Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
-                                 List<IrrigationNetworkLayer> layers) {
+    private IrrigationNetworkPart(IrrigationNetwork network, Chunk chunk,
+                                  Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
+                                  Map<Direction, Set<IAgriIrrigationConnection>> crossChunkConnections,
+                                  List<IrrigationNetworkLayer> layers) {
         this.chunk = chunk;
         this.network = network;
         this.connections = connections;
+        this.crossChunkConnections = crossChunkConnections;
         this.layers = layers;
-        this.capacity = capacity;
     }
 
     public final Chunk getChunk() {
@@ -43,6 +45,24 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
 
     public final int getId() {
         return this.getNetwork().getId();
+    }
+
+    public List<IrrigationNetworkLayer> getLayers() {
+        return this.layers;
+    }
+
+    public int getCapacity(double height) {
+        return this.getLayers().stream().mapToInt(layer -> layer.getCapacity(height)).sum();
+    }
+
+    public int getCapacity(double height1, double height2) {
+        if(height2 == height1) {
+            return 0;
+        }
+        if(height2 > height1) {
+            return this.getCapacity(height2, height1);
+        }
+        return this.getCapacity(height1) - this.getCapacity(height2);
     }
 
     @Nullable
@@ -127,9 +147,9 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
             this.iterate();
         }
 
-        protected IrrigationNetworkPart build(IrrigationNetwork network) {
+        protected IrrigationNetworkPart build(IrrigationNetwork network, Map<Direction,
+                Set<IAgriIrrigationConnection>> crossChunkConnections) {
             List<IrrigationNetworkLayer> layers = Lists.newArrayList();
-            int capacity = 0;
             for(int i = 0; i < this.limits.size() - 1; i++) {
                 double min = this.limits.get(i);
                 double max = this.limits.get(i + 1);
@@ -139,10 +159,9 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                         .mapToInt(node -> node.getFluidVolume(max) - node.getFluidVolume(min))
                         .sum();
                 layers.add(new IrrigationNetworkLayer(min, max, volume));
-                capacity += volume;
             }
-            return new IrrigationNetworkPart(network, this.getChunk(), capacity,
-                    this.connections, layers);
+            return new IrrigationNetworkPart(network, this.getChunk(),
+                    this.connections, crossChunkConnections, layers);
         }
 
         private void iterate() {
@@ -220,5 +239,4 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
             }
         }
     }
-
 }
