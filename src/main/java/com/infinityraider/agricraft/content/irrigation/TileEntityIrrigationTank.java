@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -113,6 +114,17 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
+    public boolean canConnect(@Nonnull IAgriIrrigationNode other, Direction from) {
+        if(from.getAxis().isVertical()) {
+            return false;
+        }
+        if(other instanceof TileEntityIrrigationChannel) {
+            return this.isSameMaterial((TileEntityIrrigationChannel) other);
+        }
+        return false;
+    }
+
+    @Override
     public boolean isSource() {
         return true;
     }
@@ -120,11 +132,6 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     @Override
     public boolean isSink() {
         return false;
-    }
-
-    @Override
-    protected int getSingleCapacity() {
-        return AgriCraft.instance.getConfig().tankCapacity();
     }
 
     @Override
@@ -395,7 +402,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         private final BlockPos max;
         private final ItemStack material;
 
-        private Set<BlockPos> neighbours;
+        private Set<Tuple<Direction, BlockPos>> connections;
 
         protected MultiBlockNode(World world, BlockPos min, BlockPos max, ItemStack material) {
             this.world = world;
@@ -444,7 +451,10 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         }
 
         @Override
-        public boolean canConnect(IAgriIrrigationNode other) {
+        public boolean canConnect(IAgriIrrigationNode other, Direction from) {
+            if(from.getAxis().isVertical()) {
+                return false;
+            }
             if(other instanceof TileEntityIrrigationComponent) {
                 return ((TileEntityIrrigationComponent) other).isSameMaterial(this.getMaterial());
             }
@@ -452,22 +462,22 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         }
 
         @Override
-        public Set<BlockPos> getPotentialNeighbours() {
-            if(this.neighbours == null) {
-                ImmutableSet.Builder<BlockPos> setBuilder = new ImmutableSet.Builder<>();
+        public Set<Tuple<Direction, BlockPos>> getPotentialConnections() {
+            if(this.connections == null) {
+                ImmutableSet.Builder<Tuple<Direction, BlockPos>> setBuilder = new ImmutableSet.Builder<>();
                 for(int y = this.getMin().getY(); y <= this.getMax().getY(); y++) {
                     for(int x = this.getMin().getX(); x <= this.getMax().getX(); x++) {
-                        setBuilder.add(new BlockPos(x, y, this.getMin().getZ() - 1));
-                        setBuilder.add(new BlockPos(x, y, this.getMax().getZ() + 1));
+                        setBuilder.add(new Tuple<>(Direction.NORTH, new BlockPos(x, y, this.getMin().getZ() - 1)));
+                        setBuilder.add(new Tuple<>(Direction.SOUTH, new BlockPos(x, y, this.getMax().getZ() + 1)));
                     }
                     for(int z = this.getMin().getZ(); z <= this.getMax().getZ(); z++) {
-                        setBuilder.add(new BlockPos(this.getMin().getX() - 1, y, z));
-                        setBuilder.add(new BlockPos(this.getMax().getX() + 1, y, z));
+                        setBuilder.add(new Tuple<>(Direction.WEST, new BlockPos(this.getMin().getX() - 1, y, z)));
+                        setBuilder.add(new Tuple<>(Direction.EAST, new BlockPos(this.getMax().getX() + 1, y, z)));
                     }
                 }
-                this.neighbours = setBuilder.build();
+                this.connections = setBuilder.build();
             }
-            return this.neighbours;
+            return this.connections;
         }
 
         @Override

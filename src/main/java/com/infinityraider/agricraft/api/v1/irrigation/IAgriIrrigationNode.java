@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.api.v1.irrigation;
 
+import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -54,12 +56,12 @@ public interface IAgriIrrigationNode {
      * @param other the other node
      * @return true if this can connect to the other
      */
-    boolean canConnect(IAgriIrrigationNode other);
+    boolean canConnect(IAgriIrrigationNode other, Direction from);
 
     /**
      * @return a collection of all positions to which this node can connect to
      */
-    Collection<BlockPos> getPotentialNeighbours();
+    Collection<Tuple<Direction, BlockPos>> getPotentialConnections();
 
     /**
      * Used for rendering fluid transients, fluid will "flow" from sources to sinks

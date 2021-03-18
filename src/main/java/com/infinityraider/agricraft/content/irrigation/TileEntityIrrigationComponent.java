@@ -7,11 +7,10 @@ import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
@@ -21,7 +20,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     private final double minY;
     private final double maxY;
 
-    private Set<BlockPos> neighbours;
+    private Set<Tuple<Direction, BlockPos>> connections;
 
     public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, double minY, double maxY) {
         super(type);
@@ -45,26 +44,16 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         return this.capacity;
     }
 
-    protected abstract int getSingleCapacity();
-
     @Override
-    public boolean canConnect(@Nonnull IAgriIrrigationNode other) {
-        if(other instanceof TileEntityIrrigationComponent) {
-            return this.isSameMaterial((TileEntityIrrigationComponent) other);
-        }
-        return false;
-    }
-
-    @Override
-    public Collection<BlockPos> getPotentialNeighbours() {
-        if(this.neighbours == null) {
-            this.neighbours = ImmutableSet.of(
-                    this.getPos().offset(Direction.NORTH),
-                    this.getPos().offset(Direction.EAST),
-                    this.getPos().offset(Direction.SOUTH),
-                    this.getPos().offset(Direction.WEST)
+    public Set<Tuple<Direction, BlockPos>> getPotentialConnections() {
+        if(this.connections == null) {
+            this.connections = ImmutableSet.of(
+                    new Tuple<>(Direction.NORTH, this.getPos().offset(Direction.NORTH)),
+                    new Tuple<>(Direction.EAST, this.getPos().offset(Direction.EAST)),
+                    new Tuple<>(Direction.SOUTH, this.getPos().offset(Direction.SOUTH)),
+                    new Tuple<>(Direction.WEST, this.getPos().offset(Direction.WEST))
             );
         }
-        return this.neighbours;
+        return this.connections;
     }
 }

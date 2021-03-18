@@ -7,6 +7,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.Set;
@@ -14,13 +15,14 @@ import java.util.Set;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public interface IAgriIrrigationNetwork extends IFluidHandler {
+    @Nullable
     World getWorld();
 
     boolean isValid();
 
     Set<IAgriIrrigationNode> nodes();
 
-    Map<IAgriIrrigationNode, Set<IAgriIrrigationNode>> connections();
+    Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections();
 
     int capacity();
 

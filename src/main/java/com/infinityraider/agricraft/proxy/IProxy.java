@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkData;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
 import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.DataHandler;
@@ -23,7 +24,6 @@ public interface IProxy extends IProxyBase<Config> {
     default Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
         return Config.Server::new;
     }
-
 
     @Override
     default void onCommonSetupEvent(final FMLCommonSetupEvent event) {
@@ -48,6 +48,7 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void registerCapabilities() {
         this.registerCapability(CapabilityIrrigationNetworkData.getInstance());
+        this.registerCapability(CapabilityIrrigationNetworkManager.getInstance());
         this.registerCapability(CapabilityMultiBlockData.getInstance());
     }
 

@@ -36,5 +36,7 @@ public abstract class Names {
 
     public static final class Objects {
         public static final String PLANT = "plant";
+        public static final String IRRIGATION_NETWORK_MANAGER = "irrigation_network_manager";
+        public static final String IRRIGATION_NETWORK_DATA = "irrigation_network_data";
     }
 }

@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
 
@@ -32,8 +33,17 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent i
     }
 
     @Override
-    protected int getSingleCapacity() {
-        return AgriCraft.instance.getConfig().channelCapacity();
+    public boolean canConnect(@Nonnull IAgriIrrigationNode other, Direction from) {
+        if(from.getAxis().isVertical()) {
+            return false;
+        }
+        if(other instanceof TileEntityIrrigationComponent) {
+            return this.isSameMaterial((TileEntityIrrigationComponent) other);
+        }
+        if(other instanceof TileEntityIrrigationTank.MultiBlockNode) {
+            return this.isSameMaterial(((TileEntityIrrigationTank.MultiBlockNode) other).getMaterial());
+        }
+        return false;
     }
 
     @Override
