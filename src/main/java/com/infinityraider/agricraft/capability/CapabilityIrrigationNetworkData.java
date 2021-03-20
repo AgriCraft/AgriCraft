@@ -27,8 +27,20 @@ public class CapabilityIrrigationNetworkData implements IInfCapabilityImplementa
     @CapabilityInject(CapabilityIrrigationNetworkData.Impl.class)
     public static final Capability<CapabilityIrrigationNetworkData.Impl> CAPABILITY = null;
 
+    public boolean registerPart(IrrigationNetworkPart part) {
+        if(part.isValid()) {
+            return part.getChunk().getCapability(this.getCapability())
+                    .map(impl -> {
+                        impl.registerPart(part);
+                        return true;
+                    }).orElse(false);
+        }
+        return false;
+    }
+
     public IrrigationNetworkPart getPart(Chunk chunk, int id) {
-        return chunk.getCapability()
+        return chunk.getCapability(this.getCapability())
+                .map(impl -> impl.getPart(id)).orElse(IrrigationNetworkPart.createEmpty(chunk));
     }
 
     @Override
@@ -76,17 +88,22 @@ public class CapabilityIrrigationNetworkData implements IInfCapabilityImplementa
         }
 
         public IrrigationNetworkPart getPart(int id) {
+            return this.parts.get(id);
+        }
 
+        private void registerPart(IrrigationNetworkPart part) {
+            this.parts.put(part.getId(), part);
         }
 
         @Override
         public void readFromNBT(CompoundNBT tag) {
-
+            // TODO
         }
 
         @Override
         public CompoundNBT writeToNBT() {
             CompoundNBT tag = new CompoundNBT();
+            // TODO
             return tag;
         }
     }

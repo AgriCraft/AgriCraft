@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.capability;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
@@ -38,9 +37,9 @@ public class CapabilityIrrigationNetworkComponent implements IInfCapabilityImple
                 .orElse(IrrigationNetworkInvalid.getInstance());
     }
 
-    public void setIrrigationNetwork(IAgriIrrigationComponent component, IrrigationNetwork network) {
+    public void setIrrigationNetwork(IAgriIrrigationComponent component, int id) {
         component.castToTile().getCapability(this.getCapability())
-                .ifPresent(impl -> impl.setNetwork(network));
+                .ifPresent(impl -> impl.setNetwork(id));
     }
 
     @Override
@@ -87,8 +86,8 @@ public class CapabilityIrrigationNetworkComponent implements IInfCapabilityImple
             return this.networkId;
         }
 
-        public void setNetwork(IrrigationNetwork network) {
-            this.networkId = network.getId();
+        public void setNetwork(int id) {
+            this.networkId = id;
         }
 
         @Nonnull
@@ -113,6 +112,9 @@ public class CapabilityIrrigationNetworkComponent implements IInfCapabilityImple
         @Override
         public void readFromNBT(CompoundNBT tag) {
             this.networkId = tag.contains(AgriNBT.KEY) ? tag.getInt(AgriNBT.KEY) : -1;
+            if(this.networkId >= 0) {
+                // TODO: inject component into network part deserialization
+            }
         }
 
         @Override

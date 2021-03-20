@@ -22,8 +22,12 @@ public class PotentialNode {
         return this.getComponent().getNode();
     }
 
-    public BlockPos getPos() {
+    public BlockPos getToPos() {
         return this.getComponent().castToTile().getPos();
+    }
+
+    public BlockPos getFromPos() {
+        return this.getToPos().offset(this.getDirection().getOpposite());
     }
 
     public Direction getDirection() {

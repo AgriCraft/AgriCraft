@@ -9,6 +9,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +22,10 @@ public interface IAgriIrrigationNetwork extends IFluidHandler {
     boolean isValid();
 
     Set<IAgriIrrigationNode> nodes();
+
+    default Set<IAgriIrrigationConnection> getConnectionsFrom(IAgriIrrigationNode node) {
+        return this.connections().getOrDefault(node, Collections.emptySet());
+    }
 
     Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections();
 

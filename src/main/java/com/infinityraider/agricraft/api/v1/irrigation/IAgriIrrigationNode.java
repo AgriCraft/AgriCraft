@@ -8,6 +8,8 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Collection;
 
 public interface IAgriIrrigationNode {
+    Collection<IAgriIrrigationComponent> getComponents();
+
     /**
      * @return the minimum fluid level, relative to the world coordinates (corresponds to an empty capacity)
      */
