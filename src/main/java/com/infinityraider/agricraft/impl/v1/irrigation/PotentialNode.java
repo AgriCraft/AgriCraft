@@ -5,6 +5,8 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Optional;
+
 public class PotentialNode {
     private final IAgriIrrigationComponent component;
     private final Direction direction;
@@ -18,12 +20,12 @@ public class PotentialNode {
         return this.component;
     }
 
-    public IAgriIrrigationNode getNode() {
-        return this.getComponent().getNode();
+    public Optional<IAgriIrrigationNode> getNode() {
+        return this.getComponent().getNode(this.getDirection().getOpposite());
     }
 
     public BlockPos getToPos() {
-        return this.getComponent().castToTile().getPos();
+        return this.getComponent().getTile().getPos();
     }
 
     public BlockPos getFromPos() {

@@ -3,13 +3,19 @@ package com.infinityraider.agricraft.content.irrigation;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Set;
 
@@ -20,13 +26,52 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     private final double minY;
     private final double maxY;
 
+    private final AutoSyncedField<Double> waterLevel;
+    private final ImmutableSet<IAgriIrrigationComponent> component;
+    private final LazyOptional<IAgriIrrigationComponent> irrigationCapability;
     private Set<Tuple<Direction, BlockPos>> connections;
+
 
     public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, double minY, double maxY) {
         super(type);
         this.capacity = capacity;
         this.minY = minY;
         this.maxY = maxY;
+        this.waterLevel = this.getAutoSyncedFieldBuilder(this.minY).build();
+        this.component = ImmutableSet.of(this);
+        this.irrigationCapability = LazyOptional.of(() -> this);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if (side != null && side.getAxis().isHorizontal()) {
+            if(cap == CapabilityIrrigationComponent.getInstance().getCapability()) {
+                return this.irrigationCapability.cast();
+            }
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public TileEntity getTile() {
+        return this;
+    }
+
+    @Override
+    public void onNetworkContentsChanged(Direction side) {
+        double h = this.getNetwork(side).fluidHeight();
+        h = Math.min(this.maxY, h);
+        if(h <= this.minY) {
+            this.waterLevel.set(0.0);
+        } else {
+            this.waterLevel.set(h);
+        }
+    }
+
+    @Override
+    public ImmutableSet<IAgriIrrigationComponent> getComponents() {
+        return this.component;
     }
 
     @Override

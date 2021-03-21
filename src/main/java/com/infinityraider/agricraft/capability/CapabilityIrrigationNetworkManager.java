@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
+import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
 import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Map;
 import java.util.Optional;
 
-public class CapabilityIrrigationNetworkManager implements IInfCapabilityImplementation<World, CapabilityIrrigationNetworkManager.Impl> {
+public class CapabilityIrrigationNetworkManager implements IInfSerializableCapabilityImplementation<World, CapabilityIrrigationNetworkManager.Impl> {
     private static final CapabilityIrrigationNetworkManager INSTANCE = new CapabilityIrrigationNetworkManager();
 
     public static CapabilityIrrigationNetworkManager getInstance() {

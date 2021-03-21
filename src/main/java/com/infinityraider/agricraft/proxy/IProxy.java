@@ -1,9 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkComponent;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkData;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
-import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
+import com.infinityraider.agricraft.capability.*;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
@@ -48,8 +45,9 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void registerCapabilities() {
-        this.registerCapability(CapabilityIrrigationNetworkComponent.getInstance());
-        this.registerCapability(CapabilityIrrigationNetworkData.getInstance());
+        this.registerCapability(CapabilityIrrigationComponent.getInstance());
+        this.registerCapability(CapabilityIrrigationNetworkReference.getInstance());
+        this.registerCapability(CapabilityIrrigationNetworkChunkData.getInstance());
         this.registerCapability(CapabilityIrrigationNetworkManager.getInstance());
         this.registerCapability(CapabilityMultiBlockData.getInstance());
     }

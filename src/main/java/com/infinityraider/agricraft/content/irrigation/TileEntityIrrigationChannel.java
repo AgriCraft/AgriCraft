@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent implements IAgriIrrigationNode {
     private static final double MIN_Y = Constants.UNIT*6;
@@ -28,8 +29,8 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent i
     }
 
     @Override
-    public IAgriIrrigationNode getNode() {
-        return this;
+    public Optional<IAgriIrrigationNode> getNode(Direction side) {
+        return Optional.ofNullable(side == null || side.getAxis().isHorizontal() ? this : null);
     }
 
     @Override

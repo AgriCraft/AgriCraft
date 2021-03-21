@@ -26,6 +26,7 @@ import javax.naming.OperationNotSupportedException;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -281,8 +282,8 @@ public final class AgriApi {
     }
 
     @Nonnull
-    public static IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component) {
-        return AgriApi.CONNECTOR.getIrrigationNetwork(component);
+    public static IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
+        return AgriApi.CONNECTOR.getIrrigationNetwork(component, side);
     }
 
     /**

@@ -5,12 +5,13 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkData;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkChunkData;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 
 public class IrrigationNetwork implements IAgriIrrigationNetwork {
     public static IAgriIrrigationNetwork createNewNetwork(IAgriIrrigationComponent component) {
-        World world = component.castToTile().getWorld();
+        World world = component.getTile().getWorld();
         if(world == null) {
             return IrrigationNetworkInvalid.getInstance();
         }
@@ -94,7 +95,7 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
 
     public void onChunkLoaded(Chunk chunk) {
         if(this.parts.containsKey(chunk.getPos())) {
-            IrrigationNetworkPart part = CapabilityIrrigationNetworkData.getInstance().getPart(chunk, this.getId());
+            IrrigationNetworkPart part = CapabilityIrrigationNetworkChunkData.getInstance().getPart(chunk, this.getId());
             this.parts.put(chunk.getPos(), part);
             this.parts.values().forEach(aPart -> aPart.onChunkLoaded(chunk));
             this.nodeCache = null;
@@ -277,11 +278,16 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
 
         protected IrrigationNetwork build(IAgriIrrigationComponent component) {
             // Initialize the first part builder
-            Chunk chunk = this.getWorld().getChunkAt(component.castToTile().getPos());
+            Chunk chunk = this.getWorld().getChunkAt(component.getTile().getPos());
             IrrigationNetworkPart.Builder partBuilder = new IrrigationNetworkPart.Builder(this, chunk);
             this.partBuilders.put(chunk, partBuilder);
             // Add the node to the first part builder and start iterating
-            partBuilder.addNodeAndIterate(component.getNode());
+            Stream.concat(Arrays.stream(Direction.values()), Stream.of((Direction) null))
+                    .map(component::getNode)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .distinct()
+                    .forEach(partBuilder::addNodeAndIterate);
             // Iterations are finished, compile the network
             return new IrrigationNetwork(
                     this.getWorld(),
@@ -306,29 +312,32 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
             if (this.potentialConnections.containsKey(fromChunk)) {
                 // If the target chunk has been visited, we create a new cross-chunk connection and update the part in the chunk
                 Set<PotentialNode> potentialNodes = this.potentialConnections.get(fromChunk);
-                potentialNodes.stream()
-                        .filter(node -> from == node.getNode())
-                        .findAny()
-                        .ifPresent(node -> {
-                            potentialNodes.remove(node);
-                            boolean flag = false;
-                            if (from.canConnect(to.getNode(), to.getDirection())) {
-                                this.crossChunkConnections.computeIfAbsent(fromChunk, chunk -> Sets.newIdentityHashSet())
-                                        .add(new IrrigationNetworkCrossChunkConnection(
-                                                from, to.getNode(), to.getFromPos(),  to.getDirection(), fromChunk.getPos()));
-                                flag = true;
-                            }
-                            if (to.getNode().canConnect(from, to.getDirection().getOpposite())) {
-                                this.crossChunkConnections.computeIfAbsent(toChunk, chunk -> Sets.newIdentityHashSet())
-                                        .add(new IrrigationNetworkCrossChunkConnection(
-                                                to.getNode(), from, to.getToPos(), to.getDirection().getOpposite(), toChunk.getPos()));
-                                flag = true;
-                            }
-                            if(flag) {
-                                this.partBuilders.computeIfAbsent(toChunk, chunk -> new IrrigationNetworkPart.Builder(this, chunk))
-                                        .addNodeAndIterate(to.getNode());
-                            }
-                        });
+                to.getNode().ifPresent(toNode -> {
+                    potentialNodes.stream()
+                            .filter(node -> node.getNode().isPresent())
+                            .filter(node -> from == node.getNode().get())
+                            .findAny()
+                            .ifPresent(node -> {
+                                potentialNodes.remove(node);
+                                boolean flag = false;
+                                if (from.canConnect(toNode, to.getDirection())) {
+                                    this.crossChunkConnections.computeIfAbsent(fromChunk, chunk -> Sets.newIdentityHashSet())
+                                            .add(new IrrigationNetworkCrossChunkConnection(
+                                                    from, toNode, to.getFromPos(), to.getDirection(), fromChunk.getPos()));
+                                    flag = true;
+                                }
+                                if (toNode.canConnect(from, to.getDirection().getOpposite())) {
+                                    this.crossChunkConnections.computeIfAbsent(toChunk, chunk -> Sets.newIdentityHashSet())
+                                            .add(new IrrigationNetworkCrossChunkConnection(
+                                                    toNode, from, to.getToPos(), to.getDirection().getOpposite(), toChunk.getPos()));
+                                    flag = true;
+                                }
+                                if (flag) {
+                                    this.partBuilders.computeIfAbsent(toChunk, chunk -> new IrrigationNetworkPart.Builder(this, chunk))
+                                            .addNodeAndIterate(toNode);
+                                }
+                            });
+                });
             } else {
                 // If the target chunk has not yet been visited, add it to the 'to-do' list
                 this.potentialConnections.computeIfAbsent(toChunk, chunk -> Sets.newIdentityHashSet()).add(to);

@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -95,5 +96,5 @@ public interface IAgriApiConnector {
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback);
 
     @Nonnull
-    IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component);
+    IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side);
 }

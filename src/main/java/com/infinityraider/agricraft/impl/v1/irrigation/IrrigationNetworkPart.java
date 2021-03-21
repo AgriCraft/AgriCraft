@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.impl.v1.irrigation;
 
 import com.google.common.collect.*;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkComponent;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkData;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkChunkData;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     public static IrrigationNetworkPart createEmpty(Chunk chunk) {
@@ -34,15 +35,22 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                                   Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
                                   Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections,
                                   List<IrrigationNetworkLayer> layers) {
+        // Set all fields
         this.chunk = chunk;
         this.networkId = networkId;
         this.connections = connections;
         this.crossChunkConnections = crossChunkConnections;
         this.layers = layers;
-        CapabilityIrrigationNetworkData.getInstance().registerPart(this);
-        this.connections.keySet().stream().flatMap(node -> node.getComponents().stream()).forEach(component ->
-                CapabilityIrrigationNetworkComponent.getInstance().setIrrigationNetwork(component, this.networkId)
-        );
+        // Register the part in the Chunk data
+        CapabilityIrrigationNetworkChunkData.getInstance().registerPart(this);
+        // Set the network for all components
+        Stream.concat(
+                this.connections.values().stream().flatMap(Set::stream),
+                this.crossChunkConnections.values().stream().flatMap(Set::stream)
+        ).forEach(connection ->
+            connection.from().getComponents().forEach(component ->
+                    CapabilityIrrigationNetworkReference.getInstance().setIrrigationNetwork(
+                            component, connection.direction(), this.networkId)));
     }
 
     public final Chunk getChunk() {
@@ -91,10 +99,9 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     public void onChunkLoaded(Chunk chunk) {
         this.getCrossChunkConnections().getOrDefault(chunk.getPos(), Collections.emptySet())
                 .forEach(connection -> {
-                    TileEntity tile = chunk.getTileEntity(connection.toPos());
-                    if (tile instanceof IAgriIrrigationComponent) {
-                        connection.onChunkLoaded(((IAgriIrrigationComponent) tile).getNode());
-                    }
+                    Direction dir = connection.direction().getOpposite();
+                    CapabilityIrrigationComponent.getInstance().acceptForNode(
+                            chunk.getTileEntity(connection.toPos()), dir, connection::onChunkLoaded);
                 });
     }
 
@@ -176,8 +183,9 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         }
 
         protected void addNodeAndIterate(IAgriIrrigationNode node) {
-            this.addNode(node);
-            this.iterate();
+            if(this.addNode(node)) {
+                this.iterate();
+            }
         }
 
         protected IrrigationNetworkPart build(IrrigationNetwork network,
@@ -214,7 +222,10 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
             }
         }
 
-        private void addNode(IAgriIrrigationNode node) {
+        private boolean addNode(IAgriIrrigationNode node) {
+            if (this.connections.containsKey(node)) {
+                return false;
+            }
             // Add limits
             this.addLimit(node.getMinFluidHeight());
             this.addLimit(node.getMaxFluidHeight());
@@ -222,41 +233,43 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
             this.connections.put(node, Sets.newIdentityHashSet());
             // Find connections
             this.toVisit.put(node, node.getPotentialConnections().stream()
-                    .map(tuple -> {
-                        TileEntity tile = this.getWorld().getTileEntity(tuple.getB());
-                        if(tile instanceof IAgriIrrigationComponent) {
-                            return new PotentialNode((IAgriIrrigationComponent) tile, tuple.getA());
-                        }
-                        return null;
-                    })
-                    .filter(Objects::nonNull)
+                    .map(tuple ->
+                            CapabilityIrrigationComponent.getInstance().applyForComponent(
+                                    this.getWorld().getTileEntity(tuple.getB()),
+                                    tuple.getA().getOpposite(),
+                                    component -> new PotentialNode(component, tuple.getA())
+                            ))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .collect(Collectors.toList())
             );
+            return true;
         }
 
         private void checkConnection(IAgriIrrigationNode node, PotentialNode site) {
             Chunk chunk = this.getWorld().getChunkAt(site.getToPos());
             if(this.getChunk() == chunk) {
                 // Fetch the new node
-                IAgriIrrigationNode newNode = site.getNode();
-                // Check if the node can connect to the network via the visiting node
-                boolean forward = node.canConnect(newNode, site.getDirection());
-                boolean backward = newNode.canConnect(node, site.getDirection().getOpposite());
-                // Add the connections
-                if (forward) {
-                    this.connections.get(node).add(new IrrigationNetworkConnection(
-                            node, newNode, site.getFromPos(), site.getDirection()));
-                }
-                if (backward) {
-                    this.connections.get(newNode).add(new IrrigationNetworkConnection(
-                            newNode, node, site.getToPos(), site.getDirection().getOpposite()));
-                }
-                // Add the node to the network if it isn't there yet
-                if (!this.toVisit.containsKey(newNode)) {
-                    if (forward || backward) {
-                        this.addNode(site.getNode());
+                site.getNode().ifPresent(newNode -> {
+                    // Check if the node can connect to the network via the visiting node
+                    boolean forward = node.canConnect(newNode, site.getDirection());
+                    boolean backward = newNode.canConnect(node, site.getDirection().getOpposite());
+                    // Add the connections
+                    if (forward) {
+                        this.connections.get(node).add(new IrrigationNetworkConnection(
+                                node, newNode, site.getFromPos(), site.getDirection()));
                     }
-                }
+                    if (backward) {
+                        this.connections.get(newNode).add(new IrrigationNetworkConnection(
+                                newNode, node, site.getToPos(), site.getDirection().getOpposite()));
+                    }
+                    // Add the node to the network if it isn't there yet
+                    if (!this.toVisit.containsKey(newNode)) {
+                        if (forward || backward) {
+                            this.addNode(newNode);
+                        }
+                    }
+                });
             } else {
                 this.getParent().handleCrossChunkConnection(this.getChunk(), node, chunk, site);
             }

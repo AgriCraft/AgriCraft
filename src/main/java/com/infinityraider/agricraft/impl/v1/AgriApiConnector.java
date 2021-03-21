@@ -20,7 +20,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFact
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkComponent;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
@@ -38,6 +38,7 @@ import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -211,7 +212,7 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component) {
-        return CapabilityIrrigationNetworkComponent.getInstance().getIrrigationNetwork(component);
+    public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
+        return CapabilityIrrigationNetworkReference.getInstance().getIrrigationNetwork(component, side);
     }
 }

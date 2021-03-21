@@ -4,9 +4,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
 import com.infinityraider.infinitylib.reference.Constants;
+import com.infinityraider.infinitylib.utility.WorldHelper;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -98,8 +101,8 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
-    public IAgriIrrigationNode getNode() {
-        return CapabilityMultiBlockData.getInstance().getIrrigationNode(this);
+    public Optional<IAgriIrrigationNode> getNode(Direction side) {
+        return Optional.of(CapabilityMultiBlockData.getInstance().getIrrigationNode(this));
     }
 
     public IAgriIrrigationNode createNewMultiBlockNode() {
@@ -433,6 +436,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
         protected int getCount(ToIntFunction<BlockPos> counter) {
             return counter.applyAsInt(this.getMax()) - counter.applyAsInt(this.getMin()) + 1;
+        }
+
+        @Override
+        public Collection<IAgriIrrigationComponent> getComponents() {
+            return WorldHelper.collectCapabilities(this.getWorld(), this.getMin(), this.getMax(),
+                    CapabilityIrrigationComponent.getInstance().getCapability(), IAgriIrrigationComponent.class);
         }
 
         @Override

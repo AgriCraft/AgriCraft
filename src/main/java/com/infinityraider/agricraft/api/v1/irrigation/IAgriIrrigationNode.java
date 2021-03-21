@@ -7,7 +7,13 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Collection;
 
+/**
+ * Interface representing nodes in an AgriCraft irrigation network
+ */
 public interface IAgriIrrigationNode {
+    /**
+     * @return a Collection of all Components which have this as node
+     */
     Collection<IAgriIrrigationComponent> getComponents();
 
     /**
@@ -53,7 +59,7 @@ public interface IAgriIrrigationNode {
 
     /**
      * Checks if this node can connect to another component.
-     * This method is called reciprocally, and if either returns true, the connection can be formed
+     * This method is called reciprocally, and is thus directional.
      *
      * @param other the other node
      * @return true if this can connect to the other
@@ -68,14 +74,14 @@ public interface IAgriIrrigationNode {
     /**
      * Used for rendering fluid transients, fluid will "flow" from sources to sinks
      *
-     * @return true if this component acts as a source
+     * @return true if this component is currently acting as a source
      */
     boolean isSource();
 
     /**
      * Used for rendering fluid transients, fluid will "flow" from sources to sinks
      *
-     * @return true if this component acts as a sink
+     * @return true if this component is currently acting as a sink
      */
     boolean isSink();
 }

@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
+import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
 import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class CapabilityMultiBlockData implements IInfCapabilityImplementation<Chunk, CapabilityMultiBlockData.Impl> {
+public class CapabilityMultiBlockData implements IInfSerializableCapabilityImplementation<Chunk, CapabilityMultiBlockData.Impl> {
     private static final CapabilityMultiBlockData INSTANCE = new CapabilityMultiBlockData();
 
     public static CapabilityMultiBlockData getInstance() {

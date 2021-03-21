@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkPart;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
+import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
 import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -14,18 +14,18 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import java.util.Map;
 
-public class CapabilityIrrigationNetworkData implements IInfCapabilityImplementation<Chunk, CapabilityIrrigationNetworkData.Impl> {
-    private static final CapabilityIrrigationNetworkData INSTANCE = new CapabilityIrrigationNetworkData();
+public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCapabilityImplementation<Chunk, CapabilityIrrigationNetworkChunkData.Impl> {
+    private static final CapabilityIrrigationNetworkChunkData INSTANCE = new CapabilityIrrigationNetworkChunkData();
 
-    public static CapabilityIrrigationNetworkData getInstance() {
+    public static CapabilityIrrigationNetworkChunkData getInstance() {
         return INSTANCE;
     }
 
     public static ResourceLocation KEY = new ResourceLocation(
             AgriCraft.instance.getModId().toLowerCase(), Names.Objects.IRRIGATION_NETWORK_DATA);
 
-    @CapabilityInject(CapabilityIrrigationNetworkData.Impl.class)
-    public static final Capability<CapabilityIrrigationNetworkData.Impl> CAPABILITY = null;
+    @CapabilityInject(CapabilityIrrigationNetworkChunkData.Impl.class)
+    public static final Capability<CapabilityIrrigationNetworkChunkData.Impl> CAPABILITY = null;
 
     public boolean registerPart(IrrigationNetworkPart part) {
         if(part.isValid()) {
@@ -44,12 +44,12 @@ public class CapabilityIrrigationNetworkData implements IInfCapabilityImplementa
     }
 
     @Override
-    public Class<CapabilityIrrigationNetworkData.Impl> getCapabilityClass() {
-        return CapabilityIrrigationNetworkData.Impl.class;
+    public Class<CapabilityIrrigationNetworkChunkData.Impl> getCapabilityClass() {
+        return CapabilityIrrigationNetworkChunkData.Impl.class;
     }
 
     @Override
-    public Capability<CapabilityIrrigationNetworkData.Impl> getCapability() {
+    public Capability<CapabilityIrrigationNetworkChunkData.Impl> getCapability() {
         return CAPABILITY;
     }
 
@@ -59,8 +59,8 @@ public class CapabilityIrrigationNetworkData implements IInfCapabilityImplementa
     }
 
     @Override
-    public CapabilityIrrigationNetworkData.Impl createNewValue(Chunk chunk) {
-        return new CapabilityIrrigationNetworkData.Impl(chunk);
+    public CapabilityIrrigationNetworkChunkData.Impl createNewValue(Chunk chunk) {
+        return new CapabilityIrrigationNetworkChunkData.Impl(chunk);
     }
 
     @Override
