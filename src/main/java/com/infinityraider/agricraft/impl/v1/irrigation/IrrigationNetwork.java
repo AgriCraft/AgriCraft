@@ -31,6 +31,10 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
         return new Builder(world).build(component);
     }
 
+    public static IAgriIrrigationNetwork loadNetwork() {
+        return IrrigationNetworkInvalid.getInstance();
+    }
+
     public static IrrigationNetwork readFromNbt(World world, int id, CompoundNBT tag) {
         IrrigationNetwork network = new IrrigationNetwork(world, (nw) -> id, Maps.newIdentityHashMap());
         network.readFromNBT(tag);
@@ -256,6 +260,7 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
         return this.contents() > 0 ? new FluidStack(Fluids.WATER, this.contents()) : FluidStack.EMPTY;
     }
 
+
     /**
      * -------
      * BUILDER
@@ -346,4 +351,14 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
 
     }
 
+
+    /**
+     * -------
+     * LOADER
+     * -------
+     */
+
+    private static class Loader {
+
+    }
 }

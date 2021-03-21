@@ -1,8 +1,15 @@
 package com.infinityraider.agricraft.reference;
 
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+
+import java.util.stream.Stream;
+
 public interface AgriNBT {
     String CAPACITY = "agri_capacity";
-    String CROSS_CROP = "agri_cross_crop";
+    String CHUNK = "agri_chunk";
+    String CONNECTIONS = "agri_connections";
+    String DIRECTION = "agri_dir";
     String DOMINANT = "agri_dominant";
     String ENTRIES = "agri_entries";
     String GENE = "agri_gene";
@@ -23,4 +30,11 @@ public interface AgriNBT {
     String X2 = "agri_x2";
     String Y2 = "agri_y2";
     String Z2 = "agri_z2";
+
+    String U1 = "agri_u1";
+    String V1 = "agri_v1";
+
+    static Stream<CompoundNBT> stream(ListNBT list) {
+        return list.stream().filter(tag -> tag instanceof CompoundNBT).map(tag -> (CompoundNBT) tag);
+    }
 }

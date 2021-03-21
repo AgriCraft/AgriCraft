@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +25,12 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         return new IrrigationNetworkPart(-1, chunk,
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyList());
     }
+
+    public static IrrigationNetworkPart.Loader createLoader(int id, Chunk chunk, int nodes, Consumer<IrrigationNetworkPart> finalizer) {
+        return new Loader(id, chunk, nodes, finalizer);
+    }
+
+
     private final Chunk chunk;
     private final int networkId;
 
@@ -65,11 +72,11 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         return this.networkId;
     }
 
-    protected Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> getConnections() {
+    public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> getConnections() {
         return this.connections;
     }
 
-    protected Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> getCrossChunkConnections() {
+    public Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> getCrossChunkConnections() {
         return this.crossChunkConnections;
     }
 
@@ -286,5 +293,32 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                 this.limits.add(index, limit);
             }
         }
+    }
+
+    public static class Loader {
+        private final int id;
+        private final Chunk chunk;
+        private final int nodes;
+        private final Consumer<IrrigationNetworkPart> finalizer;
+
+        private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
+        private final Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections;
+        private final List<IrrigationNetworkLayer> layers;
+
+        protected Loader(int id, Chunk chunk, int nodes, Consumer<IrrigationNetworkPart> finalizer) {
+            this.id = id;
+            this.chunk = chunk;
+            this.nodes = nodes;
+            this.finalizer = finalizer;
+            this.connections = Maps.newIdentityHashMap();
+            this.crossChunkConnections = Maps.newIdentityHashMap();
+            this.layers = Lists.newArrayList();
+        }
+
+        protected void finalize() {
+            this.finalizer.accept(new IrrigationNetworkPart(
+                    this.id, this.chunk, this.connections, this.crossChunkConnections, this.layers));
+        }
+
     }
 }
