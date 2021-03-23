@@ -37,14 +37,13 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
     public static final Capability<CapabilityIrrigationNetworkReference.Impl> CAPABILITY = null;
 
     public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
-        return component.getTile().getCapability(this.getCapability(), side)
+        return this.getCapability(component.getTile(), side)
                 .map(impl -> impl.getNetwork(side))
                 .orElse(IrrigationNetworkInvalid.getInstance());
     }
 
     public void setIrrigationNetwork(IAgriIrrigationComponent component, @Nullable Direction dir, int id) {
-        component.getTile().getCapability(this.getCapability())
-                .ifPresent(impl -> impl.setNetwork(dir, id));
+        this.getCapability(component.getTile(), dir).ifPresent(impl -> impl.setNetwork(dir, id));
     }
 
     @Override
@@ -149,7 +148,16 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         }
 
         protected void onIdDeserialized(@Nullable Direction dir, int id) {
-            // TODO: inject component into network part deserialization
+            World world = this.getWorld();
+            if(world == null) {
+                // TODO
+            } else {
+                CapabilityIrrigationNetworkChunkData.getInstance().onComponentDeserialized(
+                        world.getChunkAt(this.getComponent().getTile().getPos()),
+                        this.getComponent(),
+                        id, dir
+                );
+            }
         }
 
         @Override

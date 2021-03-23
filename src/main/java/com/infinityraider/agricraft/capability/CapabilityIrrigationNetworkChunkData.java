@@ -2,7 +2,9 @@ package com.infinityraider.agricraft.capability;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkCrossChunkConnection;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkPart;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
@@ -10,11 +12,15 @@ import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImple
 import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -33,19 +39,21 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
     public static final Capability<CapabilityIrrigationNetworkChunkData.Impl> CAPABILITY = null;
 
     public boolean registerPart(IrrigationNetworkPart part) {
-        if(part.isValid()) {
-            return part.getChunk().getCapability(this.getCapability())
-                    .map(impl -> {
-                        impl.registerPart(part);
-                        return true;
-                    }).orElse(false);
+        if (part.isValid()) {
+            return this.getCapability(part.getChunk()).map(impl -> {
+                impl.registerPart(part);
+                return true;
+            }).orElse(false);
         }
         return false;
     }
 
     public IrrigationNetworkPart getPart(Chunk chunk, int id) {
-        return chunk.getCapability(this.getCapability())
-                .map(impl -> impl.getPart(id)).orElse(IrrigationNetworkPart.createEmpty(chunk));
+        return this.getCapability(chunk).map(impl -> impl.getPart(id)).orElse(IrrigationNetworkPart.createEmpty(chunk));
+    }
+
+    public void onComponentDeserialized(Chunk chunk, IAgriIrrigationComponent component, int id, @Nullable Direction dir) {
+        this.getCapability(chunk).ifPresent(impl -> impl.onComponentDeserialized(component, id, dir));
     }
 
     @Override
@@ -102,6 +110,10 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
             this.parts.put(part.getId(), part);
         }
 
+        public void onComponentDeserialized(IAgriIrrigationComponent component, int id, @Nullable Direction dir) {
+            this.loaders.get(id).onComponentDeserialized(component, dir);
+        }
+
         @Override
         public void readFromNBT(CompoundNBT tag) {
             this.parts.clear();
@@ -111,13 +123,14 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
             }
             AgriNBT.stream(tag.getList(AgriNBT.ENTRIES, 10)).forEach(partTag -> {
                 int id = partTag.getInt(AgriNBT.NETWORK);
-                int nodes = partTag.getInt(AgriNBT.ENTRIES);
                 Consumer<IrrigationNetworkPart> finalizer = (part) -> {
-                    this.registerPart(part);
                     this.loaders.remove(part.getId());
                 };
-                IrrigationNetworkPart.Loader loader = IrrigationNetworkPart.createLoader(id, this.getChunk(), nodes, finalizer);
-                // TODO
+                IrrigationNetworkPart.Loader loader = IrrigationNetworkPart.createLoader(id, this.getChunk(), finalizer);
+                AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
+                        this.readConnectionFromNBT(loader, connectionTag));
+                AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
+                        this.readChunkConnectionFromNBT(loader, connectionTag));
                 this.loaders.put(id, loader);
             });
         }
@@ -131,8 +144,6 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
                 CompoundNBT partTag = new CompoundNBT();
                 // Write network id
                 partTag.putInt(AgriNBT.NETWORK, part.getId());
-                // Write the number of nodes
-                partTag.putInt(AgriNBT.ENTRIES, part.getConnections().size());
                 // Write internal connections
                 ListNBT connectionsList = new ListNBT();
                 part.getConnections().values().stream().flatMap(Set::stream).forEach(connection -> {
@@ -142,15 +153,10 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
                 partTag.put(AgriNBT.CONNECTIONS, connectionsList);
                 // Write chunk connections
                 ListNBT chunkConnectionsList = new ListNBT();
-                part.getCrossChunkConnections().forEach((pos, connections) -> connections.forEach(connection -> {
-                    // Create connection tag
-                    CompoundNBT connectionTag = this.writeConnectionToNBT(connection);
-                    // Write chunk data
-                    connectionTag.putInt(AgriNBT.U1, pos.x);
-                    connectionTag.putInt(AgriNBT.V1, pos.z);
+                part.getCrossChunkConnections().values().stream().flatMap(Set::stream).forEach(connection -> {
                     // Add connection to the list
-                    chunkConnectionsList.add(connectionTag);
-                }));
+                    chunkConnectionsList.add(this.writeChunkConnectionToNBT(connection));
+                });
                 partTag.put(AgriNBT.CHUNK, chunkConnectionsList);
                 // Add part list to the tag list
                 partTags.add(partTag);
@@ -174,6 +180,33 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
             tag.putInt(AgriNBT.DIRECTION, connection.direction().ordinal());
             // Return the tag
             return tag;
+        }
+
+        protected CompoundNBT writeChunkConnectionToNBT(IrrigationNetworkCrossChunkConnection connection) {
+            // Create connection tag
+            CompoundNBT tag = this.writeConnectionToNBT(connection);
+            // Write chunk data
+            tag.putInt(AgriNBT.U1, connection.getToChunkPos().x);
+            tag.putInt(AgriNBT.V1, connection.getToChunkPos().z);
+            // Return the tag
+            return tag;
+        }
+
+        protected void readConnectionFromNBT(IrrigationNetworkPart.Loader loader, CompoundNBT tag) {
+            loader.addConnection(
+                    new BlockPos(tag.getInt(AgriNBT.X1), tag.getInt(AgriNBT.Y1), tag.getInt(AgriNBT.Z1)),
+                    new BlockPos(tag.getInt(AgriNBT.X2), tag.getInt(AgriNBT.Y2), tag.getInt(AgriNBT.Z2)),
+                    Direction.byIndex(tag.getInt(AgriNBT.DIRECTION))
+            );
+        }
+
+        protected void readChunkConnectionFromNBT(IrrigationNetworkPart.Loader loader, CompoundNBT tag) {
+            loader.addChunkConnection(
+                    new ChunkPos(tag.getInt(AgriNBT.U1), tag.getInt(AgriNBT.V1)),
+                    new BlockPos(tag.getInt(AgriNBT.X1), tag.getInt(AgriNBT.Y1), tag.getInt(AgriNBT.Z1)),
+                    new BlockPos(tag.getInt(AgriNBT.X2), tag.getInt(AgriNBT.Y2), tag.getInt(AgriNBT.Z2)),
+                    Direction.byIndex(tag.getInt(AgriNBT.DIRECTION))
+            );
         }
     }
 }

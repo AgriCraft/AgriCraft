@@ -34,7 +34,7 @@ public class CapabilityMultiBlockData implements IInfSerializableCapabilityImple
     public static final Capability<Impl> CAPABILITY = null;
 
     public Impl getMultiBlockData(Chunk chunk) {
-        return chunk.getCapability(this.getCapability()).orElse(new Empty(chunk));
+        return this.getCapability(chunk).orElse(new Empty(chunk));
     }
 
     public IAgriIrrigationNode getIrrigationNode(TileEntityIrrigationTank tank) {
@@ -51,7 +51,7 @@ public class CapabilityMultiBlockData implements IInfSerializableCapabilityImple
     }
 
     public void removeMultiBlockNode(World world, BlockPos pos) {
-        world.getChunkAt(pos).getCapability(this.getCapability()).ifPresent(impl -> impl.removeNode(pos));
+        this.getCapability(world.getChunkAt(pos)).ifPresent(impl -> impl.removeNode(pos));
     }
 
     @Override

@@ -42,11 +42,11 @@ public class CapabilityIrrigationNetworkManager implements IInfSerializableCapab
             // Shouldn't ever happen
             return -1;
         }
-        return world.getCapability(this.getCapability()).map(impl -> impl.addNetwork(network)).orElse(-1);
+        return this.getCapability(world).map(impl -> impl.addNetwork(network)).orElse(-1);
     }
 
     public IAgriIrrigationNetwork getNetwork(World world, int id) {
-        return world.getCapability(this.getCapability())
+        return this.getCapability(world)
                 .map(impl -> impl)
                 .flatMap(impl -> impl.getNetwork(id))
                 .orElse(IrrigationNetworkInvalid.getInstance());
@@ -88,7 +88,7 @@ public class CapabilityIrrigationNetworkManager implements IInfSerializableCapab
         IChunk iChunk = event.getChunk();
         if(iChunk instanceof Chunk) {
             Chunk chunk = (Chunk) iChunk;
-            chunk.getWorld().getCapability(this.getCapability()).ifPresent(impl -> impl.onChunkLoaded(chunk));
+            this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkLoaded(chunk));
         }
     }
 
@@ -98,7 +98,7 @@ public class CapabilityIrrigationNetworkManager implements IInfSerializableCapab
         IChunk iChunk = event.getChunk();
         if(iChunk instanceof Chunk) {
             Chunk chunk = (Chunk) iChunk;
-            chunk.getWorld().getCapability(this.getCapability()).ifPresent(impl -> impl.onChunkUnloaded(chunk));
+            this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkUnloaded(chunk));
         }
     }
 

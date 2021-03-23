@@ -17,6 +17,11 @@ public class IrrigationNetworkCrossChunkConnection extends IrrigationNetworkConn
         this.to = to;
     }
 
+    public IrrigationNetworkCrossChunkConnection(IAgriIrrigationNode from,
+                                                 BlockPos fromPos, Direction direction, ChunkPos toChunk) {
+        this(from, null, fromPos, direction, toChunk);
+    }
+
     public ChunkPos getToChunkPos() {
         return this.toChunk;
     }

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.irrigation;
 
 import com.google.common.collect.*;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
@@ -8,13 +9,18 @@ import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkChunkData;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -26,8 +32,8 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyList());
     }
 
-    public static IrrigationNetworkPart.Loader createLoader(int id, Chunk chunk, int nodes, Consumer<IrrigationNetworkPart> finalizer) {
-        return new Loader(id, chunk, nodes, finalizer);
+    public static IrrigationNetworkPart.Loader createLoader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
+        return new Loader(id, chunk, finalizer);
     }
 
 
@@ -197,19 +203,8 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
 
         protected IrrigationNetworkPart build(IrrigationNetwork network,
                                               Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections) {
-            List<IrrigationNetworkLayer> layers = Lists.newArrayList();
-            for(int i = 0; i < this.limits.size() - 1; i++) {
-                double min = this.limits.get(i);
-                double max = this.limits.get(i + 1);
-                int volume = this.toVisit.keySet().stream()
-                        .filter(node -> node.getMinFluidHeight() >= min)
-                        .filter(node -> node.getMaxFluidHeight() <= max)
-                        .mapToInt(node -> node.getFluidVolume(max) - node.getFluidVolume(min))
-                        .sum();
-                layers.add(new IrrigationNetworkLayer(min, max, volume));
-            }
             return new IrrigationNetworkPart(network.getId(), this.getChunk(),
-                    this.connections, crossChunkConnections, layers);
+                    this.connections, crossChunkConnections, compileLayers(this.limits, this.toVisit.keySet()));
         }
 
         private void iterate() {
@@ -234,8 +229,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                 return false;
             }
             // Add limits
-            this.addLimit(node.getMinFluidHeight());
-            this.addLimit(node.getMaxFluidHeight());
+            addLimits(this.limits, node);
             // Initialize entry in the connections map
             this.connections.put(node, Sets.newIdentityHashSet());
             // Find connections
@@ -281,44 +275,121 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                 this.getParent().handleCrossChunkConnection(this.getChunk(), node, chunk, site);
             }
         }
-
-        private void addLimit(double limit) {
-            int index;
-            for(index = 0; index < this.limits.size(); index++) {
-                if(limit < this.limits.get(index)) {
-                    break;
-                }
-            }
-            if(index == 0 || limit > this.limits.get(index - 1)) {
-                this.limits.add(index, limit);
-            }
-        }
     }
 
     public static class Loader {
         private final int id;
         private final Chunk chunk;
-        private final int nodes;
         private final Consumer<IrrigationNetworkPart> finalizer;
 
-        private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
-        private final Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections;
-        private final List<IrrigationNetworkLayer> layers;
+        private final Set<IAgriIrrigationNode> nodes;
+        private final Set<BlockPos> positions;
+        private final Map<BlockPos, Set<Tuple<BlockPos, Direction>>> connections;
+        private final Map<ChunkPos, Map<BlockPos, Set<Tuple<BlockPos, Direction>>>> crossChunkConnections;
+        private final Map<BlockPos, IAgriIrrigationNode> nodeMap;
 
-        protected Loader(int id, Chunk chunk, int nodes, Consumer<IrrigationNetworkPart> finalizer) {
+        protected Loader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
             this.id = id;
             this.chunk = chunk;
-            this.nodes = nodes;
             this.finalizer = finalizer;
-            this.connections = Maps.newIdentityHashMap();
-            this.crossChunkConnections = Maps.newIdentityHashMap();
-            this.layers = Lists.newArrayList();
+            this.nodes = Sets.newIdentityHashSet();
+            this.positions = Sets.newHashSet();
+            this.connections = Maps.newHashMap();
+            this.crossChunkConnections = Maps.newHashMap();
+            this.nodeMap = Maps.newHashMap();
         }
 
-        protected void finalize() {
+        public void addConnection(BlockPos from, BlockPos to, Direction direction) {
+            // Add connection data
+            this.connections.computeIfAbsent(from, pos -> Sets.newIdentityHashSet()).add(new Tuple<>(to, direction));
+            // Add required positions to visit
+            this.positions.add(from);
+            this.positions.add(to);
+        }
+
+        public void addChunkConnection(ChunkPos toChunk, BlockPos from, BlockPos to, Direction direction) {
+            // Add connection data
+            this.crossChunkConnections.computeIfAbsent(toChunk, pos -> Maps.newHashMap())
+                    .computeIfAbsent(from, pos -> Sets.newIdentityHashSet()).add(new Tuple<>(to, direction));
+            // Add required positions to visit
+            this.positions.add(from);
+        }
+
+        public void onComponentDeserialized(IAgriIrrigationComponent component, @Nullable Direction direction) {
+            component.getNode(direction).ifPresent(node -> {
+                this.nodes.add(node);
+                BlockPos pos = component.getTile().getPos();
+                this.nodeMap.put(pos, node);
+                this.positions.remove(pos);
+            });
+            if(this.positions.size() <= 0) {
+                this.finishLoading();
+            }
+        }
+
+        protected void finishLoading() {
+            Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections = Maps.newIdentityHashMap();
+            Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections = Maps.newHashMap();
+            // Compile limits
+            List<Double> limits = Lists.newArrayList();
+            this.nodes.forEach(node -> addLimits(limits, node));
+            // Build connections
+            this.connections.forEach((pos, set) -> set.forEach(tuple -> {
+                IAgriIrrigationNode from = this.nodeMap.get(pos);
+                IAgriIrrigationNode to = this.nodeMap.get(tuple.getA());
+                connections.computeIfAbsent(from, node -> Sets.newIdentityHashSet()).add(
+                        new IrrigationNetworkConnection(from, to, pos, tuple.getB()));
+            }));
+            // Build cross-chunk connections
+            this.crossChunkConnections.forEach(((chunkPos, posMap) -> posMap.forEach((pos, set) -> set.forEach(tuple -> {
+                IAgriIrrigationNode from = this.nodeMap.get(pos);
+                IBlockReader neighbour = this.chunk.getWorld().getBlockReader(chunkPos.x, chunkPos.z);
+                if(neighbour != null) {
+                    TileEntity tile = neighbour.getTileEntity(tuple.getA());
+                    CapabilityIrrigationComponent.getInstance().getIrrigationComponent(tile)
+                            .flatMap(component -> component.getNode(tuple.getB().getOpposite()))
+                            .ifPresent(to -> crossChunkConnections.computeIfAbsent(chunkPos, (aPos) ->
+                                    Sets.newIdentityHashSet()).add(
+                                            new IrrigationNetworkCrossChunkConnection(from, to, pos, tuple.getB(), chunkPos)));
+                } else {
+                    crossChunkConnections.computeIfAbsent(chunkPos, (aPos) ->
+                            Sets.newIdentityHashSet()).add(new IrrigationNetworkCrossChunkConnection(from, pos, tuple.getB(), chunkPos));
+                }
+            }))));
             this.finalizer.accept(new IrrigationNetworkPart(
-                    this.id, this.chunk, this.connections, this.crossChunkConnections, this.layers));
+                    this.id, this.chunk, connections, crossChunkConnections, compileLayers(limits, this.nodes)));
         }
+    }
 
+    protected static void addLimits(List<Double> limits, IAgriIrrigationNode node) {
+        addLimit(limits, node.getMinFluidHeight());
+        addLimit(limits, node.getMaxFluidHeight());
+    }
+
+    protected static void addLimit(List<Double> limits, double limit) {
+        int index;
+        for(index = 0; index < limits.size(); index++) {
+            if(limit < limits.get(index)) {
+                break;
+            }
+        }
+        if(index == 0 || limit > limits.get(index - 1)) {
+            limits.add(index, limit);
+        }
+    }
+
+    protected static List<IrrigationNetworkLayer> compileLayers(List<Double> limits, Collection<IAgriIrrigationNode> nodes) {
+        List<IrrigationNetworkLayer> layers = Lists.newArrayList();
+        for(int i = 0; i < limits.size() - 1; i++) {
+            double min = limits.get(i);
+            double max = limits.get(i + 1);
+            int volume = nodes.stream()
+                    .filter(node -> node.getMinFluidHeight() >= min)
+                    .filter(node -> node.getMaxFluidHeight() <= max)
+                    .mapToInt(node -> node.getFluidVolume(max) - node.getFluidVolume(min))
+                    .sum();
+            layers.add(new IrrigationNetworkLayer(min, max, volume));
+        }
+        return layers;
     }
 }

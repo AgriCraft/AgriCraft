@@ -31,10 +31,6 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
         return new Builder(world).build(component);
     }
 
-    public static IAgriIrrigationNetwork loadNetwork() {
-        return IrrigationNetworkInvalid.getInstance();
-    }
-
     public static IrrigationNetwork readFromNbt(World world, int id, CompoundNBT tag) {
         IrrigationNetwork network = new IrrigationNetwork(world, (nw) -> id, Maps.newIdentityHashMap());
         network.readFromNBT(tag);
@@ -100,7 +96,7 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
     public void onChunkLoaded(Chunk chunk) {
         if(this.parts.containsKey(chunk.getPos())) {
             IrrigationNetworkPart part = CapabilityIrrigationNetworkChunkData.getInstance().getPart(chunk, this.getId());
-            this.parts.put(chunk.getPos(), part);
+            this.parts.put(chunk.getPos(), part);   // TODO: make sure this is called after the part is deserialized
             this.parts.values().forEach(aPart -> aPart.onChunkLoaded(chunk));
             this.nodeCache = null;
             this.connectionCache = null;

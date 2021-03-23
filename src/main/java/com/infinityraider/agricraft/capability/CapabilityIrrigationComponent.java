@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.NonNullConsumer;
 import net.minecraftforge.common.util.NonNullFunction;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -78,14 +79,15 @@ public class CapabilityIrrigationComponent implements IInfCapabilityImplementati
 
     public boolean isIrrigationComponent(TileEntity tile) {
         return tile instanceof IAgriIrrigationComponent
-                || tile.getCapability(this.getCapability()).isPresent();
+                || this.getCapability(tile).isPresent()
+                || Arrays.stream(Direction.values()).anyMatch(dir -> this.getCapability(tile, dir).isPresent());
     }
 
     public Optional<IAgriIrrigationComponent> getIrrigationComponent(TileEntity tile) {
         if(tile instanceof IAgriIrrigationComponent) {
             return Optional.of((IAgriIrrigationComponent) tile);
         } else {
-            return tile.getCapability(this.getCapability()).map(c -> c);
+            return this.getCapability(tile).map(c -> c);
         }
     }
 
@@ -97,7 +99,7 @@ public class CapabilityIrrigationComponent implements IInfCapabilityImplementati
         if(tile instanceof IAgriIrrigationComponent) {
             consumer.accept((IAgriIrrigationComponent) tile);
         } else {
-            tile.getCapability(this.getCapability(), dir).ifPresent(consumer);
+            this.getCapability(tile, dir).ifPresent(consumer);
         }
     }
 
@@ -109,7 +111,7 @@ public class CapabilityIrrigationComponent implements IInfCapabilityImplementati
         if(tile instanceof IAgriIrrigationComponent) {
             return Optional.of(function.apply((IAgriIrrigationComponent) tile));
         } else {
-            return tile.getCapability(this.getCapability(), dir).map(function);
+            return this.getCapability(tile, dir).map(function);
         }
     }
 }
