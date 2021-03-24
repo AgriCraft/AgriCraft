@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
 import java.util.function.ToIntFunction;
 
 @ParametersAreNonnullByDefault
@@ -75,6 +77,35 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         new MultiBlockFormer(this).formMultiBlock();
     }
 
+    public void onNeighbourChanged(BlockPos fromPos) {
+        if(this.getWorld() == null) {
+            return;
+        }
+        if(isInMultiBlock(fromPos)) {
+            TileEntity tile = this.getWorld().getTileEntity(fromPos);
+            if(tile instanceof TileEntityIrrigationTank) {
+                TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                if(tank.isSameMaterial(this)) {
+                    if(tank.getMultiBlockMin().equals(this.getMultiBlockMin()) && tank.getMultiBlockMax().equals(this.getMultiBlockMax())) {
+                        return;
+                    }
+                }
+            }
+            this.unFormMultiBlock();
+        }
+    }
+
+    public boolean isInMultiBlock(BlockPos pos) {
+        BlockPos min = this.getMultiBlockMin();
+        BlockPos max = this.getMultiBlockMax();
+        return pos.getX() >= min.getX()
+                && pos.getY() >= min.getY()
+                && pos.getZ() >= min.getZ()
+                && pos.getX() <= max.getX()
+                && pos.getY() <= max.getY()
+                && pos.getZ() <= max.getZ();
+    }
+
     public void unFormMultiBlock() {
         // Safety check
         if(this.getWorld() == null) {
@@ -113,7 +144,14 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.getMultiBlockMin().equals(this.getMultiBlockMax())) {
             return this;
         }
-        return new MultiBlockNode(this.getWorld(), this.getMultiBlockMin(), this.getMultiBlockMax(), this.getMaterial().copy());
+        return new MultiBlockNode(
+                this.getWorld(),
+                this.getMultiBlockMin(),
+                this.getMultiBlockMax(),
+                this.getMaterial().copy(),
+                () -> this.getMultiBlockOrigin().getFluidContents(),
+                (v) -> this.getMultiBlockOrigin().setFluidContents(v)
+        );
     }
 
     @Override
@@ -404,14 +442,18 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         private final BlockPos min;
         private final BlockPos max;
         private final ItemStack material;
+        private final IntSupplier contentGetter;
+        private final IntConsumer contentSetter;
 
         private Set<Tuple<Direction, BlockPos>> connections;
 
-        protected MultiBlockNode(World world, BlockPos min, BlockPos max, ItemStack material) {
+        protected MultiBlockNode(World world, BlockPos min, BlockPos max, ItemStack material, IntSupplier contentGetter, IntConsumer contentSetter) {
             this.world = world;
             this.min = min;
             this.max = max;
             this.material = material;
+            this.contentGetter = contentGetter;
+            this.contentSetter = contentSetter;
         }
 
         public World getWorld() {
@@ -457,6 +499,16 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         @Override
         public int getFluidCapacity() {
             return this.getTankCount() * AgriCraft.instance.getConfig().tankCapacity();
+        }
+
+        @Override
+        public int getFluidContents() {
+            return this.contentGetter.getAsInt();
+        }
+
+        @Override
+        public void setFluidContents(int volume) {
+            this.contentSetter.accept(volume);
         }
 
         @Override

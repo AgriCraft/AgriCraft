@@ -142,6 +142,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
         return TILE_FACTORY;
     }
 
+    @Nonnull
     @Override
     public ItemGrate asItem() {
         return AgriCraft.instance.getModItemRegistry().grate;

@@ -132,14 +132,12 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-        if(!world.isRemote() && !state.isIn(newState.getBlock())) {
-            TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof TileEntityIrrigationTank) {
-                ((TileEntityIrrigationTank) tile).unFormMultiBlock();
-            }
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileEntityIrrigationTank) {
+            ((TileEntityIrrigationTank) tile).onNeighbourChanged(fromPos);
         }
-        super.onReplaced(state, world, pos, newState, isMoving);
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }
 
     @Override

@@ -26,9 +26,12 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     private final double minY;
     private final double maxY;
 
+    private final AutoSyncedField<Integer> contents;
     private final AutoSyncedField<Double> waterLevel;
+
     private final ImmutableSet<IAgriIrrigationComponent> component;
     private final LazyOptional<IAgriIrrigationComponent> irrigationCapability;
+
     private Set<Tuple<Direction, BlockPos>> connections;
 
 
@@ -37,6 +40,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         this.capacity = capacity;
         this.minY = minY;
         this.maxY = maxY;
+        this.contents = this.getAutoSyncedFieldBuilder(0).build();
         this.waterLevel = this.getAutoSyncedFieldBuilder(this.minY).build();
         this.component = ImmutableSet.of(this);
         this.irrigationCapability = LazyOptional.of(() -> this);
@@ -87,6 +91,16 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     @Override
     public int getFluidCapacity() {
         return this.capacity;
+    }
+
+    @Override
+    public int getFluidContents() {
+        return this.contents.get();
+    }
+
+    @Override
+    public void setFluidContents(int volume) {
+        this.contents.set(Math.min(this.getFluidCapacity(), Math.max(0, volume)));
     }
 
     @Override

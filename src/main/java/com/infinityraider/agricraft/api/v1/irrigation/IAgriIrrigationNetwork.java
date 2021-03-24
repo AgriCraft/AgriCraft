@@ -55,12 +55,12 @@ public interface IAgriIrrigationNetwork extends IFluidHandler {
     boolean isValid();
 
     /**
-     * @return a set of all nodes in the network
+     * @return a non-modifiable set of all nodes in the network
      */
     Set<IAgriIrrigationNode> nodes();
 
     /**
-     * Fetches all connections from a certain node
+     * Fetches a non-modifiable map of all connections from a certain node
      * @param node the node
      * @return a set containing the connections
      */
@@ -69,7 +69,7 @@ public interface IAgriIrrigationNetwork extends IFluidHandler {
     }
 
     /**
-     * @return a map of all connections, mapped per node in the network
+     * @return a map non-modifiable map of all connections, mapped per node in the network
      */
     Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections();
 

@@ -386,7 +386,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
             int volume = nodes.stream()
                     .filter(node -> node.getMinFluidHeight() >= min)
                     .filter(node -> node.getMaxFluidHeight() <= max)
-                    .mapToInt(node -> node.getFluidVolume(max) - node.getFluidVolume(min))
+                    .mapToInt(node -> node.calculateFluidVolume(max) - node.calculateFluidVolume(min))
                     .sum();
             layers.add(new IrrigationNetworkLayer(min, max, volume));
         }

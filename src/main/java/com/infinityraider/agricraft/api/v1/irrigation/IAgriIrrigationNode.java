@@ -29,24 +29,32 @@ public interface IAgriIrrigationNode {
     /**
      * @return the total fluid capacity in mB for this node
      */
-    int getFluidCapacity() ;
+    int getFluidCapacity();
 
     /**
-     * Fetches the volume of fluid for a given fluid height, relative to the world coordinates
-     * @param fluidHeight the fluid height
-     * @return the volume of fluid in mB
+     * @return the current fluid contents in mB for this node
      */
-    default int getFluidVolume(double fluidHeight) {
-        double f = (fluidHeight - this.getMinFluidHeight())/(this.getMaxFluidHeight() - this.getMinFluidHeight());
-        return (int) MathHelper.lerp(f, 0, this.getFluidCapacity());
+    int getFluidContents();
+
+    /**
+     * Sets the current fluid contents in mB for this node
+     * @param volume the fluid volume in mB
+     */
+    void setFluidContents(int volume);
+
+    /**
+     * @return the current fluid heights relative to the world coordinates
+     */
+    default double getFluidHeight() {
+        return this.calculateFluidHeight(this.getFluidContents());
     }
 
     /**
-     * Fetches the height of the fluid, relative to the world coordinates as a function of the content in the tank
+     * Calculates the height of the fluid, relative to the world coordinates as a function of the content in the tank
      * @param content the volume content of fluid in the node
      * @return the height of the fluid level in world coordinates
      */
-    default double getFluidHeight(int content) {
+    default double calculateFluidHeight(int content) {
         if(content <= 0) {
             return this.getMinFluidHeight();
         }
@@ -55,6 +63,16 @@ public interface IAgriIrrigationNode {
         }
         double f = (content + 0.0D)/this.getFluidCapacity();
         return MathHelper.lerp(f, this.getMinFluidHeight(), this.getMaxFluidHeight());
+    }
+
+    /**
+     * Calculates the volume of fluid for a given fluid height, relative to the world coordinates
+     * @param fluidHeight the fluid height
+     * @return the volume of fluid in mB
+     */
+    default int calculateFluidVolume(double fluidHeight) {
+        double f = (fluidHeight - this.getMinFluidHeight())/(this.getMaxFluidHeight() - this.getMinFluidHeight());
+        return (int) MathHelper.lerp(f, 0, this.getFluidCapacity());
     }
 
     /**

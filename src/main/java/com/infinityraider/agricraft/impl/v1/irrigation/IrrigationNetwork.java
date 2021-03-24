@@ -98,6 +98,7 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
             IrrigationNetworkPart part = CapabilityIrrigationNetworkChunkData.getInstance().getPart(chunk, this.getId());
             this.parts.put(chunk.getPos(), part);   // TODO: make sure this is called after the part is deserialized
             this.parts.values().forEach(aPart -> aPart.onChunkLoaded(chunk));
+            // Reset caches
             this.nodeCache = null;
             this.connectionCache = null;
         }
@@ -107,6 +108,7 @@ public class IrrigationNetwork implements IAgriIrrigationNetwork {
         if(this.parts.containsKey(chunk.getPos())) {
             this.parts.put(chunk.getPos(), null);
             this.parts.values().forEach(aPart -> aPart.onChunkUnloaded(chunk));
+            // Reset caches
             this.nodeCache = null;
             this.connectionCache = null;
         }

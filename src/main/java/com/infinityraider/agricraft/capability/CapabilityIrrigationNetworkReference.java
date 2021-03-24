@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkSingleComponent;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
@@ -22,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CapabilityIrrigationNetworkReference implements IInfSerializableCapabilityImplementation<TileEntity, CapabilityIrrigationNetworkReference.Impl> {
     private static final CapabilityIrrigationNetworkReference INSTANCE = new CapabilityIrrigationNetworkReference();
@@ -84,11 +86,21 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         private final Map<Direction, Integer> dirIds;
         private int nullId;
 
+        private final Map<Direction, IAgriIrrigationNetwork> defaults;
+        private final IAgriIrrigationNetwork nullDefault;
+
         private Impl(IAgriIrrigationComponent component) {
             this.component = component;
             this.dirIds = Maps.newEnumMap(Direction.class);
             Arrays.stream(Direction.values()).forEach(dir -> this.dirIds.put(dir, -1));
             this.nullId = -1;
+            this.defaults = Arrays.stream(Direction.values()).collect(Collectors.toMap(dir -> dir, dir ->
+                    component.getNode(dir).map(node ->
+                            (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, dir, node))
+                            .orElse(IrrigationNetworkInvalid.getInstance())));
+            this.nullDefault = component.getNode(null).map(node ->
+                    (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, null, node))
+                    .orElse(IrrigationNetworkInvalid.getInstance());
         }
 
         public void setNetwork(@Nullable Direction dir, int id) {
@@ -111,7 +123,9 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
             }
             int id = this.getNetworkId(dir);
             if(id < 0) {
-                return IrrigationNetworkInvalid.getInstance();
+                return dir == null
+                        ? this.nullDefault
+                        : this.defaults.get(dir);
             }
             return CapabilityIrrigationNetworkManager.getInstance().getNetwork(world, id);
         }
