@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.misc;
+package com.infinityraider.agricraft.api.v1.requirement;
 
 import java.util.Arrays;
 import java.util.List;

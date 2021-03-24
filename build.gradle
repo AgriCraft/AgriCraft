@@ -70,6 +70,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            // Make mixins work on dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 agricraft {
                     source sourceSets.main
@@ -87,6 +90,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            // Make mixins work on dependencies
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 agricraft {
                     source sourceSets.main
@@ -132,6 +138,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
+        // for any curseforge mod
+        url "https://cursemaven.com"
+    }
+
+    maven {
         // for JEI
         url "https://dvs1.progwml6.com/files/maven"
     }
@@ -162,6 +173,11 @@ dependencies {
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.3-beta-6") {
         transitive = false
     })
+
+    //Better Weather
+    compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
+    runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
+
 }
 
 // Delete Old Plants

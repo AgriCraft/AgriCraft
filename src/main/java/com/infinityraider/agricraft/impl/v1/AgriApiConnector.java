@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -33,6 +34,7 @@ import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
+import com.infinityraider.agricraft.impl.v1.requirement.SeasonLogic;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
@@ -68,6 +70,8 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     @Nonnull
+    private final IAgriSeasonLogic seasonLogic;
+    @Nonnull
     private final AgriMutationHandler mutator;
 
     public AgriApiConnector() {
@@ -80,6 +84,7 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.soilRegistry = AgriSoilRegistry.getInstance();
         this.seedAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
+        this.seasonLogic = SeasonLogic.getInstance();
         this.mutator = AgriMutationHandler.getInstance();
     }
 
@@ -147,6 +152,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerAdapterizer;
+    }
+
+    @Override
+    @Nonnull
+    public IAgriSeasonLogic connectSeasonLogic() {
+        return this.seasonLogic;
     }
 
     @Nonnull

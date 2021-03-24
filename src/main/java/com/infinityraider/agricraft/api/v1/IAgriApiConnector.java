@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -64,6 +65,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
+
+    @Nonnull
+    IAgriSeasonLogic connectSeasonLogic();
 
     @Nonnull
     ItemStack seedToStack(AgriSeed seed, int amount);

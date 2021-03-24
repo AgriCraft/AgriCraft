@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
@@ -61,6 +62,7 @@ public final class PluginHandler {
         registerGenes(AgriApi.getGeneRegistry());
         registerSeeds(AgriApi.getSeedAdapterizer());
         registerFertilizers(AgriApi.getFertilizerAdapterizer());
+        registerSeasonLogic(AgriApi.getSeasonLogic());
     }
 
     public static void registerSoils(IAgriSoilRegistry soilRegistry) {
@@ -93,6 +95,10 @@ public final class PluginHandler {
 
     public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(adapterizer));
+    }
+
+    public static void registerSeasonLogic(IAgriSeasonLogic seasonLogic) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeasonLogic(seasonLogic));
     }
 
     /**

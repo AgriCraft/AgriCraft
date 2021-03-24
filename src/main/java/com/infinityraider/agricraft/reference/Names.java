@@ -24,6 +24,7 @@ public abstract class Names {
     }
 
     public static final class Mods {
+        public static final String BETTER_WEATHER = "betterweather";
         public static final String JEI = "jei";
         public static final String THE_ONE_PROBE = "theoneprobe";
     }

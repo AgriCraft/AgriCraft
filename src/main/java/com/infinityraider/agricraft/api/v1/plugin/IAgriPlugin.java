@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
@@ -87,6 +88,10 @@ public interface IAgriPlugin {
     }
 
     default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
+        // Default Implementation: Do nothing.
+    }
+
+    default void registerSeasonLogic(@Nonnull IAgriSeasonLogic seasonLogic) {
         // Default Implementation: Do nothing.
     }
 }
