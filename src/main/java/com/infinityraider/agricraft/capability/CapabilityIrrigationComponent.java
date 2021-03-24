@@ -78,9 +78,10 @@ public class CapabilityIrrigationComponent implements IInfCapabilityImplementati
     }
 
     public boolean isIrrigationComponent(TileEntity tile) {
-        return tile instanceof IAgriIrrigationComponent
+        return tile != null && (
+                tile instanceof IAgriIrrigationComponent
                 || this.getCapability(tile).isPresent()
-                || Arrays.stream(Direction.values()).anyMatch(dir -> this.getCapability(tile, dir).isPresent());
+                || Arrays.stream(Direction.values()).anyMatch(dir -> this.getCapability(tile, dir).isPresent()));
     }
 
     public Optional<IAgriIrrigationComponent> getIrrigationComponent(TileEntity tile) {

@@ -17,8 +17,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.Iterator;
 
 public class PlayerConnectToServerHandler {
-
     private static final AgriLogger LOG = AgriCore.getLogger("agricraft-net");
+    private static final PlayerConnectToServerHandler INSTANCE = new PlayerConnectToServerHandler();
+
+    public static PlayerConnectToServerHandler getInstance() {
+        return INSTANCE;
+    }
+
+    private PlayerConnectToServerHandler() {}
 
     @SubscribeEvent
     @SuppressWarnings("unused")

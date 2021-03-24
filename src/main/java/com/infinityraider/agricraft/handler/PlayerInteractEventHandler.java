@@ -19,16 +19,23 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@SuppressWarnings("unused")
 public class PlayerInteractEventHandler {
+    private static final PlayerInteractEventHandler INSTANCE = new PlayerInteractEventHandler();
+
+    public static PlayerInteractEventHandler getInstance() {
+        return INSTANCE;
+    }
+
+    private PlayerInteractEventHandler() {}
 
     /**
      * Event handler to disable vanilla farming.
      * 
      * @param event
      */
+    @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
+    public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
         // If not disabled, don't bother.
         if (!AgriCraft.instance.getConfig().disableVanillaFarming()) {
             return;
@@ -123,8 +130,9 @@ public class PlayerInteractEventHandler {
      * Event handler to deny bonemeal while sneaking on crops that are not
      * allowed to be bonemealed
      */
+    @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
+    public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
         if (!event.getEntityLiving().isSneaking()) {
             return;
         }

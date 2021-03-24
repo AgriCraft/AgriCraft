@@ -13,6 +13,6 @@ public class ServerProxy implements IServerProxyBase<Config>, IProxy {
     @Override
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
-        registerEventHandler(new PlayerConnectToServerHandler());
+        this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
     }
 }

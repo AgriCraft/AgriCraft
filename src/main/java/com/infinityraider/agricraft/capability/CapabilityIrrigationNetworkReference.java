@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CapabilityIrrigationNetworkReference implements IInfSerializableCapabilityImplementation<TileEntity, CapabilityIrrigationNetworkReference.Impl> {
     private static final CapabilityIrrigationNetworkReference INSTANCE = new CapabilityIrrigationNetworkReference();
@@ -86,21 +85,16 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         private final Map<Direction, Integer> dirIds;
         private int nullId;
 
+        // Need to lazy-initialize these, as the TileEntities must have the chance to fully construct first
         private final Map<Direction, IAgriIrrigationNetwork> defaults;
-        private final IAgriIrrigationNetwork nullDefault;
+        private IAgriIrrigationNetwork nullDefault;
 
         private Impl(IAgriIrrigationComponent component) {
             this.component = component;
             this.dirIds = Maps.newEnumMap(Direction.class);
             Arrays.stream(Direction.values()).forEach(dir -> this.dirIds.put(dir, -1));
             this.nullId = -1;
-            this.defaults = Arrays.stream(Direction.values()).collect(Collectors.toMap(dir -> dir, dir ->
-                    component.getNode(dir).map(node ->
-                            (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, dir, node))
-                            .orElse(IrrigationNetworkInvalid.getInstance())));
-            this.nullDefault = component.getNode(null).map(node ->
-                    (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, null, node))
-                    .orElse(IrrigationNetworkInvalid.getInstance());
+            this.defaults = Maps.newEnumMap(Direction.class);
         }
 
         public void setNetwork(@Nullable Direction dir, int id) {
@@ -123,11 +117,25 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
             }
             int id = this.getNetworkId(dir);
             if(id < 0) {
-                return dir == null
-                        ? this.nullDefault
-                        : this.defaults.get(dir);
+                return this.getDefault(dir);
             }
             return CapabilityIrrigationNetworkManager.getInstance().getNetwork(world, id);
+        }
+
+        protected IAgriIrrigationNetwork getDefault(@Nullable Direction dir) {
+            if(dir == null) {
+                if(this.nullDefault == null) {
+                    this.nullDefault = component.getNode(null).map(node ->
+                            (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, null, node))
+                            .orElse(IrrigationNetworkInvalid.getInstance());
+                }
+                return this.nullDefault;
+            } else {
+                return this.defaults.computeIfAbsent(dir, aDir ->
+                        component.getNode(aDir).map(node ->
+                                (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, aDir, node))
+                                .orElse(IrrigationNetworkInvalid.getInstance()));
+            }
         }
 
         @Nonnull
@@ -165,6 +173,7 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
             World world = this.getWorld();
             if(world == null) {
                 // TODO
+                throw new RuntimeException("Component deserialized before chunk is deserialized");
             } else {
                 CapabilityIrrigationNetworkChunkData.getInstance().onComponentDeserialized(
                         world.getChunkAt(this.getComponent().getTile().getPos()),

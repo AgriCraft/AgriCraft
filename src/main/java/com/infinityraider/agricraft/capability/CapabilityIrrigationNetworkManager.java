@@ -14,11 +14,8 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Map;
 import java.util.Optional;
@@ -82,24 +79,12 @@ public class CapabilityIrrigationNetworkManager implements IInfSerializableCapab
         return World.class;
     }
 
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void onChunkLoaded(ChunkEvent.Load event) {
-        IChunk iChunk = event.getChunk();
-        if(iChunk instanceof Chunk) {
-            Chunk chunk = (Chunk) iChunk;
-            this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkLoaded(chunk));
-        }
+    public void onChunkLoaded(Chunk chunk) {
+        this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkLoaded(chunk));
     }
 
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void onChunkUnloaded(ChunkEvent.Unload event) {
-        IChunk iChunk = event.getChunk();
-        if(iChunk instanceof Chunk) {
-            Chunk chunk = (Chunk) iChunk;
-            this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkUnloaded(chunk));
-        }
+    public void onChunkUnloaded(Chunk chunk) {
+        this.getCapability(chunk.getWorld()).ifPresent(impl -> impl.onChunkUnloaded(chunk));
     }
 
     public static class Impl implements ISerializable {
