@@ -20,15 +20,13 @@ import java.util.Set;
 
 public class IrrigationNetworkSingleComponent extends IrrigationNetworkJoinable {
     private final IAgriIrrigationComponent component;
-    private final Direction direction;
     private final IAgriIrrigationNode node;
 
     private final Set<IAgriIrrigationNode> nodes;
     private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
 
-    public IrrigationNetworkSingleComponent(IAgriIrrigationComponent component, @Nullable Direction direction, IAgriIrrigationNode node) {
+    public IrrigationNetworkSingleComponent(IAgriIrrigationComponent component, IAgriIrrigationNode node) {
         this.component = component;
-        this.direction = direction;
         this.node = node;
         this.nodes = ImmutableSet.of(this.getNode());
         this.connections = new ImmutableMap.Builder<IAgriIrrigationNode, Set<IAgriIrrigationConnection>>().put(this.getNode(), ImmutableSet.of()).build();
@@ -40,11 +38,6 @@ public class IrrigationNetworkSingleComponent extends IrrigationNetworkJoinable 
 
     public BlockPos getPos() {
         return this.getComponent().getTile().getPos();
-    }
-
-    @Nullable
-    public Direction getDirection() {
-        return this.direction;
     }
 
     public IAgriIrrigationNode getNode() {
@@ -109,15 +102,12 @@ public class IrrigationNetworkSingleComponent extends IrrigationNetworkJoinable 
             @Nonnull IAgriIrrigationComponent component,
             @Nonnull Direction dir) {
         if(other instanceof IrrigationNetworkSingleComponent) {
-            return Optional.of(new IrrigationNetwork(this, (IrrigationNetworkSingleComponent) other));
+            return Optional.of(new IrrigationNetwork(this, (IrrigationNetworkSingleComponent) other, dir));
         } else {
-            if(this.getDirection() == null) {
-                return Optional.empty();
-            }
             if(other instanceof IrrigationNetwork) {
-                return ((IrrigationNetwork) other).joinComponent(to, from, this, this.getComponent(), this.getDirection().getOpposite());
+                return ((IrrigationNetwork) other).joinComponent(to, from, this, this.getComponent(), dir.getOpposite());
             } else {
-                return other.tryJoinComponent(to, this.getComponent(), this.getDirection().getOpposite());
+                return other.tryJoinComponent(to, this.getComponent(), dir.getOpposite());
             }
         }
     }

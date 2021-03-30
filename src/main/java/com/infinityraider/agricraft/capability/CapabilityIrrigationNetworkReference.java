@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkSingleComponent;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -82,31 +83,23 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
     public static class Impl implements ISerializable {
         private final IAgriIrrigationComponent component;
 
-        private final Map<Direction, Integer> dirIds;
-        private int nullId;
+        private final Map<IAgriIrrigationNode, Integer> ids;
 
         // Need to lazy-initialize these, as the TileEntities must have the chance to fully construct first
-        private final Map<Direction, IAgriIrrigationNetwork> defaults;
-        private IAgriIrrigationNetwork nullDefault;
+        private final Map<IAgriIrrigationNode, IAgriIrrigationNetwork> defaults;
 
         private Impl(IAgriIrrigationComponent component) {
             this.component = component;
-            this.dirIds = Maps.newEnumMap(Direction.class);
-            Arrays.stream(Direction.values()).forEach(dir -> this.dirIds.put(dir, -1));
-            this.nullId = -1;
-            this.defaults = Maps.newEnumMap(Direction.class);
+            this.ids = Maps.newIdentityHashMap();
+            this.defaults = Maps.newIdentityHashMap();
         }
 
         public void setNetwork(@Nullable Direction dir, int id) {
-            if(dir == null) {
-                this.nullId = id;
-            } else {
-                this.dirIds.put(dir, id);
-            }
+            this.getComponent().getNode(dir).map(node -> this.ids.put(node, id));
         }
 
         public int getNetworkId(@Nullable Direction dir) {
-            return dir == null ? this.nullId : this.dirIds.get(dir);
+            return this.getComponent().getNode(dir).map(node -> this.ids.getOrDefault(node, -1)).orElse(-1);
         }
 
         @Nonnull
@@ -123,19 +116,9 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         }
 
         protected IAgriIrrigationNetwork getDefault(@Nullable Direction dir) {
-            if(dir == null) {
-                if(this.nullDefault == null) {
-                    this.nullDefault = component.getNode(null).map(node ->
-                            (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, null, node))
-                            .orElse(IrrigationNetworkInvalid.getInstance());
-                }
-                return this.nullDefault;
-            } else {
-                return this.defaults.computeIfAbsent(dir, aDir ->
-                        component.getNode(aDir).map(node ->
-                                (IAgriIrrigationNetwork) new IrrigationNetworkSingleComponent(component, aDir, node))
-                                .orElse(IrrigationNetworkInvalid.getInstance()));
-            }
+            return this.getComponent().getNode(dir)
+                    .map(node ->  this.defaults.computeIfAbsent(node, (aNode) -> new IrrigationNetworkSingleComponent(this.getComponent(), node)))
+                    .orElse(IrrigationNetworkInvalid.getInstance());
         }
 
         @Nonnull
@@ -150,22 +133,19 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
 
         @Override
         public void readFromNBT(CompoundNBT tag) {
-            Arrays.stream(Direction.values()).forEach(dir -> this.dirIds.put(dir, -1));
             if(tag.contains(AgriNBT.ENTRIES)) {
                 ListNBT dirTags = tag.getList(AgriNBT.ENTRIES, 10);
                 for(int i = 0; i < dirTags.size(); i++) {
                     CompoundNBT dirTag = dirTags.getCompound(i);
-                    int id = dirTag.contains(AgriNBT.KEY) ? dirTag.getInt(AgriNBT.KEY) : -1;
-                    if(id >= 0) {
-                        Direction dir = Direction.byIndex(i);
-                        this.dirIds.put(dir, id);
-                        this.onIdDeserialized(dir, id);
+                    if(dirTag.contains(AgriNBT.KEY) && dirTag.contains(AgriNBT.DIRECTION)) {
+                        int id = dirTag.getInt(AgriNBT.KEY);
+                        if(id >= 0) {
+                            Direction dir = Direction.byIndex(dirTag.getInt(AgriNBT.DIRECTION));
+                            this.setNetwork(dir, id);
+                            this.onIdDeserialized(dir, id);
+                        }
                     }
                 }
-            }
-            this.nullId = tag.contains(AgriNBT.KEY) ? tag.getInt(AgriNBT.KEY) : -1;
-            if(this.nullId >= 0) {
-                this.onIdDeserialized(null, this.nullId);
             }
         }
 
@@ -187,13 +167,13 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         public CompoundNBT writeToNBT() {
             CompoundNBT tag = new CompoundNBT();
             ListNBT dirTags = new ListNBT();
-            this.dirIds.forEach((key, value) -> {
+            Arrays.stream(Direction.values()).forEach(dir -> {
                 CompoundNBT dirTag = new CompoundNBT();
-                dirTag.putInt(AgriNBT.KEY, value);
-                dirTags.add(key.ordinal(), dirTag);
+                dirTag.putInt(AgriNBT.KEY, this.getNetworkId(dir));
+                dirTag.putInt(AgriNBT.DIRECTION, dir.ordinal());
+                dirTags.add(dir.ordinal(), dirTag);
             });
             tag.put(AgriNBT.ENTRIES, dirTags);
-            tag.putInt(AgriNBT.KEY, this.nullId);
             return tag;
         }
     }
