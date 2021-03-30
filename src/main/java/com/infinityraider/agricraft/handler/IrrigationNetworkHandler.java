@@ -1,10 +1,13 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.event.world.BlockEvent;
@@ -41,21 +44,27 @@ public class IrrigationNetworkHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onNeighbourNotifyEvent(BlockEvent.NeighborNotifyEvent event) {
-        TileEntity tile = event.getWorld().getTileEntity(event.getPos());
-        if(!this.isIrrigationComponent(tile)) {
-            return;
-        }
-        IAgriIrrigationComponent component = (IAgriIrrigationComponent) tile;
-        event.getNotifiedSides().forEach(dir -> {
-            TileEntity tileAt = event.getWorld().getTileEntity(event.getPos().offset(dir));
-            if(isIrrigationComponent(tileAt)) {
-                //TODO: Irrigation network formation / updating logic
-                AgriCraft.instance.getLogger().info("Found two adjacent irrigation components");
-            }
-        });
+        CapabilityIrrigationComponent.getInstance().getIrrigationComponent(event.getWorld().getTileEntity(event.getPos())).ifPresent(component ->
+            event.getNotifiedSides().forEach(dir -> component.getNode(dir).ifPresent(node ->
+                    this.handleDirection(event.getWorld(), event.getPos(), component, node, dir))));
     }
 
-    protected boolean isIrrigationComponent(TileEntity tile) {
-        return CapabilityIrrigationComponent.getInstance().isIrrigationComponent(tile);
+    protected void handleDirection(IWorld world, BlockPos pos, IAgriIrrigationComponent source, IAgriIrrigationNode sourceNode, Direction dir) {
+        CapabilityIrrigationComponent.getInstance().getIrrigationComponent(world.getTileEntity(pos.offset(dir))).ifPresent(target ->
+                target.getNode(dir.getOpposite()).ifPresent(toNode -> {
+                    IAgriIrrigationNetwork fromNetwork = source.getNetwork(dir);
+                    IAgriIrrigationNetwork toNetwork = target.getNetwork(dir.getOpposite());
+                    // Try form network from first node to second
+                    if (this.tryFormNetwork(fromNetwork, sourceNode, target, dir)) {
+                        // A network was formed, update target network
+                        toNetwork = target.getNetwork(dir.getOpposite());
+                    }
+                    // Try form network from second node to the first
+                    this.tryFormNetwork(toNetwork, toNode, source, dir.getOpposite());
+                }));
+    }
+
+    protected boolean tryFormNetwork(IAgriIrrigationNetwork network, IAgriIrrigationNode from, IAgriIrrigationComponent target, Direction dir) {
+        return network.tryJoinComponent(from, target, dir).isPresent();
     }
 }

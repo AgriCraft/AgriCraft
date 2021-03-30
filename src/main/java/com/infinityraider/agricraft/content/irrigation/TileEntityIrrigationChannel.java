@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.block.BlockState;

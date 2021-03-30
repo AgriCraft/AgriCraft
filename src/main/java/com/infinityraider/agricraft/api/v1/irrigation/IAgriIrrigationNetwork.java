@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.irrigation;
 
 import mezz.jei.api.MethodsReturnNonnullByDefault;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -72,6 +74,15 @@ public interface IAgriIrrigationNetwork extends IFluidHandler {
      * @return a map non-modifiable map of all connections, mapped per node in the network
      */
     Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections();
+
+    /**
+     * Tries to to join a component to this network at the given node
+     * @param node the node in this network
+     * @param component the node to be joined at the node in this network
+     * @param dir the direction for the connection (points from the node to the component)
+     * @return an optional containing the newly formed network, or empty if a connection was not possible
+     */
+    Optional<IAgriIrrigationNetwork> tryJoinComponent(IAgriIrrigationNode node, IAgriIrrigationComponent component, Direction dir);
 
     /**
      * @return the total fluid capacity of the network in mB

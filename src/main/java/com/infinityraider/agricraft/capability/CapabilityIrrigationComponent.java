@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.NonNullConsumer;
 import net.minecraftforge.common.util.NonNullFunction;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -84,11 +85,11 @@ public class CapabilityIrrigationComponent implements IInfCapabilityImplementati
                 || Arrays.stream(Direction.values()).anyMatch(dir -> this.getCapability(tile, dir).isPresent()));
     }
 
-    public Optional<IAgriIrrigationComponent> getIrrigationComponent(TileEntity tile) {
+    public Optional<IAgriIrrigationComponent> getIrrigationComponent(@Nullable TileEntity tile) {
         if(tile instanceof IAgriIrrigationComponent) {
             return Optional.of((IAgriIrrigationComponent) tile);
         } else {
-            return this.getCapability(tile).map(c -> c);
+            return tile == null ? Optional.empty() : this.getCapability(tile).map(c -> c);
         }
     }
 

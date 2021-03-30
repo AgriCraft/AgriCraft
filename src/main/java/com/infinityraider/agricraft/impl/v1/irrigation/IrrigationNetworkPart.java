@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
@@ -36,7 +35,6 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         return new Loader(id, chunk, finalizer);
     }
 
-
     private final Chunk chunk;
     private final int networkId;
 
@@ -44,7 +42,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     private final Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections;
     private final List<IrrigationNetworkLayer> layers;
 
-    private IrrigationNetworkPart(int networkId, Chunk chunk,
+    protected IrrigationNetworkPart(int networkId, Chunk chunk,
                                   Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
                                   Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections,
                                   List<IrrigationNetworkLayer> layers) {
@@ -57,13 +55,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         // Register the part in the Chunk data
         CapabilityIrrigationNetworkChunkData.getInstance().registerPart(this);
         // Set the network for all components
-        Stream.concat(
-                this.connections.values().stream().flatMap(Set::stream),
-                this.crossChunkConnections.values().stream().flatMap(Set::stream)
-        ).forEach(connection ->
-            connection.from().getComponents().forEach(component ->
-                    CapabilityIrrigationNetworkReference.getInstance().setIrrigationNetwork(
-                            component, connection.direction(), this.networkId)));
+        this.setComponentIds();
     }
 
     public final Chunk getChunk() {
@@ -78,12 +70,30 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         return this.networkId;
     }
 
+    protected void setComponentIds() {
+        Stream.concat(
+                this.connections.values().stream().flatMap(Set::stream),
+                this.crossChunkConnections.values().stream().flatMap(Set::stream)
+        ).forEach(connection ->
+                connection.from().getComponents().forEach(component ->
+                        CapabilityIrrigationNetworkReference.getInstance().setIrrigationNetwork(
+                                component, connection.direction(), this.networkId)));
+    }
+
     public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> getConnections() {
         return this.connections;
     }
 
+    public void addConnections(Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections) {
+        connections.forEach((node, set) -> this.getConnections().computeIfAbsent(node, (aNode) -> Sets.newIdentityHashSet()).addAll(set));
+    }
+
     public Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> getCrossChunkConnections() {
         return this.crossChunkConnections;
+    }
+
+    public void addCrossChunkConnections(Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> connections) {
+        connections.forEach((pos, set) -> this.getCrossChunkConnections().computeIfAbsent(pos, (aPos) -> Sets.newIdentityHashSet()).addAll(set));
     }
 
     public List<IrrigationNetworkLayer> getLayers() {
@@ -143,6 +153,15 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
 
     @Nonnull
     @Override
+    public Optional<IAgriIrrigationNetwork> tryJoinComponent(
+            @Nonnull IAgriIrrigationNode node,
+            @Nonnull IAgriIrrigationComponent component,
+            @Nonnull Direction dir) {
+        return this.getNetwork().tryJoinComponent(node, component, dir);
+    }
+
+    @Nonnull
+    @Override
     public FluidStack contentAsFluidStack() {
         return this.getNetwork().contentAsFluidStack();
     }
@@ -165,116 +184,6 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     @Override
     public void setContents(int value) {
         this.getNetwork().setContents(value);
-    }
-
-    protected static class Builder {
-        private final IrrigationNetwork.Builder parent;
-        private final Chunk chunk;
-        private final List<Double> limits;
-
-        private final Map<IAgriIrrigationNode, List<PotentialNode>> toVisit;
-        private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
-
-        protected Builder(@Nonnull IrrigationNetwork.Builder parent, @Nonnull Chunk chunk) {
-            this.parent = parent;
-            this.chunk = chunk;
-            this.limits = Lists.newArrayList();
-            this.toVisit = Maps.newIdentityHashMap();
-            this.connections = Maps.newIdentityHashMap();
-        }
-
-        public IrrigationNetwork.Builder getParent() {
-            return this.parent;
-        }
-
-        public Chunk getChunk() {
-            return this.chunk;
-        }
-
-        public World getWorld() {
-            return this.getChunk().getWorld();
-        }
-
-        protected void addNodeAndIterate(IAgriIrrigationNode node) {
-            if(this.addNode(node)) {
-                this.iterate();
-            }
-        }
-
-        protected IrrigationNetworkPart build(IrrigationNetwork network,
-                                              Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections) {
-            return new IrrigationNetworkPart(network.getId(), this.getChunk(),
-                    this.connections, crossChunkConnections, compileLayers(this.limits, this.toVisit.keySet()));
-        }
-
-        private void iterate() {
-            boolean iterate = this.toVisit.entrySet().stream()
-                    .filter(entry -> entry.getValue().size() > 0)
-                    .findFirst()
-                    .map(entry -> {
-                        PotentialNode site = entry.getValue().remove(0);
-                        this.checkConnection(entry.getKey(), site);
-                        // A new node was treated, therefore we need to continue to iterate
-                        return true;
-                    })
-                    // No new node was treated, therefore we can stop iterating
-                    .orElse(false);
-            if (iterate) {
-                this.iterate();
-            }
-        }
-
-        private boolean addNode(IAgriIrrigationNode node) {
-            if (this.connections.containsKey(node)) {
-                return false;
-            }
-            // Add limits
-            addLimits(this.limits, node);
-            // Initialize entry in the connections map
-            this.connections.put(node, Sets.newIdentityHashSet());
-            // Find connections
-            this.toVisit.put(node, node.getPotentialConnections().stream()
-                    .map(tuple ->
-                            CapabilityIrrigationComponent.getInstance().applyForComponent(
-                                    this.getWorld().getTileEntity(tuple.getB()),
-                                    tuple.getA().getOpposite(),
-                                    component -> new PotentialNode(component, tuple.getA())
-                            ))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList())
-            );
-            return true;
-        }
-
-        private void checkConnection(IAgriIrrigationNode node, PotentialNode site) {
-            Chunk chunk = this.getWorld().getChunkAt(site.getToPos());
-            if(this.getChunk() == chunk) {
-                // Fetch the new node
-                site.getNode().ifPresent(newNode -> {
-                    // Check if the node can connect to the network via the visiting node
-                    boolean forward = node.canConnect(newNode, site.getDirection());
-                    boolean backward = newNode.canConnect(node, site.getDirection().getOpposite());
-                    // Add the connections
-                    if (forward) {
-                        this.connections.get(node).add(new IrrigationNetworkConnection(
-                                node, newNode, site.getFromPos(), site.getDirection()));
-                    }
-                    if (backward) {
-                        this.connections.get(newNode).add(new IrrigationNetworkConnection(
-                                newNode, node, site.getToPos(), site.getDirection().getOpposite()));
-                    }
-                    // Add the node to the network if it isn't there yet
-                    if (!this.toVisit.containsKey(newNode)) {
-                        if (forward || backward) {
-                            this.addNode(newNode);
-                        }
-                    }
-                });
-            } else {
-                this.getParent().handleCrossChunkConnection(this.getChunk(), node, chunk, site);
-            }
-        }
     }
 
     public static class Loader {
