@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkSingleComponent;
 import com.infinityraider.infinitylib.utility.InfinityLogger;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
 import net.minecraft.entity.LivingEntity;
@@ -47,8 +46,6 @@ public class DebugModeIrrigationNetwork extends DebugMode {
             networks.forEach(network -> {
                 if(network instanceof IrrigationNetwork) {
                     logger.info("Network: " + ((IrrigationNetwork) network).getId());
-                } else if(network instanceof IrrigationNetworkSingleComponent) {
-                    logger.info("Single component irrigation network");
                 } else {
                     logger.info("Network: " + network.getClass().getName());
                 }

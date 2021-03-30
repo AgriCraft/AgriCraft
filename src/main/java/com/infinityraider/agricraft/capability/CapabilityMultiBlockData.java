@@ -21,6 +21,9 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * Capability to store multi-block data in Chunks
+ */
 public class CapabilityMultiBlockData implements IInfSerializableCapabilityImplementation<Chunk, CapabilityMultiBlockData.Impl> {
     private static final CapabilityMultiBlockData INSTANCE = new CapabilityMultiBlockData();
 

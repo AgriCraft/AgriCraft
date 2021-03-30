@@ -17,6 +17,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * API capability for IAgriIrrigationComponent implementations on TileEntities
+ */
 public class CapabilityIrrigationComponent implements IInfCapabilityImplementation<TileEntity, IAgriIrrigationComponent> {
     private static final CapabilityIrrigationComponent INSTANCE = new CapabilityIrrigationComponent();
 

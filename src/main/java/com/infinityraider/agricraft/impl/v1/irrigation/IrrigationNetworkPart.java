@@ -39,12 +39,12 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     private final int networkId;
 
     private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
-    private final Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections;
+    private final Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> crossChunkConnections;
     private final List<IrrigationNetworkLayer> layers;
 
     protected IrrigationNetworkPart(int networkId, Chunk chunk,
                                   Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
-                                  Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections,
+                                  Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> crossChunkConnections,
                                   List<IrrigationNetworkLayer> layers) {
         // Set all fields
         this.chunk = chunk;
@@ -88,11 +88,11 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         connections.forEach((node, set) -> this.getConnections().computeIfAbsent(node, (aNode) -> Sets.newIdentityHashSet()).addAll(set));
     }
 
-    public Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> getCrossChunkConnections() {
+    public Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> getCrossChunkConnections() {
         return this.crossChunkConnections;
     }
 
-    public void addCrossChunkConnections(Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> connections) {
+    public void addCrossChunkConnections(Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> connections) {
         connections.forEach((pos, set) -> this.getCrossChunkConnections().computeIfAbsent(pos, (aPos) -> Sets.newIdentityHashSet()).addAll(set));
     }
 
@@ -116,7 +116,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
 
     public void onChunkUnloaded(Chunk chunk) {
         this.getCrossChunkConnections().getOrDefault(chunk.getPos(), Collections.emptySet())
-                .forEach(IrrigationNetworkCrossChunkConnection::onChunkUnloaded);
+                .forEach(IrrigationNetworkConnection.CrossChunk::onChunkUnloaded);
     }
 
     public void onChunkLoaded(Chunk chunk) {
@@ -238,7 +238,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
 
         protected void finishLoading() {
             Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections = Maps.newIdentityHashMap();
-            Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> crossChunkConnections = Maps.newHashMap();
+            Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> crossChunkConnections = Maps.newHashMap();
             // Compile limits
             List<Double> limits = Lists.newArrayList();
             this.nodes.forEach(node -> addLimits(limits, node));
@@ -259,10 +259,10 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                             .flatMap(component -> component.getNode(tuple.getB().getOpposite()))
                             .ifPresent(to -> crossChunkConnections.computeIfAbsent(chunkPos, (aPos) ->
                                     Sets.newIdentityHashSet()).add(
-                                            new IrrigationNetworkCrossChunkConnection(from, to, pos, tuple.getB(), chunkPos)));
+                                            new IrrigationNetworkConnection.CrossChunk(from, to, pos, tuple.getB(), chunkPos)));
                 } else {
                     crossChunkConnections.computeIfAbsent(chunkPos, (aPos) ->
-                            Sets.newIdentityHashSet()).add(new IrrigationNetworkCrossChunkConnection(from, pos, tuple.getB(), chunkPos));
+                            Sets.newIdentityHashSet()).add(new IrrigationNetworkConnection.CrossChunk(from, pos, tuple.getB(), chunkPos));
                 }
             }))));
             this.finalizer.accept(new IrrigationNetworkPart(

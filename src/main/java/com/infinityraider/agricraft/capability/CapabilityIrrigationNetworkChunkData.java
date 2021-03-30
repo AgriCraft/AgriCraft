@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkCrossChunkConnection;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkConnection;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkPart;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Capability for saving IrrigationNetworkPart data on Chunks
+ */
 public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCapabilityImplementation<Chunk, CapabilityIrrigationNetworkChunkData.Impl> {
     private static final CapabilityIrrigationNetworkChunkData INSTANCE = new CapabilityIrrigationNetworkChunkData();
 
@@ -182,7 +185,7 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
             return tag;
         }
 
-        protected CompoundNBT writeChunkConnectionToNBT(IrrigationNetworkCrossChunkConnection connection) {
+        protected CompoundNBT writeChunkConnectionToNBT(IrrigationNetworkConnection.CrossChunk connection) {
             // Create connection tag
             CompoundNBT tag = this.writeConnectionToNBT(connection);
             // Write chunk data

@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
 public class IrrigationNetworkConnection implements IAgriIrrigationConnection {
     private final IAgriIrrigationNode from;
@@ -36,5 +37,44 @@ public class IrrigationNetworkConnection implements IAgriIrrigationConnection {
     @Override
     public Direction direction() {
         return this.direction;
+    }
+
+    public static class CrossChunk extends IrrigationNetworkConnection {
+        private final ChunkPos toChunk;
+
+        private IAgriIrrigationNode to;
+
+        public CrossChunk(IAgriIrrigationNode from, IAgriIrrigationNode to,
+                          BlockPos fromPos, Direction direction, ChunkPos toChunk) {
+            super(from, null, fromPos, direction);
+            this.toChunk = toChunk;
+            this.to = to;
+        }
+
+        public CrossChunk(IAgriIrrigationNode from,
+                          BlockPos fromPos, Direction direction, ChunkPos toChunk) {
+            this(from, null, fromPos, direction, toChunk);
+        }
+
+        public ChunkPos getToChunkPos() {
+            return this.toChunk;
+        }
+
+        @Override
+        public IAgriIrrigationNode to() {
+            return this.to;
+        }
+
+        public boolean isTargetChunkLoaded() {
+            return this.to() != null;
+        }
+
+        public void onChunkUnloaded() {
+            this.to = null;
+        }
+
+        public void onChunkLoaded(IAgriIrrigationNode to) {
+            this.to = to;
+        }
     }
 }

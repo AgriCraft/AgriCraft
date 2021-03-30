@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
@@ -20,6 +19,9 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Capability for storing IrrigationNetwork IDs to Worlds
+ */
 public class CapabilityIrrigationNetworkManager implements IInfSerializableCapabilityImplementation<World, CapabilityIrrigationNetworkManager.Impl> {
     private static final CapabilityIrrigationNetworkManager INSTANCE = new CapabilityIrrigationNetworkManager();
 
@@ -46,7 +48,7 @@ public class CapabilityIrrigationNetworkManager implements IInfSerializableCapab
         return this.getCapability(world)
                 .map(impl -> impl)
                 .flatMap(impl -> impl.getNetwork(id))
-                .orElse(IrrigationNetworkInvalid.getInstance());
+                .orElse(IrrigationNetwork.getInvalid());
     }
 
     @Override

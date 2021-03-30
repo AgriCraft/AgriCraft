@@ -5,8 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkInvalid;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkSingleComponent;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
@@ -25,6 +24,9 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * Capability to store and fetch references to IrrigationNetwork IDs on IrrigationNetworkComponents
+ */
 public class CapabilityIrrigationNetworkReference implements IInfSerializableCapabilityImplementation<TileEntity, CapabilityIrrigationNetworkReference.Impl> {
     private static final CapabilityIrrigationNetworkReference INSTANCE = new CapabilityIrrigationNetworkReference();
 
@@ -41,7 +43,7 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
     public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
         return this.getCapability(component.getTile(), side)
                 .map(impl -> impl.getNetwork(side))
-                .orElse(IrrigationNetworkInvalid.getInstance());
+                .orElse(IrrigationNetwork.getInvalid());
     }
 
     public void setIrrigationNetwork(IAgriIrrigationComponent component, @Nullable Direction dir, int id) {
@@ -106,7 +108,7 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
         public IAgriIrrigationNetwork getNetwork(@Nullable Direction dir) {
             World world = this.getWorld();
             if(world == null) {
-                return IrrigationNetworkInvalid.getInstance();
+                return IrrigationNetwork.getInvalid();
             }
             int id = this.getNetworkId(dir);
             if(id < 0) {
@@ -117,8 +119,8 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
 
         protected IAgriIrrigationNetwork getDefault(@Nullable Direction dir) {
             return this.getComponent().getNode(dir)
-                    .map(node ->  this.defaults.computeIfAbsent(node, (aNode) -> new IrrigationNetworkSingleComponent(this.getComponent(), node)))
-                    .orElse(IrrigationNetworkInvalid.getInstance());
+                    .map(node ->  this.defaults.computeIfAbsent(node, (aNode) -> IrrigationNetwork.createSingleNodeNetwork(this.getComponent(), node)))
+                    .orElse(IrrigationNetwork.getInvalid());
         }
 
         @Nonnull

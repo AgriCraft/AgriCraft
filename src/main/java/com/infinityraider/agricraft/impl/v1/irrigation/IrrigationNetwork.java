@@ -19,11 +19,35 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * This is the main implementation for IAgriIrrigationNetwork interface
+ * The network is split up in different parts, where each part is within a Chunk.
+ *
+ * Parts are loaded and unloaded when their chunk is loaded and unloaded respectively.
+ *
+ * Alternative implementations, defined as inner classes are SingleNode and Invalid,
+ * these represent networks consisting of a single node or are always invalid respectively.
+ */
 public class IrrigationNetwork extends IrrigationNetworkJoinable {
+    public static IAgriIrrigationNetwork createSingleNodeNetwork(@Nonnull IAgriIrrigationComponent component, @Nonnull IAgriIrrigationNode node) {
+        return new SingleNode(component, node);
+    }
+
+    public static IAgriIrrigationNetwork getInvalid() {
+        return Invalid.getInstance();
+    }
+
+    public static IrrigationNetwork readFromNbt(World world, int id, CompoundNBT tag) {
+        IrrigationNetwork network = new IrrigationNetwork(world, (nw) -> id, Maps.newIdentityHashMap());
+        network.readFromNBT(tag);
+        return network;
+    }
+
     private final World world;
     private final int id;
 
@@ -39,7 +63,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
     private int capacity;
     private int contents;
 
-    protected IrrigationNetwork(IrrigationNetworkSingleComponent first, IrrigationNetworkSingleComponent second, Direction dir) {
+    private IrrigationNetwork(SingleNode first, SingleNode second, Direction dir) {
         this.world = Objects.requireNonNull(first.getWorld(), "Can not initialize an irrigation network while the world is null");
         this.id = CapabilityIrrigationNetworkManager.getInstance().addNetworkToWorld(this);
         this.parts = Maps.newHashMap();
@@ -59,18 +83,18 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
             // Initialize first part
             Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> firstConnections = Maps.newIdentityHashMap();
             firstConnections.put(first.getNode(), Sets.newIdentityHashSet());
-            Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> firstChunkConnections = Maps.newHashMap();
+            Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> firstChunkConnections = Maps.newHashMap();
             firstChunkConnections.put(secondChunk.getPos(), Sets.newIdentityHashSet());
-            IrrigationNetworkCrossChunkConnection firstConnection = new IrrigationNetworkCrossChunkConnection(
+            IrrigationNetworkConnection.CrossChunk firstConnection = new IrrigationNetworkConnection.CrossChunk(
                     first.getNode(), second.getNode(), first.getPos(), dir, secondChunk.getPos());
             firstChunkConnections.get(secondChunk.getPos()).add(firstConnection);
             IrrigationNetworkPart firstPart = new IrrigationNetworkPart(this.getId(), firstChunk, firstConnections, firstChunkConnections, Lists.newArrayList());
             // Initialize second part
             Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> secondConnections = Maps.newIdentityHashMap();
             secondConnections.put(second.getNode(), Sets.newIdentityHashSet());
-            Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>> secondChunkConnections = Maps.newHashMap();
+            Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> secondChunkConnections = Maps.newHashMap();
             secondChunkConnections.put(firstChunk.getPos(), Sets.newIdentityHashSet());
-            IrrigationNetworkCrossChunkConnection secondConnection = new IrrigationNetworkCrossChunkConnection(
+            IrrigationNetworkConnection.CrossChunk secondConnection = new IrrigationNetworkConnection.CrossChunk(
                     second.getNode(), first.getNode(), second.getPos(), dir.getOpposite(), firstChunk.getPos());
             secondChunkConnections.get(firstChunk.getPos()).add(secondConnection);
             IrrigationNetworkPart secondPart = new IrrigationNetworkPart(this.getId(), secondChunk, secondConnections, secondChunkConnections, Lists.newArrayList());
@@ -118,15 +142,15 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
         Chunk fromChunk = this.getWorld().getChunkAt(fromPos);
         // Gather nodes and connections of the joining network
         Map<Chunk, Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>>> connectionMap = Maps.newIdentityHashMap();
-        Map<ChunkPos, Map<ChunkPos, Set<IrrigationNetworkCrossChunkConnection>>> chunkConnectionMap = Maps.newHashMap();
+        Map<ChunkPos, Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>>> chunkConnectionMap = Maps.newHashMap();
         other.connections().forEach((node, connections) -> connections.forEach(connection -> {
             // Fetch chunk
             Chunk chunk = this.getWorld().getChunkAt(connection.fromPos());
             // Ensure the node is in the connection map
             connectionMap.computeIfAbsent(chunk, (pos) -> Maps.newIdentityHashMap()).computeIfAbsent(node, (aNode) -> Sets.newIdentityHashSet());
             // Insert the connection in the correct connection map
-            if(connection instanceof IrrigationNetworkCrossChunkConnection) {
-                IrrigationNetworkCrossChunkConnection chunkConnection = (IrrigationNetworkCrossChunkConnection) connection;
+            if(connection instanceof IrrigationNetworkConnection.CrossChunk) {
+                IrrigationNetworkConnection.CrossChunk chunkConnection = (IrrigationNetworkConnection.CrossChunk) connection;
                 chunkConnectionMap.computeIfAbsent(chunk.getPos(), (pos) -> Maps.newHashMap())
                         .computeIfAbsent(chunkConnection.getToChunkPos(), (pos) -> Sets.newIdentityHashSet())
                         .add(chunkConnection);
@@ -145,10 +169,10 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
         } else {
             chunkConnectionMap.computeIfAbsent(fromChunk.getPos(), (pos) -> Maps.newHashMap())
                     .computeIfAbsent(toChunk.getPos(), (pos) -> Sets.newIdentityHashSet())
-                    .add(new IrrigationNetworkCrossChunkConnection(from, to, fromPos, dir, toChunk.getPos()));
+                    .add(new IrrigationNetworkConnection.CrossChunk(from, to, fromPos, dir, toChunk.getPos()));
             chunkConnectionMap.computeIfAbsent(toChunk.getPos(), (pos) -> Maps.newHashMap())
                     .computeIfAbsent(fromChunk.getPos(), (pos) -> Sets.newIdentityHashSet())
-                    .add(new IrrigationNetworkCrossChunkConnection(to, from, toPos, dir.getOpposite(), fromChunk.getPos()));
+                    .add(new IrrigationNetworkConnection.CrossChunk(to, from, toPos, dir.getOpposite(), fromChunk.getPos()));
         }
         // Populate parts
         connectionMap.forEach((chunk, connections) -> {
@@ -231,12 +255,6 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
         return tag;
     }
 
-    public static IrrigationNetwork readFromNbt(World world, int id, CompoundNBT tag) {
-        IrrigationNetwork network = new IrrigationNetwork(world, (nw) -> id, Maps.newIdentityHashMap());
-        network.readFromNBT(tag);
-        return network;
-    }
-
     public boolean readFromNBT(CompoundNBT tag) {
         boolean valid = true;
         this.parts.clear();
@@ -315,7 +333,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
                         .forEach(connection -> connections.get(connection.from()).add(connection));
                 part.getCrossChunkConnections().values().stream()
                         .flatMap(Collection::stream)
-                        .filter(IrrigationNetworkCrossChunkConnection::isTargetChunkLoaded)
+                        .filter(IrrigationNetworkConnection.CrossChunk::isTargetChunkLoaded)
                         .forEach(connection -> connections.get(connection.from()).add(connection));
             });
             this.connectionCache = ImmutableMap.copyOf(Maps.transformValues(connections, ImmutableSet.Builder::build));
@@ -356,5 +374,166 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
     @Override
     public FluidStack contentAsFluidStack() {
         return this.contents() > 0 ? new FluidStack(Fluids.WATER, this.contents()) : FluidStack.EMPTY;
+    }
+
+    private static class SingleNode extends IrrigationNetworkJoinable {
+        private final IAgriIrrigationComponent component;
+        private final IAgriIrrigationNode node;
+
+        private final Set<IAgriIrrigationNode> nodes;
+        private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
+
+        private SingleNode(IAgriIrrigationComponent component, IAgriIrrigationNode node) {
+            this.component = component;
+            this.node = node;
+            this.nodes = ImmutableSet.of(this.getNode());
+            this.connections = new ImmutableMap.Builder<IAgriIrrigationNode, Set<IAgriIrrigationConnection>>().put(this.getNode(), ImmutableSet.of()).build();
+        }
+
+        public IAgriIrrigationComponent getComponent() {
+            return this.component;
+        }
+
+        public BlockPos getPos() {
+            return this.getComponent().getTile().getPos();
+        }
+
+        public IAgriIrrigationNode getNode() {
+            return this.node;
+        }
+
+        @Nullable
+        @Override
+        public World getWorld() {
+            return this.getComponent().getTile().getWorld();
+        }
+
+        @Override
+        public boolean isValid() {
+            return true;
+        }
+
+        @Nonnull
+        @Override
+        public Set<IAgriIrrigationNode> nodes() {
+            return this.nodes;
+        }
+
+        @Nonnull
+        @Override
+        public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections() {
+            return this.connections;
+        }
+
+        @Override
+        public int capacity() {
+            return this.getNode().getFluidCapacity();
+        }
+
+        @Override
+        public double fluidHeight() {
+            return this.getNode().getFluidHeight();
+        }
+
+        @Override
+        public int contents() {
+            return this.getNode().getFluidContents();
+        }
+
+        @Override
+        public void setContents(int value) {
+            this.getNode().setFluidContents(value);
+
+        }
+
+        @Nonnull
+        @Override
+        public FluidStack contentAsFluidStack() {
+            return this.contents() <= 0 ? FluidStack.EMPTY : new FluidStack(Fluids.WATER, this.contents());
+        }
+
+        @Override
+        protected Optional<IAgriIrrigationNetwork> joinComponent(
+                @Nonnull IAgriIrrigationNode from,
+                @Nonnull IAgriIrrigationNode to,
+                @Nonnull IAgriIrrigationNetwork other,
+                @Nonnull IAgriIrrigationComponent component,
+                @Nonnull Direction dir) {
+            if(other instanceof SingleNode) {
+                return Optional.of(new IrrigationNetwork(this, (SingleNode) other, dir));
+            } else {
+                if(other instanceof IrrigationNetwork) {
+                    return ((IrrigationNetwork) other).joinComponent(to, from, this, this.getComponent(), dir.getOpposite());
+                } else {
+                    return other.tryJoinComponent(to, this.getComponent(), dir.getOpposite());
+                }
+            }
+        }
+    }
+
+    private static class Invalid implements IAgriIrrigationNetwork {
+        private static final Invalid INSTANCE = new Invalid();
+
+        private static IAgriIrrigationNetwork getInstance() {
+            return INSTANCE;
+        }
+
+        private Invalid() {}
+
+        @Nullable
+        @Override
+        public World getWorld() {
+            return null;
+        }
+
+        @Override
+        public boolean isValid() {
+            return false;
+        }
+
+        @Nonnull
+        @Override
+        public Set<IAgriIrrigationNode> nodes() {
+            return ImmutableSet.of();
+        }
+
+        @Nonnull
+        @Override
+        public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections() {
+            return ImmutableMap.of();
+        }
+
+        @Nonnull
+        @Override
+        public Optional<IAgriIrrigationNetwork> tryJoinComponent(
+                @Nonnull IAgriIrrigationNode node,
+                @Nonnull IAgriIrrigationComponent component,
+                @Nonnull Direction dir) {
+            return Optional.empty();
+        }
+
+        @Override
+        public int capacity() {
+            return 0;
+        }
+
+        @Override
+        public double fluidHeight() {
+            return 0;
+        }
+
+        @Override
+        public int contents() {
+            return 0;
+        }
+
+        @Override
+        public void setContents(int value) {}
+
+        @Nonnull
+        @Override
+        public FluidStack contentAsFluidStack() {
+            return FluidStack.EMPTY;
+        }
     }
 }
