@@ -8,6 +8,8 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
 import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
+import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
+import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import mcp.MethodsReturnNonnullByDefault;
@@ -19,8 +21,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.IntConsumer;
@@ -549,6 +554,18 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         @Override
         public boolean isSink() {
             return false;
+        }
+    }
+
+    public static RenderFactory createRenderFactory() {
+        return new RenderFactory();
+    }
+
+    private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntityIrrigationTank> {
+        @Nullable
+        @OnlyIn(Dist.CLIENT)
+        public TileEntityIrrigationTankRenderer createRenderer() {
+            return new TileEntityIrrigationTankRenderer();
         }
     }
 }

@@ -35,6 +35,7 @@ public class AgriTileRegistry {
 
         this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
                 .addBlock(AgriCraft.instance.getModBlockRegistry().tank)
+                .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
                 .build();
 
         this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
@@ -42,6 +43,7 @@ public class AgriTileRegistry {
                         AgriCraft.instance.getModBlockRegistry().channel,
                         AgriCraft.instance.getModBlockRegistry().channel_hollow
                 )
+                .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
                 .build();
 
         this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)

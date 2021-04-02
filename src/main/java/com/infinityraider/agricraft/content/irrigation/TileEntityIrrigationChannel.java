@@ -1,14 +1,18 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
+import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRenderer;
+import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent implements IAgriIrrigationNode {
@@ -57,5 +61,17 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent i
     public boolean isSink() {
         // TODO: return true on this when a sprinkler is attached
         return false;
+    }
+
+    public static RenderFactory createRenderFactory() {
+        return new RenderFactory();
+    }
+
+    private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntityIrrigationChannel> {
+        @Nullable
+        @OnlyIn(Dist.CLIENT)
+        public TileEntityIrrigationChannelRenderer createRenderer() {
+            return new TileEntityIrrigationChannelRenderer();
+        }
     }
 }

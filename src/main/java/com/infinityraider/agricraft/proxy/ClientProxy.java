@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
 import com.infinityraider.agricraft.handler.SeedAnalyzerViewPointHandler;
+import com.infinityraider.agricraft.render.world.IrrigationNetworkDebugRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,6 +26,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
         this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
+        this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
     }
 
     @Override
