@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ItemDebugger extends ItemDebuggerBase {
     private static final List<DebugMode> MODES = ImmutableList.of(
+            new DebugModeIrrigationComponent(),
             new DebugModeIrrigationNetwork(),
             new DebugModeCheckSoil(),
             new DebugModeClearGrass(),

@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkChunkData;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.fluid.Fluids;
@@ -211,11 +210,19 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
         return layers;
     }
 
+    public void onPartLoaded(IrrigationNetworkPart part) {
+        if(part.getId() == this.getId()) {
+            // Put the part in the parts map
+            this.parts.put(part.getChunk().getPos(), part);
+            // Reset caches
+            this.nodeCache = null;
+            this.connectionCache = null;
+        }
+    }
+
     public void onChunkLoaded(Chunk chunk) {
         if(this.parts.containsKey(chunk.getPos())) {
-            IrrigationNetworkPart part = CapabilityIrrigationNetworkChunkData.getInstance().getPart(chunk, this.getId());
-            this.parts.put(chunk.getPos(), part);   // TODO: make sure this is called after the part is deserialized
-            this.parts.values().forEach(aPart -> aPart.onChunkLoaded(chunk));
+            this.parts.values().stream().filter(Objects::nonNull).forEach(aPart -> aPart.onChunkLoaded(chunk));
             // Reset caches
             this.nodeCache = null;
             this.connectionCache = null;

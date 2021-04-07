@@ -99,8 +99,9 @@ public class IrrigationNetworkDebugRenderer {
                 component.getNode(dir).ifPresent(node -> {
                     // Fetch the network for the node
                     IAgriIrrigationNetwork network = component.getNetwork(dir);
-                    // Check if the node has a connection in the network for the current direction
-                    boolean connection = network.getConnectionsFrom(node).stream().anyMatch(con -> con.direction() == dir);
+                    // Check if the node has a connection in the network for the current position and direction
+                    boolean connection = network.getConnectionsFrom(node).stream().anyMatch(con ->
+                            con.fromPos().equals(pos) && con.direction() == dir);
                     // Render the debug lines based on the network type
                     if (network.isValid()) {
                         if (network instanceof IrrigationNetwork) {

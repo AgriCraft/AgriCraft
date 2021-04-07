@@ -26,11 +26,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
-    public static IrrigationNetworkPart createEmpty(Chunk chunk) {
-        return new IrrigationNetworkPart(-1, chunk,
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyList());
-    }
-
     public static IrrigationNetworkPart.Loader createLoader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
         return new Loader(id, chunk, finalizer);
     }
@@ -265,8 +260,11 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                             Sets.newIdentityHashSet()).add(new IrrigationNetworkConnection.CrossChunk(from, pos, tuple.getB(), chunkPos));
                 }
             }))));
-            this.finalizer.accept(new IrrigationNetworkPart(
-                    this.id, this.chunk, connections, crossChunkConnections, compileLayers(limits, this.nodes)));
+            // Create new part
+            IrrigationNetworkPart part = new IrrigationNetworkPart(
+                    this.id, this.chunk, connections, crossChunkConnections, compileLayers(limits, this.nodes));
+            // Call finalizer
+            this.finalizer.accept(part);
         }
     }
 

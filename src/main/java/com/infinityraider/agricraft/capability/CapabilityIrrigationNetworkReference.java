@@ -157,6 +157,9 @@ public class CapabilityIrrigationNetworkReference implements IInfSerializableCap
                 // TODO
                 throw new RuntimeException("Component deserialized before chunk is deserialized");
             } else {
+                if(world.isRemote()) {
+                    return;
+                }
                 CapabilityIrrigationNetworkChunkData.getInstance().onComponentDeserialized(
                         world.getChunkAt(this.getComponent().getTile().getPos()),
                         this.getComponent(),
