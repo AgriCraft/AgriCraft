@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 public class DebugModeIrrigationComponent extends DebugMode {
     @Override
     public String debugName() {
-        return "irrigation network data";
+        return "irrigation component data";
     }
 
     @Override

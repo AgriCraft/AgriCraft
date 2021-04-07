@@ -4,8 +4,6 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetwork;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkConnection;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationNetworkPart;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -100,7 +98,7 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
         }
 
         private void registerPart(IrrigationNetworkPart part) {
-            this.parts.put(part.getId(), part);
+            this.parts.put(part.getNetworkId(), part);
         }
 
         public void onComponentDeserialized(IAgriIrrigationComponent component, int id, @Nullable Direction dir) {
@@ -124,19 +122,16 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
                 int id = partTag.getInt(AgriNBT.NETWORK);
                 Consumer<IrrigationNetworkPart> finalizer = (part) -> {
                     // Remove the loader from the loaders map
-                    this.loaders.remove(part.getId());
-                    // Add the part to its network
-                    IAgriIrrigationNetwork network = part.getNetwork();
-                    if(network instanceof IrrigationNetwork) {
-                        ((IrrigationNetwork) network).onPartLoaded(part);
-                    }
+                    this.loaders.remove(part.getNetworkId());
                 };
-                IrrigationNetworkPart.Loader loader = IrrigationNetworkPart.createLoader(id, this.getChunk(), finalizer);
-                AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
-                        this.readConnectionFromNBT(loader, connectionTag));
-                AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
-                        this.readChunkConnectionFromNBT(loader, connectionTag));
-                this.loaders.put(id, loader);
+                IrrigationNetworkPart.createLoader(id, this.getChunk(), finalizer).map(loader -> {
+                    AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
+                            this.readConnectionFromNBT(loader, connectionTag));
+                    AgriNBT.stream(partTag.getList(AgriNBT.CONNECTIONS, 10)).forEach(connectionTag ->
+                            this.readChunkConnectionFromNBT(loader, connectionTag));
+                    this.loaders.put(id, loader);
+                    return true;
+                }).orElseThrow(() -> new IllegalStateException("Network with ID " + id + " does not exist"));   //Should not ever happen
             });
         }
 
@@ -148,7 +143,7 @@ public class CapabilityIrrigationNetworkChunkData implements IInfSerializableCap
                 // Create tag for the part
                 CompoundNBT partTag = new CompoundNBT();
                 // Write network id
-                partTag.putInt(AgriNBT.NETWORK, part.getId());
+                partTag.putInt(AgriNBT.NETWORK, part.getNetworkId());
                 // Write internal connections
                 ListNBT connectionsList = new ListNBT();
                 part.getConnections().values().stream().flatMap(Set::stream).forEach(connection -> {

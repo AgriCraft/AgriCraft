@@ -6,9 +6,9 @@ import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationConnection;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkChunkData;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Tuple;
@@ -26,24 +26,33 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
-    public static IrrigationNetworkPart.Loader createLoader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
-        return new Loader(id, chunk, finalizer);
+    public static Optional<IrrigationNetworkPart.Loader> createLoader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
+        IAgriIrrigationNetwork network = CapabilityIrrigationNetworkManager.getInstance().getNetwork(chunk.getWorld(), id);
+        if(network instanceof IrrigationNetwork) {
+            return Optional.of(createLoader((IrrigationNetwork) network, chunk, finalizer));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static IrrigationNetworkPart.Loader createLoader(IrrigationNetwork network, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
+        return new Loader(network, chunk, finalizer);
     }
 
     private final Chunk chunk;
-    private final int networkId;
+    private final IrrigationNetwork network;
 
     private final Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections;
     private final Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> crossChunkConnections;
     private final List<IrrigationNetworkLayer> layers;
 
-    protected IrrigationNetworkPart(int networkId, Chunk chunk,
+    protected IrrigationNetworkPart(IrrigationNetwork network, Chunk chunk,
                                   Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> connections,
                                   Map<ChunkPos, Set<IrrigationNetworkConnection.CrossChunk>> crossChunkConnections,
                                   List<IrrigationNetworkLayer> layers) {
         // Set all fields
+        this.network = network;
         this.chunk = chunk;
-        this.networkId = networkId;
         this.connections = connections;
         this.crossChunkConnections = crossChunkConnections;
         this.layers = layers;
@@ -57,12 +66,12 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         return this.chunk;
     }
 
-    public final IAgriIrrigationNetwork getNetwork() {
-        return CapabilityIrrigationNetworkManager.getInstance().getNetwork(this.getWorld(), this.getId());
+    public final IrrigationNetwork getNetwork() {
+        return this.network;
     }
 
-    public final int getId() {
-        return this.networkId;
+    public final int getNetworkId() {
+        return this.getNetwork().getId();
     }
 
     protected void setComponentIds() {
@@ -72,7 +81,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         ).forEach(connection ->
                 connection.from().getComponents().forEach(component ->
                         CapabilityIrrigationNetworkReference.getInstance().setIrrigationNetwork(
-                                component, connection.direction(), this.networkId)));
+                                component, connection.direction(), this.getNetworkId())));
     }
 
     public Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> getConnections() {
@@ -182,7 +191,7 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
     }
 
     public static class Loader {
-        private final int id;
+        private final IrrigationNetwork network;
         private final Chunk chunk;
         private final Consumer<IrrigationNetworkPart> finalizer;
 
@@ -192,8 +201,8 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
         private final Map<ChunkPos, Map<BlockPos, Set<Tuple<BlockPos, Direction>>>> crossChunkConnections;
         private final Map<BlockPos, IAgriIrrigationNode> nodeMap;
 
-        protected Loader(int id, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
-            this.id = id;
+        protected Loader(IrrigationNetwork network, Chunk chunk, Consumer<IrrigationNetworkPart> finalizer) {
+            this.network = network;
             this.chunk = chunk;
             this.finalizer = finalizer;
             this.nodes = Sets.newIdentityHashSet();
@@ -260,9 +269,11 @@ public class IrrigationNetworkPart implements IAgriIrrigationNetwork {
                             Sets.newIdentityHashSet()).add(new IrrigationNetworkConnection.CrossChunk(from, pos, tuple.getB(), chunkPos));
                 }
             }))));
-            // Create new part
+            // Create the part
             IrrigationNetworkPart part = new IrrigationNetworkPart(
-                    this.id, this.chunk, connections, crossChunkConnections, compileLayers(limits, this.nodes));
+                    this.network, this.chunk, connections, crossChunkConnections, compileLayers(limits, this.nodes));
+            // Register it to the network
+            part.getNetwork().onPartLoaded(part);
             // Call finalizer
             this.finalizer.accept(part);
         }

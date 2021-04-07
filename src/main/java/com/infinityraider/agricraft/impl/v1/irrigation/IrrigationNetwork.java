@@ -76,7 +76,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
             connections.get(first.getNode()).add(new IrrigationNetworkConnection(first.getNode(), second.getNode(), first.getPos(), dir));
             connections.put(second.getNode(), Sets.newIdentityHashSet());
             connections.get(second.getNode()).add(new IrrigationNetworkConnection(second.getNode(), first.getNode(), second.getPos(), dir.getOpposite()));
-            IrrigationNetworkPart part = new IrrigationNetworkPart(this.getId(), firstChunk, connections, Maps.newHashMap(), Lists.newArrayList());
+            IrrigationNetworkPart part = new IrrigationNetworkPart(this, firstChunk, connections, Maps.newHashMap(), Lists.newArrayList());
             this.parts.put(firstChunk.getPos(), part);
         } else {
             // Initialize first part
@@ -87,7 +87,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
             IrrigationNetworkConnection.CrossChunk firstConnection = new IrrigationNetworkConnection.CrossChunk(
                     first.getNode(), second.getNode(), first.getPos(), dir, secondChunk.getPos());
             firstChunkConnections.get(secondChunk.getPos()).add(firstConnection);
-            IrrigationNetworkPart firstPart = new IrrigationNetworkPart(this.getId(), firstChunk, firstConnections, firstChunkConnections, Lists.newArrayList());
+            IrrigationNetworkPart firstPart = new IrrigationNetworkPart(this, firstChunk, firstConnections, firstChunkConnections, Lists.newArrayList());
             // Initialize second part
             Map<IAgriIrrigationNode, Set<IAgriIrrigationConnection>> secondConnections = Maps.newIdentityHashMap();
             secondConnections.put(second.getNode(), Sets.newIdentityHashSet());
@@ -96,7 +96,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
             IrrigationNetworkConnection.CrossChunk secondConnection = new IrrigationNetworkConnection.CrossChunk(
                     second.getNode(), first.getNode(), second.getPos(), dir.getOpposite(), firstChunk.getPos());
             secondChunkConnections.get(firstChunk.getPos()).add(secondConnection);
-            IrrigationNetworkPart secondPart = new IrrigationNetworkPart(this.getId(), secondChunk, secondConnections, secondChunkConnections, Lists.newArrayList());
+            IrrigationNetworkPart secondPart = new IrrigationNetworkPart(this, secondChunk, secondConnections, secondChunkConnections, Lists.newArrayList());
             // Add the parts
             this.parts.put(firstChunk.getPos(), firstPart);
             this.parts.put(secondChunk.getPos(), secondPart);
@@ -177,7 +177,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
         connectionMap.forEach((chunk, connections) -> {
             // Fetch or create part
             IrrigationNetworkPart part = this.parts.computeIfAbsent(chunk.getPos(), (pos) ->
-                    new IrrigationNetworkPart(this.getId(), chunk, Maps.newIdentityHashMap(), Maps.newHashMap(), Lists.newArrayList()));
+                    new IrrigationNetworkPart(this, chunk, Maps.newIdentityHashMap(), Maps.newHashMap(), Lists.newArrayList()));
             // Add connections
             part.addConnections(connections);
             // Add cross-chunk connections
@@ -211,7 +211,7 @@ public class IrrigationNetwork extends IrrigationNetworkJoinable {
     }
 
     public void onPartLoaded(IrrigationNetworkPart part) {
-        if(part.getId() == this.getId()) {
+        if(part.getNetworkId() == this.getId()) {
             // Put the part in the parts map
             this.parts.put(part.getChunk().getPos(), part);
             // Reset caches
