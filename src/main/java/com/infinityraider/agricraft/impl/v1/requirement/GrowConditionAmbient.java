@@ -12,8 +12,8 @@ public class GrowConditionAmbient<T> extends GrowConditionAbstract {
     private final Function<World, T> fetcher;
     private final Predicate<T> predicate;
 
-    public GrowConditionAmbient(int strength, RequirementType type, Function<World, T> fetcher, Predicate<T> predicate) {
-        super(strength, type);
+    public GrowConditionAmbient(int strength, RequirementType type, Function<World, T> fetcher, Predicate<T> predicate, CacheType cacheType) {
+        super(strength, type, cacheType);
         this.fetcher = fetcher;
         this.predicate = predicate;
     }

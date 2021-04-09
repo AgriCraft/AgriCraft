@@ -14,7 +14,7 @@ public class GrowConditionWeeds extends GrowConditionAbstract {
     private final BiPredicate<IAgriWeed, IAgriGrowthStage> predicate;
 
     public GrowConditionWeeds(int strength, BlockPos offset, BiPredicate<IAgriWeed, IAgriGrowthStage> predicate) {
-        super(strength, RequirementType.WEEDS, offset);
+        super(strength, RequirementType.WEEDS, offset, CacheType.BLOCK_UPDATE);
         this.predicate = predicate;
     }
 

@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
 import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;

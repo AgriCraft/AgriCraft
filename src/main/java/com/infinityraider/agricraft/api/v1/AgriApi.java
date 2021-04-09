@@ -13,10 +13,10 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +25,9 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -53,6 +55,7 @@ public final class AgriApi {
      * Notice, unlike the other API methods, this one is always safe to use, and will not throw an
      * exception when AgriCraft is not installed, opting instead to return
      * {@link AgriApiState#INVALID}.
+     * </p>
      *
      * @return the current state of the AgriCraft API.
      */
@@ -66,6 +69,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft configuration
      */
@@ -79,6 +83,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Plant Registry.
      */
@@ -92,6 +97,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Weed Registry.
      */
@@ -105,6 +111,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Growth Stage Registry.
      */
@@ -118,6 +125,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Mutation Registry.
      */
@@ -131,6 +139,7 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Gene Registry.
      */
@@ -140,10 +149,25 @@ public final class AgriApi {
     }
 
     /**
+     * Fetches the AgriCraft Stat Registry.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the AgriCraft Stat Registry.
+     */
+    @Nonnull
+    public static IAgriStatRegistry getStatRegistry() {
+        return AgriApi.CONNECTOR.connectStatRegistry();
+    }
+
+    /**
      * Fetches the AgriCraft Soil Registry.
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @return the AgriCraft Soil Registry.
      */
@@ -153,16 +177,18 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Stat Registry.
+     * Fetches the AgriCraft Soil Adapterizer.
+     * The Soil adapterizer is used to convert BlockStates or TileEntities to contained BlockStates (e.g. flower pots)
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
-     * @return the AgriCraft Stat Registry.
+     * @return the AgriCraft Soil Adapterizer.
      */
     @Nonnull
-    public static IAgriStatRegistry getStatRegistry() {
-        return AgriApi.CONNECTOR.connectStatRegistry();
+    public static IAgriAdapterizer<BlockState> getSoilAdapterizer() {
+        return AgriApi.CONNECTOR.connectSoilAdapterizer();
     }
 
     /**
@@ -173,8 +199,9 @@ public final class AgriApi {
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
-     * @return the AgriCraft Seed Registry.
+     * @return the AgriCraft Seed Adapterizer.
      */
     @Nonnull
     public static IAgriAdapterizer<AgriSeed> getSeedAdapterizer() {
@@ -182,28 +209,60 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Fertilizer Registry.
+     * Fetches the AgriCraft Fertilizer Adapterizer.
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
+     * </p>
      *
-     * @return the AgriCraft Fertilizer Registry.
+     * @return the AgriCraft Fertilizer Adapterizer.
      */
     @Nonnull
     public static IAgriAdapterizer<IAgriFertilizer> getFertilizerAdapterizer() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
 
+    /**
+     * Fetches the AgriCraft Season Logic manager
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the AgriCraft season logic instance
+     */
     @Nonnull
     public static IAgriSeasonLogic getSeasonLogic() {
         return AgriApi.CONNECTOR.connectSeasonLogic();
     }
 
+    /**
+     * Converts an AgriSeed instance to an ItemStack
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param seed the seed
+     * @param amount the desired stack size
+     * @return ItemStack holding the seed
+     */
     @Nonnull
     public static ItemStack seedToStack(AgriSeed seed, int amount) {
         return AgriApi.CONNECTOR.seedToStack(seed, amount);
     }
 
+    /**
+     * Converts an IAgriPlant instance to an ItemStack
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param plant the plant
+     * @param amount the desired stack size
+     * @return ItemStack holding the seed for the plant (with default genome)
+     */
     @Nonnull
     public static ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         return AgriApi.CONNECTOR.plantToSeedStack(plant, amount);
@@ -211,6 +270,10 @@ public final class AgriApi {
 
     /**
      * Fetches an IAgriCrop instance from a position in the world
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @param world the World object
      * @param pos the BlockPos holding the coordinates
@@ -222,6 +285,26 @@ public final class AgriApi {
     }
 
     /**
+     * Creates a new the AgriCraft growth requirement builder
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return a new IAgriGrowthRequirement.Builder object to instantiate a IAgriGrowthRequirement
+     */
+    @Nonnull
+    public static IAgriGrowthRequirement.Builder getGrowthRequirementBuilder() {
+        return AgriApi.CONNECTOR.getGrowthRequirementBuilder();
+    }
+
+    /**
+     * Fetches the AgriCraft grow condition factory
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
      * @return the IDefaultGrowConditionFactory which can be used to construct native AgriCraft IGrowConditions
      */
     @Nonnull
@@ -233,6 +316,10 @@ public final class AgriApi {
      * Fetches an ordered list containing the predefined amount of stages, following the default, internal AgriCraft growth scheme.
      * This scheme starts with the first stage in the list (at index 0), which returns the next item in the list from IAgriGrowthStage.getNextStage(),
      * except for the last stage which returns itself.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
      *
      * @param stages the number of required stages (must be greater than 0)
      * @return non-null, ordered list containing the requested amount of growth stages
@@ -243,7 +330,13 @@ public final class AgriApi {
     }
 
     /**
-     * @return The current IAgriMutationEngine object which controls the mutation logic of crops
+     * Fetches the AgriCraft mutation handler
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return The current IAgriMutationHandler object which controls the mutation logic of crops
      */
     @Nonnull
     public static IAgriMutationHandler getAgriMutationHandler() {
@@ -251,6 +344,12 @@ public final class AgriApi {
     }
 
     /**
+     * Creates a new genome builder object
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
      * @param plant the plant for which to construct a new genome
      * @return A new IAgriGenome.Builder object to construct AgriCraft IAgriGenome objects
      */
@@ -260,6 +359,12 @@ public final class AgriApi {
     }
 
     /**
+     * Fetches the AgriCraft plant quad generator
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
      * @return AgriCraft's internal quad generator for plant rendering
      */
     @Nonnull
@@ -270,6 +375,11 @@ public final class AgriApi {
 
     /**
      * Finds a registered json plant callback from their id
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
      * @param id the id
      * @return optional containing the callback, or empty if no such callback is registered
      */
@@ -280,6 +390,11 @@ public final class AgriApi {
 
     /**
      * Tries to register a json plant callback behaviour
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
      * @param callback the callback to register
      * @return true if successful (will fail in case a callback with the same id is already registered)
      */
@@ -287,6 +402,17 @@ public final class AgriApi {
         return AgriApi.CONNECTOR.registerJsonPlantCallback(callback);
     }
 
+    /**
+     * Fetches the irrigation network a component is connected to on the given side
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param component the irrigation component
+     * @param side the side
+     * @return the irrigation network
+     */
     @Nonnull
     public static IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
         return AgriApi.CONNECTOR.getIrrigationNetwork(component, side);

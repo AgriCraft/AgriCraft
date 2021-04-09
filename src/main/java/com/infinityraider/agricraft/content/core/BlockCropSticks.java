@@ -232,7 +232,7 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @SuppressWarnings("deprecation")
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable() && AgriApi.getSoilRegistry().contains(world.getBlockState(pos.down()));
+        return current.getMaterial().isReplaceable() && AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos.down())).isPresent();
     }
 
     @Override

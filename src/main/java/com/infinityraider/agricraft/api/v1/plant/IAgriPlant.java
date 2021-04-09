@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
-import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 
@@ -158,7 +158,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * Fetches the user-friendly plant description for use in tooltips. Notice, any
      * localization of this information is left for the implementer to handle.
      *
-     * @return Information about the plant to be displayed in tooltips.
+     * @param consumer consumer accepting information about the plant to be displayed in tooltips.
      */
     void addTooltip(Consumer<ITextComponent> consumer);
 
@@ -179,10 +179,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * you just want to have vanilla crop behaviour, you can use APIv2.getDefaultGrowthRequirement()
      * to get a growth requirement with default behaviour
      *
-     * @return
+     * @return a set containing all growth conditions for the given stage
      */
     @Nonnull
-    Set<IGrowCondition> getGrowConditions(IAgriGrowthStage stage);
+    IAgriGrowthRequirement getGrowthRequirement(IAgriGrowthStage stage);
 
     /**
      * Retrieves all possible products of harvesting this plant. Note, this function is to be used
@@ -386,6 +386,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
         return a > b;
     }
 
+    @Nonnull
     @Override
     default CompoundNBT writeToNBT() {
         CompoundNBT tag = new CompoundNBT();

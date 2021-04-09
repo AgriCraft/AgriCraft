@@ -11,8 +11,8 @@ public class GrowConditionAmbientLong extends GrowConditionAbstract {
     private final ToLongFunction<World> fetcher;
     private final LongPredicate predicate;
 
-    public GrowConditionAmbientLong(int strength, RequirementType type, ToLongFunction<World> fetcher, LongPredicate predicate) {
-        super(strength, type);
+    public GrowConditionAmbientLong(int strength, RequirementType type, ToLongFunction<World> fetcher, LongPredicate predicate, CacheType cacheType) {
+        super(strength, type, cacheType);
         this.fetcher = fetcher;
         this.predicate = predicate;
     }

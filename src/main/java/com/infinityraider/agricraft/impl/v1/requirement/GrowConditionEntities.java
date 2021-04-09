@@ -19,7 +19,7 @@ public class GrowConditionEntities extends GrowConditionAbstract {
     private final int complexity;
 
     public GrowConditionEntities(int strength, Predicate<Entity> predicate, BlockPos offset, double range, int min, int max) {
-        super(strength, RequirementType.ENTITY, offset);
+        super(strength, RequirementType.ENTITY, offset, CacheType.NONE);
         this.predicate = predicate;
         this.offset = offset;
         this.range = range;

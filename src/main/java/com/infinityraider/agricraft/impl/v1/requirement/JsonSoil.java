@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
+import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.google.common.base.Preconditions;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -15,21 +16,39 @@ import javax.annotation.Nonnull;
  * Class wrapping the AgriCore AgriSoil.
  */
 public class JsonSoil implements IAgriSoil {
-    private final AgriSoil soil;
+    private final String id;
     private final ITextComponent name;
     private final Collection<BlockState> variants;
 
-    @SuppressWarnings("unchecked")
+    private final Humidity humidity;
+    private final Acidity acidity;
+    private final Nutrients nutrients;
+
     public JsonSoil(@Nonnull AgriSoil soil) {
-        this.soil = Preconditions.checkNotNull(soil);
+        this.id = Preconditions.checkNotNull(soil).getId();
         this.name = new TranslationTextComponent(soil.getLangKey());
-        this.variants = Collections.unmodifiableCollection(Preconditions.checkNotNull(this.soil.getVariants(BlockState.class)));
+        this.variants = Collections.unmodifiableCollection(Preconditions.checkNotNull(soil.getVariants(BlockState.class)));
+        this.humidity = IAgriSoil.Humidity.fromString(soil.getHumidity()).orElseGet(() -> {
+            AgriCore.getLogger("agricraft").warn(
+                    "Soil: \"{0}\" does not have valid humidity defined (\"{1}\"), defaulting to DAMP",
+                    soil.getId(), soil.getHumidity());
+            return Humidity.DAMP;});
+        this.acidity = IAgriSoil.Acidity.fromString(soil.getAcidity()).orElseGet(() -> {
+            AgriCore.getLogger("agricraft").warn(
+                    "Soil: \"{0}\" does not have valid acidity defined (\"{1}\"), defaulting to NEUTRAL",
+                    soil.getId(), soil.getAcidity());
+            return Acidity.NEUTRAL;});
+        this.nutrients = IAgriSoil.Nutrients.fromString(soil.getNutrients()).orElseGet(() -> {
+            AgriCore.getLogger("agricraft").warn(
+                    "Soil: \"{0}\" does not have valid nutrients defined (\"{1}\"), defaulting to MEDIUM",
+                    soil.getId(), soil.getAcidity());
+            return Nutrients.MEDIUM;});
     }
 
     @Override
     @Nonnull
     public String getId() {
-        return this.soil.getId();
+        return this.id;
     }
 
     @Override
@@ -44,4 +63,21 @@ public class JsonSoil implements IAgriSoil {
         return this.variants;
     }
 
+    @Nonnull
+    @Override
+    public Humidity getHumidity() {
+        return this.humidity;
+    }
+
+    @Nonnull
+    @Override
+    public Acidity getAcidity() {
+        return this.acidity;
+    }
+
+    @Nonnull
+    @Override
+    public Nutrients getNutrients() {
+        return this.nutrients;
+    }
 }

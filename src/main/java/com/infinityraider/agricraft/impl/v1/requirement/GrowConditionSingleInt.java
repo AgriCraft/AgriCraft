@@ -13,8 +13,9 @@ public class GrowConditionSingleInt extends GrowConditionAbstract {
     private final ToIntBiFunction<World, BlockPos> fetcher;
     private final IntPredicate predicate;
 
-    public GrowConditionSingleInt(int strength, RequirementType type, BlockPos offset, ToIntBiFunction<World, BlockPos> fetcher, IntPredicate predicate) {
-        super(strength, type, offset);
+    public GrowConditionSingleInt(int strength, RequirementType type, BlockPos offset, ToIntBiFunction<World, BlockPos> fetcher,
+                                  IntPredicate predicate, CacheType cacheType) {
+        super(strength, type, offset, cacheType);
         this.offset = offset;
         this.fetcher = fetcher;
         this.predicate = predicate;

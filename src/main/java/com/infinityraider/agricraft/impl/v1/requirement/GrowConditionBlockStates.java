@@ -15,7 +15,7 @@ public class GrowConditionBlockStates extends GrowConditionAbstract {
     private final Predicate<BlockState> predicate;
 
     public GrowConditionBlockStates(int strength, RequirementType type, int min, int max, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate) {
-        super(strength, type, getOffsets(minOffset, maxOffset));
+        super(strength, type, getOffsets(minOffset, maxOffset), CacheType.BLOCK_UPDATE);
         this.min = min;
         this.max = max;
         this.predicate = predicate;

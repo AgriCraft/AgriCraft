@@ -13,8 +13,9 @@ public class GrowConditionSingle<T> extends GrowConditionAbstract {
     private final BiFunction<World, BlockPos, T> fetcher;
     private final Predicate<T> predicate;
 
-    public GrowConditionSingle(int strength, RequirementType type, BlockPos offset, BiFunction<World, BlockPos, T> fetcher, Predicate<T> predicate) {
-        super(strength, type, offset);
+    public GrowConditionSingle(int strength, RequirementType type, BlockPos offset, BiFunction<World, BlockPos, T> fetcher,
+                               Predicate<T> predicate, CacheType cacheType) {
+        super(strength, type, offset, cacheType);
         this.offset = offset;
         this.fetcher = fetcher;
         this.predicate = predicate;

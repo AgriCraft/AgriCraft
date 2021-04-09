@@ -122,8 +122,8 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
             // return new gene pair with or without mutations, based on mutativity stat
             IAgriStat mutativity = AgriStatRegistry.getInstance().mutativityStat();
             return gene.generateGenePair(
-                    this.rollAndExecuteMutation(gene, first, mutativity, parents.getA().getStats().getValue(mutativity), random),
-                    this.rollAndExecuteMutation(gene, second, mutativity, parents.getB().getStats().getValue(mutativity), random)
+                    this.rollAndExecuteMutation(gene, first, mutativity, parents.getA().getStats().getMutativity(), random),
+                    this.rollAndExecuteMutation(gene, second, mutativity, parents.getB().getStats().getMutativity(), random)
             );
         }
 

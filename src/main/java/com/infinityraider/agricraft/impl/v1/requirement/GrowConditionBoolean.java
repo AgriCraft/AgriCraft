@@ -11,8 +11,8 @@ public class GrowConditionBoolean extends GrowConditionAbstract {
     private final BlockPos offset;
     private final BiPredicate<World, BlockPos> fetcher;
 
-    public GrowConditionBoolean(int strength, RequirementType type, BlockPos offset, BiPredicate<World, BlockPos> fetcher) {
-        super(strength, type, offset);
+    public GrowConditionBoolean(int strength, RequirementType type, BlockPos offset, BiPredicate<World, BlockPos> fetcher, CacheType cacheType) {
+        super(strength, type, offset, cacheType);
         this.offset = offset;
         this.fetcher = fetcher;
     }

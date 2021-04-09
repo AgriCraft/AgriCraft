@@ -5,6 +5,7 @@ import com.agricraft.agricore.util.AgriValidator;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.block.BlockState;
@@ -125,6 +126,21 @@ public class ModValidator implements AgriValidator {
     @Override
     public boolean isValidCallback(String callback) {
         return JsonPlantCallback.get(callback).isPresent();
+    }
+
+    @Override
+    public boolean isValidHumidity(String humidity) {
+        return IAgriSoil.Humidity.fromString(humidity).isPresent();
+    }
+
+    @Override
+    public boolean isValidAcidity(String acidity) {
+        return IAgriSoil.Acidity.fromString(acidity).isPresent();
+    }
+
+    @Override
+    public boolean isValidNutrients(String nutrients) {
+        return IAgriSoil.Nutrients.fromString(nutrients).isPresent();
     }
 
     @Override

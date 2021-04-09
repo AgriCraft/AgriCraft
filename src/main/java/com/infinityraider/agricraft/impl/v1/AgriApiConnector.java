@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
@@ -32,12 +33,14 @@ import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
+import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.requirement.SeasonLogic;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -51,27 +54,17 @@ import java.util.List;
 import java.util.Optional;
 
 public class AgriApiConnector implements IAgriApiConnector {
-    @Nonnull
     private final IAgriPlantRegistry plantRegistry;
-    @Nonnull
     private final IAgriGrowthRegistry growthStageRegistry;
-    @Nonnull
     private final IAgriWeedRegistry weedRegistry;
-    @Nonnull
     private final IAgriMutationRegistry mutationRegistry;
-    @Nonnull
     private final IAgriStatRegistry statRegistry;
-    @Nonnull
     private final IAgriGeneRegistry geneRegistry;
-    @Nonnull
     private final IAgriSoilRegistry soilRegistry;
-    @Nonnull
+    private final IAgriAdapterizer<BlockState> soilAdapterizer;
     private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
-    @Nonnull
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
-    @Nonnull
     private final IAgriSeasonLogic seasonLogic;
-    @Nonnull
     private final AgriMutationHandler mutator;
 
     public AgriApiConnector() {
@@ -81,7 +74,8 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.mutationRegistry = AgriMutationRegistry.getInstance();
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
-        this.soilRegistry = AgriSoilRegistry.getInstance();
+        this.soilRegistry =  AgriSoilRegistry.getInstance();
+        this.soilAdapterizer = new AgriAdapterizer<>();
         this.seedAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.seasonLogic = SeasonLogic.getInstance();
@@ -132,14 +126,20 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriSoilRegistry connectSoilRegistry() {
-        return this.soilRegistry;
+    public IAgriStatRegistry connectStatRegistry() {
+        return this.statRegistry;
     }
 
     @Override
     @Nonnull
-    public IAgriStatRegistry connectStatRegistry() {
-        return this.statRegistry;
+    public IAgriSoilRegistry connectSoilRegistry() {
+        return this.soilRegistry;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriAdapterizer<BlockState> connectSoilAdapterizer() {
+        return this.soilAdapterizer;
     }
 
     @Override
@@ -177,6 +177,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         return tile instanceof TileEntityCropSticks ? Optional.of((IAgriCrop) tile) : Optional.empty();
+    }
+
+    @Nonnull
+    @Override
+    public IAgriGrowthRequirement.Builder getGrowthRequirementBuilder() {
+        return AgriGrowthRequirement.getBuilder();
     }
 
     @Override

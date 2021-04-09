@@ -13,7 +13,6 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,7 +21,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import javax.annotation.Nonnull;
 
+import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -60,6 +61,7 @@ public final class PluginHandler {
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
         registerGenes(AgriApi.getGeneRegistry());
+        registerSoilAdapters(AgriApi.getSoilAdapterizer());
         registerSeeds(AgriApi.getSeedAdapterizer());
         registerFertilizers(AgriApi.getFertilizerAdapterizer());
         registerSeasonLogic(AgriApi.getSeasonLogic());
@@ -87,6 +89,10 @@ public final class PluginHandler {
 
     public static void registerGenes(IAgriGeneRegistry geneRegistry) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerGenes(geneRegistry));
+    }
+
+    public static void registerSoilAdapters(IAgriAdapterizer<BlockState> adapterizer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoilAdapters(adapterizer));
     }
 
     public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {

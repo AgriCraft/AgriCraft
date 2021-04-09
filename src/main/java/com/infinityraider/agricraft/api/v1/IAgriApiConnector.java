@@ -13,11 +13,11 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -55,10 +55,13 @@ public interface IAgriApiConnector {
     IAgriGeneRegistry connectGeneRegistry();
 
     @Nonnull
+    IAgriStatRegistry connectStatRegistry();
+
+    @Nonnull
     IAgriSoilRegistry connectSoilRegistry();
 
     @Nonnull
-    IAgriStatRegistry connectStatRegistry();
+    IAgriAdapterizer<BlockState> connectSoilAdapterizer();
 
     @Nonnull
     IAgriAdapterizer<AgriSeed> connectSeedAdapterizer();
@@ -77,6 +80,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
+
+    @Nonnull
+    IAgriGrowthRequirement.Builder getGrowthRequirementBuilder();
 
     @Nonnull
     IDefaultGrowConditionFactory getDefaultGrowConditionFactory();

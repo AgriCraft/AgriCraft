@@ -19,6 +19,36 @@ public interface IAgriStatsMap {
      */
     int getValue(IAgriStat stat);
 
+    /** @return the value for the gain stat */
+    default int getGain() {
+        return this.getValue(AgriApi.getStatRegistry().gainStat());
+    }
+
+    /** @return the value for the growth stat */
+    default int getGrowth() {
+        return this.getValue(AgriApi.getStatRegistry().growthStat());
+    }
+
+    /** @return the value for the strength stat */
+    default int getStrength() {
+        return this.getValue(AgriApi.getStatRegistry().strengthStat());
+    }
+
+    /** @return the value for the fertility stat */
+    default int getFertility() {
+        return this.getValue(AgriApi.getStatRegistry().fertilityStat());
+    }
+
+    /** @return the value for the resistance stat */
+    default int getResistance() {
+        return this.getValue(AgriApi.getStatRegistry().resistanceStat());
+    }
+
+    /** @return the value for the mutativity stat */
+    default int getMutativity() {
+        return this.getValue(AgriApi.getStatRegistry().mutativityStat());
+    }
+
     /**
      * @return the sum of all values of all stats
      */

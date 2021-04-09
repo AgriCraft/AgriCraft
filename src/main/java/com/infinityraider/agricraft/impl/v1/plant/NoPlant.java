@@ -5,9 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.requirement.IGrowCondition;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
+import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
@@ -73,6 +74,12 @@ public class NoPlant implements IAgriPlant {
     @Override
     public Collection<ItemStack> getSeedItems() {
         return Collections.emptySet();
+    }
+
+    @Nonnull
+    @Override
+    public IAgriGrowthRequirement getGrowthRequirement(IAgriGrowthStage stage) {
+        return AgriGrowthRequirement.getNone();
     }
 
     @Override
@@ -145,12 +152,6 @@ public class NoPlant implements IAgriPlant {
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
         consumer.accept(tooltip);
-    }
-
-    @Nonnull
-    @Override
-    public Set<IGrowCondition> getGrowConditions(IAgriGrowthStage stage) {
-        return ImmutableSet.of();
     }
 
     @Override

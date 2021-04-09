@@ -8,10 +8,9 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class BetterWeatherSeasonGetter implements BiFunction<World, BlockPos, Optional<AgriSeason>> {
+public class BetterWeatherSeasonGetter implements BiFunction<World, BlockPos, AgriSeason> {
     private static final BetterWeatherSeasonGetter INSTANCE = new BetterWeatherSeasonGetter();
 
     public static BetterWeatherSeasonGetter getInstance() {
@@ -21,20 +20,20 @@ public class BetterWeatherSeasonGetter implements BiFunction<World, BlockPos, Op
     private BetterWeatherSeasonGetter() {}
 
     @Nonnull
-    public Optional<AgriSeason> convert(@Nullable Object obj) {
+    public AgriSeason convert(@Nullable Object obj) {
         if(obj instanceof Season) {
             switch (((Season) obj).getKey()) {
-                case SPRING: return Optional.of(AgriSeason.SPRING);
-                case SUMMER: return Optional.of(AgriSeason.SUMMER);
-                case AUTUMN: return Optional.of(AgriSeason.AUTUMN);
-                case WINTER: return Optional.of(AgriSeason.WINTER);
+                case SPRING: return AgriSeason.SPRING;
+                case SUMMER: return AgriSeason.SUMMER;
+                case AUTUMN: return AgriSeason.AUTUMN;
+                case WINTER: return  AgriSeason.WINTER;
             }
         }
-        return Optional.empty();
+        return AgriSeason.ANY;
     }
 
     @Override
-    public Optional<AgriSeason> apply(World world, BlockPos pos) {
+    public AgriSeason apply(World world, BlockPos pos) {
         return this.convert(Climate.getSeason(world));
     }
 }

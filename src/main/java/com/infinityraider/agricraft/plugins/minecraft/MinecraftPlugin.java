@@ -7,6 +7,8 @@ import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 
+import javax.annotation.Nonnull;
+
 @AgriPlugin
 @SuppressWarnings("unused")
 public class MinecraftPlugin implements IAgriPlugin {
@@ -34,12 +36,12 @@ public class MinecraftPlugin implements IAgriPlugin {
     }
 
     @Override
-    public void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
+    public void registerSeeds(@Nonnull IAgriAdapterizer<AgriSeed> adapterizer) {
         adapterizer.registerAdapter(new SeedWrapper());
     }
 
     @Override
-    public void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {
+    public void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
         adapterizer.registerAdapter(BonemealWrapper.INSTANCE);
     }
 

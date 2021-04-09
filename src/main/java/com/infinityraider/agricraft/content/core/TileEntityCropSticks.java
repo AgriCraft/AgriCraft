@@ -14,14 +14,14 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoil;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
-import com.infinityraider.agricraft.impl.v1.crop.GrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
+import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -63,11 +63,11 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     private final AutoSyncedField<IAgriWeed> weed;
     private final AutoSyncedField<IAgriGrowthStage> weedGrowth;
     private final AutoSyncedField<Boolean> crossCrop;
-    // Growth Requirements
-    private GrowthRequirement requirement;  // TODO: Implement growth requirements and cache their states
     // Cache for neighbouring crops
     private final Map<Direction, Optional<IAgriCrop>> neighbours;
     private boolean needsCaching;
+    // Growth Requirements
+    private RequirementCache requirement;
 
     public TileEntityCropSticks() {
         // Super constructor with appropriate TileEntity Type
@@ -123,6 +123,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         this.neighbours = Maps.newEnumMap(Direction.class);
         Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, Optional.empty()));
         this.needsCaching = true;
+
+        // Initialize growth requirement cache
+        this.requirement = RequirementCache.create(this);
     }
 
     // Use neighbour cache instead to prevent having to read TileEntities from the world
@@ -244,7 +247,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     public boolean isFertile() {
         return this.getWorld() != null
                 && this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())
-                && this.getPlant().getGrowConditions(this.getGrowthStage()).stream().allMatch(c -> c.isMet(this.getWorld(), this.getPosition()));
+                && this.requirement.isMet();
     }
 
     @Override
@@ -261,8 +264,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     @Override
     public Optional<IAgriSoil> getSoil() {
         return Optional.ofNullable(this.getWorld())
-                .map(world -> AgriApi.getSoilRegistry().get(world.getBlockState(this.getPosition().down())))
-                .flatMap(soils -> soils.stream().findAny());
+                .flatMap(world -> AgriApi.getSoilRegistry().valueOf(world.getBlockState(this.getPosition().down())));
     }
 
     @Override
@@ -304,7 +306,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             return false;
         }
         if(this.hasPlant()) {
-            int resist = this.getStats().getValue(AgriStatRegistry.getInstance().resistanceStat());
+            int resist = this.getStats().getResistance();
             int max = AgriStatRegistry.getInstance().resistanceStat().getMax();
             // At 1 resist, 50/50 chance for weed growth tick
             // At 10 resist, 0% chance
@@ -389,7 +391,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
     }
 
     protected double calculateGrowthRate() {
-        int growth = this.getStats().getValue(AgriStatRegistry.getInstance().growthStat());
+        int growth = this.getStats().getGrowth();
         return this.getPlant().getGrowthChanceBase(this.getGrowthStage())
             + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier();
     }
@@ -602,6 +604,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.getWorld() != null) {
             BlockState state = this.getBlockState();
             boolean plant = this.hasPlant() || this.hasWeeds();
+            // Update block state
             if(resetBrightness && BlockCropSticks.LIGHT.fetch(state) > 0) {
                 this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(BlockCropSticks.LIGHT.apply(state), plant));
             } else {
@@ -609,7 +612,22 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                     this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
                 }
             }
+            // Update growth requirement
+            this.requirement.flush();
+            this.requirement = RequirementCache.create(this);
         }
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+        this.requirement.flush();
+        super.onChunkUnloaded();
+    }
+
+    @Override
+    public void remove() {
+        this.requirement.flush();
+        super.remove();
     }
 
     @Override

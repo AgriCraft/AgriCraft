@@ -14,7 +14,7 @@ public class GrowConditionStructure extends GrowConditionAbstract {
     private final BlockPos offset;
 
     public GrowConditionStructure(int strength, Predicate<IForgeStructure> predicate, BlockPos offset) {
-        super(strength, RequirementType.STRUCTURE, offset);
+        super(strength, RequirementType.STRUCTURE, offset, CacheType.FULL);
         this.predicate = predicate;
         this.offset = offset;
     }

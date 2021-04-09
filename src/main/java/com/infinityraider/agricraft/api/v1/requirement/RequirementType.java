@@ -88,7 +88,5 @@ public enum RequirementType {
      */
 
     /** for any other requirements not covered by the defaults */
-    OTHER;
-
-
+    OTHER
 }

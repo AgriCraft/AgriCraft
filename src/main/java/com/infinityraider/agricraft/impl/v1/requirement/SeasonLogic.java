@@ -7,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class SeasonLogic implements IAgriSeasonLogic {
@@ -18,15 +17,15 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     private IAgriPlugin owner;
-    private BiFunction<World, BlockPos, Optional<AgriSeason>> getter;
+    private BiFunction<World, BlockPos, AgriSeason> getter;
 
     private SeasonLogic() {
         this.owner = null;
-        this.getter = (world, pos) -> Optional.empty();
+        this.getter = (world, pos) -> AgriSeason.ANY;
     }
 
     @Override
-    public Optional<AgriSeason> getSeason(World world, BlockPos pos) {
+    public AgriSeason getSeason(World world, BlockPos pos) {
         return this.getter.apply(world, pos);
     }
 
@@ -37,7 +36,7 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     @Override
-    public void claim(IAgriPlugin plugin, BiFunction<World, BlockPos, Optional<AgriSeason>> getter) {
+    public void claim(IAgriPlugin plugin, BiFunction<World, BlockPos, AgriSeason> getter) {
         this.owner = plugin;
         this.getter = getter;
     }

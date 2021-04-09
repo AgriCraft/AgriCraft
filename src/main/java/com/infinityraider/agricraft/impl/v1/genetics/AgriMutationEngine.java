@@ -97,12 +97,12 @@ public class AgriMutationEngine implements IAgriMutationEngine {
 
     protected int sorter(IAgriCrop crop) {
         IAgriStat fertility = AgriStatRegistry.getInstance().fertilityStat();
-        return fertility.getMax() - crop.getStats().getValue(fertility);
+        return fertility.getMax() - crop.getStats().getFertility();
     }
 
     protected boolean rollFertility(IAgriCrop crop, Random random) {
         IAgriStat fertility = AgriStatRegistry.getInstance().fertilityStat();
-        return random.nextInt(fertility.getMax()) < crop.getStats().getValue(fertility);
+        return random.nextInt(fertility.getMax()) < crop.getStats().getFertility();
     }
 
     protected boolean spawnChild(IAgriCrop target, IAgriGenome genome) {
