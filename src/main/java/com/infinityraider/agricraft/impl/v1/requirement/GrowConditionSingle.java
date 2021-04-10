@@ -2,9 +2,11 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -14,8 +16,8 @@ public class GrowConditionSingle<T> extends GrowConditionAbstract {
     private final Predicate<T> predicate;
 
     public GrowConditionSingle(int strength, RequirementType type, BlockPos offset, BiFunction<World, BlockPos, T> fetcher,
-                               Predicate<T> predicate, CacheType cacheType) {
-        super(strength, type, offset, cacheType);
+                               Predicate<T> predicate, List<ITextComponent> tooltips, CacheType cacheType) {
+        super(strength, type, offset, tooltips, cacheType);
         this.offset = offset;
         this.fetcher = fetcher;
         this.predicate = predicate;

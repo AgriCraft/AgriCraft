@@ -4,9 +4,11 @@ import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class GrowConditionEntities extends GrowConditionAbstract {
@@ -18,8 +20,9 @@ public class GrowConditionEntities extends GrowConditionAbstract {
 
     private final int complexity;
 
-    public GrowConditionEntities(int strength, Predicate<Entity> predicate, BlockPos offset, double range, int min, int max) {
-        super(strength, RequirementType.ENTITY, offset, CacheType.NONE);
+    public GrowConditionEntities(int strength, Predicate<Entity> predicate, BlockPos offset, double range, int min, int max,
+                                 List<ITextComponent> tooltips) {
+        super(strength, RequirementType.ENTITY, offset, tooltips, CacheType.NONE);
         this.predicate = predicate;
         this.offset = offset;
         this.range = range;

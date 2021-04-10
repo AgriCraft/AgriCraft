@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class GrowConditionBlockStates extends GrowConditionAbstract {
@@ -14,8 +16,9 @@ public class GrowConditionBlockStates extends GrowConditionAbstract {
     private final int max;
     private final Predicate<BlockState> predicate;
 
-    public GrowConditionBlockStates(int strength, RequirementType type, int min, int max, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate) {
-        super(strength, type, getOffsets(minOffset, maxOffset), CacheType.BLOCK_UPDATE);
+    public GrowConditionBlockStates(int strength, RequirementType type, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                    Predicate<BlockState> predicate, List<ITextComponent> tooltips) {
+        super(strength, type, getOffsets(minOffset, maxOffset), tooltips, CacheType.BLOCK_UPDATE);
         this.min = min;
         this.max = max;
         this.predicate = predicate;

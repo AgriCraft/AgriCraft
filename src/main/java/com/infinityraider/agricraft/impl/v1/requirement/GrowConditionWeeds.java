@@ -5,16 +5,18 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 public class GrowConditionWeeds extends GrowConditionAbstract {
     private final BiPredicate<IAgriWeed, IAgriGrowthStage> predicate;
 
-    public GrowConditionWeeds(int strength, BlockPos offset, BiPredicate<IAgriWeed, IAgriGrowthStage> predicate) {
-        super(strength, RequirementType.WEEDS, offset, CacheType.BLOCK_UPDATE);
+    public GrowConditionWeeds(int strength, BlockPos offset, BiPredicate<IAgriWeed, IAgriGrowthStage> predicate, List<ITextComponent> tooltips) {
+        super(strength, RequirementType.WEEDS, offset, tooltips, CacheType.BLOCK_UPDATE);
         this.predicate = predicate;
     }
 

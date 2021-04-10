@@ -1,5 +1,7 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import net.minecraft.util.text.TranslationTextComponent;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +47,13 @@ public enum AgriSeason {
      */
     public boolean isSeason() {
         return this != ANY;
+    }
+
+    /**
+     * @return Text Component for the display name of the season
+     */
+    public TranslationTextComponent getDisplayName() {
+        return new TranslationTextComponent("agricraft.season." + this.name().toLowerCase());
     }
 
     /**

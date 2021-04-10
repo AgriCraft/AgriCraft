@@ -1,37 +1,36 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
+import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class GrowConditionAbstract implements IAgriGrowCondition {
     private final int strength;
     private final RequirementType type;
     private final ImmutableSet<BlockPos> offsets;
+    private final List<ITextComponent> tooltips;
     private final CacheType cacheType;
 
-    public GrowConditionAbstract(int strength, RequirementType type, CacheType cacheType) {
-        this(strength, type, ImmutableSet.of(), cacheType);
+    public GrowConditionAbstract(int strength, RequirementType type, List<ITextComponent> tooltips, CacheType cacheType) {
+        this(strength, type, ImmutableSet.of(), tooltips, cacheType);
     }
 
-    public GrowConditionAbstract(int strength, RequirementType type, BlockPos offset, CacheType cacheType) {
-        this(strength, type, ImmutableSet.of(offset), cacheType);
+    public GrowConditionAbstract(int strength, RequirementType type, BlockPos offset, List<ITextComponent> tooltips, CacheType cacheType) {
+        this(strength, type, ImmutableSet.of(offset), tooltips, cacheType);
     }
 
-    public GrowConditionAbstract(int strength, RequirementType type, ImmutableSet<BlockPos> offsets, CacheType cacheType) {
+    public GrowConditionAbstract(int strength, RequirementType type, ImmutableSet<BlockPos> offsets, List<ITextComponent> tooltips, CacheType cacheType) {
         this.strength = strength;
         this.type = type;
         this.offsets = offsets;
+        this.tooltips = tooltips;
         this.cacheType = cacheType;
     }
 
@@ -58,7 +57,8 @@ public abstract class GrowConditionAbstract implements IAgriGrowCondition {
 
     @Override
     public void addDescription(@Nonnull Consumer<ITextComponent> consumer) {
-        consumer.accept(getTooltip(this.getType()));
+        this.tooltips.forEach(consumer);
+        //consumer.accept(getTooltip(this.getType()));
     }
 
     @Override
@@ -71,6 +71,7 @@ public abstract class GrowConditionAbstract implements IAgriGrowCondition {
         return this.cacheType;
     }
 
+    /*
     private static final Map<RequirementType, ITextComponent> tooltips = Maps.newEnumMap(RequirementType.class);
 
     private static ITextComponent getTooltip(RequirementType type) {
@@ -81,4 +82,5 @@ public abstract class GrowConditionAbstract implements IAgriGrowCondition {
         }
         return tooltip;
     }
+     */
 }

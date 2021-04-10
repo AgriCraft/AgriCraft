@@ -10,17 +10,17 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.extensions.IForgeStructure;
 
 import java.util.Collection;
-import java.util.function.BiPredicate;
-import java.util.function.IntPredicate;
-import java.util.function.LongPredicate;
-import java.util.function.Predicate;
+import java.util.List;
+import java.util.function.*;
 
 /**
  * Class to obtain default AgriCraft implementations of the most common IGrowConditions.
@@ -30,6 +30,7 @@ import java.util.function.Predicate;
  * if 0 is passed in, the condition will always be ignored (this makes no sense and should never be done)
  * if 11 or higher is passed in, the condition will never be ignored
  */
+@SuppressWarnings("unused")
 public interface IDefaultGrowConditionFactory {
     /*
      * ----
@@ -60,7 +61,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition light(int strength, int value);
 
     /** Must match the predicate */
-    IAgriGrowCondition light(int strength, IntPredicate predicate);
+    IAgriGrowCondition light(int strength, IntPredicate predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -76,7 +77,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition redstone(int strength, int value);
 
     /** Must match the predicate */
-    IAgriGrowCondition redstone(int strength, IntPredicate predicate);
+    IAgriGrowCondition redstone(int strength, IntPredicate predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -95,7 +96,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition liquidFromFluid(int strength, Collection<Fluid> fluids);
 
     /** Must match the predicate */
-    IAgriGrowCondition liquidFromFluid(int strength, Predicate<Fluid> predicate);
+    IAgriGrowCondition liquidFromFluid(int strength, Predicate<Fluid> predicate, List<ITextComponent> tooltips);
 
     /** Must match the given fluid state */
     IAgriGrowCondition liquidFromState(int strength, FluidState state);
@@ -107,7 +108,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition liquidFromState(int strength, Collection<FluidState> states);
 
     /** Must match the predicate */
-    IAgriGrowCondition liquidFromState(int strength, Predicate<FluidState> predicate);
+    IAgriGrowCondition liquidFromState(int strength, Predicate<FluidState> predicate, List<ITextComponent> tooltips);
 
     /** Must match the tag */
     IAgriGrowCondition liquidFromTag(int strength, Tag<Fluid> fluid);
@@ -119,16 +120,16 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition liquidFromTag(int strength, Collection<Tag<Fluid>> fluids);
 
     /** Must be instance of the given class */
-    IAgriGrowCondition liquidFromClass(int strength, Class<Fluid> fluid);
+    IAgriGrowCondition liquidFromClass(int strength, Class<Fluid> fluid, List<ITextComponent> tooltips);
 
     /** Must be instance of any of the given classes */
-    IAgriGrowCondition liquidFromClass(int strength, Class<Fluid>... fluids);
+    IAgriGrowCondition liquidFromClass(int strength, List<ITextComponent> tooltips, Class<Fluid>... fluids);
 
     /** Must be instance of any of the given classes */
-    IAgriGrowCondition liquidFromClass(int strength, Collection<Class<Fluid>> fluids);
+    IAgriGrowCondition liquidFromClass(int strength, Collection<Class<Fluid>> fluids, List<ITextComponent> tooltips);
 
     /** Must match the predicate */
-    IAgriGrowCondition liquidFromClass(int strength, Predicate<Class<? extends Fluid>> predicate);
+    IAgriGrowCondition liquidFromClass(int strength, Predicate<Class<? extends Fluid>> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -138,28 +139,28 @@ public interface IDefaultGrowConditionFactory {
      */
 
     /** Must match the given biome */
-    IAgriGrowCondition biome(int strength, Biome biome);
+    IAgriGrowCondition biome(int strength, Biome biome, ITextComponent biomeName);
 
     /** Must match any of the given biomes */
-    IAgriGrowCondition biome(int strength, Biome... biomes);
+    IAgriGrowCondition biome(int strength, Function<Biome, ITextComponent> nameFunction, Biome... biomes);
 
     /** Must match any of the given biomes */
-    IAgriGrowCondition biome(int strength, Collection<Biome> biomes);
+    IAgriGrowCondition biome(int strength, Collection<Biome> biomes, Function<Biome, ITextComponent> nameFunction);
 
     /** Must match the predicate */
-    IAgriGrowCondition biome(int strength, Predicate<Biome> predicate);
+    IAgriGrowCondition biome(int strength, Predicate<Biome> predicate, List<ITextComponent> tooltips);
 
     /** Must match the given biome category */
-    IAgriGrowCondition biomeFromCategory(int strength, Biome.Category category);
+    IAgriGrowCondition biomeFromCategory(int strength, Biome.Category category, ITextComponent categoryName);
 
     /** Must match any of the given biome categories */
-    IAgriGrowCondition biomeFromCategories(int strength, Biome.Category... categories);
+    IAgriGrowCondition biomeFromCategories(int strength, Function<Biome.Category, ITextComponent> nameFunction, Biome.Category... categories);
 
     /** Must match any of the given biome categories */
-    IAgriGrowCondition biomeFromCategories(int strength, Collection<Biome.Category> categories);
+    IAgriGrowCondition biomeFromCategories(int strength, Collection<Biome.Category> categories, Function<Biome.Category, ITextComponent> nameFunction);
 
     /** Must match the predicate */
-    IAgriGrowCondition biomeFromCategory(int strength, Predicate<Biome.Category> predicate);
+    IAgriGrowCondition biomeFromCategory(int strength, Predicate<Biome.Category> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -169,16 +170,16 @@ public interface IDefaultGrowConditionFactory {
      */
 
     /** Must match the given climate */
-    IAgriGrowCondition climate(int strength, Biome.Climate climate);
+    IAgriGrowCondition climate(int strength, Biome.Climate climate, List<ITextComponent> tooltips);
 
     /** Must match any of the given climates */
-    IAgriGrowCondition climate(int strength, Biome.Climate... climates);
+    IAgriGrowCondition climate(int strength, List<ITextComponent> tooltips, Biome.Climate... climates);
 
     /** Must match any of the given climates */
-    IAgriGrowCondition climate(int strength, Collection<Biome.Climate> climates);
+    IAgriGrowCondition climate(int strength, Collection<Biome.Climate> climates, List<ITextComponent> tooltips);
 
     /** Must match the predicate */
-    IAgriGrowCondition climate(int strength, Predicate<Biome.Climate> predicate);
+    IAgriGrowCondition climate(int strength, Predicate<Biome.Climate> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -186,30 +187,38 @@ public interface IDefaultGrowConditionFactory {
      * dimension
      * ---------
      */
+    /** Must match the given dimension */
+    IAgriGrowCondition dimension(int strength, ResourceLocation dimension, ITextComponent dimensionName);
+
+    /** Must match any of the given dimensions */
+    IAgriGrowCondition dimensions(int strength, Function<ResourceLocation, ITextComponent> nameFunction, ResourceLocation... dimensions);
+
+    /** Must match any of the given dimensions */
+    IAgriGrowCondition dimensions(int strength, Collection<ResourceLocation> dimensions, Function<ResourceLocation, ITextComponent> nameFunction);
 
     /** Must match the given dimension */
-    IAgriGrowCondition dimensionFromKey(int strength, RegistryKey<World> dimension);
+    IAgriGrowCondition dimensionFromKey(int strength, RegistryKey<World> dimension, ITextComponent dimensionName);
 
     /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensionFromKeys(int strength, RegistryKey<World>... dimensions);
+    IAgriGrowCondition dimensionsFromKeys(int strength, Function<RegistryKey<World>, ITextComponent> nameFunction, RegistryKey<World>... dimensions);
 
     /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensionFromKeys(int strength, Collection<RegistryKey<World>> dimensions);
+    IAgriGrowCondition dimensionsFromKeys(int strength, Collection<RegistryKey<World>> dimensions, Function<RegistryKey<World>, ITextComponent> nameFunction);
 
     /** Must match the predicate */
-    IAgriGrowCondition dimensionFromKey(int strength, Predicate<RegistryKey<World>> predicate);
+    IAgriGrowCondition dimensionFromKey(int strength, Predicate<RegistryKey<World>> predicate, List<ITextComponent> tooltips);
 
     /** Must match the given dimension type */
-    IAgriGrowCondition dimensionFromType(int strength, DimensionType dimension);
+    IAgriGrowCondition dimensionFromType(int strength, DimensionType dimension, ITextComponent dimensionName);
 
     /** Must match any of the given dimension types */
-    IAgriGrowCondition dimensionFromTypes(int strength, DimensionType... dimensions);
+    IAgriGrowCondition dimensionFromTypes(int strength, Function<DimensionType, ITextComponent> nameFunction, DimensionType... dimensions);
 
     /** Must match any of the given dimension types */
-    IAgriGrowCondition dimensionFromTypes(int strength, Collection<DimensionType> dimensions);
+    IAgriGrowCondition dimensionFromTypes(int strength, Collection<DimensionType> dimensions, Function<DimensionType, ITextComponent> nameFunction);
 
     /** Must match the predicate */
-    IAgriGrowCondition dimensionFromType(int strength, Predicate<DimensionType> predicate);
+    IAgriGrowCondition dimensionFromType(int strength, Predicate<DimensionType> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -231,7 +240,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition withoutWeed(int strength, IAgriWeed weed);
 
     /** matching the predicate */
-    IAgriGrowCondition weed(int strength, Predicate<IAgriWeed> predicate);
+    IAgriGrowCondition weed(int strength, Predicate<IAgriWeed> predicate, List<ITextComponent> tooltips);
 
     /** if a specific weed and growth stage is needed for growth */
     IAgriGrowCondition withWeed(int strength, IAgriWeed weed, IAgriGrowthStage stage);
@@ -240,7 +249,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition withoutWeed(int strength, IAgriWeed weed, IAgriGrowthStage stage);
 
     /** Must match the predicate */
-    IAgriGrowCondition weed(int strength, BiPredicate<IAgriWeed, IAgriGrowthStage> predicate);
+    IAgriGrowCondition weed(int strength, BiPredicate<IAgriWeed, IAgriGrowthStage> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -249,14 +258,26 @@ public interface IDefaultGrowConditionFactory {
      * -----
      */
 
+    /** growth only allowed during the day */
+    IAgriGrowCondition day(int strength);
+
+    /** growth only allowed during dusk */
+    IAgriGrowCondition dusk(int strength);
+
+    /** growth only allowed during the night */
+    IAgriGrowCondition night(int strength);
+
+    /** growth only allowed during dawn */
+    IAgriGrowCondition dawn(int strength);
+
     /** growth only allowed during the time of the day bounded by min and max (both inclusive) */
-    IAgriGrowCondition timeAllowed(int strength, long min, long max);
+    IAgriGrowCondition timeAllowed(int strength, long min, long max, List<ITextComponent> tooltips);
 
     /** growth not allowed during the time of the day bounded by min and max (both inclusive) */
-    IAgriGrowCondition timeForbidden(int strength, long min, long max);
+    IAgriGrowCondition timeForbidden(int strength, long min, long max, List<ITextComponent> tooltips);
 
     /** Must match the predicate */
-    IAgriGrowCondition time(int strength, LongPredicate predicate);
+    IAgriGrowCondition time(int strength, LongPredicate predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -275,7 +296,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition blockBelow(int strength, Collection<Block> blocks);
 
     /** Must match the predicate */
-    IAgriGrowCondition blockBelow(int strength, Predicate<Block> predicate);
+    IAgriGrowCondition blockBelow(int strength, Predicate<Block> predicate, List<ITextComponent> tooltips);
 
     /** Must match the given state */
     IAgriGrowCondition stateBelow(int strength, BlockState state);
@@ -287,7 +308,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition stateBelow(int strength, Collection<BlockState> states);
 
     /** Must match the predicate */
-    IAgriGrowCondition stateBelow(int strength, Predicate<BlockState> predicate);
+    IAgriGrowCondition stateBelow(int strength, Predicate<BlockState> predicate, List<ITextComponent> tooltips);
 
     /** Must match the tag */
     IAgriGrowCondition tagBelow(int strength, Tag<Block> tag);
@@ -299,16 +320,16 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition tagBelow(int strength, Collection<Tag<Block>> tags);
 
     /** Must be instance of the given class */
-    IAgriGrowCondition classBelow(int strength, Class<Block> clazz);
+    IAgriGrowCondition classBelow(int strength, Class<Block> clazz, List<ITextComponent> tooltips);
 
     /** Must be instance of any of the given classes */
-    IAgriGrowCondition classBelow(int strength, Class<Block>... classes);
+    IAgriGrowCondition classBelow(int strength, List<ITextComponent> tooltips, Class<Block>... classes);
 
     /** Must be instance of any of the given classes */
-    IAgriGrowCondition classBelow(int strength, Collection<Class<Block>> classes);
+    IAgriGrowCondition classBelow(int strength, Collection<Class<Block>> classes, List<ITextComponent> tooltips);
 
     /** Must match the predicate */
-    IAgriGrowCondition classBelow(int strength, Predicate<Class<? extends Block>> predicate);
+    IAgriGrowCondition classBelow(int strength, Predicate<Class<? extends Block>> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -327,7 +348,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition blocksNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<Block> blocks);
 
     /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition blocksNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<Block> predicate);
+    IAgriGrowCondition blocksNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<Block> predicate, List<ITextComponent> tooltips);
 
     /** Must match amount of the given state in the range bound by the offsets */
     IAgriGrowCondition statesNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, BlockState state);
@@ -339,7 +360,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition statesNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states);
 
     /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition statesNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate);
+    IAgriGrowCondition statesNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate, List<ITextComponent> tooltips);
 
     /** Must match amount of the tag in the range bound by the offsets */
     IAgriGrowCondition tagsNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Tag<Block> tag);
@@ -351,16 +372,20 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition tagsNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<Tag<Block>> tags);
 
     /** Amount must be instance of the given class in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Class<Block> clazz);
+    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset,
+                                   Class<Block> clazz, List<ITextComponent> tooltips);
 
     /** Amount must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Class<Block>... classes);
+    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset,
+                                   List<ITextComponent> tooltips, Class<Block>... classes);
 
     /** Amount must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<Class<Block>> classes);
+    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset,
+                                   Collection<Class<Block>> classes, List<ITextComponent> tooltips);
 
     /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<Class<? extends Block>> predicate);
+    IAgriGrowCondition classNearby(int strength, int amount, BlockPos minOffset, BlockPos maxOffset,
+                                   Predicate<Class<? extends Block>> predicate, List<ITextComponent> tooltips);
 
     /** Must match amount between min and max (both inclusive) of the given block in the range bound by the offsets */
     IAgriGrowCondition blocksNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Block block);
@@ -372,7 +397,8 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition blocksNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<Block> blocks);
 
     /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition blocksNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Predicate<Block> predicate);
+    IAgriGrowCondition blocksNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                    Predicate<Block> predicate, List<ITextComponent> tooltips);
 
     /** Must match amount between min and max (both inclusive) of the given state in the range bound by the offsets */
     IAgriGrowCondition statesNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, BlockState state);
@@ -384,7 +410,8 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition statesNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states);
 
     /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition statesNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate);
+    IAgriGrowCondition statesNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                    Predicate<BlockState> predicate, List<ITextComponent> tooltips);
 
     /** Must match amount between min and max (both inclusive) of the tag in the range bound by the offsets */
     IAgriGrowCondition tagsNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Tag<Block> tag);
@@ -396,16 +423,20 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition tagsNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<Tag<Block>> tags);
 
     /** Amount between min and max (both inclusive) must be instance of the given class in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Class<Block> clazz);
+    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                   Class<Block> clazz, List<ITextComponent> tooltips);
 
     /** Amount between min and max (both inclusive) must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Class<Block>... classes);
+    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                   List<ITextComponent> tooltips, Class<Block>... classes);
 
     /** Amount between min and max (both inclusive) must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<Class<Block>> classes);
+    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                   Collection<Class<Block>> classes, List<ITextComponent> tooltips);
 
     /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Predicate<Class<? extends Block>> predicate);
+    IAgriGrowCondition classNearby(int strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
+                                   Predicate<Class<? extends Block>> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -418,28 +449,28 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition entityNearby(int strength, EntityType<?> type, double range);
 
     /** An entity instance of the class must by present within the range */
-    IAgriGrowCondition entityNearby(int strength, Class<Entity> clazz, double range);
+    IAgriGrowCondition entityNearby(int strength, Class<Entity> clazz, double range, ITextComponent entityName);
 
     /** An entity matching the predicate must by present within the range */
-    IAgriGrowCondition entityNearby(int strength, Predicate<Entity> predicate, double range);
+    IAgriGrowCondition entityNearby(int strength, Predicate<Entity> predicate, double range, List<ITextComponent> tooltips);
 
     /** Amount of entities of the type must by present within the range */
     IAgriGrowCondition entitiesNearby(int strength, EntityType<?> type, double range, int amount);
 
     /** Amount of entity instances of the class must by present within the range */
-    IAgriGrowCondition entitiesNearby(int strength, Class<Entity> clazz, double range, int amount);
+    IAgriGrowCondition entitiesNearby(int strength, Class<Entity> clazz, double range, int amount, ITextComponent entityName);
 
     /** Amount of entities matching the predicate must by present within the range */
-    IAgriGrowCondition entitiesNearby(int strength, Predicate<Entity> predicate, double range, int amount);
+    IAgriGrowCondition entitiesNearby(int strength, Predicate<Entity> predicate, double range, int amount, List<ITextComponent> tooltips);
 
     /** Amount of entities bounded by min and max (both inclusive) of the type must by present within the range */
     IAgriGrowCondition entitiesNearby(int strength, EntityType<?> type, double range, int min, int max);
 
     /** Amount of entity instances bounded by min and max (both inclusive) of the class must by present within the range */
-    IAgriGrowCondition entitiesNearby(int strength, Class<Entity> clazz, double range, int min, int max);
+    IAgriGrowCondition entitiesNearby(int strength, Class<Entity> clazz, double range, int min, int max, ITextComponent entityName);
 
     /** Amount of entities bounded by min and max (both inclusive) matching the predicate must by present within the range */
-    IAgriGrowCondition entitiesNearby(int strength, Predicate<Entity> predicate, double range, int min, int max);
+    IAgriGrowCondition entitiesNearby(int strength, Predicate<Entity> predicate, double range, int min, int max, List<ITextComponent> tooltips);
 
 
     /*
@@ -494,7 +525,7 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition notInSeasons(int strength, Collection<AgriSeason> seasons);
 
     /** Only during seasons matching the predicate */
-    IAgriGrowCondition season(int strength, Predicate<AgriSeason> predicate);
+    IAgriGrowCondition season(int strength, Predicate<AgriSeason> predicate, List<ITextComponent> tooltips);
 
     /*
      * ----------
@@ -617,11 +648,11 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition notInBastionRemnant(int strength);
 
     /** Must not be in the given structure */
-    IAgriGrowCondition inStructure(int strength, IForgeStructure structure);
+    IAgriGrowCondition inStructure(int strength, IForgeStructure structure, ITextComponent structureName);
 
     /** Must be in the given structure */
-    IAgriGrowCondition notInStructure(int strength, IForgeStructure structure);
+    IAgriGrowCondition notInStructure(int strength, IForgeStructure structure, ITextComponent structureName);
 
     /** Must match the predicate */
-    IAgriGrowCondition structure(int strength, Predicate<IForgeStructure> predicate);
+    IAgriGrowCondition structure(int strength, Predicate<IForgeStructure> predicate, List<ITextComponent> tooltips);
 }
