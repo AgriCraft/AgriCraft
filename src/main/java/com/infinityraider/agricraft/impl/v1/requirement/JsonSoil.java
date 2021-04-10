@@ -24,6 +24,8 @@ public class JsonSoil implements IAgriSoil {
     private final Acidity acidity;
     private final Nutrients nutrients;
 
+    private final double growthModifier;
+
     public JsonSoil(@Nonnull AgriSoil soil) {
         this.id = Preconditions.checkNotNull(soil).getId();
         this.name = new TranslationTextComponent(soil.getLangKey());
@@ -43,6 +45,7 @@ public class JsonSoil implements IAgriSoil {
                     "Soil: \"{0}\" does not have valid nutrients defined (\"{1}\"), defaulting to MEDIUM",
                     soil.getId(), soil.getAcidity());
             return Nutrients.MEDIUM;});
+        this.growthModifier = soil.getGrowthModifier();
     }
 
     @Override
@@ -79,5 +82,10 @@ public class JsonSoil implements IAgriSoil {
     @Override
     public Nutrients getNutrients() {
         return this.nutrients;
+    }
+
+    @Override
+    public double getGrowthModifier() {
+        return this.growthModifier;
     }
 }

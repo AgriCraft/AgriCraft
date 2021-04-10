@@ -329,7 +329,8 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                     this.spreadWeeds();
                 } else {
                     // Weeds are not mature yet, increment their growth
-                    if(this.getRandom().nextDouble() < this.getWeeds().getGrowthChance(this.getWeedGrowthStage())) {
+                    double f = this.getSoil().map(IAgriSoil::getGrowthModifier).orElse(1.0D);
+                    if(this.getRandom().nextDouble() < f*this.getWeeds().getGrowthChance(this.getWeedGrowthStage())) {
                         this.setWeed(this.getWeeds(), this.getWeedGrowthStage().getNextStage(this, this.getRandom()));
                     }
                 }
@@ -392,8 +393,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
 
     protected double calculateGrowthRate() {
         int growth = this.getStats().getGrowth();
-        return this.getPlant().getGrowthChanceBase(this.getGrowthStage())
-            + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier();
+        double soilFactor = this.getSoil().map(IAgriSoil::getGrowthModifier).orElse(1.0D);
+        return soilFactor * (this.getPlant().getGrowthChanceBase(this.getGrowthStage())
+            + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier());
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
+import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
@@ -27,6 +28,8 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -395,6 +398,26 @@ public class JsonPlant implements IAgriPlant {
             BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
             builder.addCondition(growConditionFactory.statesNearby(obj.getStrength(), obj.getAmount(), min, max, obj.convertAll(BlockState.class)));
         });
+
+        // Define requirement for seasons
+        List<AgriSeason> seasons = plant.getRequirement().getSeasons().stream()
+                .map(AgriSeason::fromString)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(Collectors.toList());
+        if(seasons.size() > 0) {
+            builder.addCondition(builder.getFactory().inSeasons(AgriApi.getStatRegistry().strengthStat().getMax(), seasons));
+        }
+
+        // Define requirement for fluids
+        List<Fluid> fluids = plant.getRequirement().getFluid().convertAll(FluidState.class).stream()
+                .map(FluidState::getFluid)
+                .distinct()
+                .collect(Collectors.toList());
+        if(fluids.size() > 0) {
+            builder.addCondition(builder.getFactory().liquidFromFluid(AgriApi.getStatRegistry().strengthStat().getMax() + 1, fluids));
+        }
 
         // Build the growth requirement
         IAgriGrowthRequirement req = builder.build();
