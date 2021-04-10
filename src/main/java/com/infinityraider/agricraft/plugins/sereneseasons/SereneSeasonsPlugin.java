@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.plugins.betterweather;
+package com.infinityraider.agricraft.plugins.sereneseasons;
 
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 
 @AgriPlugin
 @SuppressWarnings("unused")
-public class BetterWeatherPlugin extends SeasonPlugin implements IAgriPlugin {
+public class SereneSeasonsPlugin extends SeasonPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
         return ModList.get().isLoaded(this.getId());
@@ -21,7 +21,7 @@ public class BetterWeatherPlugin extends SeasonPlugin implements IAgriPlugin {
 
     @Override
     public String getId() {
-        return Names.Mods.BETTER_WEATHER;
+        return Names.Mods.SERENE_SEASONS;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class BetterWeatherPlugin extends SeasonPlugin implements IAgriPlugin {
 
     @Override
     protected BiFunction<World, BlockPos, AgriSeason> getSeasonGetter() {
-        return BetterWeatherSeasonGetter.getInstance();
+        return SereneSeasonsSeasonGetter.getInstance();
     }
 }

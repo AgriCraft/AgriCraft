@@ -171,4 +171,16 @@ public interface IAgriConfig {
      */
     boolean areGratesClimbable();
 
+
+    /*
+     * ----------------------------
+     * COMPATIBILITY CONFIG OPTIONS
+     * ----------------------------
+     */
+
+    /**
+     * @return the mod controlling the season logic in case multiple are present
+     */
+    String getSeasonLogicMod();
+
 }

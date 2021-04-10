@@ -2,6 +2,8 @@ package com.infinityraider.agricraft.config;
 
 import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.impl.v1.requirement.SeasonPlugin;
+import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.config.ConfigurationHandler;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,6 +45,9 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         // decoration
         private final ForgeConfigSpec.ConfigValue<Boolean> climbableGrate;
+
+        // compat
+        private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
 
         public Common(ForgeConfigSpec.Builder builder) {
             super();
@@ -101,6 +106,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("decoration");
             this.climbableGrate = builder.comment("When true, entities will be able to climb on grates")
                     .define("Grates always climbable", true);
+            builder.pop();
+
+            builder.push("compat");
+            this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed (accepted values are: " + SeasonPlugin.getConfigComment())
+                    .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
             builder.pop();
         }
 
@@ -218,6 +228,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableLogging() {
             return this.enableLogging.get();
+        }
+
+        @Override
+        public String getSeasonLogicMod() {
+            return this.seasonLogic.get();
         }
     }
 

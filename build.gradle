@@ -178,6 +178,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
     runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
 
+    //Serene Seasons
+    compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+
 }
 
 // Delete Old Plants

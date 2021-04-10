@@ -27,6 +27,7 @@ public abstract class Names {
         public static final String BETTER_WEATHER = "betterweather";
         public static final String JEI = "jei";
         public static final String THE_ONE_PROBE = "theoneprobe";
+        public static final String SERENE_SEASONS = "sereneseasons";
     }
 
     public static final class Nuggets {
