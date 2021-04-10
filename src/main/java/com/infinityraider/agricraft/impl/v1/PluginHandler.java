@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -43,15 +43,19 @@ public final class PluginHandler {
         PLUGINS.stream()
                 .peek(PluginHandler::logPlugin)
                 .filter(IAgriPlugin::isEnabled)
-                .forEach(MinecraftForge.EVENT_BUS::register);
+                .forEach(plugin -> plugin.onCommonSetupEvent(event));
+    }
+
+    private static void executeForPlugins(Consumer<IAgriPlugin> consumer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(consumer);
     }
 
     public static void onInterModEnqueueEvent(InterModEnqueueEvent event) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onInterModEnqueueEvent(event));
+        executeForPlugins(plugin -> plugin.onInterModEnqueueEvent(event));
     }
 
     public static void onInterModProcessEvent(InterModProcessEvent event) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onInterModProcessEvent(event));
+        executeForPlugins(plugin -> plugin.onInterModProcessEvent(event));
     }
 
     public static void populateRegistries() {
@@ -68,43 +72,43 @@ public final class PluginHandler {
     }
 
     public static void registerSoils(IAgriSoilRegistry soilRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoils(soilRegistry));
+        executeForPlugins(plugin -> plugin.registerSoils(soilRegistry));
     }
 
     public static void registerWeeds(IAgriRegistry<IAgriWeed> weedRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerWeeds(weedRegistry));
+        executeForPlugins(plugin -> plugin.registerWeeds(weedRegistry));
     }
 
     public static void registerPlants(IAgriRegistry<IAgriPlant> plantRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerPlants(plantRegistry));
+        executeForPlugins(plugin -> plugin.registerPlants(plantRegistry));
     }
 
     public static void registerMutations(IAgriMutationRegistry mutationRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerMutations(mutationRegistry));
+        executeForPlugins(plugin -> plugin.registerMutations(mutationRegistry));
     }
 
     public static void registerStats(IAgriStatRegistry statRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerStats(statRegistry));
+        executeForPlugins(plugin -> plugin.registerStats(statRegistry));
     }
 
     public static void registerGenes(IAgriGeneRegistry geneRegistry) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerGenes(geneRegistry));
+        executeForPlugins(plugin -> plugin.registerGenes(geneRegistry));
     }
 
     public static void registerSoilAdapters(IAgriAdapterizer<BlockState> adapterizer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSoilAdapters(adapterizer));
+        executeForPlugins(plugin -> plugin.registerSoilAdapters(adapterizer));
     }
 
     public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeeds(adapterizer));
+        executeForPlugins(plugin -> plugin.registerSeeds(adapterizer));
     }
 
     public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerFertilizers(adapterizer));
+        executeForPlugins(plugin -> plugin.registerFertilizers(adapterizer));
     }
 
     public static void registerSeasonLogic(IAgriSeasonLogic seasonLogic) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach((p) -> p.registerSeasonLogic(seasonLogic));
+        executeForPlugins(plugin -> plugin.registerSeasonLogic(seasonLogic));
     }
 
     /**

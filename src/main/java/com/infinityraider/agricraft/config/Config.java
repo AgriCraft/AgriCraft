@@ -34,6 +34,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> weedSpreading;
         private final ForgeConfigSpec.ConfigValue<Boolean> weedsDestroyCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> rakingDropsItems;
+        private final ForgeConfigSpec.ConfigValue<Double> seedCompostValue;
 
         // irrigation
         private final ForgeConfigSpec.ConfigValue<Integer> tankCapacity;
@@ -86,6 +87,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Weeds destroy crop sticks", false);
             this.rakingDropsItems = builder.comment("Set to false if you wish to disable drops from raking weeds.")
                     .define("Raking weeds drops items", true);
+            this.seedCompostValue = builder.comment("Defines the seed compost value, if set to zero, seeds will not be compostable")
+                    .defineInRange("Seed compost value", 0.3, 0, 1.0);
             builder.pop();
 
             builder.push("irrigation");
@@ -178,6 +181,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean rakingDropsItems() {
             return this.rakingDropsItems.get();
+        }
+
+        @Override
+        public float seedCompostValue() {
+            return this.seedCompostValue.get().floatValue();
         }
 
         @Override

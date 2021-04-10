@@ -105,6 +105,11 @@ public interface IAgriConfig {
     boolean rakingDropsItems();
 
     /**
+     * @return the compost value for seeds (between 0 and 1, zero means seeds are not compostable)
+     */
+    float seedCompostValue();
+
+    /**
      * @return true if a text warning should be displayed when attempting to plant with vanilla farming disabled
      */
     @OnlyIn(Dist.CLIENT)
