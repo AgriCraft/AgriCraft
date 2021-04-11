@@ -15,17 +15,19 @@ public class GrowConditionBiPredicate<T> implements IAgriGrowCondition, BiPredic
     private final RequirementType type;
     private final BiPredicate<T, Integer> predicate;
     private final BiFunction<World, BlockPos, T> getter;
+    private final UnaryOperator<BlockPos> offsetter;
     private final Set<BlockPos> offsets;
     private final Set<ITextComponent> descriptions;
     private final int complexity;
     private final CacheType cacheType;
 
     public GrowConditionBiPredicate(RequirementType type, BiPredicate<T, Integer> predicate, BiFunction<World, BlockPos, T> getter,
-                                    UnaryOperator<BlockPos> offset, Set<ITextComponent> descriptions, int complexity, CacheType cacheType) {
+                                    UnaryOperator<BlockPos> offsetter, Set<ITextComponent> descriptions, int complexity, CacheType cacheType) {
         this.type = type;
         this.predicate = predicate;
         this.getter = getter;
-        this.offsets = ImmutableSet.of(offset.apply(new BlockPos(0, 0, 0)));
+        this.offsetter = offsetter;
+        this.offsets = ImmutableSet.of(offsetter.apply(new BlockPos(0, 0, 0)));
         this.descriptions = descriptions;
         this.complexity = complexity;
         this.cacheType = cacheType;
@@ -38,7 +40,7 @@ public class GrowConditionBiPredicate<T> implements IAgriGrowCondition, BiPredic
 
     @Override
     public boolean isMet(@Nonnull World world, @Nonnull BlockPos pos, int strength) {
-        return this.predicate.test(this.getter.apply(world, pos), strength);
+        return this.predicate.test(this.getter.apply(world, this.offsetter.apply(pos)), strength);
     }
 
     @Override

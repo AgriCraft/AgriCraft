@@ -21,13 +21,19 @@ public class DebugModeCheckSoil extends DebugMode {
 
     @Override
     public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
-        String type = AgriApi.getSoilRegistry().stream()
+        IAgriSoil soil = AgriApi.getSoilRegistry().stream()
                 .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
-                .map(IAgriSoil::getId)
                 .findFirst()
-                .orElse("Unknown Soil");
+                .orElse(null);
         MessageUtil.messagePlayer(context.getPlayer(), "{0} Soil Info:", AgriCraft.instance.proxy().getLogicalSide());
-        MessageUtil.messagePlayer(context.getPlayer(), " - Soil Type: \"{0}\"", type);
+        if(soil == null) {
+            MessageUtil.messagePlayer(context.getPlayer(), " - Type: \"{0}\"", "Unknown Soil");
+        } else {
+            MessageUtil.messagePlayer(context.getPlayer(), " - Type: \"{0}\"", soil.getId());
+            MessageUtil.messagePlayer(context.getPlayer(), " - Humidity: \"{0}\"", soil.getHumidity());
+            MessageUtil.messagePlayer(context.getPlayer(), " - Acidity: \"{0}\"", soil.getAcidity());
+            MessageUtil.messagePlayer(context.getPlayer(), " - Nutrients: \"{0}\"", soil.getNutrients());
+        }
     }
 
     @Override
