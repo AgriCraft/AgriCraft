@@ -281,6 +281,9 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Show Disabled Vanilla Farming Warning", true);
             this.statFormat = builder.comment("This defines how to display the stats of plants (Client only)")
                     .define("Stat Format", TextFormatting.GREEN + "- {0}: [{1}/{2}]");
+            builder.pop();
+
+            builder.push("irrigation");
             this.disableParticles = builder.comment("Set to true to disable particles (Client only)")
                     .define("Disable particles", false);
             builder.pop();

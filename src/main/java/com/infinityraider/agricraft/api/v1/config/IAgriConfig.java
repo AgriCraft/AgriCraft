@@ -75,7 +75,7 @@ public interface IAgriConfig {
     boolean onlyMatureSeedDrops();
 
     /**
-     * @return false if grass drops should not be overriden (global override for all IAgriPlant instances)
+     * @return false if grass drops should not be overridden (global override for all IAgriPlant instances)
      */
     boolean overwriteGrassDrops();
 
@@ -126,12 +126,6 @@ public interface IAgriConfig {
     @OnlyIn(Dist.CLIENT)
     String statDisplayFormat();
 
-    /**
-     * @return true if particles should be disabled
-     */
-    @OnlyIn(Dist.CLIENT)
-    boolean disableParticles();
-
 
     /*
      * -------------------------
@@ -168,6 +162,12 @@ public interface IAgriConfig {
      * @return the water consumption of sprinklers in mB/tick
      */
     int sprinklerWaterConsumption();
+
+    /**
+     * @return true if particles should be disabled
+     */
+    @OnlyIn(Dist.CLIENT)
+    boolean disableParticles();
 
 
     /*
