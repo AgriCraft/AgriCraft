@@ -15,7 +15,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;

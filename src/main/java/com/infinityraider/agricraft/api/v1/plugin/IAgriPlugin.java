@@ -11,7 +11,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 

@@ -25,7 +25,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;

@@ -60,16 +60,40 @@
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",
 
+  "agricraft.tooltip.humidity": "Humidity",
+  "agricraft.tooltip.acidity": "Acidity",
+  "agricraft.tooltip.nutrients": "Nutrients",
+
+  "agricraft.tooltip.humidity.arid": "Arid",
+  "agricraft.tooltip.humidity.dry": "Dry",
+  "agricraft.tooltip.humidity.damp": "Damp",
+  "agricraft.tooltip.humidity.wet": "Wet",
+  "agricraft.tooltip.humidity.watery": "Watery",
+  "agricraft.tooltip.humidity.flooded": "Flooded",
+  "agricraft.tooltip.humidity.invalid": "Invalid",
+
+  "agricraft.tooltip.acidity.highly_acidic": "Highly Acidic",
+  "agricraft.tooltip.acidity.acidic": "Acidic",
+  "agricraft.tooltip.acidity.slightly_acidic": "Slightly Acidic",
+  "agricraft.tooltip.acidity.neutral": "Neutral",
+  "agricraft.tooltip.acidity.slightly_alkaline": "Slightly Alkaline",
+  "agricraft.tooltip.acidity.alkaline": "Alkaline",
+  "agricraft.tooltip.acidity.highly_alkaline": "Highly Alkaline",
+  "agricraft.tooltip.acidity.invalid": "Invalid",
+
+  "agricraft.tooltip.nutrients.none": "None",
+  "agricraft.tooltip.nutrients.very_low": "Very Low",
+  "agricraft.tooltip.nutrients.low": "Low",
+  "agricraft.tooltip.nutrients.medium": "Average",
+  "agricraft.tooltip.nutrients.high": "High",
+  "agricraft.tooltip.nutrients.very_high": "Very High",
+  "agricraft.tooltip.nutrients.invalid": "Invalid",
+
   "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
   "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
 
   "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
   "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
-
-  "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
-  "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
-  "agricraft.message.trowel_plant": "There already is a plant here.",
-  "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
 
   "agricraft.tooltip.growth_req.soil": "This plant will only grow on a specific soil",
   "agricraft.tooltip.growth_req.light": "This plant will only grow at a specific light level",
@@ -98,6 +122,11 @@
   "agricraft.tooltip.gene.animal_attractant.rabbit": "This plant might attract the attention of rabbits",
   "agricraft.tooltip.gene.animal_attractant.sheep": "This plant might attract the attention of sheep",
   "agricraft.tooltip.gene.animal_attractant.turtle": "This plant might attract the attention of turtles",
+
+  "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
+  "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
+  "agricraft.message.trowel_plant": "There already is a plant here.",
+  "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
 
   "agricraft.structure.village": "Village",
   "agricraft.structure.pillager_outpost": "Pillager Outpost",

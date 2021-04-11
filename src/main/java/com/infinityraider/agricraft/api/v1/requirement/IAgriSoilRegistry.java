@@ -1,11 +1,10 @@
-package com.infinityraider.agricraft.api.v1.soil;
+package com.infinityraider.agricraft.api.v1.requirement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import net.minecraft.block.BlockState;
 
 import java.util.Optional;

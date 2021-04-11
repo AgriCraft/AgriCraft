@@ -431,7 +431,7 @@ public class JsonPlant implements IAgriPlant {
         return req;
     }
 
-    private static <T extends Enum<T> & IAgriSoil.SynonymEnum<?>> void handleSoilCriterion(
+    private static <T extends Enum<T> & IAgriSoil.SoilProperty> void handleSoilCriterion(
             T criterion, Consumer<BiPredicate<T, Integer>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
         if(!criterion.isValid()) {
             invalidCallback.run();

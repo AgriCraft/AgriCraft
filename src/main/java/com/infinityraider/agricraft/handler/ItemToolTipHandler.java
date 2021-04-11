@@ -1,17 +1,23 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 
 import java.text.MessageFormat;
-import java.util.Objects;
+import java.util.Collection;
 
 import com.infinityraider.agricraft.reference.AgriToolTips;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,7 +45,7 @@ public class ItemToolTipHandler {
     }
 
     private static void addParameter(ItemTooltipEvent event, String key, Object value) {
-        event.getToolTip().add(new StringTextComponent(" - " + key + ": " + Objects.toString(value)).mergeStyle(TextFormatting.DARK_AQUA));
+        event.getToolTip().add(new StringTextComponent(" - " + key + ": " + value).mergeStyle(TextFormatting.DARK_AQUA));
     }
 
     @SubscribeEvent
@@ -63,15 +69,51 @@ public class ItemToolTipHandler {
                     addParameter(event, key, tag.get(key));
                 }
             } else {
-                addFormatted(event, " - No NBT Tags");
+                addFormatted(event, " - No NBT Data");
+            }
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addTagInfo(ItemTooltipEvent event) {
+        if (AgriCraft.instance.getConfig().tagTooltips()) {
+            addCategory(event, "Item Tags");
+            Collection<ResourceLocation> itemTags = ItemTags.getCollection().getOwningTags(event.getItemStack().getItem());
+            if(itemTags.size() > 0) {
+                itemTags.forEach(tag -> addFormatted(event, " - " + tag.toString()));
+            } else {
+                addFormatted(event, " - No Item Tags");
+            }
+            if(event.getItemStack().getItem() instanceof BlockItem) {
+                addCategory(event, "Block Tags");
+                Collection<ResourceLocation> blockTags =
+                        BlockTags.getCollection().getOwningTags(((BlockItem) event.getItemStack().getItem()).getBlock());
+                if(blockTags.size() > 0) {
+                    blockTags.forEach(tag -> addFormatted(event, " - " + tag.toString()));
+                } else {
+                    addFormatted(event, " - No Block Tags");
+                }
             }
         }
     }
 
     /**
+     * Adds tooltips to soils.
+     */
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addSoilInfo(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if(!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
+            BlockItem item = (BlockItem) stack.getItem();
+            BlockState state = item.getBlock().getDefaultState();
+            AgriApi.getSoilRegistry().valueOf(state).ifPresent(soil -> soil.addDisplayInfo(text -> event.getToolTip().add(text)));
+        }
+    }
+
+    /**
      * Adds tooltips to items that are trowels (implementing ITrowel).
-     *
-     * @param event
      */
     @SubscribeEvent
     @SuppressWarnings("unused")
@@ -90,8 +132,6 @@ public class ItemToolTipHandler {
 
     /**
      * Adds tooltips to items that are clippers (implementing IAgriClipperItem).
-     *
-     * @param event
      */
     @SubscribeEvent
     @SuppressWarnings("unused")
@@ -104,8 +144,6 @@ public class ItemToolTipHandler {
 
     /**
      * Adds tooltips to items that are rakes (implementing IAgriRakeItem).
-     *
-     * @param event
      */
     @SubscribeEvent
     @SuppressWarnings("unused")

@@ -20,7 +20,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
@@ -38,7 +38,6 @@ import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.requirement.SeasonLogic;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -176,7 +175,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
-        return tile instanceof TileEntityCropSticks ? Optional.of((IAgriCrop) tile) : Optional.empty();
+        return tile instanceof IAgriCrop ? Optional.of((IAgriCrop) tile) : Optional.empty();
     }
 
     @Nonnull

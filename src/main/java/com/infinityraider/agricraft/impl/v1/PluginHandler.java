@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;

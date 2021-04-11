@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.soil.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 
 import javax.annotation.Nullable;
 
