@@ -34,10 +34,19 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Demo class to showcase the flexibility and potential of the genome system.
+ *
+ * These genes cause animals to be attracted to specific plants with the right genes.
+ * These genes can only be activated by mutating on certain default plants,
+ * from where they can be propagated through the mutation tree with some difficulty.
+ *
+ */
 public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     private static final int RANGE = 5;
     private static final int COOLDOWN = 60*20;
-    private static final int PRIORITY = 3;
+    private static final double SPEED = 1.0;
+    private static final int PRIORITY = 4;
 
     private final String id;
 
@@ -72,10 +81,14 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         return this.id;
     }
 
+    public boolean isDefaultPlant(IAgriPlant plant) {
+        return this.defaultPlantIds.contains(plant.getId());
+    }
+
     @Nonnull
     @Override
     public IAllele<Boolean> defaultAllele(IAgriPlant plant) {
-        return this.getAllele(defaultPlantIds.contains(plant.getId()));
+        return this.getAllele(false);
     }
 
     @Nonnull
@@ -136,7 +149,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     public void onEntitySpawned(LivingSpawnEvent event) {
         if(!event.getWorld().isRemote() && this.clazz.isInstance(event.getEntityLiving())) {
             MobEntity entity = this.clazz.cast(event.getEntityLiving());
-            EatCropGoal goal = new EatCropGoal(entity, entity.getAIMoveSpeed(), COOLDOWN, this.defaultPlantIds);
+            EatCropGoal goal = new EatCropGoal(this, entity, SPEED, COOLDOWN, this.defaultPlantIds);
             if(EntityHelper.injectGoal(entity, goal, PRIORITY)) {
                 CapabilityEatCropGoal.getInstance().setCropEatGoal(entity, goal);
             }
@@ -207,24 +220,43 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         public IAgriGenePair<Boolean> pickOrMutate(IAgriGene<Boolean> gene, IAllele<Boolean> first, IAllele<Boolean> second,
                                                    Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
             return gene.generateGenePair(
-                    this.handle(gene, first, parents.getA(), random),
-                    this.handle(gene, second, parents.getB(), random)
+                    this.mutateAllele(gene, first, parents.getA(), random),
+                    this.mutateAllele(gene, second, parents.getB(), random)
             );
         }
 
-        protected IAllele<Boolean> handle(IAgriGene<Boolean> gene, IAllele<Boolean> allele, IAgriGenome genome, Random random) {
-            if(allele.trait()) {
-                // true alleles will mostly mutate to false (90% at mutativity 1, 50% at mutativity 10)
-                double probability = this.mutationChance(genome);
-                double roll = random.nextDouble();
-                if (roll < probability) {
+        protected IAllele<Boolean> mutateAllele(IAgriGene<Boolean> gene, IAllele<Boolean> allele, IAgriGenome genome, Random random) {
+            if(gene instanceof GeneAnimalAttractant && ((GeneAnimalAttractant) gene).isDefaultPlant(genome.getPlant())) {
+                //If the plant is a default plant, give a chance to mutate from false to true
+                if(allele.trait()) {
+                    // Never mutate to false on a default plant
                     return allele;
                 } else {
-                    return gene.getAllele(false);
+                    // On a default 55% to mutate to true at mutativity 1, 100% at mutativity 10
+                    double probability = (1 - BASE_PROBABILITY) + this.mutationChance(genome);
+                    double roll = random.nextDouble();
+                    if (roll < probability) {
+                        return gene.getAllele(true);
+                    } else {
+                        return allele;
+                    }
                 }
             } else {
-                // false alleles will never mutate to true
-                return allele;
+                // If the plant is not a default plant, it will never mutate from false to true,
+                // and mostly mutate from true to false
+                if (allele.trait()) {
+                    // 95% to mutate to false at mutativity 1, 50% at mutativity 10
+                    double probability = this.mutationChance(genome);
+                    double roll = random.nextDouble();
+                    if (roll < probability) {
+                        return allele;
+                    } else {
+                        return gene.getAllele(false);
+                    }
+                } else {
+                    // Never mutate to true
+                    return allele;
+                }
             }
         }
 
@@ -236,9 +268,10 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     }
 
     public static class EatCropGoal extends Goal {
-        private static final double DIST_SQ = 0.75 * 0.75;
+        private static final double DIST_SQ = 1.25 * 1.25;
 
-        protected final MobEntity entity;
+        private final GeneAnimalAttractant gene;
+        private final MobEntity entity;
         private final double speed;
         private final int cooldown;
         private final List<String> plantIds;
@@ -252,7 +285,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
         private int cooldownCounter;
 
-        private EatCropGoal(MobEntity entity, double speed, int cooldown, List<String> plantIds) {
+        private EatCropGoal(GeneAnimalAttractant gene, MobEntity entity, double speed, int cooldown, List<String> plantIds) {
+            this.gene = gene;
             this.entity = entity;
             this.speed = speed;
             this.cooldown = cooldown;
@@ -261,6 +295,10 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
                 throw new IllegalArgumentException("Unsupported mob type for EatCropGoal");
             }
             this.potentialTargets = Sets.newIdentityHashSet();
+        }
+
+        protected GeneAnimalAttractant getGene() {
+            return this.gene;
         }
 
         protected MobEntity getEntity() {
@@ -280,7 +318,6 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
             } else {
                 this.target = this.findSuitableTarget();
                 if (this.getTarget() == null) {
-                    this.resetTask();
                     return false;
                 } else {
                     this.potentialTargets.remove(this.target);
@@ -320,7 +357,9 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
                     this.targetX, this.targetY, this.targetZ,
                     (float)(this.getEntity().getHorizontalFaceSpeed() + 20),
                     (float)this.getEntity().getVerticalFaceSpeed());
-            if (this.getEntity().getDistanceSq(this.targetX, this.targetY, this.targetZ) < DIST_SQ) {
+            double distSq = this.getEntity().getDistanceSq(this.targetX, this.targetY, this.targetZ);
+            double criterion = Math.max(DIST_SQ, this.getEntity().getWidth()*this.getEntity().getWidth());
+            if (distSq <= criterion) {
                 this.getEntity().getNavigator().clearPath();
                 this.target.setGrowthStage(this.getTarget().getPlant().getInitialGrowthStage());
                 if(this.getEntity() instanceof AnimalEntity) {
@@ -352,11 +391,16 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
                     && crop.isValid()
                     && crop.hasPlant()
                     && crop.isMature()
-                    && this.isSuitablePlant(crop.getPlant());
+                    && this.isSuitablePlant(crop.getPlant())
+                    && crop.getGenome().map(this::hasSuitableGene).orElse(false);
         }
 
         protected boolean isSuitablePlant(IAgriPlant plant) {
             return plant.isPlant() && this.plantIds.contains(plant.getId());
+        }
+
+        protected boolean hasSuitableGene(IAgriGenome genome) {
+            return genome.getGenePair(this.getGene()).getTrait();
         }
 
         public void addPotentialTarget(IAgriCrop crop) {
