@@ -41,7 +41,7 @@ public class PlayerInteractEventHandler {
             return;
         }
 
-        // Fetch the event itemstack.
+        // Fetch the event item stack.
         final ItemStack stack = event.getItemStack();
 
         // If the item in the player's hand is not a seed, who cares?
@@ -92,39 +92,6 @@ public class PlayerInteractEventHandler {
         }
          */
     }
-
-        /*
-     * This is done with an event because else the player will place the vines
-     * as a block instead of applying them to the grate
-     */
-    /*
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void applyVinesToGrate(PlayerInteractEvent.RightClickBlock event) {
-        // Fetch the ItemStack
-        final ItemStack stack = event.getItemStack();
-
-        // If the player is not holding a stack of vines, who cares?
-        if (stack.getItem() != Item.getItemFromBlock(Blocks.VINE)) {
-            return;
-        }
-
-        // Fetch world information.
-        final BlockPos pos = event.getPos();
-        final World world = event.getWorld();
-        final BlockState state = world.getBlockState(pos);
-
-        // Fetch the block at the location.
-        final Block block = state.getBlock();
-
-        // If the player isn't clicking a grate, who cares?
-        if (!(block instanceof BlockGrate)) {
-            return;
-        }
-        // The player is trying to place vines! Scandalous!
-        // We better deny the event!
-        event.setUseItem(Event.Result.DENY);
-    }
-     */
 
     /*
      * Event handler to deny bonemeal while sneaking on crops that are not

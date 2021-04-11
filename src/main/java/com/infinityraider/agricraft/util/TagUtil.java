@@ -22,10 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITagCollection;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.*;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -180,7 +177,7 @@ public final class TagUtil {
 
     @Nonnull
     private static Collection<ItemStack> makeItemStackFromTag(@Nonnull String prefix, @Nonnull String suffix, int amount, String data, List<String> ignoredData) {
-        return Optional.ofNullable(ItemTags.getCollection().get(new ResourceLocation(prefix, suffix)))
+        return Optional.ofNullable(TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(prefix, suffix)))
                 .map(tag -> tag.getAllElements()
                         .stream()
                         .map(item -> addNbtData(new ItemStack(item, amount), data))//TODO: ignored NBT values
@@ -281,7 +278,7 @@ public final class TagUtil {
     @Nonnull
     private static Collection<BlockState> fetchBlockStatesFromTag(@Nonnull String prefix, @Nonnull String suffix, @Nullable String data, List<String> ignoredData) {
         // Do the thing.
-        return Optional.ofNullable(BlockTags.getCollection().get(new ResourceLocation(prefix, suffix)))
+        return Optional.ofNullable(TagCollectionManager.getManager().getBlockTags().get(new ResourceLocation(prefix, suffix)))
                 .map(tag -> tag.getAllElements()
                         .stream()
                         .flatMap(block -> block.getStateContainer().getValidStates()
@@ -357,7 +354,7 @@ public final class TagUtil {
     @Nonnull
     private static Collection<FluidState> fetchFluidStatesFromTag(@Nonnull String prefix, @Nonnull String suffix, @Nullable String data, List<String> ignoredData) {
         // Do the thing.
-        return Optional.ofNullable(FluidTags.getCollection().get(new ResourceLocation(prefix, suffix)))
+        return Optional.ofNullable(TagCollectionManager.getManager().getFluidTags().get(new ResourceLocation(prefix, suffix)))
                 .map(tag -> tag.getAllElements()
                         .stream()
                         .flatMap(fluid -> fluid.getStateContainer().getValidStates()
