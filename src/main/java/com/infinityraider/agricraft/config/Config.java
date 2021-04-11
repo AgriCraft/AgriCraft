@@ -76,7 +76,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Growth rate multiplier", 1.0, 0.0, 3.0);
             this.onlyMatureSeedDrops = builder.comment("Set this to true to make only mature crops drop seeds (to encourage trowel usage).")
                     .define("Only mature crops drop seeds", false);
-            this.overwriteGrassDrops = builder.comment("Determines if AgriCraft should completeley override grass drops with those confiured in the JSON files.")
+            this.overwriteGrassDrops = builder.comment("Determines if AgriCraft should completely override grass drops with those configured in the JSON files.")
                     .define("Overwrite Grass Drops", true);
             this.disableWeeds = builder.comment("Set to true to completely disable the spawning of weeds")
                     .define("Disable weeds", false);
@@ -115,7 +115,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.pop();
 
             builder.push("compat");
-            this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed (accepted values are: " + SeasonPlugin.getConfigComment())
+            this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
             builder.pop();
         }
