@@ -70,7 +70,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return an ITextComponent to describe this gene on the client
      */
     @Nonnull
-    IFormattableTextComponent getDescription();
+    IFormattableTextComponent getGeneDescription();
 
     /**
      * @return the RGB values to color the dominant part of the DNA helix for this gene, only used client side

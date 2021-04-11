@@ -63,20 +63,26 @@ public class MinecraftPlugin implements IAgriPlugin {
     @Override
     public void registerGenes(@Nonnull IAgriGeneRegistry geneRegistry) {
         if(AgriCraft.instance.getConfig().enableAnimalAttractingCrops()) {
-            geneRegistry.add(new GeneAnimalAttractant("cow", CowEntity.class, ImmutableList.of("vanilla:wheat_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("cow",
+                    CowEntity.class, ImmutableList.of("vanilla:wheat_plant"),
                     new Vector3f(1, 1, 1), new Vector3f(0, 0, 0)));
-            geneRegistry.add(new GeneAnimalAttractant(
-                    "pig", PigEntity.class, ImmutableList.of("vanilla:beet_root_plant", "vanilla:carrot_plant", "vanilla:potato_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("pig",
+                    PigEntity.class, ImmutableList.of("vanilla:beet_root_plant", "vanilla:carrot_plant", "vanilla:potato_plant"),
                     new Vector3f(1, 0, 223.0F / 255.0F), new Vector3f(1, 133.0F / 255.0F, 240.0F / 255.0F)));
-            geneRegistry.add(new GeneAnimalAttractant("sheep", SheepEntity.class, ImmutableList.of("vanilla:wheat_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("sheep",
+                    SheepEntity.class, ImmutableList.of("vanilla:wheat_plant"),
                     new Vector3f(1, 1, 1), new Vector3f(123.0F / 255.0F, 83.0F / 255.0F, 25.0F / 255.0F)));
-            geneRegistry.add(new GeneAnimalAttractant("chicken", ChickenEntity.class, ImmutableList.of("vanilla:melon_plant", "vanilla:pumpkin_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("chicken",
+                    ChickenEntity.class, ImmutableList.of("vanilla:melon_plant", "vanilla:pumpkin_plant"),
                     new Vector3f(255.0F / 255.0F, 170.0F / 255.0F, 96.0F / 255.0F), new Vector3f(253.0F / 255.0F, 201.0F / 255.0F, 160.0F / 255.0F)));
-            geneRegistry.add(new GeneAnimalAttractant("rabbit", RabbitEntity.class, ImmutableList.of("vanilla:carrot_plant", "vanilla:dandelion_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("rabbit",
+                    RabbitEntity.class, ImmutableList.of("vanilla:carrot_plant", "vanilla:dandelion_plant"),
                     new Vector3f(83.0F / 255.0F, 46.0F / 255.0F, 0), new Vector3f(123.0F / 255.0F, 83.0F / 255.0F, 25.0F / 255.0F)));
-            geneRegistry.add(new GeneAnimalAttractant("panda", PandaEntity.class, ImmutableList.of("vanilla:bamboo_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("panda",
+                    PandaEntity.class, ImmutableList.of("vanilla:bamboo_plant"),
                     new Vector3f(0, 0, 0), new Vector3f(1, 1, 1)));
-            geneRegistry.add(new GeneAnimalAttractant("turtle", TurtleEntity.class, ImmutableList.of("vanilla:sea_grass_plant", "vanilla:kelp_plant"),
+            geneRegistry.add(new GeneAnimalAttractant("turtle",
+                    TurtleEntity.class, ImmutableList.of("vanilla:sea_grass_plant", "vanilla:kelp_plant"),
                     new Vector3f(12.0F / 255.0F, 80.0F / 255.0F, 0), new Vector3f(144.0F / 255.0F, 96.0F / 255.0F, 54.0F / 255.0F)));
         }
     }

@@ -77,7 +77,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getDescription() {
+    public TranslationTextComponent getGeneDescription() {
         return this.descr;
     }
 

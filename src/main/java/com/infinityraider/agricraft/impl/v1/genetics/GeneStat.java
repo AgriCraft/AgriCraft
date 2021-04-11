@@ -91,7 +91,7 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Nonnull
     @Override
-    public IFormattableTextComponent getDescription() {
+    public IFormattableTextComponent getGeneDescription() {
         return this.getStat().getDescription();
     }
 

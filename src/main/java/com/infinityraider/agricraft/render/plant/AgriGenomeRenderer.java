@@ -130,7 +130,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         int domColor = textFormats.getA().getColor() == null ? 0 : textFormats.getA().getColor().getColor();
         int recColor = textFormats.getB().getColor() == null ? 0 : textFormats.getB().getColor().getColor();
         // Fetch text components
-        IReorderingProcessor geneText = genePair.getGene().getDescription().mergeStyle(STYLE_GENE).func_241878_f();
+        IReorderingProcessor geneText = genePair.getGene().getGeneDescription().mergeStyle(STYLE_GENE).func_241878_f();
         IReorderingProcessor domText = genePair.getDominant().getTooltip()/*.mergeStyle(textFormats.getA())*/.func_241878_f();
         IReorderingProcessor recText = genePair.getRecessive().getTooltip()/*.mergeStyle(textFormats.getB())*/.func_241878_f();
         // Calculate positions

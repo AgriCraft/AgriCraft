@@ -23,6 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Demo class to showcase the flexibility and potential of the genome system.
@@ -58,7 +60,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     private final Set<IAllele<Boolean>> alleles;
 
-    private final TranslationTextComponent description;
+    private final TranslationTextComponent geneDescription;
+    private final TranslationTextComponent genePairDescription;
     private final Vector3f colorDom;
     private final Vector3f colorRec;
 
@@ -69,7 +72,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         this.alleleTrue = new Allele(this, true);
         this.alleleFalse = new Allele(this, false);
         this.alleles = ImmutableSet.of(this.alleleTrue, this.alleleFalse);
-        this.description = new TranslationTextComponent(AgriCraft.instance.getModId() + ".gene.animal_attractant." + this.getId());
+        this.geneDescription = new TranslationTextComponent(AgriCraft.instance.getModId() + ".gene.animal_attractant." + this.getId());
+        this.genePairDescription = new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.gene.animal_attractant." + this.getId());
         this.colorDom = colorDom;
         this.colorRec = colorRec;
         AgriCraft.instance.proxy().registerEventHandler(this);
@@ -118,14 +122,20 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     @Nonnull
     @Override
     public IAgriGenePair<Boolean> generateGenePair(IAllele<Boolean> first, IAllele<Boolean> second) {
-        return new AgriGenePair<>(this, first, second);
+        return new GenePair(this, first, second);
     }
 
     @Nonnull
     @Override
-    public IFormattableTextComponent getDescription() {
-        return this.description;
+    public IFormattableTextComponent getGeneDescription() {
+        return this.geneDescription;
     }
+
+    @Nonnull
+    public IFormattableTextComponent getGenePairDescription() {
+        return this.genePairDescription;
+    }
+
 
     @Nonnull
     @Override
@@ -206,6 +216,26 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
             CompoundNBT tag = new CompoundNBT();
             tag.putBoolean(AgriNBT.KEY, this.trait());
             return tag;
+        }
+    }
+
+    private static class GenePair extends AgriGenePair<Boolean> {
+        public GenePair(GeneAnimalAttractant gene, IAllele<Boolean> first, IAllele<Boolean> second) {
+            super(gene, first, second);
+            }
+
+
+        @Override
+        public final GeneAnimalAttractant getGene() {
+            return (GeneAnimalAttractant) super.getGene();
+        }
+
+
+        @Override
+        public void addTooltipDescription(Consumer<ITextComponent> consumer) {
+            if(this.getTrait()) {
+                consumer.accept(this.getGene().getGenePairDescription());
+            }
         }
     }
 

@@ -3,6 +3,10 @@ package com.infinityraider.agricraft.impl.v1.genetics;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
+import com.infinityraider.agricraft.reference.AgriToolTips;
+import net.minecraft.util.text.ITextComponent;
+
+import java.util.function.Consumer;
 
 public class AgriGenePair<A> implements IAgriGenePair<A> {
     private final IAgriGene<A> gene;
@@ -21,7 +25,7 @@ public class AgriGenePair<A> implements IAgriGenePair<A> {
     }
 
     @Override
-    public final IAgriGene<A> getGene() {
+    public IAgriGene<A> getGene() {
         return this.gene;
     }
 
@@ -38,5 +42,10 @@ public class AgriGenePair<A> implements IAgriGenePair<A> {
     @Override
     public IAgriGenePair<A> clone() {
         return new AgriGenePair<>(this.getGene(), this.getDominant(), this.getRecessive());
+    }
+
+    @Override
+    public void addTooltipDescription(Consumer<ITextComponent> consumer) {
+        consumer.accept(AgriToolTips.getGeneTooltip(this));
     }
 }

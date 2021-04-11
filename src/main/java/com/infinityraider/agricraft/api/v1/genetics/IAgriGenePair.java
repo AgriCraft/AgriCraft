@@ -1,5 +1,9 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
+import net.minecraft.util.text.ITextComponent;
+
+import java.util.function.Consumer;
+
 /**
  * Gene Pair for two alleles of a gene in a genome
  * @param <T> the type of the gene
@@ -32,6 +36,16 @@ public interface IAgriGenePair<T> {
      * @return a new gene pair identical to this one
      */
     IAgriGenePair<T> clone();
+
+    /**
+     * Method to add descriptions to tooltips for crops and seeds.
+     *
+     * Note that this is always called, even for hidden genes, therefore if no description is to be added,
+     * do not pass anything to the consumer.
+     *
+     * @param consumer the consumer for the description
+     */
+    void addTooltipDescription(Consumer<ITextComponent> consumer);
 
     /**
      * Checks if another gene pair is equal to this one

@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
@@ -93,10 +92,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
 
     @Override
     public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
-        this.geneMap.values().stream()
-                .filter(gene -> !gene.getGene().isHidden())
-                .map(AgriToolTips::getGeneTooltip)
-                .forEach(consumer);
+        this.geneMap.values().forEach(genePair -> genePair.addTooltipDescription(consumer));
     }
 
     private static class Builder implements IAgriGenome.Builder {
