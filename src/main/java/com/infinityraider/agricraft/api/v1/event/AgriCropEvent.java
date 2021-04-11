@@ -101,6 +101,34 @@ public abstract class AgriCropEvent extends Event {
         }
 
         /**
+         * Fired when a growth tick is received on a crop
+         */
+        public static abstract class General extends AgriCropEvent.Grow {
+            protected General(@Nonnull IAgriCrop crop) {
+                super(crop, Type.GENERAL);
+            }
+
+            /**
+             * Fired before the growth tick, can be cancelled
+             */
+            @Cancelable
+            public static final class Pre extends AgriCropEvent.Grow.General {
+                public Pre(@Nonnull IAgriCrop crop) {
+                    super(crop);
+                }
+            }
+
+            /**
+             * Fired after the growth tick
+             */
+            public static final class Post extends AgriCropEvent.Grow.General {
+                public Post(@Nonnull IAgriCrop crop) {
+                    super(crop);
+                }
+            }
+        }
+
+        /**
          * Fired when a plant grows
          */
         public static abstract class Plant extends AgriCropEvent.Grow {
@@ -188,6 +216,8 @@ public abstract class AgriCropEvent extends Event {
          * Enumeration holding the different types of growth ticks
          */
         public enum Type {
+            /** General growth tick, is called before either of the other three */
+            GENERAL,
             /** Plant growth tick, when a growth tick is applied to the plant */
             PLANT,
             /** Weeds growth tick, when a growth tick is applied to the weeds */

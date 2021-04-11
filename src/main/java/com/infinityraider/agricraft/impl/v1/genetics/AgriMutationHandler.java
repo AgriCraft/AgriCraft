@@ -100,7 +100,7 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
             // Search for matching mutations
             return AgriMutationRegistry.getInstance().getMutationsFromParents(first.trait(), second.trait())
                     // order them randomly
-                    .sorted((m1, m2) -> random.nextBoolean() ? -1 : 1)
+                    .sorted((m1, m2) -> m1 == m2 ? 0 : random.nextBoolean() ? -1 : 1)
                     // fetch one
                     .findAny()
                     // map it to its child, or to nothing based on the mutation success rate

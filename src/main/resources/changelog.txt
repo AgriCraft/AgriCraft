@@ -10,12 +10,14 @@ Changelog
 - CHANGE: Soils now have properties such as Humidity, Acidity and Nutrients
 - CHANGE: Crops no longer require a specific soil block (or blocks), but rather specific levels of Humidity, Acidity and Nutrients, which becomes more forgiving with increasing strength
 - CHANGE: Clipper no longer allows to clone plants, but provides an alternative harvest method instead (e.g. to obtain flowers)
+- CHANGE: Seeds are now compostable
 - ADDED: Genomes; plants and seeds now have genomes in according with Mendelian genetics
 - ADDED: Fertility stat: this governs the probability of generating offspring (meaning participating in spreading / mutating)
 - ADDED: Resistance stat: this governs the resistance of the plant against weeds (probability of spawning weeds, and gaining preferential growth compared to weeds)
 - ADDED: Mutativity stat: this governs how quickly and in which direction stats will mutate when passed to offspring
 - ADDED: Crops can now be planted under water, which is required for some species
 - ADDED: If season mods are present (Better Weather, Serene Seasons), crops will require certain seasons to grow
+- ADDED: Genes defining attraction of certain animals to certain crops, allowing for automatic animal breeding
 
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].

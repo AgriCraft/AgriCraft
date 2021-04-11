@@ -288,16 +288,19 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if (this.getWorld() == null || this.getWorld().isRemote) {
             return;
         }
-        // Decide if the weeds receives the growth tick or not
-        if (this.rollForWeedAction()) {
-            // Weeds have the word
-            this.executeWeedGrowthTick();
-        } else if (this.isCrossCrop()) {
-            // mutation tick
-            this.executeCrossGrowthTick();
-        } else if (this.isFertile()) {
-            // plant growth tick
-            this.executePlantGrowthTick();
+        if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.General.Pre(this))) {
+            // Decide if the weeds receives the growth tick or not
+            if (this.rollForWeedAction()) {
+                // Weeds have the word
+                this.executeWeedGrowthTick();
+            } else if (this.isCrossCrop()) {
+                // mutation tick
+                this.executeCrossGrowthTick();
+            } else if (this.isFertile()) {
+                // plant growth tick
+                this.executePlantGrowthTick();
+            }
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.General.Post(this));
         }
     }
 

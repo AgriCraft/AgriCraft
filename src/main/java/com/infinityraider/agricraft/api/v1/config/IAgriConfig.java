@@ -110,6 +110,11 @@ public interface IAgriConfig {
     float seedCompostValue();
 
     /**
+     * @return true if genes for animal attraction are enabled
+     */
+    boolean enableAnimalAttractingCrops();
+
+    /**
      * @return true if a text warning should be displayed when attempting to plant with vanilla farming disabled
      */
     @OnlyIn(Dist.CLIENT)
