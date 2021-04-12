@@ -53,6 +53,7 @@ public class JeiPlugin implements IModPlugin {
         AgriRecipeCategoryMutation.registerRecipeCatalysts(registration);
         AgriRecipeCategoryProduce.registerRecipeCatalysts(registration);
         AgriRecipeCategoryClipping.registerRecipeCatalysts(registration);
+        AgriRecipeCategorySoilProperties.registerRecipeCatalysts(registration);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class JeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new AgriRecipeCategoryMutation());
         registration.addRecipeCategories(new AgriRecipeCategoryProduce());
         registration.addRecipeCategories(new AgriRecipeCategoryClipping());
+        registration.addRecipeCategories(new AgriRecipeCategorySoilProperties(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -73,6 +75,7 @@ public class JeiPlugin implements IModPlugin {
         AgriRecipeCategoryMutation.registerRecipes(registration);
         AgriRecipeCategoryProduce.registerRecipes(registration);
         AgriRecipeCategoryClipping.registerRecipes(registration);
+        AgriRecipeCategorySoilProperties.registerRecipes(registration);
     }
 
     @Override
@@ -85,6 +88,10 @@ public class JeiPlugin implements IModPlugin {
     }
 
     public static IAgriDrawable createAgriDrawable(ResourceLocation location, int u, int v, int w, int h, int textureWidth, int textureHeight) {
+        return createAgriDrawable(location, u, v, w, h, w, h, textureWidth, textureHeight);
+    }
+
+    public static IAgriDrawable createAgriDrawable(ResourceLocation location, int u, int v, int w, int h, int uMax, int vMax, int textureWidth, int textureHeight) {
         return new IAgriDrawable() {
             @Override
             public int getWidth() {
@@ -99,7 +106,7 @@ public class JeiPlugin implements IModPlugin {
             @Override
             public void draw(MatrixStack transform, int x, int y) {
                 this.bindTexture(location);
-                Screen.blit(transform, x, y, u, v, getWidth(), getHeight(), textureWidth, textureHeight);
+                Screen.blit(transform, x, y, getWidth(), getHeight(), u, v, uMax, vMax, textureWidth, textureHeight);
             }
         };
     }

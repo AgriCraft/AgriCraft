@@ -91,6 +91,10 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
 
     @Override
     public void setRecipe(IRecipeLayout layout, @Nonnull IAgriMutation mutation, @Nonnull IIngredients ingredients) {
+        // Clear the focus as this sometimes causes display bugs
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
+        layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
+
         // Denote that this is a shapeless recipe.
         layout.setShapeless();
 

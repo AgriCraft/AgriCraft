@@ -49,7 +49,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
 
     @Override
     default void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
-        consumer.accept(Tooltips.TOOLTIP_SOIL);
+        consumer.accept(Tooltips.SOIL);
         consumer.accept(Tooltips.tooltipHumidity(this));
         consumer.accept(Tooltips.tooltipAcidity(this));
         consumer.accept(Tooltips.tooltipNutrients(this));
@@ -204,30 +204,29 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     final class Tooltips {
         private Tooltips() {}
 
-        private static final ITextComponent TOOLTIP_SOIL =
-                new TranslationTextComponent("agricraft.tooltip.soil").mergeStyle(TextFormatting.DARK_GRAY);
+        public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil").mergeStyle(TextFormatting.DARK_GRAY);
 
-        private static final ITextComponent TOOLTIP_HUMIDITY = new TranslationTextComponent("agricraft.tooltip.humidity");
-        private static final ITextComponent TOOLTIP_ACIDITY = new TranslationTextComponent("agricraft.tooltip.acidity");
-        private static final ITextComponent TOOLTIP_NUTRIENTS = new TranslationTextComponent("agricraft.tooltip.nutrients");
+        public static final ITextComponent HUMIDITY = new TranslationTextComponent("agricraft.tooltip.humidity").mergeStyle(TextFormatting.DARK_GRAY);
+        public static final ITextComponent ACIDITY = new TranslationTextComponent("agricraft.tooltip.acidity").mergeStyle(TextFormatting.DARK_GRAY);
+        public static final ITextComponent NUTRIENTS = new TranslationTextComponent("agricraft.tooltip.nutrients").mergeStyle(TextFormatting.DARK_GRAY);
 
         private static ITextComponent tooltipHumidity(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(TOOLTIP_HUMIDITY).append(new StringTextComponent(": "))
+                    .append(HUMIDITY).append(new StringTextComponent(": "))
                     .append(soil.getHumidity().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
 
         private static ITextComponent tooltipAcidity(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(TOOLTIP_ACIDITY).append(new StringTextComponent(": "))
+                    .append(ACIDITY).append(new StringTextComponent(": "))
                     .append(soil.getAcidity().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
 
         private static ITextComponent tooltipNutrients(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(TOOLTIP_NUTRIENTS).append(new StringTextComponent(": "))
+                    .append(NUTRIENTS).append(new StringTextComponent(": "))
                     .append(soil.getNutrients().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
