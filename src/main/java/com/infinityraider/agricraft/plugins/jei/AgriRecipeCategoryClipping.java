@@ -32,10 +32,10 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().clipper), AgriRecipeCategoryClipping.ID);
         registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriRecipeCategoryClipping.ID);
         registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriRecipeCategoryClipping.ID);
         registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriRecipeCategoryClipping.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().clipper), AgriRecipeCategoryClipping.ID);
     }
 
     public AgriRecipeCategoryClipping() {
