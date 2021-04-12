@@ -91,7 +91,7 @@ public class AgriClippingRecipeCategory implements IRecipeCategory<IAgriPlant> {
         // Clear the focus as this sometimes causes display bugs
         layout.getIngredientsGroup(AgriPlantIngredient.TYPE).setOverrideDisplayFocus(null);
         layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
-        
+
         // Denote that this is a shapeless recipe.
         layout.setShapeless();
 

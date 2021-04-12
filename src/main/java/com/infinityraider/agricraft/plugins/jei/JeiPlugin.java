@@ -12,6 +12,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,10 +31,21 @@ public class JeiPlugin implements IModPlugin {
 
     public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "compat_jei");
 
+    private static IJeiRuntime jei;
+
+    public static IJeiRuntime getJei() {
+        return jei;
+    }
+
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
         return ID;
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        jei = jeiRuntime;
     }
 
     @Override
@@ -46,6 +58,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         AgriPlantIngredient.register(registration);
+        AgriSoilIngredient.register(registration);
     }
 
     @Override
