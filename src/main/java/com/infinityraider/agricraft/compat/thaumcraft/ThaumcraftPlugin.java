@@ -30,7 +30,7 @@ public class ThaumcraftPlugin implements IAgriPlugin {
 
         // Fix Golems
         FMLInterModComms.sendMessage(
-                "Thaumcraft",
+                "thaumcraft",
                 "harvestClickableCrop",
                 new ItemStack(AgriBlocks.getInstance().CROP, 1, Constants.MATURE)
         );
