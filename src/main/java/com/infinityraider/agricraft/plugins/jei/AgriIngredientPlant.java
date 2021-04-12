@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @OnlyIn(Dist.CLIENT)
-public class AgriPlantIngredient {
+public class AgriIngredientPlant {
     public static final IIngredientType<IAgriPlant> TYPE = () -> IAgriPlant.class;
 
     private static final IIngredientHelper<IAgriPlant> HELPER = new IIngredientHelper<IAgriPlant>() {

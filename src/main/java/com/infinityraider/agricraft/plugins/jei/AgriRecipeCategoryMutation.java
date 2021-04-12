@@ -22,7 +22,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation> {
+public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation> {
 
     public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/mutation");
 
@@ -34,12 +34,12 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriMutationRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriMutationRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriMutationRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriRecipeCategoryMutation.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriRecipeCategoryMutation.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriRecipeCategoryMutation.ID);
     }
 
-    public AgriMutationRecipeCategory() {
+    public AgriRecipeCategoryMutation() {
         this.icon = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/crop_sticks_wood.png"), 0, 0, 16, 16, 16, 16);
         this.background = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_mutation.png"), 0, 0, 128, 128, 128, 128);
     }
@@ -77,13 +77,13 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
     @Override
     public void setIngredients(IAgriMutation mutation, IIngredients ingredients) {
         // Parents as plants
-        ingredients.setInputLists(AgriPlantIngredient.TYPE,
+        ingredients.setInputLists(AgriIngredientPlant.TYPE,
                 mutation.getParents().stream().map(ImmutableList::of).collect(Collectors.toList()));
         // Parents as seeds
         ingredients.setInputLists(VanillaTypes.ITEM,
                 mutation.getParents().stream().map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
         // Child as plant
-        ingredients.setOutputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
+        ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
         // Child as seed
         ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack())));
         // TODO: soils and requirements
@@ -95,20 +95,20 @@ public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation
         layout.setShapeless();
 
         // Setup Recipe Parents
-        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(0, true, 25, 40);
-        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(1, true, 87, 40);
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(0, true, 25, 40);
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(1, true, 87, 40);
         layout.getIngredientsGroup(VanillaTypes.ITEM).init(0, true, 15, 5);
         layout.getIngredientsGroup(VanillaTypes.ITEM).init(1, true, 95, 5);
 
         // Setup Recipe Child
-        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).init(2, false, 56, 40);
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(2, false, 56, 40);
         layout.getIngredientsGroup(VanillaTypes.ITEM).init(2, false, 55, 1);
 
         // TODO: soils and requirements
 
         // Register Recipe Elements
         layout.getItemStacks().set(ingredients);
-        layout.getIngredientsGroup(AgriPlantIngredient.TYPE).set(ingredients);
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
     }
 
 }

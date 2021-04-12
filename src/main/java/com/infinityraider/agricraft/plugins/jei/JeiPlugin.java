@@ -50,29 +50,29 @@ public class JeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        AgriMutationRecipeCategory.registerRecipeCatalysts(registration);
-        AgriProduceRecipeCategory.registerRecipeCatalysts(registration);
-        AgriClippingRecipeCategory.registerRecipeCatalysts(registration);
+        AgriRecipeCategoryMutation.registerRecipeCatalysts(registration);
+        AgriRecipeCategoryProduce.registerRecipeCatalysts(registration);
+        AgriRecipeCategoryClipping.registerRecipeCatalysts(registration);
     }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
-        AgriPlantIngredient.register(registration);
-        AgriSoilIngredient.register(registration);
+        AgriIngredientPlant.register(registration);
+        AgriIngredientSoil.register(registration);
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new AgriMutationRecipeCategory());
-        registration.addRecipeCategories(new AgriProduceRecipeCategory());
-        registration.addRecipeCategories(new AgriClippingRecipeCategory());
+        registration.addRecipeCategories(new AgriRecipeCategoryMutation());
+        registration.addRecipeCategories(new AgriRecipeCategoryProduce());
+        registration.addRecipeCategories(new AgriRecipeCategoryClipping());
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        AgriMutationRecipeCategory.registerRecipes(registration);
-        AgriProduceRecipeCategory.registerRecipes(registration);
-        AgriClippingRecipeCategory.registerRecipes(registration);
+        AgriRecipeCategoryMutation.registerRecipes(registration);
+        AgriRecipeCategoryProduce.registerRecipes(registration);
+        AgriRecipeCategoryClipping.registerRecipes(registration);
     }
 
     @Override

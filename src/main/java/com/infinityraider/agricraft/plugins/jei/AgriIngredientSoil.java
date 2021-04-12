@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @OnlyIn(Dist.CLIENT)
-public class AgriSoilIngredient {
+public class AgriIngredientSoil {
     public static final IIngredientType<Block> TYPE = () -> Block.class;
 
     private static final IIngredientHelper<Block> HELPER = new IIngredientHelper<Block>() {
