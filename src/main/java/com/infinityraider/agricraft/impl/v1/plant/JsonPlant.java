@@ -386,7 +386,7 @@ public class JsonPlant implements IAgriPlant {
         final double f = plant.getRequirement().getLightToleranceFactor();
         final int minLight = plant.getRequirement().getMinLight();
         final int maxLight = plant.getRequirement().getMaxLight();
-        builder.defineLightLevel((light, strength) -> {
+        builder.defineLightLevel((strength, light) -> {
             int lower = minLight - (int) (f * strength);
             int upper = maxLight + (int) (f * strength);
             return light >= lower && light <= upper;
@@ -432,11 +432,11 @@ public class JsonPlant implements IAgriPlant {
     }
 
     private static <T extends Enum<T> & IAgriSoil.SoilProperty> void handleSoilCriterion(
-            T criterion, Consumer<BiPredicate<T, Integer>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
+            T criterion, Consumer<BiPredicate<Integer, T>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
         if(!criterion.isValid()) {
             invalidCallback.run();
         }
-        consumer.accept((humidity, strength) -> {
+        consumer.accept((strength, humidity) -> {
             if(humidity.isValid() && criterion.isValid()) {
                 int lower = type.lowerLimit(humidity.ordinal() - (int) (f * strength));
                 int upper = type.upperLimit(humidity.ordinal() + (int) (f * strength));

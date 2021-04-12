@@ -99,7 +99,7 @@ public interface IAgriGrowthRequirement {
          * @param predicate test for humidity
          * @return the builder (this)
          */
-        Builder defineHumidity(BiPredicate<IAgriSoil.Humidity, Integer> predicate);
+        Builder defineHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate);
 
         /**
          * Defines the acidity rule, must be defined before calling build()
@@ -110,7 +110,7 @@ public interface IAgriGrowthRequirement {
          * @param predicate test for acidity
          * @return the builder (this)
          */
-        Builder defineAcidity(BiPredicate<IAgriSoil.Acidity, Integer> predicate);
+        Builder defineAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate);
 
         /**
          * Defines the nutrients rule, must be defined before calling build()
@@ -121,7 +121,7 @@ public interface IAgriGrowthRequirement {
          * @param predicate test for nutrients
          * @return the builder (this)
          */
-        Builder defineNutrients(BiPredicate<IAgriSoil.Nutrients, Integer> predicate);
+        Builder defineNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate);
 
         /**
          * Defines the light level rule, must be defined before calling build()

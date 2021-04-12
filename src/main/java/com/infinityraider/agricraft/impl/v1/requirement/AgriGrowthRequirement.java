@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -13,6 +14,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -85,17 +87,17 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
     @Override
     public boolean isSoilHumidityAccepted(IAgriSoil.Humidity humidity, int strength) {
-        return this.humidity.test(humidity, strength);
+        return this.humidity.test(strength, humidity);
     }
 
     @Override
     public boolean isSoilAcidityAccepted(IAgriSoil.Acidity acidity, int strength) {
-        return this.acidity.test(acidity, strength);
+        return this.acidity.test(strength, acidity);
     }
 
     @Override
     public boolean isSoilNutrientsAccepted(IAgriSoil.Nutrients nutrients, int strength) {
-        return this.nutrients.test(nutrients, strength);
+        return this.nutrients.test(strength, nutrients);
     }
 
     @Override
@@ -115,10 +117,10 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         private static final UnaryOperator<BlockPos> CROP = pos -> pos;
         private static final UnaryOperator<BlockPos> SOIL = BlockPos::down;
 
-        private static final Set<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableSet.of();
-        private static final Set<ITextComponent> ACIDITY_DESCRIPTION = ImmutableSet.of();
-        private static final Set<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableSet.of();
-        private static final Set<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableSet.of();
+        private static final List<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableList.of();
+        private static final List<ITextComponent> ACIDITY_DESCRIPTION = ImmutableList.of();
+        private static final List<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableList.of();
+        private static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of();
 
         private final Set<IAgriGrowCondition> conditions;
 
@@ -149,21 +151,21 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineHumidity(BiPredicate<IAgriSoil.Humidity, Integer> predicate) {
+        public IAgriGrowthRequirement.Builder defineHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate) {
             this.humidity = new GrowConditionSingle<>(RequirementType.SOIL, predicate, HUMIDITY_GETTER, SOIL,
                     HUMIDITY_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineAcidity(BiPredicate<IAgriSoil.Acidity, Integer> predicate) {
+        public IAgriGrowthRequirement.Builder defineAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate) {
             this.acidity = new GrowConditionSingle<>(RequirementType.SOIL, predicate, ACIDITY_GETTER, SOIL,
                     ACIDITY_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineNutrients(BiPredicate<IAgriSoil.Nutrients, Integer> predicate) {
+        public IAgriGrowthRequirement.Builder defineNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate) {
             this.nutrients = new GrowConditionSingle<>(RequirementType.SOIL, predicate, NUTRIENTS_GETTER, SOIL,
                     NUTRIENT_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
