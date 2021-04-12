@@ -3,17 +3,16 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.log.AgriLogAdapter;
 import com.infinityraider.agricraft.AgriCraft;
 
-import java.text.MessageFormat;
 import org.apache.logging.log4j.Level;
 
 public class ModLogger implements AgriLogAdapter {
 
     public void log(Level logLevel, Object source, String format, Object... objects) {
         try {
-            AgriCraft.instance.getLogger().log(Level.INFO, String.valueOf(source), MessageFormat.format(format, objects));
+            AgriCraft.instance.getLogger().log(logLevel, "[" + source + "]" + format, objects);
         } catch (IllegalArgumentException ex) {
             // This is bad...
-            AgriCraft.instance.getLogger().log(Level.INFO, String.valueOf(source), format);
+            AgriCraft.instance.getLogger().log(logLevel, "[" + source + "]" + format);
         }
     }
 
