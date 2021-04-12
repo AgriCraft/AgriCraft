@@ -111,12 +111,6 @@ public class AgriCraft extends InfinityMod {
         wrapper.registerMessage(MessageCompareLight.class);
     }
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent e) {
-        AgriAlphaWarnings.chooseMessage(l -> e.player.sendMessage(ForgeHooks.newChatWithLinks(l)));
-    }
-
     @Override
     public IModConfiguration getConfiguration() {
         return ModConfiguration.getInstance();
