@@ -40,6 +40,7 @@ public class JeiPlugin implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         AgriMutationRecipeCategory.registerRecipeCatalysts(registration);
         AgriProduceRecipeCategory.registerRecipeCatalysts(registration);
+        AgriClippingRecipeCategory.registerRecipeCatalysts(registration);
     }
 
     @Override
@@ -51,12 +52,14 @@ public class JeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new AgriMutationRecipeCategory());
         registration.addRecipeCategories(new AgriProduceRecipeCategory());
+        registration.addRecipeCategories(new AgriClippingRecipeCategory());
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         AgriMutationRecipeCategory.registerRecipes(registration);
         AgriProduceRecipeCategory.registerRecipes(registration);
+        AgriClippingRecipeCategory.registerRecipes(registration);
     }
 
     @Override

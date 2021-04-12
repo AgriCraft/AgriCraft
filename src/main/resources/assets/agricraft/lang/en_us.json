@@ -42,6 +42,7 @@
 
   "agricraft.gui.mutation": "Plant Mutation",
   "agricraft.gui.produce": "Plant Products",
+  "agricraft.gui.clipping": "Plant Clipping",
 
   "agricraft.tooltip.unknown": "Unknown",
   "agricraft.tooltip.plant": "Plant",

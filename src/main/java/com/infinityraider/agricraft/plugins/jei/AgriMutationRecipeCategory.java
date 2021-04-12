@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 
 public class AgriMutationRecipeCategory implements IRecipeCategory<IAgriMutation> {
 
-    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "gui/mutation");
+    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/mutation");
 
     public final IAgriDrawable icon;
     public final IAgriDrawable background;

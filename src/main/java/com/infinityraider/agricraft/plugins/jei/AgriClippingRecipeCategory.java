@@ -1,14 +1,10 @@
 package com.infinityraider.agricraft.plugins.jei;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
-
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -21,26 +17,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AgriProduceRecipeCategory implements IRecipeCategory<IAgriPlant> {
+public class AgriClippingRecipeCategory implements IRecipeCategory<IAgriPlant> {
 
-    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/produce");
+    public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/clipping");
 
     public final IAgriDrawable icon;
     public final IAgriDrawable background;
 
     public static void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AgriApi.getPlantRegistry().all(), AgriProduceRecipeCategory.ID);
+        registration.addRecipes(AgriApi.getPlantRegistry().all(), AgriClippingRecipeCategory.ID);
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriProduceRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriProduceRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriProduceRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().clipper), AgriClippingRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriClippingRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriClippingRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriClippingRecipeCategory.ID);
     }
 
-    public AgriProduceRecipeCategory() {
-        this.icon = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/debugger.png"), 0, 0, 16, 16, 16, 16);
+    public AgriClippingRecipeCategory() {
+        this.icon = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/item/clipper.png"), 0, 0, 16, 16, 16, 16);
         this.background = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_produce.png"), 0, 0, 128, 128, 128, 128);
     }
 
@@ -59,7 +58,7 @@ public class AgriProduceRecipeCategory implements IRecipeCategory<IAgriPlant> {
     @Nonnull
     @Override
     public String getTitle() {
-        return I18n.format("agricraft.gui.produce");
+        return I18n.format("agricraft.gui.clipping");
     }
 
     @Nonnull
@@ -82,7 +81,7 @@ public class AgriProduceRecipeCategory implements IRecipeCategory<IAgriPlant> {
         ingredients.setInputLists(AgriPlantIngredient.TYPE, ImmutableList.of(ImmutableList.of(plant)));
         // Outputs
         List<List<ItemStack>> products = new ArrayList<>();
-        plant.getAllPossibleProducts(product -> products.add(ImmutableList.of(product)));
+        plant.getAllPossibleClipProducts(product -> products.add(ImmutableList.of(product)));
         ingredients.setOutputLists(VanillaTypes.ITEM, products);
         // TODO: soils and requirements
     }
