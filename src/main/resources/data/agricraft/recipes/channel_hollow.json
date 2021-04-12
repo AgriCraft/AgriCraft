@@ -14,7 +14,8 @@
     },
     "c": {
       "type": "infinitylib:dynamic_material_parent",
-      "parent": "agricraft:irrigation_channel"
+      "parent": "agricraft:irrigation_channel",
+      "material": "minecraft:planks"
     }
   },
   "result":

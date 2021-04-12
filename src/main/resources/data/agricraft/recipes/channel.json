@@ -8,7 +8,8 @@
   {
     "c": {
       "type": "infinitylib:dynamic_material_parent",
-      "parent": "agricraft:irrigation_tank"
+      "parent": "agricraft:irrigation_tank",
+      "material": "minecraft:planks"
     }
   },
   "result":
