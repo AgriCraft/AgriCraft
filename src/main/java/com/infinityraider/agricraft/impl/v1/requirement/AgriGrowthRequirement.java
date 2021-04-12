@@ -57,16 +57,16 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
     private final Set<IAgriGrowCondition> conditions;
 
-    private final GrowConditionBiPredicate<IAgriSoil.Humidity> humidity;
-    private final GrowConditionBiPredicate<IAgriSoil.Acidity> acidity;
-    private final GrowConditionBiPredicate<IAgriSoil.Nutrients> nutrients;
-    private final GrowConditionBiPredicate<Integer> lightLevel;
+    private final GrowConditionSingle<IAgriSoil.Humidity> humidity;
+    private final GrowConditionSingle<IAgriSoil.Acidity> acidity;
+    private final GrowConditionSingle<IAgriSoil.Nutrients> nutrients;
+    private final GrowConditionSingle<Integer> lightLevel;
 
     private AgriGrowthRequirement(Set<IAgriGrowCondition> conditions,
-                                  GrowConditionBiPredicate<IAgriSoil.Humidity> humidity,
-                                  GrowConditionBiPredicate<IAgriSoil.Acidity> acidity,
-                                  GrowConditionBiPredicate<IAgriSoil.Nutrients> nutrients,
-                                  GrowConditionBiPredicate<Integer> lightLevel) {
+                                  GrowConditionSingle<IAgriSoil.Humidity> humidity,
+                                  GrowConditionSingle<IAgriSoil.Acidity> acidity,
+                                  GrowConditionSingle<IAgriSoil.Nutrients> nutrients,
+                                  GrowConditionSingle<Integer> lightLevel) {
         this.humidity = humidity;
         this.acidity = acidity;
         this.nutrients = nutrients;
@@ -122,10 +122,10 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         private final Set<IAgriGrowCondition> conditions;
 
-        private GrowConditionBiPredicate<IAgriSoil.Humidity> humidity;
-        private GrowConditionBiPredicate<IAgriSoil.Acidity> acidity;
-        private GrowConditionBiPredicate<IAgriSoil.Nutrients> nutrients;
-        private GrowConditionBiPredicate<Integer> lightLevel;
+        private GrowConditionSingle<IAgriSoil.Humidity> humidity;
+        private GrowConditionSingle<IAgriSoil.Acidity> acidity;
+        private GrowConditionSingle<IAgriSoil.Nutrients> nutrients;
+        private GrowConditionSingle<Integer> lightLevel;
 
         private Builder() {
             this.conditions = Sets.newIdentityHashSet();
@@ -150,28 +150,28 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         @Override
         public IAgriGrowthRequirement.Builder defineHumidity(BiPredicate<IAgriSoil.Humidity, Integer> predicate) {
-            this.humidity = new GrowConditionBiPredicate<>(RequirementType.SOIL, predicate, HUMIDITY_GETTER, SOIL,
+            this.humidity = new GrowConditionSingle<>(RequirementType.SOIL, predicate, HUMIDITY_GETTER, SOIL,
                     HUMIDITY_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineAcidity(BiPredicate<IAgriSoil.Acidity, Integer> predicate) {
-            this.acidity = new GrowConditionBiPredicate<>(RequirementType.SOIL, predicate, ACIDITY_GETTER, SOIL,
+            this.acidity = new GrowConditionSingle<>(RequirementType.SOIL, predicate, ACIDITY_GETTER, SOIL,
                     ACIDITY_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineNutrients(BiPredicate<IAgriSoil.Nutrients, Integer> predicate) {
-            this.nutrients = new GrowConditionBiPredicate<>(RequirementType.SOIL, predicate, NUTRIENTS_GETTER, SOIL,
+            this.nutrients = new GrowConditionSingle<>(RequirementType.SOIL, predicate, NUTRIENTS_GETTER, SOIL,
                     NUTRIENT_DESCRIPTION, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineLightLevel(BiPredicate<Integer, Integer> predicate) {
-            this.lightLevel = new GrowConditionBiPredicate<>(RequirementType.LIGHT, predicate, LIGHT_LEVEL_GETTER, CROP,
+            this.lightLevel = new GrowConditionSingle<>(RequirementType.LIGHT, predicate, LIGHT_LEVEL_GETTER, CROP,
                     LIGHT_LEVEL_DESCRIPTION, 1, IAgriGrowCondition.CacheType.NONE);
             return this;
         }

@@ -396,7 +396,7 @@ public class JsonPlant implements IAgriPlant {
         plant.getRequirement().getConditions().forEach(obj -> {
             BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
             BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.addCondition(growConditionFactory.statesNearby(obj.getStrength(), obj.getAmount(), min, max, obj.convertAll(BlockState.class)));
+            builder.addCondition(growConditionFactory.statesNearby(str -> false, obj.getAmount(), min, max, obj.convertAll(BlockState.class)));
         });
 
         // Define requirement for seasons
@@ -407,7 +407,7 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(seasons.size() > 0) {
-            builder.addCondition(builder.getFactory().inSeasons(AgriApi.getStatRegistry().strengthStat().getMax(), seasons));
+            builder.addCondition(builder.getFactory().inSeasons(str -> str >= AgriApi.getStatRegistry().strengthStat().getMax(), seasons));
         }
 
         // Define requirement for fluids
@@ -416,7 +416,7 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(fluids.size() > 0) {
-            builder.addCondition(builder.getFactory().liquidFromFluid(AgriApi.getStatRegistry().strengthStat().getMax() + 1, fluids));
+            builder.addCondition(builder.getFactory().liquidFromFluid(str -> false, fluids));
         }
 
         // Build the growth requirement
