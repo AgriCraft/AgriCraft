@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -19,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
 
@@ -28,7 +30,16 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
     public final IAgriDrawable background;
 
     public static void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AgriApi.getPlantRegistry().all(), AgriRecipeCategoryClipping.ID);
+        registration.addRecipes(
+                AgriApi.getPlantRegistry().stream()
+                        .filter(IAgriPlant::isPlant)
+                        .filter(plant -> {
+                            List<ItemStack> products = Lists.newArrayList();
+                            plant.getAllPossibleClipProducts(products::add);
+                            return !products.isEmpty();
+                        })
+                        .collect(Collectors.toList()),
+                ID);
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {

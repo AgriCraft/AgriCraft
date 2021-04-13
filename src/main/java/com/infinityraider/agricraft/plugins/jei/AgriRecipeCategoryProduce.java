@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
@@ -30,7 +31,9 @@ public class AgriRecipeCategoryProduce implements IRecipeCategory<IAgriPlant> {
     public final IAgriDrawable background;
 
     public static void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AgriApi.getPlantRegistry().all(), AgriRecipeCategoryProduce.ID);
+        registration.addRecipes(
+                AgriApi.getPlantRegistry().stream().filter(IAgriPlant::isPlant).collect(Collectors.toList()),
+                ID);
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {

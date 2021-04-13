@@ -48,7 +48,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
     private final Set<TooltipRegion> tooltips;
 
     public static void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AgriApi.getPlantRegistry().all(), ID);
+        registration.addRecipes(
+                AgriApi.getPlantRegistry().stream().filter(IAgriPlant::isPlant).collect(Collectors.toList()),
+                ID);
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
