@@ -89,6 +89,10 @@ public class AgriRecipeCategoryProduce implements IRecipeCategory<IAgriPlant> {
 
     @Override
     public void setRecipe(IRecipeLayout layout, @Nonnull IAgriPlant plant, @Nonnull IIngredients ingredients) {
+        // Clear the focus as this sometimes causes display bugs
+        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
+        layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
+
         // Denote that this is a shapeless recipe.
         layout.setShapeless();
 
@@ -103,8 +107,6 @@ public class AgriRecipeCategoryProduce implements IRecipeCategory<IAgriPlant> {
                 layout.getItemStacks().init(++index, false, x, y);
             }
         }
-
-        // TODO: soils and requirements
 
         // Register Recipe Elements
         layout.getItemStacks().set(ingredients);
