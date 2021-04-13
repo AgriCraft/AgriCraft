@@ -438,8 +438,8 @@ public class JsonPlant implements IAgriPlant {
         }
         consumer.accept((strength, humidity) -> {
             if(humidity.isValid() && criterion.isValid()) {
-                int lower = type.lowerLimit(humidity.ordinal() - (int) (f * strength));
-                int upper = type.upperLimit(humidity.ordinal() + (int) (f * strength));
+                int lower = type.lowerLimit(criterion.ordinal() - (int) (f * strength));
+                int upper = type.upperLimit(criterion.ordinal() + (int) (f * strength));
                 return humidity.ordinal() <= upper && humidity.ordinal() >= lower;
             }
             return false;

@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @mezz.jei.api.JeiPlugin
@@ -33,6 +34,7 @@ public class JeiPlugin implements IModPlugin {
 
     private static IJeiRuntime jei;
 
+    @Nullable
     public static IJeiRuntime getJei() {
         return jei;
     }
@@ -53,7 +55,7 @@ public class JeiPlugin implements IModPlugin {
         AgriRecipeCategoryMutation.registerRecipeCatalysts(registration);
         AgriRecipeCategoryProduce.registerRecipeCatalysts(registration);
         AgriRecipeCategoryClipping.registerRecipeCatalysts(registration);
-        AgriRecipeCategorySoilProperties.registerRecipeCatalysts(registration);
+        AgriRecipeCategoryGrowthRequirements.registerRecipeCatalysts(registration);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class JeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new AgriRecipeCategoryMutation());
         registration.addRecipeCategories(new AgriRecipeCategoryProduce());
         registration.addRecipeCategories(new AgriRecipeCategoryClipping());
-        registration.addRecipeCategories(new AgriRecipeCategorySoilProperties(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new AgriRecipeCategoryGrowthRequirements(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -75,7 +77,7 @@ public class JeiPlugin implements IModPlugin {
         AgriRecipeCategoryMutation.registerRecipes(registration);
         AgriRecipeCategoryProduce.registerRecipes(registration);
         AgriRecipeCategoryClipping.registerRecipes(registration);
-        AgriRecipeCategorySoilProperties.registerRecipes(registration);
+        AgriRecipeCategoryGrowthRequirements.registerRecipes(registration);
     }
 
     @Override

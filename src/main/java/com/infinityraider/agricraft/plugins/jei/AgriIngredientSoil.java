@@ -8,6 +8,7 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -74,7 +75,10 @@ public class AgriIngredientSoil {
             if(soil == null) {
                 return;
             }
-            JeiPlugin.getJei().getIngredientManager().getIngredientRenderer(VanillaTypes.ITEM).render(transform, x, y, new ItemStack(soil));
+            IJeiRuntime jei =  JeiPlugin.getJei();
+            if(jei != null) {
+                jei.getIngredientManager().getIngredientRenderer(VanillaTypes.ITEM).render(transform, x, y, new ItemStack(soil));
+            }
         }
 
         @Override

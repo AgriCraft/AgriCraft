@@ -43,7 +43,7 @@
   "agricraft.gui.mutation": "Plant Mutation",
   "agricraft.gui.produce": "Plant Products",
   "agricraft.gui.clipping": "Plant Clipping",
-  "agricraft.gui.soil": "Soil Properties",
+  "agricraft.gui.growth_req": "Growth Requirements",
 
   "agricraft.tooltip.unknown": "Unknown",
   "agricraft.tooltip.plant": "Plant",

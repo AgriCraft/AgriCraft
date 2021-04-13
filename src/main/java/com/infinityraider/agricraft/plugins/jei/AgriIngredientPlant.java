@@ -17,7 +17,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @OnlyIn(Dist.CLIENT)
@@ -65,30 +68,49 @@ public class AgriIngredientPlant {
         }
     };
 
-    private static final IAgriIngredientRenderer<IAgriPlant> RENDERER = new IAgriIngredientRenderer<IAgriPlant>() {
+    public static final Renderer RENDERER = new Renderer();
+
+    public static void register(IModIngredientRegistration registration) {
+        registration.register(TYPE, AgriApi.getPlantRegistry().all(), HELPER, RENDERER);
+    }
+
+    public static class Renderer implements IAgriIngredientRenderer<IAgriPlant> {
+        private final Map<IAgriPlant, IAgriGrowthStage> stageMap = new IdentityHashMap<>();
+
+        public void useGrowthStageForNextRenderCall(IAgriPlant plant, IAgriGrowthStage stage) {
+            // It is an ugly hack, but JEI does not really provide anything to handle this elegantly
+            stageMap.put(plant, stage);
+        }
+
         @Override
         public void render(@Nonnull MatrixStack transform, int x, int y, @Nullable IAgriPlant plant) {
             if(plant == null) {
                 return;
             }
-            plant.getGrowthStages().stream().filter(IAgriGrowthStage::isMature).findFirst().ifPresent(stage -> {
-                List<ResourceLocation> tex = plant.getTexturesFor(stage);
-                if(tex.size() > 0) {
-                    this.bindTextureAtlas();
-                    Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(0)));
-                }
+            Optional.ofNullable(stageMap.remove(plant)).map(stage -> {
+                    this.renderStage(transform, x, y, plant, stage);
+                    return true;
+            }).orElseGet(() ->  {
+                plant.getGrowthStages().stream().filter(IAgriGrowthStage::isMature).findFirst().ifPresent(stage ->
+                    this.renderStage(transform, x, y, plant, stage));
+                return false;
             });
         }
 
+        private void renderStage(@Nonnull MatrixStack transform, int x, int y, IAgriPlant plant, IAgriGrowthStage stage) {
+            List<ResourceLocation> tex = plant.getTexturesFor(stage);
+            if(tex.size() > 0) {
+                this.bindTextureAtlas();
+                Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(0)));
+            }
+        }
+
+        @Nonnull
         @Override
         public List<ITextComponent> getTooltip(IAgriPlant plant, @Nonnull ITooltipFlag iTooltipFlag) {
             List<ITextComponent> tooltip = Lists.newArrayList();
             plant.addTooltip(tooltip::add);
             return tooltip;
         }
-    };
-
-    public static void register(IModIngredientRegistration registration) {
-        registration.register(TYPE, AgriApi.getPlantRegistry().all(), HELPER, RENDERER);
     }
 }

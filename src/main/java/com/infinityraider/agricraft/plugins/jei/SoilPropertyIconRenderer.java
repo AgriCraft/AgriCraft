@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -56,8 +55,8 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
     }
 
     protected void drawTooltip(MatrixStack transforms, List<ITextComponent> tooltip, double x, double y) {
-        int w = Minecraft.getInstance().getMainWindow().getScaledWidth();
-        int h = Minecraft.getInstance().getMainWindow().getScaledHeight();
+        int w = this.getScaledWindowWidth();
+        int h = this.getScaledWindowHeight();
         GuiUtils.drawHoveringText(transforms, tooltip, (int) x, (int) y, w, h, -1, this.getFontRenderer());
     }
 
