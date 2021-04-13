@@ -156,7 +156,7 @@
 
   "agricraft.plant.beet_root.name": "Beet Root",
   "agricraft.plant.beet_root.seed": "Beet Root Seeds",
-  "agricraft.plant.beet_root.desc": "Beet. It\\u0027s what\\u0027s for dinner.",
+  "agricraft.plant.beet_root.desc": "Beet. It's what's for dinner.",
 
   "agricraft.plant.brown_mushroom.name": "Brown Mushroom",
   "agricraft.plant.brown_mushroom.seed": "Brown Mushroom Spores",
@@ -298,9 +298,13 @@
   "agricraft.plant.redstodendron.seed": "Redstodendron Seeds",
   "agricraft.plant.redstodendron.desc": "Much more complex than the average red algea.",
 
+  "agricraft.plant.sweet_berry.name": "Sweet Berry",
+  "agricraft.plant.sweet_berry.seed": "Sweet Berry Seeds",
+  "agricraft.plant.sweet_berry.desc": "You should make a cake out of it.",
+
   "agricraft.plant.wither_rose.name": "Wither Rose",
   "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
-  "agricraft.plant.wither_rose.desc": "In Soviet Russia, rose withers you.",
+  "agricraft.plant.wither_rose.desc": "Nobody likes their roses withering, but this is on another level.",
 
 
   "agricraft.weed.weed.name": "Weeds",
