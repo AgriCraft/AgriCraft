@@ -21,10 +21,12 @@ import javax.annotation.Nonnull;
 public class MinecraftPlugin implements IAgriPlugin {
     public final JsonPlantCallback thorns;
     public final JsonPlantCallback brightness;
+    public final JsonPlantCallback withering;
 
     public MinecraftPlugin() {
         this.thorns = JsonPlantCallBackThorns.getInstance();
         this.brightness = JsonPlantCallBackBrightness.getInstance();
+        this.withering = JsonPlantCallBackWithering.getInstance();
     }
 
     @Override
