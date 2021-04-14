@@ -210,9 +210,9 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
         if(this.getWorld() == null) {
             return false;
         }
-        int height = plant.getPlantHeight(stage);
+        double height = plant.getPlantHeight(stage);
         while(height > 16) {
-            int offset = height / 16;
+            int offset = ((int) height) / 16;
             BlockPos pos = this.getPos().up(offset);
             BlockState state = this.getWorld().getBlockState(pos);
             if(!state.isAir(this.getWorld(), pos)) {

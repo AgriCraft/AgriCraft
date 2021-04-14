@@ -172,8 +172,9 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
                 return getCrossPlantShape(this.getCrop(world, pos)
                         .map(crop -> Math.max(
                                 crop.getPlant().getPlantHeight(crop.getGrowthStage()),
-                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())
-                        )).orElse(0));
+                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())))
+                        .map(Double::intValue)
+                        .orElse(0));
             } else {
                 return SHAPE_CROSS_CROP;
             }
@@ -182,8 +183,9 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
                 return getPlantShape(this.getCrop(world, pos)
                         .map(crop -> Math.max(
                                 crop.getPlant().getPlantHeight(crop.getGrowthStage()),
-                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())
-                        )).orElse(0));
+                                crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())))
+                        .map(Double::intValue)
+                        .orElse(0));
             } else {
                 return SHAPE_DEFAULT;
             }

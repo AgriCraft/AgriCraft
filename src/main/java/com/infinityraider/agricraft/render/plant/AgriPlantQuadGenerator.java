@@ -92,19 +92,19 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
         tessellator.pushMatrix();
 
-        tessellator.translate(0, 6.0F*yOffset/16.0F, 0);
+        tessellator.translate(0, 12.0F*yOffset/16.0F, 0);
 
-        tessellator.drawScaledFaceDouble(1, 0, 7, 6, Direction.NORTH, icon, 4);
-        tessellator.drawScaledFaceDouble(9, 0, 15, 6, Direction.NORTH, icon, 4);
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, icon, 4.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, icon, 3.999F, 0, 0, 16, 16);
 
-        tessellator.drawScaledFaceDouble(1, 0, 7, 6, Direction.EAST, icon, 4);
-        tessellator.drawScaledFaceDouble(9, 0, 15, 6, Direction.EAST, icon, 4);
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, icon, 4.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, icon, 3.999F, 0, 0, 16, 16);
 
-        tessellator.drawScaledFaceDouble(1, 0, 7, 6, Direction.NORTH, icon, 12);
-        tessellator.drawScaledFaceDouble(9, 0, 15, 6, Direction.NORTH, icon, 12);
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, icon, 12.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, icon, 11.999F, 0, 0, 16, 16);
 
-        tessellator.drawScaledFaceDouble(1, 0, 7, 6, Direction.EAST, icon, 12);
-        tessellator.drawScaledFaceDouble(9, 0, 15, 6, Direction.EAST, icon, 12);
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, icon, 12.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, icon, 11.999F, 0, 0, 16, 16);
 
         tessellator.popMatrix();
 

@@ -131,7 +131,7 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public int getPlantHeight(IAgriGrowthStage stage) {
+    public double getPlantHeight(IAgriGrowthStage stage) {
         return 0;
     }
 

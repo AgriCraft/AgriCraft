@@ -38,5 +38,5 @@ public interface IAgriGrowable {
      * @param stage the growth stage
      * @return height of the plant in 1/16ths of a block
      */
-    int getPlantHeight(IAgriGrowthStage stage);
+    double getPlantHeight(IAgriGrowthStage stage);
 }

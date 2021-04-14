@@ -87,7 +87,7 @@ public final class NoWeed implements IAgriWeed {
     }
 
     @Override
-    public int getPlantHeight(IAgriGrowthStage stage) {
+    public double getPlantHeight(IAgriGrowthStage stage) {
         return 0;
     }
 

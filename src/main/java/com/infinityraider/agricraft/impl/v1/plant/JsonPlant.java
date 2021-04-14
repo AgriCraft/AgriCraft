@@ -167,12 +167,12 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public int getPlantHeight(IAgriGrowthStage stage) {
+    public double getPlantHeight(IAgriGrowthStage stage) {
         int index = IncrementalGrowthLogic.getGrowthIndex(stage);
         if(index < 0 || index >= this.plant.getGrowthStages()) {
             return 0;
         }
-        return this.plant.getGrowthStageHeight(index);
+        return this.plant.getGrowthStageHeight(index)*this.plant.getTexture().getRenderType().getHeightModifier();
     }
 
     @Override
@@ -244,25 +244,26 @@ public class JsonPlant implements IAgriPlant {
         final int height = this.plant.getGrowthStageHeight(index);
         ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
         int layer = 0;
+        int layers = (int) Math.ceil(height/16.0);
         while((16*layer) < height) {
             ResourceLocation rl = layer == 0
                     ? new ResourceLocation(this.plant.getTexture().getPlantTexture(index))
                     : new ResourceLocation(this.plant.getTexture().getPlantTexture(this.plant.getGrowthStages() + layer - 1));
             switch (this.plant.getTexture().getRenderType()) {
                 case HASH:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layer));
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layers - layer - 1));
                     break;
                 case CROSS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl, layer));
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl, layers - layer - 1));
                     break;
                 case PLUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl, layer));
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl, layers - layer - 1));
                     break;
                 case RHOMBUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl, layer));
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl, layers - layer - 1));
                     break;
                 default:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl, layer));
+                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl, layers - layer - 1));
                     break;
             }
             layer++;
