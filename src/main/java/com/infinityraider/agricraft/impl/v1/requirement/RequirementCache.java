@@ -4,19 +4,28 @@ import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
 import com.infinityraider.agricraft.handler.BlockUpdateHandler;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class RequirementCache {
     private static final RequirementCache EMPTY = new RequirementCache() {
         @Override
         public boolean isMet() {
-            return true;
+            return false;
+        }
+
+        @Override
+        public void addTooltip(Consumer<ITextComponent> consumer) {
+            consumer.accept(AgriToolTips.UNKNOWN);
         }
     };
 
@@ -28,6 +37,8 @@ public abstract class RequirementCache {
     }
 
     public abstract boolean isMet();
+
+    public abstract void addTooltip(Consumer<ITextComponent> consumer);
 
     public void flush() {}
 
@@ -45,6 +56,16 @@ public abstract class RequirementCache {
         @Override
         public boolean isMet() {
             return this.conditions.stream().allMatch(Condition::isMet);
+        }
+
+        @Override
+        public void addTooltip(Consumer<ITextComponent> consumer) {
+            if(this.isMet()) {
+                consumer.accept(AgriToolTips.FERTILE);
+            } else {
+                consumer.accept(AgriToolTips.NOT_FERTILE);
+                this.conditions.stream().filter(condition -> !condition.isMet()).forEach(condition -> condition.addTooltip(consumer));
+            }
         }
 
         @Override
@@ -77,6 +98,10 @@ public abstract class RequirementCache {
                     return false;
                 }
                 return this.getCondition().isMet(this.getWorld(), this.getPos(), this.getStrength());
+            }
+
+            public void addTooltip(Consumer<ITextComponent> consumer) {
+                this.getCondition().addDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").append(tooltip)));
             }
 
             public void flush() {}

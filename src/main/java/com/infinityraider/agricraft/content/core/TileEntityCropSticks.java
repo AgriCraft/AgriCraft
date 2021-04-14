@@ -97,7 +97,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
                 (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
                 (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH),
                 CoreHandler::isInitialized,
-                NO_GROWTH).withRenderUpdate().build();
+                NO_GROWTH).withCallBack((stage) -> this.requirement = RequirementCache.create(this)).withRenderUpdate().build();
 
         this.weed = this.getAutoSyncedFieldBuilder(NO_WEED,
                 (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
@@ -683,11 +683,7 @@ public class TileEntityCropSticks extends TileEntityBase implements IAgriCrop, I
             //Add the stats
             this.getStats().addTooltips(consumer);
             //Add the fertility information.
-            if(this.isFertile()) {
-                consumer.accept(AgriToolTips.FERTILE);
-            } else {
-                consumer.accept(AgriToolTips.NOT_FERTILE);
-            }
+            this.requirement.addTooltip(consumer);
         } else {
             consumer.accept(AgriToolTips.NO_PLANT);
         }
