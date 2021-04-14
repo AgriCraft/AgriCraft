@@ -20,8 +20,11 @@ Changelog
 - ADDED: Genes defining attraction of certain animals to certain crops, allowing for automatic animal breeding
 - ADDED: new vanilla plant: Bamboo
 - ADDED: new vanilla plant: Cornflower
+- ADDED: new vanilla plant: Crimson Fungus
 - ADDED: new vanilla plant: Lily
+- ADDED: new vanilla plant: Sea Grass
 - ADDED: new vanilla plant: Sweet Berry
+- ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
 
 2.12.0a7
