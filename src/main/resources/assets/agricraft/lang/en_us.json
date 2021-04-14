@@ -183,6 +183,10 @@
   "agricraft.plant.cornflower.seed": "Cornflower Seeds",
   "agricraft.plant.cornflower.desc": "Also known as the bachelor's button.",
 
+  "agricraft.plant.crimson_fungus.name": "Crimson Fungus",
+  "agricraft.plant.crimson_fungus.seed": "Crimson Fungus Spores",
+  "agricraft.plant.crimson_fungus.desc": "It secretes a peculiar red ooze.",
+
   "agricraft.plant.daisy.name": "Daisy",
   "agricraft.plant.daisy.seed": "Daisy Seeds",
   "agricraft.plant.daisy.desc": "A rarity by any measure.",
@@ -310,6 +314,10 @@
   "agricraft.plant.sweet_berry.name": "Sweet Berry",
   "agricraft.plant.sweet_berry.seed": "Sweet Berry Seeds",
   "agricraft.plant.sweet_berry.desc": "You should make a cake out of it.",
+
+  "agricraft.plant.warped_fungus.name": "Warped Fungus",
+  "agricraft.plant.warped_fungus.seed": "Warped Fungus Spores",
+  "agricraft.plant.warped_fungus.desc": "Efficient Hoglin repellant.",
 
   "agricraft.plant.wither_rose.name": "Wither Rose",
   "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
