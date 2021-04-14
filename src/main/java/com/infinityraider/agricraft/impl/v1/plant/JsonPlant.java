@@ -407,7 +407,7 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(seasons.size() > 0) {
-            builder.addCondition(builder.getFactory().inSeasons(str -> str >= AgriApi.getStatRegistry().strengthStat().getMax(), seasons));
+            builder.addCondition(builder.inSeasons(str -> str >= AgriApi.getStatRegistry().strengthStat().getMax(), seasons));
         }
 
         // Define requirement for fluids
@@ -416,7 +416,7 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(fluids.size() > 0) {
-            builder.addCondition(builder.getFactory().liquidFromFluid(str -> false, fluids));
+            builder.addCondition(builder.liquidFromFluid(str -> false, fluids));
         }
 
         // Build the growth requirement

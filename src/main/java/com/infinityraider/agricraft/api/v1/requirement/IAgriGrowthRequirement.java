@@ -70,8 +70,10 @@ public interface IAgriGrowthRequirement {
 
     /**
      * Builder class to initialize IAgriGrowthRequirements
+     *
+     * Note that the Builder is also an instance of IDefaultGrowConditionFactory for easy creation of Growth Conditions
      */
-    interface Builder {
+    interface Builder extends IDefaultGrowConditionFactory {
         /**
          * Builds the growth requirement
          *
@@ -81,14 +83,6 @@ public interface IAgriGrowthRequirement {
          * @return a new IAgriGrowthRequirement
          */
         IAgriGrowthRequirement build();
-
-        /**
-         * Utility method to quickly fetch the default grow condition factory
-         * @return the AgriCraft IDefaultGrowCondition instance
-         */
-        default IDefaultGrowConditionFactory getFactory() {
-            return AgriApi.getDefaultGrowConditionFactory();
-        }
 
         /**
          * Defines the humidity rule, must be defined before calling build()

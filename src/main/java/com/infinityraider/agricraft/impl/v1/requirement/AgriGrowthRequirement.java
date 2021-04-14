@@ -105,7 +105,7 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         return this.lightLevel.test(light, strength);
     }
 
-    private static class Builder implements IAgriGrowthRequirement.Builder {
+    private static class Builder extends Factory implements IAgriGrowthRequirement.Builder {
         private static final BiFunction<World, BlockPos, IAgriSoil.Humidity> HUMIDITY_GETTER = (world, pos) ->
                 AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos)).map(IAgriSoil::getHumidity).orElse(IAgriSoil.Humidity.INVALID);
         private static final BiFunction<World, BlockPos, IAgriSoil.Acidity> ACIDITY_GETTER = (world, pos) ->

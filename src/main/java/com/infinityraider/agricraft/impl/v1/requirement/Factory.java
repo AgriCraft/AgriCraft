@@ -89,7 +89,7 @@ public class Factory extends FactoryAbstract {
         return INSTANCE;
     }
 
-    private Factory() {}
+    protected Factory() {}
 
     @Override
     protected IAgriGrowCondition statesInRange(RequirementType type, BiPredicate<Integer, BlockState> predicate, int min, int max,
