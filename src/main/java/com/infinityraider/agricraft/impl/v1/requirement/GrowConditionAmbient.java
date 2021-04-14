@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-public class GrowConditionAmbient<T> extends GrowConditionSingle<T> {
+public class GrowConditionAmbient<T> extends GrowConditionBase<T> {
     public GrowConditionAmbient(RequirementType type, BiPredicate<Integer, T> predicate, Function<World, T> fetcher,
                                 List<ITextComponent> tooltips, CacheType cacheType) {
         super(type, predicate, (world, pos) -> fetcher.apply(world), pos -> pos, tooltips, 0, cacheType);

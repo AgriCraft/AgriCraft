@@ -46,6 +46,45 @@ public interface IDefaultGrowConditionFactory {
     /** Must match any of the given soils */
     IAgriGrowCondition soil(IntPredicate strength, Collection<IAgriSoil> soils);
 
+    /** Must match the soil predicate */
+    IAgriGrowCondition soil(BiPredicate<Integer, IAgriSoil> predicate, List<ITextComponent> tooltips);
+
+    /** Must match the given soil humidity */
+    IAgriGrowCondition soilHumidity(IntPredicate strength, IAgriSoil.Humidity humidity);
+
+    /** Must match any of the given soil humidities */
+    IAgriGrowCondition soilHumidities(IntPredicate strength, IAgriSoil.Humidity... humidities);
+
+    /** Must match any of the given soil humidities */
+    IAgriGrowCondition soilHumidities(IntPredicate strength, Collection<IAgriSoil.Humidity> humidities);
+
+    /** Must match the soil humidity predicate */
+    IAgriGrowCondition soilHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate, List<ITextComponent> tooltips);
+
+    /** Must match the given soil acidity */
+    IAgriGrowCondition soilAcidity(IntPredicate strength, IAgriSoil.Acidity acidity);
+
+    /** Must match any of the given soil acidities */
+    IAgriGrowCondition soilAcidities(IntPredicate strength, IAgriSoil.Acidity... acidities);
+
+    /** Must match any of the given soil acidities */
+    IAgriGrowCondition soilAcidities(IntPredicate strength, Collection<IAgriSoil.Acidity> acidities);
+
+    /** Must match the soil acidity predicate */
+    IAgriGrowCondition soilAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate, List<ITextComponent> tooltips);
+
+    /** Must match the given soil nutrients */
+    IAgriGrowCondition soilNutrients(IntPredicate strength, IAgriSoil.Nutrients nutrients);
+
+    /** Must match any of the given soil nutrients */
+    IAgriGrowCondition soilNutrients(IntPredicate strength, IAgriSoil.Nutrients... nutrients);
+
+    /** Must match any of the given soil nutrients */
+    IAgriGrowCondition soilNutrients(IntPredicate strength, Collection<IAgriSoil.Nutrients> nutrients);
+
+    /** Must match the soil nutrients predicate */
+    IAgriGrowCondition soilNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate, List<ITextComponent> tooltips);
+
 
     /*
      * -----

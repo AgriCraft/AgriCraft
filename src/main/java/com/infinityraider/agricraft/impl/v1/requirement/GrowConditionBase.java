@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.*;
 
-public class GrowConditionSingle<T> implements IAgriGrowCondition, BiPredicate<Integer, T> {
+public class GrowConditionBase<T> implements IAgriGrowCondition, BiPredicate<Integer, T> {
     private final RequirementType type;
     private final BiPredicate<Integer, T> predicate;
     private final BiFunction<World, BlockPos, T> getter;
@@ -22,8 +22,8 @@ public class GrowConditionSingle<T> implements IAgriGrowCondition, BiPredicate<I
     private final int complexity;
     private final CacheType cacheType;
 
-    public GrowConditionSingle(RequirementType type, BiPredicate<Integer, T> predicate, BiFunction<World, BlockPos, T> getter,
-                               UnaryOperator<BlockPos> offsetter, List<ITextComponent> descriptions, int complexity, CacheType cacheType) {
+    public GrowConditionBase(RequirementType type, BiPredicate<Integer, T> predicate, BiFunction<World, BlockPos, T> getter,
+                             UnaryOperator<BlockPos> offsetter, List<ITextComponent> descriptions, int complexity, CacheType cacheType) {
         this.type = type;
         this.predicate = predicate;
         this.getter = getter;

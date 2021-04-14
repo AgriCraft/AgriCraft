@@ -30,7 +30,7 @@ public interface IAgriGrowthRequirement {
      *
      * @param humidity the humidity
      * @param strength the strength stat of the plant
-     * @return if the plant can grow on a soil with the given humidity level
+     * @return if the plant can grow on a soil with the given humidity
      */
     boolean isSoilHumidityAccepted(IAgriSoil.Humidity humidity, int strength);
 
@@ -39,7 +39,7 @@ public interface IAgriGrowthRequirement {
      *
      * @param acidity the acidity
      * @param strength the strength stat of the plant
-     * @return if the plant can grow on a soil with the given humidity level
+     * @return if the plant can grow on a soil with the given acidity
      */
     boolean isSoilAcidityAccepted(IAgriSoil.Acidity acidity, int strength);
 
@@ -48,18 +48,26 @@ public interface IAgriGrowthRequirement {
      *
      * @param nutrients the nutrients
      * @param strength the strength stat of the plant
-     * @return if the plant can grow on a soil with the given humidity level
+     * @return if the plant can grow on a soil with the given nutrients
      */
     boolean isSoilNutrientsAccepted(IAgriSoil.Nutrients nutrients, int strength);
 
     /**
      * Specific check for light level
      *
-     * @param light level the humidity
+     * @param light the light level
      * @param strength the strength stat of the plant
-     * @return if the plant can grow on a soil with the given humidity level
+     * @return if the plant can grow with the given light level
      */
     boolean isLightLevelAccepted(int light, int strength);
+
+    /**
+     * Specific check for seasons
+     * @param season the season
+     * @param strength the strength stat of the plant
+     * @return if the plant can grow during the given season
+     */
+    boolean isSeasonAccepted(AgriSeason season, int strength);
 
     /**
      * @return a new Builder object
@@ -127,6 +135,17 @@ public interface IAgriGrowthRequirement {
          * @return the builder (this)
          */
         Builder defineLightLevel(BiPredicate<Integer, Integer> predicate);
+
+        /**
+         * Defines the seasonality rule, must be defined before calling build()
+         * The first argument of the predicate is the light level, the second the strength of the plant
+         *
+         * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
+         *
+         * @param predicate test for seasons
+         * @return the builder (this)
+         */
+        Builder defineSeasonality(BiPredicate<Integer, AgriSeason> predicate);
 
         /**
          * Adds a grow condition to the builder

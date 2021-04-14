@@ -13,7 +13,7 @@ import java.util.function.BiPredicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public class GrowConditionMulti<T> extends GrowConditionSingle<Stream<T>> {
+public class GrowConditionMulti<T> extends GrowConditionBase<Stream<T>> {
     private final Set<BlockPos> offsets;
 
     public GrowConditionMulti(RequirementType type, BiPredicate<Integer, T> predicate, BiFunction<World, BlockPos, Stream<T>> getter,

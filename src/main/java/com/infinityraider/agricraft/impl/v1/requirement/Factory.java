@@ -6,10 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
-import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -36,55 +33,6 @@ import java.util.stream.Stream;
 public class Factory extends FactoryAbstract {
     private static final Factory INSTANCE = new Factory();
 
-    private static final BiFunction<World, BlockPos, Integer> LIGHT_FUNCTION = IWorldReader::getLight;
-
-    private static final BiFunction<World, BlockPos, Integer> REDSTONE_FUNCTION = World::getRedstonePowerFromNeighbors;
-
-    private static final BiFunction<World, BlockPos, Biome> BIOME_FUNCTION = World::getBiome;
-
-    private static final Function<World, RegistryKey<World>> DIMENSION_KEY_FUNCTION = World::getDimensionKey;
-
-    private static final Function<World, DimensionType> DIMENSION_TYPE_FUNCTION = World::getDimensionType;
-    private static final Function<World, Long> TIME_FUNCTION = World::getDayTime;
-
-    private static final BiFunction<World, BlockPos, Boolean> RAIN_FUNCTION = (world, pos) ->
-            world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.RAIN;
-
-    private static final BiFunction<World, BlockPos, Boolean> SNOW_FUNCTION = (world, pos) ->
-            world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.SNOW;
-
-    private static final BiFunction<World, BlockPos, AgriSeason> SEASON_FUNCTION = (world, pos) ->
-            AgriApi.getSeasonLogic().getSeason(world, pos);
-
-    private static final BiFunction<World, BlockPos, Optional<IAgriCrop>> CROP_FUNCTION = AgriApi::getCrop;
-
-    private static final BiFunction<World, BlockPos, Stream<Structure<?>>> STRUCTURE_FUNCTION = (world, pos) ->
-            world.getChunkAt(pos).getStructureReferences().entrySet().stream()
-                    .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
-                    .map(Map.Entry::getKey);
-
-    private static BiFunction<World, BlockPos, Stream<Entity>> entityFunction(double range) {
-        return (world, pos) ->
-                world.getEntitiesWithinAABBExcludingEntity(
-                        null, new AxisAlignedBB(pos.add(-range, -range, -range), pos.add(range, range, range))).stream();
-    }
-
-    private static BiFunction<World, BlockPos, Stream<BlockState>> blockStateFunction(BlockPos min, BlockPos max) {
-        return (world, pos) -> WorldHelper.streamPositions(pos.add(min), pos.add(max)).map(world::getBlockState);
-    }
-
-    private static final UnaryOperator<BlockPos> OFFSETTER_NONE = pos -> pos;
-    private static final UnaryOperator<BlockPos> OFFSETTER_SOIL = BlockPos::down;
-
-    private static final List<ITextComponent> TOOLTIP_NO_RAIN = ImmutableList.of(
-            new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.no_rain"));
-    private static final List<ITextComponent> TOOLTIP_RAIN = ImmutableList.of(
-            new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.rain"));
-    private static final List<ITextComponent> TOOLTIP_NO_SNOW = ImmutableList.of(
-            new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.no_snow"));
-    private static final List<ITextComponent> TOOLTIP_SNOW = ImmutableList.of(
-            new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.snow"));
-
     public static IDefaultGrowConditionFactory getInstance() {
         return INSTANCE;
     }
@@ -92,96 +40,169 @@ public class Factory extends FactoryAbstract {
     protected Factory() {}
 
     @Override
-    protected IAgriGrowCondition statesInRange(RequirementType type, BiPredicate<Integer, BlockState> predicate, int min, int max,
-                                               BlockPos minOffset, BlockPos maxOffset,
-                                               List<ITextComponent> tooltips) {
-        return new GrowConditionMulti<>(type, predicate, blockStateFunction(minOffset, maxOffset), min, max, OFFSETTER_NONE,
+    protected GrowConditionBase<Stream<BlockState>> statesInRange(RequirementType type, BiPredicate<Integer, BlockState> predicate, int min, int max,
+                                                                  BlockPos minOffset, BlockPos maxOffset,
+                                                                  List<ITextComponent> tooltips) {
+        return new GrowConditionMulti<>(type, predicate, Functions.blockstate(minOffset, maxOffset), min, max, Offsetters.NONE,
                 tooltips, (maxOffset.getX() - minOffset.getX())*(maxOffset.getX() - minOffset.getX())*(maxOffset.getX() - minOffset.getX()),
                 IAgriGrowCondition.CacheType.BLOCK_UPDATE, WorldHelper.streamPositions(minOffset, maxOffset).collect(Collectors.toSet()));
     }
 
     @Override
-    public IAgriGrowCondition light(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.LIGHT, predicate, LIGHT_FUNCTION, OFFSETTER_NONE,
-                tooltips, 1, IAgriGrowCondition.CacheType.NONE);
-    }
-
-    @Override
-    public IAgriGrowCondition redstone(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.REDSTONE, predicate, REDSTONE_FUNCTION, OFFSETTER_SOIL,
+    protected <P extends IAgriSoil.SoilProperty> GrowConditionBase<P> soilProperty(
+            BiPredicate<Integer, P> predicate, Function<IAgriSoil, P> mapper, P invalid, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.SOIL, predicate, Functions.soilProperty(mapper, invalid), Offsetters.SOIL,
                 tooltips, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
     }
 
     @Override
-    public IAgriGrowCondition biome(BiPredicate<Integer, Biome> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.BIOME, predicate, BIOME_FUNCTION, OFFSETTER_NONE,
+    public GrowConditionBase<Integer> light(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.LIGHT, predicate, Functions.LIGHT, Offsetters.NONE,
+                tooltips, 1, IAgriGrowCondition.CacheType.NONE);
+    }
+
+    @Override
+    public GrowConditionBase<Integer> redstone(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.REDSTONE, predicate, Functions.REDSTONE, Offsetters.SOIL,
+                tooltips, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
+    }
+
+    @Override
+    public GrowConditionBase<Biome> biome(BiPredicate<Integer, Biome> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.BIOME, predicate, Functions.BIOME, Offsetters.NONE,
                 tooltips, 1, IAgriGrowCondition.CacheType.FULL);
     }
 
     @Override
-    public IAgriGrowCondition dimensionFromKey(BiPredicate<Integer, RegistryKey<World>> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionAmbient<>(RequirementType.DIMENSION, predicate, DIMENSION_KEY_FUNCTION,
+    public GrowConditionBase<RegistryKey<World>> dimensionFromKey(BiPredicate<Integer, RegistryKey<World>> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionAmbient<>(RequirementType.DIMENSION, predicate, Functions.DIMENSION_KEY,
                 tooltips, IAgriGrowCondition.CacheType.FULL);
     }
 
     @Override
-    public IAgriGrowCondition dimensionFromType(BiPredicate<Integer, DimensionType> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionAmbient<>(RequirementType.DIMENSION, predicate, DIMENSION_TYPE_FUNCTION,
+    public GrowConditionBase<DimensionType> dimensionFromType(BiPredicate<Integer, DimensionType> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionAmbient<>(RequirementType.DIMENSION, predicate, Functions.DIMENSION_TYPE,
                 tooltips, IAgriGrowCondition.CacheType.FULL);
     }
 
     @Override
-    public IAgriGrowCondition weed(TriPredicate<Integer, IAgriWeed, IAgriGrowthStage> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.WEEDS, (str, opt) -> opt.map(crop -> predicate.test(str, crop.getWeeds(), crop.getWeedGrowthStage())).orElse(false),
-                CROP_FUNCTION, OFFSETTER_NONE, tooltips, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
+    public GrowConditionBase<Optional<IAgriCrop>> weed(TriPredicate<Integer, IAgriWeed, IAgriGrowthStage> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.WEEDS, (str, opt) -> opt.map(crop -> predicate.test(str, crop.getWeeds(), crop.getWeedGrowthStage())).orElse(false),
+                Functions.CROP, Offsetters.NONE, tooltips, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
     }
 
     @Override
-    public IAgriGrowCondition time(BiPredicate<Integer, Long> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionAmbient<>(RequirementType.TIME, predicate, TIME_FUNCTION,
+    public GrowConditionBase<Long> time(BiPredicate<Integer, Long> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionAmbient<>(RequirementType.TIME, predicate, Functions.TIME,
                 tooltips, IAgriGrowCondition.CacheType.FULL);
     }
 
     @Override
-    public IAgriGrowCondition entitiesNearby(BiPredicate<Integer, Entity> predicate, double range, int min, int max,
+    public GrowConditionBase<Stream<Entity>> entitiesNearby(BiPredicate<Integer, Entity> predicate, double range, int min, int max,
                                              List<ITextComponent> tooltips) {
-        return new GrowConditionMulti<>(RequirementType.ENTITY, predicate, entityFunction(range), min, max, OFFSETTER_NONE,
+        return new GrowConditionMulti<>(RequirementType.ENTITY, predicate, Functions.entity(range), min, max, Offsetters.NONE,
                 tooltips, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition noRain(IntPredicate strength) {
-        return new GrowConditionSingle<>(RequirementType.RAIN, (str, value) -> strength.test(str) && !value, RAIN_FUNCTION, OFFSETTER_NONE,
-                TOOLTIP_NO_RAIN, 1, IAgriGrowCondition.CacheType.NONE);
+    public GrowConditionBase<Boolean> noRain(IntPredicate strength) {
+        return new GrowConditionBase<>(RequirementType.RAIN, (str, value) -> strength.test(str) && !value, Functions.RAIN, Offsetters.NONE,
+                Tooltips.NO_RAIN, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition withRain(IntPredicate strength) {
-        return new GrowConditionSingle<>(RequirementType.RAIN, (str, value) -> strength.test(str) && value, RAIN_FUNCTION, OFFSETTER_NONE,
-                TOOLTIP_RAIN, 1, IAgriGrowCondition.CacheType.NONE);
+    public GrowConditionBase<Boolean> withRain(IntPredicate strength) {
+        return new GrowConditionBase<>(RequirementType.RAIN, (str, value) -> strength.test(str) && value, Functions.RAIN, Offsetters.NONE,
+                Tooltips.RAIN, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition noSnow(IntPredicate strength) {
-        return new GrowConditionSingle<>(RequirementType.SNOW, (str, value) -> strength.test(str) && !value, SNOW_FUNCTION, OFFSETTER_NONE,
-                TOOLTIP_NO_SNOW, 1, IAgriGrowCondition.CacheType.NONE);
+    public GrowConditionBase<Boolean> noSnow(IntPredicate strength) {
+        return new GrowConditionBase<>(RequirementType.SNOW, (str, value) -> strength.test(str) && !value, Functions.SNOW, Offsetters.NONE,
+                Tooltips.NO_SNOW, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition withSnow(IntPredicate strength) {
-        return new GrowConditionSingle<>(RequirementType.RAIN, (str, value) -> strength.test(str) && value, SNOW_FUNCTION, OFFSETTER_NONE,
-                TOOLTIP_SNOW, 1, IAgriGrowCondition.CacheType.NONE);
+    public GrowConditionBase<Boolean> withSnow(IntPredicate strength) {
+        return new GrowConditionBase<>(RequirementType.RAIN, (str, value) -> strength.test(str) && value, Functions.SNOW, Offsetters.NONE,
+                Tooltips.SNOW, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition season(BiPredicate<Integer, AgriSeason> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.SEASON, predicate, SEASON_FUNCTION, OFFSETTER_NONE,
+    public GrowConditionBase<AgriSeason> season(BiPredicate<Integer, AgriSeason> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.SEASON, predicate, Functions.SEASON, Offsetters.NONE,
                 tooltips, 1, IAgriGrowCondition.CacheType.NONE);
     }
 
     @Override
-    public IAgriGrowCondition structure(BiPredicate<Integer, IForgeStructure> predicate, List<ITextComponent> tooltips) {
-        return new GrowConditionSingle<>(RequirementType.STRUCTURE, (str, stream) -> stream.anyMatch(structure -> predicate.test(str, structure)),
-                STRUCTURE_FUNCTION, OFFSETTER_NONE, tooltips, 1, IAgriGrowCondition.CacheType.FULL);
+    public GrowConditionBase<Stream<Structure<?>>> structure(BiPredicate<Integer, IForgeStructure> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.STRUCTURE, (str, stream) -> stream.anyMatch(structure -> predicate.test(str, structure)),
+                Functions.STRUCTURE, Offsetters.NONE, tooltips, 1, IAgriGrowCondition.CacheType.FULL);
+    }
+
+    private static final class Functions {
+        private static final BiFunction<World, BlockPos, Integer> LIGHT = IWorldReader::getLight;
+
+        private static final BiFunction<World, BlockPos, Integer> REDSTONE = World::getRedstonePowerFromNeighbors;
+
+        private static final BiFunction<World, BlockPos, Biome> BIOME = World::getBiome;
+
+        private static final Function<World, RegistryKey<World>> DIMENSION_KEY = World::getDimensionKey;
+
+        private static final Function<World, DimensionType> DIMENSION_TYPE = World::getDimensionType;
+        private static final Function<World, Long> TIME = World::getDayTime;
+
+        private static final BiFunction<World, BlockPos, Boolean> RAIN = (world, pos) ->
+                world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.RAIN;
+
+        private static final BiFunction<World, BlockPos, Boolean> SNOW = (world, pos) ->
+                world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.SNOW;
+
+        private static final BiFunction<World, BlockPos, AgriSeason> SEASON = (world, pos) ->
+                AgriApi.getSeasonLogic().getSeason(world, pos);
+
+        private static final BiFunction<World, BlockPos, Optional<IAgriCrop>> CROP = AgriApi::getCrop;
+
+        private static final BiFunction<World, BlockPos, Stream<Structure<?>>> STRUCTURE = (world, pos) ->
+                world.getChunkAt(pos).getStructureReferences().entrySet().stream()
+                        .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
+                        .map(Map.Entry::getKey);
+
+        private static <P extends IAgriSoil.SoilProperty> BiFunction<World, BlockPos, P> soilProperty(Function<IAgriSoil, P> mapper, P invalid) {
+            return (world, pos) -> AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos)).map(mapper).orElse(invalid);
+        }
+
+        private static BiFunction<World, BlockPos, Stream<Entity>> entity(double range) {
+            return (world, pos) ->
+                    world.getEntitiesWithinAABBExcludingEntity(
+                            null, new AxisAlignedBB(pos.add(-range, -range, -range), pos.add(range, range, range))).stream();
+        }
+
+        private static BiFunction<World, BlockPos, Stream<BlockState>> blockstate(BlockPos min, BlockPos max) {
+            return (world, pos) -> WorldHelper.streamPositions(pos.add(min), pos.add(max)).map(world::getBlockState);
+        }
+
+        private Functions () {}
+    }
+
+    private static final class Offsetters {
+        private static final UnaryOperator<BlockPos> NONE = pos -> pos;
+        private static final UnaryOperator<BlockPos> SOIL = BlockPos::down;
+
+        private Offsetters() {}
+    }
+
+    private static final class Tooltips {
+
+        private static final List<ITextComponent> NO_RAIN = ImmutableList.of(
+                new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.no_rain"));
+        private static final List<ITextComponent> RAIN = ImmutableList.of(
+                new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.rain"));
+        private static final List<ITextComponent> NO_SNOW = ImmutableList.of(
+                new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.no_snow"));
+        private static final List<ITextComponent> SNOW = ImmutableList.of(
+                new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.snow"));
+
+        private Tooltips() {}
     }
 }
