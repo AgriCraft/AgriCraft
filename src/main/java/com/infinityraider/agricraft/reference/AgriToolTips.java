@@ -1,15 +1,21 @@
 package com.infinityraider.agricraft.reference;
 
+import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
+
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 public class AgriToolTips {
     public static final TranslationTextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
@@ -108,5 +114,50 @@ public class AgriToolTips {
                 .append(genePair.getDominant().getTooltip())
                 .append(new StringTextComponent( " - "))
                 .append(genePair.getRecessive().getTooltip());
+    }
+
+    public static ITextComponent collect(Stream<ITextComponent> stream, String separator) {
+        return stream.collect(collector(separator));
+    }
+
+    private static Collector<ITextComponent, IFormattableTextComponent, ITextComponent> collector(String separator) {
+        return new Collector<ITextComponent, IFormattableTextComponent, ITextComponent>() {
+
+            @Override
+            public Supplier<IFormattableTextComponent> supplier() {
+                return () -> new StringTextComponent("");
+            }
+
+            @Override
+            public BiConsumer<IFormattableTextComponent, ITextComponent> accumulator() {
+                return (combined, toAdd) -> {
+                    if(!combined.getString().isEmpty()) {
+                        combined.append(new StringTextComponent(separator));
+                    }
+                    combined.append(toAdd);
+                };
+            }
+
+            @Override
+            public BinaryOperator<IFormattableTextComponent> combiner() {
+                return (a, b) -> {
+                    if(a.getString().isEmpty()) {
+                        return a.append(new StringTextComponent(separator)).append(b);
+                    } else {
+                        return a.append(b);
+                    }
+                };
+            }
+
+            @Override
+            public Function<IFormattableTextComponent, ITextComponent> finisher() {
+                return text -> text;
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return ImmutableSet.of();
+            }
+        };
     }
 }

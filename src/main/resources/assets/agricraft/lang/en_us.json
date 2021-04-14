@@ -150,6 +150,11 @@
   "agricraft.structure.nether_fossil": "Nether Fossil",
   "agricraft.structure.bastion_remnant": "Bastion Remnant",
 
+  "agricraft.season.spring": "Spring",
+  "agricraft.season.summer": "Summer",
+  "agricraft.season.autumn": "Autumn",
+  "agricraft.season.winter": "Winter",
+
   "agricraft.plant.allium.name": "Allium",
   "agricraft.plant.allium.seed": "Allium Seeds",
   "agricraft.plant.allium.desc": "From the family of plants including the garlic, onion, and chive this plant produces a beautiful umbel consisting of many small purple blooms.",
