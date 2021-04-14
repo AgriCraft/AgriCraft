@@ -108,7 +108,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition soil(IntPredicate strength, IAgriSoil soil) {
-        return this.statesInRange(RequirementType.SOIL, (str, state) -> strength.test(str) && soil.isVariant(state), 1, 1, OFFSET_SOIL, OFFSET_SOIL,
+        return this.statesInRange(RequirementType.SOIL, (str, state) -> strength.test(str) || soil.isVariant(state), 1, 1, OFFSET_SOIL, OFFSET_SOIL,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SOIL)
                         .append(new StringTextComponent(": "))
@@ -123,7 +123,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition soil(IntPredicate strength, Collection<IAgriSoil> soils) {
-        return this.statesInRange(RequirementType.SOIL, (str, state) -> strength.test(str) && soils.stream().anyMatch(soil -> soil.isVariant(state)),
+        return this.statesInRange(RequirementType.SOIL, (str, state) -> strength.test(str) || soils.stream().anyMatch(soil -> soil.isVariant(state)),
                 1, 1, OFFSET_SOIL, OFFSET_SOIL,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SOIL)
@@ -134,32 +134,32 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition light(IntPredicate strength, int min, int max) {
-        return this.light((str, light) -> strength.test(str) && light >= min && light <= max,
+        return this.light((str, light) -> strength.test(str) || light >= min && light <= max,
                 ImmutableList.of(tooltipInRange(TOOLTIP_LIGHT, min, max)));
     }
 
     @Override
     public IAgriGrowCondition light(IntPredicate strength, int value) {
-        return this.light((str, light) -> strength.test(str) && light == value,
+        return this.light((str, light) -> strength.test(str) || light == value,
                 ImmutableList.of(tooltipEqualTo(TOOLTIP_LIGHT, value)));
     }
 
     @Override
     public IAgriGrowCondition redstone(IntPredicate strength, int min, int max) {
-        return this.redstone((str, redstone) -> strength.test(str) && redstone >= min && redstone <= max,
+        return this.redstone((str, redstone) -> strength.test(str) || redstone >= min && redstone <= max,
                 ImmutableList.of(tooltipInRange(TOOLTIP_REDSTONE, min, max)));
     }
 
     @Override
     public IAgriGrowCondition redstone(IntPredicate strength, int value) {
-        return this.redstone((str, redstone) -> strength.test(str) && redstone == value,
+        return this.redstone((str, redstone) -> strength.test(str) || redstone == value,
                 ImmutableList.of(tooltipEqualTo(TOOLTIP_REDSTONE, value)));
     }
 
     @Override
     public IAgriGrowCondition liquidFromFluid(IntPredicate strength, Fluid fluid) {
         return this.liquidFromFluid(
-                (str, fld) -> strength.test(str) && fld.equals(fluid),
+                (str, fld) -> strength.test(str) || fld.equals(fluid),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -174,7 +174,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromFluid(IntPredicate strength, Collection<Fluid> fluids) {
-        return this.liquidFromFluid((str, fluid) -> strength.test(str) && fluids.contains(fluid),
+        return this.liquidFromFluid((str, fluid) -> strength.test(str) || fluids.contains(fluid),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -191,7 +191,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition liquidFromState(IntPredicate strength, FluidState state) {
         return this.liquidFromState(
-                (str, fluid) -> strength.test(str) && state.equals(fluid),
+                (str, fluid) -> strength.test(str) || state.equals(fluid),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -206,7 +206,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromState(IntPredicate strength, Collection<FluidState> states) {
-        return this.liquidFromState((str, state) -> strength.test(str) && states.contains(state),
+        return this.liquidFromState((str, state) -> strength.test(str) || states.contains(state),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -222,7 +222,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromTag(IntPredicate strength, Tag<Fluid> tag) {
-        return this.liquidFromFluid((str, fluid) -> strength.test(str) && tag.contains(fluid),
+        return this.liquidFromFluid((str, fluid) -> strength.test(str) || tag.contains(fluid),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -238,7 +238,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromTag(IntPredicate strength, Collection<Tag<Fluid>> tags) {
-        return this.liquidFromFluid((str, fluid) -> strength.test(str) && tags.stream().anyMatch(tag -> tag.contains(fluid)),
+        return this.liquidFromFluid((str, fluid) -> strength.test(str) || tags.stream().anyMatch(tag -> tag.contains(fluid)),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_FLUID)
                         .append(new StringTextComponent(": "))
@@ -249,7 +249,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromClass(IntPredicate strength, Class<Fluid> clazz, List<ITextComponent> tooltips) {
-        return this.liquidFromFluid((str, fluid) -> strength.test(str) && clazz.isInstance(fluid), tooltips);
+        return this.liquidFromFluid((str, fluid) -> strength.test(str) || clazz.isInstance(fluid), tooltips);
     }
 
     @Override
@@ -259,7 +259,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition liquidFromClass(IntPredicate strength, Collection<Class<Fluid>> classes, List<ITextComponent> tooltips) {
-        return this.liquidFromFluid((str, fluid) -> strength.test(str) && classes.stream().anyMatch(clazz -> clazz.isInstance(fluid)), tooltips);
+        return this.liquidFromFluid((str, fluid) -> strength.test(str) || classes.stream().anyMatch(clazz -> clazz.isInstance(fluid)), tooltips);
     }
 
     @Override
@@ -269,7 +269,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition biome(IntPredicate strength, Biome biome, ITextComponent biomeName) {
-        return this.biome((str, aBiome) -> strength.test(str) && biome.equals(aBiome),
+        return this.biome((str, aBiome) -> strength.test(str) || biome.equals(aBiome),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_BIOME)
                         .append(new StringTextComponent(": "))
@@ -284,7 +284,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition biome(IntPredicate strength, Collection<Biome> biomes, Function<Biome, ITextComponent> nameFunction) {
-        return this.biome((str, biome) -> strength.test(str) && biomes.contains(biome),
+        return this.biome((str, biome) -> strength.test(str) || biomes.contains(biome),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_BIOME)
                         .append(new StringTextComponent(": "))
@@ -294,7 +294,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition biomeFromCategory(IntPredicate strength, Biome.Category category, ITextComponent categoryName) {
-        return this.biomeFromCategory((str, aCategory) -> strength.test(str) && category.equals(aCategory),
+        return this.biomeFromCategory((str, aCategory) -> strength.test(str) || category.equals(aCategory),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_BIOME_CATEGORY)
                         .append(new StringTextComponent(": "))
@@ -309,7 +309,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition biomeFromCategories(IntPredicate strength, Collection<Biome.Category> categories, Function<Biome.Category, ITextComponent> nameFunction) {
-        return this.biomeFromCategory((str, category) -> strength.test(str) && categories.contains(category),
+        return this.biomeFromCategory((str, category) -> strength.test(str) || categories.contains(category),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_BIOME)
                         .append(new StringTextComponent(": "))
@@ -324,7 +324,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition climate(IntPredicate strength, Biome.Climate climate, List<ITextComponent> tooltips) {
-        return this.climate((str, aClimate) -> strength.test(str) && climate.equals(aClimate), tooltips);
+        return this.climate((str, aClimate) -> strength.test(str) || climate.equals(aClimate), tooltips);
     }
 
     @Override
@@ -334,7 +334,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition climate(IntPredicate strength, Collection<Biome.Climate> climates, List<ITextComponent> tooltips) {
-        return this.climate((str, climate) -> strength.test(str) && climates.contains(climate), tooltips);
+        return this.climate((str, climate) -> strength.test(str) || climates.contains(climate), tooltips);
     }
 
     @Override
@@ -366,7 +366,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition dimensionFromKey(IntPredicate strength, RegistryKey<World> dimension, ITextComponent dimensionName) {
-        return this.dimensionFromKey((str, aDimension) -> strength.test(str) && dimension.equals(aDimension),
+        return this.dimensionFromKey((str, aDimension) -> strength.test(str) || dimension.equals(aDimension),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_DIMENSION)
                         .append(new StringTextComponent(": "))
@@ -383,7 +383,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition dimensionsFromKeys(
             IntPredicate strength, Collection<RegistryKey<World>> dimensions, Function<RegistryKey<World>, ITextComponent> nameFunction) {
-        return this.dimensionFromKey((str, dimension) -> strength.test(str) && dimensions.contains(dimension),
+        return this.dimensionFromKey((str, dimension) -> strength.test(str) || dimensions.contains(dimension),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_DIMENSION)
                         .append(new StringTextComponent(": "))
@@ -393,7 +393,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition dimensionFromType(IntPredicate strength, DimensionType dimension, ITextComponent dimensionName) {
-        return this.dimensionFromType((str, aDimension) -> strength.test(str) && dimension.equals(aDimension),
+        return this.dimensionFromType((str, aDimension) -> strength.test(str) || dimension.equals(aDimension),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_DIMENSION)
                         .append(new StringTextComponent(": "))
@@ -408,7 +408,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition dimensionFromTypes(IntPredicate strength, Collection<DimensionType> dimensions, Function<DimensionType, ITextComponent> nameFunction) {
-        return this.dimensionFromType((str, dim) -> strength.test(str) && dimensions.contains(dim),
+        return this.dimensionFromType((str, dim) -> strength.test(str) || dimensions.contains(dim),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_DIMENSION)
                         .append(new StringTextComponent(": "))
@@ -418,17 +418,17 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition withWeed(IntPredicate strength) {
-        return this.weed((str, weed) -> strength.test(str) && weed.isWeed(), ImmutableList.of(TOOLTIP_WITH_WEED));
+        return this.weed((str, weed) -> strength.test(str) || weed.isWeed(), ImmutableList.of(TOOLTIP_WITH_WEED));
     }
 
     @Override
     public IAgriGrowCondition withoutWeed(IntPredicate strength) {
-        return this.weed((str, weed) -> strength.test(str) && !weed.isWeed(), ImmutableList.of(TOOLTIP_WITHOUT_WEED));
+        return this.weed((str, weed) -> strength.test(str) || !weed.isWeed(), ImmutableList.of(TOOLTIP_WITHOUT_WEED));
     }
 
     @Override
     public IAgriGrowCondition withWeed(IntPredicate strength, IAgriWeed weed) {
-        return this.weed((str, aWeed) -> strength.test(str) && weed.equals(aWeed),
+        return this.weed((str, aWeed) -> strength.test(str) || weed.equals(aWeed),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_WITH_WEED)
                         .append(new StringTextComponent(": "))
@@ -438,7 +438,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition withoutWeed(IntPredicate strength, IAgriWeed weed) {
-        return this.weed((str, aWeed) -> strength.test(str) && !weed.equals(aWeed),
+        return this.weed((str, aWeed) -> strength.test(str) || !weed.equals(aWeed),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_WITHOUT_WEED)
                         .append(new StringTextComponent(": "))
@@ -453,7 +453,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition withWeed(IntPredicate strength, IAgriWeed weed, IAgriGrowthStage stage) {
-        return this.weed((str, aWeed, growth) -> strength.test(str) && weed.equals(aWeed) && stage.equals(growth),
+        return this.weed((str, aWeed, growth) -> strength.test(str) || weed.equals(aWeed) && stage.equals(growth),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_WITH_WEED)
                         .append(new StringTextComponent(": "))
@@ -463,7 +463,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition withoutWeed(IntPredicate strength, IAgriWeed weed, IAgriGrowthStage stage) {
-        return this.weed((str, aWeed, growth) -> strength.test(str) && !(weed.equals(aWeed) && stage.equals(growth)),
+        return this.weed((str, aWeed, growth) -> strength.test(str) || !(weed.equals(aWeed) && stage.equals(growth)),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_WITHOUT_WEED)
                         .append(new StringTextComponent(": "))
@@ -493,17 +493,17 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition timeAllowed(IntPredicate strength, long min, long max, List<ITextComponent> tooltips) {
-        return this.time((str, time) -> strength.test(str) && time >= min && time <= max, tooltips);
+        return this.time((str, time) -> strength.test(str) || time >= min && time <= max, tooltips);
     }
 
     @Override
     public IAgriGrowCondition timeForbidden(IntPredicate strength, long min, long max, List<ITextComponent> tooltips) {
-        return this.time((str, time) -> strength.test(str) && time < min || time > max, tooltips);
+        return this.time((str, time) -> strength.test(str) || time < min || time > max, tooltips);
     }
 
     @Override
     public IAgriGrowCondition blockBelow(IntPredicate strength, Block block) {
-        return this.blockBelow((str, aBlock) -> strength.test(str) && block.equals(aBlock),
+        return this.blockBelow((str, aBlock) -> strength.test(str) || block.equals(aBlock),
                 ImmutableList.of(TOOLTIP_BLOCK_BELOW, block.getTranslatedName()));
     }
 
@@ -514,7 +514,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition blockBelow(IntPredicate strength, Collection<Block> blocks) {
-        return this.blockBelow((str, block) -> strength.test(str) && blocks.contains(block), Stream.concat(Stream.of(
+        return this.blockBelow((str, block) -> strength.test(str) || blocks.contains(block), Stream.concat(Stream.of(
                 TOOLTIP_BLOCK_BELOW),
                 blocks.stream().map(Block::getTranslatedName)
         ).collect(Collectors.toList()));
@@ -527,7 +527,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition stateBelow(IntPredicate strength, BlockState state) {
-        return this.stateBelow((str, aState) -> strength.test(str) && state.equals(aState),
+        return this.stateBelow((str, aState) -> strength.test(str) || state.equals(aState),
                 ImmutableList.of(TOOLTIP_BLOCK_BELOW, state.getBlock().getTranslatedName()));
     }
 
@@ -538,7 +538,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition stateBelow(IntPredicate strength, Collection<BlockState> states) {
-        return this.stateBelow((str, state) -> strength.test(str) && states.contains(state), Stream.concat(Stream.of(
+        return this.stateBelow((str, state) -> strength.test(str) || states.contains(state), Stream.concat(Stream.of(
                 TOOLTIP_BLOCK_BELOW),
                 states.stream().map(state -> state.getBlock().getTranslatedName())
         ).collect(Collectors.toList()));
@@ -551,7 +551,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition tagBelow(IntPredicate strength, Tag<Block> tag) {
-        return this.blockBelow((str, block) -> strength.test(str) && tag.contains(block), Stream.concat(Stream.of(
+        return this.blockBelow((str, block) -> strength.test(str) || tag.contains(block), Stream.concat(Stream.of(
                 TOOLTIP_BLOCK_BELOW),
                 tag.getAllElements().stream().map(Block::getTranslatedName)
         ).collect(Collectors.toList()));
@@ -564,7 +564,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition tagBelow(IntPredicate strength, Collection<Tag<Block>> tags) {
-        return this.blockBelow((str, block) -> strength.test(str) && tags.stream().anyMatch(tag -> tag.contains(block)),
+        return this.blockBelow((str, block) -> strength.test(str) || tags.stream().anyMatch(tag -> tag.contains(block)),
                 Stream.concat(Stream.of(
                         TOOLTIP_BLOCK_BELOW),
                         tags.stream().flatMap(tag -> tag.getAllElements().stream()).map(Block::getTranslatedName)
@@ -573,7 +573,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition classBelow(IntPredicate strength, Class<Block> clazz, List<ITextComponent> tooltips) {
-        return this.blockBelow((str, block) -> strength.test(str) && clazz.isInstance(block), tooltips);
+        return this.blockBelow((str, block) -> strength.test(str) || clazz.isInstance(block), tooltips);
     }
 
     @Override
@@ -583,7 +583,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition classBelow(IntPredicate strength, Collection<Class<Block>> classes, List<ITextComponent> tooltips) {
-        return this.blockBelow((str, block) -> strength.test(str) && classes.stream().anyMatch(clazz -> clazz.isInstance(block)), tooltips);
+        return this.blockBelow((str, block) -> strength.test(str) || classes.stream().anyMatch(clazz -> clazz.isInstance(block)), tooltips);
     }
 
     @Override
@@ -734,7 +734,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
                                            Predicate<BlockState> predicate, List<ITextComponent> tooltips) {
-        return this.statesInRange(RequirementType.BLOCKS_NEARBY, (str, state) -> strength.test(str) && predicate.test(state),
+        return this.statesInRange(RequirementType.BLOCKS_NEARBY, (str, state) -> strength.test(str) || predicate.test(state),
                 min, max, minOffset, maxOffset, tooltips);
     }
 
@@ -787,7 +787,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entityNearby(IntPredicate strength, EntityType<?> type, double range) {
-        return this.entityNearby((str, entity) -> strength.test(str) && entity.getType().equals(type), range,
+        return this.entityNearby((str, entity) -> strength.test(str) || entity.getType().equals(type), range,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_ENTITY_NEARBY)
                         .append(new StringTextComponent(": "))
@@ -797,7 +797,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entityNearby(IntPredicate strength, Class<Entity> clazz, double range, ITextComponent entityName) {
-        return this.entityNearby((str, entity) -> strength.test(str) && clazz.isInstance(entity), range,
+        return this.entityNearby((str, entity) -> strength.test(str) || clazz.isInstance(entity), range,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_ENTITY_NEARBY)
                         .append(new StringTextComponent(": "))
@@ -812,7 +812,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entitiesNearby(IntPredicate strength, EntityType<?> type, double range, int amount) {
-        return this.entitiesNearby((str, entity) -> strength.test(str) && entity.getType().equals(type), range, amount,
+        return this.entitiesNearby((str, entity) -> strength.test(str) || entity.getType().equals(type), range, amount,
                 ImmutableList.of(new StringTextComponent("")
                         .append(tooltipEqualTo(TOOLTIP_ENTITY_NEARBY, amount))
                         .append(new StringTextComponent(": "))
@@ -822,7 +822,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entitiesNearby(IntPredicate strength, Class<Entity> clazz, double range, int amount, ITextComponent entityName) {
-        return this.entitiesNearby((str, entity) -> strength.test(str) && clazz.isInstance(entity), range, amount,
+        return this.entitiesNearby((str, entity) -> strength.test(str) || clazz.isInstance(entity), range, amount,
                 ImmutableList.of(new StringTextComponent("")
                         .append(tooltipEqualTo(TOOLTIP_ENTITY_NEARBY, amount))
                         .append(new StringTextComponent(": "))
@@ -837,7 +837,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entitiesNearby(IntPredicate strength, EntityType<?> type, double range, int min, int max) {
-        return this.entitiesNearby((str, entity) -> strength.test(str) && entity.getType().equals(type), range, min, max,
+        return this.entitiesNearby((str, entity) -> strength.test(str) || entity.getType().equals(type), range, min, max,
                 ImmutableList.of(new StringTextComponent("")
                         .append(tooltipInRange(TOOLTIP_ENTITY_NEARBY, min, max))
                         .append(new StringTextComponent(": "))
@@ -847,7 +847,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition entitiesNearby(IntPredicate strength, Class<Entity> clazz, double range, int min, int max, ITextComponent entityName) {
-        return this.entitiesNearby((str, entity) -> strength.test(str) && clazz.isInstance(entity), range, min, max,
+        return this.entitiesNearby((str, entity) -> strength.test(str) || clazz.isInstance(entity), range, min, max,
                 ImmutableList.of(new StringTextComponent("")
                         .append(tooltipInRange(TOOLTIP_ENTITY_NEARBY, min, max))
                         .append(new StringTextComponent(": "))
@@ -857,7 +857,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition inSeason(IntPredicate strength, AgriSeason season) {
-        return this.season((str, aSeason) -> strength.test(str) && season.matches(aSeason),
+        return this.season((str, aSeason) -> strength.test(str) || season.matches(aSeason),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SEASON)
                         .append(new StringTextComponent(": "))
@@ -872,7 +872,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition inSeasons(IntPredicate strength, Collection<AgriSeason> seasons) {
-        return this.season((str, season) -> strength.test(str) && seasons.stream().anyMatch(season::matches),
+        return this.season((str, season) -> strength.test(str) || seasons.stream().anyMatch(season::matches),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SEASON)
                         .append(new StringTextComponent(": "))
@@ -882,7 +882,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition notInSeason(IntPredicate strength, AgriSeason season) {
-        return this.season((str, aSeason) -> strength.test(str) && !season.matches(aSeason),
+        return this.season((str, aSeason) -> strength.test(str) || !season.matches(aSeason),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SEASON)
                         .append(new StringTextComponent(": "))
@@ -899,7 +899,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition notInSeasons(IntPredicate strength, Collection<AgriSeason> seasons) {
-        return this.season((str, season) -> strength.test(str) && seasons.stream().noneMatch(season::matches),
+        return this.season((str, season) -> strength.test(str) || seasons.stream().noneMatch(season::matches),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_SEASON)
                         .append(new StringTextComponent(": "))
@@ -931,7 +931,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition inPyramid(IntPredicate strength) {
-        return this.structure((str, structure) -> strength.test(str) && structure == Structure.DESERT_PYRAMID || structure == Structure.JUNGLE_PYRAMID,
+        return this.structure((str, structure) -> strength.test(str) || structure == Structure.DESERT_PYRAMID || structure == Structure.JUNGLE_PYRAMID,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_IN_STRUCTURE)
                         .append(new StringTextComponent(": "))
@@ -1031,7 +1031,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition notInPyramid(IntPredicate strength) {
-        return this.structure((str, structure) -> strength.test(str) && structure != Structure.DESERT_PYRAMID && structure != Structure.JUNGLE_PYRAMID,
+        return this.structure((str, structure) -> strength.test(str) || structure != Structure.DESERT_PYRAMID && structure != Structure.JUNGLE_PYRAMID,
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_OUT_STRUCTURE)
                         .append(new StringTextComponent(": "))
@@ -1111,7 +1111,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition inStructure(IntPredicate strength, IForgeStructure structure, ITextComponent structureName) {
-        return this.structure((str, aStructure) -> strength.test(str) && structure.equals(aStructure),
+        return this.structure((str, aStructure) -> strength.test(str) || structure.equals(aStructure),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_IN_STRUCTURE)
                         .append(new StringTextComponent(": "))
@@ -1121,7 +1121,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition notInStructure(IntPredicate strength, IForgeStructure structure, ITextComponent structureName) {
-        return this.structure((str, aStructure) -> strength.test(str) && !structure.equals(aStructure),
+        return this.structure((str, aStructure) -> strength.test(str) || !structure.equals(aStructure),
                 ImmutableList.of(new StringTextComponent("")
                         .append(TOOLTIP_OUT_STRUCTURE)
                         .append(new StringTextComponent(": "))
