@@ -17,6 +17,11 @@ import java.util.function.BiFunction;
  */
 public interface IAgriSeasonLogic {
     /**
+     * @return true if a season mod is present and has claimed the AgriCraft season logic
+     */
+    boolean isActive();
+
+    /**
      * Fetches the season for a given position in the world
      *
      * @param world the world

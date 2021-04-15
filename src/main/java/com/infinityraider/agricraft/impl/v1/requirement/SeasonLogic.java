@@ -25,6 +25,11 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     @Override
+    public boolean isActive() {
+        return this.getOwner() != null;
+    }
+
+    @Override
     public AgriSeason getSeason(World world, BlockPos pos) {
         return this.getter.apply(world, pos);
     }

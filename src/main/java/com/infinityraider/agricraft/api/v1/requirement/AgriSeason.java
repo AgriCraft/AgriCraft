@@ -5,6 +5,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Enum to refer to seasonality for AgriCraft plants.
@@ -65,5 +66,12 @@ public enum AgriSeason {
         return Arrays.stream(values())
                 .filter(season -> season.keys.stream().anyMatch(string::equalsIgnoreCase))
                 .findAny();
+    }
+
+    /**
+     * @return a stream of the four seasons
+     */
+    public static Stream<AgriSeason> stream() {
+        return Arrays.stream(values()).filter(season -> season != ANY);
     }
 }

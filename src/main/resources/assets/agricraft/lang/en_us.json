@@ -51,6 +51,7 @@
   "agricraft.tooltip.no_plant": "No Plant",
   "agricraft.tooltip.genome": "Genome",
   "agricraft.tooltip.growth": "Growth",
+  "agricraft.tooltip.light": "Light Level",
   "agricraft.tooltip.mature": "Mature",
   "agricraft.tooltip.fertile": "Fertile",
   "agricraft.tooltip.not_fertile": "Not Fertile",

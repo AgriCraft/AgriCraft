@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
@@ -36,6 +37,7 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
@@ -45,6 +47,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
     private final IDrawable icon;
     private final IAgriDrawable background;
+    private final IAgriDrawable background_seasons;
     private final Set<TooltipRegion> tooltips;
 
     public static void registerRecipes(IRecipeRegistration registration) {
@@ -61,10 +64,20 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
     public AgriRecipeCategoryGrowthRequirements(IGuiHelper helper) {
         this.icon = helper.createDrawableIngredient(new ItemStack(Blocks.FARMLAND));
-        this.background = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req.png"), 0, 0, 128, 128, 128, 128);
+        this.background = JeiPlugin.createAgriDrawable(
+                new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req.png"),
+                0, 0, 128, 128, 128, 128);
+        this.background_seasons = JeiPlugin.createAgriDrawable(
+                new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req_seasons.png"),
+                0, 0, 128, 128, 128, 128);
         this.tooltips = ImmutableSet.of(
                 new TooltipRegion(AgriToolTips.GROWTH, 102, 20, 111, 70),
-                new TooltipRegion(AgriApi.getStatRegistry().strengthStat().getDescription(), 114, 20, 123, 70)
+                new TooltipRegion(AgriApi.getStatRegistry().strengthStat().getDescription(), 114, 20, 123, 70),
+                new TooltipRegion(AgriToolTips.LIGHT, 17, 25, 21, 74),
+                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 25, 26, 37, 38, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 25, 38, 37, 50, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 25, 50, 37, 62, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.WINTER.getDisplayName(), 25, 62, 37, 74, AgriApi.getSeasonLogic()::isActive)
         );
     }
 
@@ -89,7 +102,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
     @Nonnull
     @Override
     public IDrawable getBackground() {
-        return this.background;
+        return AgriApi.getSeasonLogic().isActive() ? this.background_seasons : this.background;
     }
 
     @Nonnull
@@ -155,21 +168,26 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         PlantRenderState state = this.getState(plant);
         int strength = state.getStrength();
         IAgriGrowthStage stage = state.getStage();
+        IAgriGrowthRequirement req = plant.getGrowthRequirement(stage);
         // Tell the renderer to render with a custom growth stage
         AgriIngredientPlant.RENDERER.useGrowthStageForNextRenderCall(plant, stage);
         // Draw increments
         IncrementRenderer.getInstance().renderStrengthIncrements(transforms, strength);
         IncrementRenderer.getInstance().renderGrowthStageIncrements(transforms, stage);
+        // Draw light levels
+        LightLevelRenderer.getInstance().renderLightLevels(transforms, 18, 26, light -> req.isLightLevelAccepted(light, strength));
         // Draw Property icons
         Arrays.stream(IAgriSoil.Humidity.values()).filter(IAgriSoil.Humidity::isValid)
-                .filter(humidity -> plant.getGrowthRequirement(stage).isSoilHumidityAccepted(humidity, strength))
+                .filter(humidity -> req.isSoilHumidityAccepted(humidity, strength))
                 .forEach(humidity -> SoilPropertyIconRenderer.getInstance().drawIcon(humidity, transforms, 37, 83, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Acidity.values()).filter(IAgriSoil.Acidity::isValid)
-                .filter(acidity -> plant.getGrowthRequirement(stage).isSoilAcidityAccepted(acidity, strength))
+                .filter(acidity -> req.isSoilAcidityAccepted(acidity, strength))
                 .forEach(acidity -> SoilPropertyIconRenderer.getInstance().drawIcon(acidity, transforms, 37, 96, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Nutrients.values()).filter(IAgriSoil.Nutrients::isValid)
-                .filter(nutrients -> plant.getGrowthRequirement(stage).isSoilNutrientsAccepted(nutrients, strength))
+                .filter(nutrients ->req.isSoilNutrientsAccepted(nutrients, strength))
                 .forEach(nutrients -> SoilPropertyIconRenderer.getInstance().drawIcon(nutrients, transforms, 37, 109, mouseX, mouseY));
+        // Draw seasons
+        SeasonRenderer.getInstance().renderSeasons(transforms, 25, 26, season -> req.isSeasonAccepted(season, strength));
         // Draw buttons
         state.updateStageButtons(102, 10);
         state.updateStrengthButtons(114, 10 );
@@ -344,24 +362,79 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         private final int y1;
         private final int x2;
         private final int y2;
+        private final BooleanSupplier isActive;
 
         public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2) {
             this(ImmutableList.of(tooltip), x1, y1, x2, y2);
         }
 
+        public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
+            this(ImmutableList.of(tooltip), x1, y1, x2, y2, isActive);
+        }
+
         public TooltipRegion(List<ITextComponent> tooltip, int x1, int y1, int x2, int y2) {
+            this(tooltip, x1, y1, x2, y2, () -> true);
+        }
+
+        public TooltipRegion(List<ITextComponent> tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
             this.tooltip = tooltip;
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x2;
             this.y2 = y2;
+            this.isActive = isActive;
         }
 
         public void drawTooltip(MatrixStack transforms, double mX, double mY) {
-            if(mX >= this.x1 && mX <= this.x2 && mY >= this.y1 && mY <= this.y2) {
-                int w = this.getScaledWindowWidth();
-                int h = this.getScaledWindowHeight();
-                GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
+            if(this.isActive.getAsBoolean()) {
+                if (mX >= this.x1 && mX <= this.x2 && mY >= this.y1 && mY <= this.y2) {
+                    int w = this.getScaledWindowWidth();
+                    int h = this.getScaledWindowHeight();
+                    GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
+                }
+            }
+        }
+    }
+
+    private static final class LightLevelRenderer implements IRenderUtilities {
+        private static final LightLevelRenderer INSTANCE = new LightLevelRenderer();
+
+        public static LightLevelRenderer getInstance() {
+            return INSTANCE;
+        }
+
+        private final ResourceLocation texture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/light_levels.png");
+
+        private LightLevelRenderer() {}
+
+        public void renderLightLevels(MatrixStack transforms, int x, int y, Predicate<Integer> predicate) {
+            this.bindTexture(this.texture);
+            for(int i = 15; i >= 0; i--) {
+                if(predicate.test(i))
+                AbstractGui.blit(transforms, x, y + 3*(15-i), 3, 3, 0, 3*(15-i), 3, 3, 3, 48);
+            }
+        }
+    }
+
+    private static final class SeasonRenderer implements IRenderUtilities {
+        private static final SeasonRenderer INSTANCE = new SeasonRenderer();
+
+        public static SeasonRenderer getInstance() {
+            return INSTANCE;
+        }
+
+        private final ResourceLocation texture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/season_icons.png");
+
+        private SeasonRenderer() {
+        }
+
+        public void renderSeasons(MatrixStack transforms, int x, int y, Predicate<AgriSeason> predicate) {
+            if (AgriApi.getSeasonLogic().isActive()) {
+                this.bindTexture(this.texture);
+                AgriSeason.stream().filter(predicate).forEach(season -> {
+                    int i = season.ordinal();
+                    AbstractGui.blit(transforms, x, y + 12 * i, 12, 12, 0, 12 * i, 12, 12, 12, 48);
+                });
             }
         }
     }
