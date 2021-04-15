@@ -252,9 +252,25 @@
   "agricraft.plant.red_tulip.seed": "Red Tulip Seeds",
   "agricraft.plant.red_tulip.desc": "A vibrant red varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
 
+  "agricraft.plant.sea_grass.name": "Sea Grass",
+  "agricraft.plant.sea_grass.seed": "Sea Grass Seed",
+  "agricraft.plant.sea_grass.desc": "Grass, but from the year 3000.",
+
+  "agricraft.plant.sea_pickle.name": "Sea Pickle",
+  "agricraft.plant.sea_pickle.seed": "Sea Pickle Seed",
+  "agricraft.plant.sea_pickle.desc": "Not as tasty as one might expect.",
+
+  "agricraft.plant.sweet_berry.name": "Sweet Berry",
+  "agricraft.plant.sweet_berry.seed": "Sweet Berry Seeds",
+  "agricraft.plant.sweet_berry.desc": "You should make a cake out of it.",
+
   "agricraft.plant.sugarcane.name": "Sugarcane",
   "agricraft.plant.sugarcane.seed": "Sugarcane Seeds",
   "agricraft.plant.sugarcane.desc": "High in fructose, a healthy part of your daily breakfast.",
+
+  "agricraft.plant.warped_fungus.name": "Warped Fungus",
+  "agricraft.plant.warped_fungus.seed": "Warped Fungus Spores",
+  "agricraft.plant.warped_fungus.desc": "Efficient Hoglin repellant.",
 
   "agricraft.plant.wheat.name": "Wheat",
   "agricraft.plant.wheat.seed": "Wheat Seeds",
@@ -264,13 +280,17 @@
   "agricraft.plant.white_tulip.seed": "White Tulip Seeds",
   "agricraft.plant.white_tulip.desc": "A snow-white varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
 
+  "agricraft.plant.wither_rose.name": "Wither Rose",
+  "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
+  "agricraft.plant.wither_rose.desc": "Nobody likes their roses withering, but this is on another level.",
+
   "agricraft.plant.aurigold.name": "Aurigold",
   "agricraft.plant.aurigold.seed": "Aurigold Seeds",
   "agricraft.plant.aurigold.desc": "A golden delight.",
 
   "agricraft.plant.cuprosia.name": "Cuprosia",
   "agricraft.plant.cuprosia.seed": "Cuprosia Seeds",
-  "agricraft.plant.cuprosia.desc": "Known as the engineer\\u0027s delight, this plant produces a substance of incredible utility.",
+  "agricraft.plant.cuprosia.desc": "Known as the engineer's delight, this plant produces a substance of incredible utility.",
 
   "agricraft.plant.diamahlia.name": "Diamahlia",
   "agricraft.plant.diamahlia.seed": "Diamahlia Seeds",
@@ -278,7 +298,7 @@
 
   "agricraft.plant.emeryllis.name": "Emeryllis",
   "agricraft.plant.emeryllis.seed": "Emeryllis Seeds",
-  "agricraft.plant.emeryllis.desc": "A truely green gem.",
+  "agricraft.plant.emeryllis.desc": "A truly green gem.",
 
   "agricraft.plant.ferranium.name": "Ferranium",
   "agricraft.plant.ferranium.seed": "Ferranium Seeds",
@@ -323,22 +343,6 @@
   "agricraft.plant.redstodendron.name": "Redstodendron",
   "agricraft.plant.redstodendron.seed": "Redstodendron Seeds",
   "agricraft.plant.redstodendron.desc": "Much more complex than the average red algea.",
-
-  "agricraft.plant.sea_grass.name": "Sea Grass",
-  "agricraft.plant.sea_grass.seed": "Sea Grass Seed",
-  "agricraft.plant.sea_grass.desc": "Grass, but from the year 3000.",
-
-  "agricraft.plant.sweet_berry.name": "Sweet Berry",
-  "agricraft.plant.sweet_berry.seed": "Sweet Berry Seeds",
-  "agricraft.plant.sweet_berry.desc": "You should make a cake out of it.",
-
-  "agricraft.plant.warped_fungus.name": "Warped Fungus",
-  "agricraft.plant.warped_fungus.seed": "Warped Fungus Spores",
-  "agricraft.plant.warped_fungus.desc": "Efficient Hoglin repellant.",
-
-  "agricraft.plant.wither_rose.name": "Wither Rose",
-  "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
-  "agricraft.plant.wither_rose.desc": "Nobody likes their roses withering, but this is on another level.",
 
 
   "agricraft.weed.weed.name": "Weeds",

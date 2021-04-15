@@ -21,8 +21,10 @@ Changelog
 - ADDED: new vanilla plant: Bamboo
 - ADDED: new vanilla plant: Cornflower
 - ADDED: new vanilla plant: Crimson Fungus
+- ADDED: new vanilla plant: Kelp
 - ADDED: new vanilla plant: Lily
 - ADDED: new vanilla plant: Sea Grass
+- ADDED: new vanilla plant: Sea Pickle
 - ADDED: new vanilla plant: Sweet Berry
 - ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
