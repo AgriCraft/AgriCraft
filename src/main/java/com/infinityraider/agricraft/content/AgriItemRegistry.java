@@ -40,12 +40,14 @@ public class AgriItemRegistry {
     public final ItemRake rake_iron;
     public final ItemTrowel trowel;
 
+    public final ItemAgriNugget nugget_coal;
     public final ItemAgriNugget nugget_diamond;
     public final ItemAgriNugget nugget_emerald;
     public final ItemAgriNugget nugget_quartz;
 
     public final ItemGrate grate;
 
+    @SuppressWarnings("deprecation")
     private AgriItemRegistry() {
         this.debugger = new ItemDebugger();
 
@@ -68,6 +70,7 @@ public class AgriItemRegistry {
         this.rake_iron = new ItemRake(ItemRake.IRON_LOGIC);
         this.trowel = new ItemTrowel();
 
+        this.nugget_coal =new ItemAgriNugget.Burnable(Names.Nuggets.COAL);
         this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
         this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
         this.nugget_quartz = new ItemAgriNugget(Names.Nuggets.QUARTZ);

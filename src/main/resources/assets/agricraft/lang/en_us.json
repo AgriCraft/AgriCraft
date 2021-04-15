@@ -20,6 +20,7 @@
   "item.agricraft.agri_rake_wood": "Wooden Hand Rake",
   "item.agricraft.agri_trowel": "Gardening Trowel",
 
+  "item.agricraft.agri_nugget_coal": "Coal Pebble",
   "item.agricraft.agri_nugget_diamond": "Diamond Shard",
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
   "item.agricraft.agri_nugget_quartz": "Quartz Shard",
@@ -206,7 +207,7 @@
 
   "agricraft.plant.kelp.name": "Kelp",
   "agricraft.plant.kelp.seed": "Kelp Seed",
-  "agricraft.plant.kelp.desc": "Perfect for mermaids going vegan.",
+  "agricraft.plant.kelp.desc": "The vegan mermaid's snack of preference.",
 
   "agricraft.plant.lily.name": "Lily",
   "agricraft.plant.lily.seed": "Lily Seeds",
@@ -287,6 +288,10 @@
   "agricraft.plant.aurigold.name": "Aurigold",
   "agricraft.plant.aurigold.seed": "Aurigold Seeds",
   "agricraft.plant.aurigold.desc": "A golden delight.",
+
+  "agricraft.plant.carbonation.name": "Carbonation",
+  "agricraft.plant.carbonation.seed": "Carbonation Seeds",
+  "agricraft.plant.carbonation.desc": "A rare flower which has driven itself to the edge of extinction due its high flammability.",
 
   "agricraft.plant.cuprosia.name": "Cuprosia",
   "agricraft.plant.cuprosia.seed": "Cuprosia Seeds",

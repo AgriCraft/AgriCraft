@@ -41,6 +41,7 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     default void onModLoadCompleteEvent(final FMLLoadCompleteEvent event) {
         PluginHandler.populateRegistries();
     }

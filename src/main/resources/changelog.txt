@@ -28,6 +28,7 @@ Changelog
 - ADDED: new vanilla plant: Sweet Berry
 - ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
+- ADDED: new resource plant: Carbonation
 
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].
