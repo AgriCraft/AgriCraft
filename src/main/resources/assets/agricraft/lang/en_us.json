@@ -355,11 +355,14 @@
   "agricraft.weed.weed.desc": "A nuisance to deal with.",
 
 
+  "agricraft.soil.clay.name": "Clay Soil",
+  "agricraft.soil.crimson_nylium.name": "Crimson Nylium Soil",
   "agricraft.soil.farmland.name": "Farmland Soil",
-  "agricraft.soil.grass.name": "Grass Soil",
   "agricraft.soil.mycelium.name": "Mycelium Soil",
+  "agricraft.soil.podzol.name": "Podzol Soil",
   "agricraft.soil.sand.name": "Sand Soil",
   "agricraft.soil.soul_sand.name": "Soul Sand Soil",
+  "agricraft.soil.soul_soil.name": "Soul Soil Soil",
   "agricraft.soil.gravel.name": "Gravel Soil",
-  "agricraft.soil.stone.name": "Stone Soil"
+  "agricraft.soil.warped_nylium.name": "Warped Nylium Soil"
 }

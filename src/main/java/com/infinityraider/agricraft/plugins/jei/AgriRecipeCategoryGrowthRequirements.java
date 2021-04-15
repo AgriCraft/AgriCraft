@@ -279,11 +279,13 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
         public boolean incrementStrength() {
             this.strength = Math.min(this.getMaxStrength(), this.getStrength() + 1);
+            this.updateGuiState();
             return true;
         }
 
         public boolean decrementStrength() {
             this.strength = Math.max(this.getMinStrength(), this.getStrength() - 1);
+            this.updateGuiState();
             return true;
         }
 
@@ -313,6 +315,10 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                     .findFirst()
                     .map(Button::onPress)
                     .orElse(false);
+        }
+
+        protected void updateGuiState() {
+
         }
     }
 
