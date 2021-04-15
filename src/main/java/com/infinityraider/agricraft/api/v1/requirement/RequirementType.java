@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 public enum RequirementType {
-    /**
+    /*
      * --------------------
      * VANILLA REQUIREMENTS
      * --------------------
@@ -53,7 +53,7 @@ public enum RequirementType {
     STRUCTURE,
 
 
-    /**
+    /*
      * ----------------
      * MOD REQUIREMENTS
      * ----------------
@@ -64,6 +64,9 @@ public enum RequirementType {
 
     /** if a specific atmosphere is required (for mods which add gases / atmospheres) */
     ATMOSPHERE,
+
+    /** if there is too much/little radiation (for mods which add radioactivity) */
+    RADIATION,
 
     /** if a specific temperature is required (for mods which add temperature) */
     TEMPERATURE,
@@ -77,11 +80,14 @@ public enum RequirementType {
     /** if mana is required (for magic mods) */
     MANA,
 
+    /** if there is too much/little pollution (for pollution adding mods) */
+    POLLUTION,
+
     /** if power is required (for mods with power) */
     POWER,
 
 
-    /**
+    /*
      * ------------------------
      * MORE EXOTIC REQUIREMENTS
      * ------------------------
