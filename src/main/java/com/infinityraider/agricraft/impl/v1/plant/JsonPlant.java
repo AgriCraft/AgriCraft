@@ -408,7 +408,7 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(seasons.size() > 0) {
-            builder.defineSeasonality((str, season) -> str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.contains(season));
+            builder.defineSeasonality((str, season) -> str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.stream().anyMatch(season::matches));
         }
 
         // Define requirement for fluids
