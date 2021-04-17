@@ -22,6 +22,9 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.api.runtime.IRecipesGui;
+import mezz.jei.gui.recipes.IRecipeLogicStateListener;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -318,6 +321,13 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         }
 
         protected void updateGuiState() {
+            IJeiRuntime jei = JeiPlugin.getJei();
+            if(jei != null) {
+                IRecipesGui gui = jei.getRecipesGui();
+                if(gui instanceof IRecipeLogicStateListener) {
+                    ((IRecipeLogicStateListener) gui).onStateChange();
+                }
+            }
 
         }
     }
