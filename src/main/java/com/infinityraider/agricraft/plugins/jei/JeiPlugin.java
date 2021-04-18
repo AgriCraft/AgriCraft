@@ -61,7 +61,6 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         AgriIngredientPlant.register(registration);
-        AgriIngredientSoil.register(registration);
     }
 
     @Override
