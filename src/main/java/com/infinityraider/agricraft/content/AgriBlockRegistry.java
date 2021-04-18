@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content;
 
+import com.infinityraider.agricraft.content.core.BlockCropPlant;
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
@@ -15,6 +16,9 @@ public class AgriBlockRegistry {
     public static AgriBlockRegistry getInstance() {
         return INSTANCE;
     }
+
+    // crop plant
+    public final BlockCropPlant crop_plant;
 
     // crop sticks
     public final BlockCropSticks crop_sticks_wood;
@@ -37,6 +41,7 @@ public class AgriBlockRegistry {
     public final BlockGrate grate;
 
     private AgriBlockRegistry() {
+        this.crop_plant = new BlockCropPlant();
         this.crop_sticks_wood = new BlockCropSticks(CropStickVariant.WOOD);
         this.crop_sticks_iron = new BlockCropSticks(CropStickVariant.IRON);
         this.crop_sticks_obsidian = new BlockCropSticks(CropStickVariant.OBSIDIAN);

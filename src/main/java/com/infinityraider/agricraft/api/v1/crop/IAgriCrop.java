@@ -72,14 +72,19 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
     boolean setGrowthStage(@Nonnull IAgriGrowthStage stage);
 
     /**
-     * @return if this crop is a crosscrop
+     * @return if this crop has crop sticks
+     */
+    boolean hasCropSticks();
+
+    /**
+     * @return if this crop is a cross crop
      */
     boolean isCrossCrop();
 
     /**
-     * Converts this crop to a crosscrop or a regular crop
+     * Converts this crop to a cross crop or a regular crop
      *
-     * @param status true for crosscrop, false for regular crop
+     * @param status true for cross crop, false for regular crop
      *
      * @return if the cross crop was successfully set.
      */

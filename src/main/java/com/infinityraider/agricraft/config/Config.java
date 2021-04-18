@@ -22,6 +22,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         // core
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
+        private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Integer> statsMin;
         private final ForgeConfigSpec.ConfigValue<Integer> statsMax;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
@@ -64,6 +65,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("core");
             this.enableJsonWriteBack = builder.comment("Set to false to disable automatic JSON writeback.")
                     .define("Enable JSON write back", true);
+            this.plantOffCropSticks = builder.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
+                    .define("Plant outside crop sticks", true);
             this.statsMin = builder.comment("Minimum allowed value of stats")
                     .defineInRange("Stats min", 1, 1, 10);
             this.statsMax = builder.comment("Maximum allowed value of stats")
@@ -126,7 +129,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
+        public boolean allowPlantingOutsideCropSticks() {
+            return this.plantOffCropSticks.get();
+        }
+
+        @Override
         public int getMinStatsValue() {
             return this.statsMin.get();
         }

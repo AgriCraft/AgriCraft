@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.content.core.TileEntityCropBase;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.QuadCache;
 import net.minecraft.block.BlockState;
@@ -20,7 +21,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.QuadTransformer;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,39 +31,32 @@ import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Function<RenderMaterial, TextureAtlasSprite> {
-    private static final ModelProperty<IAgriPlant> PROPERTY_PLANT = new ModelProperty<>();
-    private static final ModelProperty<IAgriGrowthStage> PROPERTY_PLANT_GROWTH = new ModelProperty<>();
-    private static final ModelProperty<IAgriWeed> PROPERTY_WEED = new ModelProperty<>();
-    private static final ModelProperty<IAgriGrowthStage> PROPERTY_WEED_GROWTH = new ModelProperty<>();
-
     private final IModelConfiguration config;
     private final QuadTransformer transformer;
     private final ItemOverrideList overrides;
     private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
 
-    private final Map<IAgriPlant, Map<IAgriGrowthStage, QuadCache>> plantQuads;
-    private final Map<IAgriWeed, Map<IAgriGrowthStage, QuadCache>> weedQuads;
+    private static final Map<IAgriPlant, Map<IAgriGrowthStage, QuadCache>> plantQuads = Maps.newConcurrentMap();
+    private static final Map<IAgriWeed, Map<IAgriGrowthStage, QuadCache>> weedQuads = Maps.newConcurrentMap();
 
     protected AgriPlantModelBridge(IModelConfiguration config, ItemOverrideList overrides, Function<RenderMaterial, TextureAtlasSprite> spriteGetter) {
         this.config = config;
         this.transformer = new QuadTransformer(this.getModelConfig().getCombinedTransform().getRotation());
         this.overrides = overrides;
         this.spriteGetter = spriteGetter;
-        this.plantQuads = Maps.newConcurrentMap();
-        this.weedQuads = Maps.newConcurrentMap();
     }
 
-    protected List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage, Direction face) {
-        return this.plantQuads
+    protected static List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage, Direction face) {
+        return plantQuads
                 .computeIfAbsent(plant, (aPlant) -> Maps.newConcurrentMap())
-                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> /*this.getTransformer().processMany(*/plant.bakeQuads(dir, stage)))//)
+                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> plant.bakeQuads(dir, stage)))
                 .getQuads(face);
     }
 
-    protected List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage, Direction face) {
-        return this.weedQuads
+    protected static List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage, Direction face) {
+        return weedQuads
                 .computeIfAbsent(weed, (aPlant) -> Maps.newConcurrentMap())
-                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> this.getTransformer().processMany(weed.bakeQuads(dir, stage))))
+                .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> weed.bakeQuads(dir, stage)))
                 .getQuads(face);
     }
 
@@ -92,11 +85,11 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData data) {
         // Fetch quads based on the plant and weed in the data
         ImmutableList.Builder<BakedQuad> quads = new ImmutableList.Builder<>();
-        if(data.hasProperty(PROPERTY_PLANT) && data.hasProperty(PROPERTY_PLANT_GROWTH)) {
-            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_PLANT), data.getData(PROPERTY_PLANT_GROWTH), side));
+        if(data.hasProperty(TileEntityCropBase.PROPERTY_PLANT) && data.hasProperty(TileEntityCropBase.PROPERTY_PLANT_GROWTH)) {
+            quads.addAll(getOrBakeQuads(data.getData(TileEntityCropBase.PROPERTY_PLANT), data.getData(TileEntityCropBase.PROPERTY_PLANT_GROWTH), side));
         }
-        if(data.hasProperty(PROPERTY_WEED) && data.hasProperty(PROPERTY_WEED_GROWTH)) {
-            quads.addAll(this.getOrBakeQuads(data.getData(PROPERTY_WEED), data.getData(PROPERTY_WEED_GROWTH), side));
+        if(data.hasProperty(TileEntityCropBase.PROPERTY_WEED) && data.hasProperty(TileEntityCropBase.PROPERTY_WEED_GROWTH)) {
+            quads.addAll(getOrBakeQuads(data.getData(TileEntityCropBase.PROPERTY_WEED), data.getData(TileEntityCropBase.PROPERTY_WEED_GROWTH), side));
         }
         return quads.build();
     }
@@ -107,10 +100,10 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
         TileEntity tile = world.getTileEntity(pos);
         if(tile instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) tile;
-            data.setData(PROPERTY_PLANT, crop.getPlant());
-            data.setData(PROPERTY_PLANT_GROWTH, crop.getGrowthStage());
-            data.setData(PROPERTY_WEED, crop.getWeeds());
-            data.setData(PROPERTY_WEED_GROWTH, crop.getWeedGrowthStage());
+            data.setData(TileEntityCropBase.PROPERTY_PLANT, crop.getPlant());
+            data.setData(TileEntityCropBase.PROPERTY_PLANT_GROWTH, crop.getGrowthStage());
+            data.setData(TileEntityCropBase.PROPERTY_WEED, crop.getWeeds());
+            data.setData(TileEntityCropBase.PROPERTY_WEED_GROWTH, crop.getWeedGrowthStage());
         }
         return data;
     }

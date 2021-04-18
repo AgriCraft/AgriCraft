@@ -45,6 +45,11 @@ public interface IAgriConfig {
      */
 
     /**
+     * @return if crops may be planted off crop sticks
+     */
+    boolean allowPlantingOutsideCropSticks();
+
+    /**
      * @return the minimum allowed value for stats (inclusive)
      */
     int getMinStatsValue();

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
@@ -17,6 +18,7 @@ public class AgriTileRegistry {
         return INSTANCE;
     }
 
+    public final TileEntityType<TileEntityCropPlant> crop_plant;
     public final TileEntityType<TileEntityCropSticks> crop_sticks;
     public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
     public final TileEntityType<TileEntityIrrigationTank> irrigation_tank;
@@ -24,8 +26,15 @@ public class AgriTileRegistry {
     public final TileEntityType<TileEntityGrate> grate;
 
     private AgriTileRegistry() {
+        this.crop_plant = InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
+                .addBlock(AgriCraft.instance.getModBlockRegistry().crop_plant)
+                .build();
+
         this.crop_sticks = InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().crop_sticks_wood)
+                .addBlocks(
+                        AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
+                        AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
+                        AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian)
                 .build();
 
         this.seed_analyzer = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)

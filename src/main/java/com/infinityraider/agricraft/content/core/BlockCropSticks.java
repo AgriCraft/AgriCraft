@@ -10,18 +10,13 @@ import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
@@ -36,25 +31,17 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IPlantable;
-
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> implements IWaterLoggable, IGrowable, IPlantable {
+public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     // Excluded classes for Iem usage logic
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
@@ -65,7 +52,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
 
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
-    public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
     public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
@@ -123,10 +109,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
         this.variant = variant;
     }
 
-    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
-        return AgriApi.getCrop(world, pos);
-    }
-
     @Override
     public BiFunction<BlockState, IBlockReader, TileEntityCropSticks> getTileEntityFactory() {
         return TILE_FACTORY;
@@ -140,27 +122,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Override
     public Item asItem() {
         return this.variant.getItem();
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, ISelectionContext.dummy());
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
     }
 
     @Override
@@ -216,51 +177,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             }
         });
         return state;
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        if(fromPos.up().equals(pos)) {
-            if(!state.isValidPosition(world, pos)) {
-                this.breakBlock(state, world, pos, true);
-            }
-        }
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-        BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable() && AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos.down())).isPresent();
-    }
-
-    @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockState state = this.getDefaultState();
-        if(state.isValidPosition(context.getWorld(), context.getPos())) {
-            return this.waterlog(state, context.getWorld(), context.getPos());
-        }
-        return null;
-    }
-
-    public void breakBlock(BlockState state, World world, BlockPos pos, boolean doDrops) {
-        if(!world.isRemote()) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            if(doDrops) {
-                spawnDrops(state, world, pos, world.getTileEntity(pos));
-            }
-        }
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        this.getCrop(world, pos).ifPresent(IAgriCrop::applyGrowthTick);
     }
 
     @Override
@@ -338,20 +254,6 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        this.getCrop(world, pos).ifPresent(crop -> crop.breakCrop(player));
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        this.getCrop(world, pos).ifPresent(crop -> crop.getPlant().onEntityCollision(crop, entity));
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
         List<ItemStack> drops = Lists.newArrayList();
         TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
@@ -378,64 +280,5 @@ public class BlockCropSticks extends BlockBaseTile<TileEntityCropSticks> impleme
             }
         }
         return drops;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public RenderType getRenderType() {
-        return RenderType.getCutout();
-    }
-
-    public void spawnItem(IAgriCrop crop, ItemStack stack) {
-        World world = crop.getWorld();
-        if(world != null) {
-            this.spawnItem(world, crop.getPosition(), stack);
-        }
-    }
-
-    /**
-     * -------------------------
-     * Vanilla IGrowable methods
-     * -------------------------
-     */
-
-    @Override
-    public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-        return this.isFertile(state, world, pos);
-    }
-
-    private static final ItemStack BONE_MEAL = new ItemStack(Items.BONE_MEAL);
-
-    @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-        return AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL)
-                .flatMap(fertilizer ->
-                        this.getCrop(world, pos).map(crop ->
-                                crop.acceptsFertilizer(fertilizer)))
-                .orElse(false);
-    }
-
-    @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-        AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL).ifPresent(fertilizer ->
-               this.getCrop(world, pos).ifPresent(crop ->
-                        fertilizer.applyFertilizer(world, pos, crop, BONE_MEAL, rand, null)));
-    }
-
-    /**
-     * ------------------------
-     * Forge IPlantable methods
-     * ------------------------
-     */
-
-    @Override
-    public BlockState getPlant(IBlockReader world, BlockPos pos) {
-        BlockState state = world.getBlockState(pos);
-        if(world instanceof World) {
-            return this.getCrop(world, pos)
-                    .flatMap(crop -> crop.getPlant().asBlockState(crop.getGrowthStage()))
-                    .orElse(state);
-        }
-        return state;
     }
 }

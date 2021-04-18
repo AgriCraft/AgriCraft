@@ -3,24 +3,29 @@ package com.infinityraider.agricraft.content.tools;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.InfinityItemProperty;
 import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -80,6 +85,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         return false;
     }
 
+    @Nonnull
     @Override
     public Optional<IAgriGenome> getGenome(ItemStack stack) {
         CompoundNBT tag = this.checkNBT(stack);
@@ -118,56 +124,125 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     @Override
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         World world = context.getWorld();
-        if (world.isRemote()) {
-            return ActionResultType.PASS;
-        }
         BlockPos pos = context.getPos();
         ItemStack stack = context.getItem();
         PlayerEntity player = context.getPlayer();
         return AgriApi.getCrop(world, pos)
-                .map(crop -> {
-                    if (crop.hasWeeds()) {
-                        // send message
-                        if (player != null) {
-                            player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUniqueID());
-                        }
-                    } else {
-                        if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
-                            if (crop.hasPlant()) {
-                                if (this.hasPlant(stack)) {
-                                    // send message
-                                    if (player != null) {
-                                        player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, player.getUniqueID());
-                                    }
-                                } else {
-                                    crop.getGenome().ifPresent(genome -> {
-                                        this.setPlant(stack, genome, crop.getGrowthStage());
-                                        crop.removeSeed();
-                                    });
-                                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
-                                    return ActionResultType.SUCCESS;
-                                }
-                            } else {
-                                if (this.hasPlant(stack)) {
-                                    this.getGenome(stack).ifPresent(genome ->
-                                            this.getGrowthStage(stack).ifPresent(growth -> {
-                                                this.removePlant(stack);
-                                                crop.setGenome(genome);
-                                                crop.setGrowthStage(growth);
-                                            }));
-                                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
-                                    return ActionResultType.SUCCESS;
-                                } else {
-                                    // send message
-                                    if (player != null) {
-                                        player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, player.getUniqueID());
-                                    }
-                                }
-                            }
-                        }
+                .map(crop -> this.tryUseOnCrop(crop, stack, player))
+                .orElseGet(() -> this.tryPlantOnSoil(world, pos, stack, player));
+    }
+
+    protected ActionResultType tryUseOnCrop(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
+        if (crop.hasWeeds()) {
+            // send message
+            if (player != null) {
+                player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUniqueID());
+            }
+        } else {
+            if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
+                if (crop.hasPlant()) {
+                    // Try picking up a plant onto the trowel
+                    return this.tryPickUpPlant(crop, stack, player);
+                } else {
+                    // Try planting a plant on crop sticks
+                    return this.tryPlantOnCropSticks(crop, stack, player);
+                }
+            }
+        }
+        return ActionResultType.FAIL;
+    }
+
+    protected ActionResultType tryPickUpPlant(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
+        if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+            return ActionResultType.PASS;
+        }
+        if (this.hasPlant(stack)) {
+            if (player != null) {
+                // send message
+                player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, player.getUniqueID());
+            }
+            return ActionResultType.FAIL;
+        } else {
+            crop.getGenome().ifPresent(genome -> {
+                this.setPlant(stack, genome, crop.getGrowthStage());
+                crop.removeSeed();
+            });
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
+            return ActionResultType.SUCCESS;
+        }
+    }
+
+    protected ActionResultType tryPlantOnCropSticks(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
+        if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+            return ActionResultType.PASS;
+        }
+        if (this.hasPlant(stack)) {
+            if (crop.hasCropSticks()) {
+                this.getGenome(stack).ifPresent(genome ->
+                        this.getGrowthStage(stack).ifPresent(growth -> {
+                            this.removePlant(stack);
+                            crop.setGenome(genome);
+                            crop.setGrowthStage(growth);
+                        }));
+            }
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
+            return ActionResultType.SUCCESS;
+        } else {
+            if (player != null) {
+                // send message
+                player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, player.getUniqueID());
+            }
+            return ActionResultType.FAIL;
+        }
+    }
+
+    protected ActionResultType tryPlantOnSoil(World world, BlockPos pos, ItemStack stack, @Nullable PlayerEntity player) {
+        if (this.hasPlant(stack)) {
+            BlockPos up = pos.up();
+            TileEntity tile = world.getTileEntity(up);
+            if (tile instanceof TileEntityCropSticks) {
+                return this.tryPlantOnCropSticks((TileEntityCropSticks) tile, stack, player);
+            }
+            return this.tryNewPlant(world, up, stack, player);
+        }
+        return ActionResultType.FAIL;
+    }
+
+    protected ActionResultType tryNewPlant(World world, BlockPos pos, ItemStack stack, @Nullable PlayerEntity player) {
+        if (AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
+            BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, pos);
+            if (newState != null && world.setBlockState(pos, newState, 11)) {
+                boolean success = AgriApi.getCrop(world, pos).map(crop -> {
+                    if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
+                        return false;
                     }
-                    return ActionResultType.FAIL;
-                }).orElse(ActionResultType.FAIL);
+                    return this.getGenome(stack).map(genome ->
+                            this.getGrowthStage(stack).map(stage -> {
+                                boolean result = crop.setGenome(genome) && this.setGrowthStage(crop, stage);
+                                if (result) {
+                                    this.removePlant(stack);
+                                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
+                                }
+                                return result;
+                            }).orElse(false))
+                            .orElse(false);
+                }).orElse(false);
+                if (success) {
+                    return ActionResultType.SUCCESS;
+                } else {
+                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                }
+            }
+        }
+        return ActionResultType.FAIL;
+    }
+
+    protected boolean setGrowthStage(IAgriCrop crop, IAgriGrowthStage stage) {
+        if(crop.getGrowthStage().equals(stage)) {
+            return true;
+        } else {
+            return crop.setGrowthStage(stage);
+        }
     }
 
     @Override

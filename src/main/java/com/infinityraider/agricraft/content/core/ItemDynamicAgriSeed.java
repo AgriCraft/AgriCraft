@@ -2,6 +2,8 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -11,11 +13,16 @@ import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -23,6 +30,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,6 +64,76 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         super(Names.Items.SEED, AgriCraft.instance.proxy().setItemRenderer(new Properties()
                 .group(AgriTabs.TAB_AGRICRAFT_SEED))
         );
+    }
+
+    @Nonnull
+    @Override
+    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        TileEntity tile = world.getTileEntity(pos);
+        ItemStack stack = context.getItem();
+        PlayerEntity player = context.getPlayer();
+        // If crop sticks were clicked, attempt to plant the seed
+        if (tile instanceof TileEntityCropSticks) {
+            return this.attemptSeedPlant(
+                    (TileEntityCropSticks) tile, stack, player == null || !player.isCreative()
+            );
+        }
+        // If a soil was clicked, check the block on top of the soil and handle accordingly
+        BlockState state = world.getBlockState(pos);
+        return AgriApi.getSoilRegistry().valueOf(state).map(soil -> {
+            BlockPos up = pos.up();
+            TileEntity above = world.getTileEntity(up);
+            // There are currently crop sticks on the soil, attempt to plant on the crop sticks
+            if (above instanceof TileEntityCropSticks) {
+                return this.attemptSeedPlant(
+                        (TileEntityCropSticks) above, stack, player == null || !player.isCreative()
+                );
+            }
+            // There are currently no crop sticks, check if the place is suitable and plant the plant directly
+            if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
+                BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
+                if (newState != null && world.setBlockState(up, newState, 11)) {
+                    boolean success = AgriApi.getCrop(world, up).map(crop -> {
+                        if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
+                            return false;
+                        }
+                        return this.getGenome(context.getItem()).map(crop::setGenome).map(result -> {
+                            if (result) {
+                                if (player == null || !player.isCreative()) {
+                                    stack.shrink(1);
+                                }
+                                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
+                            }
+                            return result;
+                        }).orElse(false);
+                    }).orElse(false);
+                    if (success) {
+                        return ActionResultType.SUCCESS;
+                    } else {
+                        world.setBlockState(up, Blocks.AIR.getDefaultState());
+                    }
+                }
+            }
+            // Neither alternative option was successful, delegate the call to the super method
+            return super.onItemUse(context);
+        }).orElse(super.onItemUse(context));
+    }
+
+    protected ActionResultType attemptSeedPlant(IAgriCrop crop, ItemStack stack, boolean consumeItem) {
+        return AgriApi.getSeedAdapterizer().valueOf(stack)
+                .map(seed -> {
+                    if (crop.plantSeed(seed)) {
+                        if (consumeItem) {
+                            stack.shrink(1);
+                        }
+                        return ActionResultType.CONSUME;
+                    } else {
+                        return ActionResultType.PASS;
+                    }
+                })
+                .orElse(ActionResultType.PASS);
     }
 
     @Nonnull

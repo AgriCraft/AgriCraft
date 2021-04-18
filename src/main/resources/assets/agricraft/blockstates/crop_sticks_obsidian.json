@@ -1,9 +1,9 @@
 {
   "forge_marker": 1,
   "variants": {
-    "cross_crop=false,plant=false": [{ "model": "agricraft:block/crop_sticks/obsidian" }],
-    "cross_crop=false,plant=true": [{ "model": "agricraft:block/crop_sticks/obsidian_plant" }],
-    "cross_crop=true,plant=false": [{ "model": "agricraft:block/crop_sticks/obsidian_cross" }],
-    "cross_crop=true,plant=true": [{ "model": "agricraft:block/crop_sticks/obsidian_cross_plant" }]
+    "cross_crop=false,plant=false": [{ "model": "agricraft:block/crop/obsidian" }],
+    "cross_crop=false,plant=true": [{ "model": "agricraft:block/crop/obsidian_plant" }],
+    "cross_crop=true,plant=false": [{ "model": "agricraft:block/crop/obsidian_cross" }],
+    "cross_crop=true,plant=true": [{ "model": "agricraft:block/crop/obsidian_cross_plant" }]
   }
 }
