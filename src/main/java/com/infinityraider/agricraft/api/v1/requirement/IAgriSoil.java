@@ -61,8 +61,8 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     enum Humidity implements SoilProperty {
         ARID,
         DRY,
-        DAMP("moist", "default"),
-        WET,
+        DAMP("moist"),
+        WET("standard", "default"),
         WATERY,
         FLOODED,
         INVALID;
@@ -104,8 +104,8 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     enum Acidity implements SoilProperty {
         HIGHLY_ACIDIC( "0", "1", "2", "highly-acidic", "highly acidic", "very-acidic", "very acidic", "very_acidic"),
         ACIDIC("3", "4", "5"),
-        SLIGHTLY_ACIDIC("6", "slightly-acidic", "slightly acidic"),
-        NEUTRAL("7", "default", "standard"),
+        SLIGHTLY_ACIDIC("6", "slightly-acidic", "slightly acidic", "standard", "default"),
+        NEUTRAL("7"),
         SLIGHTLY_ALKALINE("8", "slightly-alkaline", "slightly alkaline"),
         ALKALINE("9", "10", "11"),
         HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline"),
@@ -149,8 +149,8 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         NONE("zero", "empty"),
         VERY_LOW("scarce", "poor"),
         LOW,
-        MEDIUM("normal", "standard", "default", "average"),
-        HIGH,
+        MEDIUM("normal", "average"),
+        HIGH("standard", "default"),
         VERY_HIGH("rich"),
         INVALID;
 
