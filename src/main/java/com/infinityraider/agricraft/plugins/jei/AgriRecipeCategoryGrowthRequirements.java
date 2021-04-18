@@ -76,11 +76,11 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         this.tooltips = ImmutableSet.of(
                 new TooltipRegion(AgriToolTips.GROWTH, 102, 20, 111, 70),
                 new TooltipRegion(AgriApi.getStatRegistry().strengthStat().getDescription(), 114, 20, 123, 70),
-                new TooltipRegion(AgriToolTips.LIGHT, 17, 25, 21, 74),
-                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 25, 26, 37, 38, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 25, 38, 37, 50, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 25, 50, 37, 62, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.WINTER.getDisplayName(), 25, 62, 37, 74, AgriApi.getSeasonLogic()::isActive)
+                new TooltipRegion(AgriToolTips.LIGHT, 31, 25, 21, 74),
+                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 37, 38, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 37, 50, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 37, 62, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.WINTER.getDisplayName(), 17, 63, 37, 74, AgriApi.getSeasonLogic()::isActive)
         );
     }
 
@@ -178,7 +178,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         IncrementRenderer.getInstance().renderStrengthIncrements(transforms, strength);
         IncrementRenderer.getInstance().renderGrowthStageIncrements(transforms, stage);
         // Draw light levels
-        LightLevelRenderer.getInstance().renderLightLevels(transforms, 18, 26, light -> req.isLightLevelAccepted(light, strength));
+        LightLevelRenderer.getInstance().renderLightLevels(transforms, 32, 26, light -> req.isLightLevelAccepted(light, strength));
         // Draw Property icons
         Arrays.stream(IAgriSoil.Humidity.values()).filter(IAgriSoil.Humidity::isValid)
                 .filter(humidity -> req.isSoilHumidityAccepted(humidity, strength))
@@ -190,7 +190,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                 .filter(nutrients ->req.isSoilNutrientsAccepted(nutrients, strength))
                 .forEach(nutrients -> SoilPropertyIconRenderer.getInstance().drawIcon(nutrients, transforms, 37, 109, mouseX, mouseY));
         // Draw seasons
-        SeasonRenderer.getInstance().renderSeasons(transforms, 25, 26, season -> req.isSeasonAccepted(season, strength));
+        SeasonRenderer.getInstance().renderSeasons(transforms, 17, 24, season -> req.isSeasonAccepted(season, strength));
         // Draw buttons
         state.updateStageButtons(102, 10);
         state.updateStrengthButtons(114, 10 );
@@ -449,7 +449,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                 this.bindTexture(this.texture);
                 AgriSeason.stream().filter(predicate).forEach(season -> {
                     int i = season.ordinal();
-                    AbstractGui.blit(transforms, x, y + 12 * i, 12, 12, 0, 12 * i, 12, 12, 12, 48);
+                    AbstractGui.blit(transforms, x, y + 13 * i, 12, 12, 0, 12 * i, 12, 12, 12, 48);
                 });
             }
         }
