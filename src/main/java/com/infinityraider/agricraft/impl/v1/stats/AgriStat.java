@@ -7,20 +7,24 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.*;
 
 import javax.annotation.Nonnull;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.IntSupplier;
 
 public class AgriStat implements IAgriStat {
     private final String name;
-    private final int min;
-    private final int max;
+    private final IntSupplier min;
+    private final IntSupplier max;
+    private final BooleanSupplier hidden;
     private final String key;
     private final TranslationTextComponent tooltip;
     private final Vector3f color;
 
-    protected AgriStat(String name, int min, int max, Vector3f color) {
+    protected AgriStat(String name, IntSupplier min, IntSupplier max, BooleanSupplier hidden, Vector3f color) {
         this.name = name;
         this.min = min;
         this.max = max;
+        this.hidden = hidden;
         this.key = "stat." + this.name;
         this.tooltip = new TranslationTextComponent(AgriCraft.instance.getModId() + "." + this.key);
         this.color = color;
@@ -28,12 +32,17 @@ public class AgriStat implements IAgriStat {
 
     @Override
     public int getMin() {
-        return this.min;
+        return this.min.getAsInt();
     }
 
     @Override
     public int getMax() {
-        return this.max;
+        return this.max.getAsInt();
+    }
+
+    @Override
+    public boolean isHidden() {
+        return this.hidden.getAsBoolean();
     }
 
     @Override
@@ -48,10 +57,12 @@ public class AgriStat implements IAgriStat {
 
     @Override
     public void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value) {
-        consumer.accept(new StringTextComponent("")
-                .append(this.getDescription())
-                .append(new StringTextComponent(": " + value))
-                .mergeStyle(TextFormatting.DARK_GRAY));
+        if(!this.isHidden()) {
+            consumer.accept(new StringTextComponent("")
+                    .append(this.getDescription())
+                    .append(new StringTextComponent(": " + value))
+                    .mergeStyle(TextFormatting.DARK_GRAY));
+        }
     }
 
     @Nonnull

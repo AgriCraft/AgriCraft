@@ -28,6 +28,11 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
      */
     int getMax();
 
+    /**
+     * @return true if this is a hidden stat (which does not show up in tooltips)
+     */
+    boolean isHidden();
+
     void writeValueToNBT(CompoundNBT tag, byte value);
 
     int readValueFromNBT(CompoundNBT tag);

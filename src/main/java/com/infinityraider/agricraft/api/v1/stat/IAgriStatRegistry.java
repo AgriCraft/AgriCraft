@@ -4,16 +4,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 
 public interface IAgriStatRegistry extends IAgriRegistry<IAgriStat> {
     /**
-     * @return AgriCraft's default minimum value for its stats
-     */
-    int defaultMax();
-
-    /**
-     * @return AgriCraft's default maximum value for its stats
-     */
-    int defaultMin();
-
-    /**
      * @return the native AgriCraft gain stat, which controls the amount of fruits obtained when harvesting a crop
      */
     IAgriStat gainStat();

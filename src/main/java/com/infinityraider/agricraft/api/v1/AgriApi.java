@@ -60,7 +60,7 @@ public final class AgriApi {
      * @return the current state of the AgriCraft API.
      */
     @Nonnull
-    AgriApiState getState() {
+    public static AgriApiState getState() {
         return AgriApi.CONNECTOR.getState();
     }
 
@@ -74,7 +74,7 @@ public final class AgriApi {
      * @return the AgriCraft configuration
      */
     @Nonnull
-    IAgriConfig getAgriConfig() {
+    public static IAgriConfig getAgriConfig() {
         return AgriApi.CONNECTOR.connectAgriConfig();
     }
 

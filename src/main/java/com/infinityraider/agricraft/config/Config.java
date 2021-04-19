@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.config;
 
 import com.agricraft.agricore.config.AgriConfigAdapter;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.impl.v1.genetics.GeneStat;
 import com.infinityraider.agricraft.impl.v1.requirement.SeasonPlugin;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.config.ConfigurationHandler;
@@ -23,8 +24,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // core
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
-        private final ForgeConfigSpec.ConfigValue<Integer> statsMin;
-        private final ForgeConfigSpec.ConfigValue<Integer> statsMax;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> disableVanillaFarming;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
@@ -37,6 +36,27 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> rakingDropsItems;
         private final ForgeConfigSpec.ConfigValue<Double> seedCompostValue;
         private final ForgeConfigSpec.ConfigValue<Boolean> animalAttraction;
+
+        // stats
+        private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
+        private final ForgeConfigSpec.ConfigValue<Integer> minGain;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxGain;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenGain;
+        private final ForgeConfigSpec.ConfigValue<Integer> minGrowth;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxGrowth;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenGrowth;
+        private final ForgeConfigSpec.ConfigValue<Integer> minStrength;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxStrength;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenStrength;
+        private final ForgeConfigSpec.ConfigValue<Integer> minResistance;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxResistance;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenResistance;
+        private final ForgeConfigSpec.ConfigValue<Integer> minFertility;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxFertility;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenFertility;
+        private final ForgeConfigSpec.ConfigValue<Integer> minMutativity;
+        private final ForgeConfigSpec.ConfigValue<Integer> maxMutativity;
+        private final ForgeConfigSpec.ConfigValue<Boolean> hiddenMutativity;
 
         // irrigation
         private final ForgeConfigSpec.ConfigValue<Integer> tankCapacity;
@@ -67,10 +87,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable JSON write back", true);
             this.plantOffCropSticks = builder.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
-            this.statsMin = builder.comment("Minimum allowed value of stats")
-                    .defineInRange("Stats min", 1, 1, 10);
-            this.statsMax = builder.comment("Maximum allowed value of stats")
-                    .defineInRange("Stats max", 10, 1, 10);
             this.fertilizerMutations = builder.comment("Set to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
             this.disableVanillaFarming = builder.comment("Set to true to disable vanilla farming, meaning you can only grow plants on crops.")
@@ -95,6 +111,54 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Seed compost value", 0.3, 0, 1.0);
             this.animalAttraction = builder.comment("Set to false to disable certain animals eating certain crops (prevents auto-breeding)")
                     .define("animal attracting crops", true);
+            builder.pop();
+
+            builder.push("stats");
+            this.statTraitLogic = builder.comment("Logic to calculate stats from gene pairs, accepted values are: \"min\", \"min\", and \"mean\"")
+                    .defineInList("Stat calculation logic", "max", GeneStat.getLogicOptions());
+            this.minGain = builder.comment("Minimum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Gain stat min", 1, 1, 10);
+            this.maxGain = builder.comment("Maximum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Gain stat max", 10, 1, 10);
+            this.hiddenGain = builder.comment("Set to true to hide the Gain stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Gain stat", false);
+            this.minGrowth = builder.comment("Minimum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Growth stat min", 1, 1, 10);
+            this.maxGrowth = builder.comment("Maximum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Growth stat max", 10, 1, 10);
+            this.hiddenGrowth = builder.comment("Set to true to hide the Growth stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Growth stat", false);
+            this.minStrength = builder.comment("Minimum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Strength stat min", 1, 1, 10);
+            this.maxStrength = builder.comment("Maximum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Strength stat max", 10, 1, 10);
+            this.hiddenStrength = builder.comment("Set to true to hide the Strength stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Strength stat", false);
+            this.minResistance = builder.comment("Minimum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Resistance stat min", 1, 1, 10);
+            this.maxResistance = builder.comment("Maximum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Resistance stat max", 10, 1, 10);
+            this.hiddenResistance = builder.comment("Set to true to hide the Resistance stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Resistance stat", false);
+            this.minFertility = builder.comment("Minimum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Fertility stat min", 1, 1, 10);
+            this.maxFertility = builder.comment("Maximum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Fertility stat max", 10, 1, 10);
+            this.hiddenFertility = builder.comment("Set to true to hide the Fertility stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Fertility stat", false);
+            this.minMutativity = builder.comment("Minimum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Mutativity stat min", 1, 1, 10);
+            this.maxMutativity = builder.comment("Maximum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+                    .defineInRange("Mutativity stat max", 10, 1, 10);
+            this.hiddenMutativity = builder.comment("Set to true to hide the Mutativity stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+                    "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
+                    .define("hide Mutativity stat", false);
+
             builder.pop();
 
             builder.push("irrigation");
@@ -131,16 +195,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean allowPlantingOutsideCropSticks() {
             return this.plantOffCropSticks.get();
-        }
-
-        @Override
-        public int getMinStatsValue() {
-            return this.statsMin.get();
-        }
-
-        @Override
-        public int getMaxStatsValue() {
-            return this.statsMax.get();
         }
 
         @Override
@@ -201,6 +255,101 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableAnimalAttractingCrops() {
             return this.animalAttraction.get();
+        }
+
+        @Override
+        public String getStatTraitLogic() {
+            return this.statTraitLogic.get();
+        }
+
+        @Override
+        public int getGainStatMinValue() {
+            return this.minGain.get();
+        }
+
+        @Override
+        public int getGainStatMaxValue() {
+            return this.maxGain.get();
+        }
+
+        @Override
+        public  boolean isGainStatHidden() {
+            return this.hiddenGain.get();
+        }
+
+        @Override
+        public int getGrowthStatMinValue() {
+            return this.minGrowth.get();
+        }
+
+        @Override
+        public int getGrowthStatMaxValue() {
+            return this.maxGrowth.get();
+        }
+
+        @Override
+        public boolean isGrowthStatHidden() {
+            return this.hiddenGrowth.get();
+        }
+
+        @Override
+        public int getStrengthStatMinValue() {
+            return this.minStrength.get();
+        }
+
+        @Override
+        public int getStrengthStatMaxValue() {
+            return this.maxStrength.get();
+        }
+
+        @Override
+        public boolean isStrengthStatHidden() {
+            return this.hiddenStrength.get();
+        }
+
+        @Override
+        public int getResistanceStatMinValue() {
+            return this.minResistance.get();
+        }
+
+        @Override
+        public int getResistanceStatMaxValue() {
+            return this.maxResistance.get();
+        }
+
+        @Override
+        public boolean isResistanceStatHidden() {
+            return this.hiddenResistance.get();
+        }
+
+        @Override
+        public int getFertilityStatMinValue() {
+            return this.minFertility.get();
+        }
+
+        @Override
+        public int getFertilityStatMaxValue() {
+            return this.maxFertility.get();
+        }
+
+        @Override
+        public boolean isFertilityStatHidden() {
+            return this.hiddenFertility.get();
+        }
+
+        @Override
+        public int getMutativityStatMinValue() {
+            return this.minMutativity.get();
+        }
+
+        @Override
+        public int getMutativityStatMaxValue() {
+            return this.maxMutativity.get();
+        }
+
+        @Override
+        public boolean isMutativityStatHidden() {
+            return this.hiddenMutativity.get();
         }
 
         @Override

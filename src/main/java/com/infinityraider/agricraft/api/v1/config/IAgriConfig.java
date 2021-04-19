@@ -50,16 +50,6 @@ public interface IAgriConfig {
     boolean allowPlantingOutsideCropSticks();
 
     /**
-     * @return the minimum allowed value for stats (inclusive)
-     */
-    int getMinStatsValue();
-
-    /**
-     * @return the maximum allowed value for stats (inclusive)
-     */
-    int getMaxStatsValue();
-
-    /**
      * @return false if fertilizers can not trigger mutations (global override for all IAgriFertilizer instances)
      */
     boolean allowFertilizerMutations();
@@ -130,6 +120,108 @@ public interface IAgriConfig {
      */
     @OnlyIn(Dist.CLIENT)
     String statDisplayFormat();
+
+
+    /*
+     * --------------------
+     * STATS CONFIG OPTIONS
+     * --------------------
+     */
+
+    /**
+     * @return the stat trait calculation logic ("min", "max", or "mean")
+     */
+    String getStatTraitLogic();
+
+    /**
+     * @return the minimum allowed value for the Gain stat (inclusive)
+     */
+    int getGainStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Gain stat (inclusive)
+     */
+    int getGainStatMaxValue();
+
+    /**
+     * @return true if the Gain stat is hidden
+     */
+    boolean isGainStatHidden();
+
+    /**
+     * @return the minimum allowed value for the Growth stat (inclusive)
+     */
+    int getGrowthStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Growth stat (inclusive)
+     */
+    int getGrowthStatMaxValue();
+
+    /**
+     * @return true if the Growth stat is hidden
+     */
+    boolean isGrowthStatHidden();
+
+    /**
+     * @return the minimum allowed value for the Strength stat (inclusive)
+     */
+    int getStrengthStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Strength stat (inclusive)
+     */
+    int getStrengthStatMaxValue();
+
+    /**
+     * @return true if the Strength stat is hidden
+     */
+    boolean isStrengthStatHidden();
+
+    /**
+     * @return the minimum allowed value for the Resistance stat (inclusive)
+     */
+    int getResistanceStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Resistance stat (inclusive)
+     */
+    int getResistanceStatMaxValue();
+
+    /**
+     * @return true if the Resistance stat is hidden
+     */
+    boolean isResistanceStatHidden();
+
+    /**
+     * @return the minimum allowed value for the Fertility stat (inclusive)
+     */
+    int getFertilityStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Fertility stat (inclusive)
+     */
+    int getFertilityStatMaxValue();
+
+    /**
+     * @return true if the Fertility stat is hidden
+     */
+    boolean isFertilityStatHidden();
+
+    /**
+     * @return the minimum allowed value for the Mutativity stat (inclusive)
+     */
+    int getMutativityStatMinValue();
+
+    /**
+     * @return the maximum allowed value for the Gain stat (inclusive)
+     */
+    int getMutativityStatMaxValue();
+
+    /**
+     * @return true if the Gain stat is hidden
+     */
+    boolean isMutativityStatHidden();
 
 
     /*
