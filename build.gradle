@@ -166,7 +166,7 @@ dependencies {
     compile project('InfinityLib')
 
 	//JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
 
     //TOP

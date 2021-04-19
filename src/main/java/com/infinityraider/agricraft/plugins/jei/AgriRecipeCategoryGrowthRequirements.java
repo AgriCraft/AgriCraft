@@ -22,9 +22,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.runtime.IJeiRuntime;
-import mezz.jei.api.runtime.IRecipesGui;
-import mezz.jei.gui.recipes.IRecipeLogicStateListener;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -52,6 +49,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
     private final IAgriDrawable background;
     private final IAgriDrawable background_seasons;
     private final Set<TooltipRegion> tooltips;
+
+    // Cache to update valid soils when strength level changes; weak hashmap to prevent memory leaks
+    private static final Map<IAgriPlant, IRecipeLayout> cache = new WeakHashMap<>();
 
     public static void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(
@@ -163,6 +163,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         // Register Recipe Elements
         layout.getItemStacks().set(ingredients);
         layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
+
+        // Cache the Recipe layout
+        cache.put(plant, layout);
     }
 
     @Override
@@ -237,7 +240,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         private PlantRenderState(IAgriPlant plant) {
             this.plant = plant;
             this.stages = plant.getGrowthStages().stream()
-                    .sorted((s1, s2) -> (int) (100*(s1.growthPercentage() - s2.growthPercentage())))
+                    .sorted((s1, s2) -> (int) (100 * (s1.growthPercentage() - s2.growthPercentage())))
                     .collect(Collectors.toList());
             this.stage = 0;
             this.strength = this.getMinStrength();
@@ -321,14 +324,22 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         }
 
         protected void updateGuiState() {
-            IJeiRuntime jei = JeiPlugin.getJei();
-            if(jei != null) {
-                IRecipesGui gui = jei.getRecipesGui();
-                if(gui instanceof IRecipeLogicStateListener) {
-                    ((IRecipeLogicStateListener) gui).onStateChange();
-                }
+            if (cache.containsKey(this.getPlant())) {
+                cache.get(this.getPlant()).getItemStacks().set(1, AgriApi.getSoilRegistry().stream()
+                        .filter(soil -> {
+                            IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getStage());
+                            boolean humidity = req.isSoilHumidityAccepted(soil.getHumidity(), this.getStrength());
+                            boolean acidity = req.isSoilAcidityAccepted(soil.getAcidity(), this.getStrength());
+                            boolean nutrients = req.isSoilNutrientsAccepted(soil.getNutrients(), this.getStrength());
+                            return humidity && acidity && nutrients;
+                        })
+                        .map(IAgriSoil::getVariants)
+                        .flatMap(Collection::stream)
+                        .map(AbstractBlock.AbstractBlockState::getBlock)
+                        .distinct()
+                        .map(ItemStack::new)
+                        .collect(Collectors.toList()));
             }
-
         }
     }
 
