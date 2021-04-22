@@ -2,10 +2,9 @@ package com.infinityraider.agricraft.render.plant;
 
 import com.infinityraider.agricraft.api.v1.misc.IAgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
-import com.infinityraider.infinitylib.render.tessellation.TessellatorBakedQuad;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -25,20 +24,20 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
         return INSTANCE;
     }
 
-    private final ThreadLocal<TessellatorBakedQuad> tess;
+    private final ThreadLocal<ITessellator> tess;
 
     private AgriPlantQuadGenerator() {
-        this.tess = ThreadLocal.withInitial(this::getQuadTessellator);
+        this.tess = ThreadLocal.withInitial(this::getBakedQuadTessellator);
     }
 
     @Nonnull
     @Override
     public List<BakedQuad> bakeQuadsForHashPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite, int yOffset) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        TessellatorBakedQuad tessellator = this.tess.get();
+        ITessellator tessellator = this.tess.get();
 
-        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-        tessellator.setCurrentFace(direction);
+        tessellator.startDrawingQuads();
+        tessellator.setFace(direction);
 
         tessellator.pushMatrix();
 
@@ -60,10 +59,10 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     @Override
     public List<BakedQuad> bakeQuadsForCrossPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite, int yOffset) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        TessellatorBakedQuad tessellator = this.tess.get();
+        ITessellator tessellator = this.tess.get();
 
-        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-        tessellator.setCurrentFace(direction);
+        tessellator.startDrawingQuads();
+        tessellator.setFace(direction);
 
         tessellator.pushMatrix();
 
@@ -85,10 +84,10 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     @Override
     public List<BakedQuad> bakeQuadsForPlusPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite, int yOffset) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        TessellatorBakedQuad tessellator = this.tess.get();
+        ITessellator tessellator = this.tess.get();
 
-        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-        tessellator.setCurrentFace(direction);
+        tessellator.startDrawingQuads();
+        tessellator.setFace(direction);
 
         tessellator.pushMatrix();
 
@@ -117,10 +116,10 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     @Override
     public List<BakedQuad> bakeQuadsForRhombusPattern(@Nullable Direction direction, @Nonnull ResourceLocation sprite, int yOffset) {
         TextureAtlasSprite icon = this.getSprite(sprite);
-        TessellatorBakedQuad tessellator = this.tess.get();
+        ITessellator tessellator = this.tess.get();
 
-        tessellator.startDrawingQuads(DefaultVertexFormats.BLOCK);
-        tessellator.setCurrentFace(direction);
+        tessellator.startDrawingQuads();
+        tessellator.setFace(direction);
 
         float d = MathHelper.sqrt(128);
 

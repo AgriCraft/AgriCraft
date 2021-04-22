@@ -1,18 +1,26 @@
 package com.infinityraider.agricraft.content.core;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.agricraft.render.items.JournalRenderer;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,6 +34,18 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
                 .group(AgriTabs.TAB_AGRICRAFT)
                 .maxStackSize(1)
         );
+    }
+
+    @Nonnull
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if(world.isRemote()) {
+            if(AgriCraft.instance.proxy().toggleJournalObserving(stack, player, hand)) {
+                return ActionResult.resultConsume(stack);
+            }
+        }
+        return ActionResult.resultPass(stack);
     }
 
     @Override
@@ -101,5 +121,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
         return true;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public InfItemRenderer getItemRenderer() {
+        return JournalRenderer.getInstance();
     }
 }
