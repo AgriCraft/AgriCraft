@@ -48,6 +48,13 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     /** Journal data */
     private ItemStack stack;
 
+    /** Animation counters */
+    private int openingCounter;
+    private int openingCounterPrev;
+
+    private int flippingCounter;
+    private int flippingCounterPrev;
+
     private JournalViewPointHandler() {}
 
     public boolean toggle(Hand hand) {
@@ -121,6 +128,14 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return AgriCraft.instance.getClientPlayer();
     }
 
+    public float getOpeningProgress(float partialTicks) {
+        return MathHelper.lerp(partialTicks, this.openingCounterPrev, this.openingCounter) / TRANSITION_DURATION;
+    }
+
+    public float getFlippingProgress(float partialTicks) {
+        return MathHelper.lerp(partialTicks, this.flippingCounterPrev, this.flippingCounter) / TRANSITION_DURATION;
+    }
+
     @Override
     public int getTransitionDuration() {
         return TRANSITION_DURATION;
@@ -147,6 +162,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         this.setOffHandActive(false);
         this.observerStart = null;
         this.cameraPosition = null;
+        this.openingCounter = 0;
+        this.openingCounterPrev = 0;
+        this.flippingCounter = 0;
+        this.flippingCounterPrev = 0;
     }
 
     @Override
@@ -211,9 +230,15 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 // Stop observing
                 ModuleDynamicCamera.getInstance().stopObserving();
             } else {
-                // Tick the scroll position to increment its animation timer
+                this.openingCounterPrev = this.openingCounter;
                 if(this.isObserved()) {
+                    // Tick the book opening counter to open
+                    this.openingCounter = (this.openingCounter < TRANSITION_DURATION) ? this.openingCounter + 1 : TRANSITION_DURATION;
+                    // Tick the scroll position to increment its animation timer
                     //this.getScrollPosition().tick(); TODO
+                } else {
+                    // Tick the book opening counter to close
+                    this.openingCounter = (this.openingCounter > 0) ? this.openingCounter - 1 : 0;
                 }
             }
         }
