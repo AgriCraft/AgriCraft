@@ -1,6 +1,23 @@
 {
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "agricraft:item/journal"
+	"loader": "forge:separate-perspective",
+	"base": {
+		"parent": "item/generated",
+		"textures": {
+			"layer0": "agricraft:item/journal"
+		}
+	},
+	"perspectives": {
+		"third_person_right_hand": {
+			"parent": "builtin/entity"
+		},
+		"third_person_left_hand": {
+			"parent": "builtin/entity"
+		},
+		"first_person_right_hand": {
+			"parent": "builtin/entity"
+		},
+		"first_person_left_hand": {
+			"parent": "builtin/entity"
+		}
 	}
 }

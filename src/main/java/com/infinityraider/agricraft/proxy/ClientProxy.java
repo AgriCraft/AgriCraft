@@ -39,7 +39,6 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         this.registerEventHandler(JournalViewPointHandler.getInstance());
         this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
         this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
-        this.registerEventHandler(JournalRenderingHandler.getInstance());
     }
 
     @Override

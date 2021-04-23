@@ -61,9 +61,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     }
 
     public ItemDynamicAgriSeed() {
-        super(Names.Items.SEED, AgriCraft.instance.proxy().setItemRenderer(new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT_SEED))
-        );
+        super(Names.Items.SEED, new Properties().group(AgriTabs.TAB_AGRICRAFT_SEED));
     }
 
     @Nonnull
