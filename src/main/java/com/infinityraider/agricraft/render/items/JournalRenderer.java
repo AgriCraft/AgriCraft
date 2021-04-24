@@ -1,8 +1,6 @@
 package com.infinityraider.agricraft.render.items;
 
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.capability.CapabilityJournalReader;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
@@ -13,8 +11,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,6 +33,7 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
     private static final float T_COVER = 0.5F;
     private static final float T_PAPER = 1.0F;
     private static final float T_TOTAL = 2*T_COVER + T_PAPER;
+    private static final float OPEN_ANGLE = 75.0F;
 
     public static JournalRenderer getInstance() {
         return INSTANCE;
@@ -48,11 +48,10 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
     @Override
     public void render(ItemStack stack, ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
                        IRenderTypeBuffer buffer, int light, int overlay) {
-        PlayerEntity player = AgriCraft.instance.getClientPlayer();
         if(this.renderFull3D(perspective)) {
             if(buffer instanceof IRenderTypeBuffer.Impl) {
-                if (CapabilityJournalReader.getInstance().isReading(stack, player)) {
-                    this.renderJournalOpen(stack, perspective, transforms, (IRenderTypeBuffer.Impl) buffer, light, overlay);
+                if (JournalViewPointHandler.getInstance().getJournal() == stack) {
+                    this.renderJournalOpen(perspective, transforms, (IRenderTypeBuffer.Impl) buffer, light, overlay);
                 } else {
                     this.renderJournalClosed(perspective, transforms, (IRenderTypeBuffer.Impl) buffer, light, overlay);
                 }
@@ -102,29 +101,33 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         transforms.pop();
     }
 
-    protected void renderJournalOpen(ItemStack stack, ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
+    protected void renderJournalOpen(ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
                                      IRenderTypeBuffer.Impl buffer, int light, int overlay) {
         // Apply transformations to the stack
         transforms.push();
         this.applyTransformations(perspective, transforms);
         float f = JournalViewPointHandler.getInstance().getOpeningProgress(this.getPartialTick());
+        if(!perspective.isFirstPerson()) {
+            transforms.rotate(Vector3f.ZP.rotationDegrees(90*f));
+        }
+
+        this.renderCoordinateSystem(transforms, buffer);
 
         // Fetch tessellator and start drawing
         ITessellator tessellator = this.getTessellator(buffer);
         tessellator.startDrawingQuads();
 
         // Configure tessellator
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
         tessellator.setBrightness(light).setOverlay(overlay);
 
         // Draw book back
         transforms.push();
         tessellator.pushMatrix();
-        transforms.translate(-1.0F*f/32.0F, 0, 0);
+        transforms.translate(-f/32.0F, 0, 0);
+        tessellator.applyTransformation(transforms.getLast().getMatrix());
 
-        tessellator.applyTransformation(transforms.getLast().getMatrix())
-                .setColorRGB(COLOR_COVER).
-                drawScaledPrism(0, - T_TOTAL/2, -HEIGHT, 0.5F, T_TOTAL/2, 0);
+        tessellator.setColorRGB(COLOR_COVER)
+                .drawScaledPrism(0, - T_TOTAL/2, -HEIGHT, 0.5F, T_TOTAL/2, 0);
 
         tessellator.popMatrix();
         transforms.pop();
@@ -134,12 +137,10 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.pushMatrix();
 
         transforms.translate(1.0F/32.0F, 0, 0);
-        transforms.rotate(Vector3f.ZP.rotationDegrees(-60*f));
+        transforms.rotate(Vector3f.ZP.rotationDegrees(-f*OPEN_ANGLE));
         transforms.translate(-1.0F/32.0F, 0, 0);
-
-        this.renderCoordinateSystem(transforms, buffer);
-
         tessellator.applyTransformation(transforms.getLast().getMatrix());
+
         tessellator.setColorRGB(COLOR_COVER)
                 .drawScaledPrism(0, -T_TOTAL/2, -HEIGHT, WIDTH, T_COVER - T_TOTAL/2, 0);
         tessellator.setColorRGB(COLOR_PAGE)
@@ -153,10 +154,10 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.pushMatrix();
 
         transforms.translate(1.0F/32.0F, 0, 0);
-        transforms.rotate(Vector3f.ZP.rotationDegrees(60*f));
+        transforms.rotate(Vector3f.ZP.rotationDegrees(f*OPEN_ANGLE));
         transforms.translate(-1.0F/32.0F, 0, 0);
-
         tessellator.applyTransformation(transforms.getLast().getMatrix());
+
         tessellator.setColorRGB(COLOR_COVER)
                 .drawScaledPrism(0, T_COVER + T_PAPER - T_TOTAL/2, -HEIGHT, WIDTH, T_TOTAL/2, 0);
         tessellator.setColorRGB(COLOR_PAGE)
@@ -165,13 +166,31 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.popMatrix();
         transforms.pop();
 
+        // Draw page flip
+        float flip = JournalViewPointHandler.getInstance().getFlippingProgress(this.getPartialTick());
+        if(flip > 0) {
+            transforms.push();
+            tessellator.pushMatrix();
+
+            transforms.translate(1.0F/32.0F, 0, 0);
+            transforms.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(flip, -OPEN_ANGLE, OPEN_ANGLE)));
+            transforms.translate(-1.0F/32.0F, 0, 0);
+            tessellator.applyTransformation(transforms.getLast().getMatrix());
+
+            tessellator.setColorRGB(COLOR_PAGE)
+                    .drawScaledFaceDouble(0.5F, -HEIGHT, WIDTH - 0.5F, 0.0F, Direction.UP, 0.0F);
+
+            tessellator.popMatrix();
+            transforms.pop();
+        }
+
         // Finalize drawing
         tessellator.draw();
         transforms.pop();
     }
 
     protected void applyTransformations(ItemCameraTransforms.TransformType perspective, MatrixStack transforms) {
-        transforms.translate(0.5, 0.5, 7.0F/16F);
+        transforms.translate(0.5, 0.5, 5.0F/16F);
         if(!perspective.isFirstPerson()) {
             transforms.translate(-WIDTH/32, T_TOTAL/32, 0);
             transforms.rotate(Vector3f.XN.rotationDegrees(-90));

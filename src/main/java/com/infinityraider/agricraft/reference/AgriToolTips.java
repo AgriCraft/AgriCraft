@@ -38,6 +38,7 @@ public class AgriToolTips {
 
     public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
     public static final ITextComponent CLIPPER = new TranslationTextComponent("agricraft.tooltip.clipper");
+    public static final ITextComponent JOURNAL = new TranslationTextComponent("agricraft.tooltip.journal");
     public static final ITextComponent MAGNIFYING_GLASS = new TranslationTextComponent("agricraft.tooltip.magnifying_glass");
     public static final ITextComponent RAKE = new TranslationTextComponent("agricraft.tooltip.rake");
     public static final ITextComponent TROWEL = new TranslationTextComponent("agricraft.tooltip.trowel");

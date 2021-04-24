@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.proxy;
 
-import com.infinityraider.agricraft.capability.CapabilityJournalReader;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.ItemToolTipHandler;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
@@ -9,7 +8,6 @@ import com.infinityraider.agricraft.handler.SeedAnalyzerViewPointHandler;
 import com.infinityraider.agricraft.render.world.IrrigationNetworkDebugRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,12 +22,6 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
         return Config.Client::new;
-    }
-
-    @Override
-    public void registerCapabilities() {
-        IProxy.super.registerCapabilities();
-        this.registerCapability(CapabilityJournalReader.getInstance());
     }
 
     @Override
@@ -65,11 +57,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public boolean toggleJournalObserving(ItemStack journal, PlayerEntity player, Hand hand) {
-        boolean result = JournalViewPointHandler.getInstance().toggle(hand);
-        if(result) {
-            CapabilityJournalReader.getInstance().toggleReader(journal, player);
-        }
-        return result;
+    public boolean toggleJournalObserving(ItemStack journal, Hand hand) {
+        return JournalViewPointHandler.getInstance().toggle(journal, hand);
     }
 }

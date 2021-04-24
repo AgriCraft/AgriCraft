@@ -8,7 +8,6 @@ import com.infinityraider.agricraft.handler.IrrigationNetworkHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -82,7 +81,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     default void toggleSeedAnalyzerObserving(boolean status) {}
 
-    default boolean toggleJournalObserving(ItemStack journal, PlayerEntity player, Hand hand) {
+    default boolean toggleJournalObserving(ItemStack journal, Hand hand) {
         return false;
     }
 }

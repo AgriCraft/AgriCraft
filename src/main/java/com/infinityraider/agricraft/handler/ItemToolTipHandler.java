@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 
@@ -109,6 +110,20 @@ public class ItemToolTipHandler {
             BlockItem item = (BlockItem) stack.getItem();
             BlockState state = item.getBlock().getDefaultState();
             AgriApi.getSoilRegistry().valueOf(state).ifPresent(soil -> soil.addDisplayInfo(text -> event.getToolTip().add(text)));
+        }
+    }
+
+    /**
+     * Adds tooltips to items that are journals (implementing ITrowel).
+     */
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addJournalTooltip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (!stack.isEmpty() && stack.getItem() instanceof IAgriJournalItem) {
+            IAgriJournalItem journal = (IAgriJournalItem) stack.getItem();
+            int count = journal.getDiscoveredSeeds(stack).size();
+            event.getToolTip().add(new StringTextComponent("" + count + " ").append(AgriToolTips.JOURNAL));
         }
     }
 

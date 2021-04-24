@@ -41,7 +41,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if(world.isRemote()) {
-            if(AgriCraft.instance.proxy().toggleJournalObserving(stack, player, hand)) {
+            if(AgriCraft.instance.proxy().toggleJournalObserving(stack, hand)) {
                 return ActionResult.resultConsume(stack);
             }
         }
