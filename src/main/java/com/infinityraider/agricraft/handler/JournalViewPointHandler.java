@@ -56,6 +56,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     private Vector3d observerStart;
     private Vector3d cameraPosition;
     private Vector2f cameraOrientation;
+    private float yawOffset;
 
     /** Journal data */
     private JournalData journal;
@@ -159,6 +160,30 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
+    public void renderViewedPageLeft(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+        if(this.getJournalData() != null) {
+            this.getJournalData().getCurrentPage().drawLeftSheet(transforms, buffer, light, overlay);
+        }
+    }
+
+    public void renderViewedPageRight(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+        if(this.getJournalData() != null) {
+            this.getJournalData().getCurrentPage().drawRightSheet(transforms, buffer, light, overlay);
+        }
+    }
+
+    public void renderFlippedPageLeft(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+        if(this.getJournalData() != null) {
+            this.getJournalData().getFlippedPage().drawLeftSheet(transforms, buffer, light, overlay);
+        }
+    }
+
+    public void renderFlippedPageRight(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+        if(this.getJournalData() != null) {
+            this.getJournalData().getFlippedPage().drawRightSheet(transforms, buffer, light, overlay);
+        }
+    }
+
     @Override
     public int getTransitionDuration() {
         return TRANSITION_DURATION;
@@ -196,7 +221,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public Vector3d getObserverPosition() {
-        if(this.cameraPosition == null) {
+        if(this.cameraPosition == null || this.yawOffset != this.getObserver().renderYawOffset) {
             this.cameraPosition = this.calculateObserverPosition(AgriCraft.instance.proxy().getFieldOfView());
         }
         return this.cameraPosition;
@@ -224,14 +249,15 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public Vector2f getObserverOrientation() {
-        if(this.cameraOrientation == null) {
+        if(this.cameraOrientation == null || this.yawOffset != this.getObserver().renderYawOffset) {
             this.cameraOrientation = this.calculateObserverOrientation();
         }
         return this.cameraOrientation;
     }
 
     protected Vector2f calculateObserverOrientation() {
-        float yaw = this.getObserver().renderYawOffset;
+        this.yawOffset = this.getObserver().renderYawOffset;
+        float yaw = this.yawOffset;
         if (this.isActive(HandSide.RIGHT)) {
             yaw += YAW;
         } else if (this.isActive(HandSide.LEFT)) {
@@ -259,10 +285,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 // Stop observing
                 ModuleDynamicCamera.getInstance().stopObserving();
             }
-            // Tick the scroll position to increment its animation timer
-            if(this.getJournalData() != null) {
-                this.getJournalData().tick();
-            }
         }
         // Tick animation timer
         this.openingCounterPrev = this.openingCounter;
@@ -272,6 +294,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         } else {
             // Tick the book opening counter to close
             this.openingCounter = (this.openingCounter > 0) ? this.openingCounter - 1 : 0;
+        }
+        // Tick the scroll position to increment its animation timer
+        if(this.getJournalData() != null) {
+            this.getJournalData().tick();
         }
     }
 
@@ -355,7 +381,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 this.animationCounter -= 1;
                 if(this.animationCounter <= 0) {
                     this.animationCounter = 0;
-                    this.page++;
+                    this.page += 1;
                 }
             } else if(this.target < this.page) {
                 if(this.animationCounter == 0) {
@@ -365,16 +391,13 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 this.animationCounter += 1;
                 if(this.animationCounter >= 0) {
                     this.animationCounter = 0;
-                    this.page--;
+                    this.page -= 1;
                 }
-            } else {
-                this.animationCounter = 0;
-                this.prevAnimationCounter = 0;
             }
         }
 
         public float getFlippingProgress(float partialTicks) {
-            return MathHelper.lerp(partialTicks, Math.abs(this.prevAnimationCounter), Math.abs(this.animationCounter));
+            return MathHelper.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/FLIPPING_DURATION;
         }
 
         public static abstract class Page {
