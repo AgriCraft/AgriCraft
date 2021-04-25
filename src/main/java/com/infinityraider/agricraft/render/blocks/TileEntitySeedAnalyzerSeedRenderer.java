@@ -99,7 +99,7 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         float dy = 5 * Constants.UNIT;
         float dz = Constants.HALF + Constants.UNIT*dir.getZOffset();
         transforms.translate(dx, dy ,dz);
-        transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
+        transforms.rotate(new Quaternion(Vector3f.YP, tile.getHorizontalAngle(), true));
 
         // render the helix
         renderer.renderDoubleHelix(genes, transforms, buffer, index, partial, r, h,1.0F, false);

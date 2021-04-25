@@ -1,15 +1,12 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
@@ -241,13 +238,10 @@ public class SeedAnalyzerViewPointHandler {
         }
 
         protected void applyPositioningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
-            // fetch orientation
-            BlockState state = analyzer.getBlockState();
-            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
             // rotate yaw
-            float yaw = MathHelper.interpolateAngle(f, this.angle, dir.getHorizontalAngle());
+            float yaw = MathHelper.interpolateAngle(f, this.angle, analyzer.getHorizontalAngle());
             transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
             // translate
             transforms.translate(MathHelper.lerp(f,0, DX), MathHelper.lerp(f,0, DY), MathHelper.lerp(f,0, DZ));
@@ -257,11 +251,8 @@ public class SeedAnalyzerViewPointHandler {
         }
 
         protected void applyObservingTransformation(TileEntitySeedAnalyzer analyzer, MatrixStack transforms) {
-            // fetch orientation
-            BlockState state = analyzer.getBlockState();
-            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // rotate yaw
-            transforms.rotate(new Quaternion(Vector3f.YP, dir.getHorizontalAngle(), true));
+            transforms.rotate(new Quaternion(Vector3f.YP, analyzer.getHorizontalAngle(), true));
             // translate
             transforms.translate(DX, DY, DZ);
             // rotate pitch
@@ -269,13 +260,10 @@ public class SeedAnalyzerViewPointHandler {
         }
 
         protected void applyReturningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
-            // fetch orientation
-            BlockState state = analyzer.getBlockState();
-            Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
             // rotate yaw
-            float yaw = MathHelper.interpolateAngle(f, dir.getHorizontalAngle(), this.calculateAngle());
+            float yaw = MathHelper.interpolateAngle(f, analyzer.getHorizontalAngle(), this.calculateAngle());
             transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
             // translate
             transforms.translate(MathHelper.lerp(f, DX, 0), MathHelper.lerp(f, DY, 0), MathHelper.lerp(f, DZ, 0));

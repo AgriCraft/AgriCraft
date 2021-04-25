@@ -68,6 +68,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
         this.capability = LazyOptional.of(() -> this);
     }
 
+    public Direction getOrientation() {
+        return BlockSeedAnalyzer.ORIENTATION.fetch(this.getBlockState());
+    }
+
+    public float getHorizontalAngle() {
+        Direction dir = this.getOrientation();
+        // For some reason Z axis directions have to be inverted
+        return dir.getAxis() == Direction.Axis.Z ? dir.getOpposite().getHorizontalAngle() : dir.getHorizontalAngle();
+    }
+
     public boolean isObserved() {
         return this.observer != null;
     }
@@ -384,7 +394,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public static Optional<ItemStack> addSeedToJournal(ItemStack seed, ItemStack journal) {
         // Check if the items are a seed and a journal respectively
         if(!seed.isEmpty() && !journal.isEmpty()
-                && seed.getItem() instanceof IAgriGeneCarrier
+                && seed.getItem() instanceof IAgriGeneCarrierItem
                 && journal.getItem() instanceof IAgriJournalItem) {
             // Fetch plant from seed
             IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
