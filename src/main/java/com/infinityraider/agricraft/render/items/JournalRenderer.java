@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,8 +26,11 @@ import java.util.Map;
 public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
     private static final JournalRenderer INSTANCE = new JournalRenderer();
 
-    private static final Vector3f COLOR_COVER = new Vector3f(0, 2.0F/255.0F, 165.0F/255.0F);
-    private static final Vector3f COLOR_PAGE = new Vector3f(189.0F/255.0F, 194.0F/255.0F, 175.0F/255.0F);
+    private static final Vector3f COLOR_COVER;
+    private static final Vector3f COLOR_PAGE;
+
+    private static final Quaternion ROTATION_RIGHT;
+    private static final Quaternion ROTATION_LEFT;
 
     private static final float HEIGHT = 7.0F;
     private static final float WIDTH = 5.0F;
@@ -112,8 +116,6 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
             transforms.rotate(Vector3f.ZP.rotationDegrees(90*f));
         }
 
-        this.renderCoordinateSystem(transforms, buffer);
-
         // Fetch tessellator and start drawing
         ITessellator tessellator = this.getTessellator(buffer);
         tessellator.startDrawingQuads();
@@ -133,7 +135,7 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.popMatrix();
         transforms.pop();
 
-        // Draw left side
+        // Draw right side
         transforms.push();
         tessellator.pushMatrix();
 
@@ -147,12 +149,21 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.setColorRGB(COLOR_PAGE)
                 .drawScaledPrism(0.5F, T_COVER - T_TOTAL/2 , -HEIGHT + 0.5F, WIDTH - 0.5F, T_COVER + T_PAPER/2 - T_TOTAL/2, -0.5F);
 
-        JournalViewPointHandler.getInstance().renderViewedPageLeft(transforms, buffer, light, overlay);
+        transforms.push();
+        transforms.translate(1.0F/32.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 + 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
+        transforms.rotate(ROTATION_RIGHT);
+        if(flip != 0) {
+            JournalViewPointHandler.getInstance().renderFlippedPageRight(transforms, buffer, light, overlay);
+        } else {
+            JournalViewPointHandler.getInstance().renderViewedPageRight(transforms, buffer, light, overlay);
+        }
+        transforms.pop();
+
 
         tessellator.popMatrix();
         transforms.pop();
 
-        //Draw right side
+        //Draw left side
         transforms.push();
         tessellator.pushMatrix();
 
@@ -166,11 +177,11 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.setColorRGB(COLOR_PAGE)
                 .drawScaledPrism(0.5F, T_COVER + T_PAPER/2 - T_TOTAL/2, -HEIGHT + 0.5F, WIDTH - 0.5F, T_COVER + T_PAPER - T_TOTAL/2, -0.5F);
 
-        if(flip != 0) {
-            JournalViewPointHandler.getInstance().renderFlippedPageRight(transforms, buffer, light, overlay);
-        } else {
-            JournalViewPointHandler.getInstance().renderViewedPageRight(transforms, buffer, light, overlay);
-        }
+        transforms.push();
+        transforms.translate((WIDTH - 0.5F)/16.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 + 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
+        transforms.rotate(ROTATION_LEFT);
+        JournalViewPointHandler.getInstance().renderViewedPageLeft(transforms, buffer, light, overlay);
+        transforms.pop();
 
         tessellator.popMatrix();
         transforms.pop();
@@ -192,10 +203,15 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
             tessellator.setColorRGB(COLOR_PAGE)
                     .drawScaledFaceDouble(0.5F, -HEIGHT + 0.5F, WIDTH - 0.5F, -0.5F, Direction.UP, 0.0F);
 
-
-            JournalViewPointHandler.getInstance().renderViewedPageRight(transforms, buffer, light, overlay);
             transforms.push();
-            transforms.scale(-1, 1, 1);
+            transforms.translate(1.0F/32.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 + 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
+            transforms.rotate(ROTATION_RIGHT);
+            JournalViewPointHandler.getInstance().renderViewedPageRight(transforms, buffer, light, overlay);
+            transforms.pop();
+
+            transforms.push();
+            transforms.translate((WIDTH - 0.5F)/16.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 - 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
+            transforms.rotate(ROTATION_LEFT);
             JournalViewPointHandler.getInstance().renderFlippedPageLeft(transforms, buffer, light, overlay);
             transforms.pop();
 
@@ -244,5 +260,15 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
                         .shadeModel(SHADE_ENABLED)
                         .lightmap(LIGHTMAP_ENABLED)
                         .build(false));
+    }
+
+    static {
+        // Initialize colors
+        COLOR_COVER = new Vector3f(0, 2.0F/255.0F, 165.0F/255.0F);
+        COLOR_PAGE = new Vector3f(189.0F/255.0F, 194.0F/255.0F, 175.0F/255.0F);
+        // Initialize rotations
+        ROTATION_RIGHT = Vector3f.XP.rotationDegrees(90);
+        ROTATION_LEFT = Vector3f.XN.rotationDegrees(90);
+        ROTATION_LEFT.multiply(Vector3f.ZP.rotationDegrees(180));
     }
 }
