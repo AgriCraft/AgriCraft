@@ -20,11 +20,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class JsonWeed implements IAgriWeed {
     private final AgriWeed weed;
@@ -128,9 +126,7 @@ public class JsonWeed implements IAgriWeed {
         ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
         int layer = 0;
         while((16*layer) < height) {
-            ResourceLocation rl = layer == 0
-                    ? new ResourceLocation(this.weed.getTexture().getPlantTexture(index))
-                    : new ResourceLocation(this.weed.getTexture().getPlantTexture(this.weed.getGrowthStages() + layer - 1));
+            ResourceLocation rl = new ResourceLocation(this.weed.getTexture().getPlantTextures(index)[layer]);
             switch (this.weed.getTexture().getRenderType()) {
                 case HASH:
                     listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layer));
@@ -153,17 +149,12 @@ public class JsonWeed implements IAgriWeed {
         return listBuilder.build();
     }
 
-    @Nullable
-    protected ResourceLocation getTextureFor(IAgriGrowthStage stage) {
-        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        return index < 0 ? null : new ResourceLocation(this.weed.getTexture().getPlantTexture(index));
-    }
-
     @Nonnull
     @Override
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
-        ResourceLocation rl = this.getTextureFor(stage);
-        return rl == null ? ImmutableList.of() : ImmutableList.of(rl);
+        return Arrays.stream(this.weed.getTexture().getPlantTextures(IncrementalGrowthLogic.getGrowthIndex(stage)))
+                .map(ResourceLocation::new)
+                .collect(Collectors.toList());
     }
 
     @Override

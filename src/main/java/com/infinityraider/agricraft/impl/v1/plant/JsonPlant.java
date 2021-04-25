@@ -246,9 +246,7 @@ public class JsonPlant implements IAgriPlant {
         int layer = 0;
         int layers = (int) Math.ceil(height/16.0);
         while((16*layer) < height) {
-            ResourceLocation rl = layer == 0
-                    ? new ResourceLocation(this.plant.getTexture().getPlantTexture(index))
-                    : new ResourceLocation(this.plant.getTexture().getPlantTexture(this.plant.getGrowthStages() + layer - 1));
+            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[layer]);
             switch (this.plant.getTexture().getRenderType()) {
                 case HASH:
                     listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layers - layer - 1));
@@ -271,17 +269,12 @@ public class JsonPlant implements IAgriPlant {
         return listBuilder.build();
     }
 
-    @Nullable
-    protected ResourceLocation getTextureFor(IAgriGrowthStage stage) {
-        int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        return index < 0 ? null : new ResourceLocation(this.plant.getTexture().getPlantTexture(index));
-    }
-
     @Nonnull
     @Override
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
-        ResourceLocation rl = this.getTextureFor(stage);
-        return rl == null ? ImmutableList.of() : ImmutableList.of(rl);
+        return Arrays.stream(this.plant.getTexture().getPlantTextures(IncrementalGrowthLogic.getGrowthIndex(stage)))
+                .map(ResourceLocation::new)
+                .collect(Collectors.toList());
     }
 
     @Nonnull
