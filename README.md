@@ -13,9 +13,10 @@ AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 |![1.7.10] | No more work will be done on 1.7.10 by [InfinityRaider](https://github.com/InfinityRaider) or [RlonRyan](https://github.com/InfinityRaider/AgriCraft/commits/master?author=RlonRyan), if you want to maintain 1.7.10, contact us on Discord
 |![1.8.9]  | The 1.8.9 branch was highly experimental and the rendering is one big hack. Don't expect anything.
 |![1.9]    | Skipped 1.9, as it was an incredibly short-lived release.
-|![1.10]   | Port finished, but not moved out of alpha.
+|![1.10]   | Closed.
 |![1.11]   | Skipped 1.11.
-|![1.12]   | Port in progress.
+|![1.12]   | Closed.
+|![1.16]   | Port in progress.
 
 ## Bug Reports [![bug]][bug-link]
 
@@ -75,3 +76,4 @@ org.gradle.jvmargs=-Xmx3G
 [1.10]:https://agricraft.github.io/versions/1.10/status.svg
 [1.11]:https://agricraft.github.io/versions/1.11/status.svg
 [1.12]:https://agricraft.github.io/versions/1.12/status.svg
+[1.16]:https://agricraft.github.io/versions/1.16/status.svg
