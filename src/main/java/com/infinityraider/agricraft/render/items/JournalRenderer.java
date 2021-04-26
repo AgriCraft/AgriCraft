@@ -9,6 +9,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -84,8 +86,6 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
         // Apply transformations to the stack
         transforms.push();
         this.applyTransformations(perspective, transforms);
-
-        this.renderCoordinateSystem(transforms, buffer);
 
         // Fetch tessellator and start drawing
         ITessellator tessellator = this.getTessellator(buffer);
@@ -290,24 +290,44 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void drawTexture(MatrixStack transforms, ResourceLocation texture,
-                            float x, float y, float w, float h, float u1, float v1, float u2, float v2) {
+                            float x, float y, float w, float h, float u1, float v1, float u2, float v2, float c) {
         this.bindTexture(texture);
+        this.drawTexture(transforms, x, y, w, h, u1, v1, u2, v2, c);
+    }
+
+    @Override
+    public void drawTexture(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float c) {
+        this.bindTextureAtlas();
+        this.drawTexture(transforms, x, y, w, h, texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(), c);
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void drawTexture(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float c) {
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         Matrix4f matrix = transforms.getLast().getMatrix();
         float x1 = (SCALE_WIDTH*x)/this.getPageWidth();
         float y1 = (SCALE_HEIGHT*y)/this.getPageHeight();
         float x2 = (SCALE_WIDTH*(x + w))/this.getPageWidth();
         float y2 = (SCALE_HEIGHT*(y + h))/this.getPageHeight();
-        bufferbuilder.pos(matrix, x1, y2, 0).tex(u1, v2).endVertex();
-        bufferbuilder.pos(matrix, x2, y2, 0).tex(u2, v2).endVertex();
-        bufferbuilder.pos(matrix, x2, y1, 0).tex(u2, v1).endVertex();
-        bufferbuilder.pos(matrix, x1, y1, 0).tex(u1, v1).endVertex();
+        bufferbuilder.pos(matrix, x1, y2, 0).tex(u1, v2).color(c, c, c, 1.0F).endVertex();
+        bufferbuilder.pos(matrix, x2, y2, 0).tex(u2, v2).color(c, c, c, 1.0F).endVertex();
+        bufferbuilder.pos(matrix, x2, y1, 0).tex(u2, v1).color(c, c, c, 1.0F).endVertex();
+        bufferbuilder.pos(matrix, x1, y1, 0).tex(u1, v1).color(c, c, c, 1.0F).endVertex();
         bufferbuilder.finishDrawing();
         RenderSystem.enableAlphaTest();
         WorldVertexBufferUploader.draw(bufferbuilder);
+    }
+
+    @Override
+    public void drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+        transforms.push();
+        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), 0);
+        float scale = SCALE_WIDTH/this.getPageWidth();
+        transforms.scale(scale, scale, scale);
+        this.getFontRenderer().func_243246_a(transforms, text, 0.0F, 0.0F, 0);
+        transforms.pop();
     }
 
     private static class PosColorRenderType extends RenderType {

@@ -181,6 +181,12 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
+    public ResourceLocation getSeedTexture() {
+        return this.texture;
+    }
+
+    @Nonnull
+    @Override
     public ResourceLocation getSeedModel() {
         return this.texture;
     }

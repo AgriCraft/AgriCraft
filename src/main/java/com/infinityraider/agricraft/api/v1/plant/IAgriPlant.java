@@ -248,6 +248,12 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     boolean allowsCloning(IAgriGrowthStage stage);
 
     /**
+     * @return The resource location for the texture of the seed
+     */
+    @Nonnull
+    ResourceLocation getSeedTexture();
+
+    /**
      * @return The resource location for the model of the seed
      */
     @Nonnull

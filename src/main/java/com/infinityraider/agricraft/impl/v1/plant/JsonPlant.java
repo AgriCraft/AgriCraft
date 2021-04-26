@@ -55,6 +55,7 @@ public class JsonPlant implements IAgriPlant {
 
     private final List<ItemStack> seedItems;
     private final List<IJsonPlantCallback> callbacks;
+    private final ResourceLocation seedTexture;
     private final ResourceLocation seedModel;
 
     public JsonPlant(AgriPlant plant) {
@@ -66,6 +67,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthRequirement = initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
         this.callbacks = JsonPlantCallback.get(plant.getCallbacks());
+        this.seedTexture = new ResourceLocation(plant.getSeedTexture());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
     }
 
@@ -275,6 +277,12 @@ public class JsonPlant implements IAgriPlant {
         return Arrays.stream(this.plant.getTexture().getPlantTextures(IncrementalGrowthLogic.getGrowthIndex(stage)))
                 .map(ResourceLocation::new)
                 .collect(Collectors.toList());
+    }
+
+    @Nonnull
+    @Override
+    public ResourceLocation getSeedTexture() {
+        return this.seedTexture;
     }
 
     @Nonnull
