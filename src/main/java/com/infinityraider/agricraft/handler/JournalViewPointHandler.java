@@ -8,11 +8,11 @@ import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraContro
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
@@ -160,27 +160,27 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
-    public void renderViewedPageLeft(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+    public void renderViewedPageLeft(IPageRenderer renderer, MatrixStack transforms) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawLeftSheet(transforms, buffer, light, overlay);
+            this.getJournalData().getCurrentPage().drawLeftSheet(renderer, transforms);
         }
     }
 
-    public void renderViewedPageRight(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+    public void renderViewedPageRight(IPageRenderer renderer, MatrixStack transforms) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawRightSheet(transforms, buffer, light, overlay);
+            this.getJournalData().getCurrentPage().drawRightSheet(renderer, transforms);
         }
     }
 
-    public void renderFlippedPageLeft(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+    public void renderFlippedPageLeft(IPageRenderer renderer, MatrixStack transforms) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawLeftSheet(transforms, buffer, light, overlay);
+            this.getJournalData().getFlippedPage().drawLeftSheet(renderer, transforms);
         }
     }
 
-    public void renderFlippedPageRight(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+    public void renderFlippedPageRight(IPageRenderer renderer, MatrixStack transforms) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawRightSheet(transforms, buffer, light, overlay);
+            this.getJournalData().getFlippedPage().drawRightSheet(renderer, transforms);
         }
     }
 
@@ -401,35 +401,57 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         }
 
         public static abstract class Page {
-            public abstract void drawLeftSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay);
+            public abstract void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms);
 
-            public abstract void drawRightSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay);
+            public abstract void drawRightSheet(IPageRenderer renderer, MatrixStack transforms);
         }
+
+        private static final ResourceLocation TEXTURE_FRONT_RIGHT = new ResourceLocation(
+                AgriCraft.instance.getModId().toLowerCase(),
+                "textures/journal/front_page.png"
+        );
 
         public static final Page FRONT_PAGE = new Page() {
             @Override
-            public void drawLeftSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+            public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
                 // Draw nothing
             }
 
             @Override
-            public void drawRightSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
-                // TODO: Draw front page sprite
+            public void drawRightSheet(IPageRenderer renderer, MatrixStack transforms) {
+                renderer.drawFullPageTexture(transforms, TEXTURE_FRONT_RIGHT);
             }
         };
 
         public static Page plantPage(IAgriPlant plant) {
             return new Page() {
                 @Override
-                public void drawLeftSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+                public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
                     // TODO
                 }
 
                 @Override
-                public void drawRightSheet(MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+                public void drawRightSheet(IPageRenderer renderer, MatrixStack transforms) {
                     // TODO
                 }
             };
         }
+    }
+
+    public interface IPageRenderer {
+        int getPageWidth();
+
+        int getPageHeight();
+
+        default void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture) {
+            this.drawTexture(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
+        }
+
+        default void drawTexture(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
+            this.drawTexture(transforms, texture, x, y, w, h, 0, 0, 1, 1);
+        }
+
+        void drawTexture(MatrixStack transforms, ResourceLocation texture,
+                         float x, float y, float w, float h, float u1, float v1, float u2, float v2);
     }
 }
