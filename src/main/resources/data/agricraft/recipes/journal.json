@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:writable_book"
+    },
+    {
+      "tag": "forge:seeds"
+    }
+  ],
+  "result":
+  {
+    "item": "agricraft:agri_journal",
+    "count": 1
+  }
+}

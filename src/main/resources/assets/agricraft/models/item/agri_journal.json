@@ -1,5 +1,6 @@
 {
 	"loader": "forge:separate-perspective",
+	"parent": "item/generated",
 	"base": {
 		"parent": "item/generated",
 		"textures": {

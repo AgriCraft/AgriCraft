@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
@@ -31,6 +32,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -342,16 +344,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
         protected JournalData(ItemStack journalStack) {
             this.journal = journalStack;
-            ImmutableList.Builder<Page> builder = new ImmutableList.Builder<>();
-            builder.add(FRONT_PAGE);
-            if(journalStack.getItem() instanceof IAgriJournalItem) {
-                IAgriJournalItem journalItem = (IAgriJournalItem) journalStack.getItem();
-                journalItem.getDiscoveredSeeds(journalStack).stream()
-                        .sorted(Comparator.comparing(plant -> plant.getPlantName().getString()))
-                        .map(PlantPage::new)
-                        .forEach(builder::add);
-            }
-            this.pages = builder.build();
+            this.pages = initializePages(journalStack);
         }
 
         public ItemStack getJournal() {
@@ -411,14 +404,29 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             return MathHelper.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/FLIPPING_DURATION;
         }
 
+        public static List<Page> initializePages(ItemStack journal) {
+            ImmutableList.Builder<Page> builder = new ImmutableList.Builder<>();
+            builder.add(FRONT_PAGE);
+            builder.add(INTRODUCTION_PAGE);
+            if(journal.getItem() instanceof IAgriJournalItem) {
+                IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
+                journalItem.getDiscoveredSeeds(journal).stream()
+                        .sorted(Comparator.comparing(plant -> plant.getPlantName().getString()))
+                        .map(JournalData::getPlantPages)
+                        .flatMap(Collection::stream)
+                        .forEach(builder::add);
+            }
+            return builder.build();
+        }
+
         public static abstract class Page {
+            protected static final float SHADE_LEFT = 0.7F;
+            protected static final float SHADE_RIGHT = 1.0F;
+
             public abstract void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms);
 
             public abstract void drawRightSheet(IPageRenderer renderer, MatrixStack transforms);
         }
-
-        private static final float SHADE_LEFT = 0.7F;
-        private static final float SHADE_RIGHT = 1.0F;
 
         private static final ResourceLocation BACKGROUND_FRONT_RIGHT = new ResourceLocation(
                 AgriCraft.instance.getModId().toLowerCase(),
@@ -437,30 +445,75 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             }
         };
 
-        private static final class PlantPage extends Page implements IRenderUtilities {
+        public static final Page INTRODUCTION_PAGE = new Page() {
+            private final ITextComponent INTRODUCTION = new TranslationTextComponent("agricraft.journal.introduction");
+            private final ITextComponent PARAGRAPH_1 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_1");
+            private final ITextComponent PARAGRAPH_2 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_2");
+            private final ITextComponent PARAGRAPH_3 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_3");
 
-            private static final ResourceLocation TITLE_TEMPLATE = new ResourceLocation(
-                    AgriCraft.instance.getModId().toLowerCase(),
-                    "textures/journal/template_title.png"
-            );
-            private static final ResourceLocation GROWTH_STAGE_TEMPLATE = new ResourceLocation(
-                    AgriCraft.instance.getModId().toLowerCase(),
-                    "textures/journal/template_growth_stage.png"
-            );
-            private static final ResourceLocation MUTATION_TEMPLATE = new ResourceLocation(
-                    AgriCraft.instance.getModId().toLowerCase(),
-                    "textures/journal/template_mutation.png"
-            );
+            @Override
+            public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
+                // Draw Nothing
+            }
 
+            @Override
+            public void drawRightSheet(IPageRenderer renderer, MatrixStack transforms) {
+                float dy = 10;
+                float dx = 6;
+                float spacing = 4;
+                // Title
+                dy += renderer.drawText(transforms, INTRODUCTION, dx, dy);
+                dy += spacing;
+                // First paragraph
+                dy += renderer.drawText(transforms, PARAGRAPH_1, dx, dy, 0.70F);
+                dy += spacing;
+                // Second paragraph
+                dy += renderer.drawText(transforms, PARAGRAPH_2, dx, dy, 0.70F);
+                dy += spacing;
+                // Third paragraph
+                renderer.drawText(transforms, PARAGRAPH_3, dx, dy, 0.70F);
+            }
+        };
+
+        public static List<Page> getPlantPages(IAgriPlant plant) {
+            ImmutableList.Builder<Page> pages = ImmutableList.builder();
+            PlantPage page = new PlantPage(plant);
+            pages.add(page);
+            List<List<TextureAtlasSprite>> mutations = page.getOffPageMutations();
+            int size = mutations.size();
+            if(size > 0) {
+                int remaining = size;
+                int from = 0;
+                int to = Math.min(remaining, MutationPage.LIMIT);
+                while(remaining > 0) {
+                    pages.add(new MutationPage(mutations.subList(from, to)));
+                    remaining -= (to - from);
+                    from = to;
+                    to = from + Math.min(remaining, MutationPage.LIMIT);
+                }
+            }
+            return pages.build();
+        }
+
+        private static final class PlantPage extends BasePage implements IRenderUtilities {
             private static final ITextComponent GROWTH_STAGES = new TranslationTextComponent("agricraft.tooltip.growth_stages");
+            private static final ITextComponent GROWTH_REQUIREMENTS = new TranslationTextComponent("agricraft.tooltip.growth_requirements");
+            private static final ITextComponent PRODUCTS = new TranslationTextComponent("agricraft.tooltip.products");
+            private static final ITextComponent MUTATIONS = new TranslationTextComponent("agricraft.tooltip.mutations");
 
             private final IAgriPlant plant;
 
-            TextureAtlasSprite seed;
-            List<TextureAtlasSprite> stages;
+            private final TextureAtlasSprite seed;
+            private final List<TextureAtlasSprite> stages;
 
-            List<List<TextureAtlasSprite>> mutationsFrom;
-            List<List<TextureAtlasSprite>> mutationsTo;
+            private final boolean[] brightnessMask;
+            private final boolean[] humidityMask;
+            private final boolean[] acidityMask;
+            private final boolean[] nutrientsMask;
+
+            private final List<ItemStack> drops;
+            private final List<List<TextureAtlasSprite>> mutationsOnPage;
+            private final List<List<TextureAtlasSprite>> mutationsOffPage;
 
             public PlantPage(IAgriPlant plant) {
                 this.plant = plant;
@@ -472,12 +525,40 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                         .map(textures -> textures.get(0))
                         .map(this::getSprite)
                         .collect(Collectors.toList());
-
-                this.mutationsFrom = this.gatherMutationSprites(mutation -> mutation.hasParent(this.plant));
-                this.mutationsTo = this.gatherMutationSprites(mutation -> mutation.hasChild(this.plant));
+                this.brightnessMask = new boolean[16];
+                for(int light = 0; light < this.brightnessMask.length; light++) {
+                    this.brightnessMask[light] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isLightLevelAccepted(light, 1);
+                }
+                this.humidityMask = new boolean[IAgriSoil.Humidity.values().length - 1];
+                for(int humidity = 0; humidity < this.humidityMask.length; humidity++) {
+                    this.humidityMask[humidity] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isSoilHumidityAccepted(IAgriSoil.Humidity.values()[humidity], 1);
+                }
+                this.acidityMask = new boolean[IAgriSoil.Acidity.values().length  - 1];
+                for(int acidity = 0; acidity < this.acidityMask.length; acidity++) {
+                    this.acidityMask[acidity] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isSoilAcidityAccepted(IAgriSoil.Acidity.values()[acidity], 1);
+                }
+                this.nutrientsMask = new boolean[IAgriSoil.Nutrients.values().length - 1];
+                for(int nutrients = 0; nutrients < this.nutrientsMask.length; nutrients++) {
+                    this.nutrientsMask[nutrients] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isSoilNutrientsAccepted(IAgriSoil.Nutrients.values()[nutrients], 1);
+                }
+                ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
+                this.plant.getAllPossibleProducts(builder::add);
+                this.drops = builder.build();
+                List<List<TextureAtlasSprite>> mutations = Stream.concat(
+                        this.gatherMutationSprites(mutation -> mutation.hasParent(this.plant)),
+                        this.gatherMutationSprites(mutation -> mutation.hasChild(this.plant))
+                ).collect(Collectors.toList());
+                int count = mutations.size();
+                if(count <= 6) {
+                    this.mutationsOnPage = mutations.subList(0, count);
+                    this.mutationsOffPage = ImmutableList.of();
+                } else {
+                    this.mutationsOnPage = mutations.subList(0, 6);
+                    this.mutationsOffPage = mutations.subList(6, count);
+                }
             }
 
-            protected List<List<TextureAtlasSprite>> gatherMutationSprites(Predicate<IAgriMutation> filter) {
+            protected Stream<List<TextureAtlasSprite>> gatherMutationSprites(Predicate<IAgriMutation> filter) {
                 return AgriApi.getMutationRegistry().stream()
                         .filter(filter)
                         .map(mutation ->
@@ -487,16 +568,22 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                                         mutation.getChild())
                                         .map(IAgriPlant::getSeedTexture)
                                         .map(this::getSprite).collect(Collectors.toList())
-                        ).collect(Collectors.toList());
+                        );
+            }
+
+            public List<List<TextureAtlasSprite>> getOffPageMutations() {
+                return this.mutationsOffPage;
             }
 
             @Override
             public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
                 // Title
-                renderer.drawTexture(transforms, TITLE_TEMPLATE, 0, 2, 128, 20, SHADE_LEFT);
+                renderer.drawTexture(transforms, Textures.TITLE, 0, 2, 128, 20, SHADE_LEFT);
                 renderer.drawText(transforms, this.plant.getSeedName(), 30, 10);
                 // Description
-                renderer.drawText(transforms, this.plant.getInformation(), 10, 30, 0.70F);
+                float offset = renderer.drawText(transforms, this.plant.getInformation(), 10, 30, 0.70F);
+                // Growth requirements
+                this.drawGrowthRequirements(renderer, transforms,35 + offset);
                 // Seed
                 renderer.drawTexture(transforms, this.seed, 4, 5, 16, 16, SHADE_LEFT);
                 // Growth stages
@@ -505,8 +592,76 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
             @Override
             public void drawRightSheet(IPageRenderer renderer, MatrixStack transforms) {
+                // Products
+                this.drawProducts(renderer, transforms);
                 // Mutations
                 this.drawMutations(renderer, transforms);
+            }
+
+            protected void drawGrowthRequirements(IPageRenderer renderer, MatrixStack transforms, float offset) {
+                float dy = Math.max(offset, 60);
+                dy += renderer.drawText(transforms, GROWTH_REQUIREMENTS, 10, dy, 0.80F) + 1;
+                // Light level
+                renderer.drawTexture(transforms, Textures.BRIGHTNESS_BAR, 6, dy, 66, 8, SHADE_LEFT);
+                transforms.push();
+                transforms.translate(0, 0, -0.001F);
+                for (int i = 0; i < this.brightnessMask.length; i++) {
+                    boolean current = this.brightnessMask[i];
+                    if(current) {
+                        boolean prev = i > 0 && this.brightnessMask[i - 1];
+                        boolean next = i < (this.brightnessMask.length - 1) && this.brightnessMask[i + 1];
+                        renderer.drawTexture(transforms, Textures.BRIGHTNESS_HIGHLIGHT, 6 + 4*i + 1, dy, 4, 8,
+                                0.25F, 0, 0.75F, 1, SHADE_LEFT);
+                        if(!prev) {
+                            renderer.drawTexture(transforms, Textures.BRIGHTNESS_HIGHLIGHT, 6 + 4 * i, dy, 1, 8,
+                                    0, 0, 0.25F, 1, SHADE_LEFT);
+                        }
+                        if(!next) {
+                            renderer.drawTexture(transforms, Textures.BRIGHTNESS_HIGHLIGHT, 6 + 4*i + 5, dy, 1, 8,
+                                    0.75F, 0, 1, 1, SHADE_LEFT);
+                        }
+                    }
+                }
+                dy += 9;
+                transforms.pop();
+                // Humidity
+                for(int i = 0; i < this.humidityMask.length; i++) {
+                    int dx = Textures.HUMIDITY_OFFSETS[i];
+                    int w = Textures.HUMIDITY_OFFSETS[i + 1] - Textures.HUMIDITY_OFFSETS[i];
+                    float u1 = (dx + 0.0F)/53.0F;
+                    float u2 = (dx + w + 0.0F)/53.0F;
+                    if(this.humidityMask[i]) {
+                        renderer.drawTexture(transforms, Textures.HUMIDITY_FILLED, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    } else {
+                        renderer.drawTexture(transforms, Textures.HUMIDITY_EMPTY, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    }
+                }
+                dy += 13;
+                // Acidity
+                for(int i = 0; i < this.acidityMask.length; i++) {
+                    int dx = Textures.ACIDITY_OFFSETS[i];
+                    int w = Textures.ACIDITY_OFFSETS[i + 1] - Textures.ACIDITY_OFFSETS[i];
+                    float u1 = (dx + 0.0F)/53.0F;
+                    float u2 = (dx + w + 0.0F)/53.0F;
+                    if(this.acidityMask[i]) {
+                        renderer.drawTexture(transforms, Textures.ACIDITY_FILLED, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    } else {
+                        renderer.drawTexture(transforms, Textures.ACIDITY_EMPTY, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    }
+                }
+                dy += 13;
+                // Nutrients
+                for(int i = 0; i < this.nutrientsMask.length; i++) {
+                    int dx = Textures.NUTRIENTS_OFFSETS[i];
+                    int w = Textures.NUTRIENTS_OFFSETS[i + 1] - Textures.NUTRIENTS_OFFSETS[i];
+                    float u1 = (dx + 0.0F)/53.0F;
+                    float u2 = (dx + w + 0.0F)/53.0F;
+                    if(this.nutrientsMask[i]) {
+                        renderer.drawTexture(transforms, Textures.NUTRIENTS_FILLED, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    } else {
+                        renderer.drawTexture(transforms, Textures.NUTRIENTS_EMPTY, 10 + dx, dy, w, 12, u1, 0, u2, 1, SHADE_LEFT);
+                    }
+                }
             }
 
             protected void drawGrowthStages(IPageRenderer renderer, MatrixStack transforms) {
@@ -523,7 +678,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                     if(i > 0 && column == 0) {
                         row += 1;
                     }
-                    renderer.drawTexture(transforms, GROWTH_STAGE_TEMPLATE, dx*(column + 1) + 16*column - 1, y0 - delta*(rows - row - 1) - 1, 18, 18, SHADE_LEFT);
+                    renderer.drawTexture(transforms, Textures.GROWTH_STAGE, dx*(column + 1) + 16*column - 1, y0 - delta*(rows - row - 1) - 1, 18, 18, SHADE_LEFT);
                     transforms.push();
                     transforms.translate(0,0, -0.001F);
                     renderer.drawTexture(transforms, this.stages.get(i), dx*(column + 1) + 16*column, y0 - delta*(rows - row - 1), 16, 16, SHADE_LEFT);
@@ -533,28 +688,128 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 renderer.drawText(transforms, GROWTH_STAGES, 10, y0 - delta*rows + 4, 0.90F);
             }
 
+            protected void drawProducts(IPageRenderer renderer, MatrixStack transforms) {
+                renderer.drawText(transforms, PRODUCTS, 10, 10, 0.80F);
+                for(int i = 0; i < this.drops.size(); i++) {
+                    renderer.drawTexture(transforms, Textures.MUTATION, 10 + i*20, 19, 18, 18, 0, 0, 18.0F/86.0F, 1, SHADE_RIGHT);
+                    renderer.drawItem(transforms, this.drops.get(i), 11+i*20, 20);
+                }
+            }
+
             protected void drawMutations(IPageRenderer renderer, MatrixStack transforms) {
-                int posX = 21;
-                int posY = 6;
+                renderer.drawText(transforms, MUTATIONS, 10, 45, 0.80F);
+                int posX = 10;
+                int posY = 54;
                 int dy = 20;
-                for (List<TextureAtlasSprite> sprites : this.mutationsTo) {
-                    this.drawMutation(renderer, transforms, posX, posY, sprites);
+                for (List<TextureAtlasSprite> sprites : this.mutationsOnPage) {
+                    this.drawMutation(renderer, transforms, posX, posY, sprites, SHADE_RIGHT);
                     posY += dy;
                 }
-                for (List<TextureAtlasSprite> sprites : this.mutationsFrom) {
-                    this.drawMutation(renderer, transforms, posX, posY, sprites);
+            }
+        }
+
+        private static final class MutationPage extends BasePage {
+            public static final int LIMIT = 18;
+
+            private final List<List<TextureAtlasSprite>> mutationsLeft;
+            private final List<List<TextureAtlasSprite>> mutationsRight;
+
+            public MutationPage(List<List<TextureAtlasSprite>> mutations) {
+                int count = mutations.size();
+                if(count <= LIMIT/2) {
+                    this.mutationsLeft = mutations;
+                    this.mutationsRight = ImmutableList.of();
+                } else {
+                    this.mutationsLeft = mutations.subList(0, LIMIT/2 - 1);
+                    this.mutationsRight = mutations.subList(LIMIT/2, count - 1);
+                }
+            }
+
+            @Override
+            public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
+                int posX = 10;
+                int posY = 6;
+                int dy = 20;
+                for (List<TextureAtlasSprite> sprites : this.mutationsLeft) {
+                    this.drawMutation(renderer, transforms, posX, posY, sprites, SHADE_LEFT);
                     posY += dy;
                 }
             }
 
-            protected void drawMutation(IPageRenderer renderer, MatrixStack transforms, int posX, int posY, List<TextureAtlasSprite> sprites) {
-                renderer.drawTexture(transforms, MUTATION_TEMPLATE, posX, posY, 86, 18, 0.7F);
+            @Override
+            public void drawRightSheet(IPageRenderer renderer, MatrixStack transforms) {
+                int posX = 10;
+                int posY = 6;
+                int dy = 20;
+                for (List<TextureAtlasSprite> sprites : this.mutationsRight) {
+                    this.drawMutation(renderer, transforms, posX, posY, sprites, SHADE_RIGHT);
+                    posY += dy;
+                }
+            }
+        }
+
+        private static abstract class BasePage extends Page {
+            protected void drawMutation(IPageRenderer renderer, MatrixStack transforms, int posX, int posY, List<TextureAtlasSprite> sprites, float c) {
+                renderer.drawTexture(transforms, Textures.MUTATION, posX, posY, 86, 18, c);
                 transforms.push();
                 transforms.translate(0, 0, -0.001F);
-                renderer.drawTexture(transforms, sprites.get(0), posX + 1, posY + 1, 16, 16, SHADE_RIGHT);
-                renderer.drawTexture(transforms, sprites.get(1), posX + 35, posY + 1, 16, 16, SHADE_RIGHT);
-                renderer.drawTexture(transforms, sprites.get(2), posX + 69, posY + 1, 16, 16, SHADE_RIGHT);
+                renderer.drawTexture(transforms, sprites.get(0), posX + 1, posY + 1, 16, 16, c);
+                renderer.drawTexture(transforms, sprites.get(1), posX + 35, posY + 1, 16, 16, c);
+                renderer.drawTexture(transforms, sprites.get(2), posX + 69, posY + 1, 16, 16, c);
                 transforms.pop();
+            }
+
+            protected static final class Textures {
+                public static final ResourceLocation TITLE = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_title.png"
+                );
+                public static final ResourceLocation GROWTH_STAGE = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_growth_stage.png"
+                );
+                public static final ResourceLocation BRIGHTNESS_BAR = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_brightness_bar.png"
+                );
+                public static final ResourceLocation BRIGHTNESS_HIGHLIGHT = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_brightness_highlight.png"
+                );
+                public static final ResourceLocation HUMIDITY_EMPTY = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_humidity_empty.png"
+                );
+                public static final ResourceLocation HUMIDITY_FILLED = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_humidity_filled.png"
+                );
+                public static final ResourceLocation ACIDITY_EMPTY = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_acidity_empty.png"
+                );
+                public static final ResourceLocation ACIDITY_FILLED = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_acidity_filled.png"
+                );
+                public static final ResourceLocation NUTRIENTS_EMPTY = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_nutrients_empty.png"
+                );
+                public static final ResourceLocation NUTRIENTS_FILLED = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_nutrients_filled.png"
+                );
+                public static final ResourceLocation MUTATION = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_mutation.png"
+                );
+
+                public static final int[] HUMIDITY_OFFSETS = new int[]{0, 8, 16, 26, 36, 46, 53};
+                public static final int[] ACIDITY_OFFSETS = new int[]{0, 7, 15, 22, 30, 38, 46, 53};
+                public static final int[] NUTRIENTS_OFFSETS = new int[]{0, 6, 14, 23, 32, 43, 53};
+
+                private Textures() {}
             }
         }
     }
@@ -578,10 +833,12 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         void drawTexture(MatrixStack transforms, TextureAtlasSprite texture,
                          float x, float y, float w, float h, float c);
 
-        default void drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
-            this.drawText(transforms, text, x, y, 1.0F);
+        default float drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+            return this.drawText(transforms, text, x, y, 1.0F);
         }
 
-        void drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale);
+        float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale);
+
+        void drawItem(MatrixStack transforms, ItemStack item, float x, float y);
     }
 }

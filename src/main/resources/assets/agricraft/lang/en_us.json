@@ -52,6 +52,9 @@
   "agricraft.tooltip.genome": "Genome",
   "agricraft.tooltip.growth": "Growth",
   "agricraft.tooltip.growth_stages": "Growth stages",
+  "agricraft.tooltip.growth_requirements": "Growth Requirements",
+  "agricraft.tooltip.mutations": "Crop Mutations",
+  "agricraft.tooltip.products": "Crop Produce",
   "agricraft.tooltip.light": "Light Level",
   "agricraft.tooltip.mature": "Mature",
   "agricraft.tooltip.fertile": "Fertile",
@@ -62,7 +65,9 @@
   "agricraft.tooltip.soil": "Soil",
   "agricraft.tooltip.magnifying_glass": "A tool to inspect the genome of crops",
   "agricraft.tooltip.clipper": "A tool to clip flowers or leaves of plants",
-  "agricraft.tooltip.journal": "Discovered Seeds",
+  "agricraft.tooltip.journal_use_1": "Sneak + Right click to place on a Seed Analyzer",
+  "agricraft.tooltip.journal_use_2": "Right click to read, scroll to flip pages",
+  "agricraft.tooltip.journal_seeds": "Discovered Seeds",
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",
 
@@ -167,6 +172,11 @@
   "agricraft.season.summer": "Summer",
   "agricraft.season.autumn": "Autumn",
   "agricraft.season.winter": "Winter",
+
+  "agricraft.journal.introduction": "Introduction",
+  "agricraft.journal.introduction.paragraph_1": "This is your very own Agricultural Journal, in here you can keep track of all the seeds you have discovered. To get started, simply place the journal on a seed analyzer and start analyzing seeds!",
+  "agricraft.journal.introduction.paragraph_2": "When analyzing the genome of a seed, you learn one or two things about it, such as what kind of environments it likes, how it will grow, what fruits it might bear, and to and from which other species it might mutate.",
+  "agricraft.journal.introduction.paragraph_3": "Can you discover all plant species?",
 
   "agricraft.plant.allium.name": "Allium",
   "agricraft.plant.allium.seed": "Allium Seeds",

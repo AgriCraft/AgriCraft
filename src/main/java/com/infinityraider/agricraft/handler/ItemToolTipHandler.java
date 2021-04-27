@@ -123,7 +123,9 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journal = (IAgriJournalItem) stack.getItem();
             int count = journal.getDiscoveredSeeds(stack).size();
-            event.getToolTip().add(new StringTextComponent("" + count + " ").append(AgriToolTips.JOURNAL));
+            event.getToolTip().add(new StringTextComponent("" + count + " ").append(AgriToolTips.JOURNAL_SEEDS));
+            event.getToolTip().add(AgriToolTips.JOURNAL_USE_1);
+            event.getToolTip().add(AgriToolTips.JOURNAL_USE_2);
         }
     }
 
