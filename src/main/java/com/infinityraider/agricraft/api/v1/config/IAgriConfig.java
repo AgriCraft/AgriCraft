@@ -50,6 +50,11 @@ public interface IAgriConfig {
     boolean allowPlantingOutsideCropSticks();
 
     /**
+     * @return true if only fertile crops may cause, participate in, or contribute to a spreading / mutation action
+     */
+    boolean onlyFertileCropsCanSpread();
+
+    /**
      * @return false if fertilizers can not trigger mutations (global override for all IAgriFertilizer instances)
      */
     boolean allowFertilizerMutations();

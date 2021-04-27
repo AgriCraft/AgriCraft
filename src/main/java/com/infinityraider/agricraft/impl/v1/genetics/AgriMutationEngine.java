@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.*;
@@ -62,7 +63,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
                 // Mature crops only
                 .filter(IAgriCrop::isMature)
                 // Fertile crops only
-                .filter(IAgriCrop::isFertile)
+                .filter(crop -> (!AgriCraft.instance.getConfig().onlyFertileCropsCanSpread()) || crop.isFertile())
                 // Sort based on fertility stat
                 .sorted(Comparator.comparingInt(this::sorter))
                 // Roll for fertility stat

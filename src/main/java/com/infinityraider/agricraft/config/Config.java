@@ -24,6 +24,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // core
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
+        private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> disableVanillaFarming;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
@@ -87,6 +88,9 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable JSON write back", true);
             this.plantOffCropSticks = builder.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
+            this.onlyFertileCropsSpread = builder.comment("Set to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
+                    "(note that this may cause issues with obtaining some specific plants)")
+                    .define("Only fertile crops mutate", false);
             this.fertilizerMutations = builder.comment("Set to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
             this.disableVanillaFarming = builder.comment("Set to true to disable vanilla farming, meaning you can only grow plants on crops.")
@@ -195,6 +199,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean allowPlantingOutsideCropSticks() {
             return this.plantOffCropSticks.get();
+        }
+
+        @Override
+        public boolean onlyFertileCropsCanSpread() {
+            return this.onlyFertileCropsSpread.get();
         }
 
         @Override
