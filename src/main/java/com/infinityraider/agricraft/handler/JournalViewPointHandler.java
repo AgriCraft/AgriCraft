@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
@@ -47,8 +46,8 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     private static final int FLIPPING_DURATION = 20;
 
     public static final double DX = 0.35;
-    public static final double DY = -1.0;
-    public static final double DZ = 0.45;
+    public static final double DY = -0.95;
+    public static final double DZ = 0.425;
 
     public static final float PITCH = 80.0F;
     public static final float YAW = 0.0F;
@@ -348,7 +347,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             if(journalStack.getItem() instanceof IAgriJournalItem) {
                 IAgriJournalItem journalItem = (IAgriJournalItem) journalStack.getItem();
                 journalItem.getDiscoveredSeeds(journalStack).stream()
-                        .sorted(Comparator.comparing(IAgriRegisterable::getId))
+                        .sorted(Comparator.comparing(plant -> plant.getPlantName().getString()))
                         .map(PlantPage::new)
                         .forEach(builder::add);
             }
@@ -495,9 +494,9 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
                 // Title
                 renderer.drawTexture(transforms, TITLE_TEMPLATE, 0, 2, 128, 20, SHADE_LEFT);
-                renderer.drawText(transforms, this.plant.getSeedName(), 23, 2);
+                renderer.drawText(transforms, this.plant.getSeedName(), 30, 10);
                 // Description
-                renderer.drawText(transforms, this.plant.getTooltip(), 2, 24);
+                renderer.drawText(transforms, this.plant.getInformation(), 10, 30, 0.70F);
                 // Seed
                 renderer.drawTexture(transforms, this.seed, 4, 5, 16, 16, SHADE_LEFT);
                 // Growth stages
@@ -518,20 +517,20 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 int columns = this.stages.size()/rows + (this.stages.size() % rows > 0 ? 1 : 0);
                 // draw stages
                 int row = 0;
-                int dx = (renderer.getPageWidth() - (16*(columns + 1)))/rows;
+                int dx = (renderer.getPageWidth() - (16*(columns)))/(columns + 1);
                 for(int i = 0; i < this.stages.size(); i++) {
                     int column = i % columns;
                     if(i > 0 && column == 0) {
                         row += 1;
                     }
-                    renderer.drawTexture(transforms, GROWTH_STAGE_TEMPLATE, dx*(column + 1) - 1, y0 - delta*(rows - row - 1) - 1, 18, 18, SHADE_LEFT);
+                    renderer.drawTexture(transforms, GROWTH_STAGE_TEMPLATE, dx*(column + 1) + 16*column - 1, y0 - delta*(rows - row - 1) - 1, 18, 18, SHADE_LEFT);
                     transforms.push();
                     transforms.translate(0,0, -0.001F);
-                    renderer.drawTexture(transforms, this.stages.get(i), dx*(column + 1), y0 - delta*(rows - row - 1), 16, 16, SHADE_LEFT);
+                    renderer.drawTexture(transforms, this.stages.get(i), dx*(column + 1) + 16*column, y0 - delta*(rows - row - 1), 16, 16, SHADE_LEFT);
                     transforms.pop();
                 }
                 // draw text
-                renderer.drawText(transforms, GROWTH_STAGES, dx, y0 - delta*rows);
+                renderer.drawText(transforms, GROWTH_STAGES, 10, y0 - delta*rows + 4, 0.90F);
             }
 
             protected void drawMutations(IPageRenderer renderer, MatrixStack transforms) {
@@ -579,6 +578,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         void drawTexture(MatrixStack transforms, TextureAtlasSprite texture,
                          float x, float y, float w, float h, float c);
 
-        void drawText(MatrixStack transforms, ITextComponent text, float x, float y);
+        default void drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+            this.drawText(transforms, text, x, y, 1.0F);
+        }
+
+        void drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale);
     }
 }

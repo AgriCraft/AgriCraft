@@ -184,14 +184,14 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getInformation(IAgriGrowthStage stage) {
+    public TranslationTextComponent getInformation() {
         return this.description;
     }
 
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
         consumer.accept(this.getPlantName());
-        consumer.accept(this.description);
+        consumer.accept(this.getInformation());
     }
 
     @Override

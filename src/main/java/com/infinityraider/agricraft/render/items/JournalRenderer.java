@@ -145,9 +145,9 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
     }
 
     protected void applyTransformations(ItemCameraTransforms.TransformType perspective, MatrixStack transforms) {
-        transforms.translate(0.5, 0.5, 5.0F/16F);
+        transforms.translate(0.5F, 0.425F, 5.0F/16F);
         if(!perspective.isFirstPerson()) {
-            transforms.translate(-WIDTH/32, T_TOTAL/32, 0);
+            transforms.translate(-WIDTH/32, T_TOTAL/32, 0.25F);
             transforms.rotate(Vector3f.XN.rotationDegrees(-90));
         }
     }
@@ -321,12 +321,17 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
     }
 
     @Override
-    public void drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+    public void drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale) {
         transforms.push();
-        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), 0);
-        float scale = SCALE_WIDTH/this.getPageWidth();
-        transforms.scale(scale, scale, scale);
-        this.getFontRenderer().func_243246_a(transforms, text, 0.0F, 0.0F, 0);
+        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), -0.01F);
+        float f = scale*SCALE_WIDTH/this.getPageWidth();
+        transforms.scale(f, f, 1);
+        // Split string
+        int l = (int) ((this.getPageWidth() - x)/scale);
+        this.getFontRenderer().trimStringToWidth(text, l).forEach(t -> {
+            this.getFontRenderer().func_238422_b_(transforms, t, 0.0F, 0.0F, 0);
+            transforms.translate(0, this.getFontRenderer().FONT_HEIGHT, 0);
+        });
         transforms.pop();
     }
 

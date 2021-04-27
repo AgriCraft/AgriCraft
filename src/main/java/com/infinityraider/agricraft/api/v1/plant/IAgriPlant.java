@@ -152,7 +152,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return Information about the plant to be displayed in the Seed Journal.
      */
     @Nonnull
-    IFormattableTextComponent getInformation(IAgriGrowthStage stage);
+    IFormattableTextComponent getInformation();
 
     /**
      * Fetches the user-friendly plant description for use in tooltips. Notice, any

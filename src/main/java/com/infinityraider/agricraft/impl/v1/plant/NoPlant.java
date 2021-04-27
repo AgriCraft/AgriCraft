@@ -142,7 +142,7 @@ public class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getInformation(IAgriGrowthStage stage) {
+    public TranslationTextComponent getInformation() {
         return AgriToolTips.UNKNOWN;
     }
 
