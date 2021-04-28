@@ -74,6 +74,34 @@ public class AgriGenomeRenderer implements IRenderUtilities {
      * Notes:
      *  - The full double helix will be rendered, therefore it might appear squished or stretched based on the height
      *  - The selected gene will be colored with its color, the inactive ones will be greyed out
+     *  - Not thread safe
+     *
+     * @param genePairs the genome for which to draw an overlay
+     * @param transforms matrix stack for the transformation
+     * @param index the index denoting the selected gene
+     * @param transition a double denoting the transition progress to the next/previous gene (bounded by 1 and -1)
+     * @param radius the radius of the double helix
+     * @param height the height of the double helix
+     * @param alpha the transparency of the helix
+     * @param color if inactive genes should be colored or greyed
+     */
+    public void renderDoubleHelix(List<IAgriGenePair<?>> genePairs, MatrixStack transforms,
+                                  int index, float transition, float radius, float height, float alpha, boolean color) {
+        IRenderTypeBuffer.Impl buffer = this.getRenderTypeBuffer();
+        this.renderDoubleHelix(genePairs, transforms, buffer, index, transition, radius, height, alpha, color);
+        LineRenderType.finish(buffer);
+    }
+
+    /**
+     * Renders an AgriCraft genome.
+     *
+     * Renders a right-hand, double helix with the dominant alleles on the left, and the recessive ones on the right,
+     * The helix will be rotated so that the selected gene (denoted by index) is along the X-axis,
+     * with a smooth transition towards the next gene.
+     *
+     * Notes:
+     *  - The full double helix will be rendered, therefore it might appear squished or stretched based on the height
+     *  - The selected gene will be colored with its color, the inactive ones will be greyed out
      *
      * @param genePairs the genome for which to draw an overlay
      * @param transforms matrix stack for the transformation
@@ -288,6 +316,10 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                                     .target(field_241712_U_)
                                     .writeMask(COLOR_DEPTH_WRITE)
                                     .build(false)));
+        }
+
+        public static void finish(IRenderTypeBuffer.Impl buffer) {
+            CACHE.values().forEach(buffer::finish);
         }
     }
 }

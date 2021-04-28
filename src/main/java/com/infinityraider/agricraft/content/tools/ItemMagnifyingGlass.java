@@ -29,7 +29,7 @@ public class ItemMagnifyingGlass extends ItemBase {
     private static final Map<UUID, Boolean> observers = Maps.newIdentityHashMap();
 
     public static boolean isObserving(PlayerEntity player) {
-        return player != null && observers.get(player.getUniqueID());
+        return player != null && observers.computeIfAbsent(player.getUniqueID(), uuid -> false);
     }
 
     public static void setObserving(PlayerEntity player, boolean status) {
