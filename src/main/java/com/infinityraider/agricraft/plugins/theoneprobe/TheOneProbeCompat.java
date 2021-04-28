@@ -40,18 +40,17 @@ public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
         }
 
         @Override
-        public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity entity,
+        public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player,
                                  World world, BlockState state, IProbeHitData hitData) {
-            this.addCropProbeInfo(info, world, hitData.getPos(), mode);
+            this.addCropProbeInfo(info, player, world, hitData.getPos(), mode);
             this.addSoilProbeInfo(info, world, hitData.getPos());
         }
 
-        protected void addCropProbeInfo(IProbeInfo info, World world, BlockPos pos, ProbeMode mode) {
+        protected void addCropProbeInfo(IProbeInfo info, PlayerEntity player, World world, BlockPos pos, ProbeMode mode) {
             AgriApi.getCrop(world, pos).ifPresent(crop -> {
-                // add crop data
-                crop.addDisplayInfo(info::text);
-                // add genome data if in creative
+                // Add data including full genome if in creative mode
                 if(mode == ProbeMode.DEBUG) {
+                    crop.addDisplayInfo(info::text);
                     info.text(AgriToolTips.GENOME);
                     crop.getGenome().map(genome -> {
                         genome.addDisplayInfo(info::text);
@@ -60,8 +59,20 @@ public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
                         info.text(AgriToolTips.UNKNOWN);
                         return false;
                     });
+                } else {
+                    // add crop data
+                    if(this.shouldAddInfo(player)) {
+                        crop.addDisplayInfo(info::text);
+                    }
                 }
             });
+        }
+
+        protected boolean shouldAddInfo(PlayerEntity player) {
+            if (AgriCraft.instance.getConfig().doesMagnifyingGlassControlTOP()) {
+                return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
+            }
+            return true;
         }
 
         protected void addSoilProbeInfo(IProbeInfo info, World world, BlockPos pos) {

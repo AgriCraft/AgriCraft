@@ -295,4 +295,9 @@ public interface IAgriConfig {
      */
     String getSeasonLogicMod();
 
+    /**
+     * @return if TOP data is controlled by the magnifying glass or not
+     */
+    boolean doesMagnifyingGlassControlTOP();
+
 }

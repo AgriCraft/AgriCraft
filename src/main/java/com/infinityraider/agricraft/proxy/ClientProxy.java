@@ -1,13 +1,11 @@
 package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
-import com.infinityraider.agricraft.handler.ItemToolTipHandler;
-import com.infinityraider.agricraft.handler.JournalViewPointHandler;
-import com.infinityraider.agricraft.handler.ModelAndTextureHandler;
-import com.infinityraider.agricraft.handler.SeedAnalyzerViewPointHandler;
+import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.render.world.IrrigationNetworkDebugRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,6 +27,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(ItemToolTipHandler.getInstance());
         this.registerEventHandler(JournalViewPointHandler.getInstance());
+        this.registerEventHandler(MagnifyingGlassViewHandler.getInstance());
         this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
         this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
     }
@@ -59,5 +58,19 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public boolean toggleJournalObserving(ItemStack journal, Hand hand) {
         return JournalViewPointHandler.getInstance().toggle(journal, hand);
+    }
+
+    @Override
+    public void toggleMagnifyingGlassObserving(Hand hand) {
+        MagnifyingGlassViewHandler.getInstance().toggle(hand);
+    }
+
+    @Override
+    public boolean isMagnifyingGlassObserving(PlayerEntity player) {
+        if(player == this.getClientPlayer()) {
+            return MagnifyingGlassViewHandler.getInstance().isActive() && MagnifyingGlassViewHandler.getInstance().isAnimationComplete();
+        } else {
+            return IProxy.super.isMagnifyingGlassObserving(player);
+        }
     }
 }

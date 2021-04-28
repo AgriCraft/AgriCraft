@@ -40,6 +40,7 @@ import com.infinityraider.agricraft.impl.v1.requirement.SeasonLogic;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -230,5 +231,10 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
         return CapabilityIrrigationNetworkReference.getInstance().getIrrigationNetwork(component, side);
+    }
+
+    @Override
+    public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+        return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
     }
 }

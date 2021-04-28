@@ -28,6 +28,7 @@ import javax.naming.OperationNotSupportedException;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -416,6 +417,20 @@ public final class AgriApi {
     @Nonnull
     public static IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side) {
         return AgriApi.CONNECTOR.getIrrigationNetwork(component, side);
+    }
+
+    /**
+     * Checks if a player is looking through a magnifying glass
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param player the player
+     * @return true if the player is currently looking through the magnifying glass
+     */
+    public static boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+        return AgriApi.CONNECTOR.isObservingWithMagnifyingGlass(player);
     }
 
     /**

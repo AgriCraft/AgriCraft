@@ -6,6 +6,7 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.plant.AgriWeed;
+import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
@@ -30,10 +31,13 @@ public class PlayerConnectToServerHandler {
     @SuppressWarnings("unused")
     public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+        // Sync jsons
         syncSoils(player);
         syncPlants(player);
         syncWeeds(player);
         syncMutations(player);
+        // Notify magnifying glass tracker
+        ItemMagnifyingGlass.setObserving(player, false);
     }
 
     private void syncSoils(ServerPlayerEntity player) {

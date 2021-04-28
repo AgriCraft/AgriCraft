@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -107,4 +108,6 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side);
+
+    boolean isObservingWithMagnifyingGlass(PlayerEntity player);
 }

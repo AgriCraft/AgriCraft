@@ -72,6 +72,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         // compat
         private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
+        private final ForgeConfigSpec.ConfigValue<Boolean> topControlledByMagnifyingGlass;
 
         public Common(ForgeConfigSpec.Builder builder) {
             super();
@@ -188,6 +189,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("compat");
             this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
+            this.topControlledByMagnifyingGlass = builder.comment("Defines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
+                    .define("TOP only with magnifying glass", true);
             builder.pop();
         }
 
@@ -414,6 +417,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public String getSeasonLogicMod() {
             return this.seasonLogic.get();
+        }
+
+        @Override
+        public boolean doesMagnifyingGlassControlTOP() {
+            return this.topControlledByMagnifyingGlass.get();
         }
     }
 

@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.network.MessageCompareLight;
+import com.infinityraider.agricraft.network.MessageMagnifyingGlassObserving;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
 import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
@@ -68,11 +69,13 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
 
     @Override
     public void registerMessages(INetworkWrapper wrapper) {
+        wrapper.registerMessage(MessageCompareLight.class);
+        wrapper.registerMessage(MessageMagnifyingGlassObserving.ToClient.class);
+        wrapper.registerMessage(MessageMagnifyingGlassObserving.ToServer.class);
         wrapper.registerMessage(MessageSyncSoilJson.class);
         wrapper.registerMessage(MessageSyncPlantJson.class);
         wrapper.registerMessage(MessageSyncWeedJson.class);
         wrapper.registerMessage(MessageSyncMutationJson.class);
-        wrapper.registerMessage(MessageCompareLight.class);
     }
 
     @Override
