@@ -25,10 +25,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.InputUpdateEvent;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -53,7 +50,11 @@ public class MagnifyingGlassViewHandler {
     private static final double DY = -0.3125;
     private static final double DZ = 0.45;
 
-    private static final double GENOME_OFFSET = 0.15;
+    private static final double GENOME_OFFSET = 0.10;
+    private static final float GENOME_SCALE = 0.10F;
+    private static final double TEXT_OFFSET = -0.025;
+    private static final float TEXT_SCALE = 0.75F;
+    private static final Quaternion TEXT_FLIPPER = Vector3f.ZP.rotationDegrees(180);
 
     private static final float ANGLE = 45.0F;
     private static final Quaternion ROTATION_LEFT;
@@ -152,6 +153,7 @@ public class MagnifyingGlassViewHandler {
             BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
             if(!blockTarget.getPos().equals(this.lastPos)) {
                 World world = AgriCraft.instance.getClientWorld();
+                this.scrollPosition.reset();
                 this.lastPos = blockTarget.getPos();
                 this.genomeCache = AgriApi.getCrop(world, lastPos)
                         .map(crop -> crop.getGenome().map(IAgriGenome::getGeneList).orElse(ImmutableList.of()))
@@ -160,7 +162,54 @@ public class MagnifyingGlassViewHandler {
         } else {
             this.lastPos = null;
             this.genomeCache = ImmutableList.of();
+            this.scrollPosition.reset();
         }
+    }
+
+    protected void renderDoubleHelix(List<IAgriGenePair<?>> genome, MatrixStack transforms, float partialTicks) {
+        // Push matrix for helix render
+        transforms.push();
+
+        // helix dimensions
+        float h = Constants.HALF;
+        float r = h / 10;
+
+        // Scale down
+        transforms.scale(GENOME_SCALE, GENOME_SCALE, GENOME_SCALE);
+
+        // Make sure the helix is centered
+        transforms.translate(0, -h/2, 0);
+
+        // Render helix
+        AgriGenomeRenderer.getInstance().renderDoubleHelix(
+                genome, transforms, this.getScrollIndex(), this.getScrollProgress(partialTicks), r, h, 1.0F, false);
+
+        // Pop matrix after helix render
+        transforms.pop();
+    }
+
+    protected void renderTextOverlay(List<IAgriGenePair<?>> genome, MatrixStack transforms) {
+        // Push matrix for overlay render
+        transforms.push();
+
+        // Translate down
+        transforms.translate(0, TEXT_OFFSET, 0);
+
+        // Flip text
+        transforms.rotate(TEXT_FLIPPER);
+
+        // Scale down
+        float width = AgriGenomeRenderer.getInstance().getScaledWindowWidth();
+        float height = AgriGenomeRenderer.getInstance().getScaledWindowHeight();
+        float scale = TEXT_SCALE/Math.max(width, height);
+        transforms.scale(scale, scale, scale);
+
+        // Render overlay
+        int index = Math.max(0, Math.min(genome.size() - 1, this.getScrollIndex()));
+        AgriGenomeRenderer.getInstance().renderTextOverlay(transforms, genome.get(index));
+
+        // Pop matrix for overlay render
+        transforms.pop();
     }
 
     @SubscribeEvent
@@ -202,6 +251,11 @@ public class MagnifyingGlassViewHandler {
             return;
         }
 
+        // Check if the player is targeting something
+        if(this.lastPos == null) {
+            return;
+        }
+
         // Fetch and push matrix to the matrix stack
         MatrixStack transforms = event.getMatrixStack();
         transforms.push();
@@ -211,8 +265,15 @@ public class MagnifyingGlassViewHandler {
         transforms.translate(-projectedView.x, -projectedView.y, -projectedView.z);
 
         // Move to the player's eye position
-        Vector3d pos = this.getPlayer().getEyePosition(event.getPartialTicks());
-        transforms.translate(pos.getX(), pos.getY(), pos.getZ());
+        Vector3d eyes = this.getPlayer().getEyePosition(event.getPartialTicks());
+        transforms.translate(eyes.getX(), eyes.getY(), eyes.getZ());
+
+        // Fetch the player's target
+        Vector3d hit = new Vector3d(this.lastPos.getX() + 0.5D, this.lastPos.getY() + 0.5D, this.lastPos.getZ() + 0.5D);
+        Vector3d view = hit.subtract(eyes).normalize();
+
+        // Translate offset
+        transforms.translate(GENOME_OFFSET*view.getX(), GENOME_OFFSET*view.getY(), GENOME_OFFSET*view.getZ());
 
         // Fetch player look orientation;
         float yaw = (float) (Math.PI*this.getPlayer().getYaw(event.getPartialTicks()))/180;
@@ -221,25 +282,22 @@ public class MagnifyingGlassViewHandler {
         // Rotate for yaw
         transforms.rotate(Vector3f.YP.rotation(-yaw));
 
-        // Translate offset according to pitch
-        transforms.translate(0, -GENOME_OFFSET*MathHelper.sin(pitch), GENOME_OFFSET*MathHelper.cos(pitch));
+        // Render helix
+        this.renderDoubleHelix(genome, transforms, event.getPartialTicks());
 
-        // Scale down
-        transforms.scale(0.125F, 0.125F, 0.125F);
-
-        // helix dimensions
-        float h = Constants.HALF;
-        float r = h / 10;
-
-        // Make sure the helix is centered
-        transforms.translate(0, -h/2, 0);
-
-        // render helix
-        AgriGenomeRenderer.getInstance().renderDoubleHelix(
-                genome, transforms, this.getScrollIndex(), this.getScrollProgress(event.getPartialTicks()), r, h, 1.0F, false);
+        // Render text overlay
+        this.renderTextOverlay(genome, transforms);
 
         // Pop last transformation matrix from the stack
         transforms.pop();
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onPlayerRender(RenderPlayerEvent.Pre event) {
+        if(this.isActive()) {
+            //TODO: set player arm when looking through the magnifying glass
+        }
     }
 
     @SuppressWarnings("unused")
@@ -280,6 +338,18 @@ public class MagnifyingGlassViewHandler {
             // If this is active, we do not want any other scroll behaviour
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onMouseClick(InputEvent.ClickInputEvent event) {
+        if(this.isActive() ) {
+            if(event.getKeyBinding() == Minecraft.getInstance().gameSettings.keyBindAttack) {
+                // If this is active, we do not want left clicks to pass
+                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
+            }
         }
     }
 
