@@ -1,0 +1,85 @@
+{
+	"loader": "infinitylib:composite",
+	"parts": {
+		"3d": {
+			"textures": {
+				"0": "agricraft:item/magnifying_glass_handle",
+				"1": "agricraft:item/magnifying_glass_glass",
+				"2": "agricraft:item/magnifying_glass_pixels",
+				"particle": "agricraft:item/magnifying_glass"
+			},
+			"elements": [
+				{
+					"name": "handle",
+					"from": [7, 0, 7],
+					"to": [9, 6, 9],
+					"faces": {
+						"north": {"uv": [7, 10, 9, 16], "texture": "#0"},
+						"east": {"uv": [7, 10, 9, 16], "texture": "#0"},
+						"south": {"uv": [7, 10, 9, 16], "texture": "#0"},
+						"west": {"uv": [7, 10, 9, 16], "texture": "#0"},
+						"up": {"uv": [7, 10, 9, 12], "texture": "#0"},
+						"down": {"uv": [7, 14, 9, 16], "texture": "#0"}
+					}
+				},
+				{
+					"name": "glass_front",
+					"from": [0, 6, 9],
+					"to": [16, 22, 9],
+					"faces": {
+						"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+						"south": {"uv": [16, 0, 0, 16], "texture": "#1"}
+					}
+				},
+				{
+					"name": "glass_back",
+					"from": [0, 6, 7],
+					"to": [16, 22, 7],
+					"faces": {
+						"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+						"south": {"uv": [16, 0, 0, 16], "texture": "#1"}
+					}
+				},
+				{
+					"name": "glass_center",
+					"from": [0, 6, 8],
+					"to": [16, 22, 8],
+					"faces": {
+						"north": {"uv": [0, 0, 16, 16], "texture": "#2"},
+						"south": {"uv": [16, 0, 0, 16], "texture": "#2"}
+					}
+				}
+			]
+		},
+		"ring": {
+			"parent": "item/generated",
+			"textures": {
+				"layer0": "agricraft:item/magnifying_glass_ring"
+			}
+		}
+	},
+	"transformations": {
+		"ring": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 6, -8],
+			"scale": [1, 1, 2]
+		}
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3.5, 0]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 3.5, 0]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 3.5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 3.5, 0]
+		},
+		"head": {
+			"translation": [0, 14.25, 0]
+		}
+	}
+}

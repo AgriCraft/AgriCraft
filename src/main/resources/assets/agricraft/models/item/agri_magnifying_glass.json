@@ -1,6 +1,21 @@
 {
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "agricraft:item/magnifying_glass"
+	"loader": "forge:separate-perspective",
+	"parent": "agricraft:item/agri_magnifying_glass_flat",
+	"base": {
+		"parent": "agricraft:item/agri_magnifying_glass_flat"
+	},
+	"perspectives": {
+		"third_person_right_hand": {
+			"parent": "agricraft:item/agri_magnifying_glass_3d"
+		},
+		"third_person_left_hand": {
+			"parent": "agricraft:item/agri_magnifying_glass_3d"
+		},
+		"first_person_right_hand": {
+			"parent": "agricraft:item/agri_magnifying_glass_3d"
+		},
+		"first_person_left_hand": {
+			"parent": "agricraft:item/agri_magnifying_glass_3d"
+		}
 	}
 }
