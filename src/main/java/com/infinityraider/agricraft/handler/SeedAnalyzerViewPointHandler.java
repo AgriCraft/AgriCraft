@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
+import com.infinityraider.agricraft.util.AnimatedScrollPosition;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -17,8 +18,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.function.IntSupplier;
 
 @OnlyIn(Dist.CLIENT)
 public class SeedAnalyzerViewPointHandler {
@@ -41,7 +40,8 @@ public class SeedAnalyzerViewPointHandler {
 
     private SeedAnalyzerViewPointHandler() {
         this.setScrollDuration(10);
-        this.scrollPosition = new AnimatedScrollPosition(this::getScrollDuration, () -> AgriApi.getGeneRegistry().count());
+        this.scrollPosition = new AnimatedScrollPosition(this::getScrollDuration, () ->
+                (int) AgriApi.getGeneRegistry().stream().filter(gene -> !gene.isHidden()).count());
         this.seedAnimator = new SeedAnimator();
     }
     public int getScrollDuration() {
@@ -123,65 +123,6 @@ public class SeedAnalyzerViewPointHandler {
             // If this is active, we do not want any other scroll behaviour
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
-        }
-    }
-
-    /**
-     * Utility class which keeps track of the scroll position, and allows to interpolate for smooth transitions
-     */
-    public static class AnimatedScrollPosition {
-        private final IntSupplier durationSupplier;
-        private final IntSupplier maxSupplier;
-
-        private int current;
-        private int target;
-        private int counter;
-
-        public AnimatedScrollPosition(IntSupplier durationSupplier, IntSupplier maxSupplier) {
-            this.durationSupplier = durationSupplier;
-            this.maxSupplier = maxSupplier;
-            this.reset();
-        }
-
-        public int getIndex() {
-            return this.current;
-        }
-
-        public float getProgress(float partialTick) {
-            if(this.target == this.current) {
-                return 0;
-            }
-            return (this.target > this.current ? 1 : -1) * ((this.counter + partialTick) / this.getDuration());
-        }
-
-        public int getDuration() {
-            return this.durationSupplier.getAsInt();
-        }
-
-        public int getMax() {
-            return this.maxSupplier.getAsInt();
-        }
-
-        public void tick() {
-            if(this.current != this.target) {
-                this.counter += 1;
-                if(counter >= this.getDuration()) {
-                    this.counter = 0;
-                    this.current += (this.target > this.current ? 1 : -1);
-                }
-            } else {
-                this.counter = 0;
-            }
-        }
-
-        public void scroll(int delta) {
-            this.target = Math.min(this.getMax() - 1, Math.max(0, this.target - delta));
-        }
-
-        public void reset() {
-            this.current = 0;
-            this.target = 0;
-            this.counter = 0;
         }
     }
 
