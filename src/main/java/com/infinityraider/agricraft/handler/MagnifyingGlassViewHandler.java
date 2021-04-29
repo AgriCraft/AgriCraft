@@ -12,6 +12,10 @@ import com.infinityraider.agricraft.util.AnimatedScrollPosition;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -51,7 +55,7 @@ public class MagnifyingGlassViewHandler {
     private static final double DZ = 0.45;
 
     private static final double GENOME_OFFSET = 0.10;
-    private static final float GENOME_SCALE = 0.10F;
+    private static final float GENOME_SCALE = 0.075F;
     private static final double TEXT_OFFSET = -0.025;
     private static final float TEXT_SCALE = 0.75F;
     private static final Quaternion TEXT_FLIPPER = Vector3f.ZP.rotationDegrees(180);
@@ -296,7 +300,17 @@ public class MagnifyingGlassViewHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPlayerRender(RenderPlayerEvent.Pre event) {
         if(this.isActive()) {
-            //TODO: set player arm when looking through the magnifying glass
+            PlayerRenderer renderer = event.getRenderer();
+            PlayerModel<AbstractClientPlayerEntity> model = renderer.getEntityModel();
+            Hand hand = this.getActiveHand();
+            HandSide side = Minecraft.getInstance().gameSettings.mainHand;
+            if((hand == Hand.MAIN_HAND && side == HandSide.RIGHT) || (hand == Hand.OFF_HAND && side == HandSide.LEFT)) {
+                model.rightArmPose = BipedModel.ArmPose.BLOCK;
+                model.leftArmPose = BipedModel.ArmPose.EMPTY;
+            } else if((hand == Hand.MAIN_HAND && side == HandSide.LEFT) || (hand == Hand.OFF_HAND && side == HandSide.RIGHT)) {
+                model.leftArmPose = BipedModel.ArmPose.BLOCK;
+                model.rightArmPose = BipedModel.ArmPose.EMPTY;
+            }
         }
     }
 
@@ -305,6 +319,14 @@ public class MagnifyingGlassViewHandler {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         this.animationCounterPrev = this.animationCounter;
         if(this.isActive()) {
+            // Check if the player is still holding the item and if not, deactivate
+            if(this.getActiveHand() == null || !(this.getPlayer().getHeldItem(this.getActiveHand()).getItem() instanceof ItemMagnifyingGlass)) {
+                this.active = false;
+                this.lastPos = null;
+                this.genomeCache = null;
+                this.scrollPosition.reset();
+                return;
+            }
             // Increment animation counter
             if(this.animationCounter < ANIMATION_DURATION) {
                 this.animationCounter += 1;
