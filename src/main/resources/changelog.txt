@@ -22,6 +22,7 @@ Changelog
 - ADDED: Genes defining attraction of certain animals to certain crops, allowing for automatic animal breeding
 - ADDED: Possibility to plant crops off crop sticks (can be disabled in the config)
 - ADDED: Config options to configure minimum and maximum values for any stat and hiding stats (effectively allowing to disabling a stat with its functionality locked at a certain value)
+- ADDED: JEI Progressive mode: mutation recipes are unlocked in JEI after reading them in the journal (can be disabled in the config)
 - ADDED: new vanilla plant: Bamboo
 - ADDED: new vanilla plant: Cornflower
 - ADDED: new vanilla plant: Crimson Fungus

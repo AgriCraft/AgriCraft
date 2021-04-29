@@ -152,6 +152,15 @@ repositories {
         name 'tterrag maven'
         url "https://maven.tterrag.com/"
     }
+
+    // For AgriCore dependencies
+    mavenCentral()
+}
+
+// Add "embedded" configuration
+configurations {
+    embed
+    compile.extendsFrom(embed)
 }
 
 // List Deps.
@@ -160,7 +169,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 	
     // AgriCore
-    compile project('AgriCore');
+    embed project('AgriCore');
     
     // InfinityLib
     compile project('InfinityLib')
@@ -227,6 +236,9 @@ processResources {
 
 // Fix Shading
 jar {
+    // Add embedded configurations to the jar
+    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    // Manifest
     archiveName = "${baseName} ${version}.${extension}"
     manifest {
         attributes([
