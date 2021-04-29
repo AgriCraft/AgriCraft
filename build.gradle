@@ -157,6 +157,7 @@ repositories {
     mavenCentral()
 }
 
+
 // Add "embedded" configuration
 configurations {
     embed
@@ -214,32 +215,16 @@ processResources {
         expand 'version': project.version
     }
 
-    // from the main mod, copy everything else, thats not the mods.toml
+    // from the main mod, copy everything else, that's not the mods.toml
     from(sourceSets.main.resources.srcDirs) {
         exclude 'META-INF/mods.toml', '**/psd/**'
     }
-    /*
-    // make sure to include mods.toml from infinitylib
-    from(sourceSets.infinitylib.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version': project.version
-    }
-    */
-
-    // from InfinityLib, copy everything else, thats not the mods.toml
-    //from(sourceSets.infinitylib.resources.srcDirs) {
-        //exclude 'META-INF/mods.toml', '**/psd/**'
-    //}
 }
 
-// Fix Shading
 jar {
-    // Add embedded configurations to the jar
-    from configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
-    // Manifest
+    // Archive name
     archiveName = "${baseName} ${version}.${extension}"
+    // Manifest
     manifest {
         attributes([
                 "Specification-Title"     : "${config.id}",
@@ -251,8 +236,8 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    /*
-    configurations.shade.each { dep ->
+    // Fix Shading
+    configurations.embed.each { dep ->
         from(project.zipTree(dep)){
             exclude 'META-INF', 'META-INF/**'
             exclude 'com/google', 'com/google/**'
@@ -262,7 +247,6 @@ jar {
             exclude 'javax/annotation', 'javax/annotation/**'
         }
     }
-    */
 }
 
 // Example configuration to allow publishing using the maven-publish task
