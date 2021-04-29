@@ -71,6 +71,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> climbableGrate;
 
         // compat
+        private final ForgeConfigSpec.ConfigValue<Boolean> progressiveJEI;
         private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
         private final ForgeConfigSpec.ConfigValue<Boolean> topControlledByMagnifyingGlass;
 
@@ -187,6 +188,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.pop();
 
             builder.push("compat");
+            this.progressiveJEI = builder.comment("Set to false if you want all mutations to be shown in JEI all the time instead of having to research them")
+                    .define("Progressive JEI", true);
             this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
             this.topControlledByMagnifyingGlass = builder.comment("Defines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
@@ -412,6 +415,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableLogging() {
             return this.enableLogging.get();
+        }
+
+        @Override
+        public boolean progressiveJEI() {
+            return this.progressiveJEI.get();
         }
 
         @Override

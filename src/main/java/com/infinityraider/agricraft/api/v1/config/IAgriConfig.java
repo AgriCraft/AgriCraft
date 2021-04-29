@@ -291,6 +291,11 @@ public interface IAgriConfig {
      */
 
     /**
+     * @return true if JEI is in progressive mode, meaning only mutations which the player has discovered will be shown
+     */
+    boolean progressiveJEI();
+
+    /**
      * @return the mod controlling the season logic in case multiple are present
      */
     String getSeasonLogicMod();

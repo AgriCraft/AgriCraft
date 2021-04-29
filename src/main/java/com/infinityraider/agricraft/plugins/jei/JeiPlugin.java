@@ -2,7 +2,9 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -14,6 +16,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,6 +42,18 @@ public class JeiPlugin implements IModPlugin {
         return jei;
     }
 
+    public static void hideMutation(IAgriMutation mutation) {
+        if(jei != null) {
+            jei.getRecipeManager().hideRecipe(mutation, AgriRecipeCategoryMutation.ID);
+        }
+    }
+
+    public static void unHideMutation(IAgriMutation mutation) {
+        if(jei != null) {
+            jei.getRecipeManager().unhideRecipe(mutation, AgriRecipeCategoryMutation.ID);
+        }
+    }
+
     @Nonnull
     @Override
     public ResourceLocation getPluginUid() {
@@ -48,6 +63,19 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         jei = jeiRuntime;
+        if (AgriCraft.instance.getConfig().progressiveJEI()) {
+            PlayerEntity player = AgriCraft.instance.getClientPlayer();
+            AgriApi.getMutationRegistry()
+                    .stream()
+                    .forEach(mutation -> {
+                        if (CapabilityResearchedPlants.getInstance().isMutationResearched(player, mutation)) {
+                            unHideMutation(mutation);
+
+                        } else {
+                            hideMutation(mutation);
+                        }
+                    });
+        }
     }
 
     @Override

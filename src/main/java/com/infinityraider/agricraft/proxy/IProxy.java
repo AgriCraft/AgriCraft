@@ -58,6 +58,7 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerCapability(CapabilityIrrigationNetworkChunkData.getInstance());
         this.registerCapability(CapabilityIrrigationNetworkManager.getInstance());
         this.registerCapability(CapabilityMultiBlockData.getInstance());
+        this.registerCapability(CapabilityResearchedPlants.getInstance());
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
+import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
+import com.infinityraider.agricraft.network.MessagePlantResearched;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
@@ -402,6 +404,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 if(this.animationCounter <= 0) {
                     this.animationCounter = 0;
                     this.page += 1;
+                    this.pages.get(this.page).onPageOpened();
                 }
             } else if(this.target < this.page) {
                 if(this.animationCounter == 0) {
@@ -412,6 +415,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 if(this.animationCounter >= 0) {
                     this.animationCounter = 0;
                     this.page -= 1;
+                    this.pages.get(this.page).onPageOpened();
                 }
             }
         }
@@ -442,14 +446,16 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             public abstract void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms);
 
             public abstract void drawRightSheet(IPageRenderer renderer, MatrixStack transforms);
+
+            public void onPageOpened() {}
         }
 
-        private static final ResourceLocation BACKGROUND_FRONT_RIGHT = new ResourceLocation(
-                AgriCraft.instance.getModId().toLowerCase(),
-                "textures/journal/front_page.png"
-        );
-
         public static final Page FRONT_PAGE = new Page() {
+            private final ResourceLocation BACKGROUND_FRONT_RIGHT = new ResourceLocation(
+                    AgriCraft.instance.getModId().toLowerCase(),
+                    "textures/journal/front_page.png"
+            );
+
             @Override
             public void drawLeftSheet(IPageRenderer renderer, MatrixStack transforms) {
                 // Draw nothing
@@ -585,6 +591,12 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                                         .map(IAgriPlant::getSeedTexture)
                                         .map(this::getSprite).collect(Collectors.toList())
                         );
+            }
+
+            public void onPageOpened() {
+                if(!CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), this.plant)) {
+                    new MessagePlantResearched(this.plant).sendToServer();
+                }
             }
 
             public List<List<TextureAtlasSprite>> getOffPageMutations() {

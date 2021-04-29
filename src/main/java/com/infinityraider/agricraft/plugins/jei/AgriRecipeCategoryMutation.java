@@ -86,7 +86,6 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
         ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
         // Child as seed
         ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack())));
-        // TODO: soils and requirements
     }
 
     @Override
@@ -107,8 +106,6 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
         // Setup Recipe Child
         layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(2, false, 56, 40);
         layout.getIngredientsGroup(VanillaTypes.ITEM).init(2, false, 55, 1);
-
-        // TODO: soils and requirements
 
         // Register Recipe Elements
         layout.getItemStacks().set(ingredients);
