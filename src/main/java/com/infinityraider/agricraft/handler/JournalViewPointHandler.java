@@ -288,6 +288,22 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         // Check if the handler is active
         if (this.isActive()) {
+            // Check if a journal is still being held
+            if(this.isOffHandActive()) {
+                if(!(this.getObserver().getHeldItem(Hand.OFF_HAND).getItem() instanceof IAgriJournalItem)) {
+                    AgriCraft.instance.proxy().toggleDynamicCamera(this, false);
+                    this.setOffHandActive(false);
+                    this.journal = null;
+                    return;
+                }
+            } else if(this.isMainHandActive()) {
+                if(!(this.getObserver().getHeldItem(Hand.MAIN_HAND).getItem() instanceof IAgriJournalItem)) {
+                    AgriCraft.instance.proxy().toggleDynamicCamera(this, false);
+                    this.setMainHandActive(false);
+                    this.journal = null;
+                    return;
+                }
+            }
             // Check for movement inputs
             boolean up = Minecraft.getInstance().gameSettings.keyBindForward.isKeyDown();
             boolean down = Minecraft.getInstance().gameSettings.keyBindBack.isKeyDown();
