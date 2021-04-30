@@ -50,8 +50,8 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
         return player != null && this.getCapability(player).map(impl -> impl.isMutationResearched(mutation)).orElse(false);
     }
 
-    public void configureJei() {
-        this.getCapability(AgriCraft.instance.getClientPlayer()).ifPresent(Impl::configureJei);
+    public void configureJei(PlayerEntity player) {
+        this.getCapability(player).ifPresent(Impl::configureJei);
     }
 
     @Override

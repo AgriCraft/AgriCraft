@@ -33,7 +33,6 @@ public class MessagePlantResearched extends MessageBase {
     @Override
     protected void processMessage(NetworkEvent.Context ctx) {
         CapabilityResearchedPlants.getInstance().researchPlant(ctx.getSender(), this.plant);
-        CapabilityResearchedPlants.getInstance().configureJei();
     }
 
     @Override

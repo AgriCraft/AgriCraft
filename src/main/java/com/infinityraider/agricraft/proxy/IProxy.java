@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.handler.DataHandler;
 import com.infinityraider.agricraft.handler.BlockUpdateHandler;
 import com.infinityraider.agricraft.handler.IrrigationNetworkHandler;
+import com.infinityraider.agricraft.handler.PlayerConnectToServerHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -65,6 +66,7 @@ public interface IProxy extends IProxyBase<Config> {
     default void registerEventHandlers() {
         this.registerEventHandler(BlockUpdateHandler.getInstance());
         this.registerEventHandler(IrrigationNetworkHandler.getInstance());
+        this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
     }
 
     @Override
