@@ -18,10 +18,15 @@ import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
 import com.infinityraider.agricraft.impl.v1.plant.JsonWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.reference.Reference;
+
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.moddiscovery.ModFile;
+import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
 public final class CoreHandler {
 
@@ -67,6 +72,7 @@ public final class CoreHandler {
 
         // Transfer Defaults
         ResourceHelper.copyResources(
+                ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
                 JSON_FILE_PATTERN.asPredicate(),
                 AGRI_FOLDER_PATTERN.asPredicate(),
                 configDir::resolve,

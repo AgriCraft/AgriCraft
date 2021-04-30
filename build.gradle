@@ -243,7 +243,6 @@ jar {
             exclude 'com/google', 'com/google/**'
             exclude 'net/jcip', 'net/jcip/**'
             exclude 'edu/umd', 'edu/umd/**'
-            exclude 'javassist', 'javassist/**'
             exclude 'javax/annotation', 'javax/annotation/**'
         }
     }
