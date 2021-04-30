@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
-import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.BlockState;
@@ -157,13 +156,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag advanced) {
-        this.getStats(stack).map(stats -> {
-            stats.addTooltips(tooltip::add);
-            return true;
-        }).orElseGet(() -> {
-            tooltip.add(AgriToolTips.UNKNOWN);
-            return false;
-        });
+        this.getStats(stack).ifPresent(stats -> stats.addTooltips(tooltip::add));
     }
 
     @Nonnull

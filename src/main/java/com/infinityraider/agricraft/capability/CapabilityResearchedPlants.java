@@ -115,7 +115,7 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
         }
 
         public boolean isMutationResearched(IAgriMutation mutation) {
-            return this.isPlantResearched(mutation.getChild());
+            return this.isPlantResearched(mutation.getChild()) || mutation.getParents().stream().anyMatch(this::isPlantResearched);
         }
 
         public void configureJei() {

@@ -81,7 +81,7 @@ public class JsonPlant implements IAgriPlant {
         if(model.contains("#")) {
             return new ModelResourceLocation(model);
         } else {
-            return new ResourceLocation(plant.getSeedModel());
+            return new ResourceLocation(model);
         }
     }
 

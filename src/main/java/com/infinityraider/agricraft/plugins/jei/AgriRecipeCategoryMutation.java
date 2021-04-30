@@ -7,8 +7,10 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 
+import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -77,15 +79,26 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
     @Override
     public void setIngredients(IAgriMutation mutation, IIngredients ingredients) {
         // Parents as plants
-        ingredients.setInputLists(AgriIngredientPlant.TYPE,
-                mutation.getParents().stream().map(ImmutableList::of).collect(Collectors.toList()));
+        ingredients.setInputLists(AgriIngredientPlant.TYPE, mutation.getParents().stream()
+                .map(plant -> this.isPlantResearched(plant) ? plant : NoPlant.getInstance())
+                .map(ImmutableList::of).collect(Collectors.toList()));
         // Parents as seeds
-        ingredients.setInputLists(VanillaTypes.ITEM,
-                mutation.getParents().stream().map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
+        ingredients.setInputLists(VanillaTypes.ITEM, mutation.getParents().stream()
+                .map(plant -> this.isPlantResearched(plant) ? plant : NoPlant.getInstance())
+                .map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
         // Child as plant
-        ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(mutation.getChild())));
+        ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(
+                this.isPlantResearched(mutation.getChild()) ? mutation.getChild() : NoPlant.getInstance())));
         // Child as seed
-        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(mutation.getChild().toItemStack())));
+        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(
+                (this.isPlantResearched(mutation.getChild()) ? mutation.getChild() : NoPlant.getInstance()).toItemStack())));
+    }
+
+    public boolean isPlantResearched(IAgriPlant plant) {
+        if(AgriCraft.instance.getConfig().progressiveJEI()) {
+            return CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), plant);
+        }
+        return true;
     }
 
     @Override

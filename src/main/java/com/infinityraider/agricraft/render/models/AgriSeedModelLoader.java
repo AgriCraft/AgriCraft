@@ -4,13 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
-import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
-import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
@@ -31,7 +27,6 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
@@ -82,16 +77,10 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         @Override
         public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
             ImmutableList.Builder<RenderMaterial> builder = new ImmutableList.Builder<>();
-            this.processRegistryTextures(AgriPlantRegistry.getInstance(), rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
+            AgriPlantRegistry.getInstance().all().stream()
+                    .map(IAgriPlant::getSeedTexture)
+                    .forEach(rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
             return builder.build();
-        }
-
-        protected <T extends IAgriRegisterable<T> & IAgriGrowable & IAgriRenderable> void processRegistryTextures(IAgriRegistry<T> registry, Consumer<ResourceLocation> consumer) {
-            registry.stream()
-                    .filter(element -> element instanceof JsonPlant)
-                    .map(element -> (JsonPlant) element)
-                    .map(JsonPlant::getSeedModel)
-                    .forEach(consumer);
         }
     }
 

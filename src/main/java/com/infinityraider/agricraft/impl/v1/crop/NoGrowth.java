@@ -32,12 +32,12 @@ public class NoGrowth implements IAgriGrowthStage {
 
     @Override
     public boolean isMature() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isFinal() {
-        return false;
+        return true;
     }
 
     @Override

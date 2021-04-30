@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
+import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.network.MessagePlantResearched;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
@@ -34,7 +35,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -428,13 +428,12 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             ImmutableList.Builder<Page> builder = new ImmutableList.Builder<>();
             builder.add(FRONT_PAGE);
             builder.add(INTRODUCTION_PAGE);
-            if(journal.getItem() instanceof IAgriJournalItem) {
+            if (journal.getItem() instanceof IAgriJournalItem) {
                 IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
-                journalItem.getDiscoveredSeeds(journal).stream()
-                        .sorted(Comparator.comparing(plant -> plant.getPlantName().getString()))
-                        .map(JournalData::getPlantPages)
-                        .flatMap(Collection::stream)
-                        .forEach(builder::add);
+                builder.addAll(getPlantPages(
+                        journalItem.getDiscoveredSeeds(journal).stream()
+                                .sorted(Comparator.comparing(plant -> plant.getPlantName().getString()))
+                                .collect(Collectors.toList())));
             }
             return builder.build();
         }
@@ -497,23 +496,25 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             }
         };
 
-        public static List<Page> getPlantPages(IAgriPlant plant) {
+        public static List<Page> getPlantPages(List<IAgriPlant> plants) {
             ImmutableList.Builder<Page> pages = ImmutableList.builder();
-            PlantPage page = new PlantPage(plant);
-            pages.add(page);
-            List<List<TextureAtlasSprite>> mutations = page.getOffPageMutations();
-            int size = mutations.size();
-            if(size > 0) {
-                int remaining = size;
-                int from = 0;
-                int to = Math.min(remaining, MutationPage.LIMIT);
-                while(remaining > 0) {
-                    pages.add(new MutationPage(mutations.subList(from, to)));
-                    remaining -= (to - from);
-                    from = to;
-                    to = from + Math.min(remaining, MutationPage.LIMIT);
+            plants.forEach(plant -> {
+                PlantPage page = new PlantPage(plant, plants);
+                pages.add(page);
+                List<List<TextureAtlasSprite>> mutations = page.getOffPageMutations();
+                int size = mutations.size();
+                if (size > 0) {
+                    int remaining = size;
+                    int from = 0;
+                    int to = Math.min(remaining, MutationPage.LIMIT);
+                    while (remaining > 0) {
+                        pages.add(new MutationPage(mutations.subList(from, to)));
+                        remaining -= (to - from);
+                        from = to;
+                        to = from + Math.min(remaining, MutationPage.LIMIT);
+                    }
                 }
-            }
+            });
             return pages.build();
         }
 
@@ -524,6 +525,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             private static final ITextComponent MUTATIONS = new TranslationTextComponent("agricraft.tooltip.mutations");
 
             private final IAgriPlant plant;
+            private final List<IAgriPlant> all;
 
             private final TextureAtlasSprite seed;
             private final List<TextureAtlasSprite> stages;
@@ -537,8 +539,9 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             private final List<List<TextureAtlasSprite>> mutationsOnPage;
             private final List<List<TextureAtlasSprite>> mutationsOffPage;
 
-            public PlantPage(IAgriPlant plant) {
+            public PlantPage(IAgriPlant plant, List<IAgriPlant> all) {
                 this.plant = plant;
+                this.all = all;
                 this.seed = this.getSprite(plant.getSeedTexture());
                 this.stages = plant.getGrowthStages().stream()
                         .sorted((a, b) -> (int) (100 * (a.growthPercentage() - b.growthPercentage())))
@@ -582,15 +585,24 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
             protected Stream<List<TextureAtlasSprite>> gatherMutationSprites(Predicate<IAgriMutation> filter) {
                 return AgriApi.getMutationRegistry().stream()
-                        .filter(filter)
-                        .map(mutation ->
-                                Stream.of(
-                                        mutation.getParents().get(0),
-                                        mutation.getParents().get(1),
-                                        mutation.getChild())
-                                        .map(IAgriPlant::getSeedTexture)
-                                        .map(this::getSprite).collect(Collectors.toList())
-                        );
+                        .filter(filter).map(mutation ->
+                                Stream.of(mutation.getParents().get(0), mutation.getParents().get(1), mutation.getChild())
+                                        .map(plant -> {
+                                            if (this.isPlantKnown(plant)) {
+                                                return plant.getSeedTexture();
+                                            } else {
+                                                return NoPlant.getInstance().getSeedTexture();
+                                            }
+                                        })
+                                        .map(this::getSprite).collect(Collectors.toList()));
+            }
+
+            protected boolean isPlantKnown(IAgriPlant plant) {
+                if(AgriCraft.instance.getConfig().progressiveJEI()) {
+                    return all.contains(plant)
+                            ||CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), plant);
+                }
+                return true;
             }
 
             public void onPageOpened() {

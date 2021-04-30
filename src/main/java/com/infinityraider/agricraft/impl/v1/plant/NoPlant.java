@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,12 +33,17 @@ public class NoPlant implements IAgriPlant {
 
     private final String id;
     private final Set<IAgriGrowthStage> stages;
-    private final ResourceLocation texture;
+
+    private final ResourceLocation texture_jei;
+    private final ResourceLocation texture_journal;
+    private final ResourceLocation seed_model;
 
     private NoPlant() {
         this.id = "none";
         this.stages = ImmutableSet.of(this.getInitialGrowthStage());
-        this.texture = new ResourceLocation("minecraft", "missingno");
+        this.texture_jei = new ResourceLocation("agricraft", "seed/unknown_jei");
+        this.texture_journal = new ResourceLocation("agricraft", "seed/unknown_journal");
+        this.seed_model = new ResourceLocation("agricraft", "seed/none");
     }
 
     @Override
@@ -146,12 +150,9 @@ public class NoPlant implements IAgriPlant {
         return AgriToolTips.UNKNOWN;
     }
 
-    private final String info = "Damnations! This is not a plant";
-    private final StringTextComponent tooltip = new StringTextComponent(this.info);
-
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
-        consumer.accept(tooltip);
+        consumer.accept(this.getPlantName());
     }
 
     @Override
@@ -182,13 +183,13 @@ public class NoPlant implements IAgriPlant {
     @Nonnull
     @Override
     public ResourceLocation getSeedTexture() {
-        return this.texture;
+        return this.texture_journal;
     }
 
     @Nonnull
     @Override
     public ResourceLocation getSeedModel() {
-        return this.texture;
+        return this.seed_model;
     }
 
     @Override
@@ -206,6 +207,6 @@ public class NoPlant implements IAgriPlant {
     @Nonnull
     @Override
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
-        return ImmutableList.of();
+        return ImmutableList.of(this.texture_jei, this.texture_journal);
     }
 }

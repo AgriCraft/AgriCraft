@@ -82,7 +82,7 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
         }
 
         protected <T extends IAgriRegisterable<T> & IAgriGrowable & IAgriRenderable> void processRegistryTextures(IAgriRegistry<T> registry, Consumer<ResourceLocation> consumer) {
-            registry.stream()
+            registry.all().stream()
                     .flatMap((element) -> element.getGrowthStages()
                             .stream().flatMap(stage -> element.getTexturesFor(stage).stream()))
                     .forEach(consumer);

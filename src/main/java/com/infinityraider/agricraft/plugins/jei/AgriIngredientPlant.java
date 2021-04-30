@@ -21,6 +21,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @OnlyIn(Dist.CLIENT)
@@ -37,7 +38,7 @@ public class AgriIngredientPlant {
 
         @Override
         public String getDisplayName(IAgriPlant plant) {
-            return plant.getId();
+            return plant.getPlantName().getString();
         }
 
         @Override
@@ -71,7 +72,7 @@ public class AgriIngredientPlant {
     public static final Renderer RENDERER = new Renderer();
 
     public static void register(IModIngredientRegistration registration) {
-        registration.register(TYPE, AgriApi.getPlantRegistry().all(), HELPER, RENDERER);
+        registration.register(TYPE, AgriApi.getPlantRegistry().stream().collect(Collectors.toList()), HELPER, RENDERER);
     }
 
     public static class Renderer implements IAgriIngredientRenderer<IAgriPlant> {
