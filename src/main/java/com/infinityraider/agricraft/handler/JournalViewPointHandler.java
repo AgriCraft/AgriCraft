@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -534,6 +535,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             private final boolean[] humidityMask;
             private final boolean[] acidityMask;
             private final boolean[] nutrientsMask;
+            private final boolean[] seasonMask;
 
             private final List<ItemStack> drops;
             private final List<List<TextureAtlasSprite>> mutationsOnPage;
@@ -565,6 +567,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 this.nutrientsMask = new boolean[IAgriSoil.Nutrients.values().length - 1];
                 for(int nutrients = 0; nutrients < this.nutrientsMask.length; nutrients++) {
                     this.nutrientsMask[nutrients] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isSoilNutrientsAccepted(IAgriSoil.Nutrients.values()[nutrients], 1);
+                }
+                this.seasonMask = new boolean[AgriSeason.values().length - 1];
+                for(int season = 0; season < this.seasonMask.length; season++) {
+                    this.seasonMask[season] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).isSeasonAccepted(AgriSeason.values()[season], 1);
                 }
                 ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
                 this.plant.getAllPossibleProducts(builder::add);
@@ -664,6 +670,23 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 }
                 dy += 9;
                 transforms.pop();
+                // Seasons
+                if(AgriApi.getSeasonLogic().isActive()) {
+                    for(int i = 0; i < this.seasonMask.length; i++) {
+                        int dx = 70;
+                        int w = 10;
+                        int h = 12;
+                        int x = (i%2)*(w + 2) + 5;
+                        int y = (i/2)*(h + 2) + 6;
+                        float v1 = (0.0F + i*h)/48;
+                        float v2 = (0.0F + (i + 1)*h)/48;
+                        if(this.seasonMask[i]) {
+                            renderer.drawTexture(transforms, Textures.SEASONS_FILLED, x + dx, y + dy, w, h, 0, v1, 1, v2, SHADE_LEFT);
+                        } else {
+                            renderer.drawTexture(transforms, Textures.SEASONS_EMPTY, x + dx, y + dy, w, h, 0, v1, 1, v2, SHADE_LEFT);
+                        }
+                    }
+                }
                 // Humidity
                 for(int i = 0; i < this.humidityMask.length; i++) {
                     int dx = Textures.HUMIDITY_OFFSETS[i];
@@ -832,13 +855,21 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                         AgriCraft.instance.getModId().toLowerCase(),
                         "textures/journal/template_acidity_filled.png"
                 );
+                public static final ResourceLocation NUTRIENTS_FILLED = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_nutrients_filled.png"
+                );
                 public static final ResourceLocation NUTRIENTS_EMPTY = new ResourceLocation(
                         AgriCraft.instance.getModId().toLowerCase(),
                         "textures/journal/template_nutrients_empty.png"
                 );
-                public static final ResourceLocation NUTRIENTS_FILLED = new ResourceLocation(
+                public static final ResourceLocation SEASONS_FILLED = new ResourceLocation(
                         AgriCraft.instance.getModId().toLowerCase(),
-                        "textures/journal/template_nutrients_filled.png"
+                        "textures/journal/template_seasons_filled.png"
+                );
+                public static final ResourceLocation SEASONS_EMPTY = new ResourceLocation(
+                        AgriCraft.instance.getModId().toLowerCase(),
+                        "textures/journal/template_seasons_empty.png"
                 );
                 public static final ResourceLocation MUTATION = new ResourceLocation(
                         AgriCraft.instance.getModId().toLowerCase(),
