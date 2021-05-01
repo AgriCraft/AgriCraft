@@ -30,7 +30,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
     public static RakeLogic WOOD_LOGIC = new RakeLogic(Names.Items.RAKE_WOOD) {
         @Override
         public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+            if(crop.world() == null || crop.world().isRemote()) {
                 return false;
             }
             if(!crop.hasWeeds()) {
@@ -38,7 +38,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
             }
             IAgriWeed weeds = crop.getWeeds();
             IAgriGrowthStage current = crop.getWeedGrowthStage();
-            IAgriGrowthStage previous = current.getPreviousStage(crop, crop.getWorld().getRandom());
+            IAgriGrowthStage previous = current.getPreviousStage(crop, crop.world().getRandom());
             if(current.equals(previous)) {
                 return crop.removeWeed();
             } else {
@@ -50,7 +50,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
     public static RakeLogic IRON_LOGIC = new RakeLogic(Names.Items.RAKE_IRON) {
         @Override
         public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+            if(crop.world() == null || crop.world().isRemote()) {
                 return false;
             }
             if(!crop.hasWeeds()) {
@@ -101,7 +101,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
         }
 
         public final ActionResultType applyLogic(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+            if(crop.world() == null || crop.world().isRemote()) {
                 return ActionResultType.PASS;
             }
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Rake.Pre(crop, stack, player))) {
@@ -109,7 +109,7 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
                 IAgriGrowthStage stage = crop.getWeedGrowthStage();
                 if(this.doRakeAction(crop, stack, player)) {
                     List<ItemStack> drops = Lists.newArrayList();
-                    weeds.onRake(stage, drops::add, crop.getWorld().getRandom(), player);
+                    weeds.onRake(stage, drops::add, crop.world().getRandom(), player);
                     AgriCropEvent.Rake.Post event = new AgriCropEvent.Rake.Post(crop, stack, drops, player);
                     MinecraftForge.EVENT_BUS.post(event);
                     event.getDrops().forEach(crop::dropItem);

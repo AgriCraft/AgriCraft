@@ -134,7 +134,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     }
 
     public void spawnItem(IAgriCrop crop, ItemStack stack) {
-        World world = crop.getWorld();
+        World world = crop.world();
         if(world != null) {
             this.spawnItem(world, crop.getPosition(), stack);
         }

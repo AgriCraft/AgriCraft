@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,12 +34,6 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
      * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop
      */
     boolean isValid();
-
-    /**
-     * @return The World in which this crop exists (may be null if the crop is invalid)
-     */
-    @Nullable
-    World getWorld();
 
     /**
      * @return The position of this crop in the world
@@ -105,27 +100,65 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriS
      */
     boolean isFullyGrown();
 
+    /**
+     * @return the soil this crop is planted on
+     */
     @Nonnull
     Optional<IAgriSoil> getSoil();
 
+    /**
+     * Breaks the crop and performs the related actions (like firing events and dropping items)
+     * @param entity the entity responsible for breaking the crop
+     */
     void breakCrop(@Nullable LivingEntity entity);
 
+    /**
+     * @return a Stream of all neighbouring crops this crop can interact with
+     */
     @Nonnull
     Stream<IAgriCrop> streamNeighbours();
 
+    /**
+     * Same as streamNeighbours(), but pre-applies a Predicate
+     * @param filter the Predicate
+     * @return Stream of all neighbouring crops this crop can interact with
+     */
     @Nonnull
     default Stream<IAgriCrop> streamNeighbours(Predicate<IAgriCrop> filter) {
         return this.streamNeighbours().filter(filter);
     }
 
+    /**
+     * @return an immutable list of all neighbouring crops this crop can interact with
+     */
     @Nonnull
     default List<IAgriCrop> getNeighbours() {
         return this.streamNeighbours().collect(Collectors.toList());
     }
 
+    /**
+     * Same as getNeighbours(), but applies a filter according to the Predicate
+     * @param filter the Predicate
+     * @return Stream of all neighbouring crops this crop can interact with
+     */
     @Nonnull
     default List<IAgriCrop> getNeighbours(Predicate<IAgriCrop> filter) {
         return this.streamNeighbours(filter).collect(Collectors.toList());
+    }
+
+    /**
+     * @return The World in which this crop exists (may be null if the tile is invalid)
+     */
+    @Nullable
+    default World world() {
+        return this.asTile().getWorld();
+    }
+
+    /**
+     * @return this, but cast to a TileEntity
+     */
+    default TileEntity asTile() {
+        return (TileEntity) this;
     }
 
     void dropItem(ItemStack item);

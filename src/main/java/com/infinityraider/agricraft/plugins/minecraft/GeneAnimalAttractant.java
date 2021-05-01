@@ -169,11 +169,11 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onCropGrowthTick(AgriCropEvent.Grow.General.Post event) {
-        if(event.getCrop().getWorld() != null && event.getCrop().hasPlant() && event.getCrop().isMature()) {
+        if(event.getCrop().world() != null && event.getCrop().hasPlant() && event.getCrop().isMature()) {
             BlockPos min = event.getCrop().getPosition().add(-RANGE, -RANGE, -RANGE);
             BlockPos max = event.getCrop().getPosition().add(RANGE, RANGE, RANGE);
             AxisAlignedBB range = new AxisAlignedBB(min, max);
-            event.getCrop().getWorld().getEntitiesWithinAABB(this.clazz, range, (entity) -> true).stream()
+            event.getCrop().world().getEntitiesWithinAABB(this.clazz, range, (entity) -> true).stream()
                     .map(entity -> CapabilityEatCropGoal.getInstance().getCropEatGoal(entity))
                     .filter(Objects::nonNull)
                     .filter(goal -> goal.isSuitableTarget(event.getCrop()))

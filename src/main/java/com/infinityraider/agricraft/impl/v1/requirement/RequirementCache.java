@@ -112,7 +112,7 @@ public abstract class RequirementCache {
 
             @Nullable
             protected World getWorld() {
-                return this.getCrop().getWorld();
+                return this.getCrop().world();
             }
 
             protected BlockPos getPos() {
