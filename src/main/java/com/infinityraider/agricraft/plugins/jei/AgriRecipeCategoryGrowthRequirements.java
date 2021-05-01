@@ -185,13 +185,13 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         // Draw Property icons
         Arrays.stream(IAgriSoil.Humidity.values()).filter(IAgriSoil.Humidity::isValid)
                 .filter(humidity -> req.isSoilHumidityAccepted(humidity, strength))
-                .forEach(humidity -> SoilPropertyIconRenderer.getInstance().drawIcon(humidity, transforms, 37, 83, mouseX, mouseY));
+                .forEach(humidity -> SoilPropertyIconRenderer.getInstance().drawHumidityIcon(humidity, transforms, 37, 83, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Acidity.values()).filter(IAgriSoil.Acidity::isValid)
                 .filter(acidity -> req.isSoilAcidityAccepted(acidity, strength))
-                .forEach(acidity -> SoilPropertyIconRenderer.getInstance().drawIcon(acidity, transforms, 37, 96, mouseX, mouseY));
+                .forEach(acidity -> SoilPropertyIconRenderer.getInstance().drawAcidityIcon(acidity, transforms, 37, 96, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Nutrients.values()).filter(IAgriSoil.Nutrients::isValid)
                 .filter(nutrients ->req.isSoilNutrientsAccepted(nutrients, strength))
-                .forEach(nutrients -> SoilPropertyIconRenderer.getInstance().drawIcon(nutrients, transforms, 37, 109, mouseX, mouseY));
+                .forEach(nutrients -> SoilPropertyIconRenderer.getInstance().drawNutrientsIcon(nutrients, transforms, 37, 109, mouseX, mouseY));
         // Draw seasons
         SeasonRenderer.getInstance().renderSeasons(transforms, 17, 24, season -> req.isSeasonAccepted(season, strength));
         // Draw buttons
@@ -439,29 +439,6 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
             for(int i = 15; i >= 0; i--) {
                 if(predicate.test(i))
                 AbstractGui.blit(transforms, x, y + 3*(15-i), 3, 3, 0, 3*(15-i), 3, 3, 3, 48);
-            }
-        }
-    }
-
-    private static final class SeasonRenderer implements IRenderUtilities {
-        private static final SeasonRenderer INSTANCE = new SeasonRenderer();
-
-        public static SeasonRenderer getInstance() {
-            return INSTANCE;
-        }
-
-        private final ResourceLocation texture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/season_icons.png");
-
-        private SeasonRenderer() {
-        }
-
-        public void renderSeasons(MatrixStack transforms, int x, int y, Predicate<AgriSeason> predicate) {
-            if (AgriApi.getSeasonLogic().isActive()) {
-                this.bindTexture(this.texture);
-                AgriSeason.stream().filter(predicate).forEach(season -> {
-                    int i = season.ordinal();
-                    AbstractGui.blit(transforms, x, y + 13 * i, 12, 12, 0, 12 * i, 12, 12, 12, 48);
-                });
             }
         }
     }

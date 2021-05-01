@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
+import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
@@ -22,7 +22,9 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
         return INSTANCE;
     }
 
-    private final ResourceLocation texture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/soil_property_icons.png");
+    private final ResourceLocation texture_humidity = JournalViewPointHandler.JournalData.Textures.HUMIDITY_FILLED;
+    private final ResourceLocation texture_acidity = JournalViewPointHandler.JournalData.Textures.ACIDITY_FILLED;
+    private final ResourceLocation texture_nutrients = JournalViewPointHandler.JournalData.Textures.NUTRIENTS_FILLED;
 
     private final int[] dxHumidity = {8, 8, 10, 10, 10, 7};
     private final int[] dxAcidity = {7, 8, 7, 8, 8, 8, 6};
@@ -30,7 +32,20 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
 
     private SoilPropertyIconRenderer() {}
 
-    public void drawIcon(IAgriSoil.SoilProperty property, MatrixStack transforms, int x, int y, double mX, double mY) {
+    public void drawHumidityIcon(IAgriSoil.SoilProperty property, MatrixStack transforms, int x, int y, double mX, double mY) {
+        this.drawIcon(property, transforms, x, y, mX, mY, this.texture_humidity);
+    }
+
+    public void drawAcidityIcon(IAgriSoil.SoilProperty property, MatrixStack transforms, int x, int y, double mX, double mY) {
+        this.drawIcon(property, transforms, x, y, mX, mY, this.texture_acidity);
+    }
+
+
+    public void drawNutrientsIcon(IAgriSoil.SoilProperty property, MatrixStack transforms, int x, int y, double mX, double mY) {
+        this.drawIcon(property, transforms, x, y, mX, mY, this.texture_nutrients);
+    }
+
+    public void drawIcon(IAgriSoil.SoilProperty property, MatrixStack transforms, int x, int y, double mX, double mY, ResourceLocation texture) {
         if(property.isValid()) {
             // Determine coordinates
             int index = property.ordinal();
@@ -40,12 +55,9 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
                 x1 += offsets[i];
             }
             int w = offsets[index];
-            int v = this.getV(property);
             // Draw the icon
-            this.bindTexture(this.texture);
-            int texWidth = 53;
-            int texHeight = 39;
-            AbstractGui.blit(transforms, x + x1, y, w, 13, x1, v, w, 13, texWidth, texHeight);
+            this.bindTexture(texture);
+            AbstractGui.blit(transforms, x + x1, y, w, 12, x1, 0, w, 12, 53, 12);
             // Draw the tooltip if needed
             if(mX >= x + x1 && mX <= x + x1 + w && mY >= y && mY <= y + 13) {
                 List<ITextComponent> tooltip = ImmutableList.of(property.getDescription());
@@ -68,17 +80,6 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
             return dxAcidity;
         } else {
             return dxNutrients;
-        }
-    }
-
-    protected int getV(IAgriSoil.SoilProperty property) {
-        if(property instanceof IAgriSoil.Humidity) {
-            return 0;
-        }
-        if(property instanceof IAgriSoil.Acidity) {
-            return 13;
-        } else {
-            return 26;
         }
     }
 }
