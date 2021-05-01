@@ -153,7 +153,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     }
 
     protected ActionResultType tryPickUpPlant(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-        if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+        if(crop.world() == null || crop.world().isRemote()) {
             return ActionResultType.PASS;
         }
         if (this.hasPlant(stack)) {
@@ -173,7 +173,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     }
 
     protected ActionResultType tryPlantOnCropSticks(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-        if(crop.getWorld() == null || crop.getWorld().isRemote()) {
+        if(crop.world() == null || crop.world().isRemote()) {
             return ActionResultType.PASS;
         }
         if (this.hasPlant(stack)) {

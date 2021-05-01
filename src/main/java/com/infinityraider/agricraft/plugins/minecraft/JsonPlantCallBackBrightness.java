@@ -27,21 +27,21 @@ public class JsonPlantCallBackBrightness extends JsonPlantCallback {
 
     @Override
     public void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
-        this.handleBrightness(crop.getWorld(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
+        this.handleBrightness(crop.world(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
     }
 
     @Override
     public void onSpawned(@Nonnull IAgriCrop crop) {
-        this.handleBrightness(crop.getWorld(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());}
+        this.handleBrightness(crop.world(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());}
 
     @Override
     public void onGrowth(@Nonnull IAgriCrop crop) {
-        this.handleBrightness(crop.getWorld(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
+        this.handleBrightness(crop.world(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
     }
 
     @Override
     public void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
-        this.handleBrightness(crop.getWorld(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
+        this.handleBrightness(crop.world(), crop.getPosition(), crop.getBlockState(), crop.getGrowthStage());
     }
 
     protected void handleBrightness(World world, BlockPos pos, BlockState state, IAgriGrowthStage stage) {
