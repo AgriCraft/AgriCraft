@@ -3,11 +3,11 @@ package com.infinityraider.agricraft.impl.v1.plant;
 import com.agricraft.agricore.plant.AgriWeed;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
+import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -127,23 +127,8 @@ public class JsonWeed implements IAgriWeed {
         int layer = 0;
         while((16*layer) < height) {
             ResourceLocation rl = new ResourceLocation(this.weed.getTexture().getPlantTextures(index)[layer]);
-            switch (this.weed.getTexture().getRenderType()) {
-                case HASH:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layer));
-                    break;
-                case CROSS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl, layer));
-                    break;
-                case PLUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl, layer));
-                    break;
-                case RHOMBUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl, layer));
-                    break;
-                default:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl, layer));
-                    break;
-            }
+            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
+                    this, stage, face, rl, layer, this.weed.getTexture().getRenderType()));
             layer++;
         }
         return listBuilder.build();

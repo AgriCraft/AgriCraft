@@ -23,6 +23,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -249,23 +250,8 @@ public class JsonPlant implements IAgriPlant {
         int layers = (int) Math.ceil(height/16.0);
         while((16*layer) < height) {
             ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[layer]);
-            switch (this.plant.getTexture().getRenderType()) {
-                case HASH:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(face, rl, layers - layer - 1));
-                    break;
-                case CROSS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(face, rl, layers - layer - 1));
-                    break;
-                case PLUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(face, rl, layers - layer - 1));
-                    break;
-                case RHOMBUS:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(face, rl, layers - layer - 1));
-                    break;
-                default:
-                    listBuilder.addAll(AgriApi.getPlantQuadGenerator().bakeQuadsForDefaultPattern(face, rl, layers - layer - 1));
-                    break;
-            }
+            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
+                    this, stage, face, rl, layers - layer - 1, this.plant.getTexture().getRenderType()));
             layer++;
         }
         return listBuilder.build();
