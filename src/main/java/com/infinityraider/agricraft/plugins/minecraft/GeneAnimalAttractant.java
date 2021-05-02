@@ -16,8 +16,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -321,9 +319,6 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
             this.speed = speed;
             this.cooldown = cooldown;
             this.plantIds = plantIds;
-            if (!(entity.getNavigator() instanceof GroundPathNavigator) && !(entity.getNavigator() instanceof FlyingPathNavigator)) {
-                throw new IllegalArgumentException("Unsupported mob type for EatCropGoal");
-            }
             this.potentialTargets = Sets.newIdentityHashSet();
         }
 
