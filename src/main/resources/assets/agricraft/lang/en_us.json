@@ -376,5 +376,70 @@
   "agricraft.soil.soul_sand.name": "Soul Sand Soil",
   "agricraft.soil.soul_soil.name": "Soul Soil Soil",
   "agricraft.soil.gravel.name": "Gravel Soil",
-  "agricraft.soil.warped_nylium.name": "Warped Nylium Soil"
+  "agricraft.soil.warped_nylium.name": "Warped Nylium Soil",
+
+
+  "agricraft.plant.botania_black_flower.name": "Mystical Black Flower",
+  "agricraft.plant.botania_black_flower.seed": "Mystical Black Seeds",
+  "agricraft.plant.botania_black_flower.desc": "A beautiful flower that is as dark as the night.",
+
+  "agricraft.plant.botania_blue_flower.name": "Mystical Blue Flower",
+  "agricraft.plant.botania_blue_flower.seed": "Mystical Blue Seeds",
+  "agricraft.plant.botania_blue_flower.desc": "A beautiful flower that is as blue as the sea.",
+
+  "agricraft.plant.botania_brown_flower.name": "Mystical Brown Flower",
+  "agricraft.plant.botania_brown_flower.seed": "Mystical Brown Seeds",
+  "agricraft.plant.botania_brown_flower.desc": "A beautiful flower that is as brown as the dirt.",
+
+  "agricraft.plant.botania_cyan_flower.name": "Mystical Cyan Flower",
+  "agricraft.plant.botania_cyan_flower.seed": "Mystical Cyan Seeds",
+  "agricraft.plant.botania_cyan_flower.desc": "A beautiful flower of indeterminate color, being both green and blue.",
+
+  "agricraft.plant.botania_gray_flower.name": "Mystical Gray Flower",
+  "agricraft.plant.botania_gray_flower.seed": "Mystical Gray Seeds",
+  "agricraft.plant.botania_gray_flower.desc": "A beautiful flower, albeit rather non-descript.",
+
+  "agricraft.plant.botania_green_flower.name": "Mystical Green Flower",
+  "agricraft.plant.botania_green_flower.seed": "Mystical Green Seeds",
+  "agricraft.plant.botania_green_flower.desc": "This flower seems to be envious of its other cousins with better descriptions.",
+
+  "agricraft.plant.botania_light_blue_flower.name": "Mystical Light Blue Flower",
+  "agricraft.plant.botania_light_blue_flower.seed": "Mystical Light Blue Seeds",
+  "agricraft.plant.botania_light_blue_flower.desc": "A beautiful flower that is blue as the sky on a sunny day.",
+
+  "agricraft.plant.botania_light_gray_flower.name": "Mystical Light Gray Flower",
+  "agricraft.plant.botania_light_gray_flower.seed": "Mystical Light Gray Seeds",
+  "agricraft.plant.botania_light_gray_flower.desc": "A beautiful flower, albeit even more non-descript than its cousin, the Mystical Gray Flower.",
+
+  "agricraft.plant.botania_lime_flower.name": "Mystical Lime Flower",
+  "agricraft.plant.botania_lime_flower.seed": "Mystical Lime Seeds",
+  "agricraft.plant.botania_lime_flower.desc": "I wonder if this flower would taste sour?",
+
+  "agricraft.plant.botania_magenta_flower.name": "Mystical Magenta Flower",
+  "agricraft.plant.botania_magenta_flower.seed": "Mystical Magenta Seeds",
+  "agricraft.plant.botania_magenta_flower.desc": "A beautiful flower, of color which my printer is always out.",
+
+  "agricraft.plant.botania_orange_flower.name": "Mystical Orange Flower",
+  "agricraft.plant.botania_orange_flower.seed": "Mystical Orange Seeds",
+  "agricraft.plant.botania_orange_flower.desc": "A beautiful flower with a fiery disposition.",
+
+  "agricraft.plant.botania_pink_flower.name": "Mystical Pink Flower",
+  "agricraft.plant.botania_pink_flower.seed": "Mystical Pink Seeds",
+  "agricraft.plant.botania_pink_flower.desc": "A truly beautiful flower, emanating the throes of a powerful primal force.",
+
+  "agricraft.plant.botania_purple_flower.name": "Mystical Purple Flower",
+  "agricraft.plant.botania_purple_flower.seed": "Mystical Purple Seeds",
+  "agricraft.plant.botania_purple_flower.desc": "A beautiful flower with a regal color, it certainly is of the royal lineage.",
+
+  "agricraft.plant.botania_red_flower.name": "Mystical Red Flower",
+  "agricraft.plant.botania_red_flower.seed": "Mystical Red Seeds",
+  "agricraft.plant.botania_red_flower.desc": "A beautiful flower with a sanguine color.",
+
+  "agricraft.plant.botania_white_flower.name": "Mystical White Flower",
+  "agricraft.plant.botania_white_flower.seed": "Mystical White Seeds",
+  "agricraft.plant.botania_white_flower.desc": "A purely divine flower.",
+
+  "agricraft.plant.botania_yellow_flower.name": "Mystical Yellow Flower",
+  "agricraft.plant.botania_yellow_flower.seed": "Mystical Yellow Seeds",
+  "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed."
 }
