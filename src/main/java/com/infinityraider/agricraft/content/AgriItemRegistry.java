@@ -5,10 +5,7 @@ import com.infinityraider.agricraft.content.decoration.ItemGrate;
 import com.infinityraider.agricraft.content.irrigation.ItemIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.ItemIrrigationChannelHollow;
 import com.infinityraider.agricraft.content.irrigation.ItemIrrigationTank;
-import com.infinityraider.agricraft.content.tools.ItemClipper;
-import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
-import com.infinityraider.agricraft.content.tools.ItemRake;
-import com.infinityraider.agricraft.content.tools.ItemTrowel;
+import com.infinityraider.agricraft.content.tools.*;
 import com.infinityraider.agricraft.reference.Names;
 
 public class AgriItemRegistry {
@@ -39,6 +36,7 @@ public class AgriItemRegistry {
     public final ItemRake rake_wood;
     public final ItemRake rake_iron;
     public final ItemTrowel trowel;
+    public final ItemSeedBag seed_bag;
 
     public final ItemAgriNugget nugget_coal;
     public final ItemAgriNugget nugget_diamond;
@@ -69,6 +67,7 @@ public class AgriItemRegistry {
         this.rake_wood = new ItemRake(ItemRake.WOOD_LOGIC);
         this.rake_iron = new ItemRake(ItemRake.IRON_LOGIC);
         this.trowel = new ItemTrowel();
+        this.seed_bag = new ItemSeedBag();
 
         this.nugget_coal =new ItemAgriNugget.Burnable(Names.Nuggets.COAL);
         this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
@@ -77,5 +76,4 @@ public class AgriItemRegistry {
 
         this.grate = new ItemGrate();
     }
-
 }

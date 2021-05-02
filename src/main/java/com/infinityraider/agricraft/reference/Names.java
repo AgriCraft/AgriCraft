@@ -22,6 +22,7 @@ public abstract class Names {
         public static final String RAKE_WOOD = "agri_rake_wood";
         public static final String TROWEL = "agri_trowel";
         public static final String SEED = "agri_seed";
+        public static final String SEED_BAG = "agri_seed_bag";
     }
 
     public static final class Mods {
