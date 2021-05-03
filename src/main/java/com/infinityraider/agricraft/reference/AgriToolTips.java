@@ -53,6 +53,8 @@ public class AgriToolTips {
 
     public static final ITextComponent LIGHT = new TranslationTextComponent("agricraft.tooltip.light");
 
+    public static final ITextComponent TOTAL = new TranslationTextComponent("agricraft.tooltip.total");
+
     public static final ITextComponent MSG_CLIPPING_IMPOSSIBLE = new TranslationTextComponent("agricraft.message.clipping_impossible");
     public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.message.trowel_weed");
     public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");

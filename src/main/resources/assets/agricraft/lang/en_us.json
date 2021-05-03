@@ -70,6 +70,8 @@
   "agricraft.tooltip.journal_seeds": "Discovered Seeds",
   "agricraft.tooltip.rake": "A tool to remove weeds from crops",
   "agricraft.tooltip.trowel": "A tool to move crops around",
+  "agricraft.tooltip.total": "Total",
+
 
   "agricraft.tooltip.humidity": "Humidity",
   "agricraft.tooltip.acidity": "Acidity",

@@ -60,6 +60,7 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerCapability(CapabilityIrrigationNetworkManager.getInstance());
         this.registerCapability(CapabilityMultiBlockData.getInstance());
         this.registerCapability(CapabilityResearchedPlants.getInstance());
+        this.registerCapability(CapabilitySeedBagContents.getInstance());
     }
 
     @Override

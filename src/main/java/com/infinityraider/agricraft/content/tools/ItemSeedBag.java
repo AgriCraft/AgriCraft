@@ -3,20 +3,39 @@ package com.infinityraider.agricraft.content.tools;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.content.AgriTabs;
-import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
+import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nonnull;
 import java.util.Comparator;
 import java.util.List;
 
 public class ItemSeedBag extends ItemBase {
+    private static final List<ISorter> sorters = Lists.newArrayList();
+
+    public static ISorter getSorter(int index) {
+        return sorters.get(index % sorters.size());
+    }
+
+    public static int addSorter(ISorter sorter) {
+        if(sorters.contains(sorter)) {
+            return sorters.indexOf(sorter);
+        } else {
+            sorters.add(sorter);
+            return sorters.size() - 1;
+        }
+    }
+
+    public static int addSorter(IAgriStat stat) {
+        return addSorter(new StatSorter(stat));
+    }
+
     public ItemSeedBag() {
         super(Names.Items.SEED_BAG, new Properties()
                 .group(AgriTabs.TAB_AGRICRAFT)
@@ -24,149 +43,76 @@ public class ItemSeedBag extends ItemBase {
         );
     }
 
-    public static class Contents implements IItemHandler {
-        private IAgriPlant plant;
+    public interface IContents extends IItemHandler {
+        IAgriPlant getPlant();
 
-        private final List<Entry> contents = Lists.newArrayList();
-        private int count;
-        private Comparator<Entry> sorter;
+        int getCount();
 
-        private IAgriGenome nextGenome;
-        private ItemStack nextStack;
+        ISorter getSorter();
 
-        protected Contents(ItemStack stack) {
+        int getSorterIndex();
 
-        }
+        void setSorterIndex(int index);
+    }
 
-        public IAgriPlant getPlant() {
-            return this.plant;
-        }
+    public interface ISorter extends Comparator<IAgriGenome> {
+        ITextComponent getName();
+    }
 
-        public int getCount() {
-            return this.count;
-        }
-
-        public Comparator<Entry> getSorter() {
-            return this.sorter;
+    public static final ISorter DEFAULT_SORTER = new ISorter() {
+        @Override
+        public ITextComponent getName() {
+            return AgriToolTips.TOTAL;
         }
 
         @Override
-        public int getSlots() {
-            return 1;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return this.nextStack;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (this.isItemValid(slot, stack)) {
-                return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
-                    boolean flag = true;
-                    for(Entry entry : this.contents) {
-                        if(entry.matches(genome)) {
-                            flag = !simulate;
-                            if(!simulate) {
-                                entry.add(stack.getCount());
-                                this.count += stack.getCount();
-                            }
-                            break;
-                        }
-                    }
-                    if(flag) {
-                        this.contents.add(new Entry(genome, stack.getCount()));
-                        this.count += stack.getCount();
-                        this.contents.sort(this.getSorter());
-                    }
-                    return ItemStack.EMPTY;
-                }).orElse(stack);
+        public int compare(IAgriGenome o1, IAgriGenome o2) {
+            int s1 = o1.getStats().getSum();
+            int s2 = o2.getStats().getSum();
+            if(s1 != s2) {
+                return s1 - s2;
             }
-            return stack;
+            return AgriGeneRegistry.getInstance().stream()
+                    .filter(gene -> !(gene instanceof GeneSpecies))
+                    .mapToInt(gene -> {
+                        int w = gene.getComparatorWeight();
+                        int d1 = o1.getGenePair(gene).getDominant().comparatorValue();
+                        int r1 = o1.getGenePair(gene).getRecessive().comparatorValue();
+                        int d2 = o2.getGenePair(gene).getDominant().comparatorValue();
+                        int r2 = o2.getGenePair(gene).getRecessive().comparatorValue();
+                        return w*((d1 + r1) - (d2 + r2));
+                    }).sum();
+        }
+    };
+
+    public static class StatSorter implements ISorter {
+        private final IAgriStat stat;
+
+        protected StatSorter(IAgriStat stat) {
+            this.stat = stat;
         }
 
-        @Nonnull
+        public IAgriStat getStat() {
+            return this.stat;
+        }
+
         @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if(this.contents.size() >= 1) {
-                ItemStack out = this.nextStack.copy();
-                if (amount >= this.contents.get(0).getAmount()) {
-                    // More seeds were requested than there actually are
-                    Entry entry = simulate ? this.contents.get(0) : this.contents.remove(0);
-                    out.setCount(entry.getAmount());
-                    if(!simulate) {
-                        this.count -= out.getCount();
-                        if (this.contents.size() > 0) {
-                            this.nextStack = this.contents.get(0).initializeStack();
-                        } else {
-                            this.nextStack = ItemStack.EMPTY;
-                        }
-                    }
-                } else {
-                    out.setCount(amount);
-                    if(!simulate) {
-                        this.contents.get(0).extract(amount);
-                        this.count -= out.getCount();
-                    }
-                }
-                return out;
+        public ITextComponent getName() {
+            return this.getStat().getDescription();
+        }
+
+        @Override
+        public int compare(IAgriGenome o1, IAgriGenome o2) {
+            int s1 = o1.getStats().getValue(this.getStat());
+            int s2 = o2.getStats().getValue(this.getStat());
+            if(s1 == s2) {
+                return DEFAULT_SORTER.compare(o1, o2);
             }
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return 64;
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if(stack.getItem() instanceof ItemDynamicAgriSeed) {
-                ItemDynamicAgriSeed seed = (ItemDynamicAgriSeed) stack.getItem();
-                IAgriPlant stackPlant = seed.getPlant(stack);
-                if(stackPlant.isPlant()) {
-                    return (!this.getPlant().isPlant()) || this.getPlant() == stackPlant;
-                }
-            }
-            return false;
+            return s1 - s2;
         }
     }
 
-    public static class Entry {
-        private final IAgriGenome genome;
-        private int amount;
-
-        public Entry(IAgriGenome genome, int amount) {
-            this.genome = genome;
-            this.amount = amount;
-        }
-
-        public int getAmount() {
-            return this.amount;
-        }
-
-        public IAgriGenome getGenome() {
-            return this.genome;
-        }
-
-        public ItemStack initializeStack() {
-            return new AgriSeed(this.genome).toStack();
-        }
-
-        public void add(int amount) {
-            this.amount += amount;
-        }
-
-        public void extract(int amount) {
-            this.amount -= amount;
-            this.amount = Math.max(this.amount, 0);
-        }
-
-        public boolean matches(IAgriGenome genome) {
-            return this.getGenome().equals(genome);
-        }
+    static {
+        addSorter(DEFAULT_SORTER);
     }
 }
