@@ -121,6 +121,11 @@ public class GeneStat implements IAgriGene<Integer> {
     }
 
     @Override
+    public int getComparatorWeight() {
+        return 10;
+    }
+
+    @Override
     public boolean isHidden() {
         return this.getStat().isHidden();
     }
@@ -171,6 +176,11 @@ public class GeneStat implements IAgriGene<Integer> {
         public StringTextComponent getTooltip() {
             // TODO: format tooltip according to config
             return this.tooltip;
+        }
+
+        @Override
+        public int comparatorValue() {
+            return this.trait();
         }
 
         @Override

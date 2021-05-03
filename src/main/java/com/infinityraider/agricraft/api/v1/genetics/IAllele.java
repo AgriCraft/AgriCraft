@@ -36,6 +36,11 @@ public interface IAllele<A> {
     IFormattableTextComponent getTooltip();
 
     /**
+     * @return value representing this allele relative to other alleles in the same gene, used in comparators
+     */
+    int comparatorValue();
+
+    /**
      * Writes this allel to NBT
      * @return a CompoundNBT tag to which this allel has been serialized
      */

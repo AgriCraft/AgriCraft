@@ -148,6 +148,11 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     }
 
     @Override
+    public int getComparatorWeight() {
+        return 1;
+    }
+
+    @Override
     public boolean isHidden() {
         return true;
     }
@@ -206,6 +211,11 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         @Override
         public IFormattableTextComponent getTooltip() {
             return null;
+        }
+
+        @Override
+        public int comparatorValue() {
+            return this.trait() ? 1 : 0;
         }
 
         @Nonnull

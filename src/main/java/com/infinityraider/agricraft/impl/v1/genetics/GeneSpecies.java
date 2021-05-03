@@ -93,6 +93,11 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
         return COLOR_RECESSIVE;
     }
 
+    @Override
+    public int getComparatorWeight() {
+        return 0;
+    }
+
     @Nonnull
     @Override
     public String getId() {

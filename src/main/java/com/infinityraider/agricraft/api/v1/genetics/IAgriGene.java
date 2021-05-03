@@ -85,6 +85,16 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
     Vector3f getRecessiveColor();
 
     /**
+     * Gets the weight of the alleles of this gene in the genome, used in genome comparators.
+     * The comparator values returned from the alleles in this gene will be multiplied with this value.
+     *
+     * For reference, the stat gene weight is 10.
+     *
+     * @return the weight
+     */
+    int getComparatorWeight();
+
+    /**
      * AgriCraft provides the possibility to have genes completely hidden.
      * Hidden genes will not be revealed in any regular gameplay mechanics (for instance the seed analyzer).
      *

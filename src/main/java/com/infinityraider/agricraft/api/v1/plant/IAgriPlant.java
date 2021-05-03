@@ -392,6 +392,13 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
         return a > b;
     }
 
+    @Override
+    default int comparatorValue() {
+        // We don't care about species when comparing genomes
+        return 0;
+    }
+
+
     @Nonnull
     @Override
     default CompoundNBT writeToNBT() {
