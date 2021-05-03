@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
@@ -80,35 +81,113 @@ public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements
     }
 
     @Override
-    public Stream<IAgriMutation> getMutationsFromParents(List<IAgriPlant> plants) {
-        return this.stream().filter(mutation -> mutation.areParentsIn(plants));
+    public boolean add(@Nullable IAgriMutation mutation) {
+        boolean result = super.add(mutation);
+        // Update the complexity map
+        if(result && mutation != null) {
+            if(this.updateComplexity(mutation.getChild())) {
+                this.updateComplexityForChildren(mutation.getChild());
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean remove(@Nullable IAgriMutation mutation) {
+        boolean result = super.remove(mutation);
+        if(result&& mutation != null) {
+            if(this.updateComplexity(mutation.getChild())) {
+                this.updateComplexityForChildren(mutation.getChild());
+            }
+        }
+        return result;
+    }
+
+    protected boolean updateComplexity(IAgriPlant plant) {
+        // Calculate the new complexity as it would appear from the mutation tree
+        int newComplexity = this.calculateComplexity(plant);
+        // Fetch the old complexity as it existed before the plant was updated
+        int oldComplexity = this.complexity(plant);
+        // If the new complexity is different, modifications must be made
+        if(newComplexity != oldComplexity) {
+            // If the nex complexity is zero, that means no parents exist for this plant
+            if (newComplexity == 0) {
+                // Remove the complexity
+                this.complexities.remove(plant);
+            } else {
+                // Put the new complexity
+                this.complexities.put(plant, newComplexity);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected void updateComplexityForChildren(IAgriPlant plant) {
+        Set<IAgriPlant> visited = Sets.newIdentityHashSet();
+        visited.add(plant);
+        this.updateComplexityForChildren(plant, visited);
+    }
+
+    protected void updateComplexityForChildren(IAgriPlant plant, Set<IAgriPlant> visited) {
+        this.stream()
+                // Iterate over all mutations which have the given plant as a parent
+                .filter(mutation -> mutation.hasParent(plant))
+                // Map to the child of each mutation which needs updating (the others are mapped to null)
+                .map(mutation -> {
+                    IAgriPlant child = mutation.getChild();
+                    if(visited.contains(child)) {
+                        // Prevent infinite loops
+                        return null;
+                    }
+                    if(this.updateComplexity(child)) {
+                        // Complexity has been updated, add it to the visited plants and return it
+                        visited.add(child);
+                        return child;
+                    }
+                    // No changes, return null
+                    return null;
+                })
+                // Filter out null plants
+                .filter(Objects::nonNull)
+                // Iterate recursively
+                .forEach(child -> this.updateComplexityForChildren(child, visited));
+    }
+
+    /**
+     * Calculates the complexity for a plant by returning the minimum of all mutations which produce the given plant as child
+     *
+     * @param plant the plant
+     * @return the calculated complexity, if it returns 0, no mutations result in this plant
+     */
+    protected int calculateComplexity(IAgriPlant plant) {
+        return this.stream().filter(mutation -> mutation.hasChild(plant))
+                .mapToInt(this::calculateComplexity)
+                .min().orElse(0);
+    }
+
+    /**
+     * Calculates the complexity for a mutation by summing the complexities (as they are currently defined) of the parents
+     *
+     * @param mutation the mutation
+     * @return the calculated complexity, its minimum is 1
+     */
+    protected int calculateComplexity(IAgriMutation mutation) {
+        return mutation.getParents().stream()
+                .mapToInt(this::complexity)
+                .sum() + 1;
     }
 
     @Override
     public int complexity(IAgriPlant plant) {
-        if(!this.complexities.containsKey(plant)) {
-            this.complexities.put(plant, this.calculateComplexity(plant));
-        }
-        return this.complexities.get(plant);
+        return this.complexities.getOrDefault(plant, 0);
     }
 
-    private int calculateComplexity(IAgriPlant plant) {
-        // Plants which are not the child of any mutation are assumed to be easily obtainable e.g. from grass drops.
-        // The complexity of such, easily obtainable plants is set to 1, which will be the lowest possible value.
-        // Complexity of plants obtained through mutations is set equal to the sum of the complexity of the parents.
-        // In case a plant can be obtained through multiple different mutations, the lowest complexity value is used.
-        return this.stream()
-                .filter(mutation -> mutation.getChild().equals(plant))
-                .mapToInt(this::sumParentsComplexity)
-                .min()
-                .orElse(1);
-    }
 
-    private int sumParentsComplexity(IAgriMutation mutation) {
-        // TODO: Ensure no infinite loops can originate here
-        return mutation.getParents().stream().mapToInt(this::complexity).sum();
+    @Override
+    public Stream<IAgriMutation> getMutationsFromParents(List<IAgriPlant> plants) {
+        return this.stream().filter(mutation -> mutation.areParentsIn(plants));
     }
-
     @Nullable
     @Override
     protected AgriRegistryEvent<IAgriMutation> createEvent(IAgriMutation element) {
