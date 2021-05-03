@@ -441,5 +441,7 @@
 
   "agricraft.plant.botania_yellow_flower.name": "Mystical Yellow Flower",
   "agricraft.plant.botania_yellow_flower.seed": "Mystical Yellow Seeds",
-  "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed."
+  "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed.",
+
+  "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3."
 }
