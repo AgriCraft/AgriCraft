@@ -19,6 +19,7 @@ import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -28,7 +29,11 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -37,6 +42,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ItemSeedBag extends ItemBase {
+    private static final ITextComponent NAME_DEACTIVATED = new TranslationTextComponent("item.agricraft.agri_seed_bag_inactive");
+
     private static final List<ISorter> sorters = Lists.newArrayList();
 
     public static ISorter getSorter(int index) {
@@ -184,6 +191,45 @@ public class ItemSeedBag extends ItemBase {
         return false;
     }
 
+    @Nonnull
+    @Override
+    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+        return this.getContents(stack).isActivated()
+                ? super.getDisplayName(stack)
+                : NAME_DEACTIVATED;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull  List<ITextComponent> tooltip, @Nonnull  ITooltipFlag flag) {
+        IContents contents = this.getContents(stack);
+        if(contents.isActivated()) {
+            // Description
+            tooltip.add(AgriToolTips.SEED_BAG_ACTIVE);
+            tooltip.add(AgriToolTips.EMPTY_LINE);
+            // Contents
+            if(contents.getPlant().isPlant()) {
+                tooltip.add(new StringTextComponent("")
+                        .append(AgriToolTips.SEED_BAG_CONTENTS)
+                        .append(new StringTextComponent(" " + contents.getCount() + "")));
+            } else {
+                tooltip.add(AgriToolTips.SEED_BAG_EMPTY);
+            }
+            // Sorter
+            tooltip.add(new StringTextComponent("")
+                    .append(AgriToolTips.SEED_BAG_SORTER)
+                    .append(new StringTextComponent(" "))
+                    .append(contents.getSorter().getName()));
+            tooltip.add(AgriToolTips.EMPTY_LINE);
+            // Usage
+            tooltip.add(AgriToolTips.SEED_BAG_MAIN_HAND);
+            tooltip.add(AgriToolTips.SEED_BAG_OFF_HAND);
+        } else {
+            tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_1);
+            tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_2);
+        }
+    }
+
     public interface IContents extends IItemHandler {
         boolean isActivated();
 
@@ -242,7 +288,7 @@ public class ItemSeedBag extends ItemBase {
     public static final ISorter DEFAULT_SORTER = new ISorter() {
         @Override
         public ITextComponent getName() {
-            return AgriToolTips.TOTAL;
+            return AgriToolTips.SEED_BAG_SORTER_DEFAULT;
         }
 
         @Override

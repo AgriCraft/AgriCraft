@@ -219,6 +219,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                     } else {
                         this.firstStack = ItemStack.EMPTY;
                         this.lastStack = ItemStack.EMPTY;
+                        this.plant = NoPlant.getInstance();
                     }
                 }
             } else {
@@ -249,6 +250,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                     } else {
                         this.firstStack = ItemStack.EMPTY;
                         this.lastStack = ItemStack.EMPTY;
+                        this.plant = NoPlant.getInstance();
                     }
                 }
             } else {
