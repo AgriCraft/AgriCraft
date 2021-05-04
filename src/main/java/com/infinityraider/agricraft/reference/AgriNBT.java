@@ -12,6 +12,7 @@ public interface AgriNBT {
     String DIRECTION = "agri_dir";
     String DOMINANT = "agri_dominant";
     String ENTRIES = "agri_entries";
+    String FLAG = "agri_flag";
     String GENE = "agri_gene";
     String GENOME = "agri_genome";
     String GROWTH = "agri_growth";

@@ -74,6 +74,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
     }
 
     public static class Impl implements IContents, ISerializable {
+        private boolean activated;
         private IAgriPlant plant;
 
         private final List<Entry> contents;
@@ -83,7 +84,8 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         private int sorterIndex;
         private Comparator<Entry> subSorter;
 
-        private ItemStack nextStack;
+        private ItemStack firstStack;
+        private ItemStack lastStack;
 
         private Impl() {
             this.plant = NoPlant.getInstance();
@@ -91,7 +93,18 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
             this.count = 0;
             this.sorters = Maps.newHashMap();
             this.setSorterIndex(0);
-            this.nextStack = ItemStack.EMPTY;
+            this.firstStack = ItemStack.EMPTY;
+            this.lastStack = ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean isActivated() {
+            return this.activated;
+        }
+
+        @Override
+        public void activate() {
+            this.activated = true;
         }
 
         @Override
@@ -118,23 +131,38 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         public void setSorterIndex(int index) {
             this.sorterIndex = index;
             this.subSorter = this.sorters.computeIfAbsent(index, value -> (a, b) -> this.getSorter().compare(a.getGenome(), b.getGenome()));
+            this.sort();
+        }
+
+        protected void sort() {
+            this.contents.sort(this.subSorter);
+            this.firstStack = this.contents.get(0).initializeStack();
+            this.firstStack = this.contents.get(this.contents.size() - 1).initializeStack();
         }
 
         @Override
         public int getSlots() {
-            return 1;
+            return this.isActivated() ? 2 : 0;
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            return this.nextStack;
+            if(this.isActivated()) {
+                if (slot == 0) {
+                    return this.firstStack;
+                }
+                if (slot == 1) {
+                    return this.lastStack;
+                }
+            }
+            return ItemStack.EMPTY;
         }
 
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (this.isItemValid(slot, stack)) {
+            if (this.isActivated() && this.isItemValid(slot, stack)) {
                 return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
                     boolean flag = true;
                     for(Entry entry : this.contents) {
@@ -150,8 +178,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                     if(flag && !simulate) {
                         this.contents.add(new Entry(genome, stack.getCount()));
                         this.count += stack.getCount();
-                        this.contents.sort(this.subSorter);
-                        this.nextStack = this.contents.get(0).initializeStack();
+                        this.sort();
                     }
                     return ItemStack.EMPTY;
                 }).orElse(stack);
@@ -162,40 +189,86 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if(this.contents.size() >= 1) {
-                ItemStack out = this.nextStack.copy();
-                if (amount >= this.contents.get(0).getAmount()) {
-                    // More seeds were requested than there actually are
-                    Entry entry = simulate ? this.contents.get(0) : this.contents.remove(0);
-                    out.setCount(entry.getAmount());
-                    if(!simulate) {
-                        this.count -= out.getCount();
-                        if (this.contents.size() > 0) {
-                            this.nextStack = this.contents.get(0).initializeStack();
-                        } else {
-                            this.nextStack = ItemStack.EMPTY;
-                        }
-                    }
-                } else {
-                    out.setCount(amount);
-                    if(!simulate) {
-                        this.contents.get(0).extract(amount);
-                        this.count -= out.getCount();
-                    }
+            if(this.isActivated() && this.contents.size() >= 1) {
+                if(slot == 0) {
+                    return this.extractFirstSeed(amount, simulate);
                 }
-                return out;
+                if(slot == 1) {
+                    return this.extractLastSeed(amount, simulate);
+                }
             }
             return ItemStack.EMPTY;
         }
 
+
+        @Nonnull
+        @Override
+        public ItemStack extractFirstSeed(int amount, boolean simulate) {
+            if(!this.isActivated()) {
+                return ItemStack.EMPTY;
+            }
+            ItemStack out = this.firstStack.copy();
+            if (amount >= this.contents.get(0).getAmount()) {
+                // More seeds were requested than there actually are
+                Entry entry = simulate ? this.contents.get(0) : this.contents.remove(0);
+                out.setCount(entry.getAmount());
+                if (!simulate) {
+                    this.count -= out.getCount();
+                    if (this.contents.size() > 0) {
+                        this.firstStack = this.contents.get(0).initializeStack();
+                    } else {
+                        this.firstStack = ItemStack.EMPTY;
+                        this.lastStack = ItemStack.EMPTY;
+                    }
+                }
+            } else {
+                out.setCount(amount);
+                if (!simulate) {
+                    this.contents.get(0).extract(amount);
+                    this.count -= out.getCount();
+                }
+            }
+            return out;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack extractLastSeed(int amount, boolean simulate) {
+            if(!this.isActivated()) {
+                return ItemStack.EMPTY;
+            }
+            ItemStack out = this.lastStack.copy();
+            if (amount >= this.contents.get(this.contents.size() - 1).getAmount()) {
+                // More seeds were requested than there actually are
+                Entry entry = simulate ? this.contents.get(this.contents.size() - 1) : this.contents.remove(this.contents.size() - 1);
+                out.setCount(entry.getAmount());
+                if (!simulate) {
+                    this.count -= out.getCount();
+                    if (this.contents.size() > 0) {
+                        this.lastStack = this.contents.get(this.contents.size() - 1).initializeStack();
+                    } else {
+                        this.firstStack = ItemStack.EMPTY;
+                        this.lastStack = ItemStack.EMPTY;
+                    }
+                }
+            } else {
+                out.setCount(amount);
+                if (!simulate) {
+                    this.contents.get(this.contents.size() - 1).extract(amount);
+                    this.count -= out.getCount();
+                }
+            }
+            return out;
+        }
+
         @Override
         public int getSlotLimit(int slot) {
-            return 64;
+            return this.isActivated() ? 64 : 0;
         }
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if(stack.getItem() instanceof ItemDynamicAgriSeed) {
+            if(this.isActivated() && stack.getItem() instanceof ItemDynamicAgriSeed) {
                 ItemDynamicAgriSeed seed = (ItemDynamicAgriSeed) stack.getItem();
                 IAgriPlant stackPlant = seed.getPlant(stack);
                 if(stackPlant.isPlant()) {
@@ -207,26 +280,31 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
         @Override
         public void readFromNBT(CompoundNBT tag) {
+            this.activated = tag.contains(AgriNBT.FLAG) && tag.getBoolean(AgriNBT.FLAG);
             this.contents.clear();
             this.count = 0;
-            this.nextStack = ItemStack.EMPTY;
-            this.plant = tag.contains(AgriNBT.PLANT)
-                    ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoPlant.getInstance())
-                    : NoPlant.getInstance();
-            if(this.getPlant().isPlant()) {
-                if (tag.contains(AgriNBT.ENTRIES)) {
-                    ListNBT entryTags = tag.getList(AgriNBT.ENTRIES, 10);
-                    entryTags.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
-                            .map(entryTag -> (CompoundNBT) entryTag).
-                            forEach(entryTag -> Entry.readFromTag(entryTag).ifPresent(entry -> {
-                                this.contents.add(entry);
-                                this.count += entry.getAmount();
-                            }));
-                    if(this.count > 0) {
-                        this.nextStack = this.contents.get(0).initializeStack();
+            this.firstStack = ItemStack.EMPTY;
+            this.lastStack = ItemStack.EMPTY;
+            if(this.isActivated()) {
+                this.plant = tag.contains(AgriNBT.PLANT)
+                        ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoPlant.getInstance())
+                        : NoPlant.getInstance();
+                if (this.getPlant().isPlant()) {
+                    if (tag.contains(AgriNBT.ENTRIES)) {
+                        ListNBT entryTags = tag.getList(AgriNBT.ENTRIES, 10);
+                        entryTags.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
+                                .map(entryTag -> (CompoundNBT) entryTag).
+                                forEach(entryTag -> Entry.readFromTag(entryTag).ifPresent(entry -> {
+                                    this.contents.add(entry);
+                                    this.count += entry.getAmount();
+                                }));
+                        if (this.count > 0) {
+                            this.firstStack = this.contents.get(0).initializeStack();
+                            this.lastStack = this.contents.get(this.contents.size() - 1).initializeStack();
+                        }
+                    } else {
+                        this.plant = NoPlant.getInstance();
                     }
-                } else {
-                    this.plant = NoPlant.getInstance();
                 }
             }
             this.setSorterIndex(tag.contains(AgriNBT.KEY) ? tag.getInt(AgriNBT.KEY) : 0);
@@ -235,6 +313,8 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Override
         public CompoundNBT writeToNBT() {
             CompoundNBT tag = new CompoundNBT();
+            // Write activated
+            tag.putBoolean(AgriNBT.FLAG, this.isActivated());
             // Write plant
             tag.putString(AgriNBT.PLANT, this.getPlant().getId());
             // Write contents
