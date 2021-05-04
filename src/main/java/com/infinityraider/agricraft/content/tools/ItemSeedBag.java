@@ -20,6 +20,8 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -74,11 +76,15 @@ public class ItemSeedBag extends ItemBase {
         return CapabilitySeedBagContents.getInstance().getCapability(stack).map(impl -> (IContents) impl).orElse(EMPTY);
     }
 
+    public boolean isActivated(ItemStack stack) {
+        return EnchantmentHelper.getEnchantments(stack).containsKey(AgriCraft.instance.getModEnchantmentRegistry().seed_bag);
+    }
+
     @Nonnull
     @Override
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         IContents contents = this.getContents(context.getItem());
-        if(contents.isActivated()) {
+        if(this.isActivated(context.getItem())) {
             Hand hand = context.getHand();
             PlayerEntity player = context.getPlayer();
             if (hand == Hand.OFF_HAND) {
@@ -103,7 +109,7 @@ public class ItemSeedBag extends ItemBase {
         if(hand == Hand.OFF_HAND) {
             ItemStack stack = player.getHeldItem(hand);
             IContents contents = this.getContents(stack);
-            if(contents.isActivated() && this.attemptExtractOrInsertSeed(player, contents)) {
+            if(this.isActivated(stack) && this.attemptExtractOrInsertSeed(player, contents)) {
                 return ActionResult.resultSuccess(stack);
             }
         }
@@ -191,10 +197,30 @@ public class ItemSeedBag extends ItemBase {
         return false;
     }
 
+    @Override
+    public boolean isEnchantable(@Nonnull ItemStack stack) {
+        return !this.isActivated(stack);
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 1;
+    }
+
+    @Override
+    public int getItemEnchantability(ItemStack stack) {
+        return this.isActivated(stack) ? 0 : 1;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment instanceof EnchantmentSeedBag;
+    }
+
     @Nonnull
     @Override
     public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-        return this.getContents(stack).isActivated()
+        return this.isActivated(stack)
                 ? super.getDisplayName(stack)
                 : NAME_DEACTIVATED;
     }
@@ -203,7 +229,7 @@ public class ItemSeedBag extends ItemBase {
     @OnlyIn(Dist.CLIENT)
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull  List<ITextComponent> tooltip, @Nonnull  ITooltipFlag flag) {
         IContents contents = this.getContents(stack);
-        if(contents.isActivated()) {
+        if(this.isActivated(stack)) {
             // Description
             tooltip.add(AgriToolTips.SEED_BAG_ACTIVE);
             tooltip.add(AgriToolTips.EMPTY_LINE);
@@ -224,6 +250,7 @@ public class ItemSeedBag extends ItemBase {
             // Usage
             tooltip.add(AgriToolTips.SEED_BAG_MAIN_HAND);
             tooltip.add(AgriToolTips.SEED_BAG_OFF_HAND);
+            tooltip.add(AgriToolTips.SEED_BAG_SCROLLING);
         } else {
             tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_1);
             tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_2);
@@ -231,10 +258,6 @@ public class ItemSeedBag extends ItemBase {
     }
 
     public interface IContents extends IItemHandler {
-        boolean isActivated();
-
-        void activate();
-
         IAgriPlant getPlant();
 
         int getCount();
@@ -312,14 +335,6 @@ public class ItemSeedBag extends ItemBase {
     };
 
     private static final IContents EMPTY = new IContents() {
-        @Override
-        public boolean isActivated() {
-            return false;
-        }
-
-        @Override
-        public void activate() {}
-
         @Override
         public IAgriPlant getPlant() {
             return NoPlant.getInstance();

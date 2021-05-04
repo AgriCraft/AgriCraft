@@ -115,6 +115,11 @@ public interface IAgriConfig {
     boolean enableAnimalAttractingCrops();
 
     /**
+     * @return the enchantment cost for enchanting the seed bag
+     */
+    int seedBagEnchantCost();
+
+    /**
      * @return true if a text warning should be displayed when attempting to plant with vanilla farming disabled
      */
     @OnlyIn(Dist.CLIENT)

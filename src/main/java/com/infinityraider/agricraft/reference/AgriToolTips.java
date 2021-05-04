@@ -51,6 +51,7 @@ public class AgriToolTips {
     public static final ITextComponent SEED_BAG_SORTER_DEFAULT = new TranslationTextComponent("agricraft.tooltip.seed_bag_sorter_default");
     public static final ITextComponent SEED_BAG_MAIN_HAND = new TranslationTextComponent("agricraft.tooltip.seed_bag_main_hand");
     public static final ITextComponent SEED_BAG_OFF_HAND = new TranslationTextComponent("agricraft.tooltip.seed_bag_off_hand");
+    public static final ITextComponent SEED_BAG_SCROLLING = new TranslationTextComponent("agricraft.tooltip.seed_bag_scrolling");
     public static final ITextComponent SEED_BAG_INACTIVE_1 = new TranslationTextComponent("agricraft.tooltip.seed_bag_inactive_1");
     public static final ITextComponent SEED_BAG_INACTIVE_2 = new TranslationTextComponent("agricraft.tooltip.seed_bag_inactive_2");
 

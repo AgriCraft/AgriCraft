@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.AgriEnchantmentRegistry;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
@@ -67,6 +68,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     @Override
     public AgriTileRegistry getModTileRegistry() {
         return AgriTileRegistry.getInstance();
+    }
+
+    @Override
+    public AgriEnchantmentRegistry getModEnchantmentRegistry() {
+        return AgriEnchantmentRegistry.getInstance();
     }
 
     @Override

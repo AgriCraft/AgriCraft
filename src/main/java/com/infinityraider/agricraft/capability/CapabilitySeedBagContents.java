@@ -74,7 +74,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
     }
 
     public static class Impl implements IContents, ISerializable {
-        private boolean activated;
         private IAgriPlant plant;
 
         private final List<Entry> contents;
@@ -95,16 +94,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
             this.setSorterIndex(0);
             this.firstStack = ItemStack.EMPTY;
             this.lastStack = ItemStack.EMPTY;
-        }
-
-        @Override
-        public boolean isActivated() {
-            return this.activated;
-        }
-
-        @Override
-        public void activate() {
-            this.activated = true;
         }
 
         @Override
@@ -135,26 +124,26 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         }
 
         protected void sort() {
-            this.contents.sort(this.subSorter);
-            this.firstStack = this.contents.get(0).initializeStack();
-            this.firstStack = this.contents.get(this.contents.size() - 1).initializeStack();
+            if(this.contents.size() > 0) {
+                this.contents.sort(this.subSorter);
+                this.firstStack = this.contents.get(0).initializeStack();
+                this.firstStack = this.contents.get(this.contents.size() - 1).initializeStack();
+            }
         }
 
         @Override
         public int getSlots() {
-            return this.isActivated() ? 2 : 0;
+            return 2;
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            if(this.isActivated()) {
-                if (slot == 0) {
-                    return this.firstStack;
-                }
-                if (slot == 1) {
-                    return this.lastStack;
-                }
+            if (slot == 0) {
+                return this.firstStack;
+            }
+            if (slot == 1) {
+                return this.lastStack;
             }
             return ItemStack.EMPTY;
         }
@@ -162,7 +151,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (this.isActivated() && this.isItemValid(slot, stack)) {
+            if (this.isItemValid(slot, stack)) {
                 return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
                     boolean flag = true;
                     for(Entry entry : this.contents) {
@@ -189,7 +178,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if(this.isActivated() && this.contents.size() >= 1) {
+            if(this.contents.size() >= 1) {
                 if(slot == 0) {
                     return this.extractFirstSeed(amount, simulate);
                 }
@@ -204,9 +193,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractFirstSeed(int amount, boolean simulate) {
-            if(!this.isActivated()) {
-                return ItemStack.EMPTY;
-            }
             ItemStack out = this.firstStack.copy();
             if (amount >= this.contents.get(0).getAmount()) {
                 // More seeds were requested than there actually are
@@ -235,9 +221,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractLastSeed(int amount, boolean simulate) {
-            if(!this.isActivated()) {
-                return ItemStack.EMPTY;
-            }
             ItemStack out = this.lastStack.copy();
             if (amount >= this.contents.get(this.contents.size() - 1).getAmount()) {
                 // More seeds were requested than there actually are
@@ -265,12 +248,12 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
         @Override
         public int getSlotLimit(int slot) {
-            return this.isActivated() ? 64 : 0;
+            return 64;
         }
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if(this.isActivated() && stack.getItem() instanceof ItemDynamicAgriSeed) {
+            if(stack.getItem() instanceof ItemDynamicAgriSeed) {
                 ItemDynamicAgriSeed seed = (ItemDynamicAgriSeed) stack.getItem();
                 IAgriPlant stackPlant = seed.getPlant(stack);
                 if(stackPlant.isPlant()) {
@@ -282,31 +265,28 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
         @Override
         public void readFromNBT(CompoundNBT tag) {
-            this.activated = tag.contains(AgriNBT.FLAG) && tag.getBoolean(AgriNBT.FLAG);
             this.contents.clear();
             this.count = 0;
             this.firstStack = ItemStack.EMPTY;
             this.lastStack = ItemStack.EMPTY;
-            if(this.isActivated()) {
-                this.plant = tag.contains(AgriNBT.PLANT)
-                        ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoPlant.getInstance())
-                        : NoPlant.getInstance();
-                if (this.getPlant().isPlant()) {
-                    if (tag.contains(AgriNBT.ENTRIES)) {
-                        ListNBT entryTags = tag.getList(AgriNBT.ENTRIES, 10);
-                        entryTags.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
-                                .map(entryTag -> (CompoundNBT) entryTag).
-                                forEach(entryTag -> Entry.readFromTag(entryTag).ifPresent(entry -> {
-                                    this.contents.add(entry);
-                                    this.count += entry.getAmount();
-                                }));
-                        if (this.count > 0) {
-                            this.firstStack = this.contents.get(0).initializeStack();
-                            this.lastStack = this.contents.get(this.contents.size() - 1).initializeStack();
-                        }
-                    } else {
-                        this.plant = NoPlant.getInstance();
+            this.plant = tag.contains(AgriNBT.PLANT)
+                    ? AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoPlant.getInstance())
+                    : NoPlant.getInstance();
+            if (this.getPlant().isPlant()) {
+                if (tag.contains(AgriNBT.ENTRIES)) {
+                    ListNBT entryTags = tag.getList(AgriNBT.ENTRIES, 10);
+                    entryTags.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
+                            .map(entryTag -> (CompoundNBT) entryTag).
+                            forEach(entryTag -> Entry.readFromTag(entryTag).ifPresent(entry -> {
+                                this.contents.add(entry);
+                                this.count += entry.getAmount();
+                            }));
+                    if (this.count > 0) {
+                        this.firstStack = this.contents.get(0).initializeStack();
+                        this.lastStack = this.contents.get(this.contents.size() - 1).initializeStack();
                     }
+                } else {
+                    this.plant = NoPlant.getInstance();
                 }
             }
             this.setSorterIndex(tag.contains(AgriNBT.KEY) ? tag.getInt(AgriNBT.KEY) : 0);
@@ -315,8 +295,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Override
         public CompoundNBT writeToNBT() {
             CompoundNBT tag = new CompoundNBT();
-            // Write activated
-            tag.putBoolean(AgriNBT.FLAG, this.isActivated());
             // Write plant
             tag.putString(AgriNBT.PLANT, this.getPlant().getId());
             // Write contents
