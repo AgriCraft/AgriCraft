@@ -1,0 +1,18 @@
+{
+	"loader": "infinitylib:composite",
+	"parts": {
+		"bag": {
+			"parent": "agricraft:item/agri_seed_bag_inactive"
+		},
+		"seed" : {
+			"loader": "agricraft:seed_bag_seed"
+		}
+	},
+	"transformations": {
+		"seed": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 0, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

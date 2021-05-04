@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.tools;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -16,12 +17,15 @@ import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.infinitylib.item.InfinityItemProperty;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -29,6 +33,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -42,6 +47,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class ItemSeedBag extends ItemBase {
     private static final ITextComponent NAME_DEACTIVATED = new TranslationTextComponent("item.agricraft.agri_seed_bag_inactive");
@@ -255,6 +261,21 @@ public class ItemSeedBag extends ItemBase {
             tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_1);
             tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_2);
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public Set<InfinityItemProperty> getModelProperties() {
+        return ImmutableSet.of(new InfinityItemProperty(new ResourceLocation(AgriCraft.instance.getModId(), "seed_bag_active")) {
+            @Override
+            public float getValue(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+                return (!stack.isEmpty()
+                        && stack.getItem() instanceof ItemSeedBag
+                        && ((ItemSeedBag) stack.getItem()).isActivated(stack))
+                        ? 1
+                        : 0;
+            }
+        });
     }
 
     public interface IContents extends IItemHandler {

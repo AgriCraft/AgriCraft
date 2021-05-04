@@ -1,6 +1,10 @@
 {
 	"parent": "item/generated",
-	"textures": {
-		"layer0": "agricraft:item/seed_bag"
-	}
+	"overrides": [{
+			"predicate": {"agricraft:seed_bag_active": 0},
+			"model": "agricraft:item/agri_seed_bag_inactive"
+		},{
+			"predicate": {"agricraft:seed_bag_active": 1},
+			"model": "agricraft:item/agri_seed_bag_active"
+		}]
 }

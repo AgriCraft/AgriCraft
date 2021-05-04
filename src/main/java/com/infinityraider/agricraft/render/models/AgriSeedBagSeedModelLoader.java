@@ -1,14 +1,16 @@
 package com.infinityraider.agricraft.render.models;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.RenderType;
@@ -19,8 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
@@ -29,19 +29,18 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-@OnlyIn(Dist.CLIENT)
-public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.Geometry> {
-    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed_model_loader");
+public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSeedModelLoader.Geometry> {
+    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed_bag_seed");
 
-    private static final AgriSeedModelLoader INSTANCE = new AgriSeedModelLoader();
+    private static final AgriSeedBagSeedModelLoader INSTANCE = new AgriSeedBagSeedModelLoader();
 
-    public static AgriSeedModelLoader getInstance() {
+    public static AgriSeedBagSeedModelLoader getInstance() {
         return INSTANCE;
     }
 
     private final Geometry geometry;
 
-    private AgriSeedModelLoader() {
+    private AgriSeedBagSeedModelLoader() {
         this.geometry = new Geometry();
     }
 
@@ -63,13 +62,14 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         return this.getGeometry();
     }
 
-    public static class Geometry implements IModelGeometry<AgriSeedModelLoader.Geometry>, IRenderUtilities {
-        private Geometry() {}
+    public static class Geometry implements IModelGeometry<Geometry>, IRenderUtilities {
+        private Geometry() {
+        }
 
         @Override
         public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                                 IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            return new BakedModel(owner, overrides);
+            return new AgriSeedBagSeedModelLoader.BakedModel(owner, overrides);
         }
 
         @Override
@@ -83,10 +83,12 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
     }
 
     public static class BakedModel implements IBakedModel, IRenderUtilities {
+        private final Map<IAgriPlant, IBakedModel> quads;
         private final IModelConfiguration owner;
         private final ItemOverrideList overrides;
 
         private BakedModel(IModelConfiguration owner, ItemOverrideList overrides) {
+            this.quads = Maps.newIdentityHashMap();
             this.owner = owner;
             this.overrides = overrides;
         }
@@ -144,9 +146,45 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
 
         @Override
         public List<Pair<IBakedModel, RenderType>> getLayerModels(ItemStack stack, boolean fabulous) {
-            return Collections.singletonList(Pair.of(
-                    this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel()),
-                    RenderTypeLookup.func_239219_a_(stack, fabulous)));
+            // Check if the stack is a bag
+            if(!(stack.getItem() instanceof ItemSeedBag)) {
+                return Collections.emptyList();
+            }
+            // Check if the bag is activated
+            ItemSeedBag bag = (ItemSeedBag) stack.getItem();
+            if(!bag.isActivated(stack)) {
+                return Collections.emptyList();
+            }
+            // Check if the bag contains seeds
+            ItemSeedBag.IContents contents = bag.getContents(stack);
+            if(!contents.getPlant().isPlant()) {
+                return Collections.emptyList();
+            }
+            // Fetch the quads
+            return Collections.singletonList(Pair.of(this.getOrBakeModel(contents.getPlant()), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+        }
+
+        protected IBakedModel getOrBakeModel(IAgriPlant plant) {
+            return this.quads.computeIfAbsent(plant, this::bakeModel);
+        }
+
+        protected IBakedModel bakeModel(IAgriPlant plant) {
+            ResourceLocation texture = plant.getSeedTexture();
+            TextureAtlasSprite sprite = this.getSprite(texture);
+            return new SimpleBakedModel(
+                    this.bakeQuads(sprite), Collections.emptyMap(),
+                    false, true, false, sprite,
+                    ItemCameraTransforms.DEFAULT, ItemOverrideList.EMPTY);
+        }
+
+        protected List<BakedQuad> bakeQuads(TextureAtlasSprite sprite) {
+            ITessellator tessellator = this.getBakedQuadTessellator();
+            tessellator.startDrawingQuads();
+            tessellator.setFace(ITessellator.Face.GENERAL);
+            tessellator.drawScaledFace(0, 0, 16, 16, Direction.EAST, sprite, 0);
+            List<BakedQuad> quads = tessellator.getQuads();
+            tessellator.draw();
+            return quads;
         }
     }
 }

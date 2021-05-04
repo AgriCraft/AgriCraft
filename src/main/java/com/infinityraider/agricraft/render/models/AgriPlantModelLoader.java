@@ -54,9 +54,7 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        //TODO
-    }
+    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {}
 
     @Override
     @Nonnull
