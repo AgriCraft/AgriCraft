@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.content.core;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -29,7 +28,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -95,20 +93,15 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
                 BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
                 if (newState != null && world.setBlockState(up, newState, 11)) {
-                    boolean success = AgriApi.getCrop(world, up).map(crop -> {
-                        if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
-                            return false;
-                        }
-                        return this.getGenome(context.getItem()).map(crop::setGenome).map(result -> {
-                            if (result) {
-                                if (player == null || !player.isCreative()) {
-                                    stack.shrink(1);
+                    boolean success = AgriApi.getCrop(world, up).map(crop ->
+                            this.getGenome(context.getItem()).map(crop::setGenome).map(result -> {
+                                if (result) {
+                                    if (player == null || !player.isCreative()) {
+                                        stack.shrink(1);
+                                    }
                                 }
-                                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
-                            }
-                            return result;
-                        }).orElse(false);
-                    }).orElse(false);
+                                return result;
+                            }).orElse(false)).orElse(false);
                     if (success) {
                         return ActionResultType.SUCCESS;
                     } else {
