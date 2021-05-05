@@ -68,6 +68,7 @@ public class AgriToolTips {
     public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");
     public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.message.trowel_no_plant");
 
+    public static final ITextComponent SNEAK_INFO = new TranslationTextComponent("agricraft.tooltip.sneak_info");
     public static final ITextComponent EMPTY_LINE = new StringTextComponent("");
 
     public static ITextComponent getSeedTooltip(AgriSeed seed) {

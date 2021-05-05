@@ -31,7 +31,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -78,6 +77,17 @@ public class ItemSeedBag extends ItemBase {
 
     public boolean isActivated(ItemStack stack) {
         return EnchantmentHelper.getEnchantments(stack).containsKey(AgriCraft.instance.getModEnchantmentRegistry().seed_bag);
+    }
+
+    public boolean incrementSorter(ItemStack stack, int delta) {
+        if(this.isActivated(stack)) {
+            IContents contents = this.getContents(stack);
+            int newPos = contents.getSorterIndex() + delta;
+            newPos = (newPos < 0) ? (newPos + sorters.size()) : (newPos % sorters.size());
+            contents.setSorterIndex(newPos);
+            return true;
+        }
+        return false;
     }
 
     @Nonnull
@@ -228,34 +238,9 @@ public class ItemSeedBag extends ItemBase {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull  List<ITextComponent> tooltip, @Nonnull  ITooltipFlag flag) {
-        IContents contents = this.getContents(stack);
-        if(this.isActivated(stack)) {
-            // Description
-            tooltip.add(AgriToolTips.SEED_BAG_ACTIVE);
-            tooltip.add(AgriToolTips.EMPTY_LINE);
-            // Contents
-            if(contents.getPlant().isPlant()) {
-                tooltip.add(new StringTextComponent("")
-                        .append(AgriToolTips.SEED_BAG_CONTENTS)
-                        .append(new StringTextComponent(" " + contents.getCount() + " "))
-                        .append(contents.getPlant().getSeedName()));
-            } else {
-                tooltip.add(AgriToolTips.SEED_BAG_EMPTY);
-            }
-            // Sorter
-            tooltip.add(new StringTextComponent("")
-                    .append(AgriToolTips.SEED_BAG_SORTER)
-                    .append(new StringTextComponent(" "))
-                    .append(contents.getSorter().getName()));
-            tooltip.add(AgriToolTips.EMPTY_LINE);
-            // Usage
-            tooltip.add(AgriToolTips.SEED_BAG_MAIN_HAND);
-            tooltip.add(AgriToolTips.SEED_BAG_OFF_HAND);
-            tooltip.add(AgriToolTips.SEED_BAG_SCROLLING);
-        } else {
-            tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_1);
-            tooltip.add(AgriToolTips.SEED_BAG_INACTIVE_2);
-        }
+        // Overriding this method to leave a note:
+        // We are handling the tooltip from an event handler to remove the enchantment tooltip
+        super.addInformation(stack, world, tooltip, flag);
     }
 
     public interface IContents extends IItemHandler {

@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.render.world.IrrigationNetworkDebugRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
+import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,11 +26,12 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
+        this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
         this.registerEventHandler(ItemToolTipHandler.getInstance());
         this.registerEventHandler(JournalViewPointHandler.getInstance());
         this.registerEventHandler(MagnifyingGlassViewHandler.getInstance());
         this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
-        this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
+        this.registerEventHandler(SeedBagScrollHandler.getInstance());
     }
 
     @Override
@@ -43,6 +45,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     public void activateRequiredModules() {
         IProxy.super.activateRequiredModules();
         ModuleDynamicCamera.getInstance().activate();
+        ModuleKeyboard.getInstance().activate();
     }
 
     @Override

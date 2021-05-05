@@ -10,8 +10,11 @@ import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import java.text.MessageFormat;
 import java.util.Collection;
 
+import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.AgriToolTips;
+import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -168,6 +172,60 @@ public class ItemToolTipHandler {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof IAgriRakeItem) {
             event.getToolTip().add(AgriToolTips.RAKE);
+        }
+    }
+
+    /**
+     * Adds tooltips to the seed bag (we must do this here to avoid the enchantment tool tip)
+     */
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addSeedBagTooltip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (stack.getItem() instanceof ItemSeedBag) {
+            ItemSeedBag bag = (ItemSeedBag) stack.getItem();
+            ItemSeedBag.IContents contents = bag.getContents(stack);
+            if(bag.isActivated(stack)) {
+                // Remove previous tooltip
+                if(event.getToolTip().size() > 0) {
+                    ITextComponent name = event.getToolTip().get(0);
+                    event.getToolTip().clear();
+                    event.getToolTip().add(name);
+                }
+                // Description
+                event.getToolTip().add(AgriToolTips.SEED_BAG_ACTIVE);
+                event.getToolTip().add(AgriToolTips.EMPTY_LINE);
+                // Contents
+                if(contents.getPlant().isPlant()) {
+                    event.getToolTip().add(new StringTextComponent("")
+                            .append(AgriToolTips.SEED_BAG_CONTENTS)
+                            .append(new StringTextComponent(" " + contents.getCount() + " "))
+                            .append(contents.getPlant().getSeedName()));
+                } else {
+                    event.getToolTip().add(AgriToolTips.SEED_BAG_EMPTY);
+                }
+                // Sorter
+                event.getToolTip().add(new StringTextComponent("")
+                        .append(AgriToolTips.SEED_BAG_SORTER)
+                        .append(new StringTextComponent(" "))
+                        .append(contents.getSorter().getName()));
+                event.getToolTip().add(AgriToolTips.EMPTY_LINE);
+                // Usage
+                if(ModuleKeyboard.getInstance().isKeyPressed(Minecraft.getInstance().gameSettings.keyBindSneak)) {
+                    event.getToolTip().add(new StringTextComponent("")
+                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_MAIN_HAND));
+                    event.getToolTip().add(new StringTextComponent("")
+                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_OFF_HAND));
+                    event.getToolTip().add(new StringTextComponent("")
+                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_SCROLLING));
+                } else {
+                    event.getToolTip().add(new StringTextComponent("")
+                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SNEAK_INFO));
+                }
+            } else {
+                event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_1);
+                event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_2);
+            }
         }
     }
 

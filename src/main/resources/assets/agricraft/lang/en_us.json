@@ -27,7 +27,7 @@
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
   "item.agricraft.agri_nugget_quartz": "Quartz Shard",
 
-  "enchantment.agricraft.agri_seed_bag": "Enchanted",
+  "enchantment.agricraft.agri_seed_bag": "Seed Sorting",
 
   "agricraft.stat.gain": "Gain",
   "agricraft.stat.growth": "Growth",
@@ -86,6 +86,7 @@
   "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, I will lose track of my seeds.",
   "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps I should try enchanting it first.",
 
+  "agricraft.tooltip.sneak_info": "(Hold <Sneak> for more info)",
 
   "agricraft.tooltip.humidity": "Humidity",
   "agricraft.tooltip.acidity": "Acidity",
