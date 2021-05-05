@@ -22,7 +22,6 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -31,7 +30,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -166,18 +164,6 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     @SuppressWarnings("deprecation")
     public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         return this.getShape(state, world, pos, context);
-    }
-
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
-        this.getCrop(world, pos).ifPresent(crop -> {
-            if(crop instanceof TileEntityCropSticks) {
-                ((TileEntityCropSticks) crop).onNeighbourChange(facing, facingPos, facingState);
-            }
-        });
-        return state;
     }
 
     @Override
