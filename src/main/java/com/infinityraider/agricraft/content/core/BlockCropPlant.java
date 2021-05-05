@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
@@ -50,8 +49,6 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     };
 
     // Properties
-    public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
-
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(PLANT)
             .add(LIGHT)
@@ -120,7 +117,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (world.isRemote()) {
-            return ActionResultType.SUCCESS;
+            return ActionResultType.PASS;
         }
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;

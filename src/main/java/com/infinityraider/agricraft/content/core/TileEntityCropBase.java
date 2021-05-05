@@ -462,15 +462,19 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             return false;
         } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
-                this.weed.set(weed);
-                this.weedGrowth.set(stage);
-                this.getWeeds().onSpawned(this);
-                this.handlePlantUpdate(false);
+                this.setWeedImpl(weed, stage);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
                 return true;
             }
         }
         return false;
+    }
+
+    protected void setWeedImpl(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage) {
+        this.weed.set(weed);
+        this.weedGrowth.set(stage);
+        this.getWeeds().onSpawned(this);
+        this.handlePlantUpdate(false);
     }
 
     @Override
@@ -574,6 +578,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             this.getModelData().setData(PROPERTY_WEED, this.getWeeds());
             this.getModelData().setData(PROPERTY_WEED_GROWTH, this.getWeedGrowthStage());
         }
+    }
+
+    public void mimicFrom(IAgriCrop other) {
+        other.getGenome().ifPresent(genome -> {
+            this.setGenomeImpl(genome.clone());
+            this.setGrowthStage(other.getGrowthStage());
+        });
+        this.setWeedImpl(other.getWeeds(), other.getWeedGrowthStage());
     }
 
     @Override

@@ -31,8 +31,9 @@ import java.util.Random;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockBaseTile<T> implements IWaterLoggable, IGrowable, IPlantable {
-    // Plant property
+    // Properties
     public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
+    public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
 
     public BlockCropBase(String name, Properties properties) {
         super(name, properties);

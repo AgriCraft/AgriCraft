@@ -54,7 +54,6 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
 
     // Properties
     public static final InfProperty<Boolean> CROSS_CROP = InfProperty.Creators.create("cross_crop", false);
-    public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(CROSS_CROP)
