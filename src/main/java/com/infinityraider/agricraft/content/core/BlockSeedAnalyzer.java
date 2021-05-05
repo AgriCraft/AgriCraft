@@ -146,7 +146,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if(hand == Hand.OFF_HAND) {
-            return ActionResultType.PASS;
+            return ActionResultType.FAIL;
         }
         TileEntity tile = world.getTileEntity(pos);
         if(!(tile instanceof TileEntitySeedAnalyzer)) {
@@ -193,10 +193,9 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                 if(!analyzer.isObserved()) {
                     analyzer.setObserving(true);
                 }
-                return ActionResultType.CONSUME;
             }
+            return ActionResultType.CONSUME;
         }
-        return ActionResultType.PASS;
     }
 
     public void extractSeed(TileEntitySeedAnalyzer analyzer, @Nullable PlayerEntity player) {
