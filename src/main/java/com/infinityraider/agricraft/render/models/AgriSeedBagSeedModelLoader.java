@@ -161,7 +161,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             // Check if the bag is activated
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
             if(!bag.isActivated(stack)) {
-                return Collections.emptyList();
+                return Collections.singletonList(Pair.of(this.getBaseModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }
             // Check if the bag contains seeds
             ItemSeedBag.IContents contents = bag.getContents(stack);

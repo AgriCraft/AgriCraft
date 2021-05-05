@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    "l l",
+    " l "
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:string"
+    },
+    "l": {
+      "tag": "forge:leather"
+    }
+  },
+  "result": {
+    "item": "agricraft:agri_seed_bag",
+    "count": 1
+  }
+}
