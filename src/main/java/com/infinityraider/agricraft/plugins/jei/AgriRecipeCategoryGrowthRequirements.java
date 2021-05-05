@@ -77,8 +77,8 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                 new TooltipRegion(AgriToolTips.GROWTH, 102, 20, 111, 70),
                 new TooltipRegion(AgriApi.getStatRegistry().strengthStat().getDescription(), 114, 20, 123, 70),
                 new TooltipRegion(AgriToolTips.LIGHT, 31, 25, 36, 74),
-                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 38, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 50, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 36, AgriApi.getSeasonLogic()::isActive),
+                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 49, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 29, 62, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.WINTER.getDisplayName(), 17, 63, 29, 74, AgriApi.getSeasonLogic()::isActive)
         );

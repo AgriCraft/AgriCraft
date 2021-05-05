@@ -59,9 +59,9 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
             this.bindTexture(texture);
             AbstractGui.blit(transforms, x + x1, y, w, 12, x1, 0, w, 12, 53, 12);
             // Draw the tooltip if needed
-            if(mX >= x + x1 && mX <= x + x1 + w && mY >= y && mY <= y + 13) {
+            if(mX >= x + x1 && mX < x + x1 + w && mY >= y && mY <= y + 12) {
                 List<ITextComponent> tooltip = ImmutableList.of(property.getDescription());
-                this.drawTooltip(transforms, tooltip, mX, mY + 13);
+                this.drawTooltip(transforms, tooltip, mX, mY + 12);
             }
         }
     }
