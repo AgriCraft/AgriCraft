@@ -1,6 +1,8 @@
 package com.infinityraider.agricraft.render.models;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
@@ -21,6 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
@@ -29,8 +33,9 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+@OnlyIn(Dist.CLIENT)
 public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSeedModelLoader.Geometry> {
-    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed_bag_seed");
+    private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed_bag_loader");
 
     private static final AgriSeedBagSeedModelLoader INSTANCE = new AgriSeedBagSeedModelLoader();
 
@@ -69,7 +74,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         @Override
         public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                                 IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            return new AgriSeedBagSeedModelLoader.BakedModel(owner, overrides);
+            return new BakedModel(owner, overrides);
         }
 
         @Override
@@ -83,12 +88,15 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
     }
 
     public static class BakedModel implements IBakedModel, IRenderUtilities {
-        private final Map<IAgriPlant, IBakedModel> quads;
+        private IBakedModel baseModel;
+        private final Map<IAgriPlant, IBakedModel> seedQuads;
+        private final Map<Direction, List<BakedQuad>> emptyMap;
         private final IModelConfiguration owner;
         private final ItemOverrideList overrides;
 
         private BakedModel(IModelConfiguration owner, ItemOverrideList overrides) {
-            this.quads = Maps.newIdentityHashMap();
+            this.seedQuads = Maps.newIdentityHashMap();
+            this.emptyMap = this.generateEmptyQuadMap();
             this.owner = owner;
             this.overrides = overrides;
         }
@@ -158,21 +166,33 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             // Check if the bag contains seeds
             ItemSeedBag.IContents contents = bag.getContents(stack);
             if(!contents.getPlant().isPlant()) {
-                return Collections.emptyList();
+                return Collections.singletonList(Pair.of(this.getBaseModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }
             // Fetch the quads
-            return Collections.singletonList(Pair.of(this.getOrBakeModel(contents.getPlant()), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+            RenderType type = RenderTypeLookup.func_239219_a_(stack, fabulous);
+            return Lists.newArrayList(
+                    Pair.of(this.getBaseModel(), type),
+                    Pair.of(this.getOrBakeSeedModel(contents.getPlant()), type)
+            );
         }
 
-        protected IBakedModel getOrBakeModel(IAgriPlant plant) {
-            return this.quads.computeIfAbsent(plant, this::bakeModel);
+        protected IBakedModel getBaseModel() {
+            if(this.baseModel == null) {
+                this.baseModel = this.getModelManager().getModel(
+                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
+            }
+            return this.baseModel;
         }
 
-        protected IBakedModel bakeModel(IAgriPlant plant) {
+        protected IBakedModel getOrBakeSeedModel(IAgriPlant plant) {
+            return this.seedQuads.computeIfAbsent(plant, this::bakeSeedModel);
+        }
+
+        protected IBakedModel bakeSeedModel(IAgriPlant plant) {
             ResourceLocation texture = plant.getSeedTexture();
             TextureAtlasSprite sprite = this.getSprite(texture);
             return new SimpleBakedModel(
-                    this.bakeQuads(sprite), Collections.emptyMap(),
+                    this.bakeQuads(sprite), this.emptyMap,
                     false, true, false, sprite,
                     ItemCameraTransforms.DEFAULT, ItemOverrideList.EMPTY);
         }
@@ -181,10 +201,20 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             ITessellator tessellator = this.getBakedQuadTessellator();
             tessellator.startDrawingQuads();
             tessellator.setFace(ITessellator.Face.GENERAL);
-            tessellator.drawScaledFace(0, 0, 16, 16, Direction.EAST, sprite, 0);
+            tessellator.drawScaledFace(4, 2, 12, 10, Direction.NORTH, sprite, 7.499F,
+                    0, 0, 16, 16);
+            tessellator.drawScaledFace(4, 2, 12, 10, Direction.SOUTH, sprite, 8.501F,
+                    0, 0, 16, 16);
             List<BakedQuad> quads = tessellator.getQuads();
             tessellator.draw();
             return quads;
+        }
+
+        private Map<Direction, List<BakedQuad>> generateEmptyQuadMap() {
+            Map<Direction, List<BakedQuad>> map = Maps.newEnumMap(Direction.class);
+            List<BakedQuad> quads = Collections.emptyList();
+            Arrays.stream(Direction.values()).forEach(dir -> map.put(dir, quads));
+            return ImmutableMap.copyOf(map);
         }
     }
 }

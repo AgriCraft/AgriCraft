@@ -396,7 +396,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
                 return ActionResultType.SUCCESS;
             }
         }
-        return ActionResultType.FAIL;
+        return ActionResultType.PASS;
     }
 
     @Override

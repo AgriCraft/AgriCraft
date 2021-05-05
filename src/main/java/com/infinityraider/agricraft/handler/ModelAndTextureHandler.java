@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriWeed;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.inventory.container.PlayerContainer;
@@ -44,12 +45,16 @@ public class ModelAndTextureHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onModelLoadEvent(ModelRegistryEvent event) {
+        // Jsons
         AgriCore.getPlants().getAllElements()
                 .stream()
                 .map(AgriPlant::getSeedModel)
                 .map(this::toResourceLocation)
                 .forEach(ModelLoader::addSpecialModel);
+        // No plant instance
         ModelLoader.addSpecialModel(NoPlant.getInstance().getSeedModel());
+        // Seed bag master
+        ModelLoader.addSpecialModel(new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
     }
 
     private ResourceLocation toResourceLocation(String string) {

@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
@@ -42,11 +43,12 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
-    // Excluded classes for Iem usage logic
+    // Excluded classes for Item usage logic
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
             IAgriClipperItem.class,
             IAgriTrowelItem.class,
+            ItemSeedBag.class,
             ItemDebugger.class
     };
 
@@ -184,7 +186,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (world.isRemote()) {
-            return ActionResultType.SUCCESS;
+            return ActionResultType.PASS;
         }
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;

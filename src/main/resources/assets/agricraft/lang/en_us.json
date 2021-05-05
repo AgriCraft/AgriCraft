@@ -78,7 +78,7 @@
   "agricraft.tooltip.seed_bag_active": "It always seems to know what seeds you need.",
   "agricraft.tooltip.seed_bag_contents": "The bag currently holds",
   "agricraft.tooltip.seed_bag_empty": "The bag is currently empty",
-  "agricraft.tooltip.seed_bag_sorter": "The bag is currently sorting by ",
+  "agricraft.tooltip.seed_bag_sorter": "The bag is currently sorting by",
   "agricraft.tooltip.seed_bag_sorter_default": "overall genetic quality",
   "agricraft.tooltip.seed_bag_main_hand": "Use from main hand to plant seeds directly from the bag",
   "agricraft.tooltip.seed_bag_off_hand": "Use from off hand to insert or extract seeds to your main hand",

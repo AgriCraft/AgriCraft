@@ -165,6 +165,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                         }
                     }
                     if(flag && !simulate) {
+                        if(!this.plant.isPlant()) {
+                            this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
+                        }
                         this.contents.add(new Entry(genome, stack.getCount()));
                         this.count += stack.getCount();
                         this.sort();
@@ -193,6 +196,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractFirstSeed(int amount, boolean simulate) {
+            if(this.firstStack.isEmpty()) {
+                return ItemStack.EMPTY;
+            }
             ItemStack out = this.firstStack.copy();
             if (amount >= this.contents.get(0).getAmount()) {
                 // More seeds were requested than there actually are
@@ -221,6 +227,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack extractLastSeed(int amount, boolean simulate) {
+            if(this.lastStack.isEmpty()) {
+                return ItemStack.EMPTY;
+            }
             ItemStack out = this.lastStack.copy();
             if (amount >= this.contents.get(this.contents.size() - 1).getAmount()) {
                 // More seeds were requested than there actually are

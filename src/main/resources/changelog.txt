@@ -13,16 +13,18 @@ Changelog
 - CHANGE: Seeds are now compostable
 - CHANGE: The Agricultural Journal has been reworked and is now more immersive
 - CHANGE: The Magnifying Glass has been reworked and is now more immersive
+- ADDED: A brand new set of login warning messages... just kidding, they got removed
 - ADDED: Genomes; plants and seeds now have genomes in according with Mendelian genetics
 - ADDED: Fertility stat: this governs the probability of generating offspring (meaning participating in spreading / mutating)
 - ADDED: Resistance stat: this governs the resistance of the plant against weeds (probability of spawning weeds, and gaining preferential growth compared to weeds)
 - ADDED: Mutativity stat: this governs how quickly and in which direction stats will mutate when passed to offspring
 - ADDED: Crops can now be planted under water, which is required for some species
+- ADDED: New item: the seed bag, obtained by enchanting a mundane leather bag, holds and sorts your seeds for you
 - ADDED: If season mods are present (Better Weather, Serene Seasons), crops will require certain seasons to grow
 - ADDED: Genes defining attraction of certain animals to certain crops, allowing for automatic animal breeding
 - ADDED: Possibility to plant crops off crop sticks (can be disabled in the config)
 - ADDED: Config options to configure minimum and maximum values for any stat and hiding stats (effectively allowing to disabling a stat with its functionality locked at a certain value)
-- ADDED: JEI Progressive mode: mutation recipes are unlocked in JEI after reading them in the journal (can be disabled in the config)
+- ADDED: Progressive mode: mutation ingredients are unlocked in the journal / JEI after reading them in the journal (can be disabled in the config)
 - ADDED: new vanilla plant: Bamboo
 - ADDED: new vanilla plant: Cornflower
 - ADDED: new vanilla plant: Crimson Fungus
