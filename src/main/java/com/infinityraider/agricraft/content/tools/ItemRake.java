@@ -8,18 +8,12 @@ import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.content.AgriTabs;
-import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -80,13 +74,6 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
         return AgriApi.getCrop(context.getWorld(), context.getPos())
                 .map(crop -> this.getRakeLogic().applyLogic(crop, context.getItem(), context.getPlayer()))
                 .orElse(ActionResultType.FAIL);
-    }
-
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag advanced) {
-        tooltip.add(AgriToolTips.RAKE);
     }
 
     public static abstract class RakeLogic {
