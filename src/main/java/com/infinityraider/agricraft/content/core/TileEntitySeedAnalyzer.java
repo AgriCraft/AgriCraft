@@ -126,13 +126,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public void onObservationEnd() {
         this.genesToRender = null;
         AgriCraft.instance.proxy().toggleSeedAnalyzerObserving(false);
-        AgriCraft.instance.proxy().toggleSeedAnalyzerActive(false);
     }
 
     @Override
     public void onCameraDeactivated() {
         this.observerStart = null;
         this.observer = null;
+        AgriCraft.instance.proxy().toggleSeedAnalyzerActive(false);
     }
 
     @Override
