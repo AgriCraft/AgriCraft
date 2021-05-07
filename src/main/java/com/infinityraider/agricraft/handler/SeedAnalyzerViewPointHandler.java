@@ -138,6 +138,7 @@ public class SeedAnalyzerViewPointHandler {
         // Check if the handler is active
         if(this.isActive()) {
             // If this is active, we do not want any click behaviour
+            event.setSwingHand(false);
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
         }

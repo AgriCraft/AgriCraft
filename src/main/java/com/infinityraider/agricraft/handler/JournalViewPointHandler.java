@@ -362,6 +362,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         // Check if the handler is active
         if(this.isActive() && !event.isUseItem()) {
             // If this is active, we do not want any click behaviour (except right clicks)
+            event.setSwingHand(false);
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
         }
