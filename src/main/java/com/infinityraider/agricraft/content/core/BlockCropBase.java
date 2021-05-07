@@ -149,7 +149,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     @Override
     public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-        return this.isFertile(state, world, pos);
+        return this.getCrop(world, pos).map(crop -> crop.isFertile() && !crop.isFullyGrown()).orElse(true);
     }
 
     private static final ItemStack BONE_MEAL = new ItemStack(Items.BONE_MEAL);
@@ -159,7 +159,8 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         return AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL)
                 .flatMap(fertilizer ->
                         this.getCrop(world, pos).map(crop ->
-                                crop.acceptsFertilizer(fertilizer)))
+                                !crop.isFullyGrown()
+                                && crop.acceptsFertilizer(fertilizer)))
                 .orElse(false);
     }
 
