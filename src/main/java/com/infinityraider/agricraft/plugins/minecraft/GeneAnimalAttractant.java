@@ -23,7 +23,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
@@ -159,9 +159,9 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void onEntitySpawned(LivingSpawnEvent event) {
-        if(!event.getWorld().isRemote() && this.clazz.isInstance(event.getEntityLiving())) {
-            MobEntity entity = this.clazz.cast(event.getEntityLiving());
+    public void onEntitySpawned(EntityJoinWorldEvent event) {
+        if(!event.getWorld().isRemote() && this.clazz.isInstance(event.getEntity())) {
+            MobEntity entity = this.clazz.cast(event.getEntity());
             EatCropGoal goal = new EatCropGoal(this, entity, SPEED, COOLDOWN, this.defaultPlantIds);
             if(EntityHelper.injectGoal(entity, goal, PRIORITY)) {
                 CapabilityEatCropGoal.getInstance().setCropEatGoal(entity, goal);
