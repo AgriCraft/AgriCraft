@@ -134,7 +134,7 @@ public class SeedAnalyzerViewPointHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onMouseClick(InputEvent.RawMouseEvent event) {
+    public void onMouseClick(InputEvent.ClickInputEvent event) {
         // Check if the handler is active
         if(this.isActive()) {
             // If this is active, we do not want any click behaviour

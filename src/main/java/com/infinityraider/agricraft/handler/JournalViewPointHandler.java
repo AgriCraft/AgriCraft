@@ -358,6 +358,17 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public void onMouseClick(InputEvent.ClickInputEvent event) {
+        // Check if the handler is active
+        if(this.isActive() && !event.isUseItem()) {
+            // If this is active, we do not want any click behaviour (except right clicks)
+            event.setResult(Event.Result.DENY);
+            event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onMovement(InputUpdateEvent event) {
         // Check if the handler is active
         if(this.isActive()) {
