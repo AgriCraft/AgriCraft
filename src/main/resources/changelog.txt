@@ -36,6 +36,8 @@ Changelog
 - ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
 - ADDED: new resource plant: Carbonation
+- ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson Brickau)
+- ADDED: Default jsons for Farmer's Delight (thanks Nelson Brickau)
 
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].
