@@ -83,8 +83,8 @@
   "agricraft.tooltip.seed_bag_main_hand": "Use from main hand to plant seeds directly from the bag",
   "agricraft.tooltip.seed_bag_off_hand": "Use from off hand to insert or extract seeds to your main hand",
   "agricraft.tooltip.seed_bag_scrolling": "Shift + Scroll to change sorting modes",
-  "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, I will lose track of my seeds.",
-  "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps I should try enchanting it first.",
+  "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, you will lose track of my seeds.",
+  "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps you should try enchanting it first.",
 
   "agricraft.tooltip.sneak_info": "(Hold <Sneak> for more info)",
 
@@ -159,7 +159,7 @@
   "agricraft.tooltip.gene.animal_attractant.rabbit": "This plant might attract the attention of rabbits",
   "agricraft.tooltip.gene.animal_attractant.sheep": "This plant might attract the attention of sheep",
   "agricraft.tooltip.gene.animal_attractant.turtle": "This plant might attract the attention of turtles",
-
+  
   "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
   "agricraft.message.trowel_plant": "There already is a plant here.",
