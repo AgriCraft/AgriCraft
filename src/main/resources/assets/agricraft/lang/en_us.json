@@ -159,7 +159,8 @@
   "agricraft.tooltip.gene.animal_attractant.rabbit": "This plant might attract the attention of rabbits",
   "agricraft.tooltip.gene.animal_attractant.sheep": "This plant might attract the attention of sheep",
   "agricraft.tooltip.gene.animal_attractant.turtle": "This plant might attract the attention of turtles",
-  
+
+  "agricraft.message.analyzer_view_blocked": "I can not observe the seed like this, the view is obstructed.",
   "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
   "agricraft.message.trowel_plant": "There already is a plant here.",

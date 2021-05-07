@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -24,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -191,6 +193,10 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
             // On the client, inspect the genome
             if(world.isRemote()) {
                 if(!analyzer.isObserved()) {
+                    if(this.isViewBlocked(world, pos, ORIENTATION.fetch(state))) {
+                        player.sendMessage(AgriToolTips.MSG_ANALYZER_VIEW_BLOCKED, Util.DUMMY_UUID);
+                        return ActionResultType.FAIL;
+                    }
                     analyzer.setObserving(true);
                 }
             }
@@ -218,6 +224,18 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                 }
             }
         }
+    }
+
+    protected boolean isViewBlocked(World world, BlockPos pos, Direction orientation) {
+        BlockPos up = pos.up();
+        if(!world.isAirBlock(up)) {
+            return true;
+        }
+        BlockPos front = pos.offset(orientation);
+        if(!world.isAirBlock(front)) {
+            return true;
+        }
+        return !world.isAirBlock(front.up());
     }
 
     @Override
