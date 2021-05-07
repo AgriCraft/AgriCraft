@@ -17,6 +17,8 @@ import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.IngameMenuScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,6 +32,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.event.TickEvent;
@@ -376,6 +379,25 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             // If this is active, we do not want any jumping or sneaking
             event.getMovementInput().sneaking = false;
             event.getMovementInput().jump = false;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public void onGuiOpened(GuiOpenEvent event) {
+        // Check if the handler is active
+        if(this.isActive() && event.getGui() != null) {
+            // Allow chatting
+            if(event.getGui() instanceof ChatScreen) {
+                return;
+            }
+            // Stop observing
+            ModuleDynamicCamera.getInstance().stopObserving();
+            // Cancel the event in case of pause
+            if(event.getGui() instanceof IngameMenuScreen) {
+                event.setResult(Event.Result.DENY);
+                event.setCanceled(true);
+            }
         }
     }
 
