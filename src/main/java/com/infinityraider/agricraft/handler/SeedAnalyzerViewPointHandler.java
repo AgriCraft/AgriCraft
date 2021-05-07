@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.util.AnimatedScrollPosition;
+import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -44,6 +46,7 @@ public class SeedAnalyzerViewPointHandler {
                 (int) AgriApi.getGeneRegistry().stream().filter(gene -> !gene.isHidden()).count());
         this.seedAnimator = new SeedAnimator();
     }
+
     public int getScrollDuration() {
         return this.scrollDuration;
     }
@@ -64,6 +67,7 @@ public class SeedAnalyzerViewPointHandler {
         this.active = active;
         this.getScrollPosition().reset();
         this.getSeedAnimator().onActivation(active);
+        PlayerAngleLocker.storePlayerAngles();
     }
 
     public void setObserved(boolean observed) {
@@ -110,6 +114,8 @@ public class SeedAnalyzerViewPointHandler {
                     this.getScrollPosition().tick();
                 }
             }
+            // Force player orientation
+            PlayerAngleLocker.forcePlayerAngles();
         }
     }
 
@@ -123,6 +129,28 @@ public class SeedAnalyzerViewPointHandler {
             // If this is active, we do not want any other scroll behaviour
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public void onMouseClick(InputEvent.RawMouseEvent event) {
+        // Check if the handler is active
+        if(this.isActive()) {
+            // If this is active, we do not want any click behaviour
+            event.setResult(Event.Result.DENY);
+            event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public void onMovement(InputUpdateEvent event) {
+        // Check if the handler is active
+        if(this.isActive()) {
+            // If this is active, we do not want any jumping or sneaking
+            event.getMovementInput().sneaking = false;
+            event.getMovementInput().jump = false;
         }
     }
 

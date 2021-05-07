@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.network.MessagePlantResearched;
+import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
@@ -30,6 +31,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -206,6 +208,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public void onCameraActivated() {
+        PlayerAngleLocker.storePlayerAngles();
         this.observerStart = this.getObserver().getPositionVec();
     }
 
@@ -316,6 +319,8 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 // Stop observing
                 ModuleDynamicCamera.getInstance().stopObserving();
             }
+            // Force player orientation
+            PlayerAngleLocker.forcePlayerAngles();
         }
         // Tick animation timer
         this.openingCounterPrev = this.openingCounter;
@@ -348,6 +353,17 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             // If this is active, we do not want any other scroll behaviour
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public void onMovement(InputUpdateEvent event) {
+        // Check if the handler is active
+        if(this.isActive()) {
+            // If this is active, we do not want any jumping or sneaking
+            event.getMovementInput().sneaking = false;
+            event.getMovementInput().jump = false;
         }
     }
 
