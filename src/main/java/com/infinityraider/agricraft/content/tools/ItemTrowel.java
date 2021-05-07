@@ -138,6 +138,8 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
             if (player != null) {
                 player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUniqueID());
             }
+        } else if(crop.isCrossCrop()) {
+            return ActionResultType.FAIL;
         } else {
             if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
                 if (crop.hasPlant()) {
@@ -175,6 +177,9 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     protected ActionResultType tryPlantOnCropSticks(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
         if(crop.world() == null || crop.world().isRemote()) {
             return ActionResultType.PASS;
+        }
+        if(crop.isCrossCrop()) {
+            return ActionResultType.FAIL;
         }
         if (this.hasPlant(stack)) {
             if (crop.hasCropSticks()) {
