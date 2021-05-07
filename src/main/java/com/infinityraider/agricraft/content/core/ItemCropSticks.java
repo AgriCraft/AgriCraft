@@ -14,13 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ItemCropSticks extends BlockItemBase {
     private final CropStickVariant variant;
@@ -49,25 +49,33 @@ public class ItemCropSticks extends BlockItemBase {
             return ActionResultType.PASS;
         }
 
-        // Calculate the target position.
+        // Fetch target pos, tile, and state
         BlockPos pos = context.getPos();
-        Direction side = context.getFace();
+        TileEntity tile = world.getTileEntity(pos);
+        BlockState state = world.getBlockState(pos);
 
         // Try placing on same block
-        if(this.canPlaceCropSticksOnPlant(world, pos)) {
-            // On plant
-            return this.placeCropSticksOnPlant(world, pos, context.getPlayer(), context.getHand());
+        if(tile instanceof TileEntityCropPlant) {
+            // Place on existing plant
+            return this.placeCropSticksOnPlant(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropPlant) tile, state);
+        } else if(tile instanceof TileEntityCropSticks) {
+            // Make cross crop
+            return this.tryMakeCrossCrop(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropSticks) tile);
         }
 
-        // Try placing on block above
-        final BlockPos cropPos = pos.offset(side);
-        BlockState above = world.getBlockState(cropPos);
-        if (above.isAir(world, cropPos) || above.getFluidState().getFluid() == Fluids.WATER) {
-            // On soil
-            return this.placeCropSticksOnSoil(world, cropPos, new BlockItemUseContext(context));
-        } else if(this.canPlaceCropSticksOnPlant(world, cropPos)) {
-            // On plant
-            return this.placeCropSticksOnPlant(world, cropPos, context.getPlayer(), context.getHand());
+        // Fetch pos, tile, and state above
+        pos = pos.offset(context.getFace());
+        tile = world.getTileEntity(pos);
+        state = world.getBlockState(pos);
+        if (state.isAir(world, pos) || state.getFluidState().getFluid() == Fluids.WATER) {
+            // Place on soil
+            return this.placeCropSticksOnSoil(world, pos, new BlockItemUseContext(context));
+        } else if(tile instanceof TileEntityCropPlant) {
+            // Place on existing plant
+            return this.placeCropSticksOnPlant(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropPlant) tile, state);
+        } else if(tile instanceof TileEntityCropSticks) {
+            // Make cross crop
+            return this.tryMakeCrossCrop(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropSticks) tile);
         }
         return ActionResultType.FAIL;
     }
@@ -89,34 +97,17 @@ public class ItemCropSticks extends BlockItemBase {
         }
 
         // Remove the crop used from the stack.
-        PlayerEntity player = context.getPlayer();
-        if(player != null) {
-            ItemStack stack = player.getHeldItem(context.getHand());
-            if(!player.isCreative()) {
-                stack.shrink(1);
-            }
-        }
+        this.consumeItem(context.getPlayer(), context.getHand());
 
         // Play placement sound.
         this.playPlacementSound(world, pos);
 
         // Action was a success.
         return ActionResultType.SUCCESS;
-
     }
 
-    protected boolean canPlaceCropSticksOnPlant(World world, BlockPos pos) {
-        // Check the block state
-        BlockState state = world.getBlockState(pos);
-        TileEntity tile = world.getTileEntity(pos);
-        return (state.getBlock() instanceof BlockCropPlant) && (tile instanceof TileEntityCropPlant);
-    }
-
-    protected ActionResultType placeCropSticksOnPlant(World world, BlockPos pos, PlayerEntity player, Hand hand) {
-        // Fetch state and tile
-        TileEntityCropPlant plant = (TileEntityCropPlant) world.getTileEntity(pos);
-        BlockState state = world.getBlockState(pos);
-
+    protected ActionResultType placeCropSticksOnPlant(World world, BlockPos pos, @Nullable PlayerEntity player, Hand hand,
+                                                      TileEntityCropPlant plant, BlockState state) {
         // Attempt to convert to crop sticks
         BlockState newState = this.getVariant().getBlock().getDefaultState();
         newState = BlockCropBase.PLANT.mimic(state, newState);
@@ -134,7 +125,27 @@ public class ItemCropSticks extends BlockItemBase {
         // Mimic plant and weed
         ((TileEntityCropSticks) tile).mimicFrom(plant);
 
-        // Remove the crop used from the stack.
+        // Remove the crop used from the stack
+        this.consumeItem(player, hand);
+
+        // Play placement sound.
+        this.playPlacementSound(world, pos);
+
+        // Action was a success.
+        return ActionResultType.SUCCESS;
+    }
+
+    protected ActionResultType tryMakeCrossCrop(World world, BlockPos pos,  @Nullable PlayerEntity player, Hand hand,
+                                                TileEntityCropSticks crop) {
+        if(!crop.hasPlant() && !crop.hasWeeds() & !crop.isCrossCrop()) {
+            crop.setCrossCrop(true);
+            this.consumeItem(player, hand);
+            this.playPlacementSound(world, pos);
+        }
+        return ActionResultType.FAIL;
+    }
+
+    protected void consumeItem(@Nullable PlayerEntity player, Hand hand) {
         if(player != null) {
             ItemStack stack = player.getHeldItem(hand);
             if(!player.isCreative()) {
@@ -142,11 +153,6 @@ public class ItemCropSticks extends BlockItemBase {
             }
         }
 
-        // Play placement sound.
-        this.playPlacementSound(world, pos);
-
-        // Action was a success.
-        return ActionResultType.SUCCESS;
     }
 
     protected void playPlacementSound(World world, BlockPos pos) {
