@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -38,8 +39,9 @@ public class ItemCropSticks extends BlockItemBase {
         super.onUse(world, entity, stack, count);
     }
 
-    @Override
     @Nonnull
+    @Override
+    @SuppressWarnings("deprecation")
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
         // Skip if remote.
         World world = context.getWorld();
@@ -59,7 +61,8 @@ public class ItemCropSticks extends BlockItemBase {
 
         // Try placing on block above
         final BlockPos cropPos = pos.offset(side);
-        if (world.isAirBlock(cropPos)) {
+        BlockState above = world.getBlockState(cropPos);
+        if (above.isAir(world, cropPos) || above.getFluidState().getFluid() == Fluids.WATER) {
             // On soil
             return this.placeCropSticksOnSoil(world, cropPos, new BlockItemUseContext(context));
         } else if(this.canPlaceCropSticksOnPlant(world, cropPos)) {
