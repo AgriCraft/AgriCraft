@@ -460,5 +460,11 @@
   "agricraft.plant.botania_yellow_flower.seed": "Mystical Yellow Seeds",
   "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed.",
 
-  "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3."
+  "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3.",
+
+  "agricraft.plant.farmersdelight_cabbage.desc" : "Full of vitamin K",
+  "agricraft.plant.farmersdelight_onion.desc" : "Goes well with pickles",
+  "agricraft.plant.farmersdelight_rice.desc" : "Flood the fields",
+  "agricraft.plant.farmersdelight_tomato.desc" : "A red and plump fruit"
+
 }
