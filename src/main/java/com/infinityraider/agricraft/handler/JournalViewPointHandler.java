@@ -123,10 +123,17 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     public void setOffHandActive(boolean status) {
         this.offHandActive = status;
+        this.mainHandActive = status;
+        if(status) {
+            PlayerAngleLocker.storePlayerAngles();
+        }
     }
 
     public void setMainHandActive(boolean status) {
         this.mainHandActive = status;
+        if(status) {
+            PlayerAngleLocker.storePlayerAngles();
+        }
     }
 
     public boolean isActive() {
@@ -211,7 +218,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public void onCameraActivated() {
-        PlayerAngleLocker.storePlayerAngles();
         this.observerStart = this.getObserver().getPositionVec();
     }
 
