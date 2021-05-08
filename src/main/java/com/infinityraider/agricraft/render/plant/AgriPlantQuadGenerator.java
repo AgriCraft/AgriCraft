@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.render.plant;
 
 import com.agricraft.agricore.plant.AgriRenderType;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
@@ -9,13 +10,14 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -69,6 +71,12 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
             default:
                 return this.bakeQuadsForDefaultPattern(direction, sprite, yOffset);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public List<BakedQuad> fetchQuads(@Nonnull ResourceLocation location) {
+        IBakedModel model = ModelLoader.instance().getBakedModel(location, ModelRotation.X0_Y0, this::getSprite);
+        return model == null ? ImmutableList.of() : model.getQuads(null, null, this.getRandom());
     }
 
     @Nonnull

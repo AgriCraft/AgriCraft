@@ -246,13 +246,18 @@ public class JsonPlant implements IAgriPlant {
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
         final int height = this.plant.getGrowthStageHeight(index);
         ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
-        int layer = 0;
-        int layers = (int) Math.ceil(height/16.0);
-        while((16*layer) < height) {
-            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[layer]);
-            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
-                    this, stage, face, rl, layers - layer - 1, this.plant.getTexture().getRenderType()));
-            layer++;
+        if(this.plant.getTexture().useModels()) {
+            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[1]);
+            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().fetchQuads(rl));
+        } else {
+            int layer = 0;
+            int layers = (int) Math.ceil(height / 16.0);
+            while ((16 * layer) < height) {
+                ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[layer]);
+                listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
+                        this, stage, face, rl, layers - layer - 1, this.plant.getTexture().getRenderType()));
+                layer++;
+            }
         }
         return listBuilder.build();
     }
