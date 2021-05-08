@@ -21,6 +21,7 @@ import com.infinityraider.agricraft.reference.Reference;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import net.minecraftforge.fml.ModList;
@@ -29,9 +30,17 @@ import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 
 public final class CoreHandler {
-
     public static final Pattern JSON_FILE_PATTERN = Pattern.compile(".*\\.json", Pattern.CASE_INSENSITIVE);
     public static final Pattern AGRI_FOLDER_PATTERN = Pattern.compile("json/defaults/.*", Pattern.CASE_INSENSITIVE);
+    public static final Predicate<String> MOD_FILTER = (path) -> {
+        String id = path.substring(path.indexOf("json/defaults/") + 14);
+        id = id.substring(0, id.indexOf("/"));
+        if(id.equalsIgnoreCase("vanilla") || id.equalsIgnoreCase("resource")) {
+            return true;
+        }
+        id = id.replace("mod_", "");
+        return  ModList.get().isLoaded(id);
+    };
 
     private static Path configDir;
     private static Path jsonDir;
@@ -64,8 +73,8 @@ public final class CoreHandler {
         config = AgriCraft.instance.getConfig();
 
         // Setup Plant Dir.
-        jsonDir = configDir.resolve("json");
-        defaultDir = jsonDir.resolve("defaults");
+        jsonDir = getConfigDir().resolve("json");
+        defaultDir = getJsonDir().resolve("defaults");
 
         // Initialize AgriCore
         AgriCore.init(new ModLogger(), new ModValidator(), new ModConverter(), AgriCraft.instance.getConfig());
@@ -75,7 +84,7 @@ public final class CoreHandler {
             ResourceHelper.copyResources(
                     ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
                     JSON_FILE_PATTERN.asPredicate(),
-                    AGRI_FOLDER_PATTERN.asPredicate(),
+                    AGRI_FOLDER_PATTERN.asPredicate().and(MOD_FILTER),
                     configDir::resolve,
                     false);
         }
@@ -169,6 +178,7 @@ public final class CoreHandler {
             AgriCore.getLogger("agricraft").info(" - {0}", weed.getId());
         }
     }
+
 
     private static void initMutations() {
         // Announce Progress
