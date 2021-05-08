@@ -141,6 +141,7 @@ public class ItemCropSticks extends BlockItemBase {
             crop.setCrossCrop(true);
             this.consumeItem(player, hand);
             this.playPlacementSound(world, pos);
+            return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
     }

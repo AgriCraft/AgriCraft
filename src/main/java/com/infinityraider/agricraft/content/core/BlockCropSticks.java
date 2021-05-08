@@ -217,7 +217,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                 if (!player.isCreative()) {
                     player.getHeldItem(hand).shrink(1);
                 }
-                return ActionResultType.CONSUME;
+                return ActionResultType.SUCCESS;
             }
         }
         // Planting from seed (copying the stats)
