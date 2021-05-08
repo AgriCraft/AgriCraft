@@ -45,6 +45,11 @@ public interface IAgriConfig {
      */
 
     /**
+     * @return true if AgriCraft should generate missing default jsons
+     */
+    boolean generateMissingDefaultJsons();
+
+    /**
      * @return if crops may be planted off crop sticks
      */
     boolean allowPlantingOutsideCropSticks();

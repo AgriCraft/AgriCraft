@@ -71,12 +71,14 @@ public final class CoreHandler {
         AgriCore.init(new ModLogger(), new ModValidator(), new ModConverter(), AgriCraft.instance.getConfig());
 
         // Transfer Defaults
-        ResourceHelper.copyResources(
-                ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
-                JSON_FILE_PATTERN.asPredicate(),
-                AGRI_FOLDER_PATTERN.asPredicate(),
-                configDir::resolve,
-                false);
+        if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {
+            ResourceHelper.copyResources(
+                    ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
+                    JSON_FILE_PATTERN.asPredicate(),
+                    AGRI_FOLDER_PATTERN.asPredicate(),
+                    configDir::resolve,
+                    false);
+        }
 
         // Load the JSON files.
         AgriCore.getLogger("agricraft").info("Attempting to read AgriCraft JSONs!");

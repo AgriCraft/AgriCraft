@@ -22,6 +22,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableLogging;
 
         // core
+        private final ForgeConfigSpec.ConfigValue<Boolean> generateMissingDefaults;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
@@ -87,6 +88,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.pop();
 
             builder.push("core");
+            this.generateMissingDefaults = builder.comment("Set to false to disable the generation of missing default jsons")
+                    .define("Generate missing default JSONs", true);
             this.enableJsonWriteBack = builder.comment("Set to false to disable automatic JSON writeback.")
                     .define("Enable JSON write back", true);
             this.plantOffCropSticks = builder.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
@@ -413,6 +416,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public ModConfig.Type getSide() {
             return ModConfig.Type.COMMON;
+        }
+
+        @Override
+        public boolean generateMissingDefaultJsons() {
+            return this.generateMissingDefaults.get();
         }
 
         @Override
