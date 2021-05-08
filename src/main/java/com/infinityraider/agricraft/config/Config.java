@@ -81,124 +81,124 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             super();
 
             builder.push("debug");
-            this.debug = builder.comment("Set to true to enable debug mode")
+            this.debug = builder.comment("\nSet to true to enable debug mode")
                     .define("debug", false);
-            this.enableLogging = builder.comment("Set to true to enable logging on the ${log} channel.")
+            this.enableLogging = builder.comment("\nSet to true to enable logging on the ${log} channel.")
                     .define("Enable Logging", true);
             builder.pop();
 
             builder.push("core");
-            this.generateMissingDefaults = builder.comment("Set to false to disable the generation of missing default jsons")
+            this.generateMissingDefaults = builder.comment("\nSet to false to disable the generation of missing default jsons")
                     .define("Generate missing default JSONs", true);
-            this.enableJsonWriteBack = builder.comment("Set to false to disable automatic JSON writeback.")
+            this.enableJsonWriteBack = builder.comment("\nSet to false to disable automatic JSON writeback.")
                     .define("Enable JSON write back", true);
-            this.plantOffCropSticks = builder.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
+            this.plantOffCropSticks = builder.comment("\nSet to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
-            this.onlyFertileCropsSpread = builder.comment("Set to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
+            this.onlyFertileCropsSpread = builder.comment("\nSet to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
                     "(note that this may cause issues with obtaining some specific plants)")
                     .define("Only fertile crops mutate", false);
-            this.fertilizerMutations = builder.comment("Set to false if to disable triggering of mutations by using fertilizers on a cross crop.")
+            this.fertilizerMutations = builder.comment("\nSet to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
-            this.disableVanillaFarming = builder.comment("Set to true to disable vanilla farming, meaning you can only grow plants on crops.")
+            this.disableVanillaFarming = builder.comment("\nSet to true to disable vanilla farming, meaning you can only grow plants on crops.")
                     .define("Disable vanilla farming", true);
-            this.growthMultiplier = builder.comment("This is a global growth rate multiplier for crops planted on crop sticks.")
+            this.growthMultiplier = builder.comment("\nThis is a global growth rate multiplier for crops planted on crop sticks.")
                     .defineInRange("Growth rate multiplier", 1.0, 0.0, 3.0);
-            this.onlyMatureSeedDrops = builder.comment("Set this to true to make only mature crops drop seeds (to encourage trowel usage).")
+            this.onlyMatureSeedDrops = builder.comment("\nSet this to true to make only mature crops drop seeds (to encourage trowel usage).")
                     .define("Only mature crops drop seeds", false);
-            this.overwriteGrassDrops = builder.comment("Determines if AgriCraft should completely override grass drops with those configured in the JSON files.")
+            this.overwriteGrassDrops = builder.comment("\nDetermines if AgriCraft should completely override grass drops with those configured in the JSON files.")
                     .define("Overwrite Grass Drops", true);
-            this.disableWeeds = builder.comment("Set to true to completely disable the spawning of weeds")
+            this.disableWeeds = builder.comment("\nSet to true to completely disable the spawning of weeds")
                     .define("Disable weeds", false);
-            this.matureWeedsKillPlants = builder.comment("Set to false to disable mature weeds killing plants")
+            this.matureWeedsKillPlants = builder.comment("\nSet to false to disable mature weeds killing plants")
                     .define("Mature weeds kill plants", true);
-            this.weedSpreading = builder.comment("Set to false to disable the spreading of weeds")
+            this.weedSpreading = builder.comment("\nSet to false to disable the spreading of weeds")
                     .define("Weeds can spread", true);
-            this.weedsDestroyCropSticks = builder.comment("Set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage).")
+            this.weedsDestroyCropSticks = builder.comment("\nSet this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage).")
                     .define("Weeds destroy crop sticks", false);
-            this.rakingDropsItems = builder.comment("Set to false if you wish to disable drops from raking weeds.")
+            this.rakingDropsItems = builder.comment("\nSet to false if you wish to disable drops from raking weeds.")
                     .define("Raking weeds drops items", true);
-            this.seedCompostValue = builder.comment("Defines the seed compost value, if set to zero, seeds will not be compostable")
+            this.seedCompostValue = builder.comment("\nDefines the seed compost value, if set to zero, seeds will not be compostable")
                     .defineInRange("Seed compost value", 0.3, 0, 1.0);
-            this.animalAttraction = builder.comment("Set to false to disable certain animals eating certain crops (prevents auto-breeding)")
+            this.animalAttraction = builder.comment("\nSet to false to disable certain animals eating certain crops (prevents auto-breeding)")
                     .define("animal attracting crops", true);
-            this.seedBagEnchantCost = builder.comment("Enchantment cost in player levels to enchant the seed bag")
+            this.seedBagEnchantCost = builder.comment("\nEnchantment cost in player levels to enchant the seed bag")
                     .defineInRange("seed bag enchant cost", 10, 0, 30);
             builder.pop();
 
             builder.push("stats");
-            this.statTraitLogic = builder.comment("Logic to calculate stats from gene pairs, accepted values are: \"min\", \"min\", and \"mean\"")
+            this.statTraitLogic = builder.comment("\nLogic to calculate stats from gene pairs, accepted values are: \"min\", \"min\", and \"mean\"")
                     .defineInList("Stat calculation logic", "max", GeneStat.getLogicOptions());
-            this.minGain = builder.comment("Minimum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minGain = builder.comment("\nMinimum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Gain stat min", 1, 1, 10);
-            this.maxGain = builder.comment("Maximum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxGain = builder.comment("\nMaximum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Gain stat max", 10, 1, 10);
-            this.hiddenGain = builder.comment("Set to true to hide the Gain stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenGain = builder.comment("\nSet to true to hide the Gain stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Gain stat", false);
-            this.minGrowth = builder.comment("Minimum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minGrowth = builder.comment("\nMinimum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Growth stat min", 1, 1, 10);
-            this.maxGrowth = builder.comment("Maximum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxGrowth = builder.comment("\nMaximum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Growth stat max", 10, 1, 10);
-            this.hiddenGrowth = builder.comment("Set to true to hide the Growth stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenGrowth = builder.comment("\nSet to true to hide the Growth stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Growth stat", false);
-            this.minStrength = builder.comment("Minimum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minStrength = builder.comment("\nMinimum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Strength stat min", 1, 1, 10);
-            this.maxStrength = builder.comment("Maximum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxStrength = builder.comment("\nMaximum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Strength stat max", 10, 1, 10);
-            this.hiddenStrength = builder.comment("Set to true to hide the Strength stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenStrength = builder.comment("\nSet to true to hide the Strength stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Strength stat", false);
-            this.minResistance = builder.comment("Minimum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minResistance = builder.comment("\nMinimum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Resistance stat min", 1, 1, 10);
-            this.maxResistance = builder.comment("Maximum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxResistance = builder.comment("\nMaximum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Resistance stat max", 10, 1, 10);
-            this.hiddenResistance = builder.comment("Set to true to hide the Resistance stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenResistance = builder.comment("\nSet to true to hide the Resistance stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Resistance stat", false);
-            this.minFertility = builder.comment("Minimum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minFertility = builder.comment("\nMinimum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Fertility stat min", 1, 1, 10);
-            this.maxFertility = builder.comment("Maximum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxFertility = builder.comment("\nMaximum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Fertility stat max", 10, 1, 10);
-            this.hiddenFertility = builder.comment("Set to true to hide the Fertility stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenFertility = builder.comment("\nSet to true to hide the Fertility stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Fertility stat", false);
-            this.minMutativity = builder.comment("Minimum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.minMutativity = builder.comment("\nMinimum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Mutativity stat min", 1, 1, 10);
-            this.maxMutativity = builder.comment("Maximum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
+            this.maxMutativity = builder.comment("\nMaximum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
                     .defineInRange("Mutativity stat max", 10, 1, 10);
-            this.hiddenMutativity = builder.comment("Set to true to hide the Mutativity stat (hidden stats will not show up in tooltips or seed analysis)\n" +
+            this.hiddenMutativity = builder.comment("\nSet to true to hide the Mutativity stat (hidden stats will not show up in tooltips or seed analysis)\n" +
                     "setting min and max equal and hiding a stat effectively disables it, with its behaviour at the defined value for min and max.")
                     .define("hide Mutativity stat", false);
 
             builder.pop();
 
             builder.push("irrigation");
-            this.tankCapacity = builder.comment("Configures the capacity (in mB) of one tank block")
+            this.tankCapacity = builder.comment("\nConfigures the capacity (in mB) of one tank block")
                     .defineInRange("Tank capacity", 8000, 1000, 40000);
-            this.channelCapacity = builder.comment("Configures the capacity (in mB) of one channel block")
+            this.channelCapacity = builder.comment("\nConfigures the capacity (in mB) of one channel block")
                     .defineInRange("Tank capacity", 50, 500, 2000);
-            this.rainFillRate = builder.comment("Configures the rate (in mB/t) at which tanks accrue water while raining (0 disables filling from rainfall)")
+            this.rainFillRate = builder.comment("\nConfigures the rate (in mB/t) at which tanks accrue water while raining (0 disables filling from rainfall)")
                     .defineInRange("Rain fill rate", 5, 0, 50);
-            this.sprinkleInterval = builder.comment("The minimum number of ticks between successive starts of irrigation.")
+            this.sprinkleInterval = builder.comment("\nThe minimum number of ticks between successive starts of irrigation.")
                     .defineInRange("Sprinkler growth interval", 40, 1, 1200);
-            this.sprinkleGrowthChance = builder.comment("Every loop, each unobscured plant in sprinkler range has this chance to get a growth tick from the sprinkler.")
+            this.sprinkleGrowthChance = builder.comment("\nEvery loop, each unobscured plant in sprinkler range has this chance to get a growth tick from the sprinkler.")
                     .defineInRange("Sprinkler growth chance", 0.2, 0, 1.0);
-            this.sprinklerWaterConsumption = builder.comment("Defined in terms of mB per second. The irrigation loop progress will pause when there is insufficient water.")
+            this.sprinklerWaterConsumption = builder.comment("\nDefined in terms of mB per second. The irrigation loop progress will pause when there is insufficient water.")
                     .defineInRange("Sprinkler water usage", 10, 0, 1000);
             builder.pop();
 
             builder.push("decoration");
-            this.climbableGrate = builder.comment("When true, entities will be able to climb on grates")
+            this.climbableGrate = builder.comment("\nWhen true, entities will be able to climb on grates")
                     .define("Grates always climbable", true);
             builder.pop();
 
             builder.push("compat");
-            this.progressiveJEI = builder.comment("Set to false if you want all mutations to be shown in JEI all the time instead of having to research them")
+            this.progressiveJEI = builder.comment("\nSet to false if you want all mutations to be shown in JEI all the time instead of having to research them")
                     .define("Progressive JEI", true);
-            this.seasonLogic = builder.comment("Defines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
+            this.seasonLogic = builder.comment("\nDefines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
-            this.topControlledByMagnifyingGlass = builder.comment("Defines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
+            this.topControlledByMagnifyingGlass = builder.comment("\nDefines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
                     .define("TOP only with magnifying glass", true);
             builder.pop();
         }
@@ -465,23 +465,23 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             super(builder);
 
             builder.push("debug");
-            this.registryTooltips = builder.comment("Set to true to add Registry information to itemstack tooltips (Client only)")
+            this.registryTooltips = builder.comment("\nSet to true to add Registry information to itemstack tooltips (Client only)")
                     .define("Registry tooltips", false);
-            this.tagTooltips = builder.comment("Set to true to add Tag information to itemstack tooltips (Client only)")
+            this.tagTooltips = builder.comment("\nSet to true to add Tag information to itemstack tooltips (Client only)")
                     .define("Tag tooltips", false);
-            this.nbtTooltips = builder.comment("Set to true to add NBT information to itemstack tooltips (Client only)")
+            this.nbtTooltips = builder.comment("\nSet to true to add NBT information to itemstack tooltips (Client only)")
                     .define("NBT tooltips", false);
             builder.pop();
 
             builder.push("core");
-            this.vanillaFarmingWarning = builder.comment("Set to false to warn that vanilla farming is disabled when trying to plant vanilla plant (Client only)")
+            this.vanillaFarmingWarning = builder.comment("\nSet to false to warn that vanilla farming is disabled when trying to plant vanilla plant (Client only)")
                     .define("Show Disabled Vanilla Farming Warning", true);
-            this.statFormat = builder.comment("This defines how to display the stats of plants (Client only)")
+            this.statFormat = builder.comment("\nThis defines how to display the stats of plants (Client only)")
                     .define("Stat Format", TextFormatting.GREEN + "- {0}: [{1}/{2}]");
             builder.pop();
 
             builder.push("irrigation");
-            this.disableParticles = builder.comment("Set to true to disable particles (Client only)")
+            this.disableParticles = builder.comment("\nSet to true to disable particles (Client only)")
                     .define("Disable particles", false);
             builder.pop();
         }
