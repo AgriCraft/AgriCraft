@@ -133,7 +133,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @Deprecated
     @SuppressWarnings("deprecation")
     public boolean canProvidePower(BlockState state) {
-        return true;
+        return PLANT.fetch(state);
     }
 
     @Override
