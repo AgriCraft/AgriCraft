@@ -293,6 +293,11 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
+    public int getRedstonePower(@Nonnull IAgriCrop crop) {
+        return this.callbacks.stream().mapToInt(callback -> callback.getRedstonePower(crop)).max().orElse(0);
+    }
+
+    @Override
     public void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
         this.callbacks.forEach(callback -> callback.onPlanted(crop, entity));
     }

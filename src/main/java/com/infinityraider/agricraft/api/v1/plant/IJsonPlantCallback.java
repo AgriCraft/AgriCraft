@@ -24,6 +24,15 @@ public interface IJsonPlantCallback {
     String getId();
 
     /**
+     * Returns the redstone power emitted when this callback is present
+     * @param crop the crop on which a plant with this callback is present
+     * @return the redstone power emitted by the crop
+     */
+    default int getRedstonePower(@Nonnull IAgriCrop crop) {
+        return 0;
+    }
+
+    /**
      * Callback for custom actions right after this plant has been planted on crop sticks,
      * does nothing by default, but can be overridden for special behaviours
      * @param crop the crop on which this plant was planted

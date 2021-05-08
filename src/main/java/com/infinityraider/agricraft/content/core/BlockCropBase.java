@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -126,6 +127,29 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @SuppressWarnings("deprecation")
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         this.getCrop(world, pos).ifPresent(crop -> crop.getPlant().onEntityCollision(crop, entity));
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public boolean canProvidePower(BlockState state) {
+        return true;
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public int getWeakPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        return this.getStrongPower(state, world, pos, side);
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public int getStrongPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        return PLANT.fetch(state)
+                ? this.getCrop(world, pos).map(crop -> crop.getPlant().getRedstonePower(crop)).orElse(0)
+                : 0;
     }
 
     @Override

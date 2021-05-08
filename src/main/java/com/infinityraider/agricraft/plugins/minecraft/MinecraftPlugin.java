@@ -19,13 +19,15 @@ import javax.annotation.Nonnull;
 @AgriPlugin
 @SuppressWarnings("unused")
 public class MinecraftPlugin implements IAgriPlugin {
-    public final JsonPlantCallback thorns;
     public final JsonPlantCallback brightness;
+    public final JsonPlantCallback redstone;
+    public final JsonPlantCallback thorns;
     public final JsonPlantCallback withering;
 
     public MinecraftPlugin() {
-        this.thorns = JsonPlantCallBackThorns.getInstance();
         this.brightness = JsonPlantCallBackBrightness.getInstance();
+        this.redstone = JsonPlantCallBackRedstone.getInstance();
+        this.thorns = JsonPlantCallBackThorns.getInstance();
         this.withering = JsonPlantCallBackWithering.getInstance();
     }
 

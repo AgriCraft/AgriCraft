@@ -281,6 +281,16 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     }
 
     /**
+     * Returns the redstone power this plant outputs at the given crop
+     * In vanilla Agricraft this is only used by the redstone resource crop
+     * @param crop the crop on which this is planted
+     * @return the redstone power emitted (both strong and weak)
+     */
+    default int getRedstonePower(@Nonnull IAgriCrop crop) {
+        return 0;
+    }
+
+    /**
      * Callback for custom actions right after this plant has been planted on crop sticks,
      * does nothing by default, but can be overridden for special behaviours
      * @param crop the crop on which this plant was planted
