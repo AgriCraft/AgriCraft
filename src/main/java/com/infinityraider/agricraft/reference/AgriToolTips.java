@@ -39,7 +39,7 @@ public class AgriToolTips {
     public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
     public static final ITextComponent CLIPPER = new TranslationTextComponent("agricraft.tooltip.clipper");
     public static final ITextComponent JOURNAL_USE_1 = new TranslationTextComponent("agricraft.tooltip.journal_use_1");
-    public static final ITextComponent JOURNAL_USE_2 = new TranslationTextComponent("agricraft.tooltip.journal_use_1");
+    public static final ITextComponent JOURNAL_USE_2 = new TranslationTextComponent("agricraft.tooltip.journal_use_2");
     public static final ITextComponent JOURNAL_SEEDS = new TranslationTextComponent("agricraft.tooltip.journal_seeds");
     public static final ITextComponent MAGNIFYING_GLASS = new TranslationTextComponent("agricraft.tooltip.magnifying_glass");
     public static final ITextComponent RAKE = new TranslationTextComponent("agricraft.tooltip.rake");
