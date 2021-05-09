@@ -188,6 +188,14 @@ dependencies {
     compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
     runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
 
+    //Create
+    compileOnly fg.deobf("curse.maven:create-328085:3278516")
+    //runtimeOnly fg.deobf("curse.maven:create-328085:3278516")
+
+    //Industrial Foregoing
+    compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
+    //runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
+
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
     runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")

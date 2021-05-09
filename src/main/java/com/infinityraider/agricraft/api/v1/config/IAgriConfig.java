@@ -315,4 +315,14 @@ public interface IAgriConfig {
      */
     boolean doesMagnifyingGlassControlTOP();
 
+    /**
+     * @return if Create compatibility is enabled
+     */
+    boolean enableCreateCompat();
+
+    /**
+     * @return if Industrial Foregoing compatibility is enabled
+     */
+    boolean enableIndustrialForegoingCompat();
+
 }

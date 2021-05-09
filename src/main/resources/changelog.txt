@@ -41,6 +41,8 @@ Changelog
 - ADDED: Default jsons for Immersive Engineering (thanks Nelson Brichau)
 - ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
 - ADDED: Default jsons for Thermal Cultivation (thanks Nelson Brichau)
+- ADDED: Compatibility with Create's Mechanical Harvester
+- ADDED: Compatibility for Industrial Foregoing harvesting
 
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].
