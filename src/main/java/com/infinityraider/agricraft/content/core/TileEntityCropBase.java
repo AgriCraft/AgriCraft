@@ -41,6 +41,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -335,11 +336,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     protected void executePlantGrowthTick() {
         if (!this.getGrowthStage().isFinal()) {
+            BlockState state = this.getBlockState();
             if (this.calculateGrowthRate() > this.getRandom().nextDouble()
-                    && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Pre(this))) {
+                    && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Pre(this))
+                    && !MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Pre(this.getWorld(), this.getPos(), state))) {
                 this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
                 this.getPlant().onGrowth(this);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Post(this));
+                MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(this.getWorld(), this.getPos(), state, state));
             }
         }
     }
