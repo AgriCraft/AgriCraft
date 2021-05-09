@@ -195,12 +195,12 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                 if(!analyzer.isObserved()) {
                     if(this.isViewBlocked(world, pos, ORIENTATION.fetch(state))) {
                         player.sendMessage(AgriToolTips.MSG_ANALYZER_VIEW_BLOCKED, Util.DUMMY_UUID);
-                        return ActionResultType.FAIL;
+                    } else {
+                        analyzer.setObserving(true);
                     }
-                    analyzer.setObserving(true);
                 }
             }
-            return ActionResultType.CONSUME;
+            return ActionResultType.FAIL;
         }
     }
 
