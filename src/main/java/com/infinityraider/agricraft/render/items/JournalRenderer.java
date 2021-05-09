@@ -188,7 +188,7 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
 
         if(openProgress > 0) {
             transforms.push();
-            transforms.translate(1.0F / 32.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 + 0.001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
+            transforms.translate(1.0F / 32.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 + 0.00001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
             transforms.rotate(ROTATION_RIGHT);
 
             if (flipProgress != 0) {
@@ -220,7 +220,7 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
 
         if(openProgress > 0) {
             transforms.push();
-            transforms.translate((WIDTH - 0.5F) / 16.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 + 0.001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
+            transforms.translate((WIDTH - 0.5F) / 16.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 - 0.00001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
             transforms.rotate(ROTATION_LEFT);
 
             JournalViewPointHandler.getInstance().renderViewedPageLeft(this, transforms);
@@ -327,7 +327,7 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
     @Override
     public float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale) {
         transforms.push();
-        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), -0.01F);
+        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), 0F);
         float f = scale*SCALE_WIDTH/this.getPageWidth();
         transforms.scale(f, f, 1);
         // Split string
