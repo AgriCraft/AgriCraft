@@ -18,7 +18,7 @@ public class AgriHarvesterMovementBehaviour extends HarvesterMovementBehaviour {
             TileEntity tile = world.getTileEntity(pos);
             if(tile instanceof IAgriCrop) {
                 IAgriCrop crop = (IAgriCrop) tile;
-                if(crop.isMature()) {
+                if(crop.hasPlant() && crop.isMature()) {
                     crop.harvest(stack -> this.dropItem(context, stack), null);
                 }
             } else {

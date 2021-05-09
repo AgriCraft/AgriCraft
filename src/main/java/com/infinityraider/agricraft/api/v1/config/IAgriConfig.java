@@ -320,4 +320,9 @@ public interface IAgriConfig {
      */
     boolean enableCreateCompat();
 
+    /**
+     * @return if Industrial Foregoing compatibility is enabled
+     */
+    boolean enableIndustrialForegoingCompat();
+
 }

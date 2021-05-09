@@ -30,6 +30,7 @@ public abstract class Names {
         public static final String CREATE = "create";
         public static final String JEI = "jei";
         public static final String THE_ONE_PROBE = "theoneprobe";
+        public static final String INDUSTRIAL_FOREGOING = "industrialforegoing";
         public static final String SERENE_SEASONS = "sereneseasons";
     }
 

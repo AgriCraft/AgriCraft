@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.plugins.create;
+package com.infinityraider.agricraft.plugins.industrialforegoing;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
@@ -9,7 +9,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @AgriPlugin
 @SuppressWarnings("unused")
-public class CreatePlugin implements IAgriPlugin {
+public class IndustrialForegoingPlugin implements IAgriPlugin {
+    public IndustrialForegoingPlugin() {
+        if(this.isEnabled() && AgriCraft.instance.getConfig().enableIndustrialForegoingCompat()) {
+            IndustrialForegoingCompat.execute();
+        }
+    }
+
     @Override
     public boolean isEnabled() {
         return ModList.get().isLoaded(this.getId());
@@ -17,7 +23,7 @@ public class CreatePlugin implements IAgriPlugin {
 
     @Override
     public String getId() {
-        return Names.Mods.CREATE;
+        return Names.Mods.INDUSTRIAL_FOREGOING;
     }
 
     @Override
@@ -27,8 +33,5 @@ public class CreatePlugin implements IAgriPlugin {
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableCreateCompat()) {
-            CreateCompat.injectAgriHarvesterMovementBehaviour();
-        }
     }
 }
