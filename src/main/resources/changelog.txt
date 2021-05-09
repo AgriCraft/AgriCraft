@@ -40,6 +40,7 @@ Changelog
 - ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson Brichau)
 - ADDED: Default jsons for Immersive Engineering (thanks Nelson Brichau)
 - ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
+- ADDED: Default jsons for Thermal Cultivation (thanks Nelson Brichau)
 - ADDED: Compatibility with Create's Mechanical Harvester
 - ADDED: Compatibility for Industrial Foregoing harvesting
 

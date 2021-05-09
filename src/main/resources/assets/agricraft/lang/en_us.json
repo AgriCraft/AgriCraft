@@ -463,9 +463,27 @@
 
   "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3.",
 
-  "agricraft.plant.farmersdelight_cabbage.desc" : "Full of vitamin K",
-  "agricraft.plant.farmersdelight_onion.desc" : "Goes well with pickles",
-  "agricraft.plant.farmersdelight_rice.desc" : "Flood the fields",
-  "agricraft.plant.farmersdelight_tomato.desc" : "A red and plump fruit"
+  "agricraft.plant.farmersdelight_cabbage.desc" : "Full of vitamin K.",
+  "agricraft.plant.farmersdelight_onion.desc" : "Goes well with pickles.",
+  "agricraft.plant.farmersdelight_rice.desc" : "Flood the fields.",
+  "agricraft.plant.farmersdelight_tomato.desc" : "A red and plump fruit.",
+
+  "agricraft.plant.thermal_barley.desc": "A cereal grain which can be ground into flour or malted to make beer or whiskey.",
+  "agricraft.plant.thermal_bell_pepper.desc": "A cultivar of peppers without the spice. Commonly chopped and used in dishes.",
+  "agricraft.plant.thermal_coffee.desc": "The fruit of a coffee tree, the pit of which can be roasted, ground, and brewed to make the lifeblood of mod devs.",
+  "agricraft.plant.thermal_corn.desc": "A staple grain prized for its versatility.",
+  "agricraft.plant.thermal_eggplant.desc": "A purple, spongy fruit used in many dishes. Tends to absorb other flavors.",
+  "agricraft.plant.thermal_frost_melon.desc": "A blue cultivar of melons. Those who consume it find that even the hottest of surfaces feel icy.",
+  "agricraft.plant.thermal_green_bean.desc": "The immature seed pods of a bean plant. Can be consumed alone or cooked in various dishes.",
+  "agricraft.plant.thermal_hops.desc": "The seed cones of a flowering hop vine. Used to flavor beer.",
+  "agricraft.plant.thermal_onion.desc": "A bulbous vegetable that is often used to add flavor to a savory dish. Brings people to tears.",
+  "agricraft.plant.thermal_peanut.desc": "The seeds of a peanut plant. Often roasted, pressed into oil, or ground into peanut butter.",
+  "agricraft.plant.thermal_radish.desc": "A root vegetable with a sharp flavor, typically eaten raw or steamed.",
+  "agricraft.plant.thermal_rice.desc": "The most widely consumed staple grain in the world. Laborious to harvest.",
+  "agricraft.plant.thermal_sadiroot.desc": "A medicinal spice known for its cleansing properties. Has a distinctive aroma.",
+  "agricraft.plant.thermal_spinach.desc": "The leaves of a spinach plant. Grants sailors an increase in muscle mass.",
+  "agricraft.plant.thermal_strawberry.desc": "A sweet, red fruit used in a variety of condiments and desserts.",
+  "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
+  "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups."
 
 }
