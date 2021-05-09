@@ -128,11 +128,29 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
         return false;
     }
 
-    @Override
     @Nonnull
+    @Override
     public TextureAtlasSprite getParticleTexture() {
-        //TODO
         return this.getMissingSprite();
+    }
+
+    @Nonnull
+    @Override
+    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+        if(data.hasProperty(TileEntityCropBase.PROPERTY_PLANT) && data.hasProperty(TileEntityCropBase.PROPERTY_PLANT_GROWTH)) {
+            IAgriPlant plant = data.getData(TileEntityCropBase.PROPERTY_PLANT);
+            if(plant != null) {
+                return this.getSprite(plant.getTexturesFor(data.getData(TileEntityCropBase.PROPERTY_PLANT_GROWTH)).get(0));
+            }
+        }
+        if(data.hasProperty(TileEntityCropBase.PROPERTY_WEED) && data.hasProperty(TileEntityCropBase.PROPERTY_WEED_GROWTH)) {
+            IAgriWeed weed = data.getData(TileEntityCropBase.PROPERTY_WEED);
+            if(weed != null) {
+                return this.getSprite(weed.getTexturesFor(data.getData(TileEntityCropBase.PROPERTY_WEED_GROWTH)).get(0));
+            }
+
+        }
+        return this.getParticleTexture();
     }
 
     @Override
