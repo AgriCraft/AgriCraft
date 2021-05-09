@@ -137,7 +137,6 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     @Override
     public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
         if(this.isInGroup(group)) {
-            items.clear();
             AgriApi.getPlantRegistry()
                     .stream()
                     .map(IAgriPlant::toAgriSeed)
