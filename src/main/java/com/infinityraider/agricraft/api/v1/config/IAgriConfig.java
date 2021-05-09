@@ -315,4 +315,9 @@ public interface IAgriConfig {
      */
     boolean doesMagnifyingGlassControlTOP();
 
+    /**
+     * @return if Create compatibility is enabled
+     */
+    boolean enableCreateCompat();
+
 }

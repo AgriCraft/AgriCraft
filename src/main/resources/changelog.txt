@@ -40,6 +40,7 @@ Changelog
 - ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson Brichau)
 - ADDED: Default jsons for Immersive Engineering (thanks Nelson Brichau)
 - ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
+- ADDED: Compatibility with Create's Mechanical Harvester
 
 2.12.0a7
 - FIXED: Moving plants with trowel resets growth stage [#1231].
