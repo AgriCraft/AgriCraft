@@ -33,6 +33,7 @@ public abstract class Names {
         public static final String THE_ONE_PROBE = "theoneprobe";
         public static final String INDUSTRIAL_FOREGOING = "industrialforegoing";
         public static final String SERENE_SEASONS = "sereneseasons";
+        public static final String STRAW_GOLEM = "strawgolem";
     }
 
     public static final class Nuggets {

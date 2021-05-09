@@ -204,6 +204,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
     runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
 
+    //Straw Golems
+    compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
+    runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
 }
 
 // Delete Old Plants

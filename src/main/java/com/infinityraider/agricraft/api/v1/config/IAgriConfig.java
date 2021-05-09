@@ -330,4 +330,8 @@ public interface IAgriConfig {
      */
     boolean enableIndustrialForegoingCompat();
 
+    /**
+     * @return if Straw Golem Reborn compatibility is enabled
+     */
+    boolean enableStrawGolemRebornCompat();
 }
