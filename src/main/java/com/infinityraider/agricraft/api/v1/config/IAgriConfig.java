@@ -316,6 +316,11 @@ public interface IAgriConfig {
     boolean doesMagnifyingGlassControlTOP();
 
     /**
+     * @return if Blood Magic compatibility is enabled
+     */
+    boolean enableBloodMagicCompat();
+
+    /**
      * @return if Create compatibility is enabled
      */
     boolean enableCreateCompat();

@@ -76,6 +76,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> progressiveJEI;
         private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
         private final ForgeConfigSpec.ConfigValue<Boolean> topControlledByMagnifyingGlass;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableBloodMagicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCreateCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableIndustrialForegoingCompat;
 
@@ -202,6 +203,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
             this.topControlledByMagnifyingGlass = builder.comment("\nDefines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
                     .define("TOP only with magnifying glass", true);
+            this.enableBloodMagicCompat = builder.comment("\nSet to false to disable compatibility with Blood Magic (in case things break)")
+                    .define("Enable Blood Magic compat", true);
             this.enableCreateCompat = builder.comment("\nSet to false to disable compatibility with Create (in case things break)")
                     .define("Enable Create compat", true);
             this.enableIndustrialForegoingCompat = builder.comment("\nSet to false to disable compatibility with Industrial Foregoing (in case things break)")
@@ -452,6 +455,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean doesMagnifyingGlassControlTOP() {
             return this.topControlledByMagnifyingGlass.get();
+        }
+
+        @Override
+        public boolean enableBloodMagicCompat() {
+            return this.enableBloodMagicCompat.get();
         }
 
         @Override

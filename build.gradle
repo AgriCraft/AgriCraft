@@ -188,6 +188,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
     runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
 
+    //Blood Magic
+    compileOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
+    //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
+
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
     //runtimeOnly fg.deobf("curse.maven:create-328085:3278516")
