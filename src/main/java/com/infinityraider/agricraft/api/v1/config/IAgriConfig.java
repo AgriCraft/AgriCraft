@@ -321,6 +321,11 @@ public interface IAgriConfig {
     boolean enableBloodMagicCompat();
 
     /**
+     * @return if Botany Pots compatibility is enabled
+     */
+    boolean enableBotanyPotsCompat();
+
+    /**
      * @return if Create compatibility is enabled
      */
     boolean enableCreateCompat();

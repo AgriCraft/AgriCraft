@@ -154,6 +154,11 @@ repositories {
     }
 
     maven {
+        // for Botany pots
+        url 'https://maven.blamejared.com'
+    }
+
+    maven {
         // for Immersive Engineering
         url "https://modmaven.dev/"
         content {
@@ -200,6 +205,11 @@ dependencies {
     //Blood Magic
     compileOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
     //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
+
+    //Botany pots
+    compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
+    runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
+    runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
 
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
