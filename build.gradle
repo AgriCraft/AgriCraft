@@ -153,6 +153,15 @@ repositories {
         url "https://maven.tterrag.com/"
     }
 
+    maven {
+        // for Immersive Engineering
+        url "https://modmaven.dev/"
+        content {
+            includeGroup 'blusunrize.immersiveengineering'
+            includeGroup 'malte0811'
+        }
+    }
+
     // For AgriCore dependencies
     mavenCentral()
 }
@@ -195,6 +204,10 @@ dependencies {
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
     //runtimeOnly fg.deobf("curse.maven:create-328085:3278516")
+
+    //Immersive Engineering
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-4.2.4-134.7")
+    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-4.2.4-134.7")
 
     //Industrial Foregoing
     compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")

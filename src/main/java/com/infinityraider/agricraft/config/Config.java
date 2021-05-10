@@ -79,6 +79,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBloodMagicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCreateCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableIndustrialForegoingCompat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableImmersiveEngineeringCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableStrawGolemRebornCompat;
 
         public Common(ForgeConfigSpec.Builder builder) {
@@ -210,6 +211,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable Create compat", true);
             this.enableIndustrialForegoingCompat = builder.comment("\nSet to false to disable compatibility with Industrial Foregoing (in case things break)")
                     .define("Enable Industrial Foregoing compat", true);
+            this.enableImmersiveEngineeringCompat = builder.comment("\nSet to false to disable compatibility with Immersive Engineering (in case things break)")
+                    .define("Enable Immersive Engineering compat", true);
             this.enableStrawGolemRebornCompat = builder.comment("\nSet to false to disable compatibility with Straw Golem Reborn (in case things break)")
                     .define("Enable Straw Golem Reborn compat", true);
             builder.pop();
@@ -473,6 +476,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableIndustrialForegoingCompat() {
             return this.enableIndustrialForegoingCompat.get();
+        }
+
+        @Override
+        public boolean enableImmersiveEngineeringCompat() {
+            return this.enableImmersiveEngineeringCompat.get();
         }
 
         @Override
