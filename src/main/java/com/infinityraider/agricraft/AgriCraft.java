@@ -3,10 +3,7 @@ package com.infinityraider.agricraft;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.config.Config;
-import com.infinityraider.agricraft.content.AgriBlockRegistry;
-import com.infinityraider.agricraft.content.AgriEnchantmentRegistry;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
-import com.infinityraider.agricraft.content.AgriTileRegistry;
+import com.infinityraider.agricraft.content.*;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
@@ -71,6 +68,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     @Override
     public AgriEnchantmentRegistry getModEnchantmentRegistry() {
         return AgriEnchantmentRegistry.getInstance();
+    }
+
+    @Override
+    public AgriRecipeSerializerRegistry getModRecipeSerializerRegistry() {
+        return AgriRecipeSerializerRegistry.getInstance();
     }
 
     @Override

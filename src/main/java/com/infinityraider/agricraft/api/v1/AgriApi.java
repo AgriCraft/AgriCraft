@@ -14,6 +14,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
 import java.lang.reflect.Constructor;
@@ -31,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 import org.apache.logging.log4j.*;
 
 /**
@@ -248,6 +250,20 @@ public final class AgriApi {
     @Nonnull
     public static ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         return AgriApi.CONNECTOR.plantToSeedStack(plant, amount);
+    }
+
+    /**
+     * Fetches the AgriSeedIngredient serializer
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the serializer
+     */
+    @Nonnull
+    public static IIngredientSerializer<AgriSeedIngredient> getSeedIngredientSerializer() {
+        return AgriApi.CONNECTOR.connectSeedIngredientSerializer();
     }
 
     /**

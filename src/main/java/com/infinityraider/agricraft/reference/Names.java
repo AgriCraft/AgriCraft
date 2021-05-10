@@ -28,6 +28,7 @@ public abstract class Names {
     public static final class Mods {
         public static final String BETTER_WEATHER = "betterweather";
         public static final String BLOOD_MAGIC = "bloodmagic";
+        public static final String BOTANY_POTS = "botanypots";
         public static final String CREATE = "create";
         public static final String JEI = "jei";
         public static final String THE_ONE_PROBE = "theoneprobe";

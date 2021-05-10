@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
@@ -45,6 +46,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -159,6 +161,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         return ItemDynamicAgriSeed.toStack(plant, amount);
+    }
+
+    @Nonnull
+    @Override
+    public IIngredientSerializer<AgriSeedIngredient> connectSeedIngredientSerializer() {
+        return AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient;
     }
 
     @Nonnull

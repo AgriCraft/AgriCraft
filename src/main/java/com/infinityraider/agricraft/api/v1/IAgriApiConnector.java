@@ -16,6 +16,7 @@ import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
+import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -74,6 +76,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     ItemStack plantToSeedStack(IAgriPlant plant, int amount);
+
+    @Nonnull
+    IIngredientSerializer<AgriSeedIngredient> connectSeedIngredientSerializer();
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
