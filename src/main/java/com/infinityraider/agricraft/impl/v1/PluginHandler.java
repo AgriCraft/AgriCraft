@@ -24,7 +24,6 @@ import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -65,7 +64,6 @@ public final class PluginHandler {
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
         registerGenes(AgriApi.getGeneRegistry());
-        registerSoilAdapters(AgriApi.getSoilAdapterizer());
         registerSeeds(AgriApi.getSeedAdapterizer());
         registerFertilizers(AgriApi.getFertilizerAdapterizer());
         registerSeasonLogic(AgriApi.getSeasonLogic());
@@ -93,10 +91,6 @@ public final class PluginHandler {
 
     public static void registerGenes(IAgriGeneRegistry geneRegistry) {
         executeForPlugins(plugin -> plugin.registerGenes(geneRegistry));
-    }
-
-    public static void registerSoilAdapters(IAgriAdapterizer<BlockState> adapterizer) {
-        executeForPlugins(plugin -> plugin.registerSoilAdapters(adapterizer));
     }
 
     public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {

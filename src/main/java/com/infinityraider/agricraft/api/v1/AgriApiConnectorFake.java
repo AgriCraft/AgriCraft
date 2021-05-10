@@ -13,13 +13,9 @@ import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -91,12 +87,6 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
-    @Nonnull
-    @Override
-    public IAgriAdapterizer<BlockState> connectSoilAdapterizer() {
-        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
-    }
-
     @Override
     @Nonnull
     public IAgriAdapterizer<AgriSeed> connectSeedAdapterizer() {
@@ -130,6 +120,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

@@ -81,7 +81,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @SuppressWarnings("deprecation")
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable() && AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos.down())).isPresent();
+        return current.getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.down()).isPresent();
     }
 
     @Override

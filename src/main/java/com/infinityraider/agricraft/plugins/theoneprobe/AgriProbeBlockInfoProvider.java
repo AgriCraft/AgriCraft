@@ -62,7 +62,7 @@ final class AgriProbeBlockInfoProvider implements IProbeInfoProvider {
     }
 
     protected void addSoilProbeInfo(IProbeInfo info, World world, BlockPos pos) {
-        AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos)).ifPresent(soil ->
+        AgriApi.getSoil(world, pos).ifPresent(soil ->
                 soil.addDisplayInfo(info::text));
     }
 }

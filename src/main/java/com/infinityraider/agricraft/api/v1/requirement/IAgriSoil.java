@@ -19,6 +19,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 /**
  * Class for interacting with AgriCraft soil definitions.
+ *
+ * Retrieve instances from the World using AgriApi.getSoil(world, pos)
+ * Retrieve instances from a Block state using ISoilRegistry.valueOf(state)
  */
 public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayable {
 

@@ -5,7 +5,10 @@ import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
 
 import java.util.Optional;
 
@@ -21,8 +24,23 @@ public interface IAgriSoilRegistry extends IAgriRegistry<IAgriSoil>, IAgriAdapte
     @Nonnull
     @Override
     default Optional<IAgriSoil> valueOf(@Nullable Object obj) {
-        return obj instanceof BlockState
-                ? this.stream().filter(soil ->soil.isVariant((BlockState) obj)).findFirst()
-                : Optional.empty();
+        if(obj instanceof ItemStack) {
+            return this.valueOf(((ItemStack) obj).getItem());
+        }
+        if(obj instanceof BlockItem) {
+            return this.valueOf(((BlockItem) obj).getBlock());
+        }
+        if(obj instanceof Block) {
+            return this.valueOf(((Block) obj).getDefaultState());
+        }
+        if(obj instanceof BlockState) {
+            return this.stream().filter(soil -> soil.isVariant((BlockState) obj)).findFirst();
+        }
+        return Optional.empty();
     }
+
+    void registerSoilProvider(@Nonnull Block block, @Nonnull IAgriSoilProvider soilProvider);
+
+    @Nonnull
+    IAgriSoilProvider getProvider(@Nonnull Block block);
 }

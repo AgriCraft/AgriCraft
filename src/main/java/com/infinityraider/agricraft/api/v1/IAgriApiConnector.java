@@ -17,7 +17,6 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -62,9 +61,6 @@ public interface IAgriApiConnector {
     IAgriSoilRegistry connectSoilRegistry();
 
     @Nonnull
-    IAgriAdapterizer<BlockState> connectSoilAdapterizer();
-
-    @Nonnull
     IAgriAdapterizer<AgriSeed> connectSeedAdapterizer();
 
     @Nonnull
@@ -81,6 +77,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
+
+    @Nonnull
+    Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
 
     @Nonnull
     IAgriGrowthRequirement.Builder getGrowthRequirementBuilder();

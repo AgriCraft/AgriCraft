@@ -215,7 +215,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     @Override
     public Optional<IAgriSoil> getSoil() {
         return Optional.ofNullable(this.getWorld())
-                .flatMap(world -> AgriApi.getSoilRegistry().valueOf(world.getBlockState(this.getPosition().down())));
+                .flatMap(world -> AgriApi.getSoil(world, this.getPosition().down()));
     }
 
     @Override

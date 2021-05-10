@@ -162,9 +162,8 @@ public class ItemSeedBag extends ItemBase {
     }
 
     protected boolean attemptPlantOnSoil(World world, BlockPos pos, ItemStack seedStack, @Nullable  PlayerEntity player) {
-        BlockState state = world.getBlockState(pos);
         BlockPos up = pos.up();
-        return AgriApi.getSoilRegistry().valueOf(state).map(soil -> {
+        return AgriApi.getSoil(world, pos).map(soil -> {
             BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
             if (newState != null && world.setBlockState(up, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, up).map(crop ->

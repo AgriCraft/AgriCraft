@@ -49,6 +49,12 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
+    public GrowConditionBase<Optional<IAgriSoil>> soil(BiPredicate<Integer, IAgriSoil> predicate, List<ITextComponent> tooltips) {
+        return new GrowConditionBase<>(RequirementType.SOIL, (str, opt) -> opt.isPresent() && predicate.test(str, opt.get()), Functions.SOIL, Offsetters.SOIL,
+                tooltips, 1, IAgriGrowCondition.CacheType.BLOCK_UPDATE);
+    }
+
+    @Override
     protected <P extends IAgriSoil.SoilProperty> GrowConditionBase<P> soilProperty(
             BiPredicate<Integer, P> predicate, Function<IAgriSoil, P> mapper, P invalid, List<ITextComponent> tooltips) {
         return new GrowConditionBase<>(RequirementType.SOIL, predicate, Functions.soilProperty(mapper, invalid), Offsetters.SOIL,
@@ -141,6 +147,8 @@ public class Factory extends FactoryAbstract {
     }
 
     private static final class Functions {
+        private static final BiFunction<World, BlockPos, Optional<IAgriSoil>> SOIL = AgriApi::getSoil;
+
         private static final BiFunction<World, BlockPos, Integer> LIGHT = IWorldReader::getLight;
 
         private static final BiFunction<World, BlockPos, Integer> REDSTONE = World::getRedstonePowerFromNeighbors;
@@ -169,7 +177,7 @@ public class Factory extends FactoryAbstract {
                         .map(Map.Entry::getKey);
 
         private static <P extends IAgriSoil.SoilProperty> BiFunction<World, BlockPos, P> soilProperty(Function<IAgriSoil, P> mapper, P invalid) {
-            return (world, pos) -> AgriApi.getSoilRegistry().valueOf(world.getBlockState(pos)).map(mapper).orElse(invalid);
+            return SOIL.andThen(soil -> soil.map(mapper).orElse(invalid));
         }
 
         private static BiFunction<World, BlockPos, Stream<Entity>> entity(double range) {

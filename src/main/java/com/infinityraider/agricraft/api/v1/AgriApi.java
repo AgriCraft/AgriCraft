@@ -13,9 +13,7 @@ import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
 import java.lang.reflect.Constructor;
@@ -25,9 +23,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -178,21 +174,6 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Soil Adapterizer.
-     * The Soil adapterizer is used to convert BlockStates or TileEntities to contained BlockStates (e.g. flower pots)
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
-     * </p>
-     *
-     * @return the AgriCraft Soil Adapterizer.
-     */
-    @Nonnull
-    public static IAgriAdapterizer<BlockState> getSoilAdapterizer() {
-        return AgriApi.CONNECTOR.connectSoilAdapterizer();
-    }
-
-    /**
      * Fetches the AgriCraft Seed Adapterizer.
      *
      * Seeds are ItemStacks which can be planted on crops, and carry genes.
@@ -283,6 +264,22 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getCrop(world, pos);
+    }
+
+    /**
+     * Fetches an IAgriSoil instance from a position in the world
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param world the World object
+     * @param pos the BlockPos holding the coordinates
+     * @return Optional containing an IAgriSoil object, or empty if the coordinates do not correspond with a soil
+     */
+    @Nonnull
+    public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+        return AgriApi.CONNECTOR.getSoil(world, pos);
     }
 
     /**

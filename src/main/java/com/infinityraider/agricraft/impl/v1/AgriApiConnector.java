@@ -16,11 +16,8 @@ import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
@@ -61,7 +58,6 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriStatRegistry statRegistry;
     private final IAgriGeneRegistry geneRegistry;
     private final IAgriSoilRegistry soilRegistry;
-    private final IAgriAdapterizer<BlockState> soilAdapterizer;
     private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     private final IAgriSeasonLogic seasonLogic;
@@ -75,7 +71,6 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry =  AgriSoilRegistry.getInstance();
-        this.soilAdapterizer = new AgriAdapterizer<>();
         this.seedAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.seasonLogic = SeasonLogic.getInstance();
@@ -136,12 +131,6 @@ public class AgriApiConnector implements IAgriApiConnector {
         return this.soilRegistry;
     }
 
-    @Nonnull
-    @Override
-    public IAgriAdapterizer<BlockState> connectSoilAdapterizer() {
-        return this.soilAdapterizer;
-    }
-
     @Override
     @Nonnull
     public IAgriAdapterizer<AgriSeed> connectSeedAdapterizer() {
@@ -177,6 +166,15 @@ public class AgriApiConnector implements IAgriApiConnector {
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         return tile instanceof IAgriCrop ? Optional.of((IAgriCrop) tile) : Optional.empty();
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        IAgriSoilRegistry registry = this.connectSoilRegistry();
+        Optional<IAgriSoil> soil = registry.valueOf(state);
+        return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
     }
 
     @Nonnull

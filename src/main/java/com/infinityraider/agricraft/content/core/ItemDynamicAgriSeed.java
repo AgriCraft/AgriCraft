@@ -79,8 +79,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             );
         }
         // If a soil was clicked, check the block on top of the soil and handle accordingly
-        BlockState state = world.getBlockState(pos);
-        return AgriApi.getSoilRegistry().valueOf(state).map(soil -> {
+        return AgriApi.getSoil(world, pos).map(soil -> {
             BlockPos up = pos.up();
             TileEntity above = world.getTileEntity(up);
             // There are currently crop sticks on the soil, attempt to plant on the crop sticks

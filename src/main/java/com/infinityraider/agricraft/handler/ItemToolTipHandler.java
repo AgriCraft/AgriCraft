@@ -13,7 +13,6 @@ import java.util.Collection;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -109,12 +108,7 @@ public class ItemToolTipHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void addSoilInfo(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        if(!stack.isEmpty() && stack.getItem() instanceof BlockItem) {
-            BlockItem item = (BlockItem) stack.getItem();
-            BlockState state = item.getBlock().getDefaultState();
-            AgriApi.getSoilRegistry().valueOf(state).ifPresent(soil -> soil.addDisplayInfo(text -> event.getToolTip().add(text)));
-        }
+        AgriApi.getSoilRegistry().valueOf(event.getItemStack()).ifPresent(soil -> soil.addDisplayInfo(text -> event.getToolTip().add(text)));
     }
 
     /**

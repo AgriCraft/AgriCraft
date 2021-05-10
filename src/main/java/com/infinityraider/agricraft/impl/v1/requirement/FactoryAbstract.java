@@ -55,12 +55,11 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition soil(IntPredicate strength, IAgriSoil soil) {
-        return this.stateAt(RequirementType.SOIL, (str, state) -> strength.test(str) || soil.isVariant(state), Offsets.SOIL,
-                ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.SOIL)
-                        .append(new StringTextComponent(": "))
-                        .append(soil.getName())
-                ));
+        return this.soil((str, aSoil) -> strength.test(str) || aSoil.equals(soil), ImmutableList.of(new StringTextComponent("")
+                .append(Descriptions.SOIL)
+                .append(new StringTextComponent(": "))
+                .append(soil.getName())
+        ));
     }
 
     @Override
@@ -70,25 +69,17 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition soil(IntPredicate strength, Collection<IAgriSoil> soils) {
-        return this.stateAt(RequirementType.SOIL, (str, state) -> strength.test(str) || soils.stream().anyMatch(soil -> soil.isVariant(state)),
-                Offsets.SOIL, ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.SOIL)
-                        .append(new StringTextComponent(": "))
-                        .append(AgriToolTips.collect(soils.stream().map(IAgriSoil::getName), ", "))
-                ));
-    }
-
-    @Override
-    public IAgriGrowCondition soil(BiPredicate<Integer, IAgriSoil> predicate, List<ITextComponent> tooltips) {
-        return this.stateAt(RequirementType.SOIL, (str, state) -> AgriApi.getSoilRegistry().valueOf(state)
-                        .map(soil -> predicate.test(str, soil)).orElse(false), Offsets.SOIL, tooltips);
+        return this.soil((str, soil) -> strength.test(str) || soils.contains(soil), ImmutableList.of(new StringTextComponent("")
+                .append(Descriptions.SOIL)
+                .append(new StringTextComponent(": "))
+                .append(AgriToolTips.collect(soils.stream().map(IAgriSoil::getName), ", "))
+        ));
     }
 
     protected <P extends IAgriSoil.SoilProperty> IAgriGrowCondition soilProperty(
             IntPredicate strength, Function<IAgriSoil, P> mapper, P property, ITextComponent tooltip) {
-        return this.stateAt(RequirementType.SOIL, (str, state) -> strength.test(str)
-                        || AgriApi.getSoilRegistry().valueOf(state).map(mapper).map(property::equals).orElse(false),
-                Offsets.SOIL, ImmutableList.of(new StringTextComponent("")
+        return this.soil((str, soil) -> strength.test(str) || mapper.apply(soil).equals(property),
+                ImmutableList.of(new StringTextComponent("")
                         .append(tooltip)
                         .append(new StringTextComponent(": "))
                         .append(property.getDescription())
@@ -97,9 +88,8 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     protected <P extends IAgriSoil.SoilProperty> IAgriGrowCondition soilProperties(
             IntPredicate strength, Function<IAgriSoil, P> mapper, Collection<P> properties, ITextComponent tooltip) {
-        return this.stateAt(RequirementType.SOIL, (str, state) -> strength.test(str)
-                        || AgriApi.getSoilRegistry().valueOf(state).map(mapper).map(properties::contains).orElse(false),
-                Offsets.SOIL, ImmutableList.of(new StringTextComponent("")
+        return this.soil((str, soil) -> strength.test(str) || properties.contains(mapper.apply(soil)),
+                ImmutableList.of(new StringTextComponent("")
                         .append(tooltip)
                         .append(new StringTextComponent(": "))
                         .append(AgriToolTips.collect(properties.stream().map(IAgriSoil.SoilProperty::getDescription), ", "))
