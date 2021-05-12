@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.plugins.botanypots;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.reference.Names;
@@ -12,12 +14,14 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.darkhax.bookshelf.block.DisplayableBlockState;
 import net.darkhax.botanypots.BotanyPotHelper;
 import net.darkhax.botanypots.BotanyPots;
+import net.darkhax.botanypots.block.tileentity.TileEntityBotanyPot;
 import net.darkhax.botanypots.crop.CropInfo;
 import net.darkhax.botanypots.crop.HarvestEntry;
 import net.darkhax.botanypots.soil.SoilInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -100,9 +104,19 @@ public class AgriCropInfo extends CropInfo {
             super(AgriCraft.instance.getModBlockRegistry().crop_plant.getDefaultState());
         }
 
+        protected IAgriGrowthStage fetchStage(World world, BlockPos pos) {
+            TileEntity tile = world.getTileEntity(pos);
+            if(tile instanceof TileEntityBotanyPot) {
+                return CapabilityBotanyPotAgriCrop.getInstance().getCapability((TileEntityBotanyPot) tile)
+                        .map(IAgriCrop::getGrowthStage)
+                        .orElse(getPlant().getFinalStage());
+            }
+            return getPlant().getFinalStage();
+        }
+
         @OnlyIn(Dist.CLIENT)
         public void render (World world, BlockPos pos, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
-            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), getPlant().getInitialGrowthStage(), matrix, buffer, light, overlay, preferredSides);
+            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), this.fetchStage(world, pos), matrix, buffer, light, overlay, preferredSides);
         }
     }
 

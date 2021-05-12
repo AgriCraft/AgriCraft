@@ -1,6 +1,9 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -13,7 +16,6 @@ import java.util.function.BiPredicate;
  * these are used to provide feedback to the player, such as in the in-game journal or JEI.
  */
 public interface IAgriGrowthRequirement {
-
     /**
      * Gets all the grow conditions that must be met for a plant to be able to grow
      *
@@ -68,6 +70,41 @@ public interface IAgriGrowthRequirement {
      * @return if the plant can grow during the given season
      */
     boolean isSeasonAccepted(AgriSeason season, int strength);
+
+    /**
+     * Checks if this growth requirement is met for a given crop
+     * @param crop the crop
+     * @return true if the growth requirement is met
+     */
+    default boolean isMet(IAgriCrop crop) {
+        return this.isMet(crop, crop.getStats().getStrength());
+    }
+
+    /**
+     * Checks if this growth requirement would be met for a given crop with a certain strength level
+     * @param crop the crop
+     * @param strength the strength
+     * @return true if the growth requirement is met
+     */
+    default boolean isMet(IAgriCrop crop, final int strength) {
+        final World world = crop.world();
+        if(world == null) {
+            return false;
+        }
+        final BlockPos pos = crop.getPosition();
+        return this.isMet(world, pos, strength);
+    }
+
+    /**
+     * Checks if this growth requirement is met at a given position in the world for a certain strength level
+     * @param world the world
+     * @param pos the position
+     * @param strength the strength
+     * @return true if the growth requirement is met
+     */
+    default boolean isMet(World world, BlockPos pos, int strength) {
+        return this.getGrowConditions().stream().allMatch(condition -> condition.isMet(world, pos, strength));
+    }
 
     /**
      * @return a new Builder object

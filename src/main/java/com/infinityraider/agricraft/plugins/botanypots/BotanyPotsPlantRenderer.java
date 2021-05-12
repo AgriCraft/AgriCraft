@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,8 +40,6 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
     public void renderPlant(IAgriPlant plant, IAgriGrowthStage stage, MatrixStack matrix, IRenderTypeBuffer buffer,
                             int light, int overlay, Direction... preferredSides) {
         if(buffer instanceof IRenderTypeBuffer.Impl) {
-            this.renderCoordinateSystem(matrix, buffer);
-
             ITessellator tessellator = this.getTessellator((IRenderTypeBuffer.Impl) buffer);
             tessellator.pushMatrix();
 

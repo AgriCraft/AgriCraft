@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 @AgriPlugin
 @SuppressWarnings("unused")
 public class BotanyPotsPlugin implements IAgriPlugin {
+
     @Override
     public boolean isEnabled() {
         return ModList.get().isLoaded(this.getId());
@@ -31,7 +32,7 @@ public class BotanyPotsPlugin implements IAgriPlugin {
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
         if (this.isEnabled() && AgriCraft.instance.getConfig().enableBotanyPotsCompat()) {
-
+            BotanyCropsCompat.registerCapability();
         }
     }
 

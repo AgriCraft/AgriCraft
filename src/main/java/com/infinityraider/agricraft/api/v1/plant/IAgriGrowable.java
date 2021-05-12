@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Comparator;
 
 /**
  * Common interface between all "things" that can grow on crop sticks
@@ -26,6 +27,15 @@ public interface IAgriGrowable {
      */
     @Nonnull
     Collection<IAgriGrowthStage> getGrowthStages();
+
+    /**
+     * @return the final growth stage for this plant
+     */
+    default IAgriGrowthStage getFinalStage() {
+        return this.getGrowthStages().stream().filter(IAgriGrowthStage::isFinal).findAny()
+                // This should not ever be reached
+                .orElseThrow(() -> new IllegalStateException("Plant without final growth stage"));
+    }
 
     /**
      * Fetches the height of the plant at the given growth stage in 1/16ths of a block.
