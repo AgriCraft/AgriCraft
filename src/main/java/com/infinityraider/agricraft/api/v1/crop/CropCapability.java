@@ -8,12 +8,20 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public final class CropCapability {
-    /** Capability reference for attaching IAgriCrop capabilities to TileEntities */
     @CapabilityInject(IAgriCrop.class)
     public static final Capability<IAgriCrop> CAPABILITY = null;
 
-    /** Key for attaching IAgriCrop capabilities to TileEntities */
     public static final ResourceLocation KEY = new ResourceLocation("agricraft", "crop");
+
+    /** Capability reference for attaching IAgriCrop capabilities to TileEntities */
+    public static Capability<IAgriCrop> getCapability() {
+        return CAPABILITY;
+    }
+
+    /** Key for attaching IAgriCrop capabilities to TileEntities */
+    public static ResourceLocation getKey() {
+        return KEY;
+    }
 
     /**
      * Registers a capability instance which AgriCraft will attach automatically to the respective tile entities
