@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.plugins.botanypots;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.reference.Names;
@@ -41,15 +40,8 @@ public class AgriCropInfo extends CropInfo {
     private final float growthStatFactor;
     private final DisplayableBlockState[] display;
 
-    public AgriCropInfo(AgriSeedIngredient plant, int growthTicks, float growthStatFactor) {
-        super(
-                new ResourceLocation(plant.getPlantId()),
-                plant,
-                Collections.emptySet(),
-                growthTicks,
-                Collections.emptyList(),
-                new DisplayableBlockState[]{},
-                Optional.empty());
+    public AgriCropInfo(ResourceLocation id, AgriSeedIngredient plant, int growthTicks, float growthStatFactor) {
+        super(id, plant, Collections.emptySet(), growthTicks, Collections.emptyList(), new DisplayableBlockState[]{}, Optional.empty());
         this.growthStatFactor = growthStatFactor;
         this.display = new DisplayableBlockState[]{new AgriDisplayState()};
     }
@@ -103,24 +95,14 @@ public class AgriCropInfo extends CropInfo {
     }
 
     private class AgriDisplayState extends DisplayableBlockState {
-        private IAgriGrowthStage stage;
 
         public AgriDisplayState() {
             super(AgriCraft.instance.getModBlockRegistry().crop_plant.getDefaultState());
-            this.stage = getPlant().getInitialGrowthStage();
-        }
-
-        public IAgriGrowthStage getStage() {
-            return this.stage;
-        }
-
-        public void setStage(IAgriGrowthStage stage) {
-            this.stage = stage;
         }
 
         @OnlyIn(Dist.CLIENT)
         public void render (World world, BlockPos pos, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
-            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), this.getStage(), world, pos, matrix, buffer, light, overlay, preferredSides);
+            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), getPlant().getInitialGrowthStage(), matrix, buffer, light, overlay, preferredSides);
         }
     }
 
@@ -158,7 +140,7 @@ public class AgriCropInfo extends CropInfo {
             AgriSeedIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(json);
             int growthTicks = json.get("growthTicks").getAsInt();
             float growthStatFactor = json.get("growthStatFactor").getAsFloat();
-            return new AgriCropInfo(plant, growthTicks, growthStatFactor);
+            return new AgriCropInfo(recipeId, plant, growthTicks, growthStatFactor);
         }
 
         @Nullable
@@ -167,7 +149,7 @@ public class AgriCropInfo extends CropInfo {
             AgriSeedIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(buffer);
             int growthTicks = buffer.readInt();
             float growthStatFactor = buffer.readFloat();
-            return new AgriCropInfo(plant, growthTicks, growthStatFactor);
+            return new AgriCropInfo(recipeId, plant, growthTicks, growthStatFactor);
         }
 
         @Override

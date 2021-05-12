@@ -39,9 +39,11 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
                 () -> this.getVertexBufferTessellator(aBuffer, this.getRenderType()))).get();
     }
 
-    public void renderPlant(IAgriPlant plant, IAgriGrowthStage stage, World world, BlockPos pos, MatrixStack matrix,
-                            IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
+    public void renderPlant(IAgriPlant plant, IAgriGrowthStage stage, MatrixStack matrix, IRenderTypeBuffer buffer,
+                            int light, int overlay, Direction... preferredSides) {
         if(buffer instanceof IRenderTypeBuffer.Impl) {
+            this.renderCoordinateSystem(matrix, buffer);
+
             ITessellator tessellator = this.getTessellator((IRenderTypeBuffer.Impl) buffer);
             tessellator.pushMatrix();
 
@@ -49,7 +51,9 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
             tessellator.setOverlay(overlay);
             tessellator.applyTransformation(matrix.getLast().getMatrix());
 
+            tessellator.startDrawingQuads();
             tessellator.addQuads(this.fetchQuads(plant, stage, preferredSides));
+            tessellator.draw();
 
             tessellator.popMatrix();
         }
