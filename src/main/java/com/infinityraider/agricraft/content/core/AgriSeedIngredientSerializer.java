@@ -25,10 +25,13 @@ public class AgriSeedIngredientSerializer implements IInfIngredientSerializer<Ag
     @Nonnull
     @Override
     public AgriSeedIngredient parse(PacketBuffer buffer) {
-        return new AgriSeedIngredient(
-                AgriApi.getPlantRegistry().get(buffer.readString())
-                        .orElse(AgriApi.getPlantRegistry().getNoPlant())
-        );
+        String id = buffer.readString();
+        IAgriPlant plant = AgriApi.getPlantRegistry().get(id).orElse(AgriApi.getPlantRegistry().getNoPlant());
+        if(plant.isPlant()) {
+            return new AgriSeedIngredient(plant);
+        } else {
+            return new AgriLazySeedIngredient(id);
+        }
     }
 
     @Nonnull
@@ -39,14 +42,43 @@ public class AgriSeedIngredientSerializer implements IInfIngredientSerializer<Ag
         }
         String id = json.get("plant").getAsString();
         IAgriPlant plant = AgriApi.getPlantRegistry().get(id).orElse(AgriApi.getPlantRegistry().getNoPlant());
-        if(!plant.isPlant()) {
-            throw new JsonParseException("Invalid plant on Agricraft plant ingredient: " + id);
+        if(plant.isPlant()) {
+            return new AgriSeedIngredient(plant);
+        } else {
+            return new AgriLazySeedIngredient(id);
         }
-        return new AgriSeedIngredient(plant);
     }
 
     @Override
     public void write(@Nonnull PacketBuffer buffer, @Nonnull AgriSeedIngredient ingredient) {
-        buffer.writeString(ingredient.getPlant().getId());
+        buffer.writeString(ingredient.getPlantId());
+    }
+
+    public static class AgriLazySeedIngredient extends AgriSeedIngredient {
+        private final String plantId;
+        private IAgriPlant plant;
+
+        public AgriLazySeedIngredient(String plant) {
+            super(AgriApi.getPlantRegistry().getNoPlant());
+            this.plantId = plant;
+        }
+
+        @Override
+        public String getPlantId() {
+            return this.plantId;
+        }
+
+        @Override
+        public IAgriPlant getPlant() {
+            if (this.plant == null) {
+                IAgriPlant plant = AgriApi.getPlantRegistry().get(this.getPlantId()).orElse(super.getPlant());
+                if (plant.isPlant()) {
+                    this.plant = plant;
+                } else {
+                    return plant;
+                }
+            }
+            return this.plant;
+        }
     }
 }

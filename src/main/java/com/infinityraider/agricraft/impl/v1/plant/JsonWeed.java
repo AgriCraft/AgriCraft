@@ -117,7 +117,7 @@ public class JsonWeed implements IAgriWeed {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         if(!stage.isGrowthStage()) {
             return ImmutableList.of();
         }

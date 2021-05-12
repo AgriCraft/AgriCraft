@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -200,7 +201,7 @@ public class NoPlant implements IAgriPlant {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         return ImmutableList.of();
     }
 

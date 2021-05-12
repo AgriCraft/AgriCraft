@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public interface IAgriRenderable {
      */
     @Nonnull
     @OnlyIn(Dist.CLIENT)
-    List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage);
+    List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage);
 
     /**
      * Method which fetches all required texture to render a plant or weed for a certain growth stage,

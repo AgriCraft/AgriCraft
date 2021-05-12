@@ -46,14 +46,14 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
         this.spriteGetter = spriteGetter;
     }
 
-    protected static List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage, Direction face) {
+    public static List<BakedQuad> getOrBakeQuads(IAgriPlant plant, IAgriGrowthStage stage, @Nullable Direction face) {
         return plantQuads
                 .computeIfAbsent(plant, (aPlant) -> Maps.newConcurrentMap())
                 .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> plant.bakeQuads(dir, stage)))
                 .getQuads(face);
     }
 
-    protected static List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage, Direction face) {
+    public static List<BakedQuad> getOrBakeQuads(IAgriWeed weed, IAgriGrowthStage stage, @Nullable Direction face) {
         return weedQuads
                 .computeIfAbsent(weed, (aPlant) -> Maps.newConcurrentMap())
                 .computeIfAbsent(stage, (aStage) -> new QuadCache(dir -> weed.bakeQuads(dir, stage)))

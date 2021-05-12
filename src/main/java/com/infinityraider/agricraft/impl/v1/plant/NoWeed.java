@@ -107,7 +107,7 @@ public final class NoWeed implements IAgriWeed {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(Direction face, IAgriGrowthStage stage) {
+    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         return ImmutableList.of();
     }
 

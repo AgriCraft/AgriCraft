@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.plugins.botanypots;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.reference.Names;
@@ -38,26 +38,24 @@ import java.util.stream.Collectors;
 public class AgriCropInfo extends CropInfo {
     public static final Serializer SERIALIZER = new Serializer();
 
-    private final IAgriPlant plant;
     private final float growthStatFactor;
     private final DisplayableBlockState[] display;
 
-    public AgriCropInfo(IAgriPlant plant, int growthTicks, float growthStatFactor) {
+    public AgriCropInfo(AgriSeedIngredient plant, int growthTicks, float growthStatFactor) {
         super(
-                new ResourceLocation(AgriCraft.instance.getModId(), plant.getId()),
-                plant.toIngredient(),
+                new ResourceLocation(plant.getPlantId()),
+                plant,
                 Collections.emptySet(),
                 growthTicks,
                 Collections.emptyList(),
                 new DisplayableBlockState[]{},
                 Optional.empty());
-        this.plant = plant;
         this.growthStatFactor = growthStatFactor;
         this.display = new DisplayableBlockState[]{new AgriDisplayState()};
     }
 
     public IAgriPlant getPlant() {
-        return this.plant;
+        return this.getSeed().getPlant();
     }
 
     public float getGrowthStatFactor() {
@@ -105,13 +103,24 @@ public class AgriCropInfo extends CropInfo {
     }
 
     private class AgriDisplayState extends DisplayableBlockState {
+        private IAgriGrowthStage stage;
+
         public AgriDisplayState() {
             super(AgriCraft.instance.getModBlockRegistry().crop_plant.getDefaultState());
+            this.stage = getPlant().getInitialGrowthStage();
+        }
+
+        public IAgriGrowthStage getStage() {
+            return this.stage;
+        }
+
+        public void setStage(IAgriGrowthStage stage) {
+            this.stage = stage;
         }
 
         @OnlyIn(Dist.CLIENT)
         public void render (World world, BlockPos pos, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
-            BotanyPotsPlantRenderer.getInstance().renderPlant(plant, world, pos, matrix, buffer, light, overlay, preferredSides);
+            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), this.getStage(), world, pos, matrix, buffer, light, overlay, preferredSides);
         }
     }
 
@@ -146,11 +155,7 @@ public class AgriCropInfo extends CropInfo {
             if(!json.has("growthStatFactor")) {
                 throw new JsonParseException("Agricraft botany pots crop must have a \"growthStatFactor\" property");
             }
-            String plantId = json.get("plant").getAsString();
-            IAgriPlant plant = AgriApi.getPlantRegistry().get(plantId).orElse(AgriApi.getPlantRegistry().getNoPlant());
-            if(!plant.isPlant()) {
-                throw new JsonParseException("Invalid plant found on Agricraft botany pots crop: " + plantId);
-            }
+            AgriSeedIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(json);
             int growthTicks = json.get("growthTicks").getAsInt();
             float growthStatFactor = json.get("growthStatFactor").getAsFloat();
             return new AgriCropInfo(plant, growthTicks, growthStatFactor);
@@ -159,15 +164,15 @@ public class AgriCropInfo extends CropInfo {
         @Nullable
         @Override
         public AgriCropInfo read(@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer) {
-            IAgriPlant plant = AgriApi.getPlantRegistry().get(buffer.readString()).orElse(AgriApi.getPlantRegistry().getNoPlant());
+            AgriSeedIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(buffer);
             int growthTicks = buffer.readInt();
             float growthStatFactor = buffer.readFloat();
-            return plant.isPlant() ? new AgriCropInfo(plant, growthTicks, growthStatFactor) : null;
+            return new AgriCropInfo(plant, growthTicks, growthStatFactor);
         }
 
         @Override
         public void write(@Nonnull PacketBuffer buffer, @Nonnull AgriCropInfo info) {
-            buffer.writeString(info.getPlant().getId());
+            AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.write(buffer, info.getSeed());
             buffer.writeInt(info.getGrowthTicks());
             buffer.writeFloat(info.getGrowthStatFactor());
         }
