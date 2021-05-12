@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.plugins.botanypots;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
@@ -19,6 +20,7 @@ import net.darkhax.botanypots.crop.CropInfo;
 import net.darkhax.botanypots.crop.HarvestEntry;
 import net.darkhax.botanypots.soil.SoilInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -79,8 +81,16 @@ public class AgriCropInfo extends CropInfo {
 
     @Override
     public List<HarvestEntry> getResults () {
-        // TODO
-        return Collections.emptyList();
+        List<ItemStack> drops = Lists.newArrayList();
+        this.getPlant().getAllPossibleClipProducts(drops::add);
+        final float size = drops.size();
+        if(size > 0) {
+            return drops.stream()
+                    .map(drop -> new HarvestEntry(1.0F / drops.size(), drop, 1, 1))
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Override
