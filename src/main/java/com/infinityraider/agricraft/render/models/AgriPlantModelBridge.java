@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.render.models;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -12,7 +12,6 @@ import com.infinityraider.infinitylib.render.QuadCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockDisplayReader;
@@ -97,14 +96,12 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     @Override
     public @Nonnull IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData data) {
         // Fetch plant and weed data from the tile
-        TileEntity tile = world.getTileEntity(pos);
-        if(tile instanceof IAgriCrop) {
-            IAgriCrop crop = (IAgriCrop) tile;
+        AgriApi.getCrop(world, pos).ifPresent(crop -> {
             data.setData(TileEntityCropBase.PROPERTY_PLANT, crop.getPlant());
             data.setData(TileEntityCropBase.PROPERTY_PLANT_GROWTH, crop.getGrowthStage());
             data.setData(TileEntityCropBase.PROPERTY_WEED, crop.getWeeds());
             data.setData(TileEntityCropBase.PROPERTY_WEED_GROWTH, crop.getWeedGrowthStage());
-        }
+        });
         return data;
     }
 

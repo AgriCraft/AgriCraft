@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -27,6 +28,7 @@ import javax.naming.OperationNotSupportedException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -296,6 +298,21 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
+    }
+
+    /**
+     * Registers a capability instance which AgriCraft will attach automatically to the respective tile entities
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param instance the instance
+     * @param <T> the exact type of the TileEntity to attach to
+     * @param <C> the parent type of the IAgriCrop being attached
+     */
+    public static <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+        AgriApi.CONNECTOR.registerCapabilityCropInstance(instance);
     }
 
     /**

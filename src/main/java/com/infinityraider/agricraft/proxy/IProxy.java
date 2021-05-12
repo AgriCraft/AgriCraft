@@ -50,6 +50,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void registerCapabilities() {
+        this.registerCapability(CapabilityCrop.getInstance());
         this.registerCapability(CapabilityEatCropGoal.getInstance());
         this.registerCapability(CapabilityIrrigationComponent.getInstance());
         this.registerCapability(CapabilityIrrigationNetworkReference.getInstance());

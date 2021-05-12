@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.core;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
@@ -36,11 +37,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.world.BlockEvent;
 
 import javax.annotation.Nonnull;
@@ -72,6 +76,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     private final AutoSyncedField<IAgriGrowthStage> weedGrowth;
     // Growth Requirements
     private RequirementCache requirement;
+
+    // Capabilities
+    private final LazyOptional<IAgriCrop> cropCapability;
 
     public TileEntityCropBase(TileEntityType<?> type) {
         // Super constructor with appropriate TileEntity Type
@@ -128,6 +135,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
         // Initialize growth requirement cache
         this.requirement = RequirementCache.create(this);
+        this.cropCapability = LazyOptional.of(() -> this);
     }
 
     @Override
@@ -561,6 +569,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         // No need to read anything since everything is covered by the AutoSyncedFields
     }
 
+
     protected void handlePlantUpdate(boolean resetBrightness)  {
         if(this.getWorld() != null) {
             BlockState state = this.getBlockState();
@@ -590,6 +599,15 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             this.setGrowthStage(other.getGrowthStage());
         });
         this.setWeedImpl(other.getWeeds(), other.getWeedGrowthStage());
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if(cap == CropCapability.getCapability()) {
+            return this.cropCapability.cast();
+        }
+        return super.getCapability(cap, side);
     }
 
     @Override

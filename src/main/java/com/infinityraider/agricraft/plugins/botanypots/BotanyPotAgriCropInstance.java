@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.plugins.botanypots;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
@@ -20,22 +20,16 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import com.infinityraider.infinitylib.utility.ISerializable;
 import net.darkhax.botanypots.block.tileentity.TileEntityBotanyPot;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,52 +39,48 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class CapabilityBotanyPotAgriCrop implements IInfSerializableCapabilityImplementation<TileEntityBotanyPot, CapabilityBotanyPotAgriCrop.Impl> {
-    private static final CapabilityBotanyPotAgriCrop INSTANCE = new CapabilityBotanyPotAgriCrop();
+public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEntityBotanyPot, BotanyPotAgriCropInstance.Impl> {
+    private static final BotanyPotAgriCropInstance INSTANCE = new BotanyPotAgriCropInstance();
 
-    public static CapabilityBotanyPotAgriCrop getInstance() {
+    public static BotanyPotAgriCropInstance getInstance() {
         return INSTANCE;
     }
 
-    public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), Names.Mods.BOTANY_POTS);
-
-    @CapabilityInject(Impl.class)
-    public static final Capability<Impl> CAPABILITY = null;
-
-    private CapabilityBotanyPotAgriCrop() {}
-
-    @Override
-    public Class<Impl> getCapabilityClass() {
-        return Impl.class;
-    }
-
-    @Override
-    public Capability<Impl> getCapability() {
-        return CAPABILITY;
-    }
-
-    @Override
-    public boolean shouldApplyCapability(TileEntityBotanyPot carrier) {
-        return true;
-    }
-
-    @Override
-    public Impl createNewValue(TileEntityBotanyPot carrier) {
-        return new Impl(carrier);
-    }
-
-    @Override
-    public ResourceLocation getCapabilityKey() {
-        return KEY;
-    }
+    private BotanyPotAgriCropInstance() {}
 
     @Override
     public Class<TileEntityBotanyPot> getCarrierClass() {
         return TileEntityBotanyPot.class;
     }
 
+    @Override
+    public Class<Impl> getCropClass() {
+        return Impl.class;
+    }
+
+    @Override
+    public Impl createCropFor(TileEntityBotanyPot tile) {
+        return new Impl(tile);
+    }
+
+    @Override
+    public void writeToNBT(CompoundNBT tag, Impl crop) {
+        tag.putString(AgriNBT.GROWTH, crop.stage.getId());
+        tag.putString(AgriNBT.WEED_GROWTH, crop.next.getId());
+    }
+
+    @Override
+    public void readFromNBT(CompoundNBT tag, Impl crop) {
+        if(tag.contains(AgriNBT.GROWTH) && tag.contains(AgriNBT.WEED_GROWTH)) {
+            crop.stage = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NoGrowth.getInstance());
+            crop.next = crop.stage.isGrowthStage()
+                    ? AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NoGrowth.getInstance())
+                    : crop.stage;
+        }
+    }
+
     // TODO: when the events come to botany pots: cache genome and implement callbacks, potentially implement weeds as well
-    public static class Impl implements IAgriCrop, ISerializable {
+    public static class Impl implements IAgriCrop {
         // Tile Entity instance
         private final TileEntityBotanyPot pot;
 
@@ -351,24 +341,6 @@ public class CapabilityBotanyPotAgriCrop implements IInfSerializableCapabilityIm
         @Override
         public IAgriStatsMap getStats() {
             return this.getGenome().map(IAgriStatProvider::getStats).orElse(NoStats.getInstance());
-        }
-
-        @Override
-        public void readFromNBT(CompoundNBT tag) {
-            if(tag.contains(AgriNBT.GROWTH) && tag.contains(AgriNBT.WEED_GROWTH)) {
-                this.stage = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NoGrowth.getInstance());
-                this.next = this.stage.isGrowthStage()
-                        ? AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NoGrowth.getInstance())
-                        : this.stage;
-            }
-        }
-
-        @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
-            tag.putString(AgriNBT.GROWTH, this.stage.getId());
-            tag.putString(AgriNBT.WEED_GROWTH, this.next.getId());
-            return tag;
         }
     }
 }

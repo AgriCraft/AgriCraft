@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.AgriApiState;
 import com.infinityraider.agricraft.api.v1.IAgriApiConnector;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
@@ -20,6 +21,7 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
@@ -173,7 +175,10 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
-        return tile instanceof IAgriCrop ? Optional.of((IAgriCrop) tile) : Optional.empty();
+        if(tile instanceof IAgriCrop) {
+            return Optional.of((IAgriCrop) tile);
+        }
+        return CapabilityCrop.getInstance().getCapability(tile).map(crop -> crop);
     }
 
     @Nonnull
@@ -183,6 +188,11 @@ public class AgriApiConnector implements IAgriApiConnector {
         IAgriSoilRegistry registry = this.connectSoilRegistry();
         Optional<IAgriSoil> soil = registry.valueOf(state);
         return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
+    }
+
+    @Override
+    public <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+        CapabilityCrop.getInstance().registerInstance(instance);
     }
 
     @Nonnull
