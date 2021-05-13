@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.crafting.IInfIngredientSerializer;
@@ -19,6 +20,9 @@ import net.darkhax.botanypots.BotanyPots;
 import net.darkhax.botanypots.crop.CropInfo;
 import net.darkhax.botanypots.crop.HarvestEntry;
 import net.darkhax.botanypots.soil.SoilInfo;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -26,6 +30,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -100,6 +105,37 @@ public class AgriCropInfo extends CropInfo {
     @Override
     public int getLightLevel(IBlockReader world, BlockPos pos) {
         return 0;
+    }
+
+    @Override
+    public int getGrowthTicksForSoil(SoilInfo soilInfo) {
+        // Correction for farmland
+        Block block = soilInfo.getRenderState().getState().getBlock();
+        if(block == Blocks.DIRT) {
+            block = Blocks.FARMLAND;
+        }
+        // Run logic
+        return AgriApi.getSoilRegistry().valueOf(block).map(soil -> {
+            IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
+            // TODO: use actual plant stats
+            if(!req.isSoilHumidityAccepted(soil.getHumidity(), 1)) {
+                return -1;
+            }
+            if(!req.isSoilAcidityAccepted(soil.getAcidity(), 1)) {
+                return -1;
+            }
+            if(!req.isSoilNutrientsAccepted(soil.getNutrients(), 1)) {
+                return -1;
+            }
+            // Fetch and verify Botany Pots modifier
+            float modifier = soilInfo.getGrowthModifier();
+            if(modifier > -1) {
+                // Apply AgriCraft modifier
+                modifier = (1 - modifier) * (float) (2 - soil.getGrowthModifier());
+                return MathHelper.floor(this.getGrowthTicks() * modifier);
+            }
+            return -1;
+        }).orElse(-1);
     }
 
     @Override

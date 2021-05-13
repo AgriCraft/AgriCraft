@@ -112,16 +112,6 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     }
 
     private static class Builder extends Factory implements IAgriGrowthRequirement.Builder {
-        private static final List<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
-                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.humidity.general"));
-        private static final List<ITextComponent> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
-                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.acidity.general"));
-        private static final List<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
-                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients.general"));
-        private static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
-                AgriCraft.instance.getModId() + ".tooltip.growth_req.light.general"));
-        private static final List<ITextComponent> SEASON_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
-                AgriCraft.instance.getModId() + ".tooltip.growth_req.season.general"));
 
         private final Set<IAgriGrowCondition> conditions;
 
@@ -157,31 +147,31 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         @Override
         public IAgriGrowthRequirement.Builder defineHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate) {
-            this.humidity = this.soilHumidity(predicate, HUMIDITY_DESCRIPTION);
+            this.humidity = this.soilHumidity(predicate, Tooltips.HUMIDITY_DESCRIPTION);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate) {
-            this.acidity = this.soilAcidity(predicate, ACIDITY_DESCRIPTION);
+            this.acidity = this.soilAcidity(predicate, Tooltips.ACIDITY_DESCRIPTION);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate) {
-            this.nutrients = this.soilNutrients(predicate, NUTRIENT_DESCRIPTION);
+            this.nutrients = this.soilNutrients(predicate, Tooltips.NUTRIENT_DESCRIPTION);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineLightLevel(BiPredicate<Integer, Integer> predicate) {
-            this.lightLevel = this.light(predicate, LIGHT_LEVEL_DESCRIPTION);
+            this.lightLevel = this.light(predicate, Tooltips.LIGHT_LEVEL_DESCRIPTION);
             return this;
         }
 
         @Override
         public IAgriGrowthRequirement.Builder defineSeasonality(BiPredicate<Integer, AgriSeason> predicate) {
-            this.season = this.season(predicate, SEASON_DESCRIPTION);
+            this.season = this.season(predicate, Tooltips.SEASON_DESCRIPTION);
             return this;
         }
 
@@ -190,5 +180,20 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
             this.conditions.add(condition);
             return this;
         }
+    }
+
+    public static final class Tooltips {
+        public static final List<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.humidity.general"));
+        public static final List<ITextComponent> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.acidity.general"));
+        public static final List<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients.general"));
+        public static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.light.general"));
+        public static final List<ITextComponent> SEASON_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.season.general"));
+
+        private Tooltips() {}
     }
 }
