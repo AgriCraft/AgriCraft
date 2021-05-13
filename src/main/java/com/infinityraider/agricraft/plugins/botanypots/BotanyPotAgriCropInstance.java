@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.plugins.botanypots;
 
+import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -20,6 +21,7 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.darkhax.botanypots.block.tileentity.TileEntityBotanyPot;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -247,7 +249,35 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
+            // Validate
+            Preconditions.checkNotNull(consumer);
 
+            // Add plant information
+            if (this.hasPlant()) {
+                //Add the plant data.
+                consumer.accept(AgriToolTips.getPlantTooltip(this.getPlant()));
+                //Add the stats
+                this.getStats().addTooltips(consumer);
+            } else {
+                consumer.accept(AgriToolTips.NO_PLANT);
+            }
+
+            // Add weed information
+            if(this.hasWeeds()) {
+                consumer.accept(AgriToolTips.getWeedTooltip(this.getWeeds()));
+                consumer.accept(AgriToolTips.getWeedGrowthTooltip(this.getWeedGrowthStage()));
+            } else {
+                consumer.accept(AgriToolTips.NO_WEED);
+            }
+
+            // Add Soil Information
+            this.getSoil().map(soil -> {
+                consumer.accept(AgriToolTips.getSoilTooltip(soil));
+                return true;
+            }).orElseGet(() -> {
+                consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
+                return false;
+            });
         }
 
         @Override
