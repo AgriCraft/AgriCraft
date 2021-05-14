@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -298,6 +299,20 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
+    }
+
+    /**
+     * Makes the item ignore the vanilla planting override rule.
+     * The Vanilla planting override rule converts Agricraft-compatible crops to Agricraft crops when planted
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param seed the seed
+     */
+    public static void registerVanillaPlantingOverrideException(Item seed) {
+        AgriApi.CONNECTOR.registerVanillaPlantingOverrideException(seed);
     }
 
     /**

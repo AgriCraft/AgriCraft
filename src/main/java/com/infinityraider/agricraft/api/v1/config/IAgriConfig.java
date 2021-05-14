@@ -65,9 +65,9 @@ public interface IAgriConfig {
     boolean allowFertilizerMutations();
 
     /**
-     * @return true if vanilla farming is disabled
+     * @return true if vanilla farming is overridden
      */
-    boolean disableVanillaFarming();
+    boolean overrideVanillaFarming();
 
     /**
      * @return global growth modifier for all AgriCraft crops
@@ -78,11 +78,6 @@ public interface IAgriConfig {
      * @return true if only mature crops will drop seeds when broken (global override for all IAgriPlant instances)
      */
     boolean onlyMatureSeedDrops();
-
-    /**
-     * @return false if grass drops should not be overridden (global override for all IAgriPlant instances)
-     */
-    boolean overwriteGrassDrops();
 
     /**
      * @return true if all weeds should be disabled (global override for all IAgriWeed instances)
@@ -123,18 +118,6 @@ public interface IAgriConfig {
      * @return the enchantment cost for enchanting the seed bag
      */
     int seedBagEnchantCost();
-
-    /**
-     * @return true if a text warning should be displayed when attempting to plant with vanilla farming disabled
-     */
-    @OnlyIn(Dist.CLIENT)
-    boolean vanillaFarmingWarning();
-
-    /**
-     * @return display format for stats in tooltips
-     */
-    @OnlyIn(Dist.CLIENT)
-    String statDisplayFormat();
 
 
     /*

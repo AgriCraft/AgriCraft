@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.impl.v1.genetics.GeneStat;
 import com.infinityraider.agricraft.impl.v1.requirement.SeasonPlugin;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.config.ConfigurationHandler;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -27,10 +26,9 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
-        private final ForgeConfigSpec.ConfigValue<Boolean> disableVanillaFarming;
+        private final ForgeConfigSpec.ConfigValue<Boolean> overrideVanillaFarming;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyMatureSeedDrops;
-        private final ForgeConfigSpec.ConfigValue<Boolean> overwriteGrassDrops;
         private final ForgeConfigSpec.ConfigValue<Boolean> disableWeeds;
         private final ForgeConfigSpec.ConfigValue<Boolean> matureWeedsKillPlants;
         private final ForgeConfigSpec.ConfigValue<Boolean> weedSpreading;
@@ -105,14 +103,12 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Only fertile crops mutate", false);
             this.fertilizerMutations = builder.comment("\nSet to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
-            this.disableVanillaFarming = builder.comment("\nSet to true to disable vanilla farming, meaning you can only grow plants on crops.")
-                    .define("Disable vanilla farming", true);
+            this.overrideVanillaFarming = builder.comment("\nSet to true to override vanilla farming, meaning vanilla seeds will be converted to agricraft seeds on planting.")
+                    .define("Override vanilla farming", true);
             this.growthMultiplier = builder.comment("\nThis is a global growth rate multiplier for crops planted on crop sticks.")
                     .defineInRange("Growth rate multiplier", 1.0, 0.0, 3.0);
             this.onlyMatureSeedDrops = builder.comment("\nSet this to true to make only mature crops drop seeds (to encourage trowel usage).")
                     .define("Only mature crops drop seeds", false);
-            this.overwriteGrassDrops = builder.comment("\nDetermines if AgriCraft should completely override grass drops with those configured in the JSON files.")
-                    .define("Overwrite Grass Drops", true);
             this.disableWeeds = builder.comment("\nSet to true to completely disable the spawning of weeds")
                     .define("Disable weeds", false);
             this.matureWeedsKillPlants = builder.comment("\nSet to false to disable mature weeds killing plants")
@@ -242,8 +238,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         }
 
         @Override
-        public boolean disableVanillaFarming() {
-            return this.disableVanillaFarming.get();
+        public boolean overrideVanillaFarming() {
+            return this.overrideVanillaFarming.get();
         }
 
         @Override
@@ -254,11 +250,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean onlyMatureSeedDrops() {
             return this.onlyMatureSeedDrops.get();
-        }
-
-        @Override
-        public boolean overwriteGrassDrops() {
-            return this.overwriteGrassDrops.get();
         }
 
         @Override
@@ -504,9 +495,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> tagTooltips;
         private final ForgeConfigSpec.ConfigValue<Boolean> nbtTooltips;
 
-        //core
-        private final ForgeConfigSpec.ConfigValue<Boolean> vanillaFarmingWarning;
-        private final ForgeConfigSpec.ConfigValue<String> statFormat;
+        //irrigation
         private final ForgeConfigSpec.ConfigValue<Boolean> disableParticles;
 
         public Client(ForgeConfigSpec.Builder builder) {
@@ -519,13 +508,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Tag tooltips", false);
             this.nbtTooltips = builder.comment("\nSet to true to add NBT information to itemstack tooltips (Client only)")
                     .define("NBT tooltips", false);
-            builder.pop();
-
-            builder.push("core");
-            this.vanillaFarmingWarning = builder.comment("\nSet to false to warn that vanilla farming is disabled when trying to plant vanilla plant (Client only)")
-                    .define("Show Disabled Vanilla Farming Warning", true);
-            this.statFormat = builder.comment("\nThis defines how to display the stats of plants (Client only)")
-                    .define("Stat Format", TextFormatting.GREEN + "- {0}: [{1}/{2}]");
             builder.pop();
 
             builder.push("irrigation");
@@ -547,16 +529,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean nbtTooltips() {
             return this.nbtTooltips.get();
-        }
-
-        @Override
-        public boolean vanillaFarmingWarning() {
-            return this.vanillaFarmingWarning.get();
-        }
-
-        @Override
-        public String statDisplayFormat() {
-            return this.statFormat.get();
         }
 
         @Override
@@ -591,18 +563,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @OnlyIn(Dist.CLIENT)
         public boolean nbtTooltips() {
             return false;
-        }
-
-        @Override
-        @OnlyIn(Dist.CLIENT)
-        public boolean vanillaFarmingWarning() {
-            return false;
-        }
-
-        @Override
-        @OnlyIn(Dist.CLIENT)
-        public String statDisplayFormat() {
-            return null;
         }
 
         @Override

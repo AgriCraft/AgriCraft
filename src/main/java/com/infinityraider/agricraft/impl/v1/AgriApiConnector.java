@@ -24,6 +24,7 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
@@ -41,6 +42,7 @@ import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -188,6 +190,11 @@ public class AgriApiConnector implements IAgriApiConnector {
         IAgriSoilRegistry registry = this.connectSoilRegistry();
         Optional<IAgriSoil> soil = registry.valueOf(state);
         return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
+    }
+
+    @Override
+    public void registerVanillaPlantingOverrideException(Item seed) {
+        VanillaPlantingHandler.getInstance().registerException(seed);
     }
 
     @Override

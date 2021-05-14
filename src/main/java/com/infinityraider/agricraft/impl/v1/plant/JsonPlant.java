@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 
@@ -74,7 +75,16 @@ public class JsonPlant implements IAgriPlant {
 
     private List<ItemStack> initSeedItems(AgriPlant plant) {
         return plant.getSeeds().stream()
-                .flatMap(seed -> seed.convertAll(ItemStack.class).stream())
+                .flatMap(seed -> {
+                    boolean override = seed.isOverridePlanting();
+                    if(override) {
+                        return seed.convertAll(ItemStack.class).stream();
+                    } else {
+                        return seed.convertAll(ItemStack.class).stream() .peek(stack ->
+                                VanillaPlantingHandler.getInstance().registerException(stack.getItem())
+                        );
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

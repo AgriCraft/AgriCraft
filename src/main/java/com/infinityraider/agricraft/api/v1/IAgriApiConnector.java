@@ -20,6 +20,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -87,6 +88,8 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
+
+    void registerVanillaPlantingOverrideException(Item seed);
 
     <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);
 

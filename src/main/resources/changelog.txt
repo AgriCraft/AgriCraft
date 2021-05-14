@@ -25,6 +25,7 @@ Changelog
 - ADDED: Possibility to plant crops off crop sticks (can be disabled in the config)
 - ADDED: Config options to configure minimum and maximum values for any stat and hiding stats (effectively allowing to disabling a stat with its functionality locked at a certain value)
 - ADDED: Progressive mode: mutation ingredients are unlocked in the journal / JEI after reading them in the journal (can be disabled in the config)
+- ADDED: Vanilla planting override; AgriCraft will convert crops to AgriCraft crops when they are planted
 - ADDED: new vanilla plant: Bamboo
 - ADDED: new vanilla plant: Cornflower
 - ADDED: new vanilla plant: Crimson Fungus

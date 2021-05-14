@@ -19,6 +19,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -136,6 +137,11 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public void registerVanillaPlantingOverrideException(Item seed) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

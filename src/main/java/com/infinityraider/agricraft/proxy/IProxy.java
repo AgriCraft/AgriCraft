@@ -67,6 +67,7 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerEventHandler(SeedBagEnchantingHandler.getInstance());
         this.registerEventHandler(IrrigationNetworkHandler.getInstance());
         this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
+        this.registerEventHandler(VanillaPlantingHandler.getInstance());
     }
 
     @Override
