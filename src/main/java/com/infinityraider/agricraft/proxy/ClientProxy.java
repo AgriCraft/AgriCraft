@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
-import com.infinityraider.agricraft.render.world.IrrigationNetworkDebugRenderer;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
@@ -26,7 +25,6 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public void registerEventHandlers() {
         IProxy.super.registerEventHandlers();
-        this.registerEventHandler(IrrigationNetworkDebugRenderer.getInstance());
         this.registerEventHandler(ItemToolTipHandler.getInstance());
         this.registerEventHandler(JournalViewPointHandler.getInstance());
         this.registerEventHandler(MagnifyingGlassViewHandler.getInstance());

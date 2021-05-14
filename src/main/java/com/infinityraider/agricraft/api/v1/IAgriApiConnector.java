@@ -8,8 +8,6 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNetwork;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -22,7 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -112,9 +109,6 @@ public interface IAgriApiConnector {
     Optional<IJsonPlantCallback> getJsonPlantCallback(String id);
 
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback);
-
-    @Nonnull
-    IAgriIrrigationNetwork getIrrigationNetwork(IAgriIrrigationComponent component, Direction side);
 
     boolean isObservingWithMagnifyingGlass(PlayerEntity player);
 }
