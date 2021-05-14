@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
@@ -32,6 +33,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.apache.logging.log4j.*;
 
 /**
@@ -279,6 +281,21 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
+    }
+
+    /**
+     * Fetches the IFluidHandler instance for an IAgriIrrigationComponent
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param component the irrigation component
+     * @return the fluid handler to push and pull water in / out the irrigation system from that component
+     */
+    @Nonnull
+    public static IFluidHandler getIrrigationComponentFluidHandler(IAgriIrrigationComponent component) {
+        return AgriApi.CONNECTOR.getIrrigationComponentFluidHandler(component);
     }
 
     /**

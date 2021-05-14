@@ -14,11 +14,13 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
+import com.infinityraider.agricraft.capability.CapabilityIrrigationContent;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
@@ -46,6 +48,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -179,6 +182,13 @@ public class AgriApiConnector implements IAgriApiConnector {
         IAgriSoilRegistry registry = this.connectSoilRegistry();
         Optional<IAgriSoil> soil = registry.valueOf(state);
         return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
+    }
+
+    @Nonnull
+    @Override
+    public IFluidHandler getIrrigationComponentFluidHandler(IAgriIrrigationComponent component) {
+        return CapabilityIrrigationContent.getInstance().getCapability(component.asTile())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid irrigation component"));
     }
 
     @Override

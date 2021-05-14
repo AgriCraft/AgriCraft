@@ -25,6 +25,9 @@ public interface AgriNBT {
     String WEED = "agri_weed";
     String WEED_GROWTH = "agri_weed_growth";
 
+    String UP = "agri_up";
+    String DOWN = "agri_down";
+
     String X1 = "agri_x1";
     String Y1 = "agri_y1";
     String Z1 = "agri_z1";

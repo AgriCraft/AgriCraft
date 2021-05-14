@@ -51,6 +51,8 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void registerCapabilities() {
         this.registerCapability(CapabilityCrop.getInstance());
+        this.registerCapability(CapabilityIrrigationContent.getInstance());
+        this.registerCapability(CapabilityIrrigationComponent.getInstance());
         this.registerCapability(CapabilityEatCropGoal.getInstance());
         this.registerCapability(CapabilityResearchedPlants.getInstance());
         this.registerCapability(CapabilitySeedBagContents.getInstance());
@@ -58,6 +60,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void registerEventHandlers() {
+        this.registerEventHandler(IrrigationSystemHandler.getInstance());
         this.registerEventHandler(BlockUpdateHandler.getInstance());
         this.registerEventHandler(SeedBagEnchantingHandler.getInstance());
         this.registerEventHandler(PlayerConnectToServerHandler.getInstance());

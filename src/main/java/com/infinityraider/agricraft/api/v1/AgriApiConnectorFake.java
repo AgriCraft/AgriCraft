@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
@@ -24,6 +25,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -127,6 +129,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public IFluidHandler getIrrigationComponentFluidHandler(IAgriIrrigationComponent component) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

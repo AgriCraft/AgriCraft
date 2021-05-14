@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
@@ -25,6 +26,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -81,6 +83,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
+
+    @Nonnull
+    IFluidHandler getIrrigationComponentFluidHandler(IAgriIrrigationComponent component);
 
     void registerVanillaPlantingOverrideException(Item seed);
 
