@@ -13,8 +13,7 @@ public class ItemDebugger extends ItemDebuggerBase {
             new DebugModeCheckSoil(),
             new DebugModeCoreInfo(),
             new DebugModeIGrowable(),
-            new DebugModeDiffLight(),
-            new DebugModeFillComponent()
+            new DebugModeDiffLight()
     );
 
     public ItemDebugger() {
