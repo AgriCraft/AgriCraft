@@ -15,9 +15,8 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
+import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -66,7 +65,7 @@ public interface IAgriApiConnector {
     IAgriSoilRegistry connectSoilRegistry();
 
     @Nonnull
-    IAgriAdapterizer<AgriSeed> connectSeedAdapterizer();
+    IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer();
 
     @Nonnull
     IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
@@ -75,13 +74,10 @@ public interface IAgriApiConnector {
     IAgriSeasonLogic connectSeasonLogic();
 
     @Nonnull
-    ItemStack seedToStack(AgriSeed seed, int amount);
-
-    @Nonnull
     ItemStack plantToSeedStack(IAgriPlant plant, int amount);
 
     @Nonnull
-    IIngredientSerializer<AgriSeedIngredient> connectSeedIngredientSerializer();
+    IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer();
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);

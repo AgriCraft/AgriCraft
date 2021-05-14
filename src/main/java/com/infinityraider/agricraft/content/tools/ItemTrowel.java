@@ -167,7 +167,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         } else {
             crop.getGenome().ifPresent(genome -> {
                 this.setPlant(stack, genome, crop.getGrowthStage());
-                crop.removeSeed();
+                crop.removeGenome();
             });
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
             return ActionResultType.SUCCESS;
@@ -186,7 +186,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                 this.getGenome(stack).ifPresent(genome ->
                         this.getGrowthStage(stack).ifPresent(growth -> {
                             this.removePlant(stack);
-                            crop.setGenome(genome);
+                            crop.spawnGenome(genome);
                             crop.setGrowthStage(growth);
                         }));
             }
@@ -223,7 +223,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                     }
                     return this.getGenome(stack).map(genome ->
                             this.getGrowthStage(stack).map(stage -> {
-                                boolean result = crop.setGenome(genome) && this.setGrowthStage(crop, stage);
+                                boolean result = crop.spawnGenome(genome) && this.setGrowthStage(crop, stage);
                                 if (result) {
                                     this.removePlant(stack);
                                     MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));

@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -334,7 +333,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
             }
 
             public ItemStack initializeStack() {
-                return new AgriSeed(this.genome).toStack();
+                return this.genome.toSeedStack();
             }
 
             public void add(int amount) {

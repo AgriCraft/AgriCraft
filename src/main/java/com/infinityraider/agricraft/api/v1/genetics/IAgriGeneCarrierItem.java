@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import net.minecraft.item.ItemStack;
@@ -22,16 +21,6 @@ public interface IAgriGeneCarrierItem {
      */
     @Nonnull
     Optional<IAgriGenome> getGenome(ItemStack stack);
-
-    /**
-     * Fetches the AgriSeed from a stack
-     * @param stack the stack
-     * @return Optional holding the seed, or empty if invalid
-     */
-    @Nonnull
-    default Optional<AgriSeed> getSeed(ItemStack stack) {
-        return this.getGenome(stack).map(AgriSeed::new);
-    }
 
     /**
      * Fetches the IAgriPlant from a stack

@@ -18,8 +18,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
+import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.capability.CapabilityIrrigationNetworkReference;
@@ -64,7 +63,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriStatRegistry statRegistry;
     private final IAgriGeneRegistry geneRegistry;
     private final IAgriSoilRegistry soilRegistry;
-    private final IAgriAdapterizer<AgriSeed> seedAdapterizer;
+    private final IAgriAdapterizer<IAgriGenome> genomeAdapterizer;
     private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     private final IAgriSeasonLogic seasonLogic;
     private final AgriMutationHandler mutator;
@@ -77,7 +76,7 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry =  AgriSoilRegistry.getInstance();
-        this.seedAdapterizer = new AgriAdapterizer<>();
+        this.genomeAdapterizer = new AgriAdapterizer<>();
         this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.seasonLogic = SeasonLogic.getInstance();
         this.mutator = AgriMutationHandler.getInstance();
@@ -139,8 +138,8 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriAdapterizer<AgriSeed> connectSeedAdapterizer() {
-        return this.seedAdapterizer;
+    public IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer() {
+        return this.genomeAdapterizer;
     }
 
     @Override
@@ -157,19 +156,13 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public ItemStack seedToStack(AgriSeed seed, int amount) {
-        return ItemDynamicAgriSeed.toStack(seed, amount);
-    }
-
-    @Nonnull
-    @Override
     public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         return ItemDynamicAgriSeed.toStack(plant, amount);
     }
 
     @Nonnull
     @Override
-    public IIngredientSerializer<AgriSeedIngredient> connectSeedIngredientSerializer() {
+    public IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer() {
         return AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient;
     }
 

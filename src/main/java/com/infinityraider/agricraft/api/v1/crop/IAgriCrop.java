@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedAcceptor;
-import com.infinityraider.agricraft.api.v1.seed.IAgriSeedProvider;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeAcceptor;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeProvider;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  *
  * To retrieve use AgriApi.getCrop()
  */
-public interface IAgriCrop extends IAgriPlantProvider, IAgriSeedProvider, IAgriSeedAcceptor, IAgriStatProvider,
+public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgriGenomeAcceptor, IAgriStatProvider,
         IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable, IAgriDisplayable {
     /**
      * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop

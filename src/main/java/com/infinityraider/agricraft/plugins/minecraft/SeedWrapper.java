@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
@@ -12,7 +11,7 @@ import net.minecraft.util.IItemProvider;
 import java.util.Objects;
 import java.util.Optional;
 
-public class SeedWrapper implements IAgriAdapter<AgriSeed> {
+public class SeedWrapper implements IAgriAdapter<IAgriGenome> {
     @Override
     public boolean accepts(Object obj) {
         if(obj instanceof IItemProvider) {
@@ -22,7 +21,7 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
     }
 
     @Override
-    public Optional<AgriSeed> valueOf(Object obj) {
+    public Optional<IAgriGenome> valueOf(Object obj) {
         if (obj instanceof IItemProvider) {
             return valueOf(new ItemStack((IItemProvider) obj));
         }
@@ -33,12 +32,12 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
         }
     }
 
-    private Optional<AgriSeed> resolve(ItemStack stack) {
+    private Optional<IAgriGenome> resolve(ItemStack stack) {
         if (stack.isEmpty()) {
             return Optional.empty();
         }
         if(stack.getItem() instanceof ItemDynamicAgriSeed) {
-            return ((ItemDynamicAgriSeed) stack.getItem()).getSeed(stack);
+            return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack);
         }
         return AgriApi.getPlantRegistry().stream()
                 .filter(plant -> this.isSeedItem(plant, stack))
@@ -50,8 +49,7 @@ public class SeedWrapper implements IAgriAdapter<AgriSeed> {
                         genome.readFromNBT(stack.getTag());
                     }
                     return genome;
-                })
-                .map(AgriSeed::new);
+                });
     }
 
     private boolean isSeedItem(IAgriPlant plant, ItemStack seed) {

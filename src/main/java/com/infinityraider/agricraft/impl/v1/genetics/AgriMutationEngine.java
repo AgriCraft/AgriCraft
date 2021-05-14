@@ -108,7 +108,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
 
     protected boolean spawnChild(IAgriCrop target, IAgriGenome genome) {
         target.setCrossCrop(false);
-        return target.setGenome(genome);
+        return target.spawnGenome(genome);
     }
 
     protected <T> IAgriGenePair<T> mutateGene(IAgriGene<T> gene, Tuple<IAgriGenome, IAgriGenome> parents, Random rand) {

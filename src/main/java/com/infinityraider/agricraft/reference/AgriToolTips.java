@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import net.minecraft.util.text.*;
 
@@ -71,13 +70,6 @@ public class AgriToolTips {
 
     public static final ITextComponent SNEAK_INFO = new TranslationTextComponent("agricraft.tooltip.sneak_info");
     public static final ITextComponent EMPTY_LINE = new StringTextComponent("");
-
-    public static ITextComponent getSeedTooltip(AgriSeed seed) {
-        return new StringTextComponent("")
-                .append(SEED)
-                .append(new StringTextComponent(": "))
-                .append(new TranslationTextComponent(seed.getPlant().getId()));
-    }
 
     public static ITextComponent getPlantTooltip(IAgriPlant plant) {
         return new StringTextComponent("")

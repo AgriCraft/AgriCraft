@@ -15,8 +15,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
+import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -94,7 +93,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
     @Nonnull
-    public IAgriAdapterizer<AgriSeed> connectSeedAdapterizer() {
+    public IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
@@ -112,19 +111,13 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public ItemStack seedToStack(AgriSeed seed, int amount) {
-        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
-    }
-
-    @Nonnull
-    @Override
     public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Nonnull
     @Override
-    public IIngredientSerializer<AgriSeedIngredient> connectSeedIngredientSerializer() {
+    public IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

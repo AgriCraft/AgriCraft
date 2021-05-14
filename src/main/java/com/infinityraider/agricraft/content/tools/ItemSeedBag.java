@@ -158,7 +158,7 @@ public class ItemSeedBag extends ItemBase {
     }
 
     protected boolean attemptPlantOnCrops(IAgriCrop crop, ItemStack seedStack, @Nullable  PlayerEntity player) {
-        return AgriApi.getSeedAdapterizer().valueOf(seedStack).map(seed -> crop.plantSeed(seed, player)).orElse(false);
+        return AgriApi.getGenomeAdapterizer().valueOf(seedStack).map(seed -> crop.plantGenome(seed, player)).orElse(false);
     }
 
     protected boolean attemptPlantOnSoil(World world, BlockPos pos, ItemStack seedStack, @Nullable  PlayerEntity player) {

@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
@@ -325,7 +324,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
                 IAgriGrowthStage current = this.getGrowthStage();
                 IAgriGrowthStage previous = current.getPreviousStage(this, this.getRandom());
                 if(current.equals(previous)) {
-                    this.removeSeed();
+                    this.removeGenome();
                 } else {
                     this.setGrowthStage(previous);
                 }
@@ -501,12 +500,12 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public boolean acceptsSeed(@Nonnull AgriSeed seed) {
-        return !this.hasSeed() && !this.isCrossCrop();
+    public boolean acceptsGenome(@Nonnull IAgriGenome genome) {
+        return !this.hasGenome() && !this.isCrossCrop();
     }
 
     @Override
-    public boolean setGenome(@Nonnull IAgriGenome genome) {
+    public boolean spawnGenome(@Nonnull IAgriGenome genome) {
         if(!this.hasPlant() && !this.isCrossCrop() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
             this.setGenomeImpl(genome);
             this.getPlant().onSpawned(this);
@@ -517,16 +516,16 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public boolean plantSeed(@Nonnull AgriSeed seed) {
-        return this.plantSeed(seed, null);
+    public boolean plantGenome(@Nonnull IAgriGenome genome) {
+        return this.plantGenome(genome, null);
     }
 
     @Override
-    public boolean plantSeed(@Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
-        if (this.acceptsSeed(seed) && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Pre(this, seed, entity))) {
-            this.setGenomeImpl(seed.getGenome());
+    public boolean plantGenome(@Nonnull IAgriGenome genome, @Nullable LivingEntity entity) {
+        if (this.acceptsGenome(genome) && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Pre(this, genome, entity))) {
+            this.setGenomeImpl(genome);
             this.getPlant().onPlanted(this, entity);
-            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Post(this, seed, entity));
+            MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Post(this, genome, entity));
             return true;
         }
         return false;
@@ -539,8 +538,8 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public boolean removeSeed() {
-        if(this.hasSeed()) {
+    public boolean removeGenome() {
+        if(this.hasGenome()) {
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
             this.handlePlantUpdate(true);
@@ -550,13 +549,8 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public boolean hasSeed() {
+    public boolean hasGenome() {
         return this.hasPlant();
-    }
-
-    @Override
-    public Optional<AgriSeed> getSeed() {
-        return this.getGenome().map(AgriSeed::new);
     }
 
     @Override

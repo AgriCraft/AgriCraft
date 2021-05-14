@@ -34,8 +34,8 @@ public class TileEntityCropPlant extends TileEntityCropBase {
     }
 
     @Override
-    public boolean removeSeed() {
-        boolean result = super.removeSeed();
+    public boolean removeGenome() {
+        boolean result = super.removeGenome();
         if(result && this.getWorld() != null && !this.getWorld().isRemote()) {
             this.getWorld().setBlockState(this.getPos(), Blocks.AIR.getDefaultState());
         }

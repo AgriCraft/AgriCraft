@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -111,8 +111,8 @@ public class JeiPlugin implements IModPlugin {
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         // Register All The Seeds.
         registration.registerSubtypeInterpreter(AgriItemRegistry.getInstance().seed, (stack) -> {
-            Optional<AgriSeed> seed = AgriApi.getSeedAdapterizer().valueOf(stack);
-            return seed.map(s -> s.getPlant().getId()).orElse("generic");
+            Optional<IAgriGenome> genome = AgriApi.getGenomeAdapterizer().valueOf(stack);
+            return genome.map(s -> s.getPlant().getId()).orElse("generic");
         });
     }
 

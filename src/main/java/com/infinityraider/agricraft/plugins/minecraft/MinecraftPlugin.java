@@ -5,9 +5,9 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.passive.*;
@@ -55,8 +55,9 @@ public class MinecraftPlugin implements IAgriPlugin {
     }
 
     @Override
-    public void registerSeeds(@Nonnull IAgriAdapterizer<AgriSeed> adapterizer) {
+    public void registerGenomes(@Nonnull IAgriAdapterizer<IAgriGenome> adapterizer) {
         adapterizer.registerAdapter(new SeedWrapper());
+        adapterizer.registerAdapter(new GenomeWrapper());
     }
 
     @Override

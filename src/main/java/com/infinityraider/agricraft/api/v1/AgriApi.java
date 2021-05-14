@@ -15,8 +15,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
+import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 
 import java.lang.reflect.Constructor;
@@ -179,20 +178,20 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Seed Adapterizer.
+     * Fetches the AgriCraft Genome Adapterizer.
      *
-     * Seeds are ItemStacks which can be planted on crops, and carry genes.
+     * Genomes are ItemStacks which can be planted on crops, and carry genes.
      * Each plant corresponds to exactly one seed
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
      *
-     * @return the AgriCraft Seed Adapterizer.
+     * @return the AgriCraft Genome Adapterizer.
      */
     @Nonnull
-    public static IAgriAdapterizer<AgriSeed> getSeedAdapterizer() {
-        return AgriApi.CONNECTOR.connectSeedAdapterizer();
+    public static IAgriAdapterizer<IAgriGenome> getGenomeAdapterizer() {
+        return AgriApi.CONNECTOR.connectGenomeAdapterizer();
     }
 
     /**
@@ -224,22 +223,6 @@ public final class AgriApi {
     }
 
     /**
-     * Converts an AgriSeed instance to an ItemStack
-     * <p>
-     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
-     * version of AgriCraft is not currently installed.
-     * </p>
-     *
-     * @param seed the seed
-     * @param amount the desired stack size
-     * @return ItemStack holding the seed
-     */
-    @Nonnull
-    public static ItemStack seedToStack(AgriSeed seed, int amount) {
-        return AgriApi.CONNECTOR.seedToStack(seed, amount);
-    }
-
-    /**
      * Converts an IAgriPlant instance to an ItemStack
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
@@ -265,7 +248,7 @@ public final class AgriApi {
      * @return the serializer
      */
     @Nonnull
-    public static IIngredientSerializer<AgriSeedIngredient> getSeedIngredientSerializer() {
+    public static IIngredientSerializer<AgriPlantIngredient> getSeedIngredientSerializer() {
         return AgriApi.CONNECTOR.connectSeedIngredientSerializer();
     }
 

@@ -7,7 +7,9 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.reference.AgriNBT;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
@@ -27,6 +29,11 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     @SuppressWarnings("unchecked")
     public <T> IAgriGenePair<T> getGenePair(IAgriGene<T> gene) {
         return (IAgriGenePair<T>) this.geneMap.get(gene);
+    }
+
+    @Override
+    public ItemStack toSeedStack(int amount) {
+        return ItemDynamicAgriSeed.toStack(this, amount);
     }
 
     @Override

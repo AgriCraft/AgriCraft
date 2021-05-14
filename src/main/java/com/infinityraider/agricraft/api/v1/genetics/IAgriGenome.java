@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
@@ -74,6 +75,19 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
     default <T> T getTrait(IAgriGene<T> gene) {
         return this.getGenePair(gene).getTrait();
     }
+
+    /**
+     * @return a new ItemStack containing the seed for this genome
+     */
+    default ItemStack toSeedStack() {
+        return this.toSeedStack(1);
+    }
+
+    /**
+     * @param amount the stack size
+     * @return a new ItemStack containing the seed for this genome
+     */
+    ItemStack toSeedStack(int amount);
 
     /**
      * Clones the genome

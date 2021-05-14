@@ -57,7 +57,7 @@ public class VanillaPlantingHandler {
         }
 
         // Pass the stack through the adapterizer
-        boolean success = AgriApi.getSeedAdapterizer().valueOf(stack).map(seed -> {
+        boolean success = AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
             // Fetch world information.
             BlockPos pos = event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace());
             World world = event.getWorld();
@@ -68,7 +68,7 @@ public class VanillaPlantingHandler {
             return AgriApi.getSoil(event.getWorld(), pos.down()).map(soil -> {
                 BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, pos);
                 if (newState != null && world.setBlockState(pos, newState, 11)) {
-                    boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantSeed(seed)).orElse(false);
+                    boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed)).orElse(false);
                     if (planted) {
                         if (player == null || !player.isCreative()) {
                             stack.shrink(1);

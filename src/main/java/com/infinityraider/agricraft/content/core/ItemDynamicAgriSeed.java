@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.Names;
@@ -36,10 +35,6 @@ import java.util.Optional;
 
 public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
-
-    public static ItemStack toStack(AgriSeed seed, int amount) {
-        return toStack(seed.getGenome(), amount);
-    }
 
     public static ItemStack toStack(IAgriPlant plant, int amount) {
         return toStack(AgriApi.getAgriGenomeBuilder(plant).build(), amount);
@@ -93,7 +88,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
                 BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
                 if (newState != null && world.setBlockState(up, newState, 11)) {
                     boolean success = AgriApi.getCrop(world, up).map(crop ->
-                            this.getGenome(context.getItem()).map(crop::setGenome).map(result -> {
+                            this.getGenome(context.getItem()).map(crop::spawnGenome).map(result -> {
                                 if (result) {
                                     if (player == null || !player.isCreative()) {
                                         stack.shrink(1);
@@ -114,9 +109,9 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     }
 
     protected ActionResultType attemptSeedPlant(IAgriCrop crop, ItemStack stack, boolean consumeItem) {
-        return AgriApi.getSeedAdapterizer().valueOf(stack)
+        return AgriApi.getGenomeAdapterizer().valueOf(stack)
                 .map(seed -> {
-                    if (crop.plantSeed(seed)) {
+                    if (crop.plantGenome(seed)) {
                         if (consumeItem) {
                             stack.shrink(1);
                         }
@@ -138,8 +133,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         if(this.isInGroup(group)) {
             AgriApi.getPlantRegistry()
                     .stream()
-                    .map(IAgriPlant::toAgriSeed)
-                    .map(seed -> toStack(seed, 1))
+                    .map(IAgriPlant::toItemStack)
                     .forEach(items::add);
         }
     }

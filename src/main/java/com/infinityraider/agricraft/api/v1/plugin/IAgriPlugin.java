@@ -2,19 +2,15 @@ package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilProvider;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 
 import javax.annotation.Nonnull;
 
@@ -39,7 +35,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
  * <li> All {@link IAgriMutation}s are registered using {@link #registerMutations(IAgriMutationRegistry)}
  * <li> All {@link IAgriStat}s are registered using {@link #registerStats(IAgriStatRegistry)}
  * <li> All {@link IAgriGene}s are registered using {@link #registerGenes(IAgriGeneRegistry)}
- * <li> All {@link AgriSeed} adapters are registered using {@link #registerSeeds(IAgriAdapterizer<AgriSeed>)}
+ * <li> All {@link IAgriGenome} adapters are registered using {@link #registerGenomes(IAgriAdapterizer<IAgriGenome>)}
  * <li> All {@link IAgriFertilizer} adapters are registered using {@link #registerFertilizers(IAgriAdapterizer<IAgriFertilizer>)}
  * </ol>
  */
@@ -88,7 +84,7 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerSeeds(@Nonnull IAgriAdapterizer<AgriSeed> adapterizer) {
+    default void registerGenomes(@Nonnull IAgriAdapterizer<IAgriGenome> adapterizer) {
         // Default Implementation: Do nothing.
     }
 

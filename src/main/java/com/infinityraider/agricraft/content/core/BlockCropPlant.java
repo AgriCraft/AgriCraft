@@ -6,10 +6,10 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
@@ -167,7 +167,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
                 crop.getPlant().getHarvestProducts(drops::add, crop.getGrowthStage(), crop.getStats(), context.getWorld().getRandom());
                 // drop the seed
                 if(crop.getGrowthStage().canDropSeed()) {
-                    crop.getSeed().map(AgriSeed::toStack).ifPresent(drops::add);
+                    crop.getGenome().map(IAgriGenome::toSeedStack).ifPresent(drops::add);
                 }
             }
         }

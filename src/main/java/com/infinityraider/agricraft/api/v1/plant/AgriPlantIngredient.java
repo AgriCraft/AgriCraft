@@ -1,8 +1,7 @@
-package com.infinityraider.agricraft.api.v1.seed;
+package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -11,10 +10,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class AgriSeedIngredient extends Ingredient {
+public class AgriPlantIngredient extends Ingredient {
     private final IAgriPlant plant;
 
-    public AgriSeedIngredient(IAgriPlant plant) {
+    public AgriPlantIngredient(IAgriPlant plant) {
         super(Stream.of(new SingleItemList(plant.toItemStack())));
         this.plant = plant;
     }
@@ -41,7 +40,7 @@ public class AgriSeedIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public IIngredientSerializer<AgriSeedIngredient> getSerializer() {
+    public IIngredientSerializer<AgriPlantIngredient> getSerializer() {
         return AgriApi.getSeedIngredientSerializer();
     }
 }

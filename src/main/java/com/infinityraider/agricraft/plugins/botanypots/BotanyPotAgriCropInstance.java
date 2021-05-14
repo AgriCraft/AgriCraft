@@ -14,7 +14,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
@@ -215,7 +214,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             if(this.hasPlant()) {
                 IAgriPlant plant = this.getPlant();
                 IAgriWeed weed = this.getWeeds();
-                if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Pre(this, entity)) && this.removeSeed()) {
+                if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Pre(this, entity)) && this.removeGenome()) {
                     plant.onBroken(this, entity);
                     weed.onBroken(this, entity);
                     MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Post(this, entity));
@@ -384,12 +383,12 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
-        public boolean acceptsSeed(@Nonnull AgriSeed seed) {
+        public boolean acceptsGenome(@Nonnull IAgriGenome genome) {
             return this.asTile().getCrop() == null && this.asTile().getSoil() != null;
         }
 
         @Override
-        public boolean setGenome(@Nonnull IAgriGenome genome) {
+        public boolean spawnGenome(@Nonnull IAgriGenome genome) {
             if (this.asTile().getCrop() != null) {
                 return false;
             }
@@ -397,7 +396,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             if (soil == null) {
                 return false;
             }
-            ItemStack seed = new AgriSeed(genome).toStack();
+            ItemStack seed = genome.toSeedStack();
             CropInfo crop = BotanyPotHelper.getCropForItem(seed);
             if (crop != null && BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
                 if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
@@ -411,12 +410,12 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
-        public boolean plantSeed(@Nonnull AgriSeed seed) {
-            return this.plantSeed(seed, null);
+        public boolean plantGenome(@Nonnull IAgriGenome genome) {
+            return this.plantGenome(genome, null);
         }
 
         @Override
-        public boolean plantSeed(@Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
+        public boolean plantGenome(@Nonnull IAgriGenome genome, @Nullable LivingEntity entity) {
             if (this.asTile().getCrop() != null) {
                 return false;
             }
@@ -424,13 +423,13 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             if (soil == null) {
                 return false;
             }
-            ItemStack seedStack = seed.toStack();
+            ItemStack seedStack = genome.toSeedStack();
             CropInfo crop = BotanyPotHelper.getCropForItem(seedStack);
             if (crop != null && BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
-                if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Plant.Pre(this, seed, entity))) {
+                if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Plant.Pre(this, genome, entity))) {
                     this.asTile().setCrop(crop, seedStack);
                     this.getPlant().onSpawned(this);
-                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Plant.Post(this, seed, entity));
+                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Plant.Post(this, genome, entity));
                     return true;
                 }
             }
@@ -438,10 +437,10 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
-        public boolean removeSeed() {
+        public boolean removeGenome() {
             if (this.asTile().getCrop() != null) {
-                ItemStack seedStack = AgriApi.getSeedAdapterizer().valueOf(this.asTile().getCropStack())
-                        .map(AgriSeed::toStack)
+                ItemStack seedStack = AgriApi.getGenomeAdapterizer().valueOf(this.asTile().getCropStack())
+                        .map(IAgriGenome::toSeedStack)
                         .orElse(this.asTile().getCropStack());
                 if (!seedStack.isEmpty() && this.asTile().canSetCrop(null)) {
                     this.asTile().setCrop(null, ItemStack.EMPTY);
@@ -453,7 +452,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
-        public boolean hasSeed() {
+        public boolean hasGenome() {
             return this.hasPlant();
         }
 
@@ -465,11 +464,6 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                 return Optional.empty();
             }
             return ((IAgriSeedItem) stack.getItem()).getGenome(stack);
-        }
-
-        @Override
-        public Optional<AgriSeed> getSeed() {
-            return AgriApi.getSeedAdapterizer().valueOf(this.asTile().getCropStack());
         }
 
         @Nonnull

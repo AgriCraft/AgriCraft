@@ -8,8 +8,6 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeedIngredient;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 
 import java.util.*;
@@ -33,19 +31,11 @@ import net.minecraft.util.text.ITextComponent;
  */
 public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllele<IAgriPlant> {
     /**
-     * Creates a new AgriSeed object for this plant with default genes
-     * @return the AgriSeed
-     */
-    default AgriSeed toAgriSeed() {
-        return new AgriSeed(this);
-    }
-
-    /**
      * Creates a new Ingredient object for this plant with default genes
      * @return the ingredient
      */
-    default AgriSeedIngredient toIngredient() {
-        return new AgriSeedIngredient(this);
+    default AgriPlantIngredient toIngredient() {
+        return new AgriPlantIngredient(this);
     }
 
     /**

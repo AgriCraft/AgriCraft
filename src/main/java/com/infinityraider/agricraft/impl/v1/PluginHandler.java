@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
@@ -12,7 +13,6 @@ import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public final class PluginHandler {
         registerMutations(AgriApi.getMutationRegistry());
         registerStats(AgriApi.getStatRegistry());
         registerGenes(AgriApi.getGeneRegistry());
-        registerSeeds(AgriApi.getSeedAdapterizer());
+        registerGenomes(AgriApi.getGenomeAdapterizer());
         registerFertilizers(AgriApi.getFertilizerAdapterizer());
         registerSeasonLogic(AgriApi.getSeasonLogic());
     }
@@ -93,8 +93,8 @@ public final class PluginHandler {
         executeForPlugins(plugin -> plugin.registerGenes(geneRegistry));
     }
 
-    public static void registerSeeds(IAgriAdapterizer<AgriSeed> adapterizer) {
-        executeForPlugins(plugin -> plugin.registerSeeds(adapterizer));
+    public static void registerGenomes(IAgriAdapterizer<IAgriGenome> adapterizer) {
+        executeForPlugins(plugin -> plugin.registerGenomes(adapterizer));
     }
 
     public static void registerFertilizers(IAgriAdapterizer<IAgriFertilizer> adapterizer) {

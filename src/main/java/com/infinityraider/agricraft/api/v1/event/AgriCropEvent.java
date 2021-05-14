@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -231,10 +230,10 @@ public abstract class AgriCropEvent extends Event {
      * Fired in the context of planting
      */
     public static abstract class Plant extends AgriCropEvent {
-        private final AgriSeed seed;
+        private final IAgriGenome seed;
         private final LivingEntity entity;
 
-        protected Plant(@Nonnull IAgriCrop crop, @Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
+        protected Plant(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome seed, @Nullable LivingEntity entity) {
             super(crop);
             this.seed = Objects.requireNonNull(seed);
             this.entity = entity;
@@ -244,7 +243,7 @@ public abstract class AgriCropEvent extends Event {
          * @return The seed which is being, or has been planted
          */
         @Nonnull
-        public AgriSeed getSeed() {
+        public IAgriGenome getSeed() {
             return seed;
         }
 
@@ -261,7 +260,7 @@ public abstract class AgriCropEvent extends Event {
          */
         @Cancelable
         public static final class Pre extends AgriCropEvent.Plant {
-            public Pre(@Nonnull IAgriCrop crop, @Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
+            public Pre(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome seed, @Nullable LivingEntity entity) {
                 super(crop, seed, entity);
             }
         }
@@ -270,7 +269,7 @@ public abstract class AgriCropEvent extends Event {
          * Fired after the planting action
          */
         public static final class Post extends AgriCropEvent.Plant {
-            public Post(@Nonnull IAgriCrop crop, @Nonnull AgriSeed seed, @Nullable LivingEntity entity) {
+            public Post(@Nonnull IAgriCrop crop, @Nonnull IAgriGenome seed, @Nullable LivingEntity entity) {
                 super(crop, seed, entity);
             }
         }
