@@ -248,8 +248,8 @@ public final class AgriApi {
      * @return the serializer
      */
     @Nonnull
-    public static IIngredientSerializer<AgriPlantIngredient> getSeedIngredientSerializer() {
-        return AgriApi.CONNECTOR.connectSeedIngredientSerializer();
+    public static IIngredientSerializer<AgriPlantIngredient> getPlantIngredientSerializer() {
+        return AgriApi.CONNECTOR.connectPlantIngredientSerializer();
     }
 
     /**

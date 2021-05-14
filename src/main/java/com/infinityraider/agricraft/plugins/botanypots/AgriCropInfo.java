@@ -189,7 +189,7 @@ public class AgriCropInfo extends CropInfo {
             if(!json.has("growthStatFactor")) {
                 throw new JsonParseException("Agricraft botany pots crop must have a \"growthStatFactor\" property");
             }
-            AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(json);
+            AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.parse(json);
             int growthTicks = json.get("growthTicks").getAsInt();
             float growthStatFactor = json.get("growthStatFactor").getAsFloat();
             return new AgriCropInfo(recipeId, plant, growthTicks, growthStatFactor);
@@ -198,7 +198,7 @@ public class AgriCropInfo extends CropInfo {
         @Nullable
         @Override
         public AgriCropInfo read(@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer) {
-            AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.parse(buffer);
+            AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.parse(buffer);
             int growthTicks = buffer.readInt();
             float growthStatFactor = buffer.readFloat();
             return new AgriCropInfo(recipeId, plant, growthTicks, growthStatFactor);
@@ -206,7 +206,7 @@ public class AgriCropInfo extends CropInfo {
 
         @Override
         public void write(@Nonnull PacketBuffer buffer, @Nonnull AgriCropInfo info) {
-            AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient.write(buffer, info.getSeed());
+            AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.write(buffer, info.getSeed());
             buffer.writeInt(info.getGrowthTicks());
             buffer.writeFloat(info.getGrowthStatFactor());
         }

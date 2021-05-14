@@ -77,7 +77,7 @@ public interface IAgriApiConnector {
     ItemStack plantToSeedStack(IAgriPlant plant, int amount);
 
     @Nonnull
-    IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer();
+    IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer();
 
     @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);

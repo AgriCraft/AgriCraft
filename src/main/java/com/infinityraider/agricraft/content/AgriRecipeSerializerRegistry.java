@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
-import com.infinityraider.agricraft.content.core.AgriSeedIngredientSerializer;
+import com.infinityraider.agricraft.content.core.AgriPlantIngredientSerializer;
 import com.infinityraider.agricraft.plugins.botanypots.BotanyPotsPlugin;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -14,10 +14,10 @@ public class AgriRecipeSerializerRegistry {
     }
 
     public final IInfRecipeSerializer botany_pots_crop_info;
-    public final IIngredientSerializer<AgriPlantIngredient> seed_ingredient;
+    public final IIngredientSerializer<AgriPlantIngredient> plant_ingredient;
 
     private AgriRecipeSerializerRegistry() {
         this.botany_pots_crop_info = BotanyPotsPlugin.getAgriCropInfoSerializer();
-        this.seed_ingredient = new AgriSeedIngredientSerializer();
+        this.plant_ingredient = new AgriPlantIngredientSerializer();
     }
 }

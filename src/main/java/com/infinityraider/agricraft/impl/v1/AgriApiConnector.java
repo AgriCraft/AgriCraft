@@ -162,8 +162,8 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer() {
-        return AgriCraft.instance.getModRecipeSerializerRegistry().seed_ingredient;
+    public IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer() {
+        return AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient;
     }
 
     @Nonnull

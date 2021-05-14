@@ -12,10 +12,10 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class AgriSeedIngredientSerializer implements IInfIngredientSerializer<AgriPlantIngredient> {
+public class AgriPlantIngredientSerializer implements IInfIngredientSerializer<AgriPlantIngredient> {
     private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed");
 
-    public AgriSeedIngredientSerializer() {}
+    public AgriPlantIngredientSerializer() {}
 
     @Override
     public ResourceLocation getId() {

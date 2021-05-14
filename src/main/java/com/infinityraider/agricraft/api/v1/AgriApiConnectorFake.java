@@ -117,7 +117,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public IIngredientSerializer<AgriPlantIngredient> connectSeedIngredientSerializer() {
+    public IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

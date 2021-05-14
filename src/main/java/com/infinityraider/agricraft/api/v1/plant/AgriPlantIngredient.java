@@ -41,6 +41,6 @@ public class AgriPlantIngredient extends Ingredient {
     @Nonnull
     @Override
     public IIngredientSerializer<AgriPlantIngredient> getSerializer() {
-        return AgriApi.getSeedIngredientSerializer();
+        return AgriApi.getPlantIngredientSerializer();
     }
 }
