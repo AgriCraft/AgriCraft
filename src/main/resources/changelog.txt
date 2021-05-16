@@ -42,6 +42,7 @@ Changelog
 - ADDED: Default jsons for Immersive Engineering (thanks Nelson Brichau)
 - ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
 - ADDED: Default jsons for Thermal Cultivation (thanks Nelson Brichau)
+- ADDED: Default jsons for Simple Farming (thanks Nelson Brichau)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
 - ADDED: Compatibility with Create's Mechanical Harvester
 - ADDED: Compatibility for Industrial Foregoing harvesting
