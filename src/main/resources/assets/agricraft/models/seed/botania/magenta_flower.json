@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/wheat_seeds",
   "textures": {
-    "layer0": "agricraft:seed/botania_red"
+    "layer0": "agricraft:seed/botania/magenta_flower"
   }
 }
