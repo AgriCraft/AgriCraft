@@ -2,11 +2,12 @@ package com.infinityraider.agricraft.proxy;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.core.CoreHandler;
 import com.infinityraider.agricraft.handler.GuiHandler;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.init.AgriOreDict;
 import com.infinityraider.agricraft.utility.CustomWoodTypeRegistry;
+import com.infinityraider.agricraft.world.WorldGen;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import com.infinityraider.infinitylib.utility.ReflectionHelper;
 import net.minecraft.command.ICommand;
@@ -41,6 +42,7 @@ public interface IProxy extends IProxyBase {
     default void postInitStart(FMLPostInitializationEvent event) {
         PluginHandler.postInit();
         AgriOreDict.upgradeOreDict();
+        WorldGen.init();
     }
 
     default void registerVillagerSkin(int id, String resource) {

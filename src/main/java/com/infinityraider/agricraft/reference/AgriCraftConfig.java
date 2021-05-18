@@ -94,13 +94,13 @@ public class AgriCraftConfig {
     public static boolean enableRakingSeedDrops = false;
 
     // World Generation
-    /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Disable World Gen", comment = "Set to true to disable world gen, no greenhouses will spawn in villages.")
     public static boolean disableWorldGen = false;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Greenhouse weight", min = "0", max = "100", comment = "The weight for a greenhouse to be generated in a village.")
     public static int greenhouseWeight = 10;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Greenhouse limit", min = "0", max = "2", comment = "The maximum number of greenhouses per village.")
     public static int greenhouseLimit = 1;
+    /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Irrigated greenhouse weight", min = "0", max = "100", comment = "The weight for an irrigated greenhouse to be generated in a village.")
     public static int greenhouseIrrigatedWeight = 2;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Irrigated greenhouse limit", min = "0", max = "2", comment = "The maximum number of irrigated greenhouses per village.")
