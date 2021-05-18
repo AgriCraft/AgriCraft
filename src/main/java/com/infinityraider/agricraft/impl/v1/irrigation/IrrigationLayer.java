@@ -2,113 +2,63 @@ package com.infinityraider.agricraft.impl.v1.irrigation;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
-import com.infinityraider.agricraft.handler.IrrigationSystemHandler;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * An irrigation layer represents a set of volumes, which are part of irrigation components,
+ * that are interconnected and exist between the same y-levels.
+ *
+ * Note that an irrigation component can contain multiple layers.
+ *
+ * Irrigation layers are dumb, and are only aware of themselves, they will accept and provide water on demand.
+ * They can be expanded with new positions, or reduced by removing existing positions.
+ * On removing an existing positions, it will verify if its parts are still interconnected,
+ * and if not, it will split itself in multiple layers.
+ */
 public class IrrigationLayer {
-    private final int id;
-    private final World world;
-
     private double min;
     private double max;
     private int capacity;
-
-    // all positions contained within this layer
-    private final Set<BlockPos> positions;
-    private final Set<ChunkPos> chunks;
-    private final Set<ChunkPos> loadedChunks;
-
-    // connections below
-    private Map<BlockPos, Function<BlockPos, IrrigationLayer>> layersBelowMap;
-    private final Set<IrrigationLayer> layersBelow;
-
-    // connections above
-    private Map<BlockPos, Function<BlockPos, IrrigationLayer>> layersAboveMap;
-    private final Set<IrrigationLayer> layersAbove;
 
     // contents
     private int content;
     private double height;
 
-    public IrrigationLayer(int id, IAgriIrrigationComponent component) {
-        this.id = id;
-        this.world = component.world();
-        this.min = component.getMinFluidHeight();
-        this.max = component.getMaxFluidHeight();
-        this.capacity =  component.getFluidCapacity();
+    // connectivity
+    private final Map<Pos, Set<Pos>> connections;
 
-        this.positions = Sets.newHashSet(component.position());
-        this.chunks = Sets.newHashSet();
-        this.loadedChunks = Sets.newHashSet();
+    public IrrigationLayer(BlockPos pos, double min, double max, int capacity) {
+        this(pos.getX(), pos.getZ(), min, max, capacity);
+    }
 
-        this.layersBelowMap = Maps.newHashMap();
-        this.layersBelow = Sets.newIdentityHashSet();
-
-        this.layersAboveMap = Maps.newHashMap();
-        this.layersAbove = Sets.newIdentityHashSet();
+    public IrrigationLayer(int x, int z, double min, double max, int capacity) {
+        this.min = min;
+        this.max = max;
+        this.capacity = capacity;
 
         this.content = 0;
         this.height = this.getMin();
+
+        this.connections = Maps.newHashMap();
+        this.connections.put(new Pos(x, z, capacity), Sets.newHashSet());
     }
 
-    public final int getId() {
-        return this.id;
-    }
-
-    public final World getWorld() {
-        return this.world;
-    }
-
-    public boolean isFullyLoaded() {
-        return this.loadedChunks.size() == this.chunks.size();
-    }
-
-    public void onChunkLoaded(ChunkPos chunk) {
-        // keep track of the amount of chunks loaded
-        if(this.chunks.contains(chunk)) {
-            this.loadedChunks.add(chunk);
-        }
-        // load the below layers
-        this.layersBelowMap.entrySet().stream()
-                .filter(entry ->
-                        entry.getKey().getX() >= chunk.getXStart() && entry.getKey().getX() <= chunk.getXEnd()
-                        && entry.getKey().getZ() >= chunk.getZStart() && entry.getKey().getZ() <= chunk.getZEnd())
-                .map(entry -> entry.getValue().apply(entry.getKey()))
-                .forEach(this.layersBelow::add);    // TODO: settle liquid contents
-        // load the above layers
-        this.layersAboveMap.entrySet().stream()
-                .filter(entry ->
-                        entry.getKey().getX() >= chunk.getXStart() && entry.getKey().getX() <= chunk.getXEnd()
-                                && entry.getKey().getZ() >= chunk.getZStart() && entry.getKey().getZ() <= chunk.getZEnd())
-                .map(entry -> entry.getValue().apply(entry.getKey()))
-                .forEach(this.layersAbove::add);    // TODO: settle liquid contents
-    }
-
-    public boolean onChunkUnloaded(ChunkPos chunk) {
-        // kee track of the amount of chunks loaded
-        if(this.chunks.contains(chunk)) {
-            this.loadedChunks.remove(chunk);
-        }
-        // return true if this needs to be unloaded
-        return this.loadedChunks.isEmpty();
-    }
-
-    public void onLayerUnloaded(IrrigationLayer layer) {
-        this.layersAbove.remove(layer);
-        this.layersBelow.remove(layer);
+    protected IrrigationLayer(Map<Pos, Set<Pos>> connections, double min, double max) {
+        this.min = min;
+        this.max = max;
+        this.capacity = connections.keySet().stream().mapToInt(Pos::getCapacity).sum();
+        this.connections = connections;
     }
 
     public double getMin() {
@@ -131,6 +81,38 @@ public class IrrigationLayer {
         return this.height;
     }
 
+    public void expand(BlockPos from, BlockPos to, int capacity, int content) {
+        // Update capacity and contents
+        this.capacity += capacity;
+        this.setContent(this.getContent() + content);
+        // Update connectivity
+        Pos fromPos = this.connections.keySet().stream().filter(pos -> pos.matches(from)).findAny()
+                .orElseThrow(() -> new IllegalArgumentException("The given position is not part of this layer"));
+        Pos toPos = new Pos(to, capacity);
+        this.connections.get(fromPos).add(toPos);
+        this.connections.computeIfAbsent(toPos, pos -> Sets.newHashSet()).add(fromPos);
+    }
+
+    public Optional<Set<IrrigationLayer>> reduce(BlockPos removed, int capacity) {
+        // update connectivity
+        Pos removedPos = this.connections.keySet().stream().filter(pos -> pos.matches(removed)).findAny()
+                .orElseThrow(() -> new IllegalArgumentException("The given position is not part of this layer"));
+        this.connections.remove(removedPos).forEach(pos -> this.connections.get(pos).remove(removedPos));
+        this.capacity -= capacity;
+        // check connectivity
+        final double height = this.getHeight();
+        Set<Map<Pos, Set<Pos>>> networks = new ConnectivityChecker(this.connections).check();
+        if(networks.size() <= 1) {
+            this.setHeight(height);
+            return Optional.empty();
+        } else {
+            return Optional.of(networks.stream()
+                    .map(connections -> new IrrigationLayer(connections, this.getMin(), this.getMax()))
+                    .collect(Collectors.toSet())
+            );
+        }
+    }
+
     protected void setContent(int content) {
         this.content = Math.max(0, Math.min(this.getCapacity(), content));
         this.height = this.calculateHeight(this.getContent());
@@ -141,103 +123,20 @@ public class IrrigationLayer {
         this.content = this.calculateContents(this.getHeight());
     }
 
-    public Set<BlockPos> getPositions() {
-        return this.positions;
-    }
-
     public int fill(int maxFill, IFluidHandler.FluidAction action) {
-        // check if this is fully loaded
-        if(!this.isFullyLoaded()) {
-            return 0;
-        }
-        // try to fill layers below first
-        int delta = this.fillBelow(maxFill, action);
-        if(delta >= maxFill) {
-            return maxFill;
-        }
-        // fill own layer
-        int fill = Math.min(maxFill - delta, this.getCapacity() - this.getContent());
+        int fill = Math.min(this.getCapacity() - this.getContent(), Math.max(0, maxFill));
         if(action.execute()) {
             this.setContent(this.getContent() + fill);
         }
         return fill;
     }
 
-    protected int fillBelow(int maxFill, IFluidHandler.FluidAction action) {
-        if(maxFill == 0) {
-            return 0;
-        }
-        int remaining = maxFill;
-        int divided = maxFill / this.layersBelow.size();
-        int delta = 0;
-        if(divided == 0) {
-            delta = this.layersBelow.stream()
-                    .filter(layer -> layer.fill(1, IFluidHandler.FluidAction.SIMULATE) > 0)
-                    .mapToInt(layer -> layer.fill(1, action))
-                    .sum();
-        } else {
-            delta = this.layersBelow.stream()
-                    .filter(layer -> layer.fill(divided, IFluidHandler.FluidAction.SIMULATE) > 0)
-                    .mapToInt(layer -> layer.fill(divided, action))
-                    .sum();
-        }
-        remaining -= delta;
-        if(remaining <= 0) {
-            return delta;
-        }
-        if(delta <= 0) {
-            return 0;
-        }
-        return fillBelow(remaining, action);
-    }
-
     public int drain(int maxDrain, IFluidHandler.FluidAction action) {
-        // check if this is fully loaded
-        if(!this.isFullyLoaded()) {
-            return 0;
-        }
-        // try to drain layers above first
-        int delta = this.drainAbove(maxDrain, action);
-        if(delta >= maxDrain) {
-            return maxDrain;
-        }
-        // drain own layer
-        if(this.getContent() <= 0) {
-            return 0;
-        }
-        int drain =  Math.min(maxDrain, this.getContent());
+        int drain = Math.min(this.getContent(), Math.max(0, maxDrain));
         if(action.execute()) {
             this.setContent(this.getContent() - drain);
         }
         return drain;
-    }
-
-    protected int drainAbove(int maxDrain, IFluidHandler.FluidAction action) {
-        if(maxDrain == 0) {
-            return 0;
-        }
-        int remaining = maxDrain;
-        int divided = maxDrain / this.layersAbove.size();
-        int delta = 0;
-        if(divided == 0) {
-            delta = this.layersAbove.stream()
-                    .filter(layer -> layer.drain(1, IFluidHandler.FluidAction.SIMULATE) > 0)
-                    .mapToInt(layer -> layer.drain(1, action))
-                    .sum();
-        } else {
-            delta = this.layersAbove.stream()
-                    .filter(layer -> layer.drain(divided, IFluidHandler.FluidAction.SIMULATE) > 0)
-                    .mapToInt(layer -> layer.drain(divided, action))
-                    .sum();
-        }
-        remaining -= delta;
-        if(remaining <= 0) {
-            return delta;
-        }
-        if(delta <= 0) {
-            return 0;
-        }
-        return drainAbove(remaining, action);
     }
 
     protected int calculateContents(double height) {
@@ -262,202 +161,148 @@ public class IrrigationLayer {
     }
 
     public CompoundNBT writeToTag() {
+        // create new tag
         CompoundNBT tag = new CompoundNBT();
-        // write layer properties
-        tag.putInt(AgriNBT.KEY, this.getId());
+        // capacity and contents
         tag.putDouble(AgriNBT.Y1, this.getMin());
         tag.putDouble(AgriNBT.Y2, this.getMax());
         tag.putInt(AgriNBT.CAPACITY, this.getCapacity());
         tag.putDouble(AgriNBT.LEVEL, this.getHeight());
-        // write layer positions
-        ListNBT positionTags = new ListNBT();
-        this.positions.forEach(pos -> {
-            CompoundNBT posTag = new CompoundNBT();
-            posTag.putInt(AgriNBT.X1, pos.getX());
-            posTag.putInt(AgriNBT.Y1, pos.getY());
-            posTag.putInt(AgriNBT.Z1, pos.getZ());
-            positionTags.add(posTag);
+        // connectivity
+        ListNBT connectionTags = new ListNBT();
+        this.connections.forEach((pos, connections) -> {
+            ListNBT subTags = new ListNBT();
+            connections.forEach(subPos -> subTags.add(subPos.writeToNBT(new CompoundNBT())));
+            connectionTags.add(pos.writeToNBT(new CompoundNBT()).put(AgriNBT.CONNECTIONS, subTags));
         });
-        tag.put(AgriNBT.ENTRIES, positionTags);
-        // write chunks
-        ListNBT chunkTags = new ListNBT();
-        this.chunks.forEach(chunk -> {
-            CompoundNBT chunkTag = new CompoundNBT();
-            chunkTag.putInt(AgriNBT.X1, chunk.x);
-            chunkTag.putInt(AgriNBT.Z1, chunk.z);
-            chunkTags.add(chunkTag);
-        });
-        tag.put(AgriNBT.CHUNK, chunkTags);
-        // write below positions
-        ListNBT belowTags = new ListNBT();
-        this.layersBelowMap.keySet().forEach(pos -> {
-            CompoundNBT posTag = new CompoundNBT();
-            posTag.putInt(AgriNBT.X1, pos.getX());
-            posTag.putInt(AgriNBT.Y1, pos.getY());
-            posTag.putInt(AgriNBT.Z1, pos.getZ());
-            belowTags.add(posTag);
-        });
-        tag.put(AgriNBT.DOWN, belowTags);
-        // write above positions
-        ListNBT aboveTags = new ListNBT();
-        this.layersAboveMap.keySet().forEach(pos -> {
-            CompoundNBT posTag = new CompoundNBT();
-            posTag.putInt(AgriNBT.X1, pos.getX());
-            posTag.putInt(AgriNBT.Y1, pos.getY());
-            posTag.putInt(AgriNBT.Z1, pos.getZ());
-            aboveTags.add(posTag);
-        });
-        tag.put(AgriNBT.UP, aboveTags);
+        tag.put(AgriNBT.ENTRIES, connectionTags);
+        // return the tag
         return tag;
     }
 
     public void readFromTag(CompoundNBT tag) {
-        // read layer properties
+        // capacity and contents
         this.min = tag.getDouble(AgriNBT.Y1);
         this.max = tag.getDouble(AgriNBT.Y2);
         this.capacity = tag.getInt(AgriNBT.CAPACITY);
         this.height = tag.getDouble(AgriNBT.LEVEL);
-        // read layer positions
-        this.positions.clear();
-        tag.getList(AgriNBT.ENTRIES, 10)
-                .stream()
-                .map(posTag -> (CompoundNBT) posTag)
-                .map(posTag -> new BlockPos(
-                    posTag.getInt(AgriNBT.X1),
-                    posTag.getInt(AgriNBT.Y1),
-                    posTag.getInt(AgriNBT.Z1)))
-                .forEach(this.positions::add);
-        // read chunks
-        this.chunks.clear();
-        tag.getList(AgriNBT.CHUNK, 10)
-                .stream()
-                .map(chunkTag -> (CompoundNBT) chunkTag)
-                .map(chunkTag -> new ChunkPos(
-                        chunkTag.getInt(AgriNBT.X1),
-                        chunkTag.getInt(AgriNBT.Z1)))
-                .forEach(this.chunks::add);
-        // read below positions
-        this.layersBelow.clear();
-        this.layersBelowMap = tag.getList(AgriNBT.DOWN, 10)
-                .stream()
-                .map(posTag -> (CompoundNBT) posTag)
-                .map(posTag ->
-                        new BlockPos(
-                                posTag.getInt(AgriNBT.X1),
-                                posTag.getInt(AgriNBT.Y1),
-                                posTag.getInt(AgriNBT.Z1)))
-                .collect(Collectors.toMap(
-                        pos -> pos,
-                        pos -> aPos -> IrrigationSystemHandler.getInstance().getBottomLayer(this.getWorld(), aPos)
-                ));
-        // read above positions
-        this.layersAbove.clear();
-        this.layersAboveMap = tag.getList(AgriNBT.UP, 10)
-                .stream()
-                .map(posTag -> (CompoundNBT) posTag)
-                .map(posTag ->
-                    new BlockPos(
-                            posTag.getInt(AgriNBT.X1),
-                            posTag.getInt(AgriNBT.Y1),
-                            posTag.getInt(AgriNBT.Z1)))
-                .collect(Collectors.toMap(
-                        pos -> pos,
-                        pos -> aPos -> IrrigationSystemHandler.getInstance().getTopLayer(this.getWorld(), aPos)
+        // connectivity
+        this.connections.clear();
+        tag.getList(AgriNBT.ENTRIES, 10).forEach(connectionTag ->
+                this.connections.put(
+                        new Pos(connectionTag),
+                        ((CompoundNBT) connectionTag).getList(AgriNBT.CONNECTIONS, 10).stream().map(Pos::new).collect(Collectors.toSet())
                 ));
     }
 
-    /*
-    public void split(double level, Consumer<IrrigationLayer> consumer) {
-        if(level <= this.getMin() || level >= this.getMax()) {
-            consumer.accept(this);
-        } else {
-            double f = (level - this.getMin())/(this.getMax() - this.getMin());
-            IrrigationLayer lower = new IrrigationLayer(
-                    this.getMin(), level, (int) f * this.getCapacity());
-            IrrigationLayer upper = new IrrigationLayer(
-                    level, this.getMax(), this.getCapacity() - lower.getCapacity());
-            if(lower.getCapacity() > 0) {
-                consumer.accept(lower);
-            }
-            if(upper.calculateContents() > 0) {
-                consumer.accept(upper);
-            }
+    public static class Pos {
+        private final int x;
+        private final int z;
+        private final int capacity;
+
+        public Pos(BlockPos pos, int capacity) {
+            this(pos.getX(), pos.getZ(), capacity);
         }
-    }
+        public Pos(INBT tag) {
+            this((CompoundNBT) tag);
+        }
 
-    public boolean merge(IrrigationLayer other, Consumer<IrrigationLayer> consumer) {
-        if(this.getMin() != other.getMin() || this.getMax() != other.getMax()) {
+        public Pos(CompoundNBT tag) {
+            this(tag.getInt(AgriNBT.X1), tag.getInt(AgriNBT.Z1), tag.getInt(AgriNBT.CAPACITY));
+        }
+
+        public Pos(int x, int z, int capacity) {
+            this.x = x;
+            this.z = z;
+            this.capacity = capacity;
+        }
+
+        public int getX() {
+            return this.x;
+        }
+
+        public int getZ() {
+            return this.z;
+        }
+
+        public int getCapacity() {
+            return this.capacity;
+        }
+
+        public boolean matches(BlockPos pos) {
+            return this.getX() == pos.getX() && this.getZ() == pos.getZ();
+        }
+
+        public CompoundNBT writeToNBT(CompoundNBT tag) {
+            tag.putInt(AgriNBT.X1, this.getX());
+            tag.putInt(AgriNBT.Z1, this.getZ());
+            tag.putInt(AgriNBT.CAPACITY, this.getCapacity());
+            return tag;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj == this) {
+                return true;
+            }
+            if(obj instanceof Pos) {
+                Pos other = (Pos) obj;
+                return this.getX() == other.getX()
+                        && this.getZ() == other.getZ()
+                        && this.getCapacity() == other.getCapacity();
+            }
             return false;
         }
-        consumer.accept(new IrrigationLayer(this.getMin(), this.getMax(), this.calculateContents() + other.calculateContents()));
-        return true;
-    }
 
-    public void distinct(IrrigationLayer other, Consumer<IrrigationLayer> consumer) {
-        if(this.merge(other, consumer)) {
-            // The layers have identical limits, the merging was successful
-            return;
-        }
-        if(this.getMax() <= other.getMin() || this.getMin() >= other.getMax()) {
-            // The layers do not overlap, pass them to the consumer
-            consumer.accept(this);
-            consumer.accept(other);
-        } else {
-            // The layers overlap
-            if(this.getMin() < other.getMin()) {
-                if(this.getMax() > other.getMax()) {
-                    // this range envelopes the other range
-                    this.envelope(other, consumer);
-                } else {
-                    // overlap from below
-                    this.overlapFromBelow(other, consumer);
-                }
-            } else {
-                if(this.getMax() > other.getMax()) {
-                    // overlap from above
-                    this.overlapFromAbove(other, consumer);
-                } else {
-                    // the other range envelopes this range
-                    other.envelope(this, consumer);
-                }
-            }
+        @Override
+        public String toString() {
+            return "(" + this.getX() + ", " + this.getZ() + ")";
         }
     }
 
-    private void envelope(IrrigationLayer other, Consumer<IrrigationLayer> consumer) {
-        this.split(other.getMin(), (split1) -> {
-            if(split1.getMax() > other.getMax()) {
-                split1.split(other.getMax(), (split2) -> {
-                    if(split2.getMax() > other.getMax()) {
-                        consumer.accept(split2);
-                    } else {
-                        other.merge(split2, consumer);
-                    }
-                });
-            } else {
-                consumer.accept(split1);
-            }
-        });
-    }
+    protected static class ConnectivityChecker {
+        private final Map<Pos, Set<Pos>> original;
+        private final Set<Map<Pos, Set<Pos>>> connectivity;
 
-    private void overlapFromAbove(IrrigationLayer other, Consumer<IrrigationLayer> consumer) {
-        other.overlapFromBelow(this, consumer);
-    }
+        protected ConnectivityChecker(Map<Pos, Set<Pos>> original) {
+            this.original = original;
+            this.connectivity = Sets.newIdentityHashSet();
+        }
 
-    private void overlapFromBelow(IrrigationLayer other, Consumer<IrrigationLayer> consumer) {
-        this.split(other.getMin(), (split1) -> {
-            if(split1.getMax() > other.getMin()) {
-                other.split(split1.getMax(), (split2) -> {
-                    if(split2.getMax() > this.getMax()) {
-                        consumer.accept(split2);
-                    } else {
-                        split1.merge(split2, consumer);
-                    }
-                });
-            } else {
-                consumer.accept(split1);
+        public Set<Map<Pos, Set<Pos>>> check() {
+            if(this.connectivity.isEmpty()) {
+                this.runCheck();
             }
-        });
+            return this.connectivity;
+        }
+
+        protected void runCheck() {
+            // Copy all original connections
+            Map<Pos, Set<Pos>> toVisit = Maps.newHashMap();
+            this.original.forEach((pos, connections) -> toVisit.put(pos, Sets.newHashSet(connections)));
+            // Iterate over the positions
+            this.original.keySet().forEach(pos -> {
+                if(toVisit.containsKey(pos)) {
+                    // we have not yet visited this position in a previous iteration, add a new entry for it
+                    this.connectivity.add(this.visitPositionRecursively(pos, Maps.newHashMap(), toVisit));
+                }
+            });
+        }
+
+        protected Map<Pos, Set<Pos>> visitPositionRecursively(Pos pos, Map<Pos, Set<Pos>> visited, Map<Pos, Set<Pos>> toVisit) {
+            // If the positions has not yet been visited, we need to dig deeper
+            if(!visited.containsKey(pos)) {
+                // Fetch the connections
+                Set<Pos> connections = this.original.get(pos);
+                // Add the position and all its connection to the visited map
+                visited.put(pos, connections);
+                // Remove it from the positions which still need to be visited
+                toVisit.remove(pos);
+                // Visit its connections recursively
+                connections.forEach(connection -> this.visitPositionRecursively(connection, visited, toVisit));
+            }
+            // Return the visited positions
+            return visited;
+        }
     }
-     */
 }

@@ -1,16 +1,10 @@
 package com.infinityraider.agricraft.handler;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
 import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationLayer;
-import com.infinityraider.agricraft.reference.AgriNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
@@ -20,7 +14,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -40,25 +33,6 @@ public class IrrigationSystemHandler {
 
     public WorldManager getManager(World world) {
         return this.managers.computeIfAbsent(world.getDimensionKey(), key -> new WorldManager(world));
-    }
-
-    public List<IrrigationLayer> getLayers(World world, BlockPos pos) {
-        return this.getManager(world).getLayers(pos);
-    }
-
-    public IrrigationLayer getBottomLayer(World world, BlockPos pos) {
-        return this.getManager(world).getBottomLayer(pos);
-    }
-
-    public IrrigationLayer getTopLayer(World world, BlockPos pos) {
-        return this.getManager(world).getTopLayer(pos);
-    }
-
-    public void loadLayers(IAgriIrrigationComponent component, ListNBT layerTags) {
-        World world = component.world();
-        if(world != null && !world.isRemote()) {
-            this.getManager(world).deserializeLayers(component, layerTags);
-        }
     }
 
     @SubscribeEvent
@@ -143,34 +117,11 @@ public class IrrigationSystemHandler {
         }
 
         protected void onChunkLoaded(IChunk chunk) {
-            this.layers.values().forEach(layer -> layer.onChunkLoaded(chunk.getPos()));
+            // TODO
         }
 
         protected void onChunkUnloaded(IChunk chunk) {
-            this.layers.values().stream()
-                    .filter(layer -> layer.onChunkUnloaded(chunk.getPos()))
-                    .forEach(layer -> {
-                        this.layers.remove(layer.getId());
-                        layer.getPositions().forEach(pos -> this.layersByPos.get(pos).remove(layer));
-                        this.layers.values().forEach(aLayer -> aLayer.onLayerUnloaded(layer));
-                    });
-        }
-
-        protected void deserializeLayers(IAgriIrrigationComponent component, ListNBT layerTags) {
-            layerTags.stream().map(tag -> (CompoundNBT) tag).forEach(tag ->
-                    this.layers.computeIfAbsent(tag.getInt(AgriNBT.KEY), id -> {
-                        IrrigationLayer newLayer = new IrrigationLayer(id, component);
-                        newLayer.readFromTag(tag);
-                        newLayer.getPositions().forEach(pos -> {
-                            List<IrrigationLayer> layers = this.layersByPos.computeIfAbsent(pos, aPos -> Lists.newArrayList());
-                            layers.add(newLayer);
-                            layers.sort(Comparator.comparingDouble(IrrigationLayer::getMax));
-                            if(this.getWorld().isAreaLoaded(pos, 0)) {
-                                newLayer.onChunkLoaded(new ChunkPos(pos));
-                            }
-                        });
-                        return newLayer;
-                    }));
+            // TODO
         }
     }
 }
