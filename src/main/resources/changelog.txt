@@ -43,6 +43,7 @@ Changelog
 - ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
 - ADDED: Default jsons for Thermal Cultivation (thanks Nelson Brichau)
 - ADDED: Default jsons for Simple Farming (thanks Nelson Brichau)
+- ADDED: Default jsons for Quark (thanks Nelson Brichau)
 - ADDED: Default jsons for XL Food Mod (thanks Nelson Brichau)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
 - ADDED: Compatibility with Create's Mechanical Harvester

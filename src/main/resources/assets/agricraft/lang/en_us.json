@@ -484,6 +484,8 @@
   "agricraft.plant.thermal_spinach.desc": "The leaves of a spinach plant. Grants sailors an increase in muscle mass.",
   "agricraft.plant.thermal_strawberry.desc": "A sweet, red fruit used in a variety of condiments and desserts.",
   "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
-  "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups."
+  "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups.",
+
+  "agricraft.plant.quark_brown_mushroom.desc": "Glow in the dark."
 
 }
