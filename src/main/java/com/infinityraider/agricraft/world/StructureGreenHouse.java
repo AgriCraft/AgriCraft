@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.init.AgriBlocks;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
+import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.WorldGenerationHelper;
 import net.minecraft.block.BlockLog;
 import net.minecraft.init.Blocks;
@@ -208,6 +209,26 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
                     IAgriStat randomStat = WorldGenerationHelper.getRandomStat(rnd);
                     AgriSeed seed = WorldGenerationHelper.getRandomSeed(rnd, false, plants).withStat(randomStat);
                     crop.setSeed(seed);
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //place a seed analyzer
+    protected boolean generateStructureSeedAnalyzer(World world, StructureBoundingBox boundingBox, int x, int y, int z, EnumFacing facing) {
+        int xCoord = this.getXWithOffset(x, z);
+        int yCoord = this.getYWithOffset(y);
+        int zCoord = this.getZWithOffset(x, z);
+        if (boundingBox.isVecInside(new BlockPos(xCoord, yCoord, zCoord))) {
+            world.setBlockState(new BlockPos(xCoord, yCoord, zCoord), AgriBlocks.getInstance().SEED_ANALYZER.getDefaultState());
+            TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) world.getTileEntity(new BlockPos(xCoord, yCoord, zCoord));
+            if (analyzer!=null) {
+                if(facing!=null) {
+                    analyzer.setOrientation(facing);
                 }
             }
             return true;
