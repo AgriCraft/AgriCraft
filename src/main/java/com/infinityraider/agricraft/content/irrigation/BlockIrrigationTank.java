@@ -137,10 +137,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 // tank logic is handled from within the tile entity
                 return ownState;
             }
+            TileEntity ownTile = world.getTileEntity(pos);
             TileEntity otherTile = world.getTileEntity(otherPos);
-            if(otherTile instanceof TileEntityIrrigationChannel) {
+            if(ownTile instanceof TileEntityIrrigationTank && otherTile instanceof TileEntityIrrigationChannel) {
                 TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) otherTile;
-                if (channel.isSameMaterial(world.getTileEntity(pos))) {
+                if (channel.canConnect((TileEntityIrrigationTank) ownTile)) {
                     return prop.apply(ownState, Connection.CHANNEL);
                 }
             }
@@ -154,7 +155,9 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityIrrigationTank) {
-            ((TileEntityIrrigationTank) tile).onNeighbourChanged(fromPos);
+            TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+            tank.onNeighbourChanged(fromPos);
+            tank.onNeighbourUpdate(fromPos);
         }
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }

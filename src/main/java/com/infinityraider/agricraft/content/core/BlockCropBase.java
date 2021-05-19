@@ -74,6 +74,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
                 this.breakBlock(state, world, pos, true);
             }
         }
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }
 
     @Override

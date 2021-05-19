@@ -22,6 +22,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -32,6 +33,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -164,6 +166,20 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     @SuppressWarnings("deprecation")
     public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         return this.getShape(state, world, pos, context);
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityCropSticks) {
+            Arrays.stream(Direction.values())
+                    .filter(dir -> dir.getAxis().isHorizontal())
+                    .filter(dir -> pos.offset(dir).equals(fromPos))
+                    .forEach(dir -> ((TileEntityCropSticks) tile).onNeighbourChange(dir, fromPos, world.getBlockState(fromPos)));
+        }
     }
 
     @Override
