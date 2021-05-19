@@ -1,24 +1,17 @@
 package com.infinityraider.agricraft.content.irrigation;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationComponent;
-import com.infinityraider.agricraft.api.v1.irrigation.IAgriIrrigationNode;
-import com.infinityraider.agricraft.capability.CapabilityIrrigationComponent;
-import com.infinityraider.agricraft.capability.CapabilityMultiBlockData;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
-import com.infinityraider.infinitylib.utility.WorldHelper;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,13 +21,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.function.IntConsumer;
-import java.util.function.IntSupplier;
-import java.util.function.ToIntFunction;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IAgriIrrigationNode {
+public class TileEntityIrrigationTank extends TileEntityIrrigationComponent {
     private static final double MIN_Y = Constants.UNIT;
     private static final double MAX_Y = 1;
 
@@ -133,51 +123,6 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                 }
             }
         }
-        CapabilityMultiBlockData.getInstance().removeMultiBlockNode(this.getWorld(), min);
-    }
-
-    @Override
-    public Optional<IAgriIrrigationNode> getNode(Direction side) {
-        return Optional.of(CapabilityMultiBlockData.getInstance().getIrrigationNode(this));
-    }
-
-    public IAgriIrrigationNode createNewMultiBlockNode() {
-        if(this.getWorld() == null) {
-            // Shouldn't ever happen, but you know, better safe than sorry...
-            return this;
-        }
-        if(this.getMultiBlockMin().equals(this.getMultiBlockMax())) {
-            return this;
-        }
-        return new MultiBlockNode(
-                this.getWorld(),
-                this.getMultiBlockMin(),
-                this.getMultiBlockMax(),
-                this.getMaterial().copy(),
-                () -> this.getMultiBlockOrigin().getFluidContents(),
-                (v) -> this.getMultiBlockOrigin().setFluidContents(v)
-        );
-    }
-
-    @Override
-    public boolean canConnect(@Nonnull IAgriIrrigationNode other, Direction from) {
-        if(from.getAxis().isVertical()) {
-            return false;
-        }
-        if(other instanceof TileEntityIrrigationChannel) {
-            return this.isSameMaterial((TileEntityIrrigationChannel) other);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isSource() {
-        return true;
-    }
-
-    @Override
-    public boolean isSink() {
-        return false;
     }
 
     @Override
@@ -439,121 +384,6 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             public TileEntityIrrigationTank getTank() {
                 return this.tank;
             }
-        }
-    }
-
-    public static class MultiBlockNode implements IAgriIrrigationNode {
-        private final World world;
-        private final BlockPos min;
-        private final BlockPos max;
-        private final ItemStack material;
-        private final IntSupplier contentGetter;
-        private final IntConsumer contentSetter;
-
-        private Set<Tuple<Direction, BlockPos>> connections;
-
-        protected MultiBlockNode(World world, BlockPos min, BlockPos max, ItemStack material, IntSupplier contentGetter, IntConsumer contentSetter) {
-            this.world = world;
-            this.min = min;
-            this.max = max;
-            this.material = material;
-            this.contentGetter = contentGetter;
-            this.contentSetter = contentSetter;
-        }
-
-        public World getWorld() {
-            return this.world;
-        }
-
-        public BlockPos getMin() {
-            return this.min;
-        }
-
-        public BlockPos getMax() {
-            return this.max;
-        }
-
-        public ItemStack getMaterial() {
-            return this.material;
-        }
-
-        public int getTankCount() {
-            return this.getCount(BlockPos::getX) * this.getCount(BlockPos::getY) * this.getCount(BlockPos::getZ);
-        }
-
-        protected int getCount(ToIntFunction<BlockPos> counter) {
-            return counter.applyAsInt(this.getMax()) - counter.applyAsInt(this.getMin()) + 1;
-        }
-
-        @Override
-        public Collection<IAgriIrrigationComponent> getComponents() {
-            return WorldHelper.collectCapabilities(this.getWorld(), this.getMin(), this.getMax(),
-                    CapabilityIrrigationComponent.getInstance().getCapability(), IAgriIrrigationComponent.class);
-        }
-
-        @Override
-        public double getMinFluidHeight() {
-            return this.getMin().getY() + MIN_Y;
-        }
-
-        @Override
-        public double getMaxFluidHeight() {
-            return this.getMax().getY() + MAX_Y;
-        }
-
-        @Override
-        public int getFluidCapacity() {
-            return this.getTankCount() * AgriCraft.instance.getConfig().tankCapacity();
-        }
-
-        @Override
-        public int getFluidContents() {
-            return this.contentGetter.getAsInt();
-        }
-
-        @Override
-        public void setFluidContents(int volume) {
-            this.contentSetter.accept(volume);
-        }
-
-        @Override
-        public boolean canConnect(IAgriIrrigationNode other, Direction from) {
-            if(from.getAxis().isVertical()) {
-                return false;
-            }
-            if(other instanceof TileEntityIrrigationComponent) {
-                return ((TileEntityIrrigationComponent) other).isSameMaterial(this.getMaterial());
-            }
-            return false;
-        }
-
-        @Override
-        public Set<Tuple<Direction, BlockPos>> getPotentialConnections() {
-            if(this.connections == null) {
-                ImmutableSet.Builder<Tuple<Direction, BlockPos>> setBuilder = new ImmutableSet.Builder<>();
-                for(int y = this.getMin().getY(); y <= this.getMax().getY(); y++) {
-                    for(int x = this.getMin().getX(); x <= this.getMax().getX(); x++) {
-                        setBuilder.add(new Tuple<>(Direction.NORTH, new BlockPos(x, y, this.getMin().getZ() - 1)));
-                        setBuilder.add(new Tuple<>(Direction.SOUTH, new BlockPos(x, y, this.getMax().getZ() + 1)));
-                    }
-                    for(int z = this.getMin().getZ(); z <= this.getMax().getZ(); z++) {
-                        setBuilder.add(new Tuple<>(Direction.WEST, new BlockPos(this.getMin().getX() - 1, y, z)));
-                        setBuilder.add(new Tuple<>(Direction.EAST, new BlockPos(this.getMax().getX() + 1, y, z)));
-                    }
-                }
-                this.connections = setBuilder.build();
-            }
-            return this.connections;
-        }
-
-        @Override
-        public boolean isSource() {
-            return true;
-        }
-
-        @Override
-        public boolean isSink() {
-            return false;
         }
     }
 
