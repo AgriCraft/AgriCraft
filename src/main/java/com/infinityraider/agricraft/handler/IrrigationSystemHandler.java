@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationLayer;
+import com.infinityraider.agricraft.impl.v1.irrigation.IrrigationLayerSection;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
@@ -74,8 +74,8 @@ public class IrrigationSystemHandler {
 
     private static final class WorldManager {
         private final World world;
-        private final Map<Integer, IrrigationLayer> layers;
-        private final Map<BlockPos, List<IrrigationLayer>> layersByPos;
+        private final Map<Integer, IrrigationLayerSection> layers;
+        private final Map<BlockPos, List<IrrigationLayerSection>> layersByPos;
         private int lastId;
 
         private WorldManager(World world) {
@@ -90,13 +90,13 @@ public class IrrigationSystemHandler {
         }
 
         @Nullable
-        public List<IrrigationLayer> getLayers(BlockPos pos) {
+        public List<IrrigationLayerSection> getLayers(BlockPos pos) {
             return this.layersByPos.get(pos);
         }
 
         @Nullable
-        public IrrigationLayer getTopLayer(BlockPos pos) {
-            List<IrrigationLayer> layers = this.getLayers(pos);
+        public IrrigationLayerSection getTopLayer(BlockPos pos) {
+            List<IrrigationLayerSection> layers = this.getLayers(pos);
             if(layers == null) {
                 return null;
             }
@@ -104,8 +104,8 @@ public class IrrigationSystemHandler {
         }
 
         @Nullable
-        public IrrigationLayer getBottomLayer(BlockPos pos) {
-            List<IrrigationLayer> layers = this.getLayers(pos);
+        public IrrigationLayerSection getBottomLayer(BlockPos pos) {
+            List<IrrigationLayerSection> layers = this.getLayers(pos);
             if(layers == null) {
                 return null;
             }

@@ -41,23 +41,25 @@ public class IrrigationNetwork {
 
     private static class IrrigationLayerManager implements IFluidHandler {
         private final IrrigationNetwork network;
-        private final IrrigationLayer layer;
+        private final IrrigationLayerSection layer;
 
-        private final Map<IrrigationLayer.Pos, Set<IrrigationLayerManager>> connectionsAbove;
-        private final Map<IrrigationLayer.Pos, Set<IrrigationLayerManager>> connectionsBelow;
+        private final Map<IrrigationLayerSection.Pos, Set<IrrigationLayerManager>> connectionsAbove;
+        private final Map<IrrigationLayerSection.Pos, Set<IrrigationLayerManager>> connectionsBelow;
+        private final Map<IrrigationLayerSection.Pos, Set<IrrigationLayerManager>> connectionsHorizontal;
 
-        protected IrrigationLayerManager(IrrigationNetwork network, IrrigationLayer layer) {
+        protected IrrigationLayerManager(IrrigationNetwork network, IrrigationLayerSection layer) {
             this.network = network;
             this.layer = layer;
             this.connectionsAbove = Maps.newHashMap();
             this.connectionsBelow = Maps.newHashMap();
+            this.connectionsHorizontal = Maps.newHashMap();
         }
 
         public IrrigationNetwork getNetwork() {
             return this.network;
         }
 
-        public IrrigationLayer getLayer() {
+        public IrrigationLayerSection getLayer() {
             return this.layer;
         }
 
