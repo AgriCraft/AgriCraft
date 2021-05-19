@@ -27,6 +27,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -128,6 +129,24 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
         }
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockState updatePostPlacement(BlockState ownState, Direction dir, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos) {
+        return getConnection(dir).map(prop -> {
+            if(prop.fetch(ownState).isTank()) {
+                // tank logic is handled from within the tile entity
+                return ownState;
+            }
+            TileEntity otherTile = world.getTileEntity(otherPos);
+            if(otherTile instanceof TileEntityIrrigationChannel) {
+                TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) otherTile;
+                if (channel.isSameMaterial(world.getTileEntity(pos))) {
+                    return prop.apply(ownState, Connection.CHANNEL);
+                }
+            }
+            return prop.apply(ownState, Connection.NONE);
+        }).orElse(super.updatePostPlacement(ownState, dir, otherState, world, pos, otherPos));
+    }
 
     @Override
     @Deprecated
@@ -187,17 +206,17 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     public enum Connection implements IStringSerializable {
-        NONE(
+        NONE(false, false,
                 Block.makeCuboidShape(0, 0, 0, 16, 16, 2),
                 Block.makeCuboidShape(0, 0, 0, 2, 16, 16)
         ),
 
-        TANK(
+        TANK(true, false,
                 VoxelShapes.empty(),
                 VoxelShapes.empty()
         ),
 
-        CHANNEL(
+        CHANNEL(false, true,
                 Stream.of(
                         Block.makeCuboidShape(0, 0, 0, 16, 6, 2),
                         Block.makeCuboidShape(0, 6, 0, 6, 10, 2),
@@ -212,16 +231,29 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get()
         );
 
+        private final boolean tank;
+        private final boolean channel;
+
         private final VoxelShape north;
         private final VoxelShape east;
         private final VoxelShape south;
         private final VoxelShape west;
 
-        Connection(VoxelShape north, VoxelShape west) {
+        Connection(boolean tank, boolean channel, VoxelShape north, VoxelShape west) {
+            this.tank = tank;
+            this.channel = channel;
             this.north = north;
             this.south = north.withOffset(0, 0, 14 * Constants.UNIT);
             this.west = west;
             this.east = west.withOffset(14 * Constants.UNIT, 0, 0);
+        }
+
+        public boolean isTank() {
+            return this.tank;
+        }
+
+        public boolean isChannel() {
+            return this.tank;
         }
 
         public VoxelShape getShape(Direction direction) {
