@@ -105,6 +105,9 @@ public class AgriCraftConfig {
     public static int greenhouseIrrigatedWeight = 2;
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Irrigated greenhouse limit", min = "0", max = "2", comment = "The maximum number of irrigated greenhouses per village.")
     public static int greenhouseIrrigatedLimit = 1;
+
+    @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Greenhouse plant tier limit", min = "1", max = "10", comment = "The maximum tier of plants allowed to spawn in greenhouses.")
+    public static int greenhousePlantTierLimit = 3;
     /*
     @AgriConfigurable(category = AgriConfigCategory.WORLD, key = "Enable villagers", comment = "Set to false if you wish to disable villagers spawning in the AgriCraft greenhouses.")
     public static boolean villagerEnabled = true;

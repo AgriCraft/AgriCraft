@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.world;
 
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.misc.IAgriConnectable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.init.AgriBlocks;
@@ -18,7 +17,6 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -254,7 +252,7 @@ public class StructureGreenHouseIrrigated extends StructureGreenHouse {
 
         //place crops
         Random rnd = new Random();
-        List<IAgriPlant> plants = new ArrayList<>(AgriApi.getPlantRegistry().all());
+        List<IAgriPlant> plants = this.getPlantPool();
         for(int x=3;x<=7;x++) {
             for(int z=8;z<=12;z++) {
                 this.generateStructureCrop(world, boundingBox, x, 2, z, (z%2==1 && x%2==0) || (x==5 &&z==10), rnd, plants);

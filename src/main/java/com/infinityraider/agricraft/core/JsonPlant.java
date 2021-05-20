@@ -147,6 +147,11 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
+    public int getTier() {
+        return this.plant.getTier();
+    }
+
+    @Override
     public void getPossibleProducts(Consumer<ItemStack> products) {
         this.plant.getProducts().getAll().stream()
                 .map(p -> p.toStack(FuzzyStack.class))

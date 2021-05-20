@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.seed.AgriSeed;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.init.AgriBlocks;
+import com.infinityraider.agricraft.reference.AgriCraftConfig;
 import com.infinityraider.agricraft.tiles.TileEntityCrop;
 import com.infinityraider.agricraft.tiles.analyzer.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.utility.WorldGenerationHelper;
@@ -18,9 +19,9 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static net.minecraft.block.BlockLog.LOG_AXIS;
 
@@ -177,7 +178,7 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
         this.placeTorch(worldIn, EnumFacing.NORTH, 8, 4, 2, boundingBox);
 
         Random rnd = new Random();
-        List<IAgriPlant> plants = new ArrayList<>(AgriApi.getPlantRegistry().all());
+        List<IAgriPlant> plants = this.getPlantPool();
 
         for(int x=3;x<=7;x++) {
             for(int z=3;z<=7;z++) {
@@ -236,6 +237,12 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
         else {
             return false;
         }
+    }
+
+    protected List<IAgriPlant> getPlantPool() {
+        return AgriApi.getPlantRegistry().stream()
+                .filter(plant -> plant.getTier() >= AgriCraftConfig.greenhousePlantTierLimit)
+                .collect(Collectors.toList());
     }
 
     //TODO: spawnVillagers

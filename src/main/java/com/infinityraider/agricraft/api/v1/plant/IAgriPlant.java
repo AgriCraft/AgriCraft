@@ -166,6 +166,8 @@ public interface IAgriPlant extends IAgriRegisterable {
      */
     int getGrowthStages();
 
+    int getTier();
+
     /**
      * Fetches the user-friendly plant description for use in the Seed Journal. Notice, any
      * localization of this information is left for the implementer to handle.
