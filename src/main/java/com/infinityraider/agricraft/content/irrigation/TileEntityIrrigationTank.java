@@ -16,7 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -36,10 +39,13 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     private final AutoSyncedField<BlockPos> min;
     private final AutoSyncedField<BlockPos> max;
 
+    private final LazyOptional<IFluidHandler> capability;
+
     public TileEntityIrrigationTank() {
         super(AgriCraft.instance.getModTileRegistry().irrigation_tank, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
         this.min = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
         this.max = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
+        this.capability = LazyOptional.of(() -> this);
     }
 
     public BlockPos getMultiBlockMin() {
@@ -58,48 +64,54 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     public int getContent() {
         if(this.isMultiBlockOrigin()) {
             return super.getContent();
+        } else {
+            return this.getMultiBlockOrigin().getContent();
         }
-        return this.getMultiBlockOrigin().getContent();
     }
 
     @Override
     public double getLevel() {
         if(this.isMultiBlockOrigin()) {
             return super.getLevel();
+        } else {
+            return this.getMultiBlockOrigin().getLevel();
         }
-        return this.getMultiBlockOrigin().getLevel();
     }
 
     @Override
     public int pushWater(int max, boolean execute) {
         if(this.isMultiBlockOrigin()) {
             return super.pushWater(max, execute);
+        } else {
+            return this.getMultiBlockOrigin().pushWater(max, execute);
         }
-        return this.getMultiBlockOrigin().pushWater(max, execute);
     }
 
     @Override
     public int drainWater(int max, boolean execute) {
         if(this.isMultiBlockOrigin()) {
             return super.drainWater(max, execute);
+        } else {
+            return this.getMultiBlockOrigin().drainWater(max, execute);
         }
-        return this.getMultiBlockOrigin().drainWater(max, execute);
     }
 
     @Override
     protected void setContent(int content) {
         if(this.isMultiBlockOrigin()) {
             super.setContent(content);
+        } else {
+            this.getMultiBlockOrigin().setContent(content);
         }
-        this.getMultiBlockOrigin().setContent(content);
     }
 
     @Override
     protected void setLevel(double level) {
         if(this.isMultiBlockOrigin()) {
             super.setLevel(level);
+        } else {
+            this.getMultiBlockOrigin().setLevel(level);
         }
-        this.getMultiBlockOrigin().setLevel(level);
     }
 
     @Override
@@ -233,6 +245,11 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
+    protected String description() {
+        return "Tank";
+    }
+
+    @Override
     public int getTanks() {
         return 1;
     }
@@ -269,6 +286,15 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     public FluidStack drain(int maxDrain, FluidAction action) {
         int drained = this.drainWater(maxDrain, action.execute());
         return drained > 0 ? new FluidStack(Fluids.WATER, drained) : FluidStack.EMPTY;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return this.capability.cast();
+        }
+        return super.getCapability(cap, side);
     }
 
     public static class MultiBlockFormer {

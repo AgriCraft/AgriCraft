@@ -10,6 +10,9 @@ public class ItemDebugger extends ItemDebuggerBase {
     private static final List<DebugMode> MODES = ImmutableList.of(
             new DebugModeCheckSoil(),
             new DebugModeCoreInfo(),
+            new DebugModeCheckIrrigationComponent(),
+            new DebugModeFillIrrigationComponent(),
+            new DebugModeDrainIrrigationComponent(),
             new DebugModeIGrowable(),
             new DebugModeDiffLight()
     );

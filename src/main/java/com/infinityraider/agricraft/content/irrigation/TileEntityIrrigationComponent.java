@@ -61,7 +61,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
                     double f_b = component.getSurfaceFactor();
                     double y_a1 = this.getMinLevel();
                     double y_b1 = component.getMinLevel();
-                    double v = (y_a - y_b) * this.getSurfaceFactor();
+                    double v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
                     double dv = f_b*v/(f_a + f_b) - (f_a*f_b)*(y_b1 - y_a1)/(f_a + f_b);
                     // only transfer if the delta is positive
                     if(dv > 0) {
@@ -194,6 +194,13 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     @SuppressWarnings("unused")
     protected void readComponentNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {}
 
+    public String describeNeighbour(Direction direction) {
+        TileEntityIrrigationComponent component = this.neighbours.getNeighbour(direction);
+        return component == null ? "none" : component.description();
+    }
+
+    protected abstract String description();
+
     // Utility class to cache neighbours
     private static class NeighbourCache {
         private final TileEntityIrrigationComponent component;
@@ -208,6 +215,11 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
 
         public TileEntityIrrigationComponent getComponent() {
             return this.component;
+        }
+
+        @Nullable
+        public TileEntityIrrigationComponent getNeighbour(Direction dir) {
+            return this.neighbours.containsKey(dir) ? this.neighbours.get(dir).getNeighbour() : null;
         }
 
         public void onNeighbourUpdate(Direction dir) {

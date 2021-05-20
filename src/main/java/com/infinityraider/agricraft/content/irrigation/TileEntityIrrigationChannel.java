@@ -46,6 +46,11 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
         return CONTENT_DELTA_FRACTION;
     }
 
+    @Override
+    protected String description() {
+        return "channel";
+    }
+
     private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntityIrrigationChannel> {
         @Nullable
         @OnlyIn(Dist.CLIENT)

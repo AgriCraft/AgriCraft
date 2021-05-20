@@ -13,7 +13,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -117,8 +121,37 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        // TODO: bucket logic
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+            ItemStack stack = player.getHeldItem(hand);
+            if(stack.getItem() instanceof BucketItem) {
+                BucketItem bucket = (BucketItem) stack.getItem();
+                Fluid fluid = bucket.getFluid();
+                if(fluid == Fluids.WATER) {
+                    // try to fill from a bucket
+                    TileEntity tile = world.getTileEntity(pos);
+                    if(tile instanceof TileEntityIrrigationTank) {
+                        TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                        if(tank.pushWater(1000, false) == 1000) {
+                            tank.pushWater(1000, true);
+                            if(!player.isCreative()) {
+                                player.setHeldItem(hand, new ItemStack(Items.BUCKET));
+                            }
+                            return ActionResultType.SUCCESS;
+                        }
+                    }
+                } else if(fluid == Fluids.EMPTY) {
+                    // try to drain to a bucket
+                    TileEntity tile = world.getTileEntity(pos);
+                    if(tile instanceof TileEntityIrrigationTank) {
+                        TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                        if(tank.drainWater(1000, false) == 1000) {
+                            tank.drainWater(1000, true);
+                            player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
+                            return ActionResultType.SUCCESS;
+                        }
+                    }
+                }
+            }
+        return ActionResultType.FAIL;
     }
 
     @Override
