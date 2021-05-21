@@ -21,8 +21,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
@@ -257,6 +259,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      */
     @Nonnull
     ResourceLocation getSeedModel();
+
+    /**
+     * Spawn custom particles if the current growth stage allow it.
+     *
+     * @param crop the crop on which this is planted.
+     * @param rand a random for use in rng.
+     */
+    void spawnParticles(@Nonnull IAgriCrop crop, Random rand);
 
     /**
      * Checks if a plant can be harvested at the given growth stage
