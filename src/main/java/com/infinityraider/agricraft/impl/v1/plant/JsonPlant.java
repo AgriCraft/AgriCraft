@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoilCondition;
 import com.google.common.collect.ImmutableList;
@@ -290,6 +291,11 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public ResourceLocation getSeedModel() {
         return this.seedModel;
+    }
+
+    @Override
+    public List<AgriParticleEffect> getParticleEffects() {
+        return this.plant.getParticleEffects();
     }
 
     @Override

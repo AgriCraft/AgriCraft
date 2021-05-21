@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -257,6 +258,11 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      */
     @Nonnull
     ResourceLocation getSeedModel();
+
+    /**
+     * @return The particle effect for the plant
+     */
+    List<AgriParticleEffect> getParticleEffects();
 
     /**
      * Checks if a plant can be harvested at the given growth stage

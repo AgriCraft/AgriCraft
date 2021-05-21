@@ -262,7 +262,7 @@ processResources {
 
 jar {
     // Archive name
-    archiveName = "${baseName} ${version}.${extension}"
+    archiveName = "${baseName}-${version}.${extension}"
     // Manifest
     manifest {
         attributes([
