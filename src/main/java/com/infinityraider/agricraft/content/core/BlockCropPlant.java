@@ -188,7 +188,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
         }
         IAgriCrop crop = optional.get();
         if (crop.hasPlant()) {
-            crop.getPlant().spawnParticles(world, pos, rand, crop.getGrowthStage());
+            crop.getPlant().spawnParticles(crop, rand);
         }
     }
 

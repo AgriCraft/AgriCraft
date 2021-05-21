@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.impl.v1.plant;
 import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -197,7 +198,7 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage stage) {}
+    public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {}
 
     @Override
     public TranslationTextComponent getTooltip() {

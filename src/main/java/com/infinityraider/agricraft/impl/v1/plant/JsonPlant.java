@@ -298,8 +298,8 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage growthStage) {
-        int index = IncrementalGrowthLogic.getGrowthIndex(growthStage);
+    public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(crop.getGrowthStage());
         if (index == -1) {
             return;
         }
@@ -307,9 +307,11 @@ public class JsonPlant implements IAgriPlant {
         for (AgriParticleEffect particleEffect : particleEffects) {
             if (particleEffect.allowParticles(index)) {
                 ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(particleEffect.getParticle()));
-                if (particle != null) {
+                World world = crop.world();
+                if (particle != null && world != null) {
                     for (int amount = 0; amount < 3; ++amount) {
                         if (rand.nextDouble() < particleEffect.getProbability()) {
+                            BlockPos pos = crop.getPosition();
                             double deltaX = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaX() * rand.nextDouble();
                             double deltaY = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaY() * rand.nextDouble();
                             double deltaZ = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaZ() * rand.nextDouble();

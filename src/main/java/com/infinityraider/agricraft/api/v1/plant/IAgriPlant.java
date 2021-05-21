@@ -263,12 +263,10 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     /**
      * Spawn custom particles if the current growth stage allow it.
      *
-     * @param world the curent world of the plant.
-     * @param pos the current position of the plant.
+     * @param crop the crop on which this is planted.
      * @param rand a random for use in rng.
-     * @param stage the current growth stage of the plant.
      */
-    void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage stage);
+    void spawnParticles(@Nonnull IAgriCrop crop, Random rand);
 
     /**
      * Checks if a plant can be harvested at the given growth stage
