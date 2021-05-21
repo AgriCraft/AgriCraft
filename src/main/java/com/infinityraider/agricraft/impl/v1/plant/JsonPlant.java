@@ -34,13 +34,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -294,8 +298,31 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public List<AgriParticleEffect> getParticleEffects() {
-        return this.plant.getParticleEffects();
+    public void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage growthStage) {
+        int index = IncrementalGrowthLogic.getGrowthIndex(growthStage);
+        if (index == -1) {
+            return;
+        }
+        List<AgriParticleEffect> particleEffects = this.plant.getParticleEffects();
+        for (AgriParticleEffect particleEffect : particleEffects) {
+            if (particleEffect.allowParticles(index)) {
+                ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(particleEffect.getParticle()));
+                if (particle != null) {
+                    for (int amount = 0; amount < 3; ++amount) {
+                        if (rand.nextDouble() < particleEffect.getProbability()) {
+                            double deltaX = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaX() * rand.nextDouble();
+                            double deltaY = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaY() * rand.nextDouble();
+                            double deltaZ = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaZ() * rand.nextDouble();
+                            world.addParticle((IParticleData) particle,
+                                    (double) pos.getX() + 0.5D + deltaX,
+                                    (double) pos.getY() + 0.5D + deltaY,
+                                    (double) pos.getZ() + 0.5D + deltaZ,
+                                    0.0D, 0.0D, 0.0D);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

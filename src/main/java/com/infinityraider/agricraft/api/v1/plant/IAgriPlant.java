@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
-import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -22,8 +21,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
@@ -260,9 +261,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     ResourceLocation getSeedModel();
 
     /**
-     * @return The particle effect for the plant
+     * Spawn custom particles if the current growth stage allow it.
+     *
+     * @param world the curent world of the plant.
+     * @param pos the current position of the plant.
+     * @param rand a random for use in rng.
+     * @param stage the current growth stage of the plant.
      */
-    List<AgriParticleEffect> getParticleEffects();
+    void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage stage);
 
     /**
      * Checks if a plant can be harvested at the given growth stage

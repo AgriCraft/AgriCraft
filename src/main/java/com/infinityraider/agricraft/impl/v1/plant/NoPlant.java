@@ -16,8 +16,10 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -195,9 +197,7 @@ public class NoPlant implements IAgriPlant {
     }
 
     @Override
-    public List<AgriParticleEffect> getParticleEffects() {
-        return new ArrayList<>();
-    }
+    public void spawnParticles(World world, BlockPos pos, Random rand, IAgriGrowthStage stage) {}
 
     @Override
     public TranslationTextComponent getTooltip() {

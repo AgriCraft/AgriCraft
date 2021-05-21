@@ -187,25 +187,8 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
             return;
         }
         IAgriCrop crop = optional.get();
-        if (crop.hasPlant() && crop.isMature()) {
-            List<AgriParticleEffect> particleEffects = crop.getPlant().getParticleEffects();
-            for (AgriParticleEffect particleEffect : particleEffects) {
-                double deltaX = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaX() * rand.nextDouble();
-                double deltaY = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaY() * rand.nextDouble();
-                double deltaZ = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaZ() * rand.nextDouble();
-                ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(particleEffect.getId()));
-                if (particle != null) {
-                    for (int amount = 0; amount < 3; ++amount) {
-                        if (rand.nextDouble() < particleEffect.getProbability()) {
-                            world.addParticle((IParticleData) particle,
-                                    (double) pos.getX() + 0.5D + deltaX,
-                                    (double) pos.getY() + 0.5D + deltaY,
-                                    (double) pos.getZ() + 0.5D + deltaZ,
-                                    0.0D, 0.0D, 0.0D);
-                        }
-                    }
-                }
-            }
+        if (crop.hasPlant()) {
+            crop.getPlant().spawnParticles(world, pos, rand, crop.getGrowthStage());
         }
     }
 
