@@ -42,11 +42,8 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        if(tile.getContent() == 0 && component.getContent() == 0) {
-            return;
-        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
-        if(y2 < 0) {
+        if(dontRenderConnection(tile, component, y2)) {
             return;
         }
 
@@ -66,11 +63,8 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        if(tile.getContent() == 0 && component.getContent() == 0) {
-            return;
-        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
-        if(y2 < 0) {
+        if(dontRenderConnection(tile, component, y2)) {
             return;
         }
 
@@ -90,11 +84,8 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        if(tile.getContent() == 0 && component.getContent() == 0) {
-            return;
-        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
-        if(y2 < 0) {
+        if(dontRenderConnection(tile, component, y2)) {
             return;
         }
 
@@ -114,11 +105,8 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        if(tile.getContent() == 0 && component.getContent() == 0) {
-            return;
-        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
-        if(y2 < 0) {
+        if(dontRenderConnection(tile, component, y2)) {
             return;
         }
 
@@ -133,13 +121,25 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.addScaledVertexWithUV(maxX, Constants.WHOLE*y1, maxZ, this.getWaterTexture(), maxX, maxZ);
     }
 
+    protected boolean dontRenderConnection(TileEntityIrrigationChannel own, TileEntityIrrigationComponent other, float otherLevel) {
+        if(own.getContent() == 0) {
+            if(other.getContent() == 0) {
+                return true;
+            }
+            if(other instanceof TileEntityIrrigationTank && otherLevel < other.getMinLevel()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected float getConnectionLevel(TileEntityIrrigationComponent component, float ownLevel, float minLevel, float maxLevel, float partialTicks) {
         float level = component.getRenderLevel(partialTicks) - component.getPos().getY();
         if(component instanceof TileEntityIrrigationChannel) {
             return (ownLevel + level)/2;
         } else if(component instanceof TileEntityIrrigationTank) {
             if(level < minLevel) {
-                return -1;
+                return minLevel;
             } else if(level > maxLevel) {
                 return maxLevel;
             } else {

@@ -54,6 +54,9 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     public void tick() {
         // Update previous level
         this.prevLevel = this.levelBuffer;
+        if(this.getPos().equals(new BlockPos(-113, 4, -137))) {
+            boolean breakpoint = true;
+        }
         // If this has sufficient fluid to distribute, try to push to neighbours
         if(this.getContent() > 0) {
             this.neighbours.streamNeighbours(true).forEach(component -> {
@@ -61,13 +64,16 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
                 float y_b = component.getLevel();
                 // If the neighbour has a higher fluid level, try push to it
                 if (y_a > y_b) {
-                    // calculate transfer volume
+                    // fetch parameters
                     float f_a = this.getSurfaceFactor();
                     float f_b = component.getSurfaceFactor();
                     float y_a1 = this.getMinLevel();
                     float y_b1 = component.getMinLevel();
+                    float y_b2 = component.getMaxLevel();
+                    // calculate transferable volume
                     float v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
-                    float dv = f_b*v/(f_a + f_b) - (f_a*f_b)*(y_b1 - y_a1)/(f_a + f_b);
+                    // determine transfer volume
+                    float dv = f_b*v/(f_a + f_b);
                     // only transfer if the delta is positive
                     if(dv > 0) {
                         int transfer = (int) dv;
