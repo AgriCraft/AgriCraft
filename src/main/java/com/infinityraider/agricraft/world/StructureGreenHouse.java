@@ -207,9 +207,11 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
                     crop.setCrossCrop(true);
                 }
                 else {
-                    IAgriStat randomStat = WorldGenerationHelper.getRandomStat(rnd);
-                    AgriSeed seed = WorldGenerationHelper.getRandomSeed(rnd, false, plants).withStat(randomStat);
-                    crop.setSeed(seed);
+                    if(plants.size() > 0) {
+                        IAgriStat randomStat = WorldGenerationHelper.getRandomStat(rnd);
+                        AgriSeed seed = WorldGenerationHelper.getRandomSeed(rnd, false, plants).withStat(randomStat);
+                        crop.setSeed(seed);
+                    }
                 }
             }
             return true;
@@ -241,7 +243,7 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
 
     protected List<IAgriPlant> getPlantPool() {
         return AgriApi.getPlantRegistry().stream()
-                .filter(plant -> plant.getTier() >= AgriCraftConfig.greenhousePlantTierLimit)
+                .filter(plant -> plant.getTier() <= AgriCraftConfig.greenhousePlantTierLimit)
                 .collect(Collectors.toList());
     }
 

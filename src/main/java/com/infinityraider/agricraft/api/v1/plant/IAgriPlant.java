@@ -166,6 +166,9 @@ public interface IAgriPlant extends IAgriRegisterable {
      */
     int getGrowthStages();
 
+    /**
+     * @return the tier of the plant (used for generation in greenhouses
+     */
     int getTier();
 
     /**
