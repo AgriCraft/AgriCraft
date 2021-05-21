@@ -115,6 +115,34 @@
         {"south":  "channel"}
       ]},
       "apply": {"model": "agricraft:block/tank/north_west_down", "y":  270, "uvlock":  true}
+    },
+    {
+      "when": {"AND":  [
+        {"ladder":  "true"},
+        {"north":  "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/ladder_north"}
+    },
+    {
+      "when": {"AND":  [
+        {"ladder":  "true"},
+        {"east":  "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/ladder_north", "y":  90}
+    },
+    {
+      "when": {"AND":  [
+        {"ladder":  "true"},
+        {"south":  "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/ladder_north", "y":  180}
+    },
+    {
+      "when": {"AND":  [
+        {"ladder":  "true"},
+        {"west":  "none"}
+      ]},
+      "apply": {"model": "agricraft:block/tank/ladder_north", "y":  270}
     }
   ]
 }

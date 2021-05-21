@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * This entire class and existance of the fluid is an ugly hack
+ * This entire class and existence of the fluid is an ugly hack
  * This fluid allows the player to swim in the tank, while having no other behaviour (including rendering)
  */
 @MethodsReturnNonnullByDefault

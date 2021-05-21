@@ -60,6 +60,8 @@ public class AgriToolTips {
     public static final ITextComponent GRATE_L1 = new TranslationTextComponent("agricraft.tooltip.grate.l1");
     public static final ITextComponent GRATE_L2 = new TranslationTextComponent("agricraft.tooltip.grate.l2");
 
+    public static final ITextComponent TANK_L1 = new TranslationTextComponent("agricraft.tooltip.tank.l1");
+
     public static final ITextComponent LIGHT = new TranslationTextComponent("agricraft.tooltip.light");
 
     public static final ITextComponent MSG_ANALYZER_VIEW_BLOCKED = new TranslationTextComponent("agricraft.message.analyzer_view_blocked");

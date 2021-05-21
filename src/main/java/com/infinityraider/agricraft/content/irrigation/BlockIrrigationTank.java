@@ -11,6 +11,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -33,7 +34,10 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nullable;
@@ -54,11 +58,12 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     public static final InfProperty<Connection> SOUTH = InfProperty.Creators.create("south", Connection.class, Connection.NONE);
     public static final InfProperty<Connection> WEST = InfProperty.Creators.create("west", Connection.class, Connection.NONE);
     public static final InfProperty<Boolean> DOWN = InfProperty.Creators.create("down", false);
+    public static final InfProperty<Boolean> LADDER = InfProperty.Creators.create("ladder", false);
     public static final InfProperty<Boolean> WATER = InfProperty.Creators.create("water", false);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(NORTH).add(EAST).add(SOUTH).add(WEST).add(DOWN)
-            .add(WATER)
+            .add(LADDER).add(WATER)
             .build();
 
     public static Optional<InfProperty<Connection>> getConnection(Direction direction) {
@@ -154,6 +159,17 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                         }
                     }
                 }
+            } else if(stack.getItem() == Items.LADDER) {
+                // try to place a ladder
+                if(!LADDER.fetch(state)) {
+                    if(!world.isRemote()) {
+                        world.setBlockState(pos, LADDER.apply(state, true));
+                        if(!player.isCreative()) {
+                            player.getHeldItem(hand).shrink(1);
+                        }
+                    }
+                    return ActionResultType.SUCCESS;
+                }
             }
         return ActionResultType.FAIL;
     }
@@ -231,6 +247,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     @Override
+    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
+        return LADDER.fetch(state);
+    }
+
+    @Override
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
@@ -274,6 +295,15 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
 
     @Override
     public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityIrrigationTank tile, LootContext.Builder context) {
+        if(LADDER.fetch(state)) {
+            dropAcceptor.accept(new ItemStack(Items.LADDER, 1));
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.getCutout();
     }
 
     public enum Connection implements IStringSerializable {
