@@ -196,6 +196,18 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     @Override
+    public void fillWithRain(World world, BlockPos pos) {
+        int rate = AgriCraft.instance.getConfig().rainFillRate();
+        if(rate > 0) {
+            TileEntity tile = world.getTileEntity(pos);
+            if(tile instanceof TileEntityIrrigationTank) {
+                TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                tank.pushWater(rate, true);
+            }
+        }
+    }
+
+    @Override
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
