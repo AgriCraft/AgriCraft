@@ -18,6 +18,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         float level = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
         float min = tile.getMinLevel() - tile.getPos().getY();
         float max = tile.getMaxLevel() - tile.getPos().getY();
+        level = level == 0 ? min : level;
 
         ITessellator tessellator = this.getTessellator(buffer);
         this.applyWaterColor(tile, tessellator.startDrawingQuads()).setBrightness(light).setOverlay(overlay).pushMatrix();
@@ -41,7 +42,13 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
+        if(tile.getContent() == 0 && component.getContent() == 0) {
+            return;
+        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        if(y2 < 0) {
+            return;
+        }
 
         float minX = 6;
         float maxX = 10;
@@ -59,7 +66,13 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
+        if(tile.getContent() == 0 && component.getContent() == 0) {
+            return;
+        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        if(y2 < 0) {
+            return;
+        }
 
         float minX = 10;
         float maxX = 16;
@@ -77,7 +90,13 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
+        if(tile.getContent() == 0 && component.getContent() == 0) {
+            return;
+        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        if(y2 < 0) {
+            return;
+        }
 
         float minX = 6;
         float maxX = 10;
@@ -95,7 +114,13 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
+        if(tile.getContent() == 0 && component.getContent() == 0) {
+            return;
+        }
         float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        if(y2 < 0) {
+            return;
+        }
 
         float minX = 0;
         float maxX = 6;
@@ -114,7 +139,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
             return (ownLevel + level)/2;
         } else if(component instanceof TileEntityIrrigationTank) {
             if(level < minLevel) {
-                return minLevel;
+                return -1;
             } else if(level > maxLevel) {
                 return maxLevel;
             } else {
