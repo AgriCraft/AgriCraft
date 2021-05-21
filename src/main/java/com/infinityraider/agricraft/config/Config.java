@@ -179,7 +179,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             this.tankCapacity = builder.comment("\nConfigures the capacity (in mB) of one tank block")
                     .defineInRange("Tank capacity", 8000, 1000, 40000);
             this.channelCapacity = builder.comment("\nConfigures the capacity (in mB) of one channel block")
-                    .defineInRange("Tank capacity", 50, 500, 2000);
+                    .defineInRange("Channel capacity", 500, 50, 2000);
             this.rainFillRate = builder.comment("\nConfigures the rate (in mB/t) at which tanks accrue water while raining (0 disables filling from rainfall)")
                     .defineInRange("Rain fill rate", 5, 0, 50);
             this.sprinkleInterval = builder.comment("\nThe minimum number of ticks between successive starts of irrigation.")

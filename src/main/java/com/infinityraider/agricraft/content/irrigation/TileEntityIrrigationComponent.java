@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -25,19 +26,20 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTexture implements ITickableTileEntity {
     private final int capacity;
-    private final double minLevel;
-    private final double maxLevel;
+    private final float minLevel;
+    private final float maxLevel;
 
     // These fields hold the actual content and level
     private int contentBuffer;
-    private double levelBuffer;
+    private float levelBuffer;
+    private float prevLevel;
     // These fields are used to sync the content and level to the client when a large difference is detected
     private final AutoSyncedField<Integer> content;
-    private final AutoSyncedField<Double> level;
+    private final AutoSyncedField<Float> level;
 
     private final NeighbourCache neighbours;
 
-    public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, double minLevel, double maxLevel) {
+    public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, float minLevel, float maxLevel) {
         super(type);
         this.capacity = capacity;
         this.minLevel = minLevel;
@@ -49,20 +51,22 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
 
     @Override
     public void tick() {
+        // Update previous level
+        this.prevLevel = this.levelBuffer;
         // If this has sufficient fluid to distribute, try to push to neighbours
-        if(this.getContent() > 2) {
+        if(this.getContent() > 0) {
             this.neighbours.streamNeighbours(true).forEach(component -> {
-                double y_a = this.getLevel();
-                double y_b = component.getLevel();
+                float y_a = this.getLevel();
+                float y_b = component.getLevel();
                 // If the neighbour has a higher fluid level, try push to it
                 if (y_a > y_b) {
                     // calculate transfer volume
-                    double f_a = this.getSurfaceFactor();
-                    double f_b = component.getSurfaceFactor();
-                    double y_a1 = this.getMinLevel();
-                    double y_b1 = component.getMinLevel();
-                    double v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
-                    double dv = f_b*v/(f_a + f_b) - (f_a*f_b)*(y_b1 - y_a1)/(f_a + f_b);
+                    float f_a = this.getSurfaceFactor();
+                    float f_b = component.getSurfaceFactor();
+                    float y_a1 = this.getMinLevel();
+                    float y_b1 = component.getMinLevel();
+                    float v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
+                    float dv = f_b*v/(f_a + f_b) - (f_a*f_b)*(y_b1 - y_a1)/(f_a + f_b);
                     // only transfer if the delta is positive
                     if(dv > 0) {
                         int transfer = (int) dv;
@@ -83,8 +87,12 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         return this.contentBuffer;
     }
 
-    public double getLevel() {
+    public float getLevel() {
         return this.levelBuffer + this.getPos().getY();
+    }
+
+    public float getRenderLevel(float partialTicks) {
+        return MathHelper.lerp(partialTicks, this.prevLevel, this.levelBuffer) + this.getPos().getY();
     }
 
     public int pushWater(int max, boolean execute) {
@@ -113,13 +121,13 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         this.contentBuffer = contents;
     }
 
-    protected void setLevel(double level) {
+    protected void setLevel(float level) {
         this.levelBuffer = Math.max(this.getMinLevel(), Math.min(this.getMaxLevel(), level)) - this.getPos().getY();
         this.contentBuffer = this.calculateContents(this.levelBuffer);
         this.checkAndSyncIfNeeded();
     }
 
-    private void setLevelBuffer(double level) {
+    private void setLevelBuffer(float level) {
         this.levelBuffer = level;
     }
 
@@ -127,24 +135,24 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         return this.capacity;
     }
 
-    public double getMinLevel() {
+    public float getMinLevel() {
         return this.minLevel + this.getPos().getY();
     }
 
-    public double getMaxLevel() {
+    public float getMaxLevel() {
         return this.maxLevel + this.getPos().getY();
     }
 
-    public double getSurfaceFactor() {
+    public float getSurfaceFactor() {
         return this.getCapacity()/(this.getMaxLevel() - this.getMinLevel());
     }
 
-    protected int calculateContents(double height) {
+    protected int calculateContents(float height) {
         return (int) (this.getCapacity()*(height + this.getPos().getY() - this.getMinLevel())/(this.getMaxLevel() - this.getMinLevel()));
     }
 
-    protected double calculateHeight(int contents) {
-        return this.getMinLevel() - this.getPos().getY() + (contents + 0.0)*(this.getMaxLevel() - this.getMinLevel())/(this.getCapacity() + 0.0);
+    protected float calculateHeight(int contents) {
+        return this.getMinLevel() - this.getPos().getY() + (contents + 0.0F)*(this.getMaxLevel() - this.getMinLevel())/(this.getCapacity() + 0.0F);
     }
 
     protected void onNeighbourUpdate(BlockPos pos) {
@@ -175,14 +183,14 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     @Override
     protected final void writeTileNBT(@Nonnull CompoundNBT tag) {
         tag.putInt(AgriNBT.CONTENTS, this.contentBuffer);
-        tag.putDouble(AgriNBT.LEVEL, this.levelBuffer);
+        tag.putFloat(AgriNBT.LEVEL, this.levelBuffer);
         this.writeComponentNBT(tag);
     }
 
     @Override
     protected final void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
         this.contentBuffer = tag.getInt(AgriNBT.CONTENTS);
-        this.levelBuffer = tag.getDouble(AgriNBT.LEVEL);
+        this.levelBuffer = tag.getFloat(AgriNBT.LEVEL);
         this.readComponentNBT(state, tag);
     }
 

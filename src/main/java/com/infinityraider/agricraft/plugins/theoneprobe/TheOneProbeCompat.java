@@ -15,8 +15,9 @@ public class TheOneProbeCompat implements Function<ITheOneProbe, Void> {
 
     @Override
     public Void apply(ITheOneProbe probe) {
-        probe.registerProvider(new AgriProbeBlockInfoProvider());
-        probe.registerBlockDisplayOverride(new AgriProbeBlockDisplayOverride());
+        probe.registerProvider(new AgriProbeCropBlockInfoProvider());
+        probe.registerBlockDisplayOverride(new AgriProbeCropBlockDisplayOverride());
+        probe.registerProvider(new AgriProbeIrrigationBlockInfoProvider());
         return null;
     }
 }

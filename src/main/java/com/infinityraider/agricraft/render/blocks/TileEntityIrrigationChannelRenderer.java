@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationComponentRenderer<TileEntityIrrigationChannel> {
     @Override
     protected void renderWater(TileEntityIrrigationChannel tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
-        float level = (float) (tile.getLevel() - tile.getPos().getY());
+        float level = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
 
         ITessellator tessellator = this.getTessellator(buffer);
         this.applyWaterColor(tile, tessellator.startDrawingQuads()).setBrightness(light).setOverlay(overlay).pushMatrix();

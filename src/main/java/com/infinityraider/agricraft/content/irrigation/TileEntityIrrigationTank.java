@@ -30,12 +30,15 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IFluidHandler {
-    private static final double MIN_Y = Constants.UNIT;
-    private static final double MAX_Y = 1;
+    private static final BlockPos DEFAULT = new BlockPos(-1, -1, -1);
+
+    private static final float MIN_Y = 2*Constants.UNIT;
+    private static final float MAX_Y = 1;
 
     private static final int HEIGHT_INTERVALS = 16;
     private static final float CONTENT_DELTA_FRACTION = 0.05F;
 
+    private TileEntityIrrigationTank origin;
     private final AutoSyncedField<BlockPos> min;
     private final AutoSyncedField<BlockPos> max;
 
@@ -43,8 +46,8 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     public TileEntityIrrigationTank() {
         super(AgriCraft.instance.getModTileRegistry().irrigation_tank, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
-        this.min = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
-        this.max = this.getAutoSyncedFieldBuilder(new BlockPos(0, 0, 0)).build();
+        this.min = this.getAutoSyncedFieldBuilder(DEFAULT).build();
+        this.max = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.capability = LazyOptional.of(() -> this);
     }
 
@@ -57,7 +60,8 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     public boolean isMultiBlockOrigin() {
-        return this.getMultiBlockMin().equals(this.getPos());
+        BlockPos origin = this.getMultiBlockMin();
+        return DEFAULT.equals(origin) || this.getPos().equals(origin);
     }
 
     @Override
@@ -70,11 +74,24 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
-    public double getLevel() {
+    public float getLevel() {
         if(this.isMultiBlockOrigin()) {
             return super.getLevel();
         } else {
             return this.getMultiBlockOrigin().getLevel();
+        }
+    }
+
+    @Override
+    public float getRenderLevel(float partialTicks) {
+        if(this.isMultiBlockOrigin()) {
+            float level = super.getRenderLevel(partialTicks);
+            if(level == this.getMaxLevel()) {
+                level = level - 0.0001F;
+            }
+            return level;
+        } else {
+            return this.getMultiBlockOrigin().getRenderLevel(partialTicks);
         }
     }
 
@@ -106,7 +123,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
-    protected void setLevel(double level) {
+    protected void setLevel(float level) {
         if(this.isMultiBlockOrigin()) {
             super.setLevel(level);
         } else {
@@ -123,23 +140,23 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
-    public double getMinLevel() {
+    public float getMinLevel() {
         return MIN_Y + this.getMultiBlockMin().getY();
     }
 
     @Override
-    public double getMaxLevel() {
+    public float getMaxLevel() {
         return MAX_Y + this.getMultiBlockMax().getY();
     }
 
     @Override
-    protected int calculateContents(double height) {
+    protected int calculateContents(float height) {
         return (int) (this.getCapacity()*(height + this.getMultiBlockMin().getY() - this.getMinLevel())/(this.getMaxLevel() - this.getMinLevel()));
     }
 
     @Override
-    protected double calculateHeight(int contents) {
-        return this.getMinLevel() - this.getMultiBlockMin().getY() + (contents + 0.0)*(this.getMaxLevel() - this.getMinLevel())/(this.getCapacity() + 0.0);
+    protected float calculateHeight(int contents) {
+        return this.getMinLevel() - this.getMultiBlockMin().getY() + (contents + 0.0F)*(this.getMaxLevel() - this.getMinLevel())/(this.getCapacity() + 0.0F);
     }
 
     public TileEntityIrrigationTank getMultiBlockOrigin() {
@@ -149,9 +166,14 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.isMultiBlockOrigin()) {
             return this;
         }
-        TileEntity tile = this.getWorld().getTileEntity(this.getMultiBlockMin());
-        if(tile instanceof TileEntityIrrigationTank) {
-            return (TileEntityIrrigationTank) tile;
+        if(this.origin == null) {
+            TileEntity tile = this.getWorld().getTileEntity(this.getMultiBlockMin());
+            if (tile instanceof TileEntityIrrigationTank) {
+                this.origin = (TileEntityIrrigationTank) tile;
+                return this.origin;
+            }
+        } else {
+            return this.origin;
         }
         this.unFormMultiBlock();
         return this;
@@ -203,7 +225,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.getWorld() == null) {
             return;
         }
-        double level = this.getLevel();
+        float level = this.getLevel();
         BlockPos min = new BlockPos(this.getMultiBlockMin());
         BlockPos max = new BlockPos(this.getMultiBlockMax());
         BlockPos.Mutable pos = new BlockPos.Mutable(0, 0, 0);
@@ -214,6 +236,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                     TileEntity tile = this.getWorld().getTileEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                        tank.origin = null;
                         tank.min.set(tank.getPos());
                         tank.max.set(tank.getPos());
                         this.getWorld().setBlockState(tank.getPos(), AgriCraft.instance.getModBlockRegistry().tank.getDefaultState());

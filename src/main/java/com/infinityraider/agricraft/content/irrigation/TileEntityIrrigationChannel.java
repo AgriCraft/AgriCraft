@@ -12,8 +12,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
-    private static final double MIN_Y = 6*Constants.UNIT;
-    private static final double MAX_Y = 10*Constants.UNIT;
+    private static final float MIN_Y = 6*Constants.UNIT;
+    private static final float MAX_Y = 10*Constants.UNIT;
 
     private static final int HEIGHT_INTERVALS = 6;
     private static final float CONTENT_DELTA_FRACTION = 0.10F;
