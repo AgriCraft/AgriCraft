@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.content.decoration.BlockGrate;
 import com.infinityraider.agricraft.content.irrigation.BlockIrrigationChannelHollow;
 import com.infinityraider.agricraft.content.irrigation.BlockIrrigationChannelNormal;
 import com.infinityraider.agricraft.content.irrigation.BlockIrrigationTank;
+import com.infinityraider.agricraft.content.irrigation.BlockSprinkler;
 
 public class AgriBlockRegistry {
 
@@ -32,7 +33,7 @@ public class AgriBlockRegistry {
     public final BlockIrrigationTank tank;
     public final BlockIrrigationChannelNormal channel;
     public final BlockIrrigationChannelHollow channel_hollow;
-    //public final BlockSprinkler sprinkler;
+    public final BlockSprinkler sprinkler;
 
     // storage
     //public final BlockBase seed_storage;
@@ -51,10 +52,10 @@ public class AgriBlockRegistry {
         this.tank = new BlockIrrigationTank();
         this.channel = new BlockIrrigationChannelNormal();
         this.channel_hollow = new BlockIrrigationChannelHollow();
-        //this.sprinkler = new BlockSprinkler();
-
-        this.grate = new BlockGrate();
+        this.sprinkler = new BlockSprinkler();
 
         //this.seed_storage = new BlockSeedStorage();
+
+        this.grate = new BlockGrate();
     }
 }
