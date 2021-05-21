@@ -78,6 +78,7 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     @Override
     public void registerMessages(INetworkWrapper wrapper) {
         wrapper.registerMessage(MessageCompareLight.class);
+        wrapper.registerMessage(MessageIrrigationNeighbourUpdate.class);
         wrapper.registerMessage(MessageMagnifyingGlassObserving.ToClient.class);
         wrapper.registerMessage(MessageMagnifyingGlassObserving.ToServer.class);
         wrapper.registerMessage(MessagePlantResearched.class);

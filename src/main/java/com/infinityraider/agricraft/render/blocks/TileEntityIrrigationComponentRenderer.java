@@ -28,7 +28,7 @@ public abstract class TileEntityIrrigationComponentRenderer<T extends TileEntity
     @Override
     public void render(T tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
         // Render the water
-        if(tile.getContent() > 0 && buffer instanceof IRenderTypeBuffer.Impl) {
+        if(buffer instanceof IRenderTypeBuffer.Impl) {
             this.renderWater(tile, partialTicks, transforms, (IRenderTypeBuffer.Impl) buffer, light, overlay);
         }
     }

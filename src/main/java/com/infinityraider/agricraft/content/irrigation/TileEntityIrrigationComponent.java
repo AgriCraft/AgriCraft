@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.network.MessageIrrigationNeighbourUpdate;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import mcp.MethodsReturnNonnullByDefault;
@@ -159,7 +160,14 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         Arrays.stream(Direction.values())
                 .filter(dir -> dir.getAxis().isHorizontal())
                 .filter(dir -> this.getPos().offset(dir).equals(pos))
-                .forEach(this.neighbours::onNeighbourUpdate);
+                .forEach(this::onNeighbourUpdate);
+    }
+
+    public void onNeighbourUpdate(Direction dir) {
+        this.neighbours.onNeighbourUpdate(dir);
+        if(this.getWorld() != null && !this.getWorld().isRemote()) {
+            new MessageIrrigationNeighbourUpdate(this.getPos(), dir).sendToDimension(this.getWorld());
+        }
     }
 
     // Syncs to the client if a difference greater than the sync threshold is detected
@@ -170,6 +178,11 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
             this.content.set(this.contentBuffer);
             this.level.set(this.levelBuffer);
         }
+    }
+
+    @Nullable
+    public TileEntityIrrigationComponent getNeighbour(Direction direction) {
+        return this.neighbours.getNeighbour(direction);
     }
 
     protected abstract boolean canConnect(TileEntityIrrigationComponent other);
@@ -203,7 +216,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     protected void readComponentNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {}
 
     public String describeNeighbour(Direction direction) {
-        TileEntityIrrigationComponent component = this.neighbours.getNeighbour(direction);
+        TileEntityIrrigationComponent component = this.getNeighbour(direction);
         return component == null ? "none" : component.description();
     }
 

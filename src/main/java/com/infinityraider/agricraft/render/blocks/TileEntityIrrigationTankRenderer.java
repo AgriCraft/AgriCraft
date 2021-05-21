@@ -14,6 +14,9 @@ public class TileEntityIrrigationTankRenderer extends TileEntityIrrigationCompon
     @Override
     protected void renderWater(TileEntityIrrigationTank tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
         float level = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        if(tile.getContent() <= 0) {
+            return;
+        }
         if(level > 1) {
             return;
         }

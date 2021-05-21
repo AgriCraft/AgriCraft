@@ -114,7 +114,13 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack, @Nullable TileEntity tile) {
-        
+        if(tile instanceof TileEntityIrrigationChannel) {
+            TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) tile;
+            channel.onNeighbourUpdate(Direction.NORTH);
+            channel.onNeighbourUpdate(Direction.EAST);
+            channel.onNeighbourUpdate(Direction.SOUTH);
+            channel.onNeighbourUpdate(Direction.WEST);
+        }
     }
 
     @Override
