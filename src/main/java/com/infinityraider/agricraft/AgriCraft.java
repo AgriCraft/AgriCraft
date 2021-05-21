@@ -61,6 +61,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
+    public AgriFluidRegistry getModFluidRegistry() {
+        return AgriFluidRegistry.getInstance();
+    }
+
+    @Override
     public AgriTileRegistry getModTileRegistry() {
         return AgriTileRegistry.getInstance();
     }

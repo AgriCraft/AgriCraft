@@ -30,7 +30,7 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IFluidHandler {
-    private static final BlockPos DEFAULT = new BlockPos(-1, -1, -1);
+    private static final BlockPos DEFAULT = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
 
     private static final float MIN_Y = 2*Constants.UNIT;
     private static final float MAX_Y = 1;
@@ -49,6 +49,10 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         this.min = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.max = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.capability = LazyOptional.of(() -> this);
+    }
+
+    public BlockIrrigationTank getBlock() {
+        return AgriCraft.instance.getModBlockRegistry().tank;
     }
 
     public BlockPos getMultiBlockMin() {
@@ -116,7 +120,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     @Override
     protected void setContent(int content) {
         if(this.isMultiBlockOrigin()) {
+            float before = this.getLevel();
             super.setContent(content);
+            this.updateMultiBlockFluidStates(before, this.getLevel());
         } else {
             this.getMultiBlockOrigin().setContent(content);
         }
@@ -125,7 +131,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     @Override
     protected void setLevel(float level) {
         if(this.isMultiBlockOrigin()) {
+            float before = this.getLevel();
             super.setLevel(level);
+            this.updateMultiBlockFluidStates(before, this.getLevel());
         } else {
             this.getMultiBlockOrigin().setLevel(level);
         }
@@ -242,6 +250,39 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                         this.getWorld().setBlockState(tank.getPos(), AgriCraft.instance.getModBlockRegistry().tank.getDefaultState());
                         tank.setLevel(level);
                     }
+                }
+            }
+        }
+    }
+
+    protected void updateMultiBlockFluidStates(float before, float after) {
+        World world = this.getWorld();
+        if(world == null || world.isRemote()) {
+            return;
+        }
+        // map before and after to ordered variables
+        float d1 = Math.min(before, after);
+        float d2 = Math.max(before, after);
+        // check if the change was significant
+        float delta = d2 - d1;
+        if(delta < 1) {
+            d1 = d1 - (int) d1;
+            d2 = d2 - (int) d2;
+            if(d1 >= 0.5 || d2 < 0.5) {
+                return;
+            }
+        }
+        // apply the change to the relevant blocks
+        BlockPos min = this.getMultiBlockMin();
+        BlockPos max = this.getMultiBlockMax();
+        int y1 = Math.max((int) d1, min.getY());
+        int y2 = Math.min(1 + (int) d2, max.getY());
+        BlockPos.Mutable pos = new BlockPos.Mutable(0, 0, 0);
+        for(int x = min.getX(); x <= max.getX(); x++) {
+            for(int y = y1; y <= y2; y++) {
+                for(int z = min.getZ(); z <= max.getZ(); z++) {
+                    pos.setPos(x, y, z);
+                    this.getBlock().updateFluidState(this.getWorld(), pos, world.getBlockState(pos), after);
                 }
             }
         }

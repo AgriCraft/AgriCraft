@@ -25,6 +25,10 @@ public abstract class Names {
         public static final String SEED_BAG = "agri_seed_bag";
     }
 
+    public static final class Fluids {
+        public static final String TANK_WATER = "agri_tank_water";
+    }
+
     public static final class Mods {
         public static final String BETTER_WEATHER = "betterweather";
         public static final String BLOOD_MAGIC = "bloodmagic";

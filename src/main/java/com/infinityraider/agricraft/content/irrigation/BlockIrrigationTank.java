@@ -14,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -52,9 +54,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     public static final InfProperty<Connection> SOUTH = InfProperty.Creators.create("south", Connection.class, Connection.NONE);
     public static final InfProperty<Connection> WEST = InfProperty.Creators.create("west", Connection.class, Connection.NONE);
     public static final InfProperty<Boolean> DOWN = InfProperty.Creators.create("down", false);
+    public static final InfProperty<Boolean> WATER = InfProperty.Creators.create("water", false);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(NORTH).add(EAST).add(SOUTH).add(WEST).add(DOWN)
+            .add(WATER)
             .build();
 
     public static Optional<InfProperty<Connection>> getConnection(Direction direction) {
@@ -130,8 +134,8 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                     TileEntity tile = world.getTileEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
-                        if(tank.pushWater(1000, false) == 1000) {
-                            tank.pushWater(1000, true);
+                        if(tank.pushWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
+                            tank.pushWater(FluidAttributes.BUCKET_VOLUME, true);
                             if(!player.isCreative()) {
                                 player.setHeldItem(hand, new ItemStack(Items.BUCKET));
                             }
@@ -143,8 +147,8 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                     TileEntity tile = world.getTileEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
-                        if(tank.drainWater(1000, false) == 1000) {
-                            tank.drainWater(1000, true);
+                        if(tank.drainWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
+                            tank.drainWater(FluidAttributes.BUCKET_VOLUME, true);
                             player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
                             return ActionResultType.SUCCESS;
                         }
@@ -205,6 +209,25 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 tank.pushWater(rate, true);
             }
         }
+    }
+
+    protected void updateFluidState(World world, BlockPos pos, BlockState state, float waterLevel) {
+        boolean shouldHaveWater = waterLevel - pos.getY() > 0.5;
+        boolean hasWater = WATER.fetch(state);
+        if(shouldHaveWater != hasWater) {
+            // 2: Send update to client
+            // 4: Prevent render update
+            // 16: Prevent neighbour reactions
+            // 32: Prevent neighbour drops
+            world.setBlockState(pos, WATER.apply(state, shouldHaveWater), 2 + 4 + 16 + 32);
+        }
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public FluidState getFluidState(BlockState state) {
+        return WATER.fetch(state) ? AgriCraft.instance.getModFluidRegistry().tank_water.getDefaultState() : Fluids.EMPTY.getDefaultState();
     }
 
     @Override
