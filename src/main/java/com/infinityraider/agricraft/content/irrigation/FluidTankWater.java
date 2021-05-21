@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.irrigation;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.render.fluid.AgriTankWaterRenderer;
 import com.infinityraider.infinitylib.fluid.FluidBase;
@@ -81,7 +82,9 @@ public class FluidTankWater extends FluidBase {
 
     @Override
     protected BlockState getBlockState(FluidState state) {
-        return Blocks.AIR.getDefaultState();
+        return AgriCraft.instance.getConfig().tankSpawnWaterBlockOnBreak()
+                ? Blocks.WATER.getDefaultState()
+                : Blocks.AIR.getDefaultState();
     }
 
     @Override

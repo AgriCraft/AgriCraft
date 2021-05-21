@@ -244,6 +244,11 @@ public interface IAgriConfig {
     int rainFillRate();
 
     /**
+     * @return true if tanks should spawn water blocks when broken when sufficiently full
+     */
+    boolean tankSpawnWaterBlockOnBreak();
+
+    /**
      * @return the amount of ticks between each sprinkle operation
      */
     int sprinkleInterval();
