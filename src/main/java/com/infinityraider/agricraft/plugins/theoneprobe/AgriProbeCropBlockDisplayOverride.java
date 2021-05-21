@@ -12,10 +12,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-public class AgriProbeBlockDisplayOverride implements IBlockDisplayOverride {
+public class AgriProbeCropBlockDisplayOverride implements IBlockDisplayOverride {
     private static final ITextComponent MOD_ID = new StringTextComponent("{=m=}Agricraft"); // TOP uses {=m=} to format the text
 
-    protected AgriProbeBlockDisplayOverride() {
+    protected AgriProbeCropBlockDisplayOverride() {
         super();
     }
 

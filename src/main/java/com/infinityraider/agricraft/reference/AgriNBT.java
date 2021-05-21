@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 public interface AgriNBT {
     String CAPACITY = "agri_capacity";
     String CHUNK = "agri_chunk";
-    String CONNECTIONS = "agri_connections";
+    String CONNECTIONS = "agri_contents";
+    String CONTENTS = "agri_connections";
     String DIRECTION = "agri_dir";
     String DOMINANT = "agri_dominant";
     String ENTRIES = "agri_entries";

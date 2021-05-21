@@ -63,6 +63,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Integer> tankCapacity;
         private final ForgeConfigSpec.ConfigValue<Integer> channelCapacity;
         private final ForgeConfigSpec.ConfigValue<Integer> rainFillRate;
+        private final ForgeConfigSpec.ConfigValue<Boolean> spawnWaterBlock;
         private final ForgeConfigSpec.ConfigValue<Integer> sprinkleInterval;
         private final ForgeConfigSpec.ConfigValue<Double> sprinkleGrowthChance;
         private final ForgeConfigSpec.ConfigValue<Integer> sprinklerWaterConsumption;
@@ -179,9 +180,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             this.tankCapacity = builder.comment("\nConfigures the capacity (in mB) of one tank block")
                     .defineInRange("Tank capacity", 8000, 1000, 40000);
             this.channelCapacity = builder.comment("\nConfigures the capacity (in mB) of one channel block")
-                    .defineInRange("Tank capacity", 50, 500, 2000);
+                    .defineInRange("Channel capacity", 500, 50, 2000);
             this.rainFillRate = builder.comment("\nConfigures the rate (in mB/t) at which tanks accrue water while raining (0 disables filling from rainfall)")
                     .defineInRange("Rain fill rate", 5, 0, 50);
+            this.spawnWaterBlock = builder.comment("\nSet to false to disable water tanks spawning a water block when broken when sufficiently full")
+                    .define("Tanks spawn water block", true);
             this.sprinkleInterval = builder.comment("\nThe minimum number of ticks between successive starts of irrigation.")
                     .defineInRange("Sprinkler growth interval", 40, 1, 1200);
             this.sprinkleGrowthChance = builder.comment("\nEvery loop, each unobscured plant in sprinkler range has this chance to get a growth tick from the sprinkler.")
@@ -400,6 +403,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public int rainFillRate() {
             return this.rainFillRate.get();
+        }
+
+        @Override
+        public boolean tankSpawnWaterBlockOnBreak() {
+            return this.spawnWaterBlock.get();
         }
 
         @Override

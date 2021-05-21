@@ -4,6 +4,7 @@ import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -90,9 +91,10 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     public BlockState updatePostPlacement(BlockState ownState, Direction dir, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos) {
         return getConnection(dir).map(prop -> {
             TileEntity otherTile = world.getTileEntity(otherPos);
-            if(otherTile instanceof TileEntityIrrigationComponent) {
+            TileEntity ownTile = world.getTileEntity(pos);
+            if(ownTile instanceof TileEntityIrrigationChannel && otherTile instanceof TileEntityIrrigationComponent) {
                 TileEntityIrrigationComponent other = (TileEntityIrrigationComponent) otherTile;
-                if (other.isSameMaterial(world.getTileEntity(pos))) {
+                if (other.canConnect((TileEntityIrrigationChannel) ownTile)) {
                     return prop.apply(ownState, true);
                 }
             }
@@ -101,8 +103,24 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileEntityIrrigationChannel) {
+            ((TileEntityIrrigationChannel) tile).onNeighbourUpdate(fromPos);
+        }
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack, @Nullable TileEntity tile) {
-        
+        if(tile instanceof TileEntityIrrigationChannel) {
+            TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) tile;
+            channel.onNeighbourUpdate(Direction.NORTH);
+            channel.onNeighbourUpdate(Direction.EAST);
+            channel.onNeighbourUpdate(Direction.SOUTH);
+            channel.onNeighbourUpdate(Direction.WEST);
+        }
     }
 
     @Override
@@ -116,9 +134,19 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     }
 
     public enum Valve implements IStringSerializable {
-        NONE,
-        OPEN,
-        CLOSED;
+        NONE(true),
+        OPEN(true),
+        CLOSED(false);
+
+        private final boolean transfer;
+
+        Valve(boolean transfer) {
+            this.transfer = transfer;
+        }
+
+        public boolean canTransfer() {
+            return this.transfer;
+        }
 
         @Override
         public String getString() {

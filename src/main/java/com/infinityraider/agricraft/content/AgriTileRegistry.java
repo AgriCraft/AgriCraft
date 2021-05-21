@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
+import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
@@ -23,6 +24,7 @@ public class AgriTileRegistry {
     public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
     public final TileEntityType<TileEntityIrrigationTank> irrigation_tank;
     public final TileEntityType<TileEntityIrrigationChannel> irrigation_channel;
+    public final TileEntityType<TileEntitySprinkler> sprinkler;
     public final TileEntityType<TileEntityGrate> grate;
 
     private AgriTileRegistry() {
@@ -53,6 +55,10 @@ public class AgriTileRegistry {
                         AgriCraft.instance.getModBlockRegistry().channel_hollow
                 )
                 .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
+                .build();
+
+        this.sprinkler = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
+                .addBlock(AgriCraft.instance.getModBlockRegistry().sprinkler)
                 .build();
 
         this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)

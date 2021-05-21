@@ -8,6 +8,7 @@ public abstract class Names {
         public static final String CROP_STICKS = "crop_sticks";
         public static final String GRATE = "grate";
         public static final String SEED_ANALYZER = "seed_analyzer";
+        public static final String SPRINKLER = "sprinkler";
         public static final String TANK = "irrigation_tank";
         public static final String CHANNEL = "irrigation_channel";
         public static final String CHANNEL_HOLLOW = "irrigation_channel_hollow";
@@ -23,6 +24,10 @@ public abstract class Names {
         public static final String TROWEL = "agri_trowel";
         public static final String SEED = "agri_seed";
         public static final String SEED_BAG = "agri_seed_bag";
+    }
+
+    public static final class Fluids {
+        public static final String TANK_WATER = "agri_tank_water";
     }
 
     public static final class Mods {

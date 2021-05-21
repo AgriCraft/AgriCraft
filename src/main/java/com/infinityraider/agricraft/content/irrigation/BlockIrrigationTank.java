@@ -11,9 +11,15 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -28,7 +34,11 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -48,9 +58,12 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     public static final InfProperty<Connection> SOUTH = InfProperty.Creators.create("south", Connection.class, Connection.NONE);
     public static final InfProperty<Connection> WEST = InfProperty.Creators.create("west", Connection.class, Connection.NONE);
     public static final InfProperty<Boolean> DOWN = InfProperty.Creators.create("down", false);
+    public static final InfProperty<Boolean> LADDER = InfProperty.Creators.create("ladder", false);
+    public static final InfProperty<Boolean> WATER = InfProperty.Creators.create("water", false);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(NORTH).add(EAST).add(SOUTH).add(WEST).add(DOWN)
+            .add(LADDER).add(WATER)
             .build();
 
     public static Optional<InfProperty<Connection>> getConnection(Direction direction) {
@@ -117,8 +130,48 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        // TODO: bucket logic
-        return super.onBlockActivated(state, world, pos, player, hand, hit);
+            ItemStack stack = player.getHeldItem(hand);
+            if(stack.getItem() instanceof BucketItem) {
+                BucketItem bucket = (BucketItem) stack.getItem();
+                Fluid fluid = bucket.getFluid();
+                if(fluid == Fluids.WATER) {
+                    // try to fill from a bucket
+                    TileEntity tile = world.getTileEntity(pos);
+                    if(tile instanceof TileEntityIrrigationTank) {
+                        TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                        if(tank.pushWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
+                            tank.pushWater(FluidAttributes.BUCKET_VOLUME, true);
+                            if(!player.isCreative()) {
+                                player.setHeldItem(hand, new ItemStack(Items.BUCKET));
+                            }
+                            return ActionResultType.SUCCESS;
+                        }
+                    }
+                } else if(fluid == Fluids.EMPTY) {
+                    // try to drain to a bucket
+                    TileEntity tile = world.getTileEntity(pos);
+                    if(tile instanceof TileEntityIrrigationTank) {
+                        TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                        if(tank.drainWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
+                            tank.drainWater(FluidAttributes.BUCKET_VOLUME, true);
+                            player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
+                            return ActionResultType.SUCCESS;
+                        }
+                    }
+                }
+            } else if(stack.getItem() == Items.LADDER) {
+                // try to place a ladder
+                if(!LADDER.fetch(state)) {
+                    if(!world.isRemote()) {
+                        world.setBlockState(pos, LADDER.apply(state, true));
+                        if(!player.isCreative()) {
+                            player.getHeldItem(hand).shrink(1);
+                        }
+                    }
+                    return ActionResultType.SUCCESS;
+                }
+            }
+        return ActionResultType.FAIL;
     }
 
     @Override
@@ -137,10 +190,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 // tank logic is handled from within the tile entity
                 return ownState;
             }
+            TileEntity ownTile = world.getTileEntity(pos);
             TileEntity otherTile = world.getTileEntity(otherPos);
-            if(otherTile instanceof TileEntityIrrigationChannel) {
+            if(ownTile instanceof TileEntityIrrigationTank && otherTile instanceof TileEntityIrrigationChannel) {
                 TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) otherTile;
-                if (channel.isSameMaterial(world.getTileEntity(pos))) {
+                if (channel.canConnect((TileEntityIrrigationTank) ownTile)) {
                     return prop.apply(ownState, Connection.CHANNEL);
                 }
             }
@@ -154,9 +208,47 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityIrrigationTank) {
-            ((TileEntityIrrigationTank) tile).onNeighbourChanged(fromPos);
+            TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+            tank.onNeighbourChanged(fromPos);
+            tank.onNeighbourUpdate(fromPos);
         }
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+    }
+
+    @Override
+    public void fillWithRain(World world, BlockPos pos) {
+        int rate = AgriCraft.instance.getConfig().rainFillRate();
+        if(rate > 0) {
+            TileEntity tile = world.getTileEntity(pos);
+            if(tile instanceof TileEntityIrrigationTank) {
+                TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                tank.pushWater(rate, true);
+            }
+        }
+    }
+
+    protected void updateFluidState(World world, BlockPos pos, BlockState state, float waterLevel) {
+        boolean shouldHaveWater = waterLevel - pos.getY() > 0.5;
+        boolean hasWater = WATER.fetch(state);
+        if(shouldHaveWater != hasWater) {
+            // 2: Send update to client
+            // 4: Prevent render update
+            // 16: Prevent neighbour reactions
+            // 32: Prevent neighbour drops
+            world.setBlockState(pos, WATER.apply(state, shouldHaveWater), 2 + 4 + 16 + 32);
+        }
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public FluidState getFluidState(BlockState state) {
+        return WATER.fetch(state) ? AgriCraft.instance.getModFluidRegistry().tank_water.getDefaultState() : Fluids.EMPTY.getDefaultState();
+    }
+
+    @Override
+    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
+        return LADDER.fetch(state);
     }
 
     @Override
@@ -203,6 +295,15 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
 
     @Override
     public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityIrrigationTank tile, LootContext.Builder context) {
+        if(LADDER.fetch(state)) {
+            dropAcceptor.accept(new ItemStack(Items.LADDER, 1));
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.getCutout();
     }
 
     public enum Connection implements IStringSerializable {

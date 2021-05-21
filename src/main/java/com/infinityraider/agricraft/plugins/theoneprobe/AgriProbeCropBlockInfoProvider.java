@@ -13,11 +13,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-final class AgriProbeBlockInfoProvider implements IProbeInfoProvider {
+final class AgriProbeCropBlockInfoProvider implements IProbeInfoProvider {
     private final String id;
 
-    protected AgriProbeBlockInfoProvider() {
-        this.id = AgriCraft.instance.getModId() + ":" + Names.Mods.THE_ONE_PROBE;
+    protected AgriProbeCropBlockInfoProvider() {
+        this.id = AgriCraft.instance.getModId() + ":" + Names.Mods.THE_ONE_PROBE + "_crop";
     }
 
     @Override
