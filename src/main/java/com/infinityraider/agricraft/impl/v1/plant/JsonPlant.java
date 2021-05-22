@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoilCondition;
 import com.google.common.collect.ImmutableList;
@@ -299,32 +298,28 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {
-        int index = IncrementalGrowthLogic.getGrowthIndex(crop.getGrowthStage());
-        if (index == -1) {
+        final int index = IncrementalGrowthLogic.getGrowthIndex(crop.getGrowthStage());
+        final World world = crop.world();
+        if (index == -1 || world == null) {
             return;
         }
-        List<AgriParticleEffect> particleEffects = this.plant.getParticleEffects();
-        for (AgriParticleEffect particleEffect : particleEffects) {
-            if (particleEffect.allowParticles(index)) {
-                ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(particleEffect.getParticle()));
-                World world = crop.world();
-                if (particle != null && world != null) {
+        this.plant.getParticleEffects().stream()
+                .filter(effect -> effect.allowParticles(index))
+                .forEach(effect -> {
+                    ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
+                    if (particle == null) {
+                        return;
+                    }
                     for (int amount = 0; amount < 3; ++amount) {
-                        if (rand.nextDouble() < particleEffect.getProbability()) {
+                        if (rand.nextDouble() < effect.getProbability()) {
                             BlockPos pos = crop.getPosition();
-                            double deltaX = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaX() * rand.nextDouble();
-                            double deltaY = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaY() * rand.nextDouble();
-                            double deltaZ = (rand.nextBoolean() ? 1 : -1) * particleEffect.getDeltaZ() * rand.nextDouble();
-                            world.addParticle((IParticleData) particle,
-                                    (double) pos.getX() + 0.5D + deltaX,
-                                    (double) pos.getY() + 0.5D + deltaY,
-                                    (double) pos.getZ() + 0.5D + deltaZ,
-                                    0.0D, 0.0D, 0.0D);
+                            double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
+                            double y = pos.getY() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaY() * rand.nextDouble();
+                            double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();
+                            world.addParticle((IParticleData) particle, x, y, z, 0.0D, 0.0D, 0.0D);
                         }
                     }
-                }
-            }
-        }
+                });
     }
 
     @Override

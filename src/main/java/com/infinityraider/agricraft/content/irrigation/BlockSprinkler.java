@@ -66,7 +66,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if(fromPos.down().equals(pos)) {
             world.setBlockState(fromPos, Blocks.AIR.getDefaultState());
-            
+            spawnDrops(state, world, pos, world.getTileEntity(pos));
         }
     }
 

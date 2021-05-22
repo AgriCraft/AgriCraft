@@ -166,6 +166,16 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         }
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
+        this.getCrop(world, pos).ifPresent(crop -> {
+            if(crop.hasPlant()) {
+                crop.getPlant().spawnParticles(crop, rand);
+            }
+        });
+    }
+
     /**
      * -------------------------
      * Vanilla IGrowable methods
