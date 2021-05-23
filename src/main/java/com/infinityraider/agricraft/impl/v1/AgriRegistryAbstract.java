@@ -20,11 +20,11 @@ import java.util.stream.Stream;
  *
  * @param <T> The type of the registry.
  */
-public abstract class AgriRegistry<T extends IAgriRegisterable<T>> implements IAgriRegistry<T> {
+public abstract class AgriRegistryAbstract<T extends IAgriRegisterable<T>> implements IAgriRegistry<T> {
 
     private final ConcurrentMap<String, T> registry;
 
-    protected AgriRegistry() {
+    protected AgriRegistryAbstract() {
         this.registry = new ConcurrentHashMap<>();
     }
 

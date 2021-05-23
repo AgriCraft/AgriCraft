@@ -5,14 +5,14 @@ import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 @SuppressWarnings("Unchecked")
-public class AgriGeneRegistry extends AgriRegistry<IAgriGene<?>> implements IAgriGeneRegistry {
+public class AgriGeneRegistry extends AgriRegistryAbstract<IAgriGene<?>> implements IAgriGeneRegistry {
     private static final AgriGeneRegistry INSTANCE = new AgriGeneRegistry();
 
     public static AgriGeneRegistry getInstance() {

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class ModConverter implements AgriConverter {
+public class AgriConverterImpl implements AgriConverter {
     @Override
     @SuppressWarnings("unchecked")
     public <T> Collection<T> convert(Class<T> token, String element, int amount, boolean useTags, String data, List<String> ignoreData) {

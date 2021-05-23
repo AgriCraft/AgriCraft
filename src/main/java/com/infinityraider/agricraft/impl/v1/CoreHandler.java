@@ -77,7 +77,7 @@ public final class CoreHandler {
         defaultDir = getJsonDir().resolve("defaults");
 
         // Initialize AgriCore
-        AgriCore.init(new ModLogger(), new ModValidator(), new ModConverter(), AgriCraft.instance.getConfig());
+        AgriCore.init(new AgriLoggerImpl(), new AgriValidatorImpl(), new AgriConverterImpl(), AgriCraft.instance.getConfig());
 
         // Transfer Defaults
         if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {

@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  *
  * @author The AgriCraft Team
  */
-public class AgriMutationRegistry extends AgriRegistry<IAgriMutation> implements IAgriMutationRegistry {
+public class AgriMutationRegistry extends AgriRegistryAbstract<IAgriMutation> implements IAgriMutationRegistry {
     private static final AgriMutationRegistry INSTANCE = new AgriMutationRegistry();
 
     public static AgriMutationRegistry getInstance() {

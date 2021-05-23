@@ -3,14 +3,14 @@ package com.infinityraider.agricraft.impl.v1.plant;
 import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedRegistry;
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class AgriWeedRegistry extends AgriRegistry<IAgriWeed> implements IAgriWeedRegistry {
+public class AgriWeedRegistry extends AgriRegistryAbstract<IAgriWeed> implements IAgriWeedRegistry {
     public static final IAgriWeed NO_WEED = NoWeed.getInstance();
 
     private static final AgriWeedRegistry INSTANCE = new AgriWeedRegistry();

@@ -6,12 +6,12 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nullable;
 
-public class AgriStatRegistry extends AgriRegistry<IAgriStat> implements IAgriStatRegistry {
+public class AgriStatRegistry extends AgriRegistryAbstract<IAgriStat> implements IAgriStatRegistry {
     private static final AgriStatRegistry INSTANCE = new AgriStatRegistry();
 
     public static AgriStatRegistry getInstance() {

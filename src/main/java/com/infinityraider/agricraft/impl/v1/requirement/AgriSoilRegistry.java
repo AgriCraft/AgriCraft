@@ -9,13 +9,13 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 import net.minecraft.block.Block;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class AgriSoilRegistry extends AgriRegistry<IAgriSoil> implements IAgriSoilRegistry {
+public class AgriSoilRegistry extends AgriRegistryAbstract<IAgriSoil> implements IAgriSoilRegistry {
     private static final AgriSoilRegistry INSTANCE = new AgriSoilRegistry();
     private static final IAgriSoilProvider EMPTY = (world, pos, state) -> Optional.empty();
 

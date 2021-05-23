@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-public class ModValidator implements AgriValidator {
+public class AgriValidatorImpl implements AgriValidator {
 
     @Override
     public <T> boolean isValidObject(Class<T> token, String object) {

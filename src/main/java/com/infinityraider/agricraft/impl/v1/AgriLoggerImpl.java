@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 
 import org.apache.logging.log4j.Level;
 
-public class ModLogger implements AgriLogAdapter {
+public class AgriLoggerImpl implements AgriLogAdapter {
 
     public void log(Level logLevel, Object source, String format, Object... objects) {
         try {

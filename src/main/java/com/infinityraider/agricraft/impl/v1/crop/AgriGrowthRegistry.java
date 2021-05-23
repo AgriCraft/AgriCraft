@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.impl.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowthRegistry;
-import com.infinityraider.agricraft.impl.v1.AgriRegistry;
+import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public class AgriGrowthRegistry extends AgriRegistry<IAgriGrowthStage> implements IAgriGrowthRegistry {
+public class AgriGrowthRegistry extends AgriRegistryAbstract<IAgriGrowthStage> implements IAgriGrowthRegistry {
     public static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
 
     private static final AgriGrowthRegistry INSTANCE = new AgriGrowthRegistry();
