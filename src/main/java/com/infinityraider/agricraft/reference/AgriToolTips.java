@@ -22,7 +22,6 @@ public class AgriToolTips {
     public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome")
             .mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);
 
-    public static final ITextComponent SEED = new TranslationTextComponent("agricraft.tooltip.seed");
     public static final ITextComponent PLANT = new TranslationTextComponent("agricraft.tooltip.plant");
     public static final ITextComponent NO_PLANT = new TranslationTextComponent("agricraft.tooltip.no_plant");
     public static final ITextComponent GROWTH = new TranslationTextComponent("agricraft.tooltip.growth");
@@ -61,6 +60,8 @@ public class AgriToolTips {
     public static final ITextComponent GRATE_L2 = new TranslationTextComponent("agricraft.tooltip.grate.l2");
 
     public static final ITextComponent TANK_L1 = new TranslationTextComponent("agricraft.tooltip.tank.l1");
+
+    public static final ITextComponent SPRINKLER = new TranslationTextComponent("agricraft.tooltip.sprinkler.l1");
 
     public static final ITextComponent LIGHT = new TranslationTextComponent("agricraft.tooltip.light");
 

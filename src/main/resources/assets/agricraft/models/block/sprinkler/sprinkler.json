@@ -1,0 +1,20 @@
+{
+	"loader": "infinitylib:dynamic_texture",
+	"textures": {
+		"default": "minecraft:block/oak_planks"
+	},
+	"elements": [
+		{
+			"name": "attachment",
+			"from": [5, 15, 5],
+			"to": [11, 21, 11],
+			"faces": {
+				"north": {"uv": [5, 10, 11, 16], "texture": "dynamic"},
+				"east": {"uv": [5, 10, 11, 16], "texture": "dynamic"},
+				"south": {"uv": [5, 10, 11, 16], "texture": "dynamic"},
+				"west": {"uv": [5, 10, 11, 16], "texture": "dynamic"},
+				"down": {"uv": [5, 5, 11, 11], "texture": "dynamic"}
+			}
+		}
+	]
+}

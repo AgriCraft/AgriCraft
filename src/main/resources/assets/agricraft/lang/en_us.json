@@ -9,6 +9,7 @@
   "block.agricraft.irrigation_tank": "Wooden Irrigation Tank",
   "block.agricraft.irrigation_channel": "Wooden Irrigation Channel",
   "block.agricraft.irrigation_channel_hollow": "Wooden Irrigation Channel (Hollow)",
+  "block.agricraft.sprinkler": "Sprinkler",
   "block.agricraft.grate": "Wooden Grate",
 
   "item.agricraft.debugger": "Debugger",
@@ -86,6 +87,14 @@
   "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, you will lose track of my seeds.",
   "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps you should try enchanting it first.",
 
+  "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
+  "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
+  "agricraft.tooltip.tank.l1": "Try not to fall in... or at least not before attaching a ladder",
+  "agricraft.tooltip.sprinkler.l1": "Attaches to the bottom of Irrigation Channels",
+
+  "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
+  "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
+
   "agricraft.tooltip.sneak_info": "(Hold <Sneak> for more info)",
 
   "agricraft.tooltip.humidity": "Humidity",
@@ -116,14 +125,6 @@
   "agricraft.tooltip.nutrients.high": "High",
   "agricraft.tooltip.nutrients.very_high": "Very High",
   "agricraft.tooltip.nutrients.invalid": "Invalid",
-
-  "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
-  "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
-
-  "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
-  "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
-
-  "agricraft.tooltip.tank.l1": "Try not to fall in... or at least not before attaching a ladder",
 
   "agricraft.tooltip.growth_req.soil": "This plant will only grow on a specific soil",
   "agricraft.tooltip.growth_req.soil.humidity": "This plant needs a specific soil humidity to grow",

@@ -59,6 +59,7 @@ public class AgriTileRegistry {
 
         this.sprinkler = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
                 .addBlock(AgriCraft.instance.getModBlockRegistry().sprinkler)
+                .setRenderFactory(TileEntitySprinkler.createRenderFactory())
                 .build();
 
         this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
