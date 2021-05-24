@@ -27,3 +27,10 @@ Agricultural farming extended
     versionRange="[1.16.5-2.0.2,)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.agricraft]]
+    modId="cyclic"
+    mandatory=false
+    versionRange="[1.16.5-1.2.8,)"
+    ordering="AFTER"
+    side="BOTH"

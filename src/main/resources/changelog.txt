@@ -47,6 +47,7 @@ Changelog
 - ADDED: Default jsons for XL Food Mod (thanks Nelson Brichau)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
 - ADDED: Compatibility with Create's Mechanical Harvester
+- ADDED: Compatibility with Cyclic's Harvester
 - ADDED: Compatibility for Industrial Foregoing harvesting
 
 2.12.0a7

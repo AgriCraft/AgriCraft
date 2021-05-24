@@ -35,6 +35,7 @@ public abstract class Names {
         public static final String BLOOD_MAGIC = "bloodmagic";
         public static final String BOTANY_POTS = "botanypots";
         public static final String CREATE = "create";
+        public static final String CYCLIC = "cyclic";
         public static final String JEI = "jei";
         public static final String THE_ONE_PROBE = "theoneprobe";
         public static final String IMMERSIVE_ENGINEERING = "immersiveengineering";
