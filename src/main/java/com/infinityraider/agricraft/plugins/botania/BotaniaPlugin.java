@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.plugins.cyclic;
+package com.infinityraider.agricraft.plugins.botania;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @AgriPlugin
 @SuppressWarnings("unused")
-public class CyclicPlugin implements IAgriPlugin {
+public class BotaniaPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
         return ModList.get().isLoaded(this.getId());
@@ -17,7 +17,7 @@ public class CyclicPlugin implements IAgriPlugin {
 
     @Override
     public String getId() {
-        return Names.Mods.CYCLIC;
+        return Names.Mods.BOTANIA;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class CyclicPlugin implements IAgriPlugin {
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableCyclicCompat()) {
-            CyclicCompat.registerHarvesterOverride();
+        if(this.isEnabled() && AgriCraft.instance.getConfig().enableBotaniaCompat()) {
+
         }
     }
 }

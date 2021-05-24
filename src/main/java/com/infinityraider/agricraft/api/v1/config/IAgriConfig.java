@@ -309,6 +309,11 @@ public interface IAgriConfig {
     boolean enableBloodMagicCompat();
 
     /**
+     * @return if Botania compatibility is enabled
+     */
+    boolean enableBotaniaCompat();
+
+    /**
      * @return if Botany Pots compatibility is enabled
      */
     boolean enableBotanyPotsCompat();
@@ -317,6 +322,11 @@ public interface IAgriConfig {
      * @return if Create compatibility is enabled
      */
     boolean enableCreateCompat();
+
+    /**
+     * @return if Cyclic compatibility is enabled
+     */
+    boolean enableCyclicCompat();
 
     /**
      * @return if Industrial Foregoing compatibility is enabled

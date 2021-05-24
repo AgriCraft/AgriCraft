@@ -76,8 +76,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
         private final ForgeConfigSpec.ConfigValue<Boolean> topControlledByMagnifyingGlass;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBloodMagicCompat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableBotaniaCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBotanyPotsCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCreateCompat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableCyclicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableIndustrialForegoingCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableImmersiveEngineeringCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableStrawGolemRebornCompat;
@@ -207,10 +209,14 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("TOP only with magnifying glass", true);
             this.enableBloodMagicCompat = builder.comment("\nSet to false to disable compatibility with Blood Magic (in case things break)")
                     .define("Enable Blood Magic compat", true);
+            this.enableBotaniaCompat = builder.comment("\nSet to false to disable compatibility with Botania (in case things break)")
+                    .define("Enable Botany Pots compat", true);
             this.enableBotanyPotsCompat = builder.comment("\nSet to false to disable compatibility with Botany Pots (in case things break)")
                     .define("Enable Botany Pots compat", true);
             this.enableCreateCompat = builder.comment("\nSet to false to disable compatibility with Create (in case things break)")
                     .define("Enable Create compat", true);
+            this.enableCyclicCompat = builder.comment("\nSet to false to disable compatibility with Cyclic (in case things break)")
+                    .define("Enable Cyclic compat", true);
             this.enableIndustrialForegoingCompat = builder.comment("\nSet to false to disable compatibility with Industrial Foregoing (in case things break)")
                     .define("Enable Industrial Foregoing compat", true);
             this.enableImmersiveEngineeringCompat = builder.comment("\nSet to false to disable compatibility with Immersive Engineering (in case things break)")
@@ -471,6 +477,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         }
 
         @Override
+        public boolean enableBotaniaCompat() {
+            return this.enableBotaniaCompat.get();
+        }
+
+        @Override
         public boolean enableBotanyPotsCompat() {
             return this.enableBotanyPotsCompat.get();
         }
@@ -478,6 +489,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableCreateCompat() {
             return this.enableCreateCompat.get();
+        }
+
+        @Override
+        public boolean enableCyclicCompat() {
+            return this.enableCyclicCompat.get();
         }
 
         @Override
