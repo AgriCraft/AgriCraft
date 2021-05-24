@@ -1,16 +1,20 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.network.MessageIrrigationNeighbourUpdate;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -26,6 +30,10 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTexture implements ITickableTileEntity {
+    /* drain 1% each tick, so it takes 100 ticks (5 seconds) to fully drain a componentt */
+    public static final float NETHER_DRAIN_FRACTION = 0.01F;
+
+    // contents
     private final int capacity;
     private final float minLevel;
     private final float maxLevel;
@@ -38,6 +46,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     private final AutoSyncedField<Integer> content;
     private final AutoSyncedField<Float> level;
 
+    // neighbour cache
     private final NeighbourCache neighbours;
 
     public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, float minLevel, float maxLevel) {
@@ -54,39 +63,57 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     public void tick() {
         // Update previous level
         this.prevLevel = this.levelBuffer;
-        if(this.getPos().equals(new BlockPos(-113, 4, -137))) {
-            boolean breakpoint = true;
-        }
         // If this has sufficient fluid to distribute, try to push to neighbours
         if(this.getContent() > 0) {
-            this.neighbours.streamNeighbours(true).forEach(component -> {
-                float y_a = this.getLevel();
-                float y_b = component.getLevel();
-                // If the neighbour has a higher fluid level, try push to it
-                if (y_a > y_b) {
-                    // fetch parameters
-                    float f_a = this.getSurfaceFactor();
-                    float f_b = component.getSurfaceFactor();
-                    float y_a1 = this.getMinLevel();
-                    float y_b1 = component.getMinLevel();
-                    float y_b2 = component.getMaxLevel();
-                    // calculate transferable volume
-                    float v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
-                    // determine transfer volume
-                    float dv = f_b*v/(f_a + f_b);
-                    // only transfer if the delta is positive
-                    if(dv > 0) {
-                        int transfer = (int) dv;
-                        // don't transfer more than this contains
-                        transfer = Math.min(transfer, this.getContent());
-                        // don't transfer more than the component can accept
-                        transfer = Math.min(transfer, component.getCapacity() - component.getContent());
-                        // do the transfer
-                        transfer = component.pushWater(transfer, true);
-                        this.drainWater(transfer, true);
-                    }
+            // balance
+            this.balanceWithNeighbours();
+            // nether logic
+            this.runNetherLogic();
+        }
+    }
+
+    protected void balanceWithNeighbours() {
+        this.neighbours.streamNeighbours(true).forEach(component -> {
+            float y_a = this.getLevel();
+            float y_b = component.getLevel();
+            // If the neighbour has a higher fluid level, try push to it
+            if (y_a > y_b) {
+                // fetch parameters
+                float f_a = this.getSurfaceFactor();
+                float f_b = component.getSurfaceFactor();
+                float y_a1 = this.getMinLevel();
+                // calculate transferable volume
+                float v = (y_a - Math.max(y_b, y_a1)) * this.getSurfaceFactor();
+                // determine transfer volume
+                float dv = f_b*v/(f_a + f_b);
+                // only transfer if the delta is positive
+                if(dv > 0) {
+                    int transfer = (int) dv;
+                    // don't transfer more than this contains
+                    transfer = Math.min(transfer, this.getContent());
+                    // don't transfer more than the component can accept
+                    transfer = Math.min(transfer, component.getCapacity() - component.getContent());
+                    // do the transfer
+                    transfer = component.pushWater(transfer, true);
+                    this.drainWater(transfer, true);
                 }
-            });
+            }
+        });
+    }
+
+    protected void runNetherLogic() {
+        if(this.getWorld() != null && this.getWorld().getDimensionType().isUltrawarm()) {
+            this.drainWater(Math.max(1, (int) (NETHER_DRAIN_FRACTION*this.getCapacity())), true);
+            if(this.getWorld().isRemote()) {
+                if(this.getWorld().getRandom().nextDouble() <= 0.20) {
+                    double x = this.getPos().getX() + 0.5 * (this.getWorld().getRandom().nextDouble() - 0.5);
+                    double y = this.getLevel();
+                    double z = this.getPos().getZ() + 0.5 * (this.getWorld().getRandom().nextDouble() - 0.5);
+                    this.getWorld().addParticle(ParticleTypes.CLOUD, x, y, z, 0, 0.15, 0);
+                    this.getWorld().playSound(AgriCraft.instance.getClientPlayer(), this.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
+                            0.5F, 2.6F + (this.getWorld().getRandom().nextFloat() - this.getWorld().getRandom().nextFloat()) * 0.8F);
+                }
+            }
         }
     }
 
@@ -255,6 +282,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
             }
         }
 
+        @SuppressWarnings("unused") // meh
         public Stream<TileEntityIrrigationComponent> streamComponents() {
             return Stream.concat(
                     Stream.of(this.getComponent()),
