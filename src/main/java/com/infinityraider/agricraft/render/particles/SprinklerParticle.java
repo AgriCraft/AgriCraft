@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,11 +22,17 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class SprinklerParticle extends AgriParticle implements IRenderUtilities {
     public SprinklerParticle(ClientWorld world, Fluid fluid, double x, double y, double z, float scale, float gravity, Vector3d velocity) {
-        this(world, fluid.getAttributes().getStillTexture(), x, y, z, scale, gravity, velocity);
+        super(world, x, y, z, scale, gravity, velocity, fluid.getAttributes().getStillTexture());
+        this.setColor(fluid);
     }
 
-    public SprinklerParticle(ClientWorld world, ResourceLocation icon, double x, double y, double z, float scale, float gravity, Vector3d velocity) {
-        super(world, x, y, z, scale, gravity, velocity, icon);
+    protected void setColor(Fluid fluid) {
+        int color = fluid.getAttributes().getColor();
+        this.setColor(
+                ((color >> 16) & 0xFF) / 255.0F,
+                ((color >> 8) & 0xFF) / 255.0F,
+                ((color) & 0xFF) / 255.0F);
+        this.setAlphaF(((color >> 24) & 0xFF) / 255.0F);
     }
 
     @Override

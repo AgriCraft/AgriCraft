@@ -19,7 +19,7 @@ public class ParticleHelper {
         for (int i = 0; i < 4; i++) {
             float alpha = -(angle + 90 * i) * ((float) Math.PI) / 180;
             double xOffset = (4 * Constants.UNIT) * Math.cos(alpha);
-            double zOffset = (4 * Constants.UNIT) * Math.sin(alpha) + 0.5;
+            double zOffset = (4 * Constants.UNIT) * Math.sin(alpha);
             float radius = 0.3F;
             for (int j = 0; j <= 4; j++) {
                 float beta = -j * ((float) Math.PI) / (8.0F);
@@ -31,7 +31,7 @@ public class ParticleHelper {
 
     private static void spawnSprinklerParticle(World world, double x, double y, double z, Vector3d vector) {
         if(world instanceof ClientWorld) {
-            final SprinklerParticle spray = new SprinklerParticle((ClientWorld) world, Fluids.WATER, x, y, z, 0.3F, 0.7F, vector);
+            final SprinklerParticle spray = new SprinklerParticle((ClientWorld) world, Fluids.WATER, x, y, z, 0.25F, 0.7F, vector);
             Minecraft.getInstance().particles.addEffect(spray);
         }
     }

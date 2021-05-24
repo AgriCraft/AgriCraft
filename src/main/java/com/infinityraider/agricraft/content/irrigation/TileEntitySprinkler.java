@@ -217,7 +217,7 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
             AgriCraft.instance.proxy().spawnSprinklerParticles(
                     this.getWorld(),
                     this.getPos().getX() + 0.5,
-                    this.getPos().getY() + 0.5,
+                    this.getPos().getY() + 0.35,
                     this.getPos().getZ() + 0.5,
                     this.getAngle()
             );
