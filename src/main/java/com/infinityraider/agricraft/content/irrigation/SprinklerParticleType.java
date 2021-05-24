@@ -37,6 +37,10 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
         super(Names.Blocks.SPRINKLER + "_particle", true);
     }
 
+    public Data createParticleData(Fluid fluid, float scale, float gravity) {
+        return new Data(fluid, scale, gravity);
+    }
+
     @Override
     public Data deserializeData(@Nonnull StringReader reader) throws CommandSyntaxException {
         reader.expect(' ');

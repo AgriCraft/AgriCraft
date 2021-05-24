@@ -5,14 +5,20 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.render.blocks.TileEntitySprinklerRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
+import com.infinityraider.infinitylib.reference.Constants;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.block.IGrowable;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
@@ -32,7 +38,6 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     private static final int WORK_DIAMETER = 1 + 2*WORK_RADIUS;
     private static final int WORK_AREA = WORK_DIAMETER*WORK_DIAMETER;
     private static final int WORK_COOLDOWN = 20;
-    private static final int BUFFER_SIZE = 100;
     private static final int ROTATION_SPEED = 360/(20 * 2); // One full rotation every 2 seconds
 
     // Irrigation data
@@ -103,7 +108,7 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
         if(channel == null) {
             return;
         }
-        this.buffer += channel.drainWater(Math.max(BUFFER_SIZE - this.buffer, 0), true);
+        this.buffer += channel.drainWater(Math.max(this.getBufferSize() - this.buffer, 0), true);
     }
 
     protected void runSprinklerLogic() {
@@ -207,20 +212,46 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
         }
     }
 
+    protected int getBufferSize() {
+        return 2*AgriCraft.instance.getConfig().sprinklerWaterConsumption();
+    }
+
     protected void spawnSprinklerParticles() {
-        if(this.getWorld() == null) {
+        if (this.getWorld() == null) {
             return;
         }
+        boolean vapour = this.getWorld().getDimensionType().isUltrawarm();
         int particleSetting = AgriCraft.instance.proxy().getParticleSetting(); //0 = all, 1 = decreased; 2 = minimal;
-        this.particleCounter = (this.particleCounter + 1) % (particleSetting + 1);
+        particleSetting += vapour ? 6 : 2;
+        this.particleCounter = (this.particleCounter + 1) % particleSetting;
         if (this.particleCounter == 0) {
-            AgriCraft.instance.proxy().spawnSprinklerParticles(
-                    this.getWorld(),
-                    this.getPos().getX() + 0.5,
-                    this.getPos().getY() + 0.35,
-                    this.getPos().getZ() + 0.5,
-                    this.getAngle()
-            );
+            double x = this.getPos().getX() + 0.5;
+            double y = this.getPos().getY() + 0.35;
+            double z = this.getPos().getZ() + 0.5;
+            for (int i = 0; i < 4; i++) {
+                float alpha = -(angle + 90 * i) * ((float) Math.PI) / 180;
+                float cosA = MathHelper.cos(alpha);
+                float sinA = MathHelper.sin(alpha);
+                double xOffset = (4 * Constants.UNIT) * cosA;
+                double zOffset = (4 * Constants.UNIT) * sinA;
+                float radius = 0.35F;
+                if (vapour) {
+                    IParticleData particle = ParticleTypes.CLOUD;
+                    this.getWorld().addParticle(particle, x + xOffset, y, z + zOffset, 0.15*cosA, 0.25, 0.15*sinA);
+                } else {
+                    IParticleData particle = AgriCraft.instance.getModParticleRegistry().sprinkler.createParticleData(Fluids.WATER, 0.2F, 0.7F);
+                    for (int j = 0; j <= 4; j++) {
+                        float beta = -j * ((float) Math.PI) / (8.0F);
+                        this.getWorld().addParticle(particle,
+                                x + xOffset * (4 - j) / 4, y, z + zOffset * (4 - j) / 4,
+                                radius * cosA, radius * Math.sin(beta), radius * sinA);
+                    }
+                }
+            }
+            if(vapour) {
+                this.getWorld().playSound(AgriCraft.instance.getClientPlayer(), this.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
+                        0.5F, 2.6F + (this.getWorld().getRandom().nextFloat() - this.getWorld().getRandom().nextFloat()) * 0.8F);
+            }
         }
     }
 

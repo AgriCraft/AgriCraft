@@ -10,7 +10,6 @@ import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -95,6 +94,4 @@ public interface IProxy extends IProxyBase<Config> {
     default int getParticleSetting() {
         return 0;
     }
-
-    default void spawnSprinklerParticles(World world, double x, double y, double z, float angle) {}
 }
