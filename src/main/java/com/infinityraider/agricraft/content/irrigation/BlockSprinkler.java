@@ -40,7 +40,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     // Shape
     private static final VoxelShape SHAPE = Stream.of(
             Block.makeCuboidShape(5, 15, 5, 11, 21, 11),
-            Block.makeCuboidShape(8 - 0.75*Math.sqrt(2), 4, 8 - 0.75*Math.sqrt(2), 8 + 0.75*Math.sqrt(2), 15, 8 + 0.75*Math.sqrt(2))
+            Block.makeCuboidShape(8 - 0.74*Math.sqrt(2), 4, 8 - 0.74*Math.sqrt(2), 8 + 0.74*Math.sqrt(2), 15, 8 + 0.74*Math.sqrt(2))
     ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
     public BlockSprinkler() {

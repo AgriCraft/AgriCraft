@@ -2,12 +2,15 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
+import com.infinityraider.agricraft.render.particles.ParticleHelper;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -73,5 +76,15 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         } else {
             return IProxy.super.isMagnifyingGlassObserving(player);
         }
+    }
+
+    @Override
+    public int getParticleSetting() {
+        return Minecraft.getInstance().gameSettings.particles.getId();
+    }
+
+    @Override
+    public void spawnSprinklerParticles(World world, double x, double y, double z, float angle) {
+        ParticleHelper.spawnSprinklerParticles(world, x, y, z, angle);
     }
 }
