@@ -50,32 +50,19 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
                                      @Nonnull ResourceLocation texture, int yOffset, AgriRenderType jsonRenderType) {
         TextureAtlasSprite sprite = this.getSprite(texture);
         AgriPlantRenderType type = CONVERSION_MAP.get(jsonRenderType);
-        List<BakedQuad> quads = this.bakeQuads(direction, sprite, yOffset, CONVERSION_MAP.get(jsonRenderType));
+        List<BakedQuad> quads = CONVERSION_MAP.get(jsonRenderType).bakedQuads(direction, sprite, yOffset);
         PlantQuadBakeEvent event = new PlantQuadBakeEvent(this, plant, stage, direction, texture, sprite, type, yOffset, quads);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getOutputQuads();
     }
 
-    @Nonnull
-    @Override
-    public List<BakedQuad> bakeQuads(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset, AgriPlantRenderType renderType) {
-        switch (renderType) {
-            case HASH:
-                return this.bakeQuadsForHashPattern(direction, sprite, yOffset);
-            case CROSS:
-                return this.bakeQuadsForCrossPattern(direction, sprite, yOffset);
-            case PLUS:
-                return this.bakeQuadsForPlusPattern(direction, sprite, yOffset);
-            case RHOMBUS:
-                return this.bakeQuadsForRhombusPattern(direction, sprite, yOffset);
-            default:
-                return this.bakeQuadsForDefaultPattern(direction, sprite, yOffset);
-        }
-    }
-
     @SuppressWarnings("deprecation")
     public List<BakedQuad> fetchQuads(@Nonnull ResourceLocation location) {
-        IBakedModel model = ModelLoader.instance().getBakedModel(location, ModelRotation.X0_Y0, this::getSprite);
+        ModelLoader loader = ModelLoader.instance();
+        if(loader == null) {
+            return ImmutableList.of();
+        }
+        IBakedModel model = loader.getBakedModel(location, ModelRotation.X0_Y0, this::getSprite);
         return model == null ? ImmutableList.of() : model.getQuads(null, null, this.getRandom());
     }
 
@@ -181,8 +168,10 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     }
 
     @Nonnull
-    public List<BakedQuad> bakeQuadsForDefaultPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
-        return this.bakeQuadsForCrossPattern(direction, sprite, yOffset);
+    @Override
+    public List<BakedQuad> bakeQuadsForGourdPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+        // TODO
+        return ImmutableList.of();
     }
 
     static {

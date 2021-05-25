@@ -12,24 +12,38 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Interface for the AgriCraft default quad generator, it's instance can be retrieved via AgriApi.getPlantQuadGenerator()
+ * Interface for the AgriCraft default quad generator, its instance can be retrieved via AgriApi.getPlantQuadGenerator()
  */
 @OnlyIn(Dist.CLIENT)
 public interface IAgriPlantQuadGenerator {
     /**
-     * Method which will generate quads for a plant according to the given render type.
-     *
-     * The yOffset parameter is used for plants which are taller than 1 block.
-     * For plants which are at most one block tall, use yOffset = 0.
-     * For taller plants this method must be called multiple times, for instance for a plant that is three blocks tall,
-     * this method will need to be called three times: once for the base layer (yOffset = 0), again for the middle layer
-     * (yOffset = 1), and a final time for the top layer (yOffset = 2).
-     *
-     * @param direction the face for the quads currently being baked
-     * @param sprite the sprite for the texture to use
-     * @param yOffset the yOffset in number of blocks
-     * @param renderType the render type to use
-     * @return list of BakedQuads
+     * Generates quads for the HASH AgriPlantRenderType
      */
-    List<BakedQuad> bakeQuads(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset, AgriPlantRenderType renderType);
+    @Nonnull
+    List<BakedQuad> bakeQuadsForHashPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+
+    /**
+     * Generates quads for the CROSS AgriPlantRenderType
+     */
+    @Nonnull
+    List<BakedQuad> bakeQuadsForCrossPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+
+    /**
+     * Generates quads for the PLUS AgriPlantRenderType
+     */
+    @Nonnull
+    List<BakedQuad> bakeQuadsForPlusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+
+    /**
+     * Generates quads for the RHOMBUS AgriPlantRenderType
+     */
+    @Nonnull
+    List<BakedQuad> bakeQuadsForRhombusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+
+    /**
+     * Generates quads for the RHOMBUS AgriPlantRenderType
+     * here yOffset = 0 is the stem, and yOffset = 1 is the gourd
+     */
+    @Nonnull
+    List<BakedQuad> bakeQuadsForGourdPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
 }
