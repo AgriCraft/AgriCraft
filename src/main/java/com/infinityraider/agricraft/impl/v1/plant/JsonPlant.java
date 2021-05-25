@@ -307,7 +307,7 @@ public class JsonPlant implements IAgriPlant {
                 .filter(effect -> effect.allowParticles(index))
                 .forEach(effect -> {
                     ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
-                    if (particle == null) {
+                    if (!(particle instanceof IParticleData)) {
                         return;
                     }
                     for (int amount = 0; amount < 3; ++amount) {
