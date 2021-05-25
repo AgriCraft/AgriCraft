@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.*;
@@ -190,7 +189,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 ImmutableList.of(new StringTextComponent("")
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
-                        .append(fluid.getDefaultState().getBlockState().getBlock().getTranslatedName())
+                        .append(new TranslationTextComponent(fluid.getDefaultState().getBlockState().getBlock().getTranslationKey()))
                 ));
     }
 
@@ -206,7 +205,8 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
                         .append(AgriToolTips.collect(fluids.stream()
-                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslatedName()), ", "))
+                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslationKey())
+                                .map(TranslationTextComponent::new), ", "))
                 ));
     }
 
@@ -222,7 +222,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 ImmutableList.of(new StringTextComponent("")
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
-                        .append(state.getBlockState().getBlock().getTranslatedName())
+                        .append(new TranslationTextComponent(state.getBlockState().getBlock().getTranslationKey()))
                 ));
     }
 
@@ -237,7 +237,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 ImmutableList.of(new StringTextComponent("")
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
-                        .append(AgriToolTips.collect(states.stream().map(fluid -> fluid.getBlockState().getBlock().getTranslatedName()), ", "))
+                        .append(AgriToolTips.collect(states.stream()
+                                .map(fluid -> fluid.getBlockState().getBlock().getTranslationKey())
+                                .map(TranslationTextComponent::new), ", "))
         ));
     }
 
@@ -253,7 +255,8 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
                         .append(AgriToolTips.collect(tag.getAllElements().stream()
-                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslatedName()), ", "))
+                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslationKey())
+                                .map(TranslationTextComponent::new), ", "))
                 ));
     }
 
@@ -269,7 +272,8 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                         .append(Descriptions.FLUID)
                         .append(new StringTextComponent(": "))
                         .append(AgriToolTips.collect(tags.stream().flatMap(tag -> tag.getAllElements().stream()
-                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslatedName())), ", "))
+                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslationKey())
+                                .map(TranslationTextComponent::new)), ", "))
                 ));
     }
 
@@ -530,7 +534,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition blockBelow(IntPredicate strength, Block block) {
         return this.blockBelow((str, aBlock) -> strength.test(str) || block.equals(aBlock),
-                ImmutableList.of(Descriptions.BLOCK_BELOW, block.getTranslatedName()));
+                ImmutableList.of(Descriptions.BLOCK_BELOW, new TranslationTextComponent(block.getTranslationKey())));
     }
 
     @Override
@@ -554,7 +558,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition stateBelow(IntPredicate strength, BlockState state) {
         return this.stateBelow((str, aState) -> strength.test(str) || state.equals(aState),
-                ImmutableList.of(Descriptions.BLOCK_BELOW, state.getBlock().getTranslatedName()));
+                ImmutableList.of(Descriptions.BLOCK_BELOW, new TranslationTextComponent(state.getBlock().getTranslationKey())));
     }
 
     @Override
@@ -566,7 +570,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition stateBelow(IntPredicate strength, Collection<BlockState> states) {
         return this.stateBelow((str, state) -> strength.test(str) || states.contains(state), Stream.concat(Stream.of(
                 Descriptions.BLOCK_BELOW),
-                states.stream().map(state -> state.getBlock().getTranslatedName())
+                states.stream()
+                        .map(state -> state.getBlock().getTranslationKey())
+                        .map(TranslationTextComponent::new)
         ).collect(Collectors.toList()));
     }
 
@@ -620,7 +626,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition blocksNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Block block) {
         return this.blocksNearby(strength, amount, minOffset, maxOffset, block::equals,
-                ImmutableList.of(Descriptions.equalTo(Descriptions.BLOCK_NEARBY, amount), block.getTranslatedName()));
+                ImmutableList.of(Descriptions.equalTo(Descriptions.BLOCK_NEARBY, amount), new TranslationTextComponent(block.getTranslationKey())));
     }
 
     @Override
@@ -645,7 +651,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, BlockState state) {
         return this.statesNearby(strength, amount, minOffset, maxOffset, state::equals,
-                ImmutableList.of(Descriptions.equalTo(Descriptions.BLOCK_NEARBY, amount), state.getBlock().getTranslatedName()));
+                ImmutableList.of(Descriptions.equalTo(Descriptions.BLOCK_NEARBY, amount), new TranslationTextComponent(state.getBlock().getTranslationKey())));
     }
 
     @Override
@@ -657,7 +663,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states) {
         return this.statesNearby(strength, amount, minOffset, maxOffset, states::contains, Stream.concat(Stream.of(
                 Descriptions.equalTo(Descriptions.BLOCK_NEARBY, amount)),
-                states.stream().map(state -> state.getBlock().getTranslatedName())
+                states.stream()
+                        .map(state -> state.getBlock().getTranslationKey())
+                        .map(TranslationTextComponent::new)
         ).collect(Collectors.toList()));
     }
 
@@ -716,7 +724,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition blocksNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Block block) {
         return this.blocksNearby(strength, min, max, minOffset, maxOffset, block::equals,
-                ImmutableList.of(Descriptions.inRange(Descriptions.BLOCK_NEARBY, min, max), block.getTranslatedName()));
+                ImmutableList.of(Descriptions.inRange(Descriptions.BLOCK_NEARBY, min, max), new TranslationTextComponent(block.getTranslationKey())));
     }
 
     @Override
@@ -741,7 +749,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     @Override
     public IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, BlockState state) {
         return this.statesNearby(strength, min, max, minOffset, maxOffset, state::equals,
-                ImmutableList.of(Descriptions.inRange(Descriptions.BLOCK_NEARBY, min, max), state.getBlock().getTranslatedName()));
+                ImmutableList.of(Descriptions.inRange(Descriptions.BLOCK_NEARBY, min, max), new TranslationTextComponent(state.getBlock().getTranslationKey())));
     }
 
     @Override
@@ -753,7 +761,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states) {
         return this.statesNearby(strength, min, max, minOffset, maxOffset, states::contains, Stream.concat(Stream.of(
                 Descriptions.inRange(Descriptions.BLOCK_NEARBY, min, max)),
-                states.stream().map(state -> state.getBlock().getTranslatedName())
+                states.stream()
+                        .map(state -> state.getBlock().getTranslationKey())
+                        .map(TranslationTextComponent::new)
         ).collect(Collectors.toList()));
     }
 
