@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Enum representing the different types AgriCraft plants / weeds are rendered
+ * Enum representing the different types for which AgriCraft plants / weeds are rendered
  */
 @OnlyIn(Dist.CLIENT)
 public enum AgriPlantRenderType implements IExtensibleEnum {

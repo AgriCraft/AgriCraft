@@ -170,7 +170,28 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     @Nonnull
     @Override
     public List<BakedQuad> bakeQuadsForGourdPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
-        // TODO
+        if(yOffset == 0) {
+            return this.bakeQuadsForHashPattern(direction, sprite, yOffset);
+        } else if(yOffset == 1) {
+            ITessellator tessellator = this.getTessellator();
+
+            tessellator.startDrawingQuads();
+            tessellator.setFace(direction);
+
+            tessellator.pushMatrix();
+
+            tessellator.drawScaledPrism(7, 0, 2, 11, 4, 6, sprite);
+            tessellator.drawScaledPrism(10, 0, 7, 14, 4, 11, sprite);
+            tessellator.drawScaledPrism(5, 0, 10, 9, 4, 14, sprite);
+            tessellator.drawScaledPrism(2, 0, 5, 6, 4, 9, sprite);
+
+            tessellator.popMatrix();
+
+            List<BakedQuad> quads = tessellator.getQuads();
+            tessellator.draw();
+
+            return quads;
+        }
         return ImmutableList.of();
     }
 
@@ -180,5 +201,6 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
         CONVERSION_MAP.put(AgriRenderType.CROSS, AgriPlantRenderType.CROSS);
         CONVERSION_MAP.put(AgriRenderType.PLUS, AgriPlantRenderType.PLUS);
         CONVERSION_MAP.put(AgriRenderType.RHOMBUS, AgriPlantRenderType.RHOMBUS);
+        CONVERSION_MAP.put(AgriRenderType.GOURD, AgriPlantRenderType.GOURD);
     }
 }
