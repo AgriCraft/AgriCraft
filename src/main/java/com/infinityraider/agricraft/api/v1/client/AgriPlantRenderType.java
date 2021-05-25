@@ -2,12 +2,13 @@ package com.infinityraider.agricraft.api.v1.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.IExtensibleEnum;
 
 /**
  * Enum representing the different types AgriCraft plants / weeds are rendered
  */
 @OnlyIn(Dist.CLIENT)
-public enum AgriPlantRenderType {
+public enum AgriPlantRenderType implements IExtensibleEnum {
     /** Renders in a hashtag pattern (#); 4 faces parallel with the block faces, similar to Vanilla wheat */
     HASH,
 
@@ -18,5 +19,10 @@ public enum AgriPlantRenderType {
     PLUS,
 
     /** Renders in a rhombus pattern (◇); 4 faces spanning between the centers of the block faces, only used for weeds */
-    RHOMBUS
+    RHOMBUS;
+
+    @SuppressWarnings("unused")
+    public static AgriPlantRenderType create(String name) {
+        throw new IllegalStateException("Enum not extended");
+    }
 }
