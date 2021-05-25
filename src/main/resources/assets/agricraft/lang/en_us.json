@@ -488,6 +488,15 @@
   "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
   "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups.",
 
-  "agricraft.plant.quark_brown_mushroom.desc": "Glow in the dark."
+  "agricraft.plant.quark_brown_mushroom.desc": "Glow in the dark.",
+
+  "agricraft.plant.buzzier_bees_buttercup.seed": "Buttercup Seeds",
+  "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast",
+
+  "agricraft.plant.buzzier_bees_white_clover.seed": "White Clover",
+  "agricraft.plant.buzzier_bees_white_clover.desc": "Also known as Dutch Clover",
+
+  "agricraft.plant.buzzier_bees_pink_clover.seed": "Pink Clover",
+  "agricraft.plant.buzzier_bees_pink_clover.desc": "May the luck be with you"
 
 }
