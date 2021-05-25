@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeProvider;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class GenomeWrapper implements IAgriAdapter<IAgriGenome> {
     @Override
     public boolean accepts(@Nullable Object obj) {
-        return obj instanceof IAgriGenomeProvider || obj instanceof ICapabilityProvider;
+        return obj instanceof IAgriGenomeProvider || obj instanceof TileEntity;
     }
 
     @Nonnull
@@ -22,9 +22,9 @@ public class GenomeWrapper implements IAgriAdapter<IAgriGenome> {
         if(obj instanceof IAgriGenomeProvider) {
             return ((IAgriGenomeProvider) obj).getGenome();
         }
-        if(obj instanceof ICapabilityProvider) {
-            ICapabilityProvider capabilityProvider = (ICapabilityProvider) obj;
-            return capabilityProvider.getCapability(CropCapability.getCapability())
+        if(obj instanceof TileEntity) {
+            TileEntity tile = (TileEntity) obj;
+            return tile.getCapability(CropCapability.getCapability())
                     .map(crop -> crop)
                     .flatMap(IAgriGenomeProvider::getGenome);
         }
