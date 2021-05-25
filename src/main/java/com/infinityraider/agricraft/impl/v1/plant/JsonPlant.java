@@ -324,7 +324,7 @@ public class JsonPlant implements IAgriPlant {
                         if (rand.nextDouble() < effect.getProbability()) {
                             BlockPos pos = crop.getPosition();
                             double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
-                            double y = pos.getY() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaY() * rand.nextDouble();
+                            double y = pos.getY() + 0.5D + effect.getDeltaY() * rand.nextDouble();
                             double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();
                             world.addParticle((IParticleData) particle, x, y, z, 0.0D, 0.0D, 0.0D);
                         }
