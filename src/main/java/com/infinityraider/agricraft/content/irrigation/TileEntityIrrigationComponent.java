@@ -103,7 +103,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
 
     protected void runNetherLogic() {
         if(this.getWorld() != null && this.getWorld().getDimensionType().isUltrawarm()) {
-            this.drainWater(Math.max(1, (int) (NETHER_DRAIN_FRACTION*this.getCapacity())), true);
+            this.drainWater(Math.max(1, (int) (this.getNetherEvaporationRate()*this.getCapacity())), true);
             if(this.getWorld().isRemote()) {
                 if(this.getWorld().getRandom().nextDouble() <= 0.20) {
                     double x = this.getPos().getX() + 0.5 * (this.getWorld().getRandom().nextDouble() - 0.5);
@@ -115,6 +115,10 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
                 }
             }
         }
+    }
+
+    protected float getNetherEvaporationRate() {
+        return NETHER_DRAIN_FRACTION;
     }
 
     public int getContent() {

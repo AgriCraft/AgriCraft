@@ -69,6 +69,18 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
+    protected void runNetherLogic() {
+        if (this.getPos().getY() == (int) this.getLevel()) {
+            super.runNetherLogic();
+        }
+    }
+
+    @Override
+    protected float getNetherEvaporationRate() {
+        return (super.getNetherEvaporationRate()*super.getCapacity())/this.getCapacity();
+    }
+
+    @Override
     public int getContent() {
         if(this.isMultiBlockOrigin()) {
             return super.getContent();
