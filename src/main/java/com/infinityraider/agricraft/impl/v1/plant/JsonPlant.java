@@ -333,6 +333,11 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
+    public int getBrightness(@Nonnull IAgriCrop crop) {
+        return this.callbacks.stream().mapToInt(callback -> callback.getBrightness(crop)).max().orElse(0);
+    }
+
+    @Override
     public int getRedstonePower(@Nonnull IAgriCrop crop) {
         return this.callbacks.stream().mapToInt(callback -> callback.getRedstonePower(crop)).max().orElse(0);
     }

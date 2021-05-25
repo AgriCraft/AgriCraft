@@ -179,7 +179,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             return false;
         }
         this.growth.set(stage);
-        this.handlePlantUpdate(false);
+        this.handlePlantUpdate();
         return true;
     }
 
@@ -467,7 +467,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
                 this.weedGrowth.set(stage);
                 this.getWeeds().onGrowthTick(this);
-                this.handlePlantUpdate(false);
+                this.handlePlantUpdate();
                 return true;
             }
             return false;
@@ -485,7 +485,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         this.weed.set(weed);
         this.weedGrowth.set(stage);
         this.getWeeds().onSpawned(this);
-        this.handlePlantUpdate(false);
+        this.handlePlantUpdate();
     }
 
     @Override
@@ -493,7 +493,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(this.hasWeeds()) {
             this.weed.set(NO_WEED);
             this.weedGrowth.set(NO_GROWTH);
-            this.handlePlantUpdate(false);
+            this.handlePlantUpdate();
             return true;
         }
         return false;
@@ -534,7 +534,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     protected void setGenomeImpl(@Nonnull IAgriGenome genome) {
         this.genome.set(Optional.of(genome));
         this.growth.set(genome.getPlant().getInitialGrowthStage());
-        this.handlePlantUpdate(true);
+        this.handlePlantUpdate();
     }
 
     @Override
@@ -542,7 +542,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(this.hasGenome()) {
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
-            this.handlePlantUpdate(true);
+            this.handlePlantUpdate();
             return true;
         }
         return false;
@@ -564,17 +564,23 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
 
-    protected void handlePlantUpdate(boolean resetBrightness)  {
+    protected void handlePlantUpdate()  {
         if(this.getWorld() != null) {
-            BlockState state = this.getBlockState();
+            BlockState oldState = this.getBlockState();
+            BlockState newState = oldState;
+            // Update brightness
+            int brightness = this.getPlant().getBrightness(this);
+            if (BlockCropBase.LIGHT.fetch(newState) != brightness) {
+                newState = BlockCropBase.LIGHT.apply(newState, brightness);
+            }
+            // Update plant state
             boolean plant = this.hasPlant() || this.hasWeeds();
-            // Update block state
-            if(resetBrightness && BlockCropSticks.LIGHT.fetch(state) > 0) {
-                this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(BlockCropSticks.LIGHT.apply(state), plant));
-            } else {
-                if (BlockCropSticks.PLANT.fetch(state) != plant) {
-                    this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.PLANT.apply(state, plant));
-                }
+            if (BlockCropBase.PLANT.fetch(newState) != plant) {
+                newState = BlockCropBase.PLANT.apply(newState, plant);
+            }
+            // Set block state if necessary
+            if(newState != oldState) {
+                this.getWorld().setBlockState(this.getPos(), newState);
             }
             // Update growth requirement
             this.requirement.flush();

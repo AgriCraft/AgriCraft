@@ -24,6 +24,15 @@ public interface IJsonPlantCallback {
     String getId();
 
     /**
+     * Returns the light level emitted when this callback is present
+     * @param crop the crop on which a plant with this callback is present
+     * @return the light level emitted by the crop
+     */
+    default int getBrightness(@Nonnull IAgriCrop crop) {
+        return 0;
+    }
+
+    /**
      * Returns the redstone power emitted when this callback is present
      * @param crop the crop on which a plant with this callback is present
      * @return the redstone power emitted by the crop
