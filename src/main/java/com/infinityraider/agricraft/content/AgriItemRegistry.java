@@ -2,10 +2,7 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.ItemGrate;
-import com.infinityraider.agricraft.content.irrigation.ItemIrrigationChannel;
-import com.infinityraider.agricraft.content.irrigation.ItemIrrigationChannelHollow;
-import com.infinityraider.agricraft.content.irrigation.ItemIrrigationTank;
-import com.infinityraider.agricraft.content.irrigation.ItemSprinkler;
+import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.tools.*;
 import com.infinityraider.agricraft.reference.Names;
 
@@ -32,6 +29,7 @@ public class AgriItemRegistry {
     public final ItemIrrigationChannel channel;
     public final ItemIrrigationChannelHollow channel_hollow;
     public final ItemSprinkler sprinkler;
+    public final ItemChannelValve valve;
 
     public final ItemClipper clipper;
     public final ItemMagnifyingGlass magnifying_glass;
@@ -64,6 +62,7 @@ public class AgriItemRegistry {
         this.channel = new ItemIrrigationChannel();
         this.channel_hollow = new ItemIrrigationChannelHollow();
         this.sprinkler = new ItemSprinkler();
+        this.valve = new ItemChannelValve();
 
         this.clipper = new ItemClipper();
         this.magnifying_glass = new ItemMagnifyingGlass();

@@ -28,6 +28,12 @@
     }, {
       "when": {"west": "true"},
       "apply": {"model": "agricraft:block/channel/connection_north", "y":  270, "uvlock":  true}
+    }, {
+      "when": {"OR": [
+        {"valve": "open"},
+        {"valve": "closed"}
+      ]},
+      "apply": {"model": "agricraft:block/channel/valve", "z":  90, "uvlock":  false}
     }
   ]
 }

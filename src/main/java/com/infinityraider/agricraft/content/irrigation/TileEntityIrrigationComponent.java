@@ -60,7 +60,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     }
 
     @Override
-    public void tick() {
+    public final void tick() {
         // Update previous level
         this.prevLevel = this.levelBuffer;
         // If this has sufficient fluid to distribute, try to push to neighbours
@@ -70,7 +70,11 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
             // nether logic
             this.runNetherLogic();
         }
+        // Tick component
+        this.tickComponent();
     }
+
+    protected abstract void tickComponent();
 
     protected void balanceWithNeighbours() {
         this.neighbours.streamNeighbours(true).forEach(component -> {

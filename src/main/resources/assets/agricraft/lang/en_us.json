@@ -22,6 +22,7 @@
   "item.agricraft.agri_seed_bag": "Suspiciously Savvy Seed Sorting Sack",
   "item.agricraft.agri_seed_bag_inactive": "Mundane Leather Pouch",
   "item.agricraft.agri_trowel": "Gardening Trowel",
+  "item.agricraft.agri_channel_valve": "Irrigation Channel Valve",
 
   "item.agricraft.agri_nugget_coal": "Coal Pebble",
   "item.agricraft.agri_nugget_diamond": "Diamond Shard",
@@ -91,6 +92,9 @@
   "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
   "agricraft.tooltip.tank.l1": "Try not to fall in... or at least not before attaching a ladder",
   "agricraft.tooltip.sprinkler.l1": "Attaches to the bottom of Irrigation Channels",
+  "agricraft.tooltip.valve.l1": "Attach to Irrigation Channels to control their flow",
+  "agricraft.tooltip.valve.l2": "Valves in regular channels are operated manually",
+  "agricraft.tooltip.valve.l3": "Valves in hollow channels are operated with redstone signals",
 
   "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
   "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",

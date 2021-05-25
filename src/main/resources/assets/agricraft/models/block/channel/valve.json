@@ -1,0 +1,79 @@
+{
+	"loader": "infinitylib:dynamic_texture",
+	"textures": {
+		"0": "minecraft:block/iron_block",
+		"default": "minecraft:block/oak_planks"
+	},
+	"elements": [
+		{
+			"name": "stem",
+			"from": [7.5, 10, 7.5],
+			"to": [8.5, 15, 8.5],
+			"faces": {
+				"north": {"uv": [0, 5, 1, 10], "texture": "#0"},
+				"east": {"uv": [0, 5, 1, 10], "texture": "#0"},
+				"south": {"uv": [0, 5, 1, 10], "texture": "#0"},
+				"west": {"uv": [0, 5, 1, 10], "texture": "#0"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#0"},
+				"down": {"uv": [0, 0, 1, 1], "texture": "#0"}
+			}
+		},
+		{
+			"name": "cage_north_west",
+			"from": [5, 10, 5],
+			"to": [6, 13, 6],
+			"faces": {
+				"north": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"east": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"south": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"west": {"uv": [5, 3, 6, 6], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "cage_north_east",
+			"from": [10, 10, 5],
+			"to": [11, 13, 6],
+			"faces": {
+				"north": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"east": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"south": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"west": {"uv": [5, 3, 6, 6], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "cage_south_east",
+			"from": [10, 10, 10],
+			"to": [11, 13, 11],
+			"faces": {
+				"north": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"east": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"south": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"west": {"uv": [10, 3, 11, 6], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "cage_south_west",
+			"from": [5, 10, 10],
+			"to": [6, 13, 11],
+			"faces": {
+				"north": {"uv": [10, 3, 11, 6], "texture": "dynamic"},
+				"east": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"south": {"uv": [5, 3, 6, 6], "texture": "dynamic"},
+				"west": {"uv": [10, 3, 11, 6], "texture": "dynamic"}
+			}
+		},
+		{
+			"name": "cage_top",
+			"from": [5, 13, 5],
+			"to": [11, 14, 11],
+			"faces": {
+				"north": {"uv": [5, 2, 11, 3], "texture": "dynamic"},
+				"east": {"uv": [5, 2, 11, 3], "texture": "dynamic"},
+				"south": {"uv": [5, 2, 11, 3], "texture": "dynamic"},
+				"west": {"uv": [5, 2, 11, 3], "texture": "dynamic"},
+				"up": {"uv": [5, 5, 11, 11], "texture": "dynamic"},
+				"down": {"uv": [5, 5, 11, 11], "texture": "dynamic"}
+			}
+		}
+	]
+}

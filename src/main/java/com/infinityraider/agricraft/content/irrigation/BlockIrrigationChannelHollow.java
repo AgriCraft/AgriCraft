@@ -51,7 +51,7 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
     }
 
     public BlockIrrigationChannelHollow() {
-        super(Names.Blocks.CHANNEL_HOLLOW, Properties.create(Material.WOOD)
+        super(Names.Blocks.CHANNEL_HOLLOW, false, Properties.create(Material.WOOD)
                 .notSolid()
         );
     }

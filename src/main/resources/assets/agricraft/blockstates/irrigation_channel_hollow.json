@@ -15,6 +15,9 @@
     }, {
       "when": {"west": "false"},
       "apply": {"model": "agricraft:block/channel_hollow/none_north", "y":  270, "uvlock":  true}
+    }, {
+      "when": {"valve": "closed"},
+      "apply": {"model": "agricraft:block/channel_hollow/valve"}
     }
   ]
 }

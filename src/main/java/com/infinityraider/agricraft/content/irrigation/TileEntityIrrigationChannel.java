@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRen
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -18,12 +19,56 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     private static final int HEIGHT_INTERVALS = 6;
     private static final float CONTENT_DELTA_FRACTION = 0.10F;
 
+    private ValveState state = ValveState.NONE;
+    private int counter = 0;
+
     public TileEntityIrrigationChannel() {
         super(AgriCraft.instance.getModTileRegistry().irrigation_channel, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
     }
 
     public static RenderFactory createRenderFactory() {
         return new RenderFactory();
+    }
+
+    public boolean hasHandWheel() {
+        return ((BlockIrrigationChannelAbstract) this.getBlockState().getBlock()).hasHandWheel();
+    }
+
+    public boolean hasValve() {
+        return BlockIrrigationChannelAbstract.VALVE.fetch(this.getBlockState()).hasValve();
+    }
+
+    public boolean isOpen() {
+        return BlockIrrigationChannelAbstract.VALVE.fetch(this.getBlockState()).canTransfer();
+    }
+
+    public boolean isClosed() {
+        return BlockIrrigationChannelAbstract.VALVE.fetch(this.getBlockState()) == BlockIrrigationChannelAbstract.Valve.CLOSED;
+    }
+
+    public void setValveState(ValveState state) {
+        this.state = state;
+        this.counter = state.getDuration();
+    }
+
+    public ValveState getValveState() {
+        return this.state;
+    }
+
+    public float getValveAnimationProgress(float partialTicks) {
+        return this.getValveState().getAnimationProgress(this.counter, partialTicks);
+    }
+
+    @Override
+    protected void tickComponent() {
+        if(this.getWorld() != null && this.getWorld().isRemote()) {
+            if (this.counter > 0) {
+                this.counter -= 1;
+                if (this.counter <= 0) {
+                    this.state = state.getResult();
+                }
+            }
+        }
     }
 
     @Override
@@ -49,6 +94,53 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     @Override
     protected String description() {
         return "channel";
+    }
+
+    public enum ValveState {
+        NONE(0),
+        OPEN(1),
+        CLOSED(0),
+        OPENING(CLOSED, OPEN, 20),
+        CLOSING(OPEN, CLOSED, 20);
+
+        private final float target;
+        private final ValveState from;
+        private final ValveState to;
+        private final int duration;
+
+        ValveState(float target) {
+            this.target = target;
+            this.from = this;
+            this.to = this;
+            this.duration = -1;
+        }
+
+        ValveState(ValveState from, ValveState to, int duration) {
+            this.from = from;
+            this.to = to;
+            this.duration = duration;
+            this.target = this.getResult().target;
+        }
+
+        public float getAnimationProgress(int counter, float partialTick) {
+            if(this.hasAnimation()) {
+                // to and from are inverted as the counter is counting down
+                return MathHelper.lerp(Math.min(1.0F, (counter + partialTick)/this.getDuration()), this.to.target, this.from.target);
+            }
+            return this.target;
+        }
+
+        public ValveState getResult() {
+            return this.to;
+        }
+
+        public boolean hasAnimation() {
+            return this.getDuration() > 0;
+        }
+
+        public int getDuration() {
+            return this.duration;
+        }
     }
 
     private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntityIrrigationChannel> {

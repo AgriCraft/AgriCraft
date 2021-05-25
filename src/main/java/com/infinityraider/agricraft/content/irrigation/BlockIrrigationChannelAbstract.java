@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.irrigation;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
@@ -57,12 +58,22 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     // TileEntity factory
     private static final BiFunction<BlockState, IBlockReader, TileEntityIrrigationChannel> TILE_FACTORY = (s, w) -> new TileEntityIrrigationChannel();
 
-    public BlockIrrigationChannelAbstract(String name, Properties properties) {
+    private final boolean handWheel;
+
+    public BlockIrrigationChannelAbstract(String name, boolean handWheel, Properties properties) {
         super(name, properties);
+        this.handWheel = handWheel;
+    }
+
+    public boolean hasHandWheel() {
+        return this.handWheel;
     }
 
     @Override
     public void addDrops(Consumer<ItemStack> dropAcceptor, BlockState state, TileEntityIrrigationChannel tile, LootContext.Builder context) {
+        if(VALVE.fetch(state).hasValve()) {
+            dropAcceptor.accept(new ItemStack(AgriCraft.instance.getModItemRegistry().valve, 1));
+        }
     }
 
     @Nullable
@@ -134,18 +145,31 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     }
 
     public enum Valve implements IStringSerializable {
-        NONE(true),
-        OPEN(true),
-        CLOSED(false);
+        NONE(true, false),
+        OPEN(true, true),
+        CLOSED(false, true);
 
         private final boolean transfer;
+        private final boolean valve;
 
-        Valve(boolean transfer) {
+        Valve(boolean transfer, boolean valve) {
             this.transfer = transfer;
+            this.valve = valve;
         }
 
         public boolean canTransfer() {
             return this.transfer;
+        }
+
+        public boolean hasValve() {
+            return this.valve;
+        }
+
+        public Valve toggleValve() {
+            if(this.hasValve()) {
+                return this.canTransfer() ? CLOSED : OPEN;
+            }
+            return NONE;
         }
 
         @Override

@@ -24,6 +24,7 @@ public abstract class Names {
         public static final String TROWEL = "agri_trowel";
         public static final String SEED = "agri_seed";
         public static final String SEED_BAG = "agri_seed_bag";
+        public static final String VALVE = "agri_channel_valve";
     }
 
     public static final class Fluids {

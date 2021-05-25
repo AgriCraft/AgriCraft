@@ -69,6 +69,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
+    protected void tickComponent() {}
+
+    @Override
     protected void runNetherLogic() {
         if (this.getPos().getY() == (int) this.getLevel()) {
             super.runNetherLogic();

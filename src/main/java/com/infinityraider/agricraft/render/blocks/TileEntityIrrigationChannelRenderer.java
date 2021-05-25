@@ -1,50 +1,71 @@
 package com.infinityraider.agricraft.render.blocks;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationComponent;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.infinitylib.reference.Constants;
+import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
 
 @OnlyIn(Dist.CLIENT)
-public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationComponentRenderer<TileEntityIrrigationChannel> {
+public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationComponentRenderer<TileEntityIrrigationChannel> implements IRenderUtilities {
+    public  static final ResourceLocation MODEL_HANDWHEEL = new ResourceLocation(AgriCraft.instance.getModId(), "block/channel/valve_wheel");
+    public  static final ResourceLocation TEXTURE_VALVE = new ResourceLocation("minecraft", "block/iron_block");
+
+    private IBakedModel handWheelModel;
+    private TextureAtlasSprite valveSprite;
+
     @Override
     protected void renderWater(TileEntityIrrigationChannel tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
         float level = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
         float min = tile.getMinLevel() - tile.getPos().getY();
-        float max = tile.getMaxLevel() - tile.getPos().getY();
         level = level == 0 ? min : level;
 
         ITessellator tessellator = this.getTessellator(buffer);
         this.applyWaterColor(tile, tessellator.startDrawingQuads()).setBrightness(light).setOverlay(overlay).pushMatrix();
         tessellator.applyTransformation(transforms.getLast().getMatrix());
 
-        if(tile.getContent() > 0) {
+        if(tile.getContent() > 0 && tile.isOpen()) {
             tessellator.drawScaledFace(6, 6, 10, 10, Direction.UP, this.getWaterTexture(), Constants.WHOLE * level);
         }
 
-        this.drawConnectionNorth(tessellator, tile, level, min, max, partialTicks);
-        this.drawConnectionEast(tessellator, tile, level, min, max, partialTicks);
-        this.drawConnectionSouth(tessellator, tile, level, min, max, partialTicks);
-        this.drawConnectionWest(tessellator, tile, level, min, max, partialTicks);
+        this.drawConnectionNorth(tessellator, tile, partialTicks);
+        this.drawConnectionEast(tessellator, tile, partialTicks);
+        this.drawConnectionSouth(tessellator, tile, partialTicks);
+        this.drawConnectionWest(tessellator, tile, partialTicks);
+
+        if(tile.hasValve() && tile.hasHandWheel()) {
+            tessellator.popMatrix().pushMatrix();
+            this.renderValveHandWheel(tessellator, tile, transforms, partialTicks);
+        }
 
         tessellator.popMatrix().draw();
     }
 
-    protected void drawConnectionNorth(ITessellator tessellator, TileEntityIrrigationChannel tile, float y1, float min, float max,
-                                       float partialTicks) {
+    protected void drawConnectionNorth(ITessellator tessellator, TileEntityIrrigationChannel tile, float partialTicks) {
         TileEntityIrrigationComponent component = tile.getNeighbour(Direction.NORTH);
         if(component == null) {
             return;
         }
-        float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
+        }
+        if(tile.isClosed()) {
+            y1 = y2;
         }
 
         float minX = 6;
@@ -58,14 +79,18 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.addScaledVertexWithUV(maxX, Constants.WHOLE*y1, maxZ, this.getWaterTexture(), maxX, maxZ);
     }
 
-    protected void drawConnectionEast(ITessellator tessellator, TileEntityIrrigationChannel tile, float y1, float min, float max, float partialTicks) {
+    protected void drawConnectionEast(ITessellator tessellator, TileEntityIrrigationChannel tile, float partialTicks) {
         TileEntityIrrigationComponent component = tile.getNeighbour(Direction.EAST);
         if(component == null) {
             return;
         }
-        float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
+        }
+        if(tile.isClosed()) {
+            y1 = y2;
         }
 
         float minX = 10;
@@ -79,14 +104,18 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.addScaledVertexWithUV(maxX, Constants.WHOLE*y2, maxZ, this.getWaterTexture(), maxX, maxZ);
     }
 
-    protected void drawConnectionSouth(ITessellator tessellator, TileEntityIrrigationChannel tile, float y1, float min, float max, float partialTicks) {
+    protected void drawConnectionSouth(ITessellator tessellator, TileEntityIrrigationChannel tile, float partialTicks) {
         TileEntityIrrigationComponent component = tile.getNeighbour(Direction.SOUTH);
         if(component == null) {
             return;
         }
-        float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
+        }
+        if(tile.isClosed()) {
+            y1 = y2;
         }
 
         float minX = 6;
@@ -100,14 +129,18 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.addScaledVertexWithUV(maxX, Constants.WHOLE*y2, maxZ, this.getWaterTexture(), maxX, maxZ);
     }
 
-    protected void drawConnectionWest(ITessellator tessellator, TileEntityIrrigationChannel tile, float y1, float min, float max, float partialTicks) {
+    protected void drawConnectionWest(ITessellator tessellator, TileEntityIrrigationChannel tile, float partialTicks) {
         TileEntityIrrigationComponent component = tile.getNeighbour(Direction.WEST);
         if(component == null) {
             return;
         }
-        float y2 = this.getConnectionLevel(component, y1, min, max, partialTicks);
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
+        }
+        if(tile.isClosed()) {
+            y1 = y2;
         }
 
         float minX = 0;
@@ -121,32 +154,71 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.addScaledVertexWithUV(maxX, Constants.WHOLE*y1, maxZ, this.getWaterTexture(), maxX, maxZ);
     }
 
-    protected boolean dontRenderConnection(TileEntityIrrigationChannel own, TileEntityIrrigationComponent other, float otherLevel) {
-        if(own.getContent() == 0) {
+    protected boolean dontRenderConnection(TileEntityIrrigationChannel self, TileEntityIrrigationComponent other, float otherLevel) {
+        if(self.getContent() == 0) {
             if(other.getContent() == 0) {
                 return true;
             }
-            if(other instanceof TileEntityIrrigationTank && otherLevel < other.getMinLevel()) {
-                return true;
+            if(other instanceof TileEntityIrrigationChannel) {
+                return ((TileEntityIrrigationChannel) other).isClosed();
             }
+            return other instanceof TileEntityIrrigationTank && otherLevel < other.getMinLevel();
         }
-        return false;
+        return self.isClosed() && other.getContent() == 0;
     }
 
-    protected float getConnectionLevel(TileEntityIrrigationComponent component, float ownLevel, float minLevel, float maxLevel, float partialTicks) {
-        float level = component.getRenderLevel(partialTicks) - component.getPos().getY();
-        if(component instanceof TileEntityIrrigationChannel) {
-            return (ownLevel + level)/2;
-        } else if(component instanceof TileEntityIrrigationTank) {
-            if(level < minLevel) {
-                return minLevel;
-            } else if(level > maxLevel) {
-                return maxLevel;
+    protected float getConnectionLevel(TileEntityIrrigationChannel self, TileEntityIrrigationComponent other, float partialTicks) {
+        float ownLevel = self.getRenderLevel(partialTicks) - self.getPos().getY();
+        float level = other.getRenderLevel(partialTicks) - other.getPos().getY();
+        float minLevel = self.getMinLevel() - self.getPos().getY();
+        float maxLevel = self.getMaxLevel() - self.getPos().getY();
+        if(other instanceof TileEntityIrrigationChannel) {
+            if(((TileEntityIrrigationChannel) other).isOpen()) {
+                return (ownLevel + level) / 2;
             } else {
-                return level;
+                return self.isOpen() ? ownLevel : (ownLevel + level) / 2;
             }
+        } else if(other instanceof TileEntityIrrigationTank) {
+            return Math.max(minLevel, Math.min(level, maxLevel));
         } else {
             return ownLevel;
         }
+    }
+
+    protected void renderValveHandWheel(ITessellator tessellator, TileEntityIrrigationChannel channel, MatrixStack transforms, float partialTicks) {
+        // fetch animation state
+        float f = channel.getValveAnimationProgress(partialTicks);
+        float minY = MathHelper.lerp(f, 6, 9);
+        float maxY = MathHelper.lerp(f, 10, 13);
+
+        // draw valve block
+        tessellator.setColorRGBA(1.0F, 1.0F, 1.0F, 1.0F);
+        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.pushMatrix();
+        tessellator.drawScaledPrism(6, minY, 6, 10, maxY, 10, this.getValveSprite());
+
+        // draw hand wheel
+        tessellator.pushMatrix();
+        tessellator.translate(0.5F, 0, 0.5F);
+        tessellator.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(f, 0, 180)));
+        tessellator.translate(-0.5F, 0, -0.5F);
+        tessellator.addQuads(this.getHandWheelModel().getQuads(null, null, channel.getRandom(), EmptyModelData.INSTANCE));
+        tessellator.popMatrix();
+
+        tessellator.popMatrix();
+    }
+
+    protected IBakedModel getHandWheelModel() {
+        if(this.handWheelModel == null) {
+            this.handWheelModel = this.getModelManager().getModel(MODEL_HANDWHEEL);
+        }
+        return this.handWheelModel;
+    }
+
+    protected TextureAtlasSprite getValveSprite() {
+        if(this.valveSprite == null) {
+            this.valveSprite = this.getSprite(TEXTURE_VALVE);
+        }
+        return this.valveSprite;
     }
 }

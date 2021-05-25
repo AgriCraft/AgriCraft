@@ -8,13 +8,19 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,7 +57,7 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
     }
 
     public BlockIrrigationChannelNormal() {
-        super(Names.Blocks.CHANNEL, Properties.create(Material.WOOD)
+        super(Names.Blocks.CHANNEL, true, Properties.create(Material.WOOD)
                 .notSolid()
         );
     }
@@ -60,6 +66,27 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
     @Override
     public ItemIrrigationChannel asItem() {
         return AgriCraft.instance.getModItemRegistry().channel;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        BlockIrrigationChannelAbstract.Valve valve = BlockIrrigationChannelAbstract.VALVE.fetch(state);
+        if(valve.hasValve()) {
+            world.setBlockState(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, valve.toggleValve()));
+            if(world.isRemote()) {
+                TileEntity tile = world.getTileEntity(pos);
+                if (tile instanceof TileEntityIrrigationChannel) {
+                    TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) tile;
+                    channel.setValveState(BlockIrrigationChannelAbstract.VALVE.fetch(state).canTransfer()
+                            ? TileEntityIrrigationChannel.ValveState.CLOSING
+                            : TileEntityIrrigationChannel.ValveState.OPENING
+                    );
+                }
+            }
+            return ActionResultType.SUCCESS;
+        }
+        return ActionResultType.PASS;
     }
 
     @Override
