@@ -6,7 +6,7 @@ import com.infinityraider.infinitylib.proxy.base.IServerProxyBase;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
+@OnlyIn(Dist.DEDICATED_SERVER)
 @SuppressWarnings("unused")
 public class ServerProxy implements IServerProxyBase<Config>, IProxy {
 
