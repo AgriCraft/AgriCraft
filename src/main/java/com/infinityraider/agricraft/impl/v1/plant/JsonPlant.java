@@ -262,7 +262,7 @@ public class JsonPlant implements IAgriPlant {
         final int height = this.plant.getGrowthStageHeight(index);
         ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
         if(this.plant.getTexture().useModels()) {
-            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[1]);
+            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantModel(index));
             listBuilder.addAll(AgriPlantQuadGenerator.getInstance().fetchQuads(rl));
         } else {
             if(this.plant.getTexture().getRenderType() == AgriRenderType.GOURD) {
