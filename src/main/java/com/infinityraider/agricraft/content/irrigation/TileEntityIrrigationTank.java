@@ -75,6 +75,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     protected void runNetherLogic() {
         if (this.getPos().getY() == (int) this.getLevel()) {
             super.runNetherLogic();
+        } else if(this.getPos().getY() == this.getMultiBlockMax().getY() && this.getContent() == this.getCapacity()) {
+            // For the first tick when the tank is completely full
+            super.runNetherLogic();
         }
     }
 

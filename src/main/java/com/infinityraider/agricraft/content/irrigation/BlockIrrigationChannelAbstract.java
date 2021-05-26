@@ -14,6 +14,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
@@ -142,6 +143,11 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     @Override
     public BiFunction<BlockState, IBlockReader, TileEntityIrrigationChannel> getTileEntityFactory() {
         return TILE_FACTORY;
+    }
+
+    public void playValveSound(World world, BlockPos pos) {
+        world.playSound(null, pos, AgriCraft.instance.getModSoundRegistry().valve, SoundCategory.BLOCKS,
+                2.5F, 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F);
     }
 
     public enum Valve implements IStringSerializable {

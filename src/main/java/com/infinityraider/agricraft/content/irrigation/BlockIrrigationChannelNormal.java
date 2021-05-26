@@ -37,7 +37,7 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
 
     public static VoxelShape getShape(BlockState state) {
         return SHAPES.computeIfAbsent(state, aState -> Stream.concat(
-                Stream.of(Shapes.BASE),
+                Stream.of(VALVE.fetch(state).hasValve() ? Shapes.BASE_VALVE : Shapes.BASE),
                 Arrays.stream(Direction.values()).map(dir -> getConnection(dir).map(prop -> {
                     boolean connected = prop.fetch(aState);
                     switch (dir) {
@@ -83,6 +83,8 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
                             : TileEntityIrrigationChannel.ValveState.OPENING
                     );
                 }
+            } else {
+                this.playValveSound(world, pos);
             }
             return ActionResultType.SUCCESS;
         }
@@ -139,6 +141,11 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
                 Block.makeCuboidShape(5, 6, 10, 6, 10, 11),
                 Block.makeCuboidShape(10, 6, 5, 11, 10, 6),
                 Block.makeCuboidShape(10, 6, 10, 11, 10, 11)
+        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+
+        public static final VoxelShape BASE_VALVE = Stream.of(
+                BASE,
+                Block.makeCuboidShape(5, 10, 5, 11, 16, 11)
         ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
 
         public static final VoxelShape CHANNEL_NORTH = Stream.of(

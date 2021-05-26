@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "brb",
+    " b ",
+    " i "
+  ],
+  "key": {
+    "r": {
+      "tag": "forge:dyes/red"
+    },
+    "b": {
+      "item": "minecraft:iron_bars"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "agricraft:sprinkler",
+    "count": 1
+  }
+}

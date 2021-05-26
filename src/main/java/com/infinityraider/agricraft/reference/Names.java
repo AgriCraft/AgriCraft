@@ -31,6 +31,10 @@ public abstract class Names {
         public static final String TANK_WATER = "agri_tank_water";
     }
 
+    public static final class Sounds {
+        public static final String VALVE = "valve";
+    }
+
     public static final class Mods {
         public static final String BETTER_WEATHER = "betterweather";
         public static final String BLOOD_MAGIC = "bloodmagic";

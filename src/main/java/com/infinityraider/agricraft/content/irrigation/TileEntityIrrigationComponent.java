@@ -18,6 +18,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -108,12 +109,12 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     protected void runNetherLogic() {
         if(this.getWorld() != null && this.getWorld().getDimensionType().isUltrawarm()) {
             this.drainWater(Math.max(1, (int) (this.getNetherEvaporationRate()*this.getCapacity())), true);
-            if(this.getWorld().isRemote()) {
+            if(this.getWorld() instanceof ServerWorld) {
                 if(this.getWorld().getRandom().nextDouble() <= 0.20) {
                     double x = this.getPos().getX() + 0.5 * (this.getWorld().getRandom().nextDouble() - 0.5);
                     double y = this.getLevel();
                     double z = this.getPos().getZ() + 0.5 * (this.getWorld().getRandom().nextDouble() - 0.5);
-                    this.getWorld().addParticle(ParticleTypes.CLOUD, x, y, z, 0, 0.15, 0);
+                    ((ServerWorld) this.getWorld()).spawnParticle(ParticleTypes.CLOUD, x, y, z, 1,0, 0.15, 0, 1);
                     this.getWorld().playSound(AgriCraft.instance.getClientPlayer(), this.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
                             0.5F, 2.6F + (this.getWorld().getRandom().nextFloat() - this.getWorld().getRandom().nextFloat()) * 0.8F);
                 }

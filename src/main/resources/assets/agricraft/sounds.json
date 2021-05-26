@@ -1,0 +1,3 @@
+{
+  "valve": { "category": "block", "sounds":[{"name": "agricraft:block/valve", "stream": true}] }
+}

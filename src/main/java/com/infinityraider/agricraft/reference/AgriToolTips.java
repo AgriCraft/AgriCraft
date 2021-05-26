@@ -35,6 +35,10 @@ public class AgriToolTips {
     public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
     public static final ITextComponent LIGHT = new TranslationTextComponent("agricraft.tooltip.light");
 
+    // Valve tooltips
+    public static final ITextComponent VALVE_INFO_OPEN = new TranslationTextComponent("agricraft.tooltip.valve.open");
+    public static final ITextComponent VALVE_INFO_CLOSED = new TranslationTextComponent("agricraft.tooltip.valve.closed");
+
     // Item tooltips
     public static final ITextComponent CLIPPER
             = new TranslationTextComponent("agricraft.tooltip.clipper").mergeStyle(TextFormatting.DARK_GRAY);

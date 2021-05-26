@@ -81,6 +81,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
+    public AgriSoundRegistry getModSoundRegistry() {
+        return AgriSoundRegistry.getInstance();
+    }
+
+    @Override
     public AgriParticleRegistry getModParticleRegistry() {
         return AgriParticleRegistry.getInstance();
     }

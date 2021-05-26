@@ -96,6 +96,9 @@
   "agricraft.tooltip.valve.l2": "Valves in regular channels are operated manually",
   "agricraft.tooltip.valve.l3": "Valves in hollow channels are operated with redstone signals",
 
+  "agricraft.tooltip.valve.open": "Valve: Open",
+  "agricraft.tooltip.valve.closed": "Valve: Closed",
+
   "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
   "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
 

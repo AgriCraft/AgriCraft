@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.plugins.theoneprobe;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationComponent;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -39,14 +40,17 @@ final class AgriProbeIrrigationBlockInfoProvider implements IProbeInfoProvider {
             if(tile instanceof TileEntityIrrigationChannel) {
                 TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) tile;
                 if(channel.hasValve()) {
-                    // TODO: valve state
+                    if(channel.isOpen()) {
+                        info.text(AgriToolTips.VALVE_INFO_OPEN);
+                    } else {
+                        info.text(AgriToolTips.VALVE_INFO_CLOSED);
+                    }
                 }
             }
             TileEntityIrrigationComponent component = (TileEntityIrrigationComponent) tile;
             info.progress(component.getContent(), component.getCapacity(), new ProgressStyle()
                     .filledColor(0xff327DCD)
                     .alternateFilledColor(0xff3732CD)
-                    .prefix("Contents: ")
                     .suffix(" mB")
             );
         }

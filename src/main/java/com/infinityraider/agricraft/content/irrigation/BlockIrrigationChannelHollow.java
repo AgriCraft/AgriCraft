@@ -15,6 +15,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,6 +55,22 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
         super(Names.Blocks.CHANNEL_HOLLOW, false, Properties.create(Material.WOOD)
                 .notSolid()
         );
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+        BlockIrrigationChannelAbstract.Valve valve = BlockIrrigationChannelAbstract.VALVE.fetch(state);
+        if(valve.hasValve()) {
+            boolean shouldBeClosed = Arrays.stream(Direction.values()).anyMatch(dir -> world.isSidePowered(pos.offset(dir), dir));
+            boolean isClosed = !valve.canTransfer();
+            if(shouldBeClosed != isClosed) {
+                world.setBlockState(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, valve.toggleValve()));
+                if(!world.isRemote()) {
+                    this.playValveSound(world, pos);
+                }
+            }
+        }
     }
 
     @Nonnull
