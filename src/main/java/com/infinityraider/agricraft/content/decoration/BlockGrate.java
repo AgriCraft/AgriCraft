@@ -173,7 +173,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
                 if (context.getFace().getAxis() != AXIS.fetch(target)) {
                     return AXIS.apply(
                             OFFSET.apply(
-                                    this.waterlog(state, context.getWorld(), context.getPos()),
+                                    this.fluidlog(state, context.getWorld(), context.getPos()),
                                     OFFSET.fetch(target)
                             ),
                             AXIS.fetch(target)
@@ -203,15 +203,15 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
             offset += offset < 0 ? 1 : 0;
             if (offset >= 11 * Constants.UNIT) {
                 return OFFSET.apply(
-                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        this.fluidlog(state, context.getWorld(), context.getPos()),
                         Offset.FAR);
             } else if (offset <= 5 * Constants.UNIT) {
                 return OFFSET.apply(
-                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        this.fluidlog(state, context.getWorld(), context.getPos()),
                         Offset.NEAR);
             } else {
                 return OFFSET.apply(
-                        this.waterlog(state, context.getWorld(), context.getPos()),
+                        this.fluidlog(state, context.getWorld(), context.getPos()),
                         Offset.MID);
             }
         }

@@ -59,7 +59,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
             .add(CROSS_CROP)
             .add(PLANT)
             .add(LIGHT)
-            .waterloggable()
+            .fluidloggable()
             .build();
 
     // TileEntity factory

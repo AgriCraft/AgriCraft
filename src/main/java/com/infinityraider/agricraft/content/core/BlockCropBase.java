@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.core;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
+import com.infinityraider.infinitylib.block.IFluidLoggable;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
@@ -31,7 +32,7 @@ import java.util.Random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockBaseTile<T> implements IWaterLoggable, IGrowable, IPlantable {
+public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockBaseTile<T> implements IFluidLoggable, IGrowable, IPlantable {
     // Properties
     public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
     public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
@@ -95,7 +96,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     public BlockState getStateForPlacement(World world, BlockPos pos) {
         BlockState state = this.getDefaultState();
         if(state.isValidPosition(world, pos)) {
-            return this.waterlog(state, world, pos);
+            return this.fluidlog(state, world, pos);
         }
         return null;
     }

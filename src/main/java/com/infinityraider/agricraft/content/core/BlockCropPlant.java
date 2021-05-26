@@ -52,7 +52,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(PLANT)
             .add(LIGHT)
-            .waterloggable()
+            .fluidloggable()
             .build();
 
     // TileEntity factory

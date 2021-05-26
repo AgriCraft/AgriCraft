@@ -137,7 +137,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         BlockState state = this.getDefaultState();
         if(state.isValidPosition(context.getWorld(), context.getPos())) {
             return ORIENTATION.apply(
-                    this.waterlog(state, context.getWorld(), context.getPos()),
+                    this.fluidlog(state, context.getWorld(), context.getPos()),
                     context.getPlacementHorizontalFacing().getOpposite());
         }
         return null;
