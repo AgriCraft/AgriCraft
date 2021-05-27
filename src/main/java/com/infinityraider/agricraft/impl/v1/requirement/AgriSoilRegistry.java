@@ -14,8 +14,11 @@ import net.minecraft.block.Block;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class AgriSoilRegistry extends AgriRegistryAbstract<IAgriSoil> implements IAgriSoilRegistry {
+    public static final IAgriSoil NO_SOIL = NoSoil.getInstance();
+
     private static final AgriSoilRegistry INSTANCE = new AgriSoilRegistry();
     private static final IAgriSoilProvider EMPTY = (world, pos, state) -> Optional.empty();
 
@@ -28,6 +31,20 @@ public class AgriSoilRegistry extends AgriRegistryAbstract<IAgriSoil> implements
     private AgriSoilRegistry() {
         super();
         this.providers = Maps.newHashMap();
+        this.directAdd(NO_SOIL);
+    }
+
+    @Override
+    public boolean remove(@Nullable IAgriSoil element) {
+        // do not allow removal of the default no plant implementation
+        return NO_SOIL != element && super.remove(element);
+    }
+
+    @Nonnull
+    @Override
+    public Stream<IAgriSoil> stream() {
+        // Filter the No plant out of the stream
+        return super.stream().filter(IAgriSoil::isSoil);
     }
 
     @Nullable
@@ -45,5 +62,10 @@ public class AgriSoilRegistry extends AgriRegistryAbstract<IAgriSoil> implements
     @Override
     public IAgriSoilProvider getProvider(@Nonnull Block block) {
         return providers.getOrDefault(block, EMPTY);
+    }
+
+    @Override
+    public IAgriSoil getNoSoil() {
+        return NO_SOIL;
     }
 }

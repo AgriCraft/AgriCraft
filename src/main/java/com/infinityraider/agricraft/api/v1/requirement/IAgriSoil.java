@@ -46,6 +46,8 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
 
     double getGrowthModifier();
 
+    boolean isSoil();
+
     default boolean isVariant(@Nonnull BlockState state) {
         return this.getVariants().contains(state);
     }

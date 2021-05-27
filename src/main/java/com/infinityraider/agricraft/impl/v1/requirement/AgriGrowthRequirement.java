@@ -5,48 +5,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.*;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
+import java.util.function.*;
 
 public class AgriGrowthRequirement implements IAgriGrowthRequirement {
-    private static final IAgriGrowthRequirement NONE = new IAgriGrowthRequirement() {
-        @Nonnull
-        @Override
-        public Set<IAgriGrowCondition> getGrowConditions() {
-            return ImmutableSet.of();
-        }
-
-        @Override
-        public boolean isSoilHumidityAccepted(IAgriSoil.Humidity humidity, int strength) {
-            return true;
-        }
-
-        @Override
-        public boolean isSoilAcidityAccepted(IAgriSoil.Acidity acidity, int strength) {
-            return true;
-        }
-
-        @Override
-        public boolean isSoilNutrientsAccepted(IAgriSoil.Nutrients nutrients, int strength) {
-            return true;
-        }
-
-        @Override
-        public boolean isLightLevelAccepted(int light, int strength) {
-            return true;
-        }
-
-        @Override
-        public boolean isSeasonAccepted(AgriSeason season, int strength) {
-            return true;
-        }
-    };
-
     public static IAgriGrowthRequirement.Builder getBuilder() {
         return new Builder();
     }
@@ -62,20 +30,23 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     private final GrowConditionBase<IAgriSoil.Nutrients> nutrients;
     private final GrowConditionBase<Integer> lightLevel;
     private final GrowConditionBase<AgriSeason> season;
+    private final GrowConditionBase<Fluid> fluid;
 
     private AgriGrowthRequirement(Set<IAgriGrowCondition> conditions,
                                   GrowConditionBase<IAgriSoil.Humidity> humidity,
                                   GrowConditionBase<IAgriSoil.Acidity> acidity,
                                   GrowConditionBase<IAgriSoil.Nutrients> nutrients,
                                   GrowConditionBase<Integer> lightLevel,
-                                  GrowConditionBase<AgriSeason> season) {
+                                  GrowConditionBase<AgriSeason> season,
+                                  GrowConditionBase<Fluid> fluid) {
         this.humidity = humidity;
         this.acidity = acidity;
         this.nutrients = nutrients;
         this.lightLevel = lightLevel;
         this.season = season;
+        this.fluid = fluid;
         ImmutableSet.Builder<IAgriGrowCondition> builder = ImmutableSet.builder();
-        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season);
+        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season, this.fluid);
         builder.addAll(conditions);
         this.conditions = builder.build();
     }
@@ -87,28 +58,33 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     }
 
     @Override
-    public boolean isSoilHumidityAccepted(IAgriSoil.Humidity humidity, int strength) {
-        return this.humidity.test(strength, humidity);
+    public IAgriGrowthResponse getSoilHumidityResponse(IAgriSoil.Humidity humidity, int strength) {
+        return this.humidity.apply(strength, humidity);
     }
 
     @Override
-    public boolean isSoilAcidityAccepted(IAgriSoil.Acidity acidity, int strength) {
-        return this.acidity.test(strength, acidity);
+    public IAgriGrowthResponse getSoilAcidityResponse(IAgriSoil.Acidity acidity, int strength) {
+        return this.acidity.apply(strength, acidity);
     }
 
     @Override
-    public boolean isSoilNutrientsAccepted(IAgriSoil.Nutrients nutrients, int strength) {
-        return this.nutrients.test(strength, nutrients);
+    public IAgriGrowthResponse getSoilNutrientsResponse(IAgriSoil.Nutrients nutrients, int strength) {
+        return this.nutrients.apply(strength, nutrients);
     }
 
     @Override
-    public boolean isLightLevelAccepted(int light, int strength) {
-        return this.lightLevel.test(strength, light);
+    public IAgriGrowthResponse getLightLevelResponse(int light, int strength) {
+        return this.lightLevel.apply(strength, light);
     }
 
     @Override
-    public boolean isSeasonAccepted(AgriSeason season, int strength) {
-        return this.season.test(strength, season);
+    public IAgriGrowthResponse getSeasonResponse(AgriSeason season, int strength) {
+        return this.season.apply(strength, season);
+    }
+
+    @Override
+    public IAgriGrowthResponse getFluidResponse(Fluid fluid, int strength) {
+        return this.fluid.apply(strength, fluid);
     }
 
     private static class Builder extends Factory implements IAgriGrowthRequirement.Builder {
@@ -120,6 +96,7 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         private GrowConditionBase<IAgriSoil.Nutrients> nutrients;
         private GrowConditionBase<Integer> lightLevel;
         private GrowConditionBase<AgriSeason> season;
+        private GrowConditionBase<Fluid> fluid;
 
         private Builder() {
             this.conditions = Sets.newIdentityHashSet();
@@ -142,36 +119,47 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
             if(this.season == null) {
                 throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the seasonality rule");
             }
-            return new AgriGrowthRequirement(this.conditions, this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season);
+            if(this.fluid == null) {
+                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the fluid rule");
+            }
+            return new AgriGrowthRequirement(
+                    this.conditions, this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season, this.fluid
+            );
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate) {
-            this.humidity = this.soilHumidity(predicate, Tooltips.HUMIDITY_DESCRIPTION);
+        public IAgriGrowthRequirement.Builder defineHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response) {
+            this.humidity = this.soilHumidity(response, Tooltips.HUMIDITY_DESCRIPTION);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate) {
-            this.acidity = this.soilAcidity(predicate, Tooltips.ACIDITY_DESCRIPTION);
+        public IAgriGrowthRequirement.Builder defineAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response) {
+            this.acidity = this.soilAcidity(response, Tooltips.ACIDITY_DESCRIPTION);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate) {
-            this.nutrients = this.soilNutrients(predicate, Tooltips.NUTRIENT_DESCRIPTION);
+        public IAgriGrowthRequirement.Builder defineNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response) {
+            this.nutrients = this.soilNutrients(response, Tooltips.NUTRIENT_DESCRIPTION);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineLightLevel(BiPredicate<Integer, Integer> predicate) {
-            this.lightLevel = this.light(predicate, Tooltips.LIGHT_LEVEL_DESCRIPTION);
+        public IAgriGrowthRequirement.Builder defineLightLevel(BiFunction<Integer, Integer, IAgriGrowthResponse> response) {
+            this.lightLevel = this.light(response, Tooltips.LIGHT_LEVEL_DESCRIPTION);
             return this;
         }
 
         @Override
-        public IAgriGrowthRequirement.Builder defineSeasonality(BiPredicate<Integer, AgriSeason> predicate) {
-            this.season = this.season(predicate, Tooltips.SEASON_DESCRIPTION);
+        public IAgriGrowthRequirement.Builder defineFluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response) {
+            this.fluid = this.fluid(response, Tooltips.FLUID_DESCRIPTION);
+            return this;
+        }
+
+        @Override
+        public IAgriGrowthRequirement.Builder defineSeasonality(BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response) {
+            this.season = this.season(response, Tooltips.SEASON_DESCRIPTION);
             return this;
         }
 
@@ -191,9 +179,49 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients.general"));
         public static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.light.general"));
+        public static final List<ITextComponent> FLUID_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.fluid.general"));
         public static final List<ITextComponent> SEASON_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.season.general"));
 
         private Tooltips() {}
     }
+
+    private static final IAgriGrowthRequirement NONE = new IAgriGrowthRequirement() {
+        @Nonnull
+        @Override
+        public Set<IAgriGrowCondition> getGrowConditions() {
+            return ImmutableSet.of();
+        }
+
+        @Override
+        public IAgriGrowthResponse getSoilHumidityResponse(IAgriSoil.Humidity humidity, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getSoilAcidityResponse(IAgriSoil.Acidity acidity, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getSoilNutrientsResponse(IAgriSoil.Nutrients nutrients, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getLightLevelResponse(int light, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getSeasonResponse(AgriSeason season, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getFluidResponse(Fluid fluid, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+    };
 }

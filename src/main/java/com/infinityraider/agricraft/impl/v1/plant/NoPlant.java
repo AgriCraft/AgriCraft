@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
-import com.agricraft.agricore.plant.AgriParticleEffect;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -17,10 +16,8 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class NoPlant implements IAgriPlant {
+public final class NoPlant implements IAgriPlant {
     private static final IAgriPlant INSTANCE = new NoPlant();
 
     public static IAgriPlant getInstance() {

@@ -97,11 +97,11 @@ public abstract class RequirementCache {
                 if(this.getWorld() == null) {
                     return false;
                 }
-                return this.getCondition().isMet(this.getWorld(), this.getPos(), this.getStrength());
+                return this.getCondition().check(this.getWorld(), this.getPos(), this.getStrength());
             }
 
             public void addTooltip(Consumer<ITextComponent> consumer) {
-                this.getCondition().addDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").append(tooltip)));
+                this.getCondition().notMetDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").append(tooltip)));
             }
 
             public void flush() {}

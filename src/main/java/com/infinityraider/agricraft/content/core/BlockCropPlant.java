@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
@@ -91,7 +92,15 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @Override
     protected boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
         return this.getCrop(world, pos).map(crop -> {
-            crop.getPlant()
+            if(crop.hasPlant()) {
+                IAgriGrowthResponse response = crop.getPlant().getGrowthRequirement(crop.getGrowthStage()).getFluidResponse(newFluid, crop.getStats().getStrength());
+                if(response.killInstantly()) {
+                    response.onPlantKilled(crop);
+                    world.setBlockState(pos, newFluid.getDefaultState().getBlockState());
+                    return true;
+                }
+            }
+            return false;
         }).orElse(false);
     }
 

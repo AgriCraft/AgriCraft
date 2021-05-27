@@ -43,4 +43,7 @@ public interface IAgriSoilRegistry extends IAgriRegistry<IAgriSoil>, IAgriAdapte
 
     @Nonnull
     IAgriSoilProvider getProvider(@Nonnull Block block);
+
+    @Nonnull
+    IAgriSoil getNoSoil();
 }

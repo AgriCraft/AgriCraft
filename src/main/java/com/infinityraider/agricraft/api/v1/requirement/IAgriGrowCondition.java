@@ -21,16 +21,15 @@ public interface IAgriGrowCondition {
     RequirementType getType();
 
     /**
-     * Determines if this condition is satisfied at the given position in the given world.
+     * Checks this condition at the given position in the given world.
      *
      * @param world : the world object
      * @param pos : the position in the world
      * @param strength : the strength stat of the crop
      *
-     * @return {@literal true} <i>if-and-only-if</i> this condition is met at the provided location
-     * in the given world, {@literal false} otherwise.
+     * @return the response.
      */
-    boolean isMet(@Nonnull World world, @Nonnull BlockPos pos, int strength);
+    IAgriGrowthResponse check(@Nonnull World world, @Nonnull BlockPos pos, int strength);
 
     /**
      * @return a set of all block positions, relative to the crop which need to be checked for this condition, can be empty (e.g in case of dimension)
@@ -38,17 +37,17 @@ public interface IAgriGrowCondition {
     Set<BlockPos> offsetsToCheck();
 
     /**
-     * Adds a detailed description of the condition to the provided list.
+     * Adds a detailed description of the condition when it is not met to the list.
      *
-     * @param consumer a consumer accepting the lines of text of the condition's description.
+     * @param consumer a consumer accepting the lines of text for a tooltip when the condition is not met.
      */
-    void addDescription(@Nonnull Consumer<ITextComponent> consumer);
+    void notMetDescription(@Nonnull Consumer<ITextComponent> consumer);
 
     /**
      * Determines the computational complexity associated with the evaluation of this condition.
      * <p>
      * The higher the value, the higher the cost associated with invoking
-     * {@link #isMet(World, BlockPos, int)}, and the later in the sequence that this condition will be
+     * {@link #check(World, BlockPos, int)}, and the later in the sequence that this condition will be
      * evaluated
      * <p>
      * <em>It is best to think of this value as the number of blocks that have to be examined as to

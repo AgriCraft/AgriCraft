@@ -2,12 +2,13 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
-import java.util.function.BiPredicate;
+import java.util.function.BiFunction;
 
 /**
  * Encapsulating interface for growth conditions, all conditions should be returned by getGrowConditions(IAgriGrowthStage).
@@ -34,7 +35,7 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength stat of the plant
      * @return if the plant can grow on a soil with the given humidity
      */
-    boolean isSoilHumidityAccepted(IAgriSoil.Humidity humidity, int strength);
+    IAgriGrowthResponse getSoilHumidityResponse(IAgriSoil.Humidity humidity, int strength);
 
     /**
      * Specific check for soil acidity
@@ -43,7 +44,7 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength stat of the plant
      * @return if the plant can grow on a soil with the given acidity
      */
-    boolean isSoilAcidityAccepted(IAgriSoil.Acidity acidity, int strength);
+    IAgriGrowthResponse getSoilAcidityResponse(IAgriSoil.Acidity acidity, int strength);
 
     /**
      * Specific check for soil nutrients
@@ -52,7 +53,7 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength stat of the plant
      * @return if the plant can grow on a soil with the given nutrients
      */
-    boolean isSoilNutrientsAccepted(IAgriSoil.Nutrients nutrients, int strength);
+    IAgriGrowthResponse getSoilNutrientsResponse(IAgriSoil.Nutrients nutrients, int strength);
 
     /**
      * Specific check for light level
@@ -61,7 +62,7 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength stat of the plant
      * @return if the plant can grow with the given light level
      */
-    boolean isLightLevelAccepted(int light, int strength);
+    IAgriGrowthResponse getLightLevelResponse(int light, int strength);
 
     /**
      * Specific check for seasons
@@ -69,41 +70,53 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength stat of the plant
      * @return if the plant can grow during the given season
      */
-    boolean isSeasonAccepted(AgriSeason season, int strength);
+    IAgriGrowthResponse getSeasonResponse(AgriSeason season, int strength);
 
     /**
-     * Checks if this growth requirement is met for a given crop
-     * @param crop the crop
-     * @return true if the growth requirement is met
+     * Specific check for fluids
+     * @param fluid the fluid
+     * @param strength the strength
+     * @return how the plant behaves in the fluid
      */
-    default boolean isMet(IAgriCrop crop) {
-        return this.isMet(crop, crop.getStats().getStrength());
+    IAgriGrowthResponse getFluidResponse(Fluid fluid, int strength);
+
+    /**
+     * Checks the growth requirement for a given crop
+     * @param crop the crop
+     * @return the growth response
+     */
+    default IAgriGrowthResponse check(IAgriCrop crop) {
+        return this.check(crop, crop.getStats().getStrength());
     }
 
     /**
-     * Checks if this growth requirement would be met for a given crop with a certain strength level
+     * Checks the growth requirement for a given crop with a certain strength level
      * @param crop the crop
      * @param strength the strength
-     * @return true if the growth requirement is met
+     * @return the growth response
      */
-    default boolean isMet(IAgriCrop crop, final int strength) {
+    default IAgriGrowthResponse check(IAgriCrop crop, final int strength) {
         final World world = crop.world();
         if(world == null) {
-            return false;
+            return IAgriGrowthResponse.INFERTILE;
         }
         final BlockPos pos = crop.getPosition();
-        return this.isMet(world, pos, strength);
+        return this.check(world, pos, strength);
     }
 
     /**
-     * Checks if this growth requirement is met at a given position in the world for a certain strength level
+     * Checks the growth requirement at a given position in the world for a certain strength level
      * @param world the world
      * @param pos the position
      * @param strength the strength
-     * @return true if the growth requirement is met
+     * @return the growth response
      */
-    default boolean isMet(World world, BlockPos pos, int strength) {
-        return this.getGrowConditions().stream().allMatch(condition -> condition.isMet(world, pos, strength));
+    default IAgriGrowthResponse check(World world, BlockPos pos, int strength) {
+        return this.getGrowConditions().stream()
+                .map(condition -> condition.check(world, pos, strength))
+                // filter out the fertile ones to avoid additional checks in the collection
+                .filter(response -> !response.isFertile())
+                .collect(IAgriGrowthResponse.COLLECTOR);
     }
 
     /**
@@ -131,58 +144,70 @@ public interface IAgriGrowthRequirement {
 
         /**
          * Defines the humidity rule, must be defined before calling build()
-         * The first argument of the predicate is the humidity, the second the strength of the plant
+         * The first argument of the function is the humidity, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
          *
-         * @param predicate test for humidity
+         * @param response test for humidity
          * @return the builder (this)
          */
-        Builder defineHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate);
+        Builder defineHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response);
 
         /**
          * Defines the acidity rule, must be defined before calling build()
-         * The first argument of the predicate is the acidity, the second the strength of the plant
+         * The first argument of the function is the acidity, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
          *
-         * @param predicate test for acidity
+         * @param response test for acidity
          * @return the builder (this)
          */
-        Builder defineAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate);
+        Builder defineAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response);
 
         /**
          * Defines the nutrients rule, must be defined before calling build()
-         * The first argument of the predicate is the nutrients, the second the strength of the plant
+         * The first argument of the function is the nutrients, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
          *
-         * @param predicate test for nutrients
+         * @param response test for nutrients
          * @return the builder (this)
          */
-        Builder defineNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate);
+        Builder defineNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response);
 
         /**
          * Defines the light level rule, must be defined before calling build()
-         * The first argument of the predicate is the light level, the second the strength of the plant
+         * The first argument of the function is the light level, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
          *
-         * @param predicate test for light level
+         * @param response test for light level
          * @return the builder (this)
          */
-        Builder defineLightLevel(BiPredicate<Integer, Integer> predicate);
+        Builder defineLightLevel(BiFunction<Integer, Integer, IAgriGrowthResponse> response);
+
+
+        /**
+         * Defines the fluid rule, must be defined before calling build()
+         * The first argument of the function is the light level, the second the strength of the plant
+         *
+         * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
+         *
+         * @param response test for light level
+         * @return the builder (this)
+         */
+        Builder defineFluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response);
 
         /**
          * Defines the seasonality rule, must be defined before calling build()
-         * The first argument of the predicate is the light level, the second the strength of the plant
+         * The first argument of the function is the light level, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
          *
-         * @param predicate test for seasons
+         * @param response test for seasons
          * @return the builder (this)
          */
-        Builder defineSeasonality(BiPredicate<Integer, AgriSeason> predicate);
+        Builder defineSeasonality(BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response);
 
         /**
          * Adds a grow condition to the builder

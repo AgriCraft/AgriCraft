@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
-import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,20 +7,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.extensions.IForgeStructure;
-import net.minecraftforge.common.util.TriPredicate;
+import net.minecraft.world.gen.feature.structure.Structure;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * Class to obtain default AgriCraft implementations of the most common IGrowConditions.
@@ -37,53 +35,25 @@ public interface IDefaultGrowConditionFactory {
      * ----
      */
 
-    /** Must match the given soil */
-    IAgriGrowCondition soil(IntPredicate strength, IAgriSoil soil);
+    /**
+     * General soil growth condition
+     */
+    IAgriGrowCondition soil(BiFunction<Integer, IAgriSoil, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given soils */
-    IAgriGrowCondition soil(IntPredicate strength, IAgriSoil... soils);
+    /**
+     * General soil humidity growth condition
+     */
+    IAgriGrowCondition soilHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given soils */
-    IAgriGrowCondition soil(IntPredicate strength, Collection<IAgriSoil> soils);
+    /**
+     * General soil acidity growth condition
+     */
+    IAgriGrowCondition soilAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match the soil predicate */
-    IAgriGrowCondition soil(BiPredicate<Integer, IAgriSoil> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the given soil humidity */
-    IAgriGrowCondition soilHumidity(IntPredicate strength, IAgriSoil.Humidity humidity);
-
-    /** Must match any of the given soil humidities */
-    IAgriGrowCondition soilHumidities(IntPredicate strength, IAgriSoil.Humidity... humidities);
-
-    /** Must match any of the given soil humidities */
-    IAgriGrowCondition soilHumidities(IntPredicate strength, Collection<IAgriSoil.Humidity> humidities);
-
-    /** Must match the soil humidity predicate */
-    IAgriGrowCondition soilHumidity(BiPredicate<Integer, IAgriSoil.Humidity> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the given soil acidity */
-    IAgriGrowCondition soilAcidity(IntPredicate strength, IAgriSoil.Acidity acidity);
-
-    /** Must match any of the given soil acidities */
-    IAgriGrowCondition soilAcidities(IntPredicate strength, IAgriSoil.Acidity... acidities);
-
-    /** Must match any of the given soil acidities */
-    IAgriGrowCondition soilAcidities(IntPredicate strength, Collection<IAgriSoil.Acidity> acidities);
-
-    /** Must match the soil acidity predicate */
-    IAgriGrowCondition soilAcidity(BiPredicate<Integer, IAgriSoil.Acidity> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the given soil nutrients */
-    IAgriGrowCondition soilNutrients(IntPredicate strength, IAgriSoil.Nutrients nutrients);
-
-    /** Must match any of the given soil nutrients */
-    IAgriGrowCondition soilNutrients(IntPredicate strength, IAgriSoil.Nutrients... nutrients);
-
-    /** Must match any of the given soil nutrients */
-    IAgriGrowCondition soilNutrients(IntPredicate strength, Collection<IAgriSoil.Nutrients> nutrients);
-
-    /** Must match the soil nutrients predicate */
-    IAgriGrowCondition soilNutrients(BiPredicate<Integer, IAgriSoil.Nutrients> predicate, List<ITextComponent> tooltips);
+    /**
+     * General soil nutrients growth condition
+     */
+    IAgriGrowCondition soilNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
 
     /*
@@ -92,14 +62,15 @@ public interface IDefaultGrowConditionFactory {
      * -----
      */
 
-    /** light value must be between the min and max (both inclusive) */
-    IAgriGrowCondition light(IntPredicate strength, int min, int max);
+    /**
+     * general light growth condition
+     */
+    IAgriGrowCondition light(BiFunction<Integer, Integer, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** light value must be the given value */
-    IAgriGrowCondition light(IntPredicate strength, int value);
-
-    /** Must match the predicate */
-    IAgriGrowCondition light(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile when the predicate (strength, light) is met, infertile otherwise
+     */
+    IAgriGrowCondition light(BiPredicate<Integer, Integer> strengthLightPredicate);
 
 
     /*
@@ -108,14 +79,15 @@ public interface IDefaultGrowConditionFactory {
      * --------
      */
 
-    /** redstone signal must be between the min and max (both inclusive) */
-    IAgriGrowCondition redstone(IntPredicate strength, int min, int max);
+    /**
+     * general redstone growth condition
+     */
+    IAgriGrowCondition redstone(BiFunction<Integer, Integer, IAgriGrowthResponse> predicate, List<ITextComponent> tooltips);
 
-    /** redstone signal must be the given value */
-    IAgriGrowCondition redstone(IntPredicate strength, int value);
-
-    /** Must match the predicate */
-    IAgriGrowCondition redstone(BiPredicate<Integer, Integer> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile when the predicate (strength, redstone) is met, infertile otherwise
+     */
+    IAgriGrowCondition redstone(BiPredicate<Integer, Integer> strengthRedstonePredicate);
 
 
     /*
@@ -124,50 +96,59 @@ public interface IDefaultGrowConditionFactory {
      * ------
      */
 
-    /** Must match the given fluid */
-    IAgriGrowCondition liquidFromFluid(IntPredicate strength, Fluid fluid);
+    /**
+     * general fluid growth condition
+     */
+    IAgriGrowCondition fluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given fluids */
-    IAgriGrowCondition liquidFromFluid(IntPredicate strength, Fluid... fluids);
+    /**
+     * general fluid state growth condition
+     */
+    IAgriGrowCondition fluidState(BiFunction<Integer, FluidState, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given fluids */
-    IAgriGrowCondition liquidFromFluid(IntPredicate strength, Collection<Fluid> fluids);
+    /**
+     * general fluid class growth condition
+     */
+    IAgriGrowCondition fluidClass(BiFunction<Integer, Class<? extends Fluid>, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match the predicate */
-    IAgriGrowCondition liquidFromFluid(BiPredicate<Integer, Fluid> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if the fluid matches or if the strength predicate passes, infertile otherwise
+     */
+    IAgriGrowCondition fluid(IntPredicate strength, Fluid fluid);
 
-    /** Must match the given fluid state */
-    IAgriGrowCondition liquidFromState(IntPredicate strength, FluidState state);
+    /**
+     * fertile if the fluid state matches or if the strength predicate passes, infertile otherwise
+     */
+    IAgriGrowCondition fluidState(IntPredicate strength, FluidState fluid);
 
-    /** Must match any of the given fluid states */
-    IAgriGrowCondition liquidFromState(IntPredicate strength, FluidState... states);
+    /**
+     * fertile if the fluid class matches or if the strength predicate passes, infertile otherwise
+     */
+    IAgriGrowCondition fluidClass(IntPredicate strength, Class<? extends Fluid> fluid, List<ITextComponent> tooltips);
 
-    /** Must match any of the given fluid states */
-    IAgriGrowCondition liquidFromState(IntPredicate strength, Collection<FluidState> states);
+    /**
+     * fertile if any of the fluids match, or if the strength predicate passes, infertile otherwise
+     */
+    default IAgriGrowCondition fluids(IntPredicate strength, Fluid... fluids) {
+        return this.fluids(strength, Arrays.asList(fluids));
+    }
 
-    /** Must match the predicate */
-    IAgriGrowCondition liquidFromState(BiPredicate<Integer, FluidState> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if any of the fluids match, or if the strength predicate passes, infertile otherwise
+     */
+    default IAgriGrowCondition fluidStates(IntPredicate strength, FluidState... fluids) {
+        return this.fluidStates(strength, Arrays.asList(fluids));
+    }
 
-    /** Must match the tag */
-    IAgriGrowCondition liquidFromTag(IntPredicate strength, Tag<Fluid> fluid);
+    /**
+     * fertile if any of the fluids match, or if the strength predicate passes, infertile otherwise
+     */
+    IAgriGrowCondition fluids(IntPredicate strength, Collection<Fluid> fluids);
 
-    /** Must match any of the given tags */
-    IAgriGrowCondition liquidFromTag(IntPredicate strength, Tag<Fluid>... fluids);
-
-    /** Must match any of the given tags */
-    IAgriGrowCondition liquidFromTag(IntPredicate strength, Collection<Tag<Fluid>> fluids);
-
-    /** Must be instance of the given class */
-    IAgriGrowCondition liquidFromClass(IntPredicate strength, Class<Fluid> fluid, List<ITextComponent> tooltips);
-
-    /** Must be instance of any of the given classes */
-    IAgriGrowCondition liquidFromClass(IntPredicate strength, List<ITextComponent> tooltips, Class<Fluid>... fluids);
-
-    /** Must be instance of any of the given classes */
-    IAgriGrowCondition liquidFromClass(IntPredicate strength, Collection<Class<Fluid>> fluids, List<ITextComponent> tooltips);
-
-    /** Must match the predicate */
-    IAgriGrowCondition liquidFromClass(BiPredicate<Integer, Class<? extends Fluid>> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if any of the fluids match, or if the strength predicate passes, infertile otherwise
+     */
+    IAgriGrowCondition fluidStates(IntPredicate strength, Collection<FluidState> fluids);
 
 
     /*
@@ -176,29 +157,49 @@ public interface IDefaultGrowConditionFactory {
      * -----
      */
 
-    /** Must match the given biome */
+    /**
+     * general biome growth condition
+     */
+    IAgriGrowCondition biome(BiFunction<Integer, Biome, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * general biome category growth condition
+     */
+    IAgriGrowCondition biomeCategory(BiFunction<Integer, Biome.Category, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * fertile if in the biome, or if the strength predicate passes
+     */
     IAgriGrowCondition biome(IntPredicate strength, Biome biome, ITextComponent biomeName);
 
-    /** Must match any of the given biomes */
-    IAgriGrowCondition biome(IntPredicate strength, Function<Biome, ITextComponent> nameFunction, Biome... biomes);
+    /**
+     * fertile if in the biome category, or if the strength predicate passes
+     */
+    IAgriGrowCondition biomeCategory(IntPredicate strength, Biome.Category category, ITextComponent categoryName);
 
-    /** Must match any of the given biomes */
-    IAgriGrowCondition biome(IntPredicate strength, Collection<Biome> biomes, Function<Biome, ITextComponent> nameFunction);
+    /**
+     * fertile if in any of the biomes, or if the strength predicate passes
+     */
+    default IAgriGrowCondition biomes(IntPredicate strength, Function<Biome, ITextComponent> nameFunction, Biome... biomes) {
+        return this.biomes(strength, Arrays.asList(biomes), nameFunction);
+    }
 
-    /** Must match the predicate */
-    IAgriGrowCondition biome(BiPredicate<Integer, Biome> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if in any of the biome category, or if the strength predicate passes
+     */
+    default IAgriGrowCondition biomeCategories(IntPredicate strength, Function<Biome.Category, ITextComponent> nameFunction, Biome.Category... categories) {
+        return this.biomeCategories(strength, Arrays.asList(categories), nameFunction);
+    }
 
-    /** Must match the given biome category */
-    IAgriGrowCondition biomeFromCategory(IntPredicate strength, Biome.Category category, ITextComponent categoryName);
+    /**
+     * fertile if in any of the biomes, or if the strength predicate passes
+     */
+    IAgriGrowCondition biomes(IntPredicate strength, Collection<Biome> biomes, Function<Biome, ITextComponent> nameFunction);
 
-    /** Must match any of the given biome categories */
-    IAgriGrowCondition biomeFromCategories(IntPredicate strength, Function<Biome.Category, ITextComponent> nameFunction, Biome.Category... categories);
-
-    /** Must match any of the given biome categories */
-    IAgriGrowCondition biomeFromCategories(IntPredicate strength, Collection<Biome.Category> categories, Function<Biome.Category, ITextComponent> nameFunction);
-
-    /** Must match the predicate */
-    IAgriGrowCondition biomeFromCategory(BiPredicate<Integer, Biome.Category> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if in any of the biome category, or if the strength predicate passes
+     */
+    IAgriGrowCondition biomeCategories(IntPredicate strength, Collection<Biome.Category> categories, Function<Biome.Category, ITextComponent> nameFunction);
 
 
     /*
@@ -207,17 +208,27 @@ public interface IDefaultGrowConditionFactory {
      * -------
      */
 
-    /** Must match the given climate */
+    /**
+     * general climate growth condition
+     */
+    IAgriGrowCondition climate(BiFunction<Integer, Biome.Climate, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * fertile if the climate matches, or if the strength predicate passes
+     */
     IAgriGrowCondition climate(IntPredicate strength, Biome.Climate climate, List<ITextComponent> tooltips);
 
-    /** Must match any of the given climates */
-    IAgriGrowCondition climate(IntPredicate strength, List<ITextComponent> tooltips, Biome.Climate... climates);
+    /**
+     * fertile if any of the climates match, or if the strength predicate passes
+     */
+    default IAgriGrowCondition climates(IntPredicate strength, List<ITextComponent> tooltips, Biome.Climate... climates) {
+        return this.climates(strength, Arrays.asList(climates), tooltips);
+    }
 
-    /** Must match any of the given climates */
-    IAgriGrowCondition climate(IntPredicate strength, Collection<Biome.Climate> climates, List<ITextComponent> tooltips);
-
-    /** Must match the predicate */
-    IAgriGrowCondition climate(BiPredicate<Integer, Biome.Climate> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if any of the climates match, or if the strength predicate passes
+     */
+    IAgriGrowCondition climates(IntPredicate strength, Collection<Biome.Climate> climates, List<ITextComponent> tooltips);
 
 
     /*
@@ -225,38 +236,26 @@ public interface IDefaultGrowConditionFactory {
      * dimension
      * ---------
      */
-    /** Must match the given dimension */
-    IAgriGrowCondition dimension(IntPredicate strength, ResourceLocation dimension, ITextComponent dimensionName);
 
-    /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensions(IntPredicate strength, Function<ResourceLocation, ITextComponent> nameFunction, ResourceLocation... dimensions);
+    /**
+     * general dimension growth condition (by registry key)
+     */
+    IAgriGrowCondition dimensionFromKey(BiFunction<Integer, RegistryKey<World>, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensions(IntPredicate strength, Collection<ResourceLocation> dimensions, Function<ResourceLocation, ITextComponent> nameFunction);
+    /**
+     * general dimension growth condition (by dimension type)
+     */
+    IAgriGrowCondition dimensionFromType(BiFunction<Integer, DimensionType, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match the given dimension */
-    IAgriGrowCondition dimensionFromKey(IntPredicate strength, RegistryKey<World> dimension, ITextComponent dimensionName);
+    /**
+     * fertile if the dimension registry key matches, or if the strength predicate passes
+     */
+    IAgriGrowCondition dimension(IntPredicate strength, RegistryKey<World> dimension, ITextComponent dimensionName);
 
-    /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensionsFromKeys(IntPredicate strength, Function<RegistryKey<World>, ITextComponent> nameFunction, RegistryKey<World>... dimensions);
-
-    /** Must match any of the given dimensions */
-    IAgriGrowCondition dimensionsFromKeys(IntPredicate strength, Collection<RegistryKey<World>> dimensions, Function<RegistryKey<World>, ITextComponent> nameFunction);
-
-    /** Must match the predicate */
-    IAgriGrowCondition dimensionFromKey(BiPredicate<Integer, RegistryKey<World>> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the given dimension type */
-    IAgriGrowCondition dimensionFromType(IntPredicate strength, DimensionType dimension, ITextComponent dimensionName);
-
-    /** Must match any of the given dimension types */
-    IAgriGrowCondition dimensionFromTypes(IntPredicate strength, Function<DimensionType, ITextComponent> nameFunction, DimensionType... dimensions);
-
-    /** Must match any of the given dimension types */
-    IAgriGrowCondition dimensionFromTypes(IntPredicate strength, Collection<DimensionType> dimensions, Function<DimensionType, ITextComponent> nameFunction);
-
-    /** Must match the predicate */
-    IAgriGrowCondition dimensionFromType(BiPredicate<Integer, DimensionType> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if the dimension type matches, or if the strength predicate passes
+     */
+    IAgriGrowCondition dimension(IntPredicate strength, DimensionType dimension, ITextComponent dimensionName);
 
 
     /*
@@ -265,29 +264,30 @@ public interface IDefaultGrowConditionFactory {
      * -----
      */
 
-    /** if any weed is needed for growth */
+    /**
+     * general weed growth condition
+     */
+    IAgriGrowCondition weed(BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * Fertile if there is any weed, or if the strength predicate passes
+     */
     IAgriGrowCondition withWeed(IntPredicate strength);
 
-    /** if no weed is allowed for growth */
-    IAgriGrowCondition withoutWeed(IntPredicate strength);
-
-    /** if a specific weed is needed for growth */
+    /**
+     * Fertile if there is a specific weed, or if the strength predicate passes
+     */
     IAgriGrowCondition withWeed(IntPredicate strength, IAgriWeed weed);
 
-    /** if a specific weed is not allowed for growth */
+    /**
+     * Fertile if there is no weed, or if the strength predicate passes
+     */
+    IAgriGrowCondition withoutWeed(IntPredicate strength);
+
+    /**
+     * Fertile if there no specific weed, or if the strength predicate passes
+     */
     IAgriGrowCondition withoutWeed(IntPredicate strength, IAgriWeed weed);
-
-    /** matching the predicate */
-    IAgriGrowCondition weed(BiPredicate<Integer, IAgriWeed> predicate, List<ITextComponent> tooltips);
-
-    /** if a specific weed and growth stage is needed for growth */
-    IAgriGrowCondition withWeed(IntPredicate strength, IAgriWeed weed, IAgriGrowthStage stage);
-
-    /** if a specific weed and growth stage is not allowed for growth */
-    IAgriGrowCondition withoutWeed(IntPredicate strength, IAgriWeed weed, IAgriGrowthStage stage);
-
-    /** Must match the predicate */
-    IAgriGrowCondition weed(TriPredicate<Integer, IAgriWeed, IAgriGrowthStage> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -296,26 +296,30 @@ public interface IDefaultGrowConditionFactory {
      * -----
      */
 
-    /** growth only allowed during the day */
+    /**
+     * general time growth condition
+     */
+    IAgriGrowCondition time(BiFunction<Integer, Long, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * fertile during the day, or if the strength predicate passes
+     */
     IAgriGrowCondition day(IntPredicate strength);
 
-    /** growth only allowed during dusk */
+    /**
+     * fertile during dusk, or if the strength predicate passes
+     */
     IAgriGrowCondition dusk(IntPredicate strength);
 
-    /** growth only allowed during the night */
+    /**
+     * fertile during the night, or if the strength predicate passes
+     */
     IAgriGrowCondition night(IntPredicate strength);
 
-    /** growth only allowed during dawn */
+    /**
+     * fertile during dawn, or if the strength predicate passes
+     */
     IAgriGrowCondition dawn(IntPredicate strength);
-
-    /** growth only allowed during the time of the day bounded by min and max (both inclusive) */
-    IAgriGrowCondition timeAllowed(IntPredicate strength, long min, long max, List<ITextComponent> tooltips);
-
-    /** growth not allowed during the time of the day bounded by min and max (both inclusive) */
-    IAgriGrowCondition timeForbidden(IntPredicate strength, long min, long max, List<ITextComponent> tooltips);
-
-    /** Must match the predicate */
-    IAgriGrowCondition time(BiPredicate<Integer, Long> predicate, List<ITextComponent> tooltips);
 
 
     /*
@@ -324,50 +328,20 @@ public interface IDefaultGrowConditionFactory {
      * ------
      */
 
-    /** Must match the given block */
-    IAgriGrowCondition blockBelow(IntPredicate strength, Block block);
+    /**
+     * general block below growth condition
+     */
+    IAgriGrowCondition blockBelow(BiFunction<Integer, Block, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given blocks */
-    IAgriGrowCondition blockBelow(IntPredicate strength, Block... blocks);
+    /**
+     * general block state below growth condition
+     */
+    IAgriGrowCondition stateBelow(BiFunction<Integer, BlockState, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Must match any of the given blocks */
-    IAgriGrowCondition blockBelow(IntPredicate strength, Collection<Block> blocks);
-
-    /** Must match the predicate */
-    IAgriGrowCondition blockBelow(BiPredicate<Integer, Block> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the given state */
-    IAgriGrowCondition stateBelow(IntPredicate strength, BlockState state);
-
-    /** Must match any of the given states */
-    IAgriGrowCondition stateBelow(IntPredicate strength, BlockState... states);
-
-    /** Must match any of the given states */
-    IAgriGrowCondition stateBelow(IntPredicate strength, Collection<BlockState> states);
-
-    /** Must match the predicate */
-    IAgriGrowCondition stateBelow(BiPredicate<Integer, BlockState> predicate, List<ITextComponent> tooltips);
-
-    /** Must match the tag */
-    IAgriGrowCondition tagBelow(IntPredicate strength, Tag<Block> tag);
-
-    /** Must match any of the given tags */
-    IAgriGrowCondition tagBelow(IntPredicate strength, Tag<Block>... tags);
-
-    /** Must match any of the given tags */
-    IAgriGrowCondition tagBelow(IntPredicate strength, Collection<Tag<Block>> tags);
-
-    /** Must be instance of the given class */
-    IAgriGrowCondition classBelow(IntPredicate strength, Class<Block> clazz, List<ITextComponent> tooltips);
-
-    /** Must be instance of any of the given classes */
-    IAgriGrowCondition classBelow(IntPredicate strength, List<ITextComponent> tooltips, Class<Block>... classes);
-
-    /** Must be instance of any of the given classes */
-    IAgriGrowCondition classBelow(IntPredicate strength, Collection<Class<Block>> classes, List<ITextComponent> tooltips);
-
-    /** Must match the predicate */
-    IAgriGrowCondition classBelow(BiPredicate<Integer, Class<? extends Block>> predicate, List<ITextComponent> tooltips);
+    /**
+     * general block class below growth condition
+     */
+    IAgriGrowCondition classBelow(BiFunction<Integer, Class<? extends Block>, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
 
     /*
@@ -376,105 +350,43 @@ public interface IDefaultGrowConditionFactory {
      * -------------
      */
 
-    /** Must match amount of the given block in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Block block);
+    /**
+     * general blocks nearby growth condition
+     */
+    IAgriGrowCondition blocksNearby(BiFunction<Integer, Stream<Block>, IAgriGrowthResponse> response,
+                                    BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
 
-    /** Must match amount of any of the given blocks in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Block... blocks);
+    /**
+     * general block states nearby growth condition
+     */
+    IAgriGrowCondition blockStatesNearby(BiFunction<Integer, Stream<BlockState>, IAgriGrowthResponse> response,
+                                         BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
 
-    /** Must match amount of any of the given blocks in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<Block> blocks);
+    /**
+     * general block classes nearby growth condition
+     */
+    IAgriGrowCondition classNearby(BiFunction<Integer, Stream<Class<? extends Block>>, IAgriGrowthResponse> response,
+                                   BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
 
-    /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<Block> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if there is at least a specified amount of a certain block nearby
+     */
+    IAgriGrowCondition blockNearby(Block block, int amount, BlockPos minOffset, BlockPos maxOffset);
 
-    /** Must match amount of the given state in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, BlockState state);
+    /**
+     * fertile if there is at least a specified amount of a certain block state nearby
+     */
+    IAgriGrowCondition blockStateNearby(BlockState state, int amount, BlockPos minOffset, BlockPos maxOffset);
 
-    /** Must match amount of any of the given states in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, BlockState... states);
+    /**
+     * fertile if there is at least a specified amount of certain blocks nearby
+     */
+    IAgriGrowCondition blocksNearby(Collection<Block> blocks, int amount, BlockPos minOffset, BlockPos maxOffset);
 
-    /** Must match amount of any of the given states in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states);
-
-    /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition statesNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Predicate<BlockState> predicate, List<ITextComponent> tooltips);
-
-    /** Must match amount of the tag in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Tag<Block> tag);
-
-    /** Must match amount of any of the given tags in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Tag<Block>... tags);
-
-    /** Must match amount of any of the given tags in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset, Collection<Tag<Block>> tags);
-
-    /** Amount must be instance of the given class in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset,
-                                   Class<Block> clazz, List<ITextComponent> tooltips);
-
-    /** Amount must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset,
-                                   List<ITextComponent> tooltips, Class<Block>... classes);
-
-    /** Amount must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset,
-                                   Collection<Class<Block>> classes, List<ITextComponent> tooltips);
-
-    /** Must match amount of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition classNearby(IntPredicate strength, int amount, BlockPos minOffset, BlockPos maxOffset,
-                                   Predicate<Class<? extends Block>> predicate, List<ITextComponent> tooltips);
-
-    /** Must match amount between min and max (both inclusive) of the given block in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Block block);
-
-    /** Must match amount between min and max (both inclusive) of any of the given blocks in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Block... blocks);
-
-    /** Must match amount between min and max (both inclusive) of any of the given blocks in the range bound by the offsets */
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<Block> blocks);
-
-    /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition blocksNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                    Predicate<Block> predicate, List<ITextComponent> tooltips);
-
-    /** Must match amount between min and max (both inclusive) of the given state in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, BlockState state);
-
-    /** Must match amount between min and max (both inclusive) of any of the given states in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, BlockState... states);
-
-    /** Must match amount between min and max (both inclusive) of any of the given states in the range bound by the offsets */
-    IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<BlockState> states);
-
-    /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition statesNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                    Predicate<BlockState> predicate, List<ITextComponent> tooltips);
-
-    /** Must match amount between min and max (both inclusive) of the tag in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Tag<Block> tag);
-
-    /** Must match amount between min and max (both inclusive) of any of the given tags in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Tag<Block>... tags);
-
-    /** Must match amount between min and max (both inclusive) of any of the given tags in the range bound by the offsets */
-    IAgriGrowCondition tagsNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset, Collection<Tag<Block>> tags);
-
-    /** Amount between min and max (both inclusive) must be instance of the given class in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                   Class<Block> clazz, List<ITextComponent> tooltips);
-
-    /** Amount between min and max (both inclusive) must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                   List<ITextComponent> tooltips, Class<Block>... classes);
-
-    /** Amount between min and max (both inclusive) must be instance of any of the given classes in the range bound by the offsets */
-    IAgriGrowCondition classNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                   Collection<Class<Block>> classes, List<ITextComponent> tooltips);
-
-    /** Must match amount between min and max (both inclusive) of the predicate in the range bound by the offsets*/
-    IAgriGrowCondition classNearby(IntPredicate strength, int min, int max, BlockPos minOffset, BlockPos maxOffset,
-                                   Predicate<Class<? extends Block>> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile if there is at least a specified amount of certain block states nearby
+     */
+    IAgriGrowCondition blockStatesNearby(Collection<BlockState> states, int amount, BlockPos minOffset, BlockPos maxOffset);
 
 
     /*
@@ -483,33 +395,20 @@ public interface IDefaultGrowConditionFactory {
      * -------------
      */
 
-    /** An entity of the type must by present within the range */
-    IAgriGrowCondition entityNearby(IntPredicate strength, EntityType<?> type, double range);
+    /**
+     * general entities nearby growth condition
+     */
+    IAgriGrowCondition entitiesNearby(BiFunction<Integer, Stream<Entity>, IAgriGrowthResponse> response, double range, List<ITextComponent> tooltips);
 
-    /** An entity instance of the class must by present within the range */
-    IAgriGrowCondition entityNearby(IntPredicate strength, Class<Entity> clazz, double range, ITextComponent entityName);
+    /**
+     * fertile if a certain number (depending on the strength) of a specific entity is nearby
+     */
+    IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, EntityType<?> entityType, double range);
 
-    /** An entity matching the predicate must by present within the range */
-    IAgriGrowCondition entityNearby(BiPredicate<Integer, Entity> predicate, double range, List<ITextComponent> tooltips);
-
-    /** Amount of entities of the type must by present within the range */
-    IAgriGrowCondition entitiesNearby(IntPredicate strength, EntityType<?> type, double range, int amount);
-
-    /** Amount of entity instances of the class must by present within the range */
-    IAgriGrowCondition entitiesNearby(IntPredicate strength, Class<Entity> clazz, double range, int amount, ITextComponent entityName);
-
-    /** Amount of entities matching the predicate must by present within the range */
-    IAgriGrowCondition entitiesNearby(BiPredicate<Integer, Entity> predicate, double range, int amount, List<ITextComponent> tooltips);
-
-    /** Amount of entities bounded by min and max (both inclusive) of the type must by present within the range */
-    IAgriGrowCondition entitiesNearby(IntPredicate strength, EntityType<?> type, double range, int min, int max);
-
-    /** Amount of entity instances bounded by min and max (both inclusive) of the class must by present within the range */
-    IAgriGrowCondition entitiesNearby(IntPredicate strength, Class<Entity> clazz, double range, int min, int max, ITextComponent entityName);
-
-    /** Amount of entities bounded by min and max (both inclusive) matching the predicate must by present within the range */
-    IAgriGrowCondition entitiesNearby(BiPredicate<Integer, Entity> predicate, double range, int min, int max, List<ITextComponent> tooltips);
-
+    /**
+     * fertile if a certain number (depending on the strength) of a specific entity is nearby
+     */
+    IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, Class<? extends Entity> entityClass, double range, ITextComponent entityName);
 
     /*
      * ----
@@ -517,13 +416,20 @@ public interface IDefaultGrowConditionFactory {
      * ----
      */
 
-    /** Must not be raining */
+    /**
+     * general rain growth condition
+     */
+    IAgriGrowCondition rain(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * fertile when it is not raining, or if the strength predicate is met
+     */
     IAgriGrowCondition noRain(IntPredicate strength);
 
-
-    /** Must be raining */
-    IAgriGrowCondition withRain(IntPredicate strength);
-
+    /**
+     * fertile when it is raining, or if the strength predicate is met
+     */
+    IAgriGrowCondition inRain(IntPredicate strength);
 
     /*
      * ----
@@ -531,12 +437,21 @@ public interface IDefaultGrowConditionFactory {
      * ----
      */
 
-    /** Must not be snowing */
+    /**
+     * general snow growth condition
+     */
+    IAgriGrowCondition snow(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * fertile when it is not snowing, or if the strength predicate is met
+     */
     IAgriGrowCondition noSnow(IntPredicate strength);
 
+    /**
+     * fertile when it is snowing, or if the strength predicate is met
+     */
+    IAgriGrowCondition inSnow(IntPredicate strength);
 
-    /** Must be snowing */
-    IAgriGrowCondition withSnow(IntPredicate strength);
 
     /*
      * -------
@@ -544,26 +459,27 @@ public interface IDefaultGrowConditionFactory {
      * -------
      */
 
-    /** Only during the given season */
-    IAgriGrowCondition inSeason(IntPredicate strength, AgriSeason season);
+    /**
+     * General season growth condition
+     */
+    IAgriGrowCondition season(BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
 
-    /** Only during the given seasons */
-    IAgriGrowCondition inSeasons(IntPredicate strength, AgriSeason... seasons);
+    /**
+     * fertile during the season, or if the strength predicate is met
+     */
+    IAgriGrowCondition season(IntPredicate strength, AgriSeason season);
 
-    /** Only during the given seasons */
-    IAgriGrowCondition inSeasons(IntPredicate strength, Collection<AgriSeason> seasons);
+    /**
+     * fertile during any of the seasons, or if the strength predicate is met
+     */
+    default IAgriGrowCondition seasons(IntPredicate strength, AgriSeason... seasons) {
+        return this.seasons(strength, Arrays.asList(seasons));
+    }
 
-    /** Not during the given season */
-    IAgriGrowCondition notInSeason(IntPredicate strength, AgriSeason season);
-
-    /** Not during the given seasons */
-    IAgriGrowCondition notInSeasons(IntPredicate strength, AgriSeason... seasons);
-
-    /** Not during the given seasons */
-    IAgriGrowCondition notInSeasons(IntPredicate strength, Collection<AgriSeason> seasons);
-
-    /** Only during seasons matching the predicate */
-    IAgriGrowCondition season(BiPredicate<Integer, AgriSeason> predicate, List<ITextComponent> tooltips);
+    /**
+     * fertile during any of the seasons, or if the strength predicate is met
+     */
+    IAgriGrowCondition seasons(IntPredicate strength, Collection<AgriSeason> seasons);
 
     /*
      * ----------
@@ -571,126 +487,208 @@ public interface IDefaultGrowConditionFactory {
      * ----------
      */
 
-    /** Must be in a village */
+    /**
+     * General structure growth condition
+     */
+    IAgriGrowCondition structure(BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response, List<ITextComponent> tooltips);
+
+    /**
+     * Fertile if in a village (or if the strength predicate passes)
+     */
     IAgriGrowCondition inVillage(IntPredicate strength);
 
-    /** Must be in a pillager outpost */
+    /**
+     * Fertile if in a pillager outpost (or if the strength predicate passes)
+     */
     IAgriGrowCondition inPillagerOutpost(IntPredicate strength);
 
-    /** Must be in a mineshaft */
+    /**
+     * Fertile if in a mineshaft (or if the strength predicate passes)
+     */
     IAgriGrowCondition inMineshaft(IntPredicate strength);
 
-    /** Must be in a mansion */
+    /**
+     * Fertile if in a mansion (or if the strength predicate passes)
+     */
     IAgriGrowCondition inMansion(IntPredicate strength);
 
-    /** Must be in a pyramid (jungle or desert) */
+    /**
+     * Fertile if in a pyramid (jungle or desert, or if the strength predicate passes)
+     */
     IAgriGrowCondition inPyramid(IntPredicate strength);
 
-    /** Must be in a jungle pyramid */
+    /**
+     * Fertile if in a jungle pyramid (or if the strength predicate passes)
+     */
     IAgriGrowCondition inJunglePyramid(IntPredicate strength);
 
-    /** Must be in a desert pyramid */
+    /**
+     * Fertile if in a desert pyramid (or if the strength predicate passes)
+     */
     IAgriGrowCondition inDesertPyramid(IntPredicate strength);
 
-    /** Must be in an igloo */
+    /**
+     * Fertile if in an igloo (or if the strength predicate passes)
+     */
     IAgriGrowCondition inIgloo(IntPredicate strength);
 
-    /** Must be in a ruined portal */
+    /**
+     * Fertile if in a ruined portal (or if the strength predicate passes)
+     */
     IAgriGrowCondition inRuinedPortal(IntPredicate strength);
 
-    /** Must be in a shipwreck */
+    /**
+     * Fertile if in a shipwreck (or if the strength predicate passes)
+     */
     IAgriGrowCondition inShipwreck(IntPredicate strength);
 
-    /** Must be in a swamp hut */
+    /**
+     * Fertile if in a swamp hut (or if the strength predicate passes)
+     */
     IAgriGrowCondition inSwampHut(IntPredicate strength);
 
-    /** Must be in a stronghold */
+    /**
+     * Fertile if in a stronghold (or if the strength predicate passes)
+     */
     IAgriGrowCondition inStronghold(IntPredicate strength);
 
-    /** Must be in a monument */
+    /**
+     * Fertile if in a monument (or if the strength predicate passes)
+     */
     IAgriGrowCondition inMonument(IntPredicate strength);
 
-    /** Must be in an ocean ruin */
+    /**
+     * Fertile if in an ocean ruin (or if the strength predicate passes)
+     */
     IAgriGrowCondition inOceanRuin(IntPredicate strength);
 
-    /** Must be in a fortress */
+    /**
+     * Fertile if in a fortress (or if the strength predicate passes)
+     */
     IAgriGrowCondition inFortress(IntPredicate strength);
 
-    /** Must be in an end city */
+    /**
+     * Fertile if in an end city (or if the strength predicate passes)
+     */
     IAgriGrowCondition inEndCity(IntPredicate strength);
 
-    /** Must be in a buried treasure */
+    /**
+     * Fertile if in a buried treasure (or if the strength predicate passes)
+     */
     IAgriGrowCondition inBuriedTreasure(IntPredicate strength);
 
-    /** Must be in a nether fossil */
+    /**
+     * Fertile if in a nether fossil (or if the strength predicate passes)
+     */
     IAgriGrowCondition inNetherFossil(IntPredicate strength);
 
-    /** Must be in a bastion remnant */
+    /**
+     * Fertile if in a bastion remnant (or if the strength predicate passes)
+     */
     IAgriGrowCondition inBastionRemnant(IntPredicate strength);
 
-    /** Must be in a village */
+    /**
+     * Infertile if in a village (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInVillage(IntPredicate strength);
 
-    /** Must be in a pillager outpost */
+    /**
+     * Infertile if in a pillager outpost (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInPillagerOutpost(IntPredicate strength);
 
-    /** Must be in a mineshaft */
+    /**
+     * Infertile if in a mineshaft (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInMineshaft(IntPredicate strength);
 
-    /** Must be in a mansion */
+    /**
+     * Infertile if in a mansion (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInMansion(IntPredicate strength);
 
-    /** Must be in a pyramid (jungle or desert) */
+    /**
+     * Infertile if in a pyramid (jungle or desert, unless the strength predicate passes)
+     */
     IAgriGrowCondition notInPyramid(IntPredicate strength);
 
-    /** Must be in a jungle pyramid */
+    /**
+     * Infertile if in a jungle pyramid (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInJunglePyramid(IntPredicate strength);
 
-    /** Must be in a desert pyramid */
+    /**
+     * Infertile if in a desert pyramid (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInDesertPyramid(IntPredicate strength);
 
-    /** Must be in an igloo */
+    /**
+     * Infertile if in an igloo (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInIgloo(IntPredicate strength);
 
-    /** Must be in a ruined portal */
+    /**
+     * Infertile if in a ruined portal (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInRuinedPortal(IntPredicate strength);
 
-    /** Must be in a shipwreck */
+    /**
+     * Infertile if in a shipwreck (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInShipwreck(IntPredicate strength);
 
-    /** Must be in a swamp hut */
+    /**
+     * Infertile if in a swamp hut (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInSwampHut(IntPredicate strength);
 
-    /** Must be in a stronghold */
+    /**
+     * Infertile if in a stronghold (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInStronghold(IntPredicate strength);
 
-    /** Must be in a monument */
+    /**
+     * Infertile if in a monument (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInMonument(IntPredicate strength);
 
-    /** Must be in an ocean ruin */
+    /**
+     * Infertile if in an ocean ruin (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInOceanRuin(IntPredicate strength);
 
-    /** Must be in a fortress */
+    /**
+     * Infertile if in a fortress (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInFortress(IntPredicate strength);
 
-    /** Must be in an end city */
+    /**
+     * Infertile if in an end city (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInEndCity(IntPredicate strength);
 
-    /** Must be in a buried treasure */
+    /**
+     * Infertile if in a buried treasure (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInBuriedTreasure(IntPredicate strength);
 
-    /** Must be in a nether fossil */
+    /**
+     * Infertile if in a nether fossil (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInNetherFossil(IntPredicate strength);
 
-    /** Must be in a bastion remnant */
+    /**
+     * Infertile if in a bastion remnant (unless the strength predicate passes)
+     */
     IAgriGrowCondition notInBastionRemnant(IntPredicate strength);
 
-    /** Must not be in the given structure */
-    IAgriGrowCondition inStructure(IntPredicate strength, IForgeStructure structure, ITextComponent structureName);
+    /**
+     * Fertile if in the given structure (or if the strength predicate passes)
+     */
+    IAgriGrowCondition inStructure(IntPredicate strength, Structure<?> structure, ITextComponent structureName);
 
-    /** Must be in the given structure */
-    IAgriGrowCondition notInStructure(IntPredicate strength, IForgeStructure structure, ITextComponent structureName);
-
-    /** Must match the predicate */
-    IAgriGrowCondition structure(BiPredicate<Integer, IForgeStructure> predicate, List<ITextComponent> tooltips);
+    /**
+     * Infertile if in the given structure (unless the strength predicate passes)
+     */
+    IAgriGrowCondition notInStructure(IntPredicate strength, Structure<?> structure, ITextComponent structureName);
 }

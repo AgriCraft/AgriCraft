@@ -11,17 +11,14 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.api.v1.requirement.IDefaultGrowConditionFactory;
+import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 
 import java.util.*;
-import java.util.function.BiPredicate;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -33,6 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
@@ -402,7 +400,6 @@ public class JsonPlant implements IAgriPlant {
 
         // Initialize utility objects
         IAgriGrowthRequirement.Builder builder = AgriApi.getGrowthRequirementBuilder();
-        IDefaultGrowConditionFactory growConditionFactory = AgriApi.getDefaultGrowConditionFactory();
 
         // Define requirement for humidity
         String humidityString = plant.getRequirement().getHumiditySoilCondition().getCondition();
@@ -444,14 +441,14 @@ public class JsonPlant implements IAgriPlant {
         builder.defineLightLevel((strength, light) -> {
             int lower = minLight - (int) (f * strength);
             int upper = maxLight + (int) (f * strength);
-            return light >= lower && light <= upper;
+            return light >= lower && light <= upper ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
         });
 
         // Define requirement for nearby blocks
         plant.getRequirement().getConditions().forEach(obj -> {
             BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
             BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.addCondition(growConditionFactory.statesNearby(str -> false, obj.getAmount(), min, max, obj.convertAll(BlockState.class)));
+            builder.addCondition(builder.blockStatesNearby(obj.convertAll(BlockState.class), obj.getAmount(), min, max));
         });
 
         // Define requirement for seasons
@@ -462,7 +459,13 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(seasons.size() > 0) {
-            builder.defineSeasonality((str, season) -> str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.stream().anyMatch(season::matches));
+            builder.defineSeasonality((str, season) -> {
+                if(str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.stream().anyMatch(season::matches)) {
+                    return IAgriGrowthResponse.FERTILE;
+                } else {
+                    return IAgriGrowthResponse.INFERTILE;
+                }
+            });
         }
 
         // Define requirement for fluids
@@ -471,7 +474,9 @@ public class JsonPlant implements IAgriPlant {
                 .distinct()
                 .collect(Collectors.toList());
         if(fluids.size() > 0) {
-            builder.addCondition(builder.liquidFromFluid(str -> false, fluids));
+            builder.defineFluid((str, fluid) -> fluids.contains(fluid) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL);
+        } else {
+            builder.defineFluid((str, fluid) -> fluid.equals(Fluids.EMPTY) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL);
         }
 
         // Build the growth requirement
@@ -487,7 +492,7 @@ public class JsonPlant implements IAgriPlant {
     }
 
     private static <T extends Enum<T> & IAgriSoil.SoilProperty> void handleSoilCriterion(
-            T criterion, Consumer<BiPredicate<Integer, T>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
+            T criterion, Consumer<BiFunction<Integer, T, IAgriGrowthResponse>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
         if(!criterion.isValid()) {
             invalidCallback.run();
         }
@@ -495,9 +500,11 @@ public class JsonPlant implements IAgriPlant {
             if(humidity.isValid() && criterion.isValid()) {
                 int lower = type.lowerLimit(criterion.ordinal() - (int) (f * strength));
                 int upper = type.upperLimit(criterion.ordinal() + (int) (f * strength));
-                return humidity.ordinal() <= upper && humidity.ordinal() >= lower;
+                if(humidity.ordinal() <= upper && humidity.ordinal() >= lower) {
+                    return IAgriGrowthResponse.FERTILE;
+                }
             }
-            return false;
+            return IAgriGrowthResponse.INFERTILE;
         });
     }
 
@@ -506,9 +513,9 @@ public class JsonPlant implements IAgriPlant {
             int min = AgriApi.getStatRegistry().strengthStat().getMin();
             int max = AgriApi.getStatRegistry().strengthStat().getMax();
             for(int strength = min; strength <= max; strength++) {
-                boolean humidity = requirement.isSoilHumidityAccepted(soil.getHumidity(), strength);
-                boolean acidity = requirement.isSoilAcidityAccepted(soil.getAcidity(), strength);
-                boolean nutrients = requirement.isSoilNutrientsAccepted(soil.getNutrients(), strength);
+                boolean humidity = requirement.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile();
+                boolean acidity = requirement.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile();
+                boolean nutrients = requirement.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile();
                 if(humidity && acidity && nutrients) {
                     return true;
                 }

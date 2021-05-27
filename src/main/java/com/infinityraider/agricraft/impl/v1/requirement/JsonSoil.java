@@ -88,4 +88,9 @@ public class JsonSoil implements IAgriSoil {
     public double getGrowthModifier() {
         return this.growthModifier;
     }
+
+    @Override
+    public boolean isSoil() {
+        return true;
+    }
 }

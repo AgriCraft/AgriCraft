@@ -160,6 +160,7 @@
   "agricraft.tooltip.growth_req.soil.acidity.general": "This plant can not grow on a soil with this acidity",
   "agricraft.tooltip.growth_req.soil.nutrients.general": "This plant can not grow on a soil with these nutrients",
   "agricraft.tooltip.growth_req.light.general": "This plant can not grow at the current light level",
+  "agricraft.tooltip.growth_req.fluid.general": "This plant can not grow in the current fluid",
   "agricraft.tooltip.growth_req.season.general": "This plant can not grow during the current season",
   
   "agricraft.tooltip.gene.animal_attractant.cow": "This plant might attract the attention of cows",
