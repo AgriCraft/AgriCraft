@@ -32,6 +32,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
@@ -159,6 +160,12 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     @Nonnull
     public BlockPos getPosition() {
         return this.getPos();
+    }
+
+    @Nonnull
+    @Override
+    public FluidState getFluidState() {
+        return this.getBlockState().getFluidState();
     }
 
     @Override

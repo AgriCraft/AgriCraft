@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +47,12 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
      */
     @Nonnull
     BlockState getBlockState();
+
+    /**
+     * @return The fluid state of the crop in the world
+     */
+    @Nonnull
+    FluidState getFluidState();
 
     /**
      * @return The growth stage of the crop.

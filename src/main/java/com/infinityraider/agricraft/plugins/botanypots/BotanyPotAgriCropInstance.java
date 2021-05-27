@@ -32,6 +32,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
@@ -127,6 +128,12 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Nonnull
         @Override
+        public FluidState getFluidState() {
+            return this.getBlockState().getFluidState();
+        }
+
+        @Nonnull
+        @Override
         public IAgriGrowthStage getGrowthStage() {
             World world = this.world();
             if(world == null) {
@@ -179,7 +186,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public boolean isFertile() {
-            return this.getPlant().getGrowthRequirement(this.getGrowthStage()).isMet(this);
+            return this.getPlant().getGrowthRequirement(this.getGrowthStage()).check(this);
         }
 
         @Override
@@ -304,13 +311,13 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                 this.getSoil().ifPresent(soil -> {
                     // TODO: update this tooltip once actual stats are used
                     IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
-                    if(!req.isSoilHumidityAccepted(soil.getHumidity(), 1)) {
+                    if(!req.getSoilHumidityResponse(soil.getHumidity(), 1)) {
                         AgriGrowthRequirement.Tooltips.HUMIDITY_DESCRIPTION.forEach(consumer);
                     }
-                    if(!req.isSoilAcidityAccepted(soil.getAcidity(), 1)) {
+                    if(!req.getSoilAcidityResponse(soil.getAcidity(), 1)) {
                         AgriGrowthRequirement.Tooltips.ACIDITY_DESCRIPTION.forEach(consumer);
                     }
-                    if(!req.isSoilNutrientsAccepted(soil.getNutrients(), 1)) {
+                    if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1)) {
                         AgriGrowthRequirement.Tooltips.NUTRIENT_DESCRIPTION.forEach(consumer);
                     }
                 });

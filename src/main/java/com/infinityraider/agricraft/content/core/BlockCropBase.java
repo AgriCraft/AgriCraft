@@ -10,6 +10,7 @@ import net.minecraft.block.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -77,6 +78,24 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         }
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+        // Detect fluid state change
+        if(oldState.getBlock() == newState.getBlock()) {
+            Fluid oldFluid = this.getFluidState(oldState).getFluid();
+            Fluid newFluid = this.getFluidState(newState).getFluid();
+            if(oldFluid != newFluid && this.onFluidChanged(world, pos, oldFluid, newFluid)) {
+                return;
+            }
+        }
+        // Call super
+        super.onReplaced(oldState, world, pos, newState, isMoving);
+    }
+
+    protected abstract boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid);
 
     @Override
     @Deprecated

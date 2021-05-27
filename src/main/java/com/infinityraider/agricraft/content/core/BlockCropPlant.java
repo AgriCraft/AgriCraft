@@ -16,6 +16,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -86,6 +87,14 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     public Item asItem() {
         return AgriCraft.instance.getModItemRegistry().seed;
     }
+
+    @Override
+    protected boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
+        return this.getCrop(world, pos).map(crop -> {
+            crop.getPlant()
+        }).orElse(false);
+    }
+
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")

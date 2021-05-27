@@ -16,6 +16,7 @@ import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -180,6 +181,11 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                     .filter(dir -> pos.offset(dir).equals(fromPos))
                     .forEach(dir -> ((TileEntityCropSticks) tile).onNeighbourChange(dir, fromPos, world.getBlockState(fromPos)));
         }
+    }
+
+    @Override
+    protected void onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
+
     }
 
     @Override
