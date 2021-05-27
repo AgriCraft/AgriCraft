@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.handler.BlockUpdateHandler;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.util.math.BlockPos;
@@ -19,8 +20,8 @@ import java.util.stream.Collectors;
 public abstract class RequirementCache {
     private static final RequirementCache EMPTY = new RequirementCache() {
         @Override
-        public boolean isMet() {
-            return false;
+        public IAgriGrowthResponse check() {
+            return IAgriGrowthResponse.INFERTILE;
         }
 
         @Override
@@ -36,7 +37,7 @@ public abstract class RequirementCache {
         return EMPTY;
     }
 
-    public abstract boolean isMet();
+    public abstract IAgriGrowthResponse check();
 
     public abstract void addTooltip(Consumer<ITextComponent> consumer);
 
@@ -54,17 +55,18 @@ public abstract class RequirementCache {
         }
 
         @Override
-        public boolean isMet() {
-            return this.conditions.stream().allMatch(Condition::isMet);
+        public IAgriGrowthResponse check() {
+            return this.conditions.stream().map(Condition::check).collect(IAgriGrowthResponse.COLLECTOR);
         }
 
         @Override
         public void addTooltip(Consumer<ITextComponent> consumer) {
-            if(this.isMet()) {
+            IAgriGrowthResponse response = this.check();
+            if(response.isFertile()) {
                 consumer.accept(AgriToolTips.FERTILE);
             } else {
                 consumer.accept(AgriToolTips.NOT_FERTILE);
-                this.conditions.stream().filter(condition -> !condition.isMet()).forEach(condition -> condition.addTooltip(consumer));
+                this.conditions.stream().filter(condition -> !condition.check().isFertile()).forEach(condition -> condition.addTooltip(consumer));
             }
         }
 
@@ -93,9 +95,9 @@ public abstract class RequirementCache {
                 this.strength = strength;
             }
 
-            public boolean isMet() {
+            public IAgriGrowthResponse check() {
                 if(this.getWorld() == null) {
-                    return false;
+                    return IAgriGrowthResponse.INFERTILE;
                 }
                 return this.getCondition().check(this.getWorld(), this.getPos(), this.getStrength());
             }
@@ -128,27 +130,27 @@ public abstract class RequirementCache {
             }
 
             private static class BlockUpdateCache extends Condition implements BlockUpdateHandler.IListener {
-                private boolean status;
+                private IAgriGrowthResponse status;
                 private boolean update;
                 private final Set<BlockPos> unloadedPositions;
 
                 private BlockUpdateCache(IAgriCrop crop, IAgriGrowCondition condition, int strength) {
                     super(crop, condition, strength);
-                    this.status = false;
+                    this.status = IAgriGrowthResponse.INFERTILE;
                     this.update = true;
                     this.unloadedPositions = Sets.newHashSet();
                     this.getCondition().offsetsToCheck().forEach(offset -> this.unloadedPositions.add(this.getPos().add(offset)));
                 }
 
                 @Override
-                public boolean isMet() {
+                public IAgriGrowthResponse check() {
                     // Do not initialize cache before the world is initialized
                     if(this.getWorld() == null) {
                         return this.status;
                     }
                     this.checkUnloaded();
                     if(this.update) {
-                        this.status = super.isMet();
+                        this.status = super.check();
                         this.update = false;
                     }
                     return this.status;
@@ -189,23 +191,23 @@ public abstract class RequirementCache {
             }
 
             private static class FullCache extends Condition {
-                private boolean status;
+                private IAgriGrowthResponse status;
                 private boolean update;
 
                 private FullCache(IAgriCrop crop, IAgriGrowCondition condition, int strength) {
                     super(crop, condition, strength);
-                    this.status = false;
+                    this.status = IAgriGrowthResponse.INFERTILE;
                     this.update = true;
                 }
 
                 @Override
-                public boolean isMet() {
+                public IAgriGrowthResponse check() {
                     // Do not initialize cache before the world is initialized
                     if(this.getWorld() == null) {
                         return this.status;
                     }
                     if(this.update) {
-                        this.status = super.isMet();
+                        this.status = super.check();
                         this.update = false;
                     }
                     return this.status;

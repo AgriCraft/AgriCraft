@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
@@ -209,10 +210,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public boolean isFertile() {
-        return this.getWorld() != null
-                && this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())
-                && this.requirement.isMet();
+    public IAgriGrowthResponse getFertilityResponse() {
+        if(this.getWorld() == null) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+        if(!this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+        return this.requirement.check();
     }
 
     @Override
@@ -261,9 +266,19 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             } else if (this.isCrossCrop()) {
                 // mutation tick
                 this.executeCrossGrowthTick();
-            } else if (this.isFertile()) {
-                // plant growth tick
-                this.executePlantGrowthTick();
+            } else {
+                IAgriGrowthResponse fertility = this.getFertilityResponse();
+                if(fertility.killInstantly()) {
+                    // kill plant
+                    fertility.onPlantKilled(this);
+                    this.removeGenome();
+                } else if(fertility.isLethal()) {
+                    // reverse growth stage
+                    this.revertGrowthStage();
+                } else if(fertility.isFertile()) {
+                    // plant growth tick
+                    this.executePlantGrowthTick();
+                }
             }
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.General.Post(this));
         }
@@ -328,14 +343,18 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     protected void tryWeedKillPlant() {
         if(AgriCraft.instance.getConfig().allowLethalWeeds() && this.getWeeds().isLethal()) {
             if(this.hasPlant() && this.rollForWeedAction()) {
-                IAgriGrowthStage current = this.getGrowthStage();
-                IAgriGrowthStage previous = current.getPreviousStage(this, this.getRandom());
-                if(current.equals(previous)) {
-                    this.removeGenome();
-                } else {
-                    this.setGrowthStage(previous);
-                }
+                this.revertGrowthStage();
             }
+        }
+    }
+
+    protected void revertGrowthStage() {
+        IAgriGrowthStage current = this.getGrowthStage();
+        IAgriGrowthStage previous = current.getPreviousStage(this, this.getRandom());
+        if(current.equals(previous)) {
+            this.removeGenome();
+        } else {
+            this.setGrowthStage(previous);
         }
     }
 

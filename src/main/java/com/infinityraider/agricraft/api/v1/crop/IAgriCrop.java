@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeAcceptor;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeProvider;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import net.minecraft.block.BlockState;
@@ -95,7 +96,14 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
     /**
      * @return if this crop is fertile and thus can grow
      */
-    boolean isFertile();
+    default boolean isFertile() {
+        return this.getFertilityResponse().isFertile();
+    }
+
+    /**
+     * @return the current fertility response for this crop
+     */
+    IAgriGrowthResponse getFertilityResponse();
 
     /**
      * @return if this crop can be harvested

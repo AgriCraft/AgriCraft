@@ -13,6 +13,7 @@ import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
@@ -185,7 +186,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
-        public boolean isFertile() {
+        public IAgriGrowthResponse getFertilityResponse() {
             return this.getPlant().getGrowthRequirement(this.getGrowthStage()).check(this);
         }
 
@@ -311,13 +312,13 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                 this.getSoil().ifPresent(soil -> {
                     // TODO: update this tooltip once actual stats are used
                     IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
-                    if(!req.getSoilHumidityResponse(soil.getHumidity(), 1)) {
+                    if(!req.getSoilHumidityResponse(soil.getHumidity(), 1).isFertile()) {
                         AgriGrowthRequirement.Tooltips.HUMIDITY_DESCRIPTION.forEach(consumer);
                     }
-                    if(!req.getSoilAcidityResponse(soil.getAcidity(), 1)) {
+                    if(!req.getSoilAcidityResponse(soil.getAcidity(), 1).isFertile()) {
                         AgriGrowthRequirement.Tooltips.ACIDITY_DESCRIPTION.forEach(consumer);
                     }
-                    if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1)) {
+                    if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1).isFertile()) {
                         AgriGrowthRequirement.Tooltips.NUTRIENT_DESCRIPTION.forEach(consumer);
                     }
                 });
