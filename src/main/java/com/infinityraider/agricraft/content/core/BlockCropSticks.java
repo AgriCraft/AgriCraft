@@ -113,6 +113,14 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
         this.variant = variant;
     }
 
+    public CropStickVariant getVariant() {
+        return this.variant;
+    }
+
+    public boolean isVariant(ItemCropSticks sticks) {
+        return this.getVariant() == sticks.getVariant();
+    }
+
     @Override
     public BiFunction<BlockState, IBlockReader, TileEntityCropSticks> getTileEntityFactory() {
         return TILE_FACTORY;
@@ -125,7 +133,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
 
     @Override
     public Item asItem() {
-        return this.variant.getItem();
+        return this.getVariant().getItem();
     }
 
     @Override
@@ -200,7 +208,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
             }
             return false;
         }).orElse(true);
-        if(this.variant.canExistInFluid(newFluid)) {
+        if(this.getVariant().canExistInFluid(newFluid)) {
             // the crop sticks remain, regardless of what happened to the plant
             return false;
         } else {

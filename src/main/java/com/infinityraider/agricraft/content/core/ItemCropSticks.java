@@ -137,7 +137,7 @@ public class ItemCropSticks extends BlockItemBase {
 
     protected ActionResultType tryMakeCrossCrop(World world, BlockPos pos,  @Nullable PlayerEntity player, Hand hand,
                                                 TileEntityCropSticks crop) {
-        if(!crop.hasPlant() && !crop.hasWeeds() & !crop.isCrossCrop()) {
+        if(!crop.hasPlant() && !crop.hasWeeds() & !crop.isCrossCrop() && ((BlockCropSticks) crop.getBlockState().getBlock()).isVariant(this)) {
             crop.setCrossCrop(true);
             this.consumeItem(player, hand);
             this.playPlacementSound(world, pos);
