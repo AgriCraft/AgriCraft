@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -609,24 +610,25 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                         .map(this::getSprite)
                         .collect(Collectors.toList());
                 this.brightnessMask = new boolean[16];
+                IAgriGrowthRequirement req = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage());
                 for(int light = 0; light < this.brightnessMask.length; light++) {
-                    this.brightnessMask[light] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).getLightLevelResponse(light, 1);
+                    this.brightnessMask[light] = req.getLightLevelResponse(light, 1).isFertile();
                 }
                 this.humidityMask = new boolean[IAgriSoil.Humidity.values().length - 1];
                 for(int humidity = 0; humidity < this.humidityMask.length; humidity++) {
-                    this.humidityMask[humidity] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).getSoilHumidityResponse(IAgriSoil.Humidity.values()[humidity], 1);
+                    this.humidityMask[humidity] = req.getSoilHumidityResponse(IAgriSoil.Humidity.values()[humidity], 1).isFertile();
                 }
                 this.acidityMask = new boolean[IAgriSoil.Acidity.values().length  - 1];
                 for(int acidity = 0; acidity < this.acidityMask.length; acidity++) {
-                    this.acidityMask[acidity] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).getSoilAcidityResponse(IAgriSoil.Acidity.values()[acidity], 1);
+                    this.acidityMask[acidity] = req.getSoilAcidityResponse(IAgriSoil.Acidity.values()[acidity], 1).isFertile();
                 }
                 this.nutrientsMask = new boolean[IAgriSoil.Nutrients.values().length - 1];
                 for(int nutrients = 0; nutrients < this.nutrientsMask.length; nutrients++) {
-                    this.nutrientsMask[nutrients] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).getSoilNutrientsResponse(IAgriSoil.Nutrients.values()[nutrients], 1);
+                    this.nutrientsMask[nutrients] = req.getSoilNutrientsResponse(IAgriSoil.Nutrients.values()[nutrients], 1).isFertile();
                 }
                 this.seasonMask = new boolean[AgriSeason.values().length - 1];
                 for(int season = 0; season < this.seasonMask.length; season++) {
-                    this.seasonMask[season] = this.plant.getGrowthRequirement(this.plant.getInitialGrowthStage()).getSeasonResponse(AgriSeason.values()[season], 1);
+                    this.seasonMask[season] = req.getSeasonResponse(AgriSeason.values()[season], 1).isFertile();
                 }
                 ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
                 this.plant.getAllPossibleProducts(builder::add);

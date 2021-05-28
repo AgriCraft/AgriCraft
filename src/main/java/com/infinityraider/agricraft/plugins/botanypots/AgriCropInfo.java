@@ -117,13 +117,13 @@ public class AgriCropInfo extends CropInfo {
         return AgriApi.getSoilRegistry().valueOf(block).map(soil -> {
             IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
             // TODO: use actual plant stats
-            if(!req.getSoilHumidityResponse(soil.getHumidity(), 1)) {
+            if(!req.getSoilHumidityResponse(soil.getHumidity(), 1).isFertile()) {
                 return -1;
             }
-            if(!req.getSoilAcidityResponse(soil.getAcidity(), 1)) {
+            if(!req.getSoilAcidityResponse(soil.getAcidity(), 1).isFertile()) {
                 return -1;
             }
-            if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1)) {
+            if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1).isFertile()) {
                 return -1;
             }
             // Fetch and verify Botany Pots modifier

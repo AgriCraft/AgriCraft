@@ -184,8 +184,8 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     }
 
     @Override
-    protected void onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
-
+    protected boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
+        return false;
     }
 
     @Override

@@ -129,9 +129,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         List<ItemStack> soils = AgriApi.getSoilRegistry().stream()
                 .filter(soil -> {
                     IAgriGrowthRequirement req = plant.getGrowthRequirement(stage);
-                    boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), strength);
-                    boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), strength);
-                    boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), strength);
+                    boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile();
+                    boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile();
+                    boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile();
                     return humidity && acidity && nutrients;})
                 .map(IAgriSoil::getVariants)
                 .flatMap(Collection::stream)
@@ -181,19 +181,19 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         IncrementRenderer.getInstance().renderStrengthIncrements(transforms, strength);
         IncrementRenderer.getInstance().renderGrowthStageIncrements(transforms, stage);
         // Draw light levels
-        LightLevelRenderer.getInstance().renderLightLevels(transforms, 32, 26, light -> req.getLightLevelResponse(light, strength));
+        LightLevelRenderer.getInstance().renderLightLevels(transforms, 32, 26, light -> req.getLightLevelResponse(light, strength).isFertile());
         // Draw Property icons
         Arrays.stream(IAgriSoil.Humidity.values()).filter(IAgriSoil.Humidity::isValid)
-                .filter(humidity -> req.getSoilHumidityResponse(humidity, strength))
+                .filter(humidity -> req.getSoilHumidityResponse(humidity, strength).isFertile())
                 .forEach(humidity -> SoilPropertyIconRenderer.getInstance().drawHumidityIcon(humidity, transforms, 37, 83, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Acidity.values()).filter(IAgriSoil.Acidity::isValid)
-                .filter(acidity -> req.getSoilAcidityResponse(acidity, strength))
+                .filter(acidity -> req.getSoilAcidityResponse(acidity, strength).isFertile())
                 .forEach(acidity -> SoilPropertyIconRenderer.getInstance().drawAcidityIcon(acidity, transforms, 37, 96, mouseX, mouseY));
         Arrays.stream(IAgriSoil.Nutrients.values()).filter(IAgriSoil.Nutrients::isValid)
-                .filter(nutrients ->req.getSoilNutrientsResponse(nutrients, strength))
+                .filter(nutrients ->req.getSoilNutrientsResponse(nutrients, strength).isFertile())
                 .forEach(nutrients -> SoilPropertyIconRenderer.getInstance().drawNutrientsIcon(nutrients, transforms, 37, 109, mouseX, mouseY));
         // Draw seasons
-        SeasonRenderer.getInstance().renderSeasons(transforms, 17, 24, season -> req.getSeasonResponse(season, strength));
+        SeasonRenderer.getInstance().renderSeasons(transforms, 17, 24, season -> req.getSeasonResponse(season, strength).isFertile());
         // Draw buttons
         state.updateStageButtons(102, 10);
         state.updateStrengthButtons(114, 10 );
@@ -328,9 +328,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                 cache.get(this.getPlant()).getItemStacks().set(1, AgriApi.getSoilRegistry().stream()
                         .filter(soil -> {
                             IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getStage());
-                            boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), this.getStrength());
-                            boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), this.getStrength());
-                            boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), this.getStrength());
+                            boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), this.getStrength()).isFertile();
+                            boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), this.getStrength()).isFertile();
+                            boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), this.getStrength()).isFertile();
                             return humidity && acidity && nutrients;
                         })
                         .map(IAgriSoil::getVariants)
