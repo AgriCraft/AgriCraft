@@ -87,7 +87,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         if(oldState.getBlock() == newState.getBlock()) {
             Fluid oldFluid = this.getFluidState(oldState).getFluid();
             Fluid newFluid = this.getFluidState(newState).getFluid();
-            if(oldFluid != newFluid && this.onFluidChanged(world, pos, oldFluid, newFluid)) {
+            if(oldFluid != newFluid && this.onFluidChanged(world, pos, newState, oldFluid, newFluid)) {
                 return;
             }
         }
@@ -95,7 +95,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         super.onReplaced(oldState, world, pos, newState, isMoving);
     }
 
-    protected abstract boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid);
+    protected abstract boolean onFluidChanged(World world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid);
 
     @Override
     @Deprecated

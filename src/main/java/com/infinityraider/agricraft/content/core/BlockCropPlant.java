@@ -90,7 +90,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     }
 
     @Override
-    protected boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
+    protected boolean onFluidChanged(World world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid) {
         return this.getCrop(world, pos).map(crop -> {
             if(crop.hasPlant()) {
                 IAgriGrowthResponse response = crop.getPlant().getGrowthRequirement(crop.getGrowthStage()).getFluidResponse(newFluid, crop.getStats().getStrength());

@@ -473,11 +473,20 @@ public class JsonPlant implements IAgriPlant {
                 .map(FluidState::getFluid)
                 .distinct()
                 .collect(Collectors.toList());
-        if(fluids.size() > 0) {
-            builder.defineFluid((str, fluid) -> fluids.contains(fluid) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL);
-        } else {
-            builder.defineFluid((str, fluid) -> fluid.equals(Fluids.EMPTY) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL);
-        }
+        BiFunction<Integer, Fluid, IAgriGrowthResponse> response = (strength, fluid) -> {
+            if(fluids.size() > 0) {
+                if(fluids.contains(fluid)) {
+                    return IAgriGrowthResponse.FERTILE;
+                }
+                return fluid.equals(Fluids.LAVA) ? IAgriGrowthResponse.KILL_IT_WITH_FIRE : IAgriGrowthResponse.LETHAL;
+            } else {
+                if(fluid.equals(Fluids.LAVA)) {
+                    return IAgriGrowthResponse.KILL_IT_WITH_FIRE;
+                }
+               return fluid.equals(Fluids.EMPTY) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL;
+            }
+        };
+        builder.defineFluid(response);
 
         // Build the growth requirement
         IAgriGrowthRequirement req = builder.build();

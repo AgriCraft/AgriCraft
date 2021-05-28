@@ -1,6 +1,11 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.Collections;
@@ -84,6 +89,43 @@ public interface IAgriGrowthResponse {
         @Override
         public boolean isLethal() {
             return true;
+        }
+    };
+
+    /**
+     * Default implementation representing a response where lava destroys the plant
+     */
+    IAgriGrowthResponse KILL_IT_WITH_FIRE = new IAgriGrowthResponse() {
+        @Override
+        public boolean isFertile() {
+            return false;
+        }
+
+        @Override
+        public boolean isLethal() {
+            return true;
+        }
+
+        @Override
+        public boolean killInstantly() {
+            return true;
+        }
+
+        @Override
+        public void onPlantKilled(IAgriCrop crop) {
+            World world = crop.world();
+            if(world instanceof ServerWorld) {
+                double x = crop.getPosition().getX() + 0.5;
+                double y = crop.getPosition().getY() + 0.5;
+                double z = crop.getPosition().getZ() + 0.5;
+                for(int i = 0; i < 3; i++) {
+                    ((ServerWorld) world).spawnParticle(ParticleTypes.LARGE_SMOKE,
+                            x + 0.25*world.getRandom().nextDouble(), y, z + 0.25*world.getRandom().nextDouble(),
+                            1, 0, 1, 0, 0.05);
+                }
+                world.playSound(null, x, y, z, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS,
+                        0.2F + world.getRandom().nextFloat() * 0.2F, 0.9F + world.getRandom().nextFloat() * 0.15F);
+            }
         }
     };
 

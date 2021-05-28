@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
@@ -21,10 +22,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -33,6 +33,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
@@ -184,8 +186,57 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     }
 
     @Override
-    protected boolean onFluidChanged(World world, BlockPos pos, Fluid oldFluid, Fluid newFluid) {
-        return false;
+    protected boolean onFluidChanged(World world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid) {
+        Optional<IAgriCrop> optCrop = this.getCrop(world, pos);
+        boolean noMorePlant = optCrop.map(crop -> {
+            if (!crop.hasPlant()) {
+                return true;
+            }
+            IAgriGrowthResponse response = crop.getPlant().getGrowthRequirement(crop.getGrowthStage()).getFluidResponse(newFluid, crop.getStats().getStrength());
+            if (response.killInstantly()) {
+                response.onPlantKilled(crop);
+                crop.removeGenome();
+                return true;
+            }
+            return false;
+        }).orElse(true);
+        if(this.variant.canExistInFluid(newFluid)) {
+            // the crop sticks remain, regardless of what happened to the plant
+            return false;
+        } else {
+            if(noMorePlant) {
+                // no more crop sticks, no more plant, only fluid
+                world.setBlockState(pos, newFluid.getDefaultState().getBlockState());
+                if(world instanceof ServerWorld) {
+                    double x = pos.getX() + 0.5;
+                    double y = pos.getY() + 0.5;
+                    double z = pos.getZ() + 0.5;
+                    for(int i = 0; i < 2; i++) {
+                        ((ServerWorld) world).spawnParticle(ParticleTypes.SMOKE,
+                                x + 0.25*world.getRandom().nextDouble(), y, z + 0.25*world.getRandom().nextDouble(),
+                                1, 0, 1, 0, 0.25);
+                    }
+                    world.playSound(null, x, y, z, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS,
+                            0.2F + world.getRandom().nextFloat() * 0.2F, 0.9F + world.getRandom().nextFloat() * 0.05F);
+                }
+            } else {
+                // no more crop sticks, but still plant, and fluid
+                BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getDefaultState();
+                newState = BlockCropBase.PLANT.mimic(state, newState);
+                newState = BlockCropBase.LIGHT.mimic(state, newState);
+                newState = InfProperty.Defaults.fluidlogged().mimic(state, newState);
+                world.setBlockState(pos, newState);
+                // If there was trouble, reset and abort.
+                TileEntity tile = world.getTileEntity(pos);
+                if(!(tile instanceof TileEntityCropPlant)) {
+                    world.setBlockState(pos, state);
+                    return false;
+                }
+                // Mimic plant and weed
+                ((TileEntityCropPlant) tile).mimicFrom(optCrop.get());
+            }
+            return true;
+        }
     }
 
     @Override

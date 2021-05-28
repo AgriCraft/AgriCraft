@@ -2,11 +2,14 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.agricraft.util.FluidPredicates;
 import com.infinityraider.infinitylib.block.BlockBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public enum CropStickVariant {
@@ -15,7 +18,8 @@ public enum CropStickVariant {
             3,
             SoundType.WOOD,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_wood,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_wood
+            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
+            FluidPredicates.NOT_LAVA
     ),
 
     IRON(
@@ -23,14 +27,16 @@ public enum CropStickVariant {
             7,
             SoundType.ANVIL,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_iron,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_iron
+            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
+            FluidPredicates.ANY_FLUID
     ),
 
     OBSIDIAN(Material.PLANTS,
             7,
             SoundType.BASALT,
             () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_obsidian,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian
+            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian,
+            FluidPredicates.ANY_FLUID
     );
 
     private final String id;
@@ -39,14 +45,19 @@ public enum CropStickVariant {
     private final Material material;
     private final Supplier<Supplier<Item>> itemSupplier;
     private final Supplier<Supplier<BlockBase>> blockSupplier;
+    private final Predicate<Fluid> fluidPredicate;
 
-    CropStickVariant(Material material, int strength, SoundType sound, Supplier<Supplier<Item>> itemSupplier, Supplier<Supplier<BlockBase>> blockSupplier) {
+    CropStickVariant(Material material, int strength, SoundType sound,
+                     Supplier<Supplier<Item>> itemSupplier,
+                     Supplier<Supplier<BlockBase>> blockSupplier,
+                     Predicate<Fluid> fluidPredicate) {
         this.id = Names.Blocks.CROP_STICKS + "_" + this.name().toLowerCase();
         this.strength = strength;
         this.sound = sound;
         this.material = material;
         this.itemSupplier = itemSupplier;
         this.blockSupplier = blockSupplier;
+        this.fluidPredicate = fluidPredicate;
     }
 
     public final String getId() {
@@ -71,5 +82,9 @@ public enum CropStickVariant {
 
     public final BlockBase getBlock() {
         return this.blockSupplier.get().get();
+    }
+
+    public final boolean canExistInFluid(Fluid fluid) {
+        return this.fluidPredicate.test(fluid);
     }
 }
