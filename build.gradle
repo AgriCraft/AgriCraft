@@ -200,7 +200,7 @@ dependencies {
 
     //Better Weather
     compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
-    runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
+    //runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
 
     //Blood Magic
     compileOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
@@ -213,8 +213,8 @@ dependencies {
     //Botany pots
     compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
     compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
-    runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
-    runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
+    //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
+    //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
 
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
@@ -225,8 +225,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:cyclic-239286:3321623")
 
     //Immersive Engineering
-    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-4.2.4-134.7")
-    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-4.2.4-134.7")
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
+    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
 
     //Industrial Foregoing
     compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
@@ -234,11 +234,11 @@ dependencies {
 
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+    //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
 
     //Straw Golems
     compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
-    runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
+    //runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
 }
 
 // Delete Old Plants
