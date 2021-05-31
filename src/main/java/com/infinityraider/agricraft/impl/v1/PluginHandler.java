@@ -24,10 +24,7 @@ import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.lifecycle.ModLifecycleEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
@@ -43,6 +40,10 @@ public final class PluginHandler {
                 .peek(PluginHandler::logPlugin)
                 .filter(IAgriPlugin::isEnabled)
                 .forEach(plugin -> plugin.onCommonSetupEvent(event));
+    }
+
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onClientSetupEvent(event));
     }
 
     private static void executeForPlugins(Consumer<IAgriPlugin> consumer) {

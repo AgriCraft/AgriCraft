@@ -77,6 +77,9 @@ public interface IAgriApiConnector {
     IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer();
 
     @Nonnull
+    IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer();
+
+    @Nonnull
     Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
 
     @Nonnull

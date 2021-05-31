@@ -23,6 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -48,10 +49,13 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     public List<BakedQuad> bakeQuads(IAgriRenderable plant, IAgriGrowthStage stage, @Nullable Direction direction,
                                      @Nonnull ResourceLocation texture, int yOffset, AgriRenderType jsonRenderType) {
+        if(direction != null) {
+            return Collections.emptyList();
+        }
         TextureAtlasSprite sprite = this.getSprite(texture);
         AgriPlantRenderType type = CONVERSION_MAP.get(jsonRenderType);
-        List<BakedQuad> quads = CONVERSION_MAP.get(jsonRenderType).bakedQuads(direction, sprite, yOffset);
-        PlantQuadBakeEvent event = new PlantQuadBakeEvent(this, plant, stage, direction, texture, sprite, type, yOffset, quads);
+        List<BakedQuad> quads = CONVERSION_MAP.get(jsonRenderType).bakedQuads(null, sprite, yOffset);
+        PlantQuadBakeEvent event = new PlantQuadBakeEvent(this, plant, stage, null, texture, sprite, type, yOffset, quads);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getOutputQuads();
     }
@@ -67,11 +71,11 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     }
 
     @Nonnull
-    public List<BakedQuad> bakeQuadsForHashPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+    public List<BakedQuad> bakeQuadsForHashPattern(@Nonnull TextureAtlasSprite sprite, int yOffset) {
         ITessellator tessellator = this.getTessellator();
 
         tessellator.startDrawingQuads();
-        tessellator.setFace(direction);
+        tessellator.setFace((Direction) null);
 
         tessellator.pushMatrix();
 
@@ -90,11 +94,11 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     }
 
     @Nonnull
-    public List<BakedQuad> bakeQuadsForCrossPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+    public List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull TextureAtlasSprite sprite, int yOffset) {
         ITessellator tessellator = this.getTessellator();
 
         tessellator.startDrawingQuads();
-        tessellator.setFace(direction);
+        tessellator.setFace((Direction) null);
 
         tessellator.pushMatrix();
 
@@ -113,11 +117,11 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     }
 
     @Nonnull
-    public List<BakedQuad> bakeQuadsForPlusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+    public List<BakedQuad> bakeQuadsForPlusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset) {
         ITessellator tessellator = this.getTessellator();
 
         tessellator.startDrawingQuads();
-        tessellator.setFace(direction);
+        tessellator.setFace((Direction) null);
 
         tessellator.pushMatrix();
 
@@ -143,11 +147,11 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     }
 
     @Nonnull
-    public List<BakedQuad> bakeQuadsForRhombusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+    public List<BakedQuad> bakeQuadsForRhombusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset) {
         ITessellator tessellator = this.getTessellator();
 
         tessellator.startDrawingQuads();
-        tessellator.setFace(direction);
+        tessellator.setFace((Direction) null);
 
         float d = MathHelper.sqrt(128);
 
@@ -169,14 +173,14 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @Nonnull
     @Override
-    public List<BakedQuad> bakeQuadsForGourdPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
+    public List<BakedQuad> bakeQuadsForGourdPattern(@Nonnull TextureAtlasSprite sprite, int yOffset) {
         if(yOffset == 0) {
-            return this.bakeQuadsForHashPattern(direction, sprite, yOffset);
+            return this.bakeQuadsForHashPattern(sprite, yOffset);
         } else if(yOffset == 1) {
             ITessellator tessellator = this.getTessellator();
 
             tessellator.startDrawingQuads();
-            tessellator.setFace(direction);
+            tessellator.setFace((Direction) null);
 
             tessellator.pushMatrix();
 

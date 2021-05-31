@@ -250,6 +250,20 @@ public final class AgriApi {
     }
 
     /**
+     * Fetches the AgriSeedIngredient serializer
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the serializer
+     */
+    @Nonnull
+    public static IIngredientSerializer<AnySoilIngredient> getAnySoilIngredientSerializer() {
+        return AgriApi.CONNECTOR.connectAnySoilIngredientSerializer();
+    }
+
+    /**
      * Fetches an IAgriCrop instance from a position in the world
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding

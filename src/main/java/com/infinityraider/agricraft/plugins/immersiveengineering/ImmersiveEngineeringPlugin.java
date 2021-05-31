@@ -3,10 +3,12 @@ package com.infinityraider.agricraft.plugins.immersiveengineering;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import com.infinityraider.agricraft.plugins.create.CreateCompat;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import javax.annotation.Nullable;
 
 @AgriPlugin
 @SuppressWarnings("unused")
@@ -27,9 +29,18 @@ public class ImmersiveEngineeringPlugin implements IAgriPlugin {
     }
 
     @Override
-    public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+    public void onClientSetupEvent(FMLClientSetupEvent event) {
         if(this.isEnabled() && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
+            ImmersiveEngineeringCompatClient.registerRenderFunction();
+        }
+    }
 
+    @Nullable
+    public static IInfRecipeSerializer getAgriClocheRecipeSerializer() {
+        if (ModList.get().isLoaded(Names.Mods.IMMERSIVE_ENGINEERING) && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
+            return ImmersiveEngineeringCompat.getAgriClocheRecipeSerializer();
+        } else {
+            return null;
         }
     }
 }

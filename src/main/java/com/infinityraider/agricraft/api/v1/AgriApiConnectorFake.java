@@ -120,6 +120,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
+    public IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }

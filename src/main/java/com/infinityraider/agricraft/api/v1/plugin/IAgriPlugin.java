@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -49,6 +50,10 @@ public interface IAgriPlugin {
     String getName();
 
     default void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        // Default Implementation: Do nothing.
+    }
+
+    default void onClientSetupEvent(FMLClientSetupEvent event) {
         // Default Implementation: Do nothing.
     }
     

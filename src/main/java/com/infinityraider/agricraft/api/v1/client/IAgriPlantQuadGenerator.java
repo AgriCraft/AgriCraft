@@ -3,12 +3,10 @@ package com.infinityraider.agricraft.api.v1.client;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -28,30 +26,30 @@ public interface IAgriPlantQuadGenerator {
      * Generates quads for the HASH AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForHashPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForHashPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
 
     /**
      * Generates quads for the CROSS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForCrossPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
 
     /**
      * Generates quads for the PLUS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForPlusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForPlusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
 
     /**
      * Generates quads for the RHOMBUS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForRhombusPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForRhombusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
 
     /**
      * Generates quads for the GOURD AgriPlantRenderType
      * here yOffset = 0 is the stem, and yOffset = 1 is the gourd
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForGourdPattern(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForGourdPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
 }

@@ -18,19 +18,29 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public enum AgriPlantRenderType implements IExtensibleEnum {
     /** Renders in a hashtag pattern (#); 4 faces parallel with the block faces, similar to Vanilla wheat */
-    HASH(AgriApi.getPlantQuadGenerator()::bakeQuadsForHashPattern),
+    HASH((sprite, yOffset) -> {
+        return AgriApi.getPlantQuadGenerator().bakeQuadsForHashPattern(sprite, yOffset);
+    }),
 
     /** Renders in a cross pattern (x); 2 faces along the diagonals, similar to Vanilla flowers */
-    CROSS(AgriApi.getPlantQuadGenerator()::bakeQuadsForCrossPattern),
+    CROSS((sprite, yOffset) -> {
+        return AgriApi.getPlantQuadGenerator().bakeQuadsForCrossPattern(sprite, yOffset);
+    }),
 
     /** Renders in a plus pattern (+); similar to cross, but instead 4 crosses at each crop stick */
-    PLUS(AgriApi.getPlantQuadGenerator()::bakeQuadsForPlusPattern),
+    PLUS((sprite, yOffset) -> {
+        return AgriApi.getPlantQuadGenerator().bakeQuadsForPlusPattern(sprite, yOffset);
+    }),
 
     /** Renders in a rhombus pattern (◇); 4 faces spanning between the centers of the block faces, only used for weeds */
-    RHOMBUS(AgriApi.getPlantQuadGenerator()::bakeQuadsForRhombusPattern),
+    RHOMBUS((sprite, yOffset) -> {
+        return AgriApi.getPlantQuadGenerator().bakeQuadsForRhombusPattern(sprite, yOffset);
+    }),
 
     /** Renders for a gourd pattern (@); i.e. for pumpkins and melons: renders a hash pattern for the initial stages, with a small gourd for the final stage */
-    GOURD(AgriApi.getPlantQuadGenerator()::bakeQuadsForGourdPattern);
+    GOURD((sprite, yOffset) -> {
+        return AgriApi.getPlantQuadGenerator().bakeQuadsForGourdPattern(sprite, yOffset);
+    });
 
     private final IQuadGenerator generator;
 
@@ -47,7 +57,7 @@ public enum AgriPlantRenderType implements IExtensibleEnum {
      */
     @Nonnull
     public List<BakedQuad> bakedQuads(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset) {
-        return this.generator.bakeQuads(direction, sprite, yOffset);
+        return this.generator.bakeQuads(sprite, yOffset);
     }
 
     /**
@@ -72,12 +82,11 @@ public enum AgriPlantRenderType implements IExtensibleEnum {
          * this method will be called three times: once for the base layer (yOffset = 0), again for the middle layer
          * (yOffset = 1), and a final time for the top layer (yOffset = 2).
          *
-         * @param direction the cull-face for the quads currently being baked
          * @param sprite the sprite for the texture to use
          * @param yOffset the yOffset in number of blocks
          * @return list of BakedQuads
          */
         @Nonnull
-        List<BakedQuad> bakeQuads(@Nullable Direction direction, @Nonnull TextureAtlasSprite sprite, int yOffset);
+        List<BakedQuad> bakeQuads(@Nonnull TextureAtlasSprite sprite, int yOffset);
     }
 }

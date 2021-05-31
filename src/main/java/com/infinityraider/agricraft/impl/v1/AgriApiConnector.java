@@ -164,6 +164,12 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
+    public IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer() {
+        return AgriCraft.instance.getModRecipeSerializerRegistry().any_soil_ingredient;
+    }
+
+    @Nonnull
+    @Override
     public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         if(tile instanceof IAgriCrop) {

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.proxy;
 
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
@@ -13,6 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.function.Function;
 
@@ -21,6 +23,11 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
         return Config.Client::new;
+    }
+
+    @Override
+    public void onClientSetupEvent(FMLClientSetupEvent event) {
+        PluginHandler.onClientSetup(event);
     }
 
     @Override
