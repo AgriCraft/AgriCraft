@@ -119,6 +119,11 @@ public interface IAgriConfig {
      */
     int seedBagEnchantCost();
 
+    /**
+     * @return the seed bag capacity
+     */
+    int seedBagCapacity();
+
 
     /*
      * --------------------

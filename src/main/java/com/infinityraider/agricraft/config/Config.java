@@ -37,6 +37,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Double> seedCompostValue;
         private final ForgeConfigSpec.ConfigValue<Boolean> animalAttraction;
         private final ForgeConfigSpec.ConfigValue<Integer> seedBagEnchantCost;
+        private final ForgeConfigSpec.ConfigValue<Integer> seedBagCapacity;
 
         // stats
         private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
@@ -128,6 +129,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("animal attracting crops", true);
             this.seedBagEnchantCost = builder.comment("\nEnchantment cost in player levels to enchant the seed bag")
                     .defineInRange("seed bag enchant cost", 10, 0, 30);
+            this.seedBagCapacity = builder.comment("\nThe amount of seeds one seed bag can hold")
+                    .defineInRange("seed bag capacity", 64, 8, 256);
             builder.pop();
 
             builder.push("stats");
@@ -299,6 +302,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public int seedBagEnchantCost() {
             return this.seedBagEnchantCost.get();
+        }
+
+        @Override
+        public int seedBagCapacity() {
+            return this.seedBagCapacity.get();
         }
 
         @Override

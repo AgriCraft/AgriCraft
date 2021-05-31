@@ -247,6 +247,8 @@ public class ItemSeedBag extends ItemBase {
 
         int getCount();
 
+        boolean isFull();
+
         ISorter getSorter();
 
         int getSorterIndex();
@@ -260,6 +262,8 @@ public class ItemSeedBag extends ItemBase {
         ItemStack extractFirstSeed(int amount, boolean simulate);
 
         ItemStack extractLastSeed(int amount, boolean simulate);
+
+        int getCapacity();
     }
 
     public interface ISorter extends Comparator<IAgriGenome> {
@@ -331,6 +335,11 @@ public class ItemSeedBag extends ItemBase {
         }
 
         @Override
+        public boolean isFull() {
+            return false;
+        }
+
+        @Override
         public ISorter getSorter() {
             return DEFAULT_SORTER;
         }
@@ -351,6 +360,11 @@ public class ItemSeedBag extends ItemBase {
         @Override
         public ItemStack extractLastSeed(int amount, boolean simulate) {
             return ItemStack.EMPTY;
+        }
+
+        @Override
+        public int getCapacity() {
+            return 0;
         }
 
         @Override

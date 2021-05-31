@@ -106,6 +106,11 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         }
 
         @Override
+        public boolean isFull() {
+            return this.getCount() >= this.getCount();
+        }
+
+        @Override
         public ISorter getSorter() {
             return ItemSeedBag.getSorter(this.getSorterIndex());
         }
@@ -150,6 +155,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if(this.isFull()) {
+                return stack;
+            }
             if (this.isItemValid(slot, stack)) {
                 return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
                     boolean flag = true;
@@ -252,6 +260,11 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                 }
             }
             return out;
+        }
+
+        @Override
+        public int getCapacity() {
+            return AgriCraft.instance.getConfig().seedBagCapacity();
         }
 
         @Override
