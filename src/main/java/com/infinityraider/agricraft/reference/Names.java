@@ -60,6 +60,7 @@ public abstract class Names {
     public static final class Objects {
         public static final String PLANT = "plant";
         public static final String RESEARCH = "research";
+        public static final String SEED_BAG_CONTENTS = "seed_bag_contents";
         public static final String IRRIGATION_NETWORK_COMPONENT = "irrigation_network_component";
         public static final String IRRIGATION_NETWORK_DATA = "irrigation_network_data";
         public static final String IRRIGATION_NETWORK_MANAGER = "irrigation_network_manager";

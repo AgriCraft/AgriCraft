@@ -179,7 +179,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         protected IBakedModel getBaseModel() {
             if(this.baseModel == null) {
                 this.baseModel = this.getModelManager().getModel(
-                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
+                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag"));
             }
             return this.baseModel;
         }

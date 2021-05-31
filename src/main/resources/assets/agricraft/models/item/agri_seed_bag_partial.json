@@ -1,0 +1,4 @@
+{
+	"parent": "item/generated",
+	"loader": "agricraft:seed_bag_loader"
+}

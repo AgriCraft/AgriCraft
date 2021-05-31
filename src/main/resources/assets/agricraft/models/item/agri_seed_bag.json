@@ -1,4 +1,22 @@
 {
-	"parent": "agricraft:item/agri_seed_bag_empty",
-	"loader": "agricraft:seed_bag_loader"
+	"overrides": [
+		{
+			"predicate": {
+				"agricraft:seed_bag_contents": 0
+			},
+			"model": "agricraft:item/agri_seed_bag_empty"
+		},
+		{
+			"predicate": {
+				"agricraft:seed_bag_contents": 1
+			},
+			"model": "agricraft:item/agri_seed_bag_partial"
+		},
+		{
+			"predicate": {
+				"agricraft:seed_bag_contents": 2
+			},
+			"model": "agricraft:item/agri_seed_bag_full"
+		}
+	]
 }

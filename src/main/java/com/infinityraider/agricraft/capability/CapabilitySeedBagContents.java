@@ -107,7 +107,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
         @Override
         public boolean isFull() {
-            return this.getCount() >= this.getCount();
+            return this.getCount() >= this.getCapacity();
         }
 
         @Override
