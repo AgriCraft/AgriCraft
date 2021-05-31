@@ -207,8 +207,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
 
     //Botania
-    compileOnly fg.deobf("vazkii.botania:Botania:r1.16-388:api")
-    //runtimeOnly fg.deobf("vazkii.botania:Botania:r1.16-388")
+    compileOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT:api")
+    //runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT")
 
     //Botany pots
     compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
@@ -226,7 +226,7 @@ dependencies {
 
     //Immersive Engineering
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
-    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
+    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
 
     //Industrial Foregoing
     compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")

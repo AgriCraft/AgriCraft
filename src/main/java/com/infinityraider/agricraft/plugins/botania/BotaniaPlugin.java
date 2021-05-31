@@ -28,7 +28,7 @@ public class BotaniaPlugin implements IAgriPlugin {
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
         if(this.isEnabled() && AgriCraft.instance.getConfig().enableBotaniaCompat()) {
-
+            BotaniaCompat.registerHarvestables();
         }
     }
 }

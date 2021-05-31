@@ -49,6 +49,8 @@ Changelog
 - ADDED: Default jsons for Buzzier Bees (thanks Nelson Brichau)
 - ADDED: Default jsons for Atmospheric (thanks Nelson Brichau)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
+- ADDED: Compatibility with Botania's Horn and Drum of the Wild
+- ADDED: Initial Compatibility with Botany Pots (requires elaboration on Botany Pots side to complete)
 - ADDED: Compatibility with Create's Mechanical Harvester
 - ADDED: Compatibility with Cyclic's Harvester
 - ADDED: Compatibility for Immersive Engineering's Garden Cloche
