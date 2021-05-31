@@ -500,12 +500,32 @@
   "agricraft.plant.quark_brown_mushroom.desc": "Glow in the dark.",
 
   "agricraft.plant.buzzier_bees_buttercup.seed": "Buttercup Seeds",
-  "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast",
+  "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast.",
 
-  "agricraft.plant.buzzier_bees_white_clover.seed": "White Clover",
-  "agricraft.plant.buzzier_bees_white_clover.desc": "Also known as Dutch Clover",
+  "agricraft.plant.buzzier_bees_white_clover.seed": "White Clover Seeds",
+  "agricraft.plant.buzzier_bees_white_clover.desc": "Also known as Dutch Clover.",
 
-  "agricraft.plant.buzzier_bees_pink_clover.seed": "Pink Clover",
-  "agricraft.plant.buzzier_bees_pink_clover.desc": "May the luck be with you"
+  "agricraft.plant.buzzier_bees_pink_clover.seed": "Pink Clover Seeds",
+  "agricraft.plant.buzzier_bees_pink_clover.desc": "May the luck be with you.",
+
+  "agricraft.plant.atmospheric_aloe_vera.desc": "A succulent plant.",
+
+  "agricraft.plant.atmospheric_gilia.seeds": "Gilia Seeds",
+  "agricraft.plant.atmospheric_gilia.desc": "Queen Anne's thimble.",
+
+  "agricraft.plant.atmospheric_hot_monkey_brush.seeds": "Hot Monkey Brush Seeds",
+  "agricraft.plant.atmospheric_hot_monkey_brush.desc": "With slow burst buds.",
+
+  "agricraft.plant.atmospheric_scalding_monkey_brush.seeds": "Scalding Monkey Brush Seeds",
+  "agricraft.plant.atmospheric_scalding_monkey_brush.desc": "Probably not good for your hair.",
+
+  "agricraft.plant.atmospheric_warm_monkey_brush.seeds": "Warm Monkey Brush Seeds",
+  "agricraft.plant.atmospheric_warm_monkey_brush.desc": "Not warm enough.",
+
+  "agricraft.plant.atmospheric_water_hyacinth.seeds": "Water Hyacinth Seeds",
+  "agricraft.plant.atmospheric_water_hyacinth.desc": "It's too invasive to be left alive.",
+
+  "agricraft.plant.atmospheric_yucca_flower.seeds": "Yucca Flower Seeds",
+  "agricraft.plant.atmospheric_yucca_flower.desc": "You can use the leaves as a sword."
 
 }
