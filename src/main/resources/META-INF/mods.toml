@@ -17,7 +17,7 @@ Agricultural farming extended
 [[dependencies.agricraft]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[36.1.0,)"
     ordering="AFTER"
     side="BOTH"
 
