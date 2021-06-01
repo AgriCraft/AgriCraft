@@ -21,7 +21,9 @@ import com.infinityraider.agricraft.impl.v1.requirement.NoSoil;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.infinitylib.crafting.IInfIngredientSerializer;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -78,6 +80,10 @@ public class AgriClocheRecipe extends ClocheRecipe {
     }
 
     protected IAgriSoil getSoil(ItemStack soil) {
+        if(soil.getItem() == Items.DIRT) {
+            // correction for farmland
+            return AgriApi.getSoilRegistry().valueOf(Blocks.FARMLAND).orElse(NoSoil.getInstance());
+        }
         return AgriApi.getSoilRegistry().valueOf(soil).orElse(NoSoil.getInstance());
     }
 
