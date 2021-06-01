@@ -54,8 +54,10 @@ public class ModelAndTextureHandler {
                 .forEach(ModelLoader::addSpecialModel);
         // no plant instance
         ModelLoader.addSpecialModel(NoPlant.getInstance().getSeedModel());
-        // seed bag master
-        ModelLoader.addSpecialModel(new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag"));
+        // seed bag models
+        ModelLoader.addSpecialModel(new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
+        ModelLoader.addSpecialModel(new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_partial"));
+        ModelLoader.addSpecialModel(new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_full"));
         // channel valve hand Wheel
         ModelLoader.addSpecialModel(TileEntityIrrigationChannelRenderer.MODEL_HANDWHEEL);
     }

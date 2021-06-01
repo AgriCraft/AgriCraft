@@ -88,11 +88,14 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
     }
 
     public static class BakedModel implements IBakedModel, IRenderUtilities {
-        private IBakedModel baseModel;
         private final Map<IAgriPlant, IBakedModel> seedQuads;
         private final Map<Direction, List<BakedQuad>> emptyMap;
         private final IModelConfiguration owner;
         private final ItemOverrideList overrides;
+
+        private IBakedModel baseModelEmpty;
+        private IBakedModel baseModelPartial;
+        private IBakedModel baseModelFull;
 
         private BakedModel(IModelConfiguration owner, ItemOverrideList overrides) {
             this.seedQuads = Maps.newIdentityHashMap();
@@ -161,27 +164,43 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             // Check if the bag is activated
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
             if(!bag.isActivated(stack)) {
-                return Collections.singletonList(Pair.of(this.getBaseModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }
             // Check if the bag contains seeds
             ItemSeedBag.IContents contents = bag.getContents(stack);
             if(!contents.getPlant().isPlant()) {
-                return Collections.singletonList(Pair.of(this.getBaseModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }
             // Fetch the quads
             RenderType type = RenderTypeLookup.func_239219_a_(stack, fabulous);
             return Lists.newArrayList(
-                    Pair.of(this.getBaseModel(), type),
+                    Pair.of(contents.isFull() ? this.getFullBagModel() : this.getPartialBagModel(), type),
                     Pair.of(this.getOrBakeSeedModel(contents.getPlant()), type)
             );
         }
 
-        protected IBakedModel getBaseModel() {
-            if(this.baseModel == null) {
-                this.baseModel = this.getModelManager().getModel(
-                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag"));
+        protected IBakedModel getEmptyBagModel() {
+            if(this.baseModelEmpty == null) {
+                this.baseModelEmpty = this.getModelManager().getModel(
+                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
             }
-            return this.baseModel;
+            return this.baseModelEmpty;
+        }
+
+        protected IBakedModel getPartialBagModel() {
+            if(this.baseModelPartial == null) {
+                this.baseModelPartial = this.getModelManager().getModel(
+                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_partial"));
+            }
+            return this.baseModelPartial;
+        }
+
+        protected IBakedModel getFullBagModel() {
+            if(this.baseModelFull == null) {
+                this.baseModelFull = this.getModelManager().getModel(
+                        new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_full"));
+            }
+            return this.baseModelFull;
         }
 
         protected IBakedModel getOrBakeSeedModel(IAgriPlant plant) {

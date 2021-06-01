@@ -1,4 +1,6 @@
 {
 	"parent": "item/generated",
-	"loader": "agricraft:seed_bag_loader"
+	"textures": {
+		"layer0": "agricraft:item/seed_bag"
+	}
 }
