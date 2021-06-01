@@ -161,25 +161,34 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
             if (this.isItemValid(slot, stack)) {
                 return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
                     boolean flag = true;
-                    for(Entry entry : this.contents) {
-                        if(entry.matches(genome)) {
-                            flag = false;
-                            if(!simulate) {
-                                entry.add(stack.getCount());
-                                this.count += stack.getCount();
+                    int amount = Math.min(this.getCapacity() - this.getCount(), stack.getCount());
+                    if(amount > 0) {
+                        for (Entry entry : this.contents) {
+                            if (entry.matches(genome)) {
+                                flag = false;
+                                if (!simulate) {
+                                    entry.add(amount);
+                                    this.count += amount;
+                                }
+                                break;
                             }
-                            break;
+                        }
+                        if (flag && !simulate) {
+                            if (!this.plant.isPlant()) {
+                                this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
+                            }
+                            this.contents.add(new Entry(genome, stack.getCount()));
+                            this.count += stack.getCount();
+                            this.sort();
                         }
                     }
-                    if(flag && !simulate) {
-                        if(!this.plant.isPlant()) {
-                            this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
-                        }
-                        this.contents.add(new Entry(genome, stack.getCount()));
-                        this.count += stack.getCount();
-                        this.sort();
+                    if(amount >= stack.getCount()) {
+                        return ItemStack.EMPTY;
+                    } else {
+                        ItemStack result = stack.copy();
+                        result.setCount(result.getCount() - amount);
+                        return result;
                     }
-                    return ItemStack.EMPTY;
                 }).orElse(stack);
             }
             return stack;
