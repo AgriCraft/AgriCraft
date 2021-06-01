@@ -155,34 +155,35 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if(this.isFull()) {
+            if (this.isFull()) {
                 return stack;
             }
             if (this.isItemValid(slot, stack)) {
                 return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack).map(genome -> {
                     boolean flag = true;
                     int amount = Math.min(this.getCapacity() - this.getCount(), stack.getCount());
-                    if(amount > 0) {
-                        for (Entry entry : this.contents) {
-                            if (entry.matches(genome)) {
-                                flag = false;
-                                if (!simulate) {
-                                    entry.add(amount);
-                                    this.count += amount;
-                                }
-                                break;
+                    if (amount <= 0) {
+                        return stack;
+                    }
+                    for (Entry entry : this.contents) {
+                        if (entry.matches(genome)) {
+                            flag = false;
+                            if (!simulate) {
+                                entry.add(amount);
+                                this.count += amount;
                             }
-                        }
-                        if (flag && !simulate) {
-                            if (!this.plant.isPlant()) {
-                                this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
-                            }
-                            this.contents.add(new Entry(genome, amount));
-                            this.count += amount;
-                            this.sort();
+                            break;
                         }
                     }
-                    if(amount >= stack.getCount()) {
+                    if (flag && !simulate) {
+                        if (!this.plant.isPlant()) {
+                            this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
+                        }
+                        this.contents.add(new Entry(genome, amount));
+                        this.count += amount;
+                        this.sort();
+                    }
+                    if (amount >= stack.getCount()) {
                         return ItemStack.EMPTY;
                     } else {
                         ItemStack result = stack.copy();
