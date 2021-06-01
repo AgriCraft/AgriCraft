@@ -177,8 +177,8 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                             if (!this.plant.isPlant()) {
                                 this.plant = ((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack);
                             }
-                            this.contents.add(new Entry(genome, stack.getCount()));
-                            this.count += stack.getCount();
+                            this.contents.add(new Entry(genome, amount));
+                            this.count += amount;
                             this.sort();
                         }
                     }
