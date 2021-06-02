@@ -49,6 +49,25 @@ public interface IAgriConfig {
      */
     boolean generateMissingDefaultJsons();
 
+    /**
+     * @return true if the coal nugget item is enabled
+     */
+    boolean enableCoalNugget();
+
+    /**
+     * @return true if the diamond nugget item is enabled
+     */
+    boolean enableDiamondNugget();
+
+    /**
+     * @return true if the emerald nugget item is enabled
+     */
+    boolean enableEmeraldNugget();
+
+    /**
+     * @return true if the quartz nugget item is enabled
+     */
+    boolean enableQuartzNugget();
 
     /**
      * @return true if AgriCraft should generate resource crop jsons

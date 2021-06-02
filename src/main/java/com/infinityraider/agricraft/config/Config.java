@@ -23,7 +23,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // core
         private final ForgeConfigSpec.ConfigValue<Boolean> generateMissingDefaults;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
-        private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
@@ -39,6 +38,13 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> animalAttraction;
         private final ForgeConfigSpec.ConfigValue<Integer> seedBagEnchantCost;
         private final ForgeConfigSpec.ConfigValue<Integer> seedBagCapacity;
+
+        // resource crops
+        private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableCoalNugget;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableDiamondNugget;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableEmeraldNugget;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableQuartzNugget;
 
         // stats
         private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
@@ -101,8 +107,6 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Generate missing default JSONs", true);
             this.enableJsonWriteBack = builder.comment("\nSet to false to disable automatic JSON writeback.")
                     .define("Enable JSON write back", true);
-            this.generateResourceCropJsons = builder.comment("\nSet to false to disable the generation of resource crop jsons")
-                    .define("Enable resource crop json generation", true);
             this.plantOffCropSticks = builder.comment("\nSet to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
             this.onlyFertileCropsSpread = builder.comment("\nSet to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
@@ -134,6 +138,19 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("seed bag enchant cost", 10, 0, 30);
             this.seedBagCapacity = builder.comment("\nThe amount of seeds one seed bag can hold")
                     .defineInRange("seed bag capacity", 64, 8, 256);
+            builder.pop();
+
+            builder.push("resource crops");
+            this.generateResourceCropJsons = builder.comment("\nSet to false to disable the generation of resource crop jsons")
+                    .define("Enable resource crop json generation", true);
+            this.enableCoalNugget = builder.comment("\nSet to false to disable the coal nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable coal nugget", true);
+            this.enableDiamondNugget = builder.comment("\nSet to false to disable the diamond nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable diamond nugget", true);
+            this.enableEmeraldNugget = builder.comment("\nSet to false to disable the emerald nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable emerald nugget", true);
+            this.enableQuartzNugget = builder.comment("\nSet to false to disable the quartz nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable quartz nugget", true);
             builder.pop();
 
             builder.push("stats");
@@ -456,6 +473,27 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         public boolean generateMissingDefaultJsons() {
             return this.generateMissingDefaults.get();
         }
+
+        @Override
+        public boolean enableCoalNugget() {
+            return this.enableCoalNugget.get();
+        }
+
+        @Override
+        public boolean enableDiamondNugget() {
+            return this.enableDiamondNugget.get();
+        }
+
+        @Override
+        public boolean enableEmeraldNugget() {
+            return this.enableEmeraldNugget.get();
+        }
+
+        @Override
+        public boolean enableQuartzNugget() {
+            return this.enableQuartzNugget.get();
+        }
+
 
         @Override
         public boolean enableJsonWriteback() {

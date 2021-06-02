@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.ItemGrate;
 import com.infinityraider.agricraft.content.irrigation.*;
@@ -71,10 +72,18 @@ public class AgriItemRegistry {
         this.trowel = new ItemTrowel();
         this.seed_bag = new ItemSeedBag();
 
-        this.nugget_coal =new ItemAgriNugget.Burnable(Names.Nuggets.COAL);
-        this.nugget_diamond = new ItemAgriNugget(Names.Nuggets.DIAMOND);
-        this.nugget_emerald = new ItemAgriNugget(Names.Nuggets.EMERALD);
-        this.nugget_quartz = new ItemAgriNugget(Names.Nuggets.QUARTZ);
+        this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget()
+                ? new ItemAgriNugget.Burnable(Names.Nuggets.COAL)
+                : null;
+        this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget()
+                ? new ItemAgriNugget(Names.Nuggets.DIAMOND)
+                : null;
+        this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget()
+                ? new ItemAgriNugget(Names.Nuggets.EMERALD)
+                : null;
+        this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget()
+                ? new ItemAgriNugget(Names.Nuggets.QUARTZ)
+                : null;
 
         this.grate = new ItemGrate();
     }
