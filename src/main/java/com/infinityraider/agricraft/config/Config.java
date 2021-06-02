@@ -23,6 +23,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // core
         private final ForgeConfigSpec.ConfigValue<Boolean> generateMissingDefaults;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
+        private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
@@ -100,6 +101,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Generate missing default JSONs", true);
             this.enableJsonWriteBack = builder.comment("\nSet to false to disable automatic JSON writeback.")
                     .define("Enable JSON write back", true);
+            this.generateResourceCropJsons = builder.comment("\nSet to false to disable the generation of resource crop jsons")
+                    .define("Enable resource crop json generation", true);
             this.plantOffCropSticks = builder.comment("\nSet to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
             this.onlyFertileCropsSpread = builder.comment("\nSet to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
@@ -457,6 +460,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableJsonWriteback() {
             return this.enableJsonWriteBack.get();
+        }
+
+        @Override
+        public boolean generateResourceCropJsons() {
+            return this.generateResourceCropJsons.get();
         }
 
         @Override

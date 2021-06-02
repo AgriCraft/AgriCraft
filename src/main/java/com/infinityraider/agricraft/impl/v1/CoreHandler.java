@@ -35,8 +35,11 @@ public final class CoreHandler {
     public static final Predicate<String> MOD_FILTER = (path) -> {
         String id = path.substring(path.indexOf("json/defaults/") + 14);
         id = id.substring(0, id.indexOf("/"));
-        if(id.equalsIgnoreCase("vanilla") || id.equalsIgnoreCase("resource")) {
+        if(id.equalsIgnoreCase("vanilla")) {
             return true;
+        }
+        if(id.equalsIgnoreCase("resource")) {
+            return AgriCraft.instance.getConfig().generateResourceCropJsons();
         }
         id = id.replace("mod_", "");
         return  ModList.get().isLoaded(id);
