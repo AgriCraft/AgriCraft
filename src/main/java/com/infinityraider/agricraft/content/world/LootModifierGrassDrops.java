@@ -27,12 +27,14 @@ public class LootModifierGrassDrops extends LootModifier {
     }
 
     private final boolean reset;
+    private final double chance;
     private final Entry[] entries;
     private final int totalWeight;
 
-    protected LootModifierGrassDrops(ILootCondition[] conditions, boolean reset, Entry[] entries) {
+    protected LootModifierGrassDrops(ILootCondition[] conditions, boolean reset, double chance, Entry[] entries) {
         super(conditions);
         this.reset = reset;
+        this.chance = chance;
         this.entries = entries;
         this.totalWeight = Arrays.stream(entries).mapToInt(Entry::getWeight).sum();
     }
@@ -41,13 +43,21 @@ public class LootModifierGrassDrops extends LootModifier {
         return this.reset;
     }
 
+    protected double getChance() {
+        return this.chance;
+    }
+
+    protected boolean roll(Random random) {
+        return this.getChance() <= random.nextDouble();
+    }
+
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         if(this.reset()) {
             generatedLoot.clear();
         }
-        if(generatedLoot.isEmpty() && this.entries.length > 0) {
+        if(this.roll(context.getRandom()) && this.entries.length > 0) {
             Entry entry = this.selectRandomEntry(context.getRandom());
             if(entry != null) {
                 ItemStack stack = entry.generateSeed(context.getRandom());
@@ -145,6 +155,7 @@ public class LootModifierGrassDrops extends LootModifier {
             return new LootModifierGrassDrops(
                     conditions,
                     object.get("reset").getAsBoolean(),
+                    object.get("chance").getAsDouble(),
                     this.readEntries(object.get("seeds").getAsJsonArray())
             );
         }
@@ -176,8 +187,10 @@ public class LootModifierGrassDrops extends LootModifier {
         public JsonObject write(LootModifierGrassDrops instance) {
             JsonObject json = super.makeConditions(instance.conditions);
             json.addProperty("reset", instance.reset());
+            json.addProperty("chance", instance.getChance());
             JsonArray entries = new JsonArray();
             Arrays.stream(instance.entries).map(this::writeEntry).forEach(entries::add);
+            json.add("seeds", entries);
             return json;
         }
 

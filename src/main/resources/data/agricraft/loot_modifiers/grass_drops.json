@@ -2,9 +2,6 @@
   "type":"agricraft:grass_seed_drops",
   "conditions": [
     {
-      "condition":"minecraft:random_chance",
-      "chance": 0.2
-    },{
       "condition":"minecraft:inverted",
       "term":{
         "condition":"minecraft:match_tool",
@@ -18,6 +15,7 @@
     }
   ],
   "reset": true,
+  "chance": 0.2,
   "seeds": [
     {
       "plant": "vanilla:carrot_plant",
