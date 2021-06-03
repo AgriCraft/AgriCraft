@@ -149,6 +149,11 @@ public interface IAgriConfig {
      */
     int seedBagCapacity();
 
+    /**
+     * @return true if AgriCraft grass drop loot modifiers are allowed to reset Vanilla grass drops
+     */
+    boolean allowGrassDropResets();
+
 
     /*
      * --------------------

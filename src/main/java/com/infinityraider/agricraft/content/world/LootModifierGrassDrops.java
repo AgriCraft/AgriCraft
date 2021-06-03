@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.world;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.loot.IInfLootModifierSerializer;
@@ -54,10 +55,10 @@ public class LootModifierGrassDrops extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        if(this.reset()) {
+        if(AgriCraft.instance.getConfig().allowGrassDropResets() && this.reset()) {
             generatedLoot.clear();
         }
-        if(this.roll(context.getRandom()) && this.entries.length > 0) {
+        if(generatedLoot.size() <= 0 && this.roll(context.getRandom()) && this.entries.length > 0) {
             Entry entry = this.selectRandomEntry(context.getRandom());
             if(entry != null) {
                 ItemStack stack = entry.generateSeed(context.getRandom());

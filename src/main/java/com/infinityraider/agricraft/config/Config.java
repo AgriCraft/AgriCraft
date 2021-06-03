@@ -38,6 +38,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> animalAttraction;
         private final ForgeConfigSpec.ConfigValue<Integer> seedBagEnchantCost;
         private final ForgeConfigSpec.ConfigValue<Integer> seedBagCapacity;
+        private final ForgeConfigSpec.ConfigValue<Boolean> allowGrassDropResets;
 
         // resource crops
         private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
@@ -138,6 +139,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("seed bag enchant cost", 10, 0, 30);
             this.seedBagCapacity = builder.comment("\nThe amount of seeds one seed bag can hold")
                     .defineInRange("seed bag capacity", 64, 8, 256);
+            this.allowGrassDropResets = builder.comment("\nSet to false if AgriCraft loot modifiers are not allowed to reset grass drops (this overrides the \"reset\" property in the loot entries")
+                    .define("Allow Grass Drop Resets", true);
             builder.pop();
 
             builder.push("resource crops");
@@ -327,6 +330,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public int seedBagCapacity() {
             return this.seedBagCapacity.get();
+        }
+
+        @Override
+        public boolean allowGrassDropResets() {
+            return this.allowGrassDropResets.get();
         }
 
         @Override
