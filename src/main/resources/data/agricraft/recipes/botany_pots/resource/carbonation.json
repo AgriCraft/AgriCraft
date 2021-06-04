@@ -6,7 +6,7 @@
       "modid": "botanypots"
     }
   ],
-  "plant": "vanilla:wheat_plant",
-  "growthTicks": 1600,
-  "growthStatFactor": 0.03333333333333333
+  "plant": "resource:carbonation_plant",
+  "growthTicks": 3428,
+  "growthStatFactor": 0.07142857142857144
 }

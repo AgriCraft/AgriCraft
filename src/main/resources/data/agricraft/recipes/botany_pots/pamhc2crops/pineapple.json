@@ -4,9 +4,13 @@
     {
       "type": "forge:mod_loaded",
       "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "pamhc2crops"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "pamhc2crops:pineapple_plant",
   "growthTicks": 1600,
   "growthStatFactor": 0.03333333333333333
 }

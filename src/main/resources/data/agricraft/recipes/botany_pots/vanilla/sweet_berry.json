@@ -6,7 +6,7 @@
       "modid": "botanypots"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "vanilla:sweet_berry_plant",
   "growthTicks": 1600,
   "growthStatFactor": 0.03333333333333333
 }

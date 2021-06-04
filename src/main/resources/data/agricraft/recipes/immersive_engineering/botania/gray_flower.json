@@ -1,0 +1,16 @@
+{
+  "type": "agricraft:agri_cloche_recipe",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botania"
+    }
+  ],
+  "plant": "botania:gray_flower_plant",
+  "growthTicks": 1500,
+  "growthStatFactor": 0.05
+}

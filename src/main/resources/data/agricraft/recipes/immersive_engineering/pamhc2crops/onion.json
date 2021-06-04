@@ -4,9 +4,13 @@
     {
       "type": "forge:mod_loaded",
       "modid": "immersiveengineering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "pamhc2crops"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "pamhc2crops:onion_plant",
   "growthTicks": 1000,
   "growthStatFactor": 0.03333333333333333
 }

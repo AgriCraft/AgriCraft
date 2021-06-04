@@ -4,9 +4,13 @@
     {
       "type": "forge:mod_loaded",
       "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "buzzier_bees"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "buzzier_bees:pink_clover_plant",
   "growthTicks": 1600,
   "growthStatFactor": 0.03333333333333333
 }

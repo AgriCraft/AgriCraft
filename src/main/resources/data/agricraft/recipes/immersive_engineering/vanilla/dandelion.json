@@ -6,7 +6,7 @@
       "modid": "immersiveengineering"
     }
   ],
-  "plant": "vanilla:wheat_plant",
-  "growthTicks": 1000,
-  "growthStatFactor": 0.03333333333333333
+  "plant": "vanilla:dandelion_plant",
+  "growthTicks": 1153,
+  "growthStatFactor": 0.038461538461538464
 }

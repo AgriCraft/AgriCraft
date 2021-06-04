@@ -4,9 +4,17 @@
     {
       "type": "forge:mod_loaded",
       "modid": "immersiveengineering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mekanism"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "metalbushesmod"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "metalbushesmod:copper_bush_plant",
   "growthTicks": 1000,
   "growthStatFactor": 0.03333333333333333
 }

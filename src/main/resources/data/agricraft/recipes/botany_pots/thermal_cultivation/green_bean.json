@@ -4,9 +4,13 @@
     {
       "type": "forge:mod_loaded",
       "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "thermal_cultivation"
     }
   ],
-  "plant": "vanilla:wheat_plant",
+  "plant": "thermal:green_bean_plant",
   "growthTicks": 1600,
   "growthStatFactor": 0.03333333333333333
 }

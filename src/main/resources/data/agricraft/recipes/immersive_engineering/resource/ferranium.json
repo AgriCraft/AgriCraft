@@ -6,7 +6,7 @@
       "modid": "immersiveengineering"
     }
   ],
-  "plant": "vanilla:wheat_plant",
-  "growthTicks": 1000,
-  "growthStatFactor": 0.03333333333333333
+  "plant": "resource:ferranium_plant",
+  "growthTicks": 1500,
+  "growthStatFactor": 0.05
 }
