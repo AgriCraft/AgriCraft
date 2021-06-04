@@ -24,7 +24,7 @@ Agricultural farming extended
 [[dependencies.agricraft]]
     modId="infinitylib"
     mandatory=true
-    versionRange="[1.16.5-2.0.2,)"
+    versionRange="[1.16.5-2.0.3,)"
     ordering="AFTER"
     side="BOTH"
 
