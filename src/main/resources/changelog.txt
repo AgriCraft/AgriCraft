@@ -37,17 +37,18 @@ Changelog
 - ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
 - ADDED: new resource plant: Carbonation
-- ADDED: Default jsons for Botania (thanks Nelson Brichau)
-- ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson Brichau)
-- ADDED: Default jsons for Immersive Engineering (thanks Nelson Brichau)
-- ADDED: Default jsons for Farmer's Delight (thanks Nelson Brichau)
-- ADDED: Default jsons for Thermal Cultivation (thanks Nelson Brichau)
-- ADDED: Default jsons for Simple Farming (thanks Nelson Brichau)
-- ADDED: Default jsons for Quark (thanks Nelson Brichau)
-- ADDED: Default jsons for XL Food Mod (thanks Nelson Brichau)
-- ADDED: Default jsons for Metal Bushes (thanks Nelson Brichau)
-- ADDED: Default jsons for Buzzier Bees (thanks Nelson Brichau)
-- ADDED: Default jsons for Atmospheric (thanks Nelson Brichau)
+- ADDED: Default jsons for Atmospheric (thanks Nelson)
+- ADDED: Default jsons for Autumnity (thanks Nelson)
+- ADDED: Default jsons for Botania (thanks Nelson)
+- ADDED: Default jsons for Buzzier Bees (thanks Nelson)
+- ADDED: Default jsons for Farmer's Delight (thanks Nelson)
+- ADDED: Default jsons for Immersive Engineering (thanks Nelson)
+- ADDED: Default jsons for Metal Bushes (thanks Nelson)
+- ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson)
+- ADDED: Default jsons for Quark (thanks Nelson)
+- ADDED: Default jsons for Simple Farming (thanks Nelson)
+- ADDED: Default jsons for Thermal Cultivation (thanks Nelson)
+- ADDED: Default jsons for XL Food Mod (thanks Nelson)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
 - ADDED: Compatibility with Botania's Horn and Drum of the Wild
 - ADDED: Initial Compatibility with Botany Pots (requires elaboration on Botany Pots side to complete)

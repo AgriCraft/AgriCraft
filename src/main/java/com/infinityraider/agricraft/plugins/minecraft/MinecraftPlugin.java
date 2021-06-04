@@ -24,6 +24,8 @@ public class MinecraftPlugin implements IAgriPlugin {
     public final JsonPlantCallback redstone;
     public final JsonPlantCallback thorns;
     public final JsonPlantCallback withering;
+    public final JsonPlantCallback poisoning;
+    public final JsonPlantCallback bushy;
 
     public MinecraftPlugin() {
         this.experience = JsonPlantCallBackExperience.getInstance();
@@ -31,6 +33,8 @@ public class MinecraftPlugin implements IAgriPlugin {
         this.redstone = JsonPlantCallBackRedstone.getInstance();
         this.thorns = JsonPlantCallBackThorns.getInstance();
         this.withering = JsonPlantCallBackWithering.getInstance();
+        this.poisoning = JsonPlantCallBackPoisoning.getInstance();
+        this.bushy = JsonPlantCallBackBushy.getInstance();
     }
 
     @Override

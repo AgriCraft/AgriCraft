@@ -526,6 +526,11 @@
   "agricraft.plant.atmospheric_water_hyacinth.desc": "It's too invasive to be left alive.",
 
   "agricraft.plant.atmospheric_yucca_flower.seeds": "Yucca Flower Seeds",
-  "agricraft.plant.atmospheric_yucca_flower.desc": "You can use the leaves as a sword."
+  "agricraft.plant.atmospheric_yucca_flower.desc": "You can use the leaves as a sword.",
+
+  "agricraft.plant.autumnity_autumn_crocus.seed": "Autumn Crocus Seeds",
+  "agricraft.plant.autumnity_autumn_crocus.desc": "Fake saffron.",
+
+  "agricraft.plant.autumnity_foul_berry.desc": "Not so sweet."
 
 }
