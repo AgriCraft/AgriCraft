@@ -236,7 +236,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             this.enableBloodMagicCompat = builder.comment("\nSet to false to disable compatibility with Blood Magic (in case things break)")
                     .define("Enable Blood Magic compat", true);
             this.enableBotaniaCompat = builder.comment("\nSet to false to disable compatibility with Botania (in case things break)")
-                    .define("Enable Botany Pots compat", true);
+                    .define("Enable Botania compat", true);
             this.enableBotanyPotsCompat = builder.comment("\nSet to false to disable compatibility with Botany Pots (in case things break)")
                     .define("Enable Botany Pots compat", true);
             this.enableCreateCompat = builder.comment("\nSet to false to disable compatibility with Create (in case things break)")

@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
 [[mods]]
 modId="agricraft"
-version="1.16.5-3.0.0"
+version="1.16.5-3.0.1"
 displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
 logoFile="logo.png"

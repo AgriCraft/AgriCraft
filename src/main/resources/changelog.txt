@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.1
+- FIXED: Botany Pots and Botani compat sharing their config options
+
 3.0.0
 - CHANGE: Ported to 1.16.5
 - CHANGE: Crop breeding now follows Mendelian genetics instead of arbitrary logic based on parent/child relations
