@@ -23,9 +23,12 @@ public class JsonPlantCallBackPoisoning extends JsonPlantCallback {
     }
 
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
-        if(entity instanceof LivingEntity && !entity.isSneaking()) {
-            EffectInstance poison = new EffectInstance(Effects.POISON, (int) (10*crop.getStats().getAverage()));
-            ((LivingEntity) entity).addPotionEffect(poison);
+        if (entity instanceof LivingEntity && !entity.isSneaking() && !entity.getEntityWorld().isRemote) {
+            LivingEntity livingEntity = ((LivingEntity) entity);
+            if (!livingEntity.isPotionActive(Effects.POISON)) {
+                EffectInstance poison = new EffectInstance(Effects.POISON, (int) (20 * crop.getStats().getAverage()));
+                ((LivingEntity) entity).addPotionEffect(poison);
+            }
         }
     }
 }
