@@ -1,6 +1,7 @@
 Changelog
 ---------
 3.0.1
+- CHANGE: Seeds Dropped from grass will have stats equal to 1 by default
 - FIXED: Botany Pots and Botani compat sharing their config options
 - FIXED: IE Cloche recipes sometimes returning null ItemStacks
 - FIXED: Agricultural Journal not readable at extreme FOVs
