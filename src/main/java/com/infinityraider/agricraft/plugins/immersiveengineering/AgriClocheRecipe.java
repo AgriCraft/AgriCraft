@@ -135,7 +135,8 @@ public class AgriClocheRecipe extends ClocheRecipe {
                 product.setValue(stack);
             }
         });
-        return product.getValue();
+        ItemStack result = product.getValue();
+        return result == null ? ItemStack.EMPTY : result;
     }
 
     @Override

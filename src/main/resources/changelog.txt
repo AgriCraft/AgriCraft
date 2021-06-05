@@ -2,6 +2,7 @@ Changelog
 ---------
 3.0.1
 - FIXED: Botany Pots and Botani compat sharing their config options
+- FIXED: IE Cloche recipes sometimes returning null ItemStacks
 
 3.0.0
 - CHANGE: Ported to 1.16.5
