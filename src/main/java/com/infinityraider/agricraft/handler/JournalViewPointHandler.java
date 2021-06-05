@@ -257,7 +257,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     protected Vector3d calculateObserverPosition(double fov) {
         // calculate offset based on fov
-        double d = 0.75 * (0.5/Math.tan(Math.PI * fov / 360));
+        double d = ((0.35/2)/Math.tan(0.5*Math.PI * fov / 360));
         // Determine x, y and z offsets
         double dx, dz;
         double dy = DY + d*MathHelper.sin((float) Math.PI * PITCH / 180);
