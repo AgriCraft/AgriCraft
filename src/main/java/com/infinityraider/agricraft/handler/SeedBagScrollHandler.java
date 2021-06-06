@@ -3,9 +3,11 @@ package com.infinityraider.agricraft.handler;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.network.MessageSyncSeedBagSortMode;
+import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -33,6 +35,8 @@ public class SeedBagScrollHandler {
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
             if(bag.incrementSorter(stack, delta)) {
                 new MessageSyncSeedBagSortMode(hand, bag.getContents(stack).getSorterIndex()).sendToServer();
+                SeedBagShakeHandler.getInstance().shake(hand);
+                AgriCraft.instance.getClientPlayer().sendMessage(AgriToolTips.MSG_SEED_BAG_SHAKE, Util.DUMMY_UUID);
                 return true;
             }
         }

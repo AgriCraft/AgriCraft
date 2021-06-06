@@ -100,6 +100,7 @@ public class AgriToolTips {
     // Feedback messages
     public static final ITextComponent MSG_ANALYZER_VIEW_BLOCKED = new TranslationTextComponent("agricraft.message.analyzer_view_blocked");
     public static final ITextComponent MSG_CLIPPING_IMPOSSIBLE = new TranslationTextComponent("agricraft.message.clipping_impossible");
+    public static final ITextComponent MSG_SEED_BAG_SHAKE = new TranslationTextComponent("agricraft.message.seed_bag_shake");
     public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.message.trowel_weed");
     public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");
     public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.message.trowel_no_plant");

@@ -174,6 +174,7 @@
 
   "agricraft.message.analyzer_view_blocked": "I can not observe the seed like this, the view is obstructed.",
   "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
+  "agricraft.message.seed_bag_shake": "You shake the bag furiously to shuffle the seeds.",
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
   "agricraft.message.trowel_plant": "There already is a plant here.",
   "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
