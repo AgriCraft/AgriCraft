@@ -8,6 +8,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -36,7 +38,15 @@ public class SeedBagScrollHandler {
             if(bag.incrementSorter(stack, delta)) {
                 new MessageSyncSeedBagSortMode(hand, bag.getContents(stack).getSorterIndex()).sendToServer();
                 SeedBagShakeHandler.getInstance().shake(hand);
-                AgriCraft.instance.getClientPlayer().sendMessage(AgriToolTips.MSG_SEED_BAG_SHAKE, Util.DUMMY_UUID);
+                ItemSeedBag.IContents contents = bag.getContents(stack);
+                IFormattableTextComponent message = new StringTextComponent("")
+                        .append(contents.getSorter().describe())
+                        .append(new StringTextComponent(", "))
+                        .append(AgriToolTips.MSG_SEED_BAG_SHAKE);
+                if(contents.getCount() <= 0) {
+                    message.append(new StringTextComponent(" ")).append(AgriToolTips.MSG_SEED_BAG_EMPTY);
+                }
+                AgriCraft.instance.getClientPlayer().sendMessage(message, Util.DUMMY_UUID);
                 return true;
             }
         }

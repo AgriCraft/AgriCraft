@@ -268,13 +268,17 @@ public class ItemSeedBag extends ItemBase {
 
     public interface ISorter extends Comparator<IAgriGenome> {
         ITextComponent getName();
+
+        ITextComponent describe();
     }
 
     public static class StatSorter implements ISorter {
         private final IAgriStat stat;
+        private final ITextComponent description;
 
         protected StatSorter(IAgriStat stat) {
             this.stat = stat;
+            this.description = new TranslationTextComponent("agricraft.message.seed_bag_sorter." + stat.getId());
         }
 
         public IAgriStat getStat() {
@@ -284,6 +288,11 @@ public class ItemSeedBag extends ItemBase {
         @Override
         public ITextComponent getName() {
             return this.getStat().getDescription();
+        }
+
+        @Override
+        public ITextComponent describe() {
+            return this.description;
         }
 
         @Override
@@ -301,6 +310,11 @@ public class ItemSeedBag extends ItemBase {
         @Override
         public ITextComponent getName() {
             return AgriToolTips.SEED_BAG_SORTER_DEFAULT;
+        }
+
+        @Override
+        public ITextComponent describe() {
+            return AgriToolTips.MSG_SEED_BAG_DEFAULT_SORTER;
         }
 
         @Override
