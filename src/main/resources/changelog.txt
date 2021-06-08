@@ -1,8 +1,11 @@
 Changelog
 ---------
 3.0.2
+- ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
+- ADDED: Default jsons for Environmental (thanks Nelson)
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create
+- FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Nelson)
 
 3.0.1
 - CHANGE: Seeds Dropped from grass will have stats equal to 1 by default
