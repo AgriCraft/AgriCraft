@@ -49,7 +49,7 @@ public class LootModifierGrassDrops extends LootModifier {
     }
 
     protected boolean roll(Random random) {
-        return this.getChance() <= random.nextDouble();
+        return random.nextDouble() < this.getChance();
     }
 
     @Nonnull
