@@ -1,11 +1,10 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.reference.Names;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.ModList;
@@ -15,10 +14,15 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public abstract class SeasonPlugin implements IAgriPlugin {
-    public static final List<String> SEASON_MODS = ImmutableList.of(
-            Names.Mods.BETTER_WEATHER,
-            Names.Mods.SERENE_SEASONS
-    );
+    private static final List<String> SEASON_MODS = Lists.newArrayList();
+
+    public static List<String> getSeasonMods() {
+        return SEASON_MODS;
+    }
+
+    protected SeasonPlugin() {
+        SEASON_MODS.add(this.getId());
+    }
 
     public static String getConfigComment() {
         StringBuilder builder = new StringBuilder();

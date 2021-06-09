@@ -230,7 +230,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             this.progressiveJEI = builder.comment("\nSet to false if you want all mutations to be shown in JEI all the time instead of having to research them")
                     .define("Progressive JEI", true);
             this.seasonLogic = builder.comment("\nDefines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
-                    .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.SEASON_MODS);
+                    .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.getSeasonMods());
             this.topControlledByMagnifyingGlass = builder.comment("\nDefines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
                     .define("TOP only with magnifying glass", true);
             this.enableBloodMagicCompat = builder.comment("\nSet to false to disable compatibility with Blood Magic (in case things break)")

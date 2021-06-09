@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.*;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.network.*;
 import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
 import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
@@ -38,6 +39,7 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     @Override
     protected void onModConstructed() {
         instance = this;
+        PluginHandler.initPlugins();
     }
 
     @Override

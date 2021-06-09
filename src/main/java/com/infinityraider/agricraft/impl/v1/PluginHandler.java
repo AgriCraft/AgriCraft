@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
@@ -18,12 +19,14 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.forgespi.language.ModFileScanData;
@@ -34,12 +37,13 @@ public final class PluginHandler {
     @Nonnull
     private static final Deque<IAgriPlugin> PLUGINS = new ConcurrentLinkedDeque<>();
 
+    public static void initPlugins() {
+        PLUGINS.addAll(getInstances(getScanData(), AgriPlugin.class, IAgriPlugin.class));
+        PLUGINS.forEach(PluginHandler::logPlugin);
+    }
+
     public static void onCommonSetup(FMLCommonSetupEvent event) {
-        PLUGINS.addAll(getInstances(getScanData(event), AgriPlugin.class, IAgriPlugin.class));
-        PLUGINS.stream()
-                .peek(PluginHandler::logPlugin)
-                .filter(IAgriPlugin::isEnabled)
-                .forEach(plugin -> plugin.onCommonSetupEvent(event));
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onCommonSetupEvent(event));
     }
 
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -145,28 +149,20 @@ public final class PluginHandler {
         return instances;
     }
 
-    private static ModFileScanData getScanData(FMLCommonSetupEvent event) {
-        FMLModContainer container = null;
-        try {
-            Field field = ModLifecycleEvent.class.getDeclaredField("container");
-            field.setAccessible(true);
-            container = (FMLModContainer) field.get(event);
-        } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
-            AgriCore.getLogger("agricraft-plugins").error(
-                    "Failed to fetch ModContainer from FMLCommonSetupEvent");
-        }
-        if(container == null) {
-            return null;
-        }
-        try {
-            Field field = FMLModContainer.class.getDeclaredField("scanResults");
-            field.setAccessible(true);
-            return (ModFileScanData) field.get(container);
-        } catch(IllegalAccessException | NoSuchFieldException | ClassCastException e) {
-            AgriCore.getLogger("agricraft-plugins").error(
-                    "Failed to fetch ModFileScanData from FMLModContainer");
-        }
-        return null;
+    private static ModFileScanData getScanData() {
+        return ModList.get().getModContainerById(AgriCraft.instance.getModId())
+                .flatMap(mc -> mc instanceof FMLModContainer ? Optional.of((FMLModContainer) mc) : Optional.empty())
+                .flatMap(container -> {
+                    try {
+                        Field field = FMLModContainer.class.getDeclaredField("scanResults");
+                        field.setAccessible(true);
+                        return Optional.ofNullable((ModFileScanData) field.get(container));
+                    } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
+                        AgriCore.getLogger("agricraft-plugins").error(
+                                "Failed to fetch ModFileScanData from FMLModContainer");
+                    }
+                    return Optional.empty();
+                }).orElse(null);
     }
     
     private static void logPlugin(IAgriPlugin plugin) {
