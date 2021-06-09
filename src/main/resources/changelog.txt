@@ -3,6 +3,7 @@ Changelog
 3.0.2
 - ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
 - ADDED: Default jsons for Environmental (thanks Nelson)
+- ADDED: Default jsons for Upgrade Aquatic (thanks Nelson)
 - ADDED: Season Compatibility with Simply Seasons
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create
