@@ -1,15 +1,18 @@
 Changelog
 ---------
 3.0.2
+- ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
+- ADDED: Default jsons for Environmental (thanks Nelson)
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create
+- FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Nelson)
 - FIXED: Seed Drop probabilities from grass being inverted
 
 3.0.1
 - CHANGE: Seeds Dropped from grass will have stats equal to 1 by default
 - ADDED: Changing sorting mode on the seed bag now causes you to shake the seed bag to shuffle the seeds
 - ADDED: Changing sorting mode on the seed bag now displays a message indicating the sorting mode
-- FIXED: Botany Pots and Botani compat sharing their config options
+- FIXED: Botany Pots and Botania compat sharing their config options
 - FIXED: IE Cloche recipes sometimes returning null ItemStacks
 - FIXED: Agricultural Journal not readable at extreme FOVs
 

@@ -229,6 +229,10 @@
   "agricraft.plant.beet_root.seed": "Beet Root Seeds",
   "agricraft.plant.beet_root.desc": "Beet. It's what's for dinner.",
 
+  "agricraft.plant.bluet.name": "Azure Bluet",
+  "agricraft.plant.bluet.seed": "Azure Bluet Seeds",
+  "agricraft.plant.bluet.desc": "Delicate ladies.",
+
   "agricraft.plant.brown_mushroom.name": "Brown Mushroom",
   "agricraft.plant.brown_mushroom.seed": "Brown Mushroom Spores",
   "agricraft.plant.brown_mushroom.desc": "A simple decomposer.",
@@ -541,6 +545,45 @@
   "agricraft.plant.autumnity_autumn_crocus.seed": "Autumn Crocus Seeds",
   "agricraft.plant.autumnity_autumn_crocus.desc": "Fake saffron.",
 
-  "agricraft.plant.autumnity_foul_berry.desc": "Not so sweet."
+  "agricraft.plant.autumnity_foul_berry.seed": "Foul Berry Seeds",
+  "agricraft.plant.autumnity_foul_berry.desc": "Not so sweet.",
+
+  "agricraft.plant.environmental_bluebell.seed": "Bluebell Seeds",
+  "agricraft.plant.environmental_bluebell.desc": "Ring it.",
+
+  "agricraft.plant.environmental_cartwheel.seed": "Cartwheel Seeds",
+  "agricraft.plant.environmental_cartwheel.desc": "Turn! Turn! Turn!",
+
+  "agricraft.plant.environmental_cattail.desc": "Not really the tail of the cat.",
+
+  "agricraft.plant.environmental_dianthus.seed": "Dianthus Seeds",
+  "agricraft.plant.environmental_dianthus.desc": "Lil' ball of moss.",
+
+  "agricraft.plant.environmental_magenta_hibiscus.seed": "Magenta Hibiscus Seeds",
+  "agricraft.plant.environmental_magenta_hibiscus.desc": "Lighter variant of the purple hibiscus.",
+
+  "agricraft.plant.environmental_orange_hibiscus.seed": "Orange Hibiscus Seeds",
+  "agricraft.plant.environmental_orange_hibiscus.desc": "The child of the red hibiscus and the yellow hibiscus.",
+
+  "agricraft.plant.environmental_pink_hibiscus.seed": "Pink Hibiscus Seeds",
+  "agricraft.plant.environmental_pink_hibiscus.desc": "The girliest hibiscus.",
+
+  "agricraft.plant.environmental_purple_hibiscus.seed": "Purple Hibiscus Seeds",
+  "agricraft.plant.environmental_purple_hibiscus.desc": "Purplelicious.",
+
+  "agricraft.plant.environmental_red_hibiscus.seed": "Red Hibiscus Seeds",
+  "agricraft.plant.environmental_red_hibiscus.desc": "Next gen poppy.",
+
+  "agricraft.plant.environmental_yellow_hibiscus.seed": "Yellow Hibiscus Seeds",
+  "agricraft.plant.environmental_yellow_hibiscus.desc": "Shiny!",
+
+  "agricraft.plant.environmental_red_lotus_flower.seed": "Red Lotus Flower Seeds",
+  "agricraft.plant.environmental_red_lotus_flower.desc": "Embellish your ponds.",
+
+  "agricraft.plant.environmental_white_lotus_flower.seed": "White Lotus Flower Seeds",
+  "agricraft.plant.environmental_white_lotus_flower.desc": "Uncolored version of the red lotus flower.",
+
+  "agricraft.plant.environmental_violet.seed": "Violet Seeds",
+  "agricraft.plant.environmental_violet.desc": "A beautiful ornamental flower to use in your garden."
 
 }

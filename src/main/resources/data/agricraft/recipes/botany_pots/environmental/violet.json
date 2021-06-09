@@ -1,0 +1,16 @@
+{
+  "type": "agricraft:botany_pots_crop",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "environmental"
+    }
+  ],
+  "plant": "environmental:violet_plant",
+  "growthTicks": 1600,
+  "growthStatFactor": 0.03333333333333333
+}
