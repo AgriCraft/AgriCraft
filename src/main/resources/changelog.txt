@@ -7,6 +7,7 @@ Changelog
 - ADDED: Season Compatibility with Simply Seasons
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create
+- FIXED: Server crash with Immersive Engineering
 - FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Nelson)
 - FIXED: Seed Drop probabilities from grass being inverted
 

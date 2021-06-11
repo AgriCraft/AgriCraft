@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +33,13 @@ public class ImmersiveEngineeringPlugin implements IAgriPlugin {
     public void onClientSetupEvent(FMLClientSetupEvent event) {
         if(this.isEnabled() && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
             ImmersiveEngineeringCompatClient.registerRenderFunction();
+        }
+    }
+
+    @Override
+    public void onServerSetupEvent(FMLDedicatedServerSetupEvent event) {
+        if(this.isEnabled() && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
+            ImmersiveEngineeringCompat.registerDummyRenderFunction();
         }
     }
 

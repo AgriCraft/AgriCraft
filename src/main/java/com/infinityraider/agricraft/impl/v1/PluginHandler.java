@@ -50,6 +50,10 @@ public final class PluginHandler {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onClientSetupEvent(event));
     }
 
+    public static void onServerSetup(FMLDedicatedServerSetupEvent event) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onServerSetupEvent(event));
+    }
+
     private static void executeForPlugins(Consumer<IAgriPlugin> consumer) {
         PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(consumer);
     }
