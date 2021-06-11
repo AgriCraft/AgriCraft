@@ -216,10 +216,10 @@ dependencies {
     //runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT")
 
     //Botany pots
-    compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
-    compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
-    //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.0.9")
-    //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.0.7")   //Botany Pots runtime dependency
+    compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
+    compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
+    runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
+    runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
 
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
@@ -244,8 +244,8 @@ dependencies {
     //Simply Seasons
     compileOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
     compileOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
-    runtimeOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
-    runtimeOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
+    //runtimeOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
+    //runtimeOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
 
     //Straw Golems
     compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")

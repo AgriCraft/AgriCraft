@@ -35,6 +35,10 @@ public class VanillaPlantingHandler {
         this.exceptions.add(item);
     }
 
+    public boolean isException(ItemStack stack) {
+        return this.exceptions.contains(stack.getItem());
+    }
+
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
@@ -47,7 +51,7 @@ public class VanillaPlantingHandler {
         final ItemStack stack = event.getItemStack();
 
         // If the item is an exception, cancel
-        if(this.exceptions.contains(stack.getItem())) {
+        if(this.isException(event.getItemStack())) {
             return;
         }
 

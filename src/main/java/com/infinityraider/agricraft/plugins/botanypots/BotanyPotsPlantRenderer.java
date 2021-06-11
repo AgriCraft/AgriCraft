@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.render.models.AgriPlantModelBridge;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
@@ -37,8 +38,8 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
                 () -> this.getVertexBufferTessellator(aBuffer, this.getRenderType()))).get();
     }
 
-    public void renderPlant(IAgriPlant plant, IAgriGrowthStage stage, MatrixStack matrix, IRenderTypeBuffer buffer,
-                            int light, int overlay, Direction... preferredSides) {
+    public void renderPlant(IAgriPlant plant, IAgriGrowthStage stage, IAgriWeed weed, IAgriGrowthStage weedStage,
+                            MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
         if(buffer instanceof IRenderTypeBuffer.Impl) {
             ITessellator tessellator = this.getTessellator((IRenderTypeBuffer.Impl) buffer);
             tessellator.pushMatrix();
@@ -49,6 +50,7 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
 
             tessellator.startDrawingQuads();
             tessellator.addQuads(this.fetchQuads(plant, stage, preferredSides));
+            tessellator.addQuads(this.fetchQuads(weed, weedStage, preferredSides));
             tessellator.draw();
 
             tessellator.popMatrix();
@@ -61,6 +63,15 @@ public class BotanyPotsPlantRenderer implements IRenderUtilities {
             quads.addAll(AgriPlantModelBridge.getOrBakeQuads(plant, stage, dir));
         }
         quads.addAll(AgriPlantModelBridge.getOrBakeQuads(plant, stage, null));
+        return quads;
+    }
+
+    protected List<BakedQuad> fetchQuads(IAgriWeed weed, IAgriGrowthStage stage, Direction... sides) {
+        List<BakedQuad> quads = Lists.newArrayList();
+        for(Direction dir : sides) {
+            quads.addAll(AgriPlantModelBridge.getOrBakeQuads(weed, stage, dir));
+        }
+        quads.addAll(AgriPlantModelBridge.getOrBakeQuads(weed, stage, null));
         return quads;
     }
 

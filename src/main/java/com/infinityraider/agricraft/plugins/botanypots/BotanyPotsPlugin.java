@@ -32,6 +32,7 @@ public class BotanyPotsPlugin implements IAgriPlugin {
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
         if (this.isEnabled() && AgriCraft.instance.getConfig().enableBotanyPotsCompat()) {
+            BotanyCropsCompat.registerEventHandler();
             BotanyCropsCompat.registerCapability();
         }
     }

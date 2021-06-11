@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.plugins.botanypots;
 
-import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -12,7 +11,6 @@ import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
@@ -20,10 +18,10 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
-import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
+import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriToolTips;
+import com.infinityraider.agricraft.util.CropHelper;
 import net.darkhax.botanypots.BotanyPotHelper;
 import net.darkhax.botanypots.block.BlockBotanyPot;
 import net.darkhax.botanypots.block.tileentity.TileEntityBotanyPot;
@@ -77,32 +75,64 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
     @Override
     public void writeToNBT(CompoundNBT tag, Impl crop) {
         tag.putString(AgriNBT.GROWTH, crop.stage.getId());
-        tag.putString(AgriNBT.WEED_GROWTH, crop.next.getId());
+        tag.putString(AgriNBT.PLANT, crop.nextStage.getId());
+        tag.putString(AgriNBT.WEED, crop.weed.getId());
+        tag.putString(AgriNBT.WEED_GROWTH, crop.weedStage.getId());
+        tag.putString(AgriNBT.CONTENTS, crop.nextWeedStage.getId());
+        tag.putInt(AgriNBT.LEVEL, crop.weedCounter);
     }
 
     @Override
     public void readFromNBT(CompoundNBT tag, Impl crop) {
-        if(tag.contains(AgriNBT.GROWTH) && tag.contains(AgriNBT.WEED_GROWTH)) {
+        if(tag.contains(AgriNBT.GROWTH) && tag.contains(AgriNBT.PLANT)) {
             crop.stage = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NoGrowth.getInstance());
-            crop.next = crop.stage.isGrowthStage()
-                    ? AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NoGrowth.getInstance())
+            crop.nextStage = crop.stage.isGrowthStage()
+                    ? AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoGrowth.getInstance())
                     : crop.stage;
+        }
+        if(tag.contains(AgriNBT.GROWTH) && tag.contains(AgriNBT.PLANT)) {
+            crop.weed = AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NoWeed.getInstance());
+            if(crop.weed.isWeed()) {
+                crop.weedStage = AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NoGrowth.getInstance());
+                crop.nextWeedStage = crop.weedStage.isGrowthStage()
+                        ? AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.CONTENTS)).orElse(NoGrowth.getInstance())
+                        : crop.weedStage;
+                crop.weedCounter = tag.contains(AgriNBT.LEVEL) ? tag.getInt(AgriNBT.WEED) : 0;
+            } else {
+                crop.weedStage = NoGrowth.getInstance();
+                crop.nextWeedStage = NoGrowth.getInstance();
+                crop.weedCounter = 0;
+            }
         }
     }
 
-    // TODO: when the events come to botany pots: cache genome and implement callbacks, potentially implement weeds as well
     public static class Impl implements IAgriCrop {
+        private static final int WEED_GROWTH_TICKS = 1000;
+
         // Tile Entity instance
         private final TileEntityBotanyPot pot;
 
         // Growth stage cache
         private IAgriGrowthStage stage;
-        private IAgriGrowthStage next;
+        private IAgriGrowthStage nextStage;
+
+        // Weeds
+        private IAgriWeed weed;
+        private IAgriGrowthStage weedStage;
+        private IAgriGrowthStage nextWeedStage;
+        private int weedCounter;
+
+        // Requirement cache
+        private final RequirementCache requirement;
 
         private Impl(TileEntityBotanyPot pot) {
             this.pot = pot;
             this.stage = NoGrowth.getInstance();
-            this.next = NoGrowth.getInstance();
+            this.nextStage = NoGrowth.getInstance();
+            this.weed = NoWeed.getInstance();
+            this.weedStage = NoGrowth.getInstance();
+            this.nextWeedStage = NoGrowth.getInstance();
+            this.requirement = RequirementCache.create(this);
         }
 
         @Override
@@ -141,11 +171,11 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                 return NoGrowth.getInstance();
             }
             if(this.hasPlant()) {
-                if (this.stage.isGrowthStage() && this.next.isGrowthStage()) {
+                if (this.stage.isGrowthStage() && this.nextStage.isGrowthStage()) {
                     float progress = this.asTile().getGrowthPercent();
-                    if(progress >= this.next.growthPercentage() && !this.stage.isFinal()) {
-                        this.stage = this.next;
-                        this.next = this.stage.getNextStage(this, world.getRandom());
+                    if(progress >= this.nextStage.growthPercentage() && !this.stage.isFinal()) {
+                        this.stage = this.nextStage;
+                        this.nextStage = this.stage.getNextStage(this, world.getRandom());
                     }
                 } else {
                     float progress = this.asTile().getGrowthPercent();
@@ -153,11 +183,11 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                             .sorted(Comparator.comparingDouble(IAgriGrowthStage::growthPercentage))
                             .filter(stage -> stage.growthPercentage() >= progress)
                             .findFirst().orElse(this.getPlant().getFinalStage());
-                    this.next = this.stage.getNextStage(this, world.getRandom());
+                    this.nextStage = this.stage.getNextStage(this, world.getRandom());
                 }
             } else {
                 this.stage = NoGrowth.getInstance();
-                this.next = NoGrowth.getInstance();
+                this.nextStage = NoGrowth.getInstance();
             }
             return this.stage;
         }
@@ -187,7 +217,10 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public IAgriGrowthResponse getFertilityResponse() {
-            return this.getPlant().getGrowthRequirement(this.getGrowthStage()).check(this);
+            if(this.world() == null) {
+                return IAgriGrowthResponse.INFERTILE;
+            }
+            return this.requirement.check();
         }
 
         @Override
@@ -246,7 +279,10 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public boolean canBeHarvested(@Nullable LivingEntity entity) {
-            return this.hasPlant() && this.isMature() && this.getPlant().allowsHarvest(this.getGrowthStage(), entity);
+            return this.hasPlant()
+                    && this.isMature()
+                    && this.getPlant().allowsHarvest(this.getGrowthStage(), entity)
+                    && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Pre(this, entity));
         }
 
         @Nonnull
@@ -255,29 +291,32 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             World world = this.world();
             CropInfo crop = this.asTile().getCrop();
             if(world != null && crop instanceof AgriCropInfo && this.canBeHarvested(entity)) {
-                if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Pre(this, entity))) {
-                    this.asTile().onCropHarvest();
-                    this.asTile().resetGrowthTime();
-                    for (final ItemStack stack : BotanyPotHelper.getHarvestStacks(world, crop)) {
-                        this.dropItem(stack);
-                    }
-                    this.getPlant().onHarvest(this, entity);
-                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));
-                    return ActionResultType.SUCCESS;
-                }
+                this.getPlant().getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), world.getRandom());
+                this.getPlant().onHarvest(this, entity);
+                MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));
+                return ActionResultType.SUCCESS;
             }
             return ActionResultType.PASS;
         }
 
         @Override
         public boolean canBeRaked(@Nonnull IAgriRakeItem item, @Nonnull ItemStack stack, @Nullable LivingEntity entity) {
-            // No weeds on botany pots (for now)
-            return false;
+            return this.hasWeeds();
         }
 
         @Override
         public boolean rake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
-            // No weeds on botany pots (for now)
+            World world = this.world();
+            if(world == null || world.isRemote()) {
+                return false;
+            }
+            IAgriWeed weed = this.getWeeds();
+            if (weed.isWeed()) {
+                IAgriGrowthStage stage = this.getWeedGrowthStage();
+                this.setWeed(NoWeed.getInstance(), NoGrowth.getInstance());
+                weed.onRake(stage, consumer, world.getRandom(), entity);
+                return true;
+            }
             return false;
         }
 
@@ -299,94 +338,118 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
-            // Validate
-            Preconditions.checkNotNull(consumer);
-
-            // Add plant information
-            if (this.hasPlant()) {
-                //Add the plant data.
-                consumer.accept(AgriToolTips.getPlantTooltip(this.getPlant()));
-                //Add the stats
-                this.getStats().addTooltips(consumer);
-                //Add the fertility information.
-                this.getSoil().ifPresent(soil -> {
-                    // TODO: update this tooltip once actual stats are used
-                    IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
-                    if(!req.getSoilHumidityResponse(soil.getHumidity(), 1).isFertile()) {
-                        AgriGrowthRequirement.Tooltips.HUMIDITY_DESCRIPTION.forEach(consumer);
-                    }
-                    if(!req.getSoilAcidityResponse(soil.getAcidity(), 1).isFertile()) {
-                        AgriGrowthRequirement.Tooltips.ACIDITY_DESCRIPTION.forEach(consumer);
-                    }
-                    if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1).isFertile()) {
-                        AgriGrowthRequirement.Tooltips.NUTRIENT_DESCRIPTION.forEach(consumer);
-                    }
-                });
-            } else {
-                consumer.accept(AgriToolTips.NO_PLANT);
-            }
-
-            // Add weed information
-            if(this.hasWeeds()) {
-                consumer.accept(AgriToolTips.getWeedTooltip(this.getWeeds()));
-                consumer.accept(AgriToolTips.getWeedGrowthTooltip(this.getWeedGrowthStage()));
-            } else {
-                consumer.accept(AgriToolTips.NO_WEED);
-            }
-
-            // Add Soil Information
-            this.getSoil().map(soil -> {
-                consumer.accept(AgriToolTips.getSoilTooltip(soil));
-                return true;
-            }).orElseGet(() -> {
-                consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
-                return false;
-            });
+            CropHelper.addDisplayInfo(this, this.requirement, consumer);
         }
 
         @Override
         public boolean hasPlant() {
-            return this.asTile().getCrop() instanceof AgriCropInfo
-                    && ((AgriCropInfo) this.asTile().getCrop()).getPlant().isPlant();
+            CropInfo info = this.asTile().getCrop();
+            return info instanceof AgriCropInfo && ((AgriCropInfo) info).getPlant().isPlant();
         }
 
         @Nonnull
         @Override
         public IAgriPlant getPlant() {
-            return this.hasPlant()
-                    ? ((AgriCropInfo) this.asTile().getCrop()).getPlant()
-                    : NoPlant.getInstance();
+            CropInfo info = this.asTile().getCrop();
+            return info instanceof AgriCropInfo ? ((AgriCropInfo) info).getPlant() : NoPlant.getInstance();
         }
 
         @Override
         public boolean hasWeeds() {
-            // No weeds on botany pots (for now)
-            return false;
+            return this.weed.isWeed();
         }
 
         @Nonnull
         @Override
         public IAgriWeed getWeeds() {
-            // No weeds on botany pots (for now)
-            return NoWeed.getInstance();
+            return this.weed;
+        }
+
+        public boolean incrementWeedCounter(int amount) {
+            if(this.hasWeeds()) {
+                this.weedCounter += amount;
+                this.weedCounter = Math.min(WEED_GROWTH_TICKS, Math.max(0, this.weedCounter));
+                if(weedCounter == 0) {
+                    this.removeWeed();
+                }
+                return this.getWeedGrowthStage().isFinal();
+            }
+            return false;
+        }
+
+        public float getWeedGrowthPercent() {
+            return ((float) this.weedCounter) / WEED_GROWTH_TICKS;
         }
 
         @Nonnull
         @Override
         public IAgriGrowthStage getWeedGrowthStage() {
-            // No weeds on botany pots (for now)
-            return NoGrowth.getInstance();
+            World world = this.world();
+            if(world == null) {
+                return NoGrowth.getInstance();
+            }
+            if(this.hasWeeds()) {
+                if (this.weedStage.isGrowthStage() && this.nextWeedStage.isGrowthStage()) {
+                    float progress = this.getWeedGrowthPercent();
+                    if(progress >= this.nextWeedStage.growthPercentage() && !this.weedStage.isFinal()) {
+                        this.weedStage = this.nextWeedStage;
+                        this.nextWeedStage = this.weedStage.getNextStage(this, world.getRandom());
+                    }
+                } else {
+                    float progress = this.getWeedGrowthPercent();
+                    this.weedStage = this.getWeeds().getGrowthStages().stream()
+                            .sorted(Comparator.comparingDouble(IAgriGrowthStage::growthPercentage))
+                            .filter(stage -> stage.growthPercentage() >= progress)
+                            .findFirst().orElse(this.getWeeds().getFinalStage());
+                    this.nextWeedStage = this.weedStage.getNextStage(this, world.getRandom());
+                }
+            } else {
+                this.weedStage = NoGrowth.getInstance();
+                this.nextWeedStage = NoGrowth.getInstance();
+            }
+            return this.weedStage;
         }
 
         @Override
         public boolean setWeed(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage) {
-            // No weeds on botany pots (for now)
+            World world = this.world();
+            if(world == null) {
+                return false;
+            }
+            if(this.getWeeds().equals(weed)) {
+                if(this.weedStage.equals(stage)) {
+                    return false;
+                }
+                if(this.getWeeds().getGrowthStages().contains(stage)) {
+                    this.weedStage = stage;
+                    this.getWeeds().onGrowthTick(this);
+                    this.nextWeedStage = this.weedStage.getNextStage(this, world.getRandom());
+                    this.weedCounter = (int) (WEED_GROWTH_TICKS*stage.growthPercentage());
+                    return true;
+                }
+                return false;
+            } else if(weed.getGrowthStages().contains(stage)) {
+                if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
+                    this.weed = weed;
+                    this.weedStage = stage;
+                    this.nextWeedStage = this.weedStage.getNextStage(this, world.getRandom());
+                    this.weedCounter = (int) (WEED_GROWTH_TICKS * stage.growthPercentage());
+                    MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
+                    return true;
+                }
+            }
             return false;
         }
 
         @Override
         public boolean removeWeed() {
-            // No weeds on botany pots (for now)
+            if(this.hasWeeds()) {
+                this.weed = NoWeed.getInstance();
+                this.weedStage = NoGrowth.getInstance();
+                this.nextWeedStage = NoGrowth.getInstance();
+                this.weedCounter = 0;
+                return true;
+            }
             return false;
         }
 
@@ -406,7 +469,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             }
             ItemStack seed = genome.toSeedStack();
             CropInfo crop = BotanyPotHelper.getCropForItem(seed);
-            if (crop != null && BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
+            if (BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
                 if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
                     this.asTile().setCrop(crop, seed);
                     this.getPlant().onSpawned(this);
@@ -433,7 +496,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             }
             ItemStack seedStack = genome.toSeedStack();
             CropInfo crop = BotanyPotHelper.getCropForItem(seedStack);
-            if (crop != null && BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
+            if (BotanyPotHelper.isSoilValidForCrop(soil, crop) && this.asTile().canSetCrop(crop)) {
                 if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Plant.Pre(this, genome, entity))) {
                     this.asTile().setCrop(crop, seedStack);
                     this.getPlant().onSpawned(this);

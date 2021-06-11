@@ -7,9 +7,14 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
+import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
+import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.crafting.IInfIngredientSerializer;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
@@ -30,7 +35,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -55,6 +59,15 @@ public class AgriCropInfo extends CropInfo {
         this.display = new DisplayableBlockState[]{new AgriDisplayState()};
     }
 
+    public AgriCropInfo withStats(ItemStack seed) {
+        if(seed.getItem() instanceof IAgriSeedItem) {
+            return ((IAgriSeedItem) seed.getItem()).getStats(seed)
+                    .map(stats -> (AgriCropInfo) new WithStats(this, stats))
+                    .orElse(this);
+        }
+        return this;
+    }
+
     public IAgriPlant getPlant() {
         return this.getSeed().getPlant();
     }
@@ -63,14 +76,13 @@ public class AgriCropInfo extends CropInfo {
         return this.growthStatFactor;
     }
 
-    @Override
-    public AgriPlantIngredient getSeed() {
-        return (AgriPlantIngredient) super.getSeed();
+    protected IAgriStatsMap getStats() {
+        return NoStats.getInstance();
     }
 
     @Override
-    public ITextComponent getName() {
-        return this.getPlant().getPlantName();
+    public AgriPlantIngredient getSeed() {
+        return (AgriPlantIngredient) super.getSeed();
     }
 
     @Override
@@ -116,30 +128,52 @@ public class AgriCropInfo extends CropInfo {
         // Run logic
         return AgriApi.getSoilRegistry().valueOf(block).map(soil -> {
             IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
-            // TODO: use actual plant stats
-            if(!req.getSoilHumidityResponse(soil.getHumidity(), 1).isFertile()) {
-                return -1;
+            int strength = this.getStats().getStrength();
+            if(!req.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile()) {
+                return Integer.MAX_VALUE;
             }
-            if(!req.getSoilAcidityResponse(soil.getAcidity(), 1).isFertile()) {
-                return -1;
+            if(!req.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile()) {
+                return Integer.MAX_VALUE;
             }
-            if(!req.getSoilNutrientsResponse(soil.getNutrients(), 1).isFertile()) {
-                return -1;
+            if(!req.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile()) {
+                return Integer.MAX_VALUE;
             }
             // Fetch and verify Botany Pots modifier
             float modifier = soilInfo.getGrowthModifier();
             if(modifier > -1) {
-                // Apply AgriCraft modifier
-                modifier = (1 - modifier) * (float) (2 - soil.getGrowthModifier());
+                // Apply Botany pots soil modifier
+                modifier = (1 + modifier * -1);
+                // Apply AgriCraft soil modifier
+                modifier = modifier * (float) (2 - soil.getGrowthModifier());
+                // Apply AgriCraft growth stat modifier
+                IAgriGrowthStage stage = this.getPlant().getInitialGrowthStage();
+                double base = this.getPlant().getGrowthChanceBase(stage);
+                double bonus = this.getPlant().getGrowthChanceBonus(stage);
+                int growth = this.getStats().getGrowth();
+                modifier =  (2 - (float) (base + growth*bonus))*modifier;
                 return MathHelper.floor(this.getGrowthTicks() * modifier);
             }
-            return -1;
-        }).orElse(-1);
+            return Integer.MAX_VALUE;
+        }).orElse(Integer.MAX_VALUE);
     }
 
     @Override
     public IRecipeSerializer<?> getSerializer () {
         return SERIALIZER;
+    }
+
+    public static class WithStats extends AgriCropInfo {
+        private final IAgriStatsMap stats;
+
+        public WithStats(AgriCropInfo parent, IAgriStatsMap stats) {
+            super(parent.getId(), parent.getSeed(), parent.getGrowthTicks(), parent.getGrowthStatFactor());
+            this.stats = stats;
+        }
+
+        @Override
+        public IAgriStatsMap getStats() {
+            return this.stats;
+        }
     }
 
     private class AgriDisplayState extends DisplayableBlockState {
@@ -148,13 +182,14 @@ public class AgriCropInfo extends CropInfo {
             super(AgriCraft.instance.getModBlockRegistry().crop_plant.getDefaultState());
         }
 
-        protected IAgriGrowthStage fetchStage(World world, BlockPos pos) {
-            return AgriApi.getCrop(world, pos).map(IAgriCrop::getGrowthStage).orElse(getPlant().getFinalStage());
-        }
-
         @OnlyIn(Dist.CLIENT)
         public void render (World world, BlockPos pos, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay, Direction... preferredSides) {
-            BotanyPotsPlantRenderer.getInstance().renderPlant(getPlant(), this.fetchStage(world, pos), matrix, buffer, light, overlay, preferredSides);
+            Optional<IAgriCrop> crop = AgriApi.getCrop(world, pos);
+            IAgriGrowthStage stage = crop.map(IAgriCrop::getGrowthStage).orElse(getPlant().getFinalStage());
+            IAgriWeed weed = crop.map(IAgriCrop::getWeeds).orElse(NoWeed.getInstance());
+            IAgriGrowthStage weedStage = crop.map(IAgriCrop::getWeedGrowthStage).orElse(weed.getFinalStage());
+            BotanyPotsPlantRenderer.getInstance().renderPlant(
+                    getPlant(), stage, weed, weedStage, matrix, buffer, light, overlay, preferredSides);
         }
     }
 

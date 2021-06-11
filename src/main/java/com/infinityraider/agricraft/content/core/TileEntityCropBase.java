@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
@@ -22,10 +21,9 @@ import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
-import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import com.infinityraider.agricraft.reference.AgriToolTips;
+import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.block.Block;
@@ -183,7 +181,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(!this.getPlant().getGrowthStages().contains(stage)) {
             return false;
         }
-        if(!this.checkGrowthSpace(this.getPlant(), stage)) {
+        if(!this.checkGrowthSpace()) {
             return false;
         }
         this.growth.set(stage);
@@ -191,22 +189,8 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         return true;
     }
 
-    @SuppressWarnings("deprecation")
-    private boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
-        if(this.getWorld() == null) {
-            return false;
-        }
-        double height = plant.getPlantHeight(stage);
-        while(height > 16) {
-            int offset = ((int) height) / 16;
-            BlockPos pos = this.getPos().up(offset);
-            BlockState state = this.getWorld().getBlockState(pos);
-            if(!state.isAir(this.getWorld(), pos)) {
-                return false;
-            }
-            height -= 16;
-        }
-        return true;
+    protected boolean checkGrowthSpace() {
+        return CropHelper.checkGrowthSpace(this);
     }
 
     @Override
@@ -214,7 +198,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(this.getWorld() == null) {
             return IAgriGrowthResponse.INFERTILE;
         }
-        if(!this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())) {
+        if(!this.checkGrowthSpace()) {
             return IAgriGrowthResponse.INFERTILE;
         }
         return this.requirement.check();
@@ -284,18 +268,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         }
     }
 
+    // method to allow for overriding
     protected boolean rollForWeedAction() {
-        if(AgriCraft.instance.getConfig().disableWeeds()) {
-            return false;
-        }
-        if(this.hasPlant()) {
-            int resist = this.getStats().getResistance();
-            int max = AgriStatRegistry.getInstance().resistanceStat().getMax();
-            // At 1 resist, 50/50 chance for weed growth tick
-            // At 10 resist, 0% chance
-            return  this.getRandom().nextInt(max) >= (max + resist)/2;
-        }
-        return this.getRandom().nextBoolean();
+        return CropHelper.rollForWeedAction(this);
     }
 
     protected void executeWeedGrowthTick() {
@@ -322,22 +297,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         }
     }
 
+    // Method to allow for overrides
     protected void spawnWeeds() {
-        AgriApi.getWeedRegistry().stream()
-                .filter(IAgriWeed::isWeed)
-                .filter(weed -> this.getRandom().nextDouble() < weed.spawnChance(this))
-                .findAny()
-                .ifPresent(weed -> this.setWeed(weed, weed.getInitialGrowthStage()));
+        CropHelper.spawnWeeds(this);
     }
 
+    // Method to allow for overrides
     protected void spreadWeeds() {
-        if(AgriCraft.instance.getConfig().allowAggressiveWeeds() && this.getWeeds().isAggressive()) {
-            this.streamNeighbours()
-                    .filter(IAgriCrop::isValid)
-                    .filter(crop -> !crop.hasWeeds())
-                    .filter(crop -> this.rollForWeedAction())
-                    .forEach(crop -> crop.setWeed(this.getWeeds(), this.getWeeds().getInitialGrowthStage()));
-        }
+        CropHelper.spreadWeeds(this);
     }
 
     protected void tryWeedKillPlant() {
@@ -393,6 +360,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     public Optional<IAgriGenome> getGenome() {
         return this.genome.get();
     }
+
     @Nonnull
     @Override
     public IAgriStatsMap getStats() {
@@ -490,14 +458,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             if(this.weedGrowth.get().equals(stage)) {
                 return false;
             }
-            if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
+            if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace()) {
                 this.weedGrowth.set(stage);
                 this.getWeeds().onGrowthTick(this);
                 this.handlePlantUpdate();
                 return true;
             }
             return false;
-        } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace(weed, stage)) {
+        } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace()) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
                 this.setWeedImpl(weed, stage);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
@@ -688,38 +656,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
-        // Validate
-        Preconditions.checkNotNull(consumer);
-
-        // Add plant information
-        if (this.hasPlant()) {
-            //Add the plant data.
-            consumer.accept(AgriToolTips.getPlantTooltip(this.getPlant()));
-            consumer.accept(AgriToolTips.getGrowthTooltip(this.getGrowthStage()));
-            //Add the stats
-            this.getStats().addTooltips(consumer);
-            //Add the fertility information.
-            this.requirement.addTooltip(consumer);
-        } else {
-            consumer.accept(AgriToolTips.NO_PLANT);
-        }
-
-        // Add weed information
-        if(this.hasWeeds()) {
-            consumer.accept(AgriToolTips.getWeedTooltip(this.getWeeds()));
-            consumer.accept(AgriToolTips.getWeedGrowthTooltip(this.getWeedGrowthStage()));
-        } else {
-            consumer.accept(AgriToolTips.NO_WEED);
-        }
-
-        // Add Soil Information
-        this.getSoil().map(soil -> {
-            consumer.accept(AgriToolTips.getSoilTooltip(soil));
-            return true;
-        }).orElseGet(() -> {
-            consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
-            return false;
-        });
+        CropHelper.addDisplayInfo(this, this.requirement, consumer);
     }
 
     @Nonnull
