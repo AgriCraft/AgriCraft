@@ -584,6 +584,30 @@
   "agricraft.plant.environmental_white_lotus_flower.desc": "Uncolored version of the red lotus flower.",
 
   "agricraft.plant.environmental_violet.seed": "Violet Seeds",
-  "agricraft.plant.environmental_violet.desc": "A beautiful ornamental flower to use in your garden."
+  "agricraft.plant.environmental_violet.desc": "A beautiful ornamental flower to use in your garden.",
+
+  "agricraft.plant.upgrade_aquatic_pink_searocket.seed": "Pink Searocket Seeds",
+  "agricraft.plant.upgrade_aquatic_pink_searocket.desc": "This plant has the potential to become a noxious weed.",
+
+  "agricraft.plant.upgrade_aquatic_white_searocket.seed": "White Searocket Seeds",
+  "agricraft.plant.upgrade_aquatic_white_searocket.desc": "Most commonly found on the beach.",
+
+  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.seed": "Blue Pickerelweed Seeds",
+  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.desc": "Pickerelweed or pickleweed?",
+
+  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.seed": "Purple Pickerelweed Seeds",
+  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.desc": "It once won the Royal Horticultural Society's Award of Garden Merit.",
+
+  "agricraft.plant.upgrade_aquatic_ochre_kelp.seed": "Ochre Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_ochre_kelp.desc": "Is it orange or yellow?",
+
+  "agricraft.plant.upgrade_aquatic_polar_kelp.seed": "Polar Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_polar_kelp.desc": "A type of kelp that lives in really cold region.",
+
+  "agricraft.plant.upgrade_aquatic_thorny_kelp.seed": "Thorny Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_thorny_kelp.desc": "Watch your fingers.",
+
+  "agricraft.plant.upgrade_aquatic_tongue_kelp.seed": "Tongue Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_tongue_kelp.desc": "Do you wanna be licked?"
 
 }
