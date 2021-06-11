@@ -394,7 +394,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     public ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, LivingEntity entity) {
         if (this.getWorld() != null && this.canBeHarvested(entity)) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Pre(this, entity))) {
-                this.getPlant().getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), this.getWorld().getRandom());
+                CropHelper.executePlantHarvestRolls(this, consumer);
                 this.setGrowthStage(this.getPlant().getGrowthStageAfterHarvest());
                 this.getPlant().onHarvest(this, entity);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));

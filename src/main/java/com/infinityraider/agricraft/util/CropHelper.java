@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -76,6 +77,16 @@ public class CropHelper {
                     .filter(nb -> !nb.hasWeeds())
                     .filter(CropHelper::rollForWeedAction)
                     .forEach(nb -> nb.setWeed(crop.getWeeds(), crop.getWeeds().getInitialGrowthStage()));
+        }
+    }
+
+    public static void executePlantHarvestRolls(IAgriCrop crop, @Nonnull Consumer<ItemStack> consumer) {
+        World world = crop.world();
+        if(world == null) {
+            return;
+        }
+        for (int trials = (crop.getStats().getGain() + 3) / 3; trials > 0; trials--) {
+            crop.getPlant().getHarvestProducts(consumer, crop.getGrowthStage(), crop.getStats(), world.getRandom());
         }
     }
 

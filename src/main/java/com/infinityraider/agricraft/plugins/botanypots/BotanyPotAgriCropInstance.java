@@ -291,7 +291,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             World world = this.world();
             CropInfo crop = this.asTile().getCrop();
             if(world != null && crop instanceof AgriCropInfo && this.canBeHarvested(entity)) {
-                this.getPlant().getHarvestProducts(consumer, this.getGrowthStage(), this.getStats(), world.getRandom());
+                CropHelper.executePlantHarvestRolls(this, consumer);
                 this.getPlant().onHarvest(this, entity);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));
                 return ActionResultType.SUCCESS;
