@@ -12,6 +12,7 @@ Changelog
 - FIXED: Server crash with Immersive Engineering
 - FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Nelson)
 - FIXED: Seed Drop probabilities from grass being inverted
+- FIXED: Journal wobbling back and forth while reading, making it difficult to read
 
 3.0.1
 - CHANGE: Seeds Dropped from grass will have stats equal to 1 by default

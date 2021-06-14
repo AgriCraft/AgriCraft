@@ -15,6 +15,7 @@ import com.infinityraider.agricraft.network.MessagePlantResearched;
 import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
+import com.infinityraider.infinitylib.modules.playeranimations.IAnimatablePlayerModel;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -36,6 +37,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -375,6 +377,17 @@ public class JournalViewPointHandler implements IDynamicCameraController {
             event.setSwingHand(false);
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public void onPlayerRender(RenderPlayerEvent.Pre event) {
+        if(event.getPlayer() == AgriCraft.instance.getClientPlayer()) {
+            if (event.getRenderer().getEntityModel() instanceof IAnimatablePlayerModel) {
+                IAnimatablePlayerModel model = (IAnimatablePlayerModel) event.getRenderer().getEntityModel();
+                model.setDoArmWobble(!this.isActive());
+            }
         }
     }
 

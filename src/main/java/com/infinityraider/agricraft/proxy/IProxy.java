@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
+import com.infinityraider.infinitylib.modules.playeranimations.ModulePlayerAnimations;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -70,7 +71,9 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
-    default void activateRequiredModules() {}
+    default void activateRequiredModules() {
+        ModulePlayerAnimations.getInstance().activate();
+    }
     
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {
