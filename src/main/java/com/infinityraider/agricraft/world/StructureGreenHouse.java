@@ -32,6 +32,8 @@ public class StructureGreenHouse extends StructureVillagePieces.House1 {
     private static final int zSize = 11;
     private int averageGroundLevel = -1;
 
+    public StructureGreenHouse() {}
+
     public StructureGreenHouse(StructureVillagePieces.Start start, int type, Random rand, StructureBoundingBox p_i45571_4_, EnumFacing facing) {
         super();
         this.setCoordBaseMode(facing);
