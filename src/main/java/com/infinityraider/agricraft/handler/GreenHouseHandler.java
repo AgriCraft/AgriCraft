@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.world.GreenHouse;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,7 @@ public class GreenHouseHandler {
         private final World world;
 
         private final Set<BlockPos> toVisit;
-        private final Map<BlockPos, BlockType> visited;
+        private final Map<BlockPos, GreenHouse.BlockType> visited;
 
         private BlockPos.Mutable min;
         private BlockPos.Mutable max;
@@ -76,7 +77,7 @@ public class GreenHouseHandler {
             return this.visited.containsKey(pos);
         }
 
-        public void recordVisit(BlockPos pos, BlockType type) {
+        public void recordVisit(BlockPos pos, GreenHouse.BlockType type) {
             this.visited.put(pos, type);
             if(type.isInterior()) {
                 this.interiorCount++;
@@ -114,7 +115,7 @@ public class GreenHouseHandler {
             if(!this.hasVisited(pos)) {
                 BlockState state = this.getWorld().getBlockState(pos);
                 if(state.getBlock().isAir(state, this.getWorld(), pos)) {
-                    this.recordVisit(pos, BlockType.INTERIOR_AIR);
+                    this.recordVisit(pos, GreenHouse.BlockType.INTERIOR_AIR);
                 } else {
                     // initial block is not air
                     this.valid = false;
@@ -125,21 +126,21 @@ public class GreenHouseHandler {
                 BlockState state = this.getWorld().getBlockState(checkPos);
                 if(this.visited.containsKey(checkPos)) {
                     // If we already visited the position, check if it was a boundary, it might not be from another direction
-                    BlockType type = this.visited.get(checkPos);
+                    GreenHouse.BlockType type = this.visited.get(checkPos);
                     if (type.isBoundary() && !this.isSolidBlock(state, checkPos, dir)) {
                         // was a boundary when visited from another direction, but from the current direction it is not, update is needed
-                        this.recordVisit(checkPos, BlockType.INTERIOR_OTHER);
+                        this.recordVisit(checkPos, GreenHouse.BlockType.INTERIOR_OTHER);
                         this.toVisit.add(checkPos);
                     }
                 } else {
                     // Block is not yet visited, categorize it
                     if(isAirBlock(state, checkPos)) {
-                        this.recordVisit(checkPos, BlockType.INTERIOR_AIR);
+                        this.recordVisit(checkPos, GreenHouse.BlockType.INTERIOR_AIR);
                         this.toVisit.add(checkPos);
                     } else if(this.isSolidBlock(state, checkPos, dir)) {
-                        this.recordVisit(checkPos, BlockType.BOUNDARY);
+                        this.recordVisit(checkPos, GreenHouse.BlockType.BOUNDARY);
                     }else {
-                        this.recordVisit(checkPos, BlockType.INTERIOR_OTHER);
+                        this.recordVisit(checkPos, GreenHouse.BlockType.INTERIOR_OTHER);
                         this.toVisit.add(checkPos);
                     }
                 }
@@ -157,48 +158,9 @@ public class GreenHouseHandler {
         public void convertAirBlocks() {
             BlockState air = AgriCraft.instance.getModBlockRegistry().greenhouse_air.getDefaultState();
             this.visited.entrySet().stream()
-                    .filter(entry -> entry.getValue() == BlockType.INTERIOR_AIR)
+                    .filter(entry -> entry.getValue() == GreenHouse.BlockType.INTERIOR_AIR)
                     .map(Map.Entry::getKey)
                     .forEach(pos -> this.getWorld().setBlockState(pos,air));
-        }
-    }
-
-    public static class GreenHouseBlock {
-        private final BlockPos pos;
-        private BlockType type;
-
-        protected GreenHouseBlock(BlockPos pos, BlockType type) {
-            this.pos = pos;
-            this.type = type;
-        }
-
-        public BlockPos getPos() {
-            return this.pos;
-        }
-
-        public BlockType getType() {
-            return this.type;
-        }
-    }
-
-    public enum BlockType {
-        INTERIOR_AIR(true),
-        INTERIOR_OTHER(true),
-        BOUNDARY(false),
-        EXTERIOR(false);
-
-        private final boolean interior;
-
-        BlockType(boolean interior) {
-            this.interior = interior;
-        }
-
-        public boolean isInterior() {
-            return this.interior;
-        }
-
-        public boolean isBoundary() {
-            return this == BOUNDARY;
         }
     }
 }
