@@ -318,6 +318,28 @@ public interface IAgriConfig {
 
 
     /*
+     * --------------------
+     * WORLD CONFIG OPTIONS
+     * --------------------
+     */
+
+    /**
+     * @return the spawn weight for greenhouses
+     */
+    int getGreenHouseSpawnWeight();
+
+    /**
+     * @return the spawn weight for irrigated greenhouses
+     */
+    int getIrrigatedGreenHouseSpawnWeight();
+
+    /**
+     * @return the maximum block size for greenhouses
+     */
+    int getGreenHouseBlockSizeLimit();
+
+
+    /*
      * ----------------------------
      * COMPATIBILITY CONFIG OPTIONS
      * ----------------------------

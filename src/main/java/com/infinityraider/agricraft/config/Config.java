@@ -80,6 +80,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // decoration
         private final ForgeConfigSpec.ConfigValue<Boolean> climbableGrate;
 
+        // world
+        private final ForgeConfigSpec.ConfigValue<Integer> greenHouseSpawnWeight;
+        private final ForgeConfigSpec.ConfigValue<Integer> irrigatedGreenHouseSpawnWeight;
+        private final ForgeConfigSpec.ConfigValue<Integer> greenhouseBlockLimit;
+
         // compat
         private final ForgeConfigSpec.ConfigValue<Boolean> progressiveJEI;
         private final ForgeConfigSpec.ConfigValue<String> seasonLogic;
@@ -225,6 +230,15 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("decoration");
             this.climbableGrate = builder.comment("\nWhen true, entities will be able to climb on grates")
                     .define("Grates always climbable", true);
+            builder.pop();
+
+            builder.push("world");
+            this.greenHouseSpawnWeight = builder.comment("\nThe weight for spawning greenhouses in villages (set to 0 to disable spawning of greenhouses)")
+                    .defineInRange("Greenhouse spawn weight", 10, 0, 1000);
+            this.irrigatedGreenHouseSpawnWeight = builder.comment("\nThe weight for spawning irrigated greenhouses in villages (set to 0 to disable spawning of irrigated greenhouses)")
+                    .defineInRange("Greenhouse spawn weight", 10, 0, 1000);
+            this.greenhouseBlockLimit = builder.comment("\nThis might have an impact on performance if set too high")
+                    .defineInRange("Greenhouse block size limit", 512, 512, Integer.MAX_VALUE);
             builder.pop();
 
             builder.push("compat");
@@ -519,6 +533,21 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableLogging() {
             return this.enableLogging.get();
+        }
+
+        @Override
+        public int getGreenHouseSpawnWeight() {
+            return this.greenHouseSpawnWeight.get();
+        }
+
+        @Override
+        public int getIrrigatedGreenHouseSpawnWeight() {
+            return this.irrigatedGreenHouseSpawnWeight.get();
+        }
+
+        @Override
+        public int getGreenHouseBlockSizeLimit() {
+            return this.greenhouseBlockLimit.get();
         }
 
         @Override
