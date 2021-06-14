@@ -3,14 +3,16 @@ package com.infinityraider.agricraft.util;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import net.minecraft.block.BlockState;
+import net.minecraftforge.common.Tags;
 
 import java.util.List;
 import java.util.Random;
 
-/**
- * A helper class for working with generation.
- */
-public class WorldGenerationHelper {
+public class GreenHouseHelper {
+    public static boolean isGreenHouseGlass(BlockState state) {
+        return Tags.Blocks.GLASS.contains(state.getBlock());
+    }
 
     /**
      * Gets a random genome from a list of plants

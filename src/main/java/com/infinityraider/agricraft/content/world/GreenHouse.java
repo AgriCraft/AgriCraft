@@ -1,39 +1,64 @@
 package com.infinityraider.agricraft.content.world;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.infinityraider.agricraft.AgriCraft;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GreenHouse {
     private final Map<ChunkPos, Part> parts;
-    private final BlockPos min;
-    private final BlockPos max;
+    private final Properties properties;
 
     public GreenHouse(Map<BlockPos, GreenHouse.BlockType> blocks) {
         BlockPos.Mutable min = new BlockPos.Mutable(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         BlockPos.Mutable max = new BlockPos.Mutable(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+        MutableInt interiorCounter = new MutableInt(0);
+        MutableInt ceilingCounter = new MutableInt(0);
+        MutableInt ceilingGlassCounter = new MutableInt(0);
         this.parts = blocks.entrySet().stream().collect(Collectors.toMap(
                 entry -> new ChunkPos(entry.getKey()),
-                entry -> handleMapEntry(entry, min, max),
+                entry -> handleMapEntry(entry, !blocks.containsKey(entry.getKey().up()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
                 GreenHouse::mergeMaps
         )).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 (entry) -> new Part(this, entry.getKey(), entry.getValue())
         ));
-        this.min = min.toImmutable();
-        this.max = max.toImmutable();
+        this.properties = new Properties(min, max, interiorCounter.getValue(), ceilingCounter.getValue(), ceilingGlassCounter.getValue());
+    }
+
+    public boolean isValid() {
+        return this.parts.values().stream().noneMatch(Part::hasGaps)
+                && this.getCeilingGlassFraction() >= AgriCraft.instance.getConfig().greenHouseCeilingGlassFraction();
+    }
+
+    protected Properties getProperties() {
+        return this.properties;
     }
 
     public BlockPos getMin() {
-        return this.min;
+        return this.getProperties().getMin();
     }
 
     public BlockPos getMax() {
-        return this.max;
+        return this.getProperties().getMax();
+    }
+
+    public double getCeilingGlassFraction() {
+        return (this.getProperties().getCeilingGlassCount() + 0.0) / this.getProperties().getCeilingCount();
+    }
+
+    public Set<ChunkPos> getChunks() {
+        return this.parts.keySet();
     }
 
     public Part getPart(BlockPos pos) {
@@ -55,6 +80,10 @@ public class GreenHouse {
         return this.getType(pos).isInterior();
     }
 
+    public void convertAirBlocks(World world) {
+        this.parts.values().forEach(part -> part.replaceAirBlocks(world));
+    }
+
     protected boolean isInRange(BlockPos pos) {
         return pos.getX() >= this.getMin().getX() && pos.getX() <= this.getMax().getX()
                 && pos.getY() >= this.getMin().getY() && pos.getY() <= this.getMax().getY()
@@ -65,11 +94,13 @@ public class GreenHouse {
         private final GreenHouse greenHouse;
         private final ChunkPos chunk;
         private final Map<BlockPos, Block> blocks;
+        private final Set<BlockPos> gaps;
 
         protected Part(GreenHouse greenHouse, ChunkPos chunk, Map<BlockPos, GreenHouse.Block> blocks) {
             this.blocks = blocks;
             this.greenHouse = greenHouse;
             this.chunk = chunk;
+            this.gaps = Sets.newHashSet();
         }
 
         public GreenHouse getGreenHouse() {
@@ -89,15 +120,35 @@ public class GreenHouse {
         public Block getBlock(BlockPos pos) {
             return this.blocks.getOrDefault(pos, null);
         }
+
+        public boolean hasGaps() {
+            return this.gaps.size() > 0;
+        }
+
+        protected void replaceAirBlocks(World world) {
+            BlockState air = AgriCraft.instance.getModBlockRegistry().greenhouse_air.getDefaultState();
+            this.blocks.values().stream()
+                    .filter(block -> block.getType().isAir())
+                    .map(Block::getPos)
+                    .forEach(pos -> world.setBlockState(pos,air));
+        }
+
+        public CompoundNBT writeToTag() {
+            CompoundNBT tag = new CompoundNBT();
+            //TODO
+            return tag;
+        }
     }
 
     protected static class Block {
         private final BlockPos pos;
         private final BlockType type;
+        private final boolean ceiling;
 
-        protected Block(BlockPos pos, BlockType type) {
+        protected Block(BlockPos pos, BlockType type, boolean ceiling) {
             this.pos = pos;
             this.type = type;
+            this.ceiling = ceiling;
         }
 
         public BlockPos getPos() {
@@ -107,18 +158,66 @@ public class GreenHouse {
         public BlockType getType() {
             return this.type;
         }
+
+        public boolean isCeiling() {
+            return this.ceiling;
+        }
+    }
+
+    protected static class Properties {
+        private BlockPos min;
+        private BlockPos max;
+
+        private int interiorCount;
+        private int ceilingCount;
+        private int ceilingGlassCount;
+
+        public Properties(BlockPos min, BlockPos max, int interiorCount, int ceilingCount, int ceilingGlassCount) {
+            this.min = min.toImmutable();
+            this.max = max.toImmutable();
+            this.interiorCount = interiorCount;
+            this.ceilingCount = ceilingCount;
+            this.ceilingGlassCount = ceilingGlassCount;
+        }
+
+        public BlockPos getMin() {
+            return this.min;
+        }
+
+        public BlockPos getMax() {
+            return this.max;
+        }
+
+        public int getInteriorCount() {
+            return this.interiorCount;
+        }
+
+        public int getCeilingCount() {
+            return this.ceilingCount;
+        }
+
+        public int getCeilingGlassCount() {
+            return this.ceilingGlassCount;
+        }
     }
 
     public enum BlockType {
-        INTERIOR_AIR(true),
-        INTERIOR_OTHER(true),
-        BOUNDARY(false),
-        EXTERIOR(false);
+        INTERIOR_AIR(true, false),
+        INTERIOR_OTHER(true, false),
+        BOUNDARY(false, true),
+        GLASS(false, true),
+        EXTERIOR(false, false);
 
         private final boolean interior;
+        private final boolean boundary;
 
-        BlockType(boolean interior) {
+        BlockType(boolean interior, boolean boundary) {
             this.interior = interior;
+            this.boundary = boundary;
+        }
+
+        public boolean isAir() {
+            return this == INTERIOR_AIR;
         }
 
         public boolean isInterior() {
@@ -126,14 +225,32 @@ public class GreenHouse {
         }
 
         public boolean isBoundary() {
-            return this == BOUNDARY;
+            return this.boundary;
+        }
+
+        public boolean isGlass() {
+            return this == GLASS;
+        }
+
+        public boolean isExterior() {
+            return this == EXTERIOR;
         }
     }
 
-    private static Map<BlockPos, GreenHouse.Block> handleMapEntry(Map.Entry<BlockPos, GreenHouse.BlockType> entry,
-                                                                  BlockPos.Mutable min, BlockPos.Mutable max) {
+    private static Map<BlockPos, GreenHouse.Block> handleMapEntry(
+            Map.Entry<BlockPos, GreenHouse.BlockType> entry, boolean ceiling, BlockPos.Mutable min, BlockPos.Mutable max,
+            MutableInt interiorCounter, MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
         Map<BlockPos, GreenHouse.Block> map = Maps.newHashMap();
-        map.put(entry.getKey(), new Block(entry.getKey(), entry.getValue()));
+        map.put(entry.getKey(), new Block(entry.getKey(), entry.getValue(), ceiling));
+        if(entry.getValue().isInterior()) {
+            interiorCounter.increment();
+        }
+        if(ceiling) {
+            ceilingCounter.increment();
+            if(entry.getValue().isGlass()) {
+                ceilingGlassCounter.increment();
+            }
+        }
         min.setPos(
                 Math.min(entry.getKey().getX(), min.getX()),
                 Math.min(entry.getKey().getY(), min.getY()),

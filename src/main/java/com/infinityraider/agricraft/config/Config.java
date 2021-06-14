@@ -83,7 +83,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         // world
         private final ForgeConfigSpec.ConfigValue<Integer> greenHouseSpawnWeight;
         private final ForgeConfigSpec.ConfigValue<Integer> irrigatedGreenHouseSpawnWeight;
-        private final ForgeConfigSpec.ConfigValue<Integer> greenhouseBlockLimit;
+        private final ForgeConfigSpec.ConfigValue<Integer> greenHouseBlockLimit;
+        private final ForgeConfigSpec.ConfigValue<Double> greenHouseCeilingGlassFraction;
+        private final ForgeConfigSpec.ConfigValue<Boolean> greenHouseIgnoresSeasons;
+        private final ForgeConfigSpec.ConfigValue<Double> greenHouseGrowthModifier;
 
         // compat
         private final ForgeConfigSpec.ConfigValue<Boolean> progressiveJEI;
@@ -237,8 +240,16 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Greenhouse spawn weight", 10, 0, 1000);
             this.irrigatedGreenHouseSpawnWeight = builder.comment("\nThe weight for spawning irrigated greenhouses in villages (set to 0 to disable spawning of irrigated greenhouses)")
                     .defineInRange("Greenhouse spawn weight", 10, 0, 1000);
-            this.greenhouseBlockLimit = builder.comment("\nThis might have an impact on performance if set too high")
+            this.greenHouseBlockLimit = builder.comment("\nThe maximum internal size of greenhouses, the larger this is, the longer greenhouse scans will take")
                     .defineInRange("Greenhouse block size limit", 512, 512, Integer.MAX_VALUE);
+            this.greenHouseCeilingGlassFraction = builder.comment("\nThe minimum fraction of glass-type blocks a greenhouse ceiling needs in order to work (0.0 = none, 1.0 = all)" +
+                    "\nBe careful when modifying this value as it might break village greenhouses")
+                    .defineInRange("Greenhouse ceiling glass fraction", 0.65, 0.0, 1.0);
+            this.greenHouseIgnoresSeasons = builder.comment("\nSet to false if greenhouses should not make crops ignore seasons")
+                    .define("Greenhouses ignore seasons", true);
+            this.greenHouseGrowthModifier = builder.comment("\nThe growth rate modifier applied to crops inside greenhouses;" +
+                            "\n0 = no growth allowed (why would you do this), < 1 = slower growth, 1 = no effect, > 1 = faster growth")
+                    .defineInRange("Greenhouse growth modifier", 1.05, 0.00, 10.00);
             builder.pop();
 
             builder.push("compat");
@@ -547,7 +558,21 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         @Override
         public int getGreenHouseBlockSizeLimit() {
-            return this.greenhouseBlockLimit.get();
+            return this.greenHouseBlockLimit.get();
+        }
+
+        @Override
+        public double greenHouseCeilingGlassFraction() {
+            return this.greenHouseCeilingGlassFraction.get();
+        }
+        @Override
+        public boolean greenHouseIgnoresSeasons() {
+            return this.greenHouseIgnoresSeasons.get();
+        }
+
+        @Override
+        public double greenHouseGrowthModifier() {
+            return this.greenHouseGrowthModifier.get();
         }
 
         @Override

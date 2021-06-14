@@ -338,6 +338,21 @@ public interface IAgriConfig {
      */
     int getGreenHouseBlockSizeLimit();
 
+    /**
+     * @return the minimum required fraction of glass in greenhouse ceilings
+     */
+    double greenHouseCeilingGlassFraction();
+
+    /**
+     * @return if greenhouses cause crops inside them to ignore seasons
+     */
+    boolean greenHouseIgnoresSeasons() ;
+
+    /**
+     * @return the growth modifier applied to crops growing in greenhouses
+     */
+    double greenHouseGrowthModifier();
+
 
     /*
      * ----------------------------
