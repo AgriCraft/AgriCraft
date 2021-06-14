@@ -193,6 +193,11 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         }
 
         @Override
+        public double getGrowthPercentage() {
+            return this.asTile().getGrowthPercent();
+        }
+
+        @Override
         public boolean setGrowthStage(@Nonnull IAgriGrowthStage stage) {
             return false;
         }
@@ -408,6 +413,11 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
                 this.nextWeedStage = NoGrowth.getInstance();
             }
             return this.weedStage;
+        }
+
+        @Override
+        public double getWeedGrowthPercentage() {
+            return (this.weedCounter + 0.0) / WEED_GROWTH_TICKS;
         }
 
         @Override

@@ -122,6 +122,10 @@ public class AgriToolTips {
     }
 
     public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth) {
+        return getGrowthTooltip(growth, growth.growthPercentage());
+    }
+
+    public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth, double precise) {
         if (growth.isFinal()) {
             return new StringTextComponent("")
                     .append(GROWTH)
@@ -130,14 +134,14 @@ public class AgriToolTips {
         } else {
             return new StringTextComponent("")
                     .append(GROWTH)
-                    .append(new StringTextComponent(": " + ((int) (100 * growth.growthPercentage()) + "%")));
+                    .append(new StringTextComponent(": " + ((int) (100 * precise) + "%")));
         }
     }
 
-    public static ITextComponent getWeedGrowthTooltip(IAgriGrowthStage growth) {
+    public static ITextComponent getWeedGrowthTooltip(double growth) {
         return new StringTextComponent("")
                 .append(WEED_GROWTH)
-                .append(new StringTextComponent(": " + ((int) (100 * growth.growthPercentage()) + "%")));
+                .append(new StringTextComponent(": " + ((int) (100 * growth) + "%")));
     }
 
     public static ITextComponent getSoilTooltip(IAgriSoil soil) {

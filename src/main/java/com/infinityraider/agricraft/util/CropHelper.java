@@ -98,7 +98,7 @@ public class CropHelper {
         if (crop.hasPlant()) {
             //Add the plant data.
             consumer.accept(AgriToolTips.getPlantTooltip(crop.getPlant()));
-            consumer.accept(AgriToolTips.getGrowthTooltip(crop.getGrowthStage()));
+            consumer.accept(AgriToolTips.getGrowthTooltip(crop.getGrowthStage(), crop.getGrowthPercentage()));
             //Add the stats
             crop.getStats().addTooltips(consumer);
             //Add the fertility information.
@@ -110,7 +110,7 @@ public class CropHelper {
         // Add weed information
         if(crop.hasWeeds()) {
             consumer.accept(AgriToolTips.getWeedTooltip(crop.getWeeds()));
-            consumer.accept(AgriToolTips.getWeedGrowthTooltip(crop.getWeedGrowthStage()));
+            consumer.accept(AgriToolTips.getWeedGrowthTooltip(crop.getWeedGrowthPercentage()));
         } else {
             consumer.accept(AgriToolTips.NO_WEED);
         }

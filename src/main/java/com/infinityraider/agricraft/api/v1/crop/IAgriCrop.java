@@ -62,6 +62,13 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
     IAgriGrowthStage getGrowthStage();
 
     /**
+     * @return The growth percentage of the crop.
+     */
+    default double getGrowthPercentage() {
+        return this.getGrowthStage().growthPercentage();
+    }
+
+    /**
      * Sets the growth stage for this crop, normalized to the range of valid values for the plant.
      * If there is no plant, this will set the stage to zero, and log a warning if the input was
      * non-zero. If growthStage changes, this will call markForUpdate and return true to inform the

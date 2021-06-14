@@ -14,6 +14,10 @@ public interface IAgriWeedSpawnable {
     @Nonnull
     IAgriGrowthStage getWeedGrowthStage();
 
+    default double getWeedGrowthPercentage() {
+        return this.getWeedGrowthStage().growthPercentage();
+    }
+
     boolean setWeed(@Nonnull IAgriWeed weed, @Nonnull IAgriGrowthStage stage);
 
     boolean removeWeed();
