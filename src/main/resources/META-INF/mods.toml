@@ -29,6 +29,13 @@ Agricultural farming extended
     side="BOTH"
 
 [[dependencies.agricraft]]
+    modId="betterweather"
+    mandatory=false
+    versionRange="[2.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.agricraft]]
     modId="botanypots"
     mandatory=false
     versionRange="[1.16.5-7.1.20,)"
