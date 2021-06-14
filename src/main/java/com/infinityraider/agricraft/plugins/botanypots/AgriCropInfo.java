@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
@@ -127,17 +126,6 @@ public class AgriCropInfo extends CropInfo {
         }
         // Run logic
         return AgriApi.getSoilRegistry().valueOf(block).map(soil -> {
-            IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getPlant().getInitialGrowthStage());
-            int strength = this.getStats().getStrength();
-            if(!req.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile()) {
-                return Integer.MAX_VALUE;
-            }
-            if(!req.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile()) {
-                return Integer.MAX_VALUE;
-            }
-            if(!req.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile()) {
-                return Integer.MAX_VALUE;
-            }
             // Fetch and verify Botany Pots modifier
             float modifier = soilInfo.getGrowthModifier();
             if(modifier > -1) {

@@ -58,7 +58,7 @@ public class BotanyPotsHandler {
         if(event.getBotanyPot().getCrop() instanceof AgriCropInfo) {
             event.getBotanyPot().getCapability(CropCapability.getCapability()).ifPresent(crop -> {
                 boolean cancel;
-                if(CropHelper.rollForWeedAction(crop)) {
+                if(AgriCraft.instance.getConfig().allowBotanyPotsWeeds() && CropHelper.rollForWeedAction(crop)) {
                     // Weed tick, run weed logic
                     cancel = true;
                     if(!crop.hasWeeds()) {

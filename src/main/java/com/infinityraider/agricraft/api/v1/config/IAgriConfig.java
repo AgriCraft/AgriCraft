@@ -354,6 +354,11 @@ public interface IAgriConfig {
     boolean enableBotanyPotsCompat();
 
     /**
+     * @return if weeds are allowed to spawn on Botany Pots
+     */
+    boolean allowBotanyPotsWeeds();
+
+    /**
      * @return if Create compatibility is enabled
      */
     boolean enableCreateCompat();

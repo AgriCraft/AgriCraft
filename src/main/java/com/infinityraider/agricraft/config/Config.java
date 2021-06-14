@@ -87,6 +87,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBloodMagicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBotaniaCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableBotanyPotsCompat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> allowBotanyPotsWeeds;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCreateCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCyclicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableIndustrialForegoingCompat;
@@ -239,6 +240,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable Botania compat", true);
             this.enableBotanyPotsCompat = builder.comment("\nSet to false to disable compatibility with Botany Pots (in case things break)")
                     .define("Enable Botany Pots compat", true);
+            this.allowBotanyPotsWeeds = builder.comment("\nSet to false to disable weeds on Botany Pots")
+                    .define("Enable Botany Pots weeds", true);
             this.enableCreateCompat = builder.comment("\nSet to false to disable compatibility with Create (in case things break)")
                     .define("Enable Create compat", true);
             this.enableCyclicCompat = builder.comment("\nSet to false to disable compatibility with Cyclic (in case things break)")
@@ -546,6 +549,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableBotanyPotsCompat() {
             return this.enableBotanyPotsCompat.get();
+        }
+
+        @Override
+        public boolean allowBotanyPotsWeeds() {
+            return this.allowBotanyPotsWeeds.get();
         }
 
         @Override
