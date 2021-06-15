@@ -5,7 +5,7 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraftforge.common.ForgeHooks;
 
 public class ItemAgriNugget extends ItemBase {
     public ItemAgriNugget(String name) {
@@ -13,15 +13,14 @@ public class ItemAgriNugget extends ItemBase {
     }
 
     public static class Burnable extends ItemAgriNugget {
+        private static final ItemStack REFERENCE = new ItemStack(Items.COAL, 1);
         public Burnable(String name) {
             super(name);
         }
 
         @Override
-        @SuppressWarnings("deprecation")
         public int getBurnTime(ItemStack itemStack) {
-            return AbstractFurnaceTileEntity.getBurnTimes().get(Items.COAL)/9;
+            return ForgeHooks.getBurnTime(REFERENCE) / 9;
         }
-
     }
 }
