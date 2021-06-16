@@ -1,12 +1,13 @@
 Changelog
 ---------
 3.0.2
+- CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
 - ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
 - ADDED: Default jsons for Environmental (thanks Nelson)
 - ADDED: Default jsons for Upgrade Aquatic (thanks Nelson)
 - ADDED: Season Compatibility with Simply Seasons
 - ADDED: Full Botany Pots compatibility
-- ADDED: Greenhouse groundwork (Greenhouses remain WIP, do not expect to find any in your world)
+- ADDED: Greenhouse groundwork (Greenhouses remain WIP, do not expect to find any in your world yet)
 - FIXED: Gain stat not correctly increasing item drops
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create

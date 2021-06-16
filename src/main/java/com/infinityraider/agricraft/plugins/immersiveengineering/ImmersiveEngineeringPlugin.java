@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.plugins.immersiveengineering;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.fml.ModList;
@@ -11,12 +10,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 
 import javax.annotation.Nullable;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.IMMERSIVE_ENGINEERING)
 public class ImmersiveEngineeringPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
-        return ModList.get().isLoaded(this.getId());
+        return AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat();
     }
 
     @Override
@@ -25,22 +24,18 @@ public class ImmersiveEngineeringPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "Immersive Engineering compatibility";
     }
 
     @Override
     public void onClientSetupEvent(FMLClientSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
-            ImmersiveEngineeringCompatClient.registerRenderFunction();
-        }
+        ImmersiveEngineeringCompatClient.registerRenderFunction();
     }
 
     @Override
     public void onServerSetupEvent(FMLDedicatedServerSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
-            ImmersiveEngineeringCompat.registerDummyRenderFunction();
-        }
+        ImmersiveEngineeringCompat.registerDummyRenderFunction();
     }
 
     @Nullable

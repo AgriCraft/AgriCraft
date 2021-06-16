@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
@@ -15,47 +14,46 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.lang.annotation.Annotation;
 import java.util.Deque;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
 
 public final class PluginHandler {
-
-    @Nonnull
     private static final Deque<IAgriPlugin> PLUGINS = new ConcurrentLinkedDeque<>();
 
     public static void initPlugins() {
-        PLUGINS.addAll(getInstances(getScanData(), AgriPlugin.class, IAgriPlugin.class));
-        PLUGINS.forEach(PluginHandler::logPlugin);
+        ModList.get().getAllScanData().forEach(data -> PLUGINS.addAll(getInstances(
+                data, AgriPlugin.class, IAgriPlugin.class, plugin -> plugin.alwaysLoad() || ModList.get().isLoaded(plugin.modId())
+        )));
+    }
+
+    public static void onAgriCraftConstructed() {
+        PLUGINS.stream().peek(PluginHandler::logPlugin).filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::onAgriCraftConstructed);
     }
 
     public static void onCommonSetup(FMLCommonSetupEvent event) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onCommonSetupEvent(event));
+        executeForPlugins(plugin -> plugin.onCommonSetupEvent(event));
     }
 
     public static void onClientSetup(FMLClientSetupEvent event) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onClientSetupEvent(event));
+        executeForPlugins(plugin -> plugin.onClientSetupEvent(event));
     }
 
     public static void onServerSetup(FMLDedicatedServerSetupEvent event) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(plugin -> plugin.onServerSetupEvent(event));
-    }
-
-    private static void executeForPlugins(Consumer<IAgriPlugin> consumer) {
-        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(consumer);
+        executeForPlugins(plugin -> plugin.onServerSetupEvent(event));
     }
 
     public static void onInterModEnqueueEvent(InterModEnqueueEvent event) {
@@ -64,6 +62,10 @@ public final class PluginHandler {
 
     public static void onInterModProcessEvent(InterModProcessEvent event) {
         executeForPlugins(plugin -> plugin.onInterModProcessEvent(event));
+    }
+
+    private static void executeForPlugins(Consumer<IAgriPlugin> consumer) {
+        PLUGINS.stream().filter(IAgriPlugin::isEnabled).forEach(consumer);
     }
 
     public static void populateRegistries() {
@@ -115,7 +117,7 @@ public final class PluginHandler {
     }
 
     /**
-     * Loads classes with a specific annotation the modfile's FML scan data
+     * Loads classes with a specific annotation from FML scan data
      *
      * @param <A> The annotation type to load.
      * @param <T> The type of class to load.
@@ -125,51 +127,40 @@ public final class PluginHandler {
      * @return A list of the loaded classes, instantiated.
      */
     @Nonnull
-    private static <A, T> List<T> getInstances(ModFileScanData data, Class<A> anno, Class<T> type) {
-        final List<T> instances = new ArrayList<>();
-        if(data == null) {
-            AgriCore.getLogger("agricraft-plugins").error(
-                    "Failed to load AgriPlugins, ModFileScanData not found");
-        } else if(data.getAnnotations() == null || data.getAnnotations().size() <= 0) {
-            AgriCore.getLogger("agricraft-plugins").error(
-                    "Failed to load AgriPlugins, no PlugIn Annotations found in ModFileScanData");
-        } else {
-            data.getAnnotations().stream().
-                    filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType())).
-                    forEach(annotationData -> {
-                        try {
-                            T instance = Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
-                            instances.add(instance);
-                        } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
-                            AgriCore.getLogger("agricraft-plugins").debug(
-                                    "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
-                                    annotationData.getTargetType(),
-                                    anno.getCanonicalName(),
-                                    type.getCanonicalName()
-                            );
-                        }
-                    });
-        }
-        return instances;
+    private static <A extends Annotation, T> List<T> getInstances(ModFileScanData data, Class<A> anno, Class<T> type, Predicate<A> predicate) {
+        return data.getAnnotations().stream()
+                .filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType()))
+                .filter(annotationData -> checkAnnotationPredicate(anno, predicate, annotationData))
+                .map(annotationData -> {
+                    try {
+                        return Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
+                    } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
+                        AgriCore.getLogger("agricraft-plugins").debug(
+                                "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
+                                annotationData.getTargetType(),
+                                anno.getCanonicalName(),
+                                type.getCanonicalName()
+                        );
+                        return null;
+                    }})
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
-    private static ModFileScanData getScanData() {
-        return ModList.get().getModContainerById(AgriCraft.instance.getModId())
-                .flatMap(mc -> mc instanceof FMLModContainer ? Optional.of((FMLModContainer) mc) : Optional.empty())
-                .flatMap(container -> {
-                    try {
-                        Field field = FMLModContainer.class.getDeclaredField("scanResults");
-                        field.setAccessible(true);
-                        return Optional.ofNullable((ModFileScanData) field.get(container));
-                    } catch (IllegalAccessException | NoSuchFieldException | ClassCastException e) {
-                        AgriCore.getLogger("agricraft-plugins").error(
-                                "Failed to fetch ModFileScanData from FMLModContainer");
-                    }
-                    return Optional.empty();
-                }).orElse(null);
+    private static <A extends Annotation> boolean checkAnnotationPredicate(Class<A> anno, Predicate<A> predicate, ModFileScanData.AnnotationData data) {
+        try {
+            return predicate.test(Class.forName(data.getMemberName()).getAnnotation(anno));
+        } catch (Exception e) {
+            AgriCore.getLogger("agricraft-plugins").error("Failed to check plugin " + data.getMemberName());
+            return false;
+        }
     }
     
     private static void logPlugin(IAgriPlugin plugin) {
-        AgriCore.getLogger("agricraft").info("\nFound AgriCraft Plugin:\n\t- Id: {0}\n\t- Name: {1}\n\t- Status: {2}", plugin.getId(), plugin.getName(), plugin.isEnabled() ? "Enabled" : "Disabled");
+        AgriCore.getLogger("agricraft").info("\nFound AgriCraft Plugin:\n\t- Id: {0}\n\t- Description: {1}\n\t- Status: {2}",
+                plugin.getId(),
+                plugin.getDescription(),
+                plugin.isEnabled() ? "Enabled" : "Disabled"
+        );
     }
 }

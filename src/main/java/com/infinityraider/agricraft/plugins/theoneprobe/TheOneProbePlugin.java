@@ -1,14 +1,13 @@
 package com.infinityraider.agricraft.plugins.theoneprobe;
 
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.THE_ONE_PROBE)
 public class TheOneProbePlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
@@ -21,8 +20,8 @@ public class TheOneProbePlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "The One Probe compatibility";
     }
 
     @Override

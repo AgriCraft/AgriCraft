@@ -1,23 +1,20 @@
 package com.infinityraider.agricraft.plugins.industrialforegoing;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
-import net.minecraftforge.fml.ModList;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.INDUSTRIAL_FOREGOING)
 public class IndustrialForegoingPlugin implements IAgriPlugin {
-    public IndustrialForegoingPlugin() {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableIndustrialForegoingCompat()) {
-            IndustrialForegoingCompat.execute();
-        }
+    @Override
+    public void onAgriCraftConstructed() {
+        IndustrialForegoingCompat.execute();
     }
 
     @Override
     public boolean isEnabled() {
-        return ModList.get().isLoaded(this.getId());
+        return AgriCraft.instance.getConfig().enableIndustrialForegoingCompat();
     }
 
     @Override
@@ -26,7 +23,7 @@ public class IndustrialForegoingPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "Industrial Foregoing compatibility";
     }
 }

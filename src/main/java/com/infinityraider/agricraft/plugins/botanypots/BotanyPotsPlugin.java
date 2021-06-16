@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.plugins.botanypots;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.fml.ModList;
@@ -10,13 +9,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nullable;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.BOTANY_POTS)
 public class BotanyPotsPlugin implements IAgriPlugin {
 
     @Override
     public boolean isEnabled() {
-        return ModList.get().isLoaded(this.getId());
+        return AgriCraft.instance.getConfig().enableBotanyPotsCompat();
     }
 
     @Override
@@ -25,16 +24,14 @@ public class BotanyPotsPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "Botany Pots compatibility";
     }
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        if (this.isEnabled() && AgriCraft.instance.getConfig().enableBotanyPotsCompat()) {
-            BotanyCropsCompat.registerEventHandler();
-            BotanyCropsCompat.registerCapability();
-        }
+        BotanyCropsCompat.registerEventHandler();
+        BotanyCropsCompat.registerCapability();
     }
 
     @Nullable

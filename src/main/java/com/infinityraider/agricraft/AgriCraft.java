@@ -31,6 +31,11 @@ import java.util.List;
 public class AgriCraft extends InfinityMod<IProxy, Config> {
     public static AgriCraft instance;
 
+    public AgriCraft() {
+        super();
+        PluginHandler.onAgriCraftConstructed();
+    }
+
     @Override
     public String getModId() {
         return Reference.MOD_ID;

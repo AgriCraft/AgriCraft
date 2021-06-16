@@ -39,6 +39,11 @@ public abstract class SeasonPlugin implements IAgriPlugin {
     }
 
     @Override
+    public final boolean isEnabled() {
+        return ModList.get().isLoaded(this.getId());
+    }
+
+    @Override
     public final void registerSeasonLogic(@Nonnull IAgriSeasonLogic seasonLogic) {
         if(SeasonLogic.getInstance().getOwner() == null) {
             if(SEASON_MODS.stream().filter(id -> !id.equalsIgnoreCase(this.getId())).anyMatch(id -> ModList.get().isLoaded(id))) {

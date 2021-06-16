@@ -1,18 +1,16 @@
 package com.infinityraider.agricraft.plugins.bloodmagic;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.BLOOD_MAGIC)
 public class BloodMagicPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
-        return ModList.get().isLoaded(this.getId());
+        return AgriCraft.instance.getConfig().enableBloodMagicCompat();
     }
 
     @Override
@@ -21,14 +19,12 @@ public class BloodMagicPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "Blood Magic compatibility";
     }
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableBloodMagicCompat()) {
-            BloodMagicCompat.execute();
-        }
+        BloodMagicCompat.execute();
     }
 }

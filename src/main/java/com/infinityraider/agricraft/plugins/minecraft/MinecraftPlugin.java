@@ -6,9 +6,9 @@ import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
+import com.infinityraider.agricraft.reference.Names;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.passive.*;
 import net.minecraft.util.math.vector.Vector3f;
@@ -16,8 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nonnull;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.MINECRAFT, alwaysLoad = true)
 public class MinecraftPlugin implements IAgriPlugin {
     public final JsonPlantCallback experience;
     public final JsonPlantCallback brightness;
@@ -48,7 +48,7 @@ public class MinecraftPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
+    public String getDescription() {
         return "Vanilla Minecraft Integration";
     }
 

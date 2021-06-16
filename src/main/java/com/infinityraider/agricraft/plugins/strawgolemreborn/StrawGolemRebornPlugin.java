@@ -1,18 +1,16 @@
 package com.infinityraider.agricraft.plugins.strawgolemreborn;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
-import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
+import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@AgriPlugin
 @SuppressWarnings("unused")
+@AgriPlugin(modId = Names.Mods.STRAW_GOLEM)
 public class StrawGolemRebornPlugin implements IAgriPlugin {
     @Override
     public boolean isEnabled() {
-        return ModList.get().isLoaded(this.getId());
+        return AgriCraft.instance.getConfig().enableStrawGolemRebornCompat();
     }
 
     @Override
@@ -21,14 +19,12 @@ public class StrawGolemRebornPlugin implements IAgriPlugin {
     }
 
     @Override
-    public String getName() {
-        return this.getId();
+    public String getDescription() {
+        return "Straw Golem Reborn compatibility [WIP]";
     }
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
-        if(this.isEnabled() && AgriCraft.instance.getConfig().enableStrawGolemRebornCompat()) {
-
-        }
+        // TODO
     }
 }
