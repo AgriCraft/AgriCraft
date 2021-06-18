@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.3
+
+
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
 - ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
