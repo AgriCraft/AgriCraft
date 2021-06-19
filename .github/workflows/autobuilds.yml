@@ -1,0 +1,48 @@
+name: Autobuild AgriCraft
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+      - name: Gradle build
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: build --no-daemon
+          wrapper-cache-enabled: true
+          dependencies-cache-enabled: true
+          configuration-cache-enabled: true
+      - name: Remove unneeded compiled files
+        run: |
+          find -type f -path './build/libs/*' -name '*sources*' -delete
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Agricraft Build
+          path: build/libs/*
+  release:
+    name: Create pubilc releases
+    runs-on: ubuntu-latest
+    needs: build
+    if: "startsWith(github.event.head_commit.message, 'Release')"
+    steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v2
+      - name: Get version from commit
+        run: echo "VERSION=$(echo ${{ github.event.commits[0].message }} | awk '{print $2}')" >> $GITHUB_ENV 
+      - name: Release public builds
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ env.VERSION }}"
+          prerelease: true
+          draft: true
+          files: "**"
