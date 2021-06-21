@@ -2,6 +2,7 @@ Changelog
 ---------
 3.0.3
 - CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
+- CHANGE: The AgriCraft config file now sits in the agricraft subdirectory
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
 
 3.0.2
