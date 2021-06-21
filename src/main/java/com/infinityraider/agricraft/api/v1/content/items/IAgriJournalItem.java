@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.infinityraider.agricraft.api.v1.util.IAgriItem;
 import net.minecraft.item.ItemStack;
 
 /**

@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 

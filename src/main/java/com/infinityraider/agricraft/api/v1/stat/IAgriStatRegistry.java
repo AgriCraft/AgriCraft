@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.stat;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 
 public interface IAgriStatRegistry extends IAgriRegistry<IAgriStat> {
     /**

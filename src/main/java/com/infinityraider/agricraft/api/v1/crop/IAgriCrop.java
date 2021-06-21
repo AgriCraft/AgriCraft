@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.util.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeedSpawnable;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeAcceptor;

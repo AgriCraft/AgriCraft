@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.IFormattableTextComponent;

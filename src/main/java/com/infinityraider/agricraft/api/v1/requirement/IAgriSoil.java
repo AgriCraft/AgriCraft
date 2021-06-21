@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 
 import java.util.Arrays;
 import java.util.Collection;

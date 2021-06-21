@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.api.v1.plugin;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.*;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;

@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.content.items;
+package com.infinityraider.agricraft.api.v1.util;
 
 import net.minecraft.item.Item;
 

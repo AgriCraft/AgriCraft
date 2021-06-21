@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 
 import javax.annotation.Nonnull;
 import java.util.List;

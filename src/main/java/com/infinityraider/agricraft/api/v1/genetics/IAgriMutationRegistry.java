@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 import java.util.Arrays;
