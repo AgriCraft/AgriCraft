@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.AgriApiState;
 import com.infinityraider.agricraft.api.v1.IAgriApiConnector;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -19,6 +20,7 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
+import com.infinityraider.agricraft.content.AgriContent;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
@@ -82,6 +84,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public AgriApiState getState() {
         return AgriApiState.VALID;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriContent connectAgriContent() {
+        return AgriContent.getInstance();
     }
 
     @Nonnull

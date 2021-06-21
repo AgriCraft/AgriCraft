@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 
 import java.text.MessageFormat;
 import java.util.Collection;

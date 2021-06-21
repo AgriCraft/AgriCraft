@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.items;
+package com.infinityraider.agricraft.api.v1.content.items;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content;
 
+import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.core.BlockCropPlant;
 import com.infinityraider.agricraft.content.core.BlockCropSticks;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
@@ -10,8 +11,9 @@ import com.infinityraider.agricraft.content.irrigation.BlockIrrigationChannelNor
 import com.infinityraider.agricraft.content.irrigation.BlockIrrigationTank;
 import com.infinityraider.agricraft.content.irrigation.BlockSprinkler;
 import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
+import net.minecraft.block.Block;
 
-public class AgriBlockRegistry {
+public class AgriBlockRegistry implements IAgriContent.Blocks {
 
     private static final AgriBlockRegistry INSTANCE = new AgriBlockRegistry();
 
@@ -63,5 +65,60 @@ public class AgriBlockRegistry {
         this.grate = new BlockGrate();
 
         this.greenhouse_air = new BlockGreenHouseAir();
+    }
+
+    @Override
+    public Block getCropPlantBlock() {
+        return this.crop_plant;
+    }
+
+    @Override
+    public Block getWoodCropSticksBlock() {
+        return this.crop_sticks_wood;
+    }
+
+    @Override
+    public Block getIronCropSticksBlock() {
+        return this.crop_sticks_iron;
+    }
+
+    @Override
+    public Block getObsidianCropSticksBlock() {
+        return this.crop_sticks_obsidian;
+    }
+
+    @Override
+    public Block getSeedAnalyzerBlock() {
+        return this.seed_analyzer;
+    }
+
+    @Override
+    public Block getTankBlock() {
+        return this.tank;
+    }
+
+    @Override
+    public Block getChannelBlock() {
+        return this.channel;
+    }
+
+    @Override
+    public Block getHollowChannelBlock() {
+        return this.channel_hollow;
+    }
+
+    @Override
+    public Block getSprinklerBlock() {
+        return this.sprinkler;
+    }
+
+    @Override
+    public Block getGrateBlock() {
+        return this.grate;
+    }
+
+    @Override
+    public Block getGreenHouseAirBlock() {
+        return this.greenhouse_air;
     }
 }

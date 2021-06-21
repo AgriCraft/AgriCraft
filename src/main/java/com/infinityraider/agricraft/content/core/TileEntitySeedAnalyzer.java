@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.*;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;

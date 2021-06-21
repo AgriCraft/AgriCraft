@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.plugins.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.ClocheRenderFunction;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import net.minecraft.block.BlockState;

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
+import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -60,6 +61,20 @@ public final class AgriApi {
     @Nonnull
     public static AgriApiState getState() {
         return AgriApi.CONNECTOR.getState();
+    }
+
+    /**
+     * Fetches the AgriCraft IAgriContent instance, giving access to AgriCraft's Minecraft content.
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the AgriCraft Minecraft content
+     */
+    @Nonnull
+    public static IAgriContent getAgriContent() {
+        return AgriApi.CONNECTOR.connectAgriContent();
     }
 
     /**

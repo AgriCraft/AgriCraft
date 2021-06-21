@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;

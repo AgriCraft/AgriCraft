@@ -9,7 +9,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;

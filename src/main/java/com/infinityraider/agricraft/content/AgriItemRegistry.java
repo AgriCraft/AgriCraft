@@ -1,13 +1,17 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.ItemGrate;
 import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.tools.*;
 import com.infinityraider.agricraft.reference.Names;
+import net.minecraft.item.Item;
 
-public class AgriItemRegistry {
+import javax.annotation.Nullable;
+
+public class AgriItemRegistry implements IAgriContent.Items {
 
     private static final AgriItemRegistry INSTANCE = new AgriItemRegistry();
 
@@ -86,5 +90,124 @@ public class AgriItemRegistry {
                 : null;
 
         this.grate = new ItemGrate();
+    }
+
+    @Override
+    public Item getDebuggerItem() {
+        return this.debugger;
+    }
+
+    @Override
+    public Item getWoodCropSticksItem() {
+        return this.crop_sticks_wood;
+    }
+
+    @Override
+    public Item getIronCropSticksItem() {
+        return this.crop_sticks_iron;
+    }
+
+    @Override
+    public Item getObsidianCropSticksItem() {
+        return this.crop_sticks_obsidian;
+    }
+
+    @Override
+    public Item getSeedAnalyzerItem() {
+        return this.seed_analyzer;
+    }
+
+    @Override
+    public Item getJournalItem() {
+        return this.journal;
+    }
+
+    @Override
+    public Item getSeedItem() {
+        return this.seed;
+    }
+
+    @Override
+    public Item getIrrigationTankItem() {
+        return this.tank;
+    }
+
+    @Override
+    public Item getIrrigationChannelItem() {
+        return this.channel;
+    }
+
+    @Override
+    public Item getHollowIrrigationChannelItem() {
+        return this.channel_hollow;
+    }
+
+    @Override
+    public Item getSprinklerItem() {
+        return this.sprinkler;
+    }
+
+    @Override
+    public Item getValveItem() {
+        return this.valve;
+    }
+
+    @Override
+    public Item getClipperItem() {
+        return this.clipper;
+    }
+
+    @Override
+    public Item getMagnifyingGlassItem() {
+        return this.magnifying_glass;
+    }
+
+    @Override
+    public Item getWoodenRakeItem() {
+        return this.rake_wood;
+    }
+
+    @Override
+    public Item getIronRakeItem() {
+        return this.rake_iron;
+    }
+
+    @Override
+    public Item getTrowelItem() {
+        return this.trowel;
+    }
+
+    @Override
+    public Item getSeedBagItem() {
+        return this.seed_bag;
+    }
+
+    @Override
+    public Item getGrateItem() {
+        return this.grate;
+    }
+
+    @Nullable
+    @Override
+    public Item getCoalNuggetItem() {
+        return this.nugget_coal;
+    }
+
+    @Nullable
+    @Override
+    public Item getDiamondNuggetItem() {
+        return this.nugget_diamond;
+    }
+
+    @Nullable
+    @Override
+    public Item getEmeraldNuggetItem() {
+        return this.nugget_emerald;
+    }
+
+    @Nullable
+    @Override
+    public Item getQuartzNuggetItem() {
+        return this.nugget_quartz;
     }
 }
