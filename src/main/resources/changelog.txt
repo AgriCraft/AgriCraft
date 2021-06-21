@@ -1,6 +1,7 @@
 Changelog
 ---------
 3.0.3
+- FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
 
 
 3.0.2

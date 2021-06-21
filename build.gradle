@@ -195,8 +195,8 @@ dependencies {
     compile project('InfinityLib')
 
 	//JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.72")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106")
 
     //TOP
     compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.3-beta-6") {
