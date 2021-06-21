@@ -1,8 +1,8 @@
 Changelog
 ---------
 3.0.3
+- CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
-
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
