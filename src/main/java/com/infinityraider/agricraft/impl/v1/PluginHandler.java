@@ -40,11 +40,8 @@ public final class PluginHandler {
         )));
     }
 
-    public static void onAgriCraftConstructed() {
-        PLUGINS.stream().peek(PluginHandler::logPlugin).filter(IAgriPlugin::isEnabled).forEach(IAgriPlugin::onAgriCraftConstructed);
-    }
-
     public static void onCommonSetup(FMLCommonSetupEvent event) {
+        PLUGINS.forEach(PluginHandler::logPlugin);
         executeForPlugins(plugin -> plugin.onCommonSetupEvent(event));
     }
 

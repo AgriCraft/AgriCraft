@@ -33,7 +33,6 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
 
     public AgriCraft() {
         super();
-        PluginHandler.onAgriCraftConstructed();
     }
 
     @Override

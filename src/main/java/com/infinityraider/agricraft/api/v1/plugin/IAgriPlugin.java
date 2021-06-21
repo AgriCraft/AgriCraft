@@ -46,10 +46,6 @@ public interface IAgriPlugin {
     
     String getDescription();
 
-    default void onAgriCraftConstructed() {
-        // Default Implementation: Do nothing.
-    }
-
     default void onCommonSetupEvent(FMLCommonSetupEvent event) {
         // Default Implementation: Do nothing.
     }
