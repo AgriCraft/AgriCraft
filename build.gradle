@@ -218,8 +218,8 @@ dependencies {
     //Botany pots
     compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
     compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
-    runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
-    runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
+    //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
+    //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
 
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3278516")
