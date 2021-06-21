@@ -98,6 +98,12 @@ public interface IAgriConfig {
      */
     boolean allowFertilizerMutations();
 
+
+    /**
+     * @return true if mutations are allowed to occur on cloning
+     */
+    boolean allowCloneMutations();
+
     /**
      * @return true if vanilla farming is overridden
      */

@@ -22,7 +22,8 @@ public class AgriMutationEngine implements IAgriMutationEngine {
 
     public AgriMutationEngine() {
         this.selector = this::selectAndSortCandidates;
-        this.cloner = (parent, random) -> parent.clone();
+        this.cloner = (parent, random) -> AgriApi.getAgriGenomeBuilder(parent.getTrait(GeneSpecies.getInstance()))
+                .populate(gene -> this.cloneGene(gene, parent, random)).build();
         this.combiner = (parents, random) -> AgriApi.getAgriGenomeBuilder(parents.getA().getTrait(GeneSpecies.getInstance()))
                 .populate(gene -> this.mutateGene(gene, parents, random)).build();
     }
@@ -116,7 +117,23 @@ public class AgriMutationEngine implements IAgriMutationEngine {
                 gene,
                 this.pickRandomAllele(parents.getA().getGenePair(gene), rand),
                 this.pickRandomAllele(parents.getB().getGenePair(gene), rand),
-                parents, rand);
+                parents,
+                rand
+        );
+    }
+
+    protected <T> IAgriGenePair<T> cloneGene(IAgriGene<T> gene, IAgriGenome parent, Random rand) {
+        if(AgriCraft.instance.getConfig().allowCloneMutations()) {
+            return gene.mutator().pickOrMutate(
+                    gene,
+                    parent.getGenePair(gene).getDominant(),
+                    parent.getGenePair(gene).getRecessive(),
+                    new Tuple<>(parent, parent),
+                    rand
+            );
+        } else {
+            return parent.getGenePair(gene).clone();
+        }
     }
 
     protected  <T> IAllele<T> pickRandomAllele(IAgriGenePair<T> pair, Random random) {

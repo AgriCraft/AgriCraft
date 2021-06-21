@@ -26,6 +26,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
+        private final ForgeConfigSpec.ConfigValue<Boolean> cloneMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> overrideVanillaFarming;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyMatureSeedDrops;
@@ -124,6 +125,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Only fertile crops mutate", false);
             this.fertilizerMutations = builder.comment("\nSet to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
+            this.cloneMutations = builder.comment("\nSet to true to allow mutations on clone events (spreading from single crop).")
+                    .define("Clone mutations", false);
             this.overrideVanillaFarming = builder.comment("\nSet to true to override vanilla farming, meaning vanilla seeds will be converted to agricraft seeds on planting.")
                     .define("Override vanilla farming", true);
             this.growthMultiplier = builder.comment("\nThis is a global growth rate multiplier for crops planted on crop sticks.")
@@ -298,6 +301,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean allowFertilizerMutations() {
             return this.fertilizerMutations.get();
+        }
+
+        @Override
+        public boolean allowCloneMutations() {
+            return this.cloneMutations.get();
         }
 
         @Override
