@@ -38,7 +38,7 @@ public class SeedBagScrollHandler {
             if(bag.incrementSorter(stack, delta)) {
                 new MessageSyncSeedBagSortMode(hand, bag.getContents(stack).getSorterIndex()).sendToServer();
                 SeedBagShakeHandler.getInstance().shake(hand);
-                ItemSeedBag.IContents contents = bag.getContents(stack);
+                ItemSeedBag.Contents contents = bag.getContents(stack);
                 IFormattableTextComponent message = new StringTextComponent("")
                         .append(contents.getSorter().describe())
                         .append(new StringTextComponent(", "))

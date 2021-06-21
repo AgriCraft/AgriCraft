@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.tools;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedBagItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -35,53 +36,39 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Comparator;
 import java.util.List;
 
-public class ItemSeedBag extends ItemBase {
+public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
     private static final ITextComponent NAME_DEACTIVATED = new TranslationTextComponent("item.agricraft.agri_seed_bag_inactive");
 
-    private static final List<ISorter> sorters = Lists.newArrayList();
-
-    public static ISorter getSorter(int index) {
-        return sorters.get(index % sorters.size());
-    }
-
-    public static int addSorter(ISorter sorter) {
-        if(sorters.contains(sorter)) {
-            return sorters.indexOf(sorter);
-        } else {
-            sorters.add(sorter);
-            return sorters.size() - 1;
-        }
-    }
-
-    public static int addSorter(IAgriStat stat) {
-        return addSorter(new StatSorter(stat));
-    }
+    private final List<Sorter> sorters;
 
     public ItemSeedBag() {
         super(Names.Items.SEED_BAG, new Properties()
                 .group(AgriTabs.TAB_AGRICRAFT)
                 .maxStackSize(1)
         );
+        this.sorters = Lists.newArrayList();
+        this.addSorter(DEFAULT_SORTER);
     }
 
-    public IContents getContents(ItemStack stack) {
-        return CapabilitySeedBagContents.getInstance().getCapability(stack).map(impl -> (IContents) impl).orElse(EMPTY);
+    @Override
+    public Contents getContents(ItemStack stack) {
+        return CapabilitySeedBagContents.getInstance().getCapability(stack).map(impl -> (Contents) impl).orElse(EMPTY);
     }
 
+    @Override
     public boolean isActivated(ItemStack stack) {
         return EnchantmentHelper.getEnchantments(stack).containsKey(AgriCraft.instance.getModEnchantmentRegistry().seed_bag);
     }
 
+    @Override
     public boolean incrementSorter(ItemStack stack, int delta) {
         if(this.isActivated(stack)) {
-            IContents contents = this.getContents(stack);
+            Contents contents = this.getContents(stack);
             int newPos = contents.getSorterIndex() + delta;
             newPos = (newPos < 0) ? (newPos + sorters.size()) : (newPos % sorters.size());
             contents.setSorterIndex(newPos);
@@ -90,10 +77,30 @@ public class ItemSeedBag extends ItemBase {
         return false;
     }
 
+    @Override
+    public Sorter getSorter(int index) {
+        return sorters.get(index % sorters.size());
+    }
+
+    @Override
+    public int addSorter(Sorter sorter) {
+        if(sorters.contains(sorter)) {
+            return sorters.indexOf(sorter);
+        } else {
+            sorters.add(sorter);
+            return sorters.size() - 1;
+        }
+    }
+
+    @Override
+    public int addSorter(IAgriStat stat) {
+        return addSorter(new StatSorter(stat));
+    }
+
     @Nonnull
     @Override
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        IContents contents = this.getContents(context.getItem());
+        Contents contents = this.getContents(context.getItem());
         if(this.isActivated(context.getItem())) {
             Hand hand = context.getHand();
             PlayerEntity player = context.getPlayer();
@@ -118,7 +125,7 @@ public class ItemSeedBag extends ItemBase {
         // From off hand: interact with main to insert / extract seeds
         if(hand == Hand.OFF_HAND) {
             ItemStack stack = player.getHeldItem(hand);
-            IContents contents = this.getContents(stack);
+            Contents contents = this.getContents(stack);
             if(this.isActivated(stack) && this.attemptExtractOrInsertSeed(player, contents)) {
                 return ActionResult.resultSuccess(stack);
             }
@@ -127,7 +134,7 @@ public class ItemSeedBag extends ItemBase {
         return ActionResult.resultPass(player.getHeldItem(hand));
     }
 
-    protected boolean attemptPlantSeed(World world, BlockPos pos, IContents contents, @Nullable  PlayerEntity player) {
+    protected boolean attemptPlantSeed(World world, BlockPos pos, Contents contents, @Nullable  PlayerEntity player) {
         if (contents.getCount() > 0) {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileEntityCropSticks) {
@@ -179,7 +186,7 @@ public class ItemSeedBag extends ItemBase {
         }).orElse(false);
     }
 
-    protected boolean attemptExtractOrInsertSeed(PlayerEntity player, IContents contents) {
+    protected boolean attemptExtractOrInsertSeed(PlayerEntity player, Contents contents) {
         ItemStack held = player.getHeldItem(Hand.MAIN_HAND);
         if(held.isEmpty()) {
             boolean last = player.isSneaking();
@@ -242,37 +249,7 @@ public class ItemSeedBag extends ItemBase {
         super.addInformation(stack, world, tooltip, flag);
     }
 
-    public interface IContents extends IItemHandler {
-        IAgriPlant getPlant();
-
-        int getCount();
-
-        boolean isFull();
-
-        ISorter getSorter();
-
-        int getSorterIndex();
-
-        void setSorterIndex(int index);
-
-        default ItemStack insertSeed(ItemStack stack, boolean simulate) {
-            return this.insertItem(0, stack, simulate);
-        }
-
-        ItemStack extractFirstSeed(int amount, boolean simulate);
-
-        ItemStack extractLastSeed(int amount, boolean simulate);
-
-        int getCapacity();
-    }
-
-    public interface ISorter extends Comparator<IAgriGenome> {
-        ITextComponent getName();
-
-        ITextComponent describe();
-    }
-
-    public static class StatSorter implements ISorter {
+    public static class StatSorter implements Sorter {
         private final IAgriStat stat;
         private final ITextComponent description;
 
@@ -306,7 +283,7 @@ public class ItemSeedBag extends ItemBase {
         }
     }
 
-    public static final ISorter DEFAULT_SORTER = new ISorter() {
+    public static final Sorter DEFAULT_SORTER = new Sorter() {
         @Override
         public ITextComponent getName() {
             return AgriToolTips.SEED_BAG_SORTER_DEFAULT;
@@ -337,7 +314,7 @@ public class ItemSeedBag extends ItemBase {
         }
     };
 
-    private static final IContents EMPTY = new IContents() {
+    private static final Contents EMPTY = new Contents() {
         @Override
         public IAgriPlant getPlant() {
             return NoPlant.getInstance();
@@ -354,7 +331,7 @@ public class ItemSeedBag extends ItemBase {
         }
 
         @Override
-        public ISorter getSorter() {
+        public Sorter getSorter() {
             return DEFAULT_SORTER;
         }
 
@@ -414,8 +391,4 @@ public class ItemSeedBag extends ItemBase {
             return false;
         }
     };
-
-    static {
-        addSorter(DEFAULT_SORTER);
-    }
 }

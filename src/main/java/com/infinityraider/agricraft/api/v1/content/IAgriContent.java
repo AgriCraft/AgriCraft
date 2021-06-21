@@ -203,7 +203,7 @@ public interface IAgriContent {
         IAgriTrowelItem getTrowelItem();
 
         /** @return the AgriCraft Seed Bag Item */
-        Item getSeedBagItem();
+        IAgriSeedBagItem getSeedBagItem();
 
         /** @return the AgriCraft Grate Item */
         Item getGrateItem();

@@ -178,7 +178,7 @@ public class ItemToolTipHandler {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof ItemSeedBag) {
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
-            ItemSeedBag.IContents contents = bag.getContents(stack);
+            ItemSeedBag.Contents contents = bag.getContents(stack);
             if(bag.isActivated(stack)) {
                 // Remove previous tooltip
                 if(event.getToolTip().size() > 0) {
