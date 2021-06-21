@@ -2,8 +2,6 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.irrigation.FluidTankWater;
-import net.minecraft.fluid.Fluid;
-
 public class AgriFluidRegistry implements IAgriContent.Fluids {
     private static final AgriFluidRegistry INSTANCE = new AgriFluidRegistry();
 
@@ -19,7 +17,7 @@ public class AgriFluidRegistry implements IAgriContent.Fluids {
     }
 
     @Override
-    public Fluid getTankWater() {
+    public FluidTankWater getTankWater() {
         return this.tank_water;
     }
 }

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.tools.*;
-import net.minecraft.enchantment.Enchantment;
 
 public class AgriEnchantmentRegistry implements IAgriContent.Enchantments {
 
@@ -20,7 +19,7 @@ public class AgriEnchantmentRegistry implements IAgriContent.Enchantments {
     }
 
     @Override
-    public Enchantment getSeedBagEnchantment() {
+    public EnchantmentSeedBag getSeedBagEnchantment() {
         return this.seed_bag;
     }
 }

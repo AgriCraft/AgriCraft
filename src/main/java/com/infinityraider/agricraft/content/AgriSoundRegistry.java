@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.sound.SoundEventBase;
-import net.minecraft.util.SoundEvent;
 
 public class AgriSoundRegistry implements IAgriContent.Sounds {
     private static final AgriSoundRegistry INSTANCE = new AgriSoundRegistry();
@@ -25,7 +24,7 @@ public class AgriSoundRegistry implements IAgriContent.Sounds {
     }
 
     @Override
-    public SoundEvent getValveSound() {
+    public SoundEventBase getValveSound() {
         return this.valve;
     }
 }

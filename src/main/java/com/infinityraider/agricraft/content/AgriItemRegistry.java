@@ -3,11 +3,10 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.core.*;
-import com.infinityraider.agricraft.content.decoration.ItemGrate;
+import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.tools.*;
 import com.infinityraider.agricraft.reference.Names;
-import net.minecraft.item.Item;
 
 import javax.annotation.Nullable;
 
@@ -93,121 +92,121 @@ public class AgriItemRegistry implements IAgriContent.Items {
     }
 
     @Override
-    public Item getDebuggerItem() {
+    public ItemDebugger getDebuggerItem() {
         return this.debugger;
     }
 
     @Override
-    public Item getWoodCropSticksItem() {
+    public ItemCropSticks getWoodCropSticksItem() {
         return this.crop_sticks_wood;
     }
 
     @Override
-    public Item getIronCropSticksItem() {
+    public ItemCropSticks getIronCropSticksItem() {
         return this.crop_sticks_iron;
     }
 
     @Override
-    public Item getObsidianCropSticksItem() {
+    public ItemCropSticks getObsidianCropSticksItem() {
         return this.crop_sticks_obsidian;
     }
 
     @Override
-    public Item getSeedAnalyzerItem() {
+    public ItemSeedAnalyzer getSeedAnalyzerItem() {
         return this.seed_analyzer;
     }
 
     @Override
-    public Item getJournalItem() {
+    public ItemJournal getJournalItem() {
         return this.journal;
     }
 
     @Override
-    public Item getSeedItem() {
+    public ItemDynamicAgriSeed getSeedItem() {
         return this.seed;
     }
 
     @Override
-    public Item getIrrigationTankItem() {
+    public ItemIrrigationTank getIrrigationTankItem() {
         return this.tank;
     }
 
     @Override
-    public Item getIrrigationChannelItem() {
+    public ItemIrrigationChannel getIrrigationChannelItem() {
         return this.channel;
     }
 
     @Override
-    public Item getHollowIrrigationChannelItem() {
+    public ItemIrrigationChannelHollow getHollowIrrigationChannelItem() {
         return this.channel_hollow;
     }
 
     @Override
-    public Item getSprinklerItem() {
+    public ItemSprinkler getSprinklerItem() {
         return this.sprinkler;
     }
 
     @Override
-    public Item getValveItem() {
+    public ItemChannelValve getValveItem() {
         return this.valve;
     }
 
     @Override
-    public Item getClipperItem() {
+    public ItemClipper getClipperItem() {
         return this.clipper;
     }
 
     @Override
-    public Item getMagnifyingGlassItem() {
+    public ItemMagnifyingGlass getMagnifyingGlassItem() {
         return this.magnifying_glass;
     }
 
     @Override
-    public Item getWoodenRakeItem() {
+    public ItemRake getWoodenRakeItem() {
         return this.rake_wood;
     }
 
     @Override
-    public Item getIronRakeItem() {
+    public ItemRake getIronRakeItem() {
         return this.rake_iron;
     }
 
     @Override
-    public Item getTrowelItem() {
+    public ItemTrowel getTrowelItem() {
         return this.trowel;
     }
 
     @Override
-    public Item getSeedBagItem() {
+    public ItemSeedBag getSeedBagItem() {
         return this.seed_bag;
     }
 
     @Override
-    public Item getGrateItem() {
+    public ItemGrate getGrateItem() {
         return this.grate;
     }
 
     @Nullable
     @Override
-    public Item getCoalNuggetItem() {
+    public ItemAgriNugget getCoalNuggetItem() {
         return this.nugget_coal;
     }
 
     @Nullable
     @Override
-    public Item getDiamondNuggetItem() {
+    public ItemAgriNugget getDiamondNuggetItem() {
         return this.nugget_diamond;
     }
 
     @Nullable
     @Override
-    public Item getEmeraldNuggetItem() {
+    public ItemAgriNugget getEmeraldNuggetItem() {
         return this.nugget_emerald;
     }
 
     @Nullable
     @Override
-    public Item getQuartzNuggetItem() {
+    public ItemAgriNugget getQuartzNuggetItem() {
         return this.nugget_quartz;
     }
 }

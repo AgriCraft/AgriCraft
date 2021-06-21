@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
@@ -13,7 +14,7 @@ import java.util.Optional;
  * Interface to be implemented in Item classes which can carry genes.
  * Examples are the AgriCraft IAgriSeedItem or IAgriTrowelItem
  */
-public interface IAgriGeneCarrierItem {
+public interface IAgriGeneCarrierItem extends IAgriItem {
     /**
      * Fetches the IAgriGenome from a stack
      * @param stack the stack

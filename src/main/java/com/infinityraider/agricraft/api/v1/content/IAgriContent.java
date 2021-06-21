@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.fluid.Fluid;
@@ -166,10 +167,10 @@ public interface IAgriContent {
         Item getSeedAnalyzerItem();
 
         /** @return the AgriCraft Journal Item */
-        Item getJournalItem();
+        IAgriJournalItem getJournalItem();
 
         /** @return the AgriCraft Seed Item */
-        Item getSeedItem();
+        IAgriSeedItem getSeedItem();
 
         /** @return the AgriCraft Irrigation Tank Item */
         Item getIrrigationTankItem();
@@ -187,19 +188,19 @@ public interface IAgriContent {
         Item getValveItem();
 
         /** @return the AgriCraft Clipper Item */
-        Item getClipperItem();
+        IAgriClipperItem getClipperItem();
 
         /** @return the AgriCraft Magnifying Glass Item */
         Item getMagnifyingGlassItem();
 
         /** @return the AgriCraft Wooden Rake Item */
-        Item getWoodenRakeItem();
+        IAgriRakeItem getWoodenRakeItem();
 
         /** @return the AgriCraft Iron Rake Item */
-        Item getIronRakeItem();
+        IAgriRakeItem getIronRakeItem();
 
         /** @return the AgriCraft Trowel Item */
-        Item getTrowelItem();
+        IAgriTrowelItem getTrowelItem();
 
         /** @return the AgriCraft Seed Bag Item */
         Item getSeedBagItem();
