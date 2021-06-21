@@ -147,6 +147,14 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
     }
 
     /**
+     * @return a new genome builder initialized for the given plant
+     */
+    @SuppressWarnings("unused")
+    static Builder builder(IAgriPlant plant) {
+        return AgriApi.getAgriGenomeBuilder(plant);
+    }
+
+    /**
      * Default builder to create IAgriGenome objects, obtain via AgriApi.getAgriGenomeBuilder(),
      */
     interface Builder {

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
@@ -15,6 +16,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -32,6 +34,15 @@ import javax.annotation.Nullable;
  */
 public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgriGenomeAcceptor, IAgriStatProvider,
         IAgriFertilizable, IAgriHarvestable, IAgriWeedSpawnable, IAgriRakeable, IAgriDisplayable {
+
+    /**
+     * @return an Optional IAgriCrop from the world
+     */
+    @SuppressWarnings("unused")
+    static Optional<IAgriCrop> fetchFromWorld(IBlockReader world, BlockPos pos) {
+        return AgriApi.getCrop(world, pos);
+    }
+
     /**
      * @return true if this object represents a valid IAgriCrop, can return false if the world has changed and there is no longer a crop
      */

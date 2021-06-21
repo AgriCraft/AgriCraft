@@ -4,6 +4,8 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -45,4 +47,11 @@ public interface IAgriJournalItem {
      */
     @Nonnull
     List<IAgriPlant> getDiscoveredSeeds(@Nonnull ItemStack journal);
+
+    /**
+     * @return this, but cast to Item
+     */
+    default Item asItem() {
+        return (Item) this;
+    }
 }

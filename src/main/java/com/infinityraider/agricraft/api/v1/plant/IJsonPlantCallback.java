@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -7,6 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Interface representing default callback behaviours which can be used by AgriCraft json plants.
@@ -17,6 +19,26 @@ import javax.annotation.Nullable;
  * New instances can be registered using AgriApi.registerJsonPlantCallback() *
  */
 public interface IJsonPlantCallback {
+    /**
+     * Finds a registered json plant callback from their id
+     *
+     * @param id the id
+     * @return optional containing the callback, or empty if no such callback is registered
+     */
+    static Optional<IJsonPlantCallback> getCallback(String id) {
+        return AgriApi.getJsonPlantCallback(id);
+    }
+
+    /**
+     * Tries to register a json plant callback behaviour
+     *
+     * @param callback the callback to register
+     * @return true if successful (will fail in case a callback with the same id is already registered)
+     */
+    static boolean registerCallback(IJsonPlantCallback callback) {
+        return AgriApi.registerJsonPlantCallback(callback);
+    }
+
     /**
      * The id used to refer to callback implementations in the json files, must be unique
      * @return a unique string representing this callback behaviour

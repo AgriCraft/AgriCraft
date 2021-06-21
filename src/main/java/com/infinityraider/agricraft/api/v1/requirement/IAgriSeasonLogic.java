@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,6 +17,13 @@ import java.util.function.BiFunction;
  * The instance of this class is retrieved via AgriApi.getSeasonLogic()
  */
 public interface IAgriSeasonLogic {
+    /**
+     * @return the AgriCraft IAgriSeasonLogic instance
+     */
+    static IAgriSeasonLogic getInstance() {
+        return AgriApi.getSeasonLogic();
+    }
+
     /**
      * @return true if a season mod is present and has claimed the AgriCraft season logic
      */

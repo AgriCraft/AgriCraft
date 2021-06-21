@@ -1,6 +1,9 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +22,13 @@ import java.util.stream.Stream;
  * If no season mod logic is registered, all season queries will return ANY.
  */
 public enum AgriSeason {
+    /** Regular seasons */
     SPRING("spring"),
     SUMMER("summer"),
     AUTUMN("autumn", "fall"),
     WINTER("winter"),
+
+    /** Allows for any season, if this season is returned, any crop will be able to grow */
     ANY("any", "all");
 
     private final List<String> keys;
@@ -55,6 +61,17 @@ public enum AgriSeason {
      */
     public TranslationTextComponent getDisplayName() {
         return new TranslationTextComponent("agricraft.season." + this.name().toLowerCase());
+    }
+
+    /**
+     * Fetches the season from the world at the given position
+     *
+     * @param world the world
+     * @param pos the position
+     * @return the season
+     */
+    public static AgriSeason getSeason(World world, BlockPos pos) {
+        return AgriApi.getSeasonLogic().getSeason(world, pos);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.api.v1.items;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Optional;
@@ -43,4 +44,10 @@ public interface IAgriTrowelItem extends IAgriGeneCarrierItem {
      */
     Optional<IAgriGrowthStage> getGrowthStage(ItemStack stack);
 
+    /**
+     * @return this, but cast to Item
+     */
+    default Item asItem() {
+        return (Item) this;
+    }
 }

@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
@@ -14,6 +15,13 @@ import javax.annotation.Nonnull;
  * @author AgriCraft Team
  */
 public interface IAgriMutationRegistry extends IAgriRegistry<IAgriMutation> {
+    /**
+     * @return the AgriCraft IAgriMutationRegistry instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriMutationRegistry getInstance() {
+        return AgriApi.getMutationRegistry();
+    }
 
     /**
      * Creates and registers a new mutation.
