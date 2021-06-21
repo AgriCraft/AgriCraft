@@ -1,7 +1,8 @@
-package com.infinityraider.agricraft.content;
+package com.infinityraider.agricraft.impl.v1;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.content.AgriTabs;
 
 public final class AgriContent implements IAgriContent {
     private static final AgriContent INSTANCE = new AgriContent();
