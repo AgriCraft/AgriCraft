@@ -4,6 +4,7 @@ Changelog
 - CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
 - CHANGE: The AgriCraft config file now sits in the agricraft subdirectory
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
+- FIXED: Server crash when reading the journal
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
