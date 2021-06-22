@@ -43,7 +43,7 @@ ext.config = parseConfig(configFile)
 // Mod Properties Transcription
 version = "${config.version_major}.${config.version_minor}.${config.version_patch}"
 group = "${config.package}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = config.id
+archivesBaseName = "${config.id}-${config.version_minecraft}-${config.version_major}.${config.version_minor}.${config.version_patch}"
 
 // Set the source and target compatibility levels.
 // Required for eclipse task generates correctly.
@@ -199,9 +199,8 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106")
 
     //TOP
-    compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.0.3-beta-6") {
-        transitive = false
-    })
+    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
+    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
 
     //Better Weather
     compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")

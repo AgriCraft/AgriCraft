@@ -80,8 +80,8 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                         AgriToolTips.getGrowthTooltip(state.getStage())), 102, 20, 111, 70),
                 new TooltipRegion((state) -> ImmutableList.of(
                         new StringTextComponent("")
-                                .append(AgriApi.getStatRegistry().strengthStat().getDescription())
-                                .append(new StringTextComponent(": " + state.getStrength()))), 114, 20, 123, 70),
+                                .appendSibling(AgriApi.getStatRegistry().strengthStat().getDescription())
+                                .appendSibling(new StringTextComponent(": " + state.getStrength()))), 114, 20, 123, 70),
                 new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 36, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 49, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 29, 62, AgriApi.getSeasonLogic()::isActive),
@@ -458,8 +458,8 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                     int w = this.getScaledWindowWidth();
                     int h = this.getScaledWindowHeight();
                     List<ITextComponent> tooltip = ImmutableList.of(new StringTextComponent("")
-                            .append(AgriToolTips.LIGHT)
-                            .append(new StringTextComponent(": " + i))
+                            .appendSibling(AgriToolTips.LIGHT)
+                            .appendSibling(new StringTextComponent(": " + i))
                     );
                     GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
                 }

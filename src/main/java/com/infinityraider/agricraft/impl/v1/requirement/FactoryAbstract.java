@@ -84,9 +84,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 (str, aFluid) -> strength.test(str) || fluid.equals(aFluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluid(response,
                 ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.FLUID)
-                        .append(new StringTextComponent(": "))
-                        .append(new TranslationTextComponent(fluid.getDefaultState().getBlockState().getBlock().getTranslationKey()))
+                        .appendSibling(Descriptions.FLUID)
+                        .appendSibling(new StringTextComponent(": "))
+                        .appendSibling(new TranslationTextComponent(fluid.getDefaultState().getBlockState().getBlock().getTranslationKey()))
                 ));
     }
 
@@ -96,9 +96,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 (str, aFluid) -> strength.test(str) || fluid.equals(aFluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluidState(response,
                 ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.FLUID)
-                        .append(new StringTextComponent(": "))
-                        .append(new TranslationTextComponent(fluid.getBlockState().getBlock().getTranslationKey()))
+                        .appendSibling(Descriptions.FLUID)
+                        .appendSibling(new StringTextComponent(": "))
+                        .appendSibling(new TranslationTextComponent(fluid.getBlockState().getBlock().getTranslationKey()))
                 ));
     }
 
@@ -115,9 +115,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 (str, fluid) -> strength.test(str) || fluids.contains(fluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluid(response,
                 ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.FLUID)
-                        .append(new StringTextComponent(": "))
-                        .append(AgriToolTips.collect(fluids.stream()
+                        .appendSibling(Descriptions.FLUID)
+                        .appendSibling(new StringTextComponent(": "))
+                        .appendSibling(AgriToolTips.collect(fluids.stream()
                                 .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslationKey())
                                 .map(TranslationTextComponent::new), ", "))
                 ));
@@ -129,9 +129,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 (str, fluid) -> strength.test(str) || fluids.contains(fluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluidState(response,
                 ImmutableList.of(new StringTextComponent("")
-                        .append(Descriptions.FLUID)
-                        .append(new StringTextComponent(": "))
-                        .append(AgriToolTips.collect(fluids.stream()
+                        .appendSibling(Descriptions.FLUID)
+                        .appendSibling(new StringTextComponent(": "))
+                        .appendSibling(AgriToolTips.collect(fluids.stream()
                                 .map(fluid -> fluid.getBlockState().getBlock().getTranslationKey())
                                 .map(TranslationTextComponent::new), ", "))
                 ));
@@ -147,9 +147,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, aBiome) -> strength.test(str) || biome.equals(aBiome) ? Responses.FERTILE : Responses.INFERTILE;
         return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.BIOME)
-                .append(new StringTextComponent(": "))
-                .append(biomeName)
+                .appendSibling(Descriptions.BIOME)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(biomeName)
         ));
     }
 
@@ -158,9 +158,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, biome) -> strength.test(str) || biome.getCategory().equals(category) ? Responses.FERTILE : Responses.INFERTILE;
         return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.BIOME_CATEGORY)
-                .append(new StringTextComponent(": "))
-                .append(categoryName)
+                .appendSibling(Descriptions.BIOME_CATEGORY)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(categoryName)
         ));
     }
 
@@ -169,9 +169,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, aBiome) -> strength.test(str) || biomes.contains(aBiome) ? Responses.FERTILE : Responses.INFERTILE;
         return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.BIOME)
-                .append(new StringTextComponent(": "))
-                .append(AgriToolTips.collect(biomes.stream().map(nameFunction), ", "))
+                .appendSibling(Descriptions.BIOME)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(AgriToolTips.collect(biomes.stream().map(nameFunction), ", "))
         ));
     }
 
@@ -180,9 +180,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, biome) -> strength.test(str) || categories.contains(biome.getCategory()) ? Responses.FERTILE : Responses.INFERTILE;
         return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.BIOME)
-                .append(new StringTextComponent(": "))
-                .append(AgriToolTips.collect(categories.stream().map(nameFunction), ", "))
+                .appendSibling(Descriptions.BIOME)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(AgriToolTips.collect(categories.stream().map(nameFunction), ", "))
         ));
     }
 
@@ -214,9 +214,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, RegistryKey<World>, IAgriGrowthResponse> response =
                 (str, aDimension) -> strength.test(str) || aDimension.equals(dimension) ? Responses.FERTILE : Responses.INFERTILE;
         return this.dimensionFromKey(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.DIMENSION)
-                .append(new StringTextComponent(": "))
-                .append(dimensionName)
+                .appendSibling(Descriptions.DIMENSION)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(dimensionName)
         ));
     }
 
@@ -225,9 +225,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, DimensionType, IAgriGrowthResponse> response =
                 (str, aDimension) -> strength.test(str) || aDimension.equals(dimension) ? Responses.FERTILE : Responses.INFERTILE;
         return this.dimensionFromType(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.DIMENSION)
-                .append(new StringTextComponent(": "))
-                .append(dimensionName)
+                .appendSibling(Descriptions.DIMENSION)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(dimensionName)
         ));
     }
 
@@ -243,9 +243,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response =
                 (str, aWeed) -> strength.test(str) || aWeed.equals(weed) ? Responses.FERTILE : Responses.INFERTILE;
         return this.weed(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.WITH_WEED)
-                .append(new StringTextComponent(": "))
-                .append(weed.getWeedName())
+                .appendSibling(Descriptions.WITH_WEED)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(weed.getWeedName())
         ));
     }
 
@@ -261,9 +261,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response =
                 (str, aWeed) -> strength.test(str) || !aWeed.equals(weed) ? Responses.FERTILE : Responses.INFERTILE;
         return this.weed(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.WITHOUT_WEED)
-                .append(new StringTextComponent(": "))
-                .append(weed.getWeedName())
+                .appendSibling(Descriptions.WITHOUT_WEED)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(weed.getWeedName())
         ));
     }
 
@@ -387,9 +387,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
             }
         };
         return this.entitiesNearby(response, range, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.ENTITY_NEARBY)
-                .append(new StringTextComponent(": "))
-                .append(entityType.getName())
+                .appendSibling(Descriptions.ENTITY_NEARBY)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(entityType.getName())
         ));
     }
 
@@ -404,9 +404,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
             }
         };
         return this.entitiesNearby(response, range, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.ENTITY_NEARBY)
-                .append(new StringTextComponent(": "))
-                .append(entityName)
+                .appendSibling(Descriptions.ENTITY_NEARBY)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(entityName)
         ));
     }
 
@@ -443,9 +443,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response = (str, aSeason) ->
                 strength.test(str) || season.matches(aSeason) ? Responses.FERTILE : Responses.INFERTILE;
         return this.season(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.SEASON)
-                .append(new StringTextComponent(": "))
-                .append(season.getDisplayName())
+                .appendSibling(Descriptions.SEASON)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(season.getDisplayName())
         ));
     }
 
@@ -454,9 +454,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response = (str, aSeason) ->
                 strength.test(str) || seasons.stream().anyMatch(aSeason::matches) ? Responses.FERTILE : Responses.INFERTILE;
         return this.season(response,ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.SEASON)
-                .append(new StringTextComponent(": "))
-                .append(AgriToolTips.collect(seasons.stream().map(AgriSeason::getDisplayName), ", "))
+                .appendSibling(Descriptions.SEASON)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(AgriToolTips.collect(seasons.stream().map(AgriSeason::getDisplayName), ", "))
         ));
     }
 
@@ -492,9 +492,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
             return Responses.INFERTILE;
         };
         return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.OUT_STRUCTURE)
-                .append(new StringTextComponent(": "))
-                .append(StructureNames.PYRAMID)
+                .appendSibling(Descriptions.OUT_STRUCTURE)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(StructureNames.PYRAMID)
         ));
     }
 
@@ -600,9 +600,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
             return Responses.FERTILE;
         };
         return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.OUT_STRUCTURE)
-                .append(new StringTextComponent(": "))
-                .append(StructureNames.PYRAMID)
+                .appendSibling(Descriptions.OUT_STRUCTURE)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(StructureNames.PYRAMID)
         ));
     }
 
@@ -680,9 +680,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response =
                 (str, stream) -> predicate.test(str) || stream.anyMatch(structure::equals) ? Responses.FERTILE : Responses.INFERTILE;
         return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.IN_STRUCTURE)
-                .append(new StringTextComponent(": "))
-                .append(structureName)
+                .appendSibling(Descriptions.IN_STRUCTURE)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(structureName)
         ));
     }
 
@@ -691,9 +691,9 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response =
                 (str, stream) -> predicate.test(str) || stream.noneMatch(structure::equals) ? Responses.FERTILE : Responses.INFERTILE;
         return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .append(Descriptions.IN_STRUCTURE)
-                .append(new StringTextComponent(": "))
-                .append(structureName)
+                .appendSibling(Descriptions.IN_STRUCTURE)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(structureName)
         ));
     }
 
@@ -712,19 +712,19 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     public static final class Descriptions {
         public static ITextComponent inRange(ITextComponent base, int min, int max) {
-            return new StringTextComponent("").append(base).append(new StringTextComponent("[" + min + "; " + max + "]"));
+            return new StringTextComponent("").appendSibling(base).appendSibling(new StringTextComponent("[" + min + "; " + max + "]"));
         }
 
         public static ITextComponent equalTo(ITextComponent base, int value) {
-            return new StringTextComponent("").append(base).append(new StringTextComponent("" + value));
+            return new StringTextComponent("").appendSibling(base).appendSibling(new StringTextComponent("" + value));
         }
 
         public static ITextComponent weed(IAgriWeed weed, IAgriGrowthStage stage) {
             return new StringTextComponent("")
-                    .append(weed.getWeedName())
-                    .append(new StringTextComponent(" ("))
-                    .append(AgriToolTips.getGrowthTooltip(stage))
-                    .append(new StringTextComponent(")"));
+                    .appendSibling(weed.getWeedName())
+                    .appendSibling(new StringTextComponent(" ("))
+                    .appendSibling(AgriToolTips.getGrowthTooltip(stage))
+                    .appendSibling(new StringTextComponent(")"));
         }
 
         public static final ITextComponent SOIL = new TranslationTextComponent(

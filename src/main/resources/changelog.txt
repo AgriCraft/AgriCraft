@@ -6,6 +6,7 @@ Changelog
 - ADDED: Config option to allow mutations on cloning (set to false by default)
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
 - FIXED: Server crash when reading the journal
+- FIXED: Crash following an AbstractMethodException (thrown by IItemHandler accessors of the Seed Analyzer)
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing

@@ -81,7 +81,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void onServerAboutToStartEvent(final FMLServerAboutToStartEvent event) {
-        GreenHouseStructures.inject(event.getServer().func_244267_aX());
+        GreenHouseStructures.inject(event.getServer().getDynamicRegistries());
     }
 
     @Override
