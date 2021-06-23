@@ -305,7 +305,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
         if (AgriApi.getGenomeAdapterizer().hasAdapter(heldItem)) {
             return AgriApi.getGenomeAdapterizer().valueOf(heldItem)
                     .map(seed -> {
-                        if (crop.plantGenome(seed)) {
+                        if (crop.plantGenome(seed, player)) {
                             if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }
