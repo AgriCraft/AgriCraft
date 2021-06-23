@@ -1,0 +1,19 @@
+{
+  "type": "botanypots:soil",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    }
+  ],
+  "input": {
+    "item": "minecraft:clay"
+  },
+  "display": {
+    "block": "minecraft:clay"
+  },
+  "categories": [
+    "clay"
+  ],
+  "growthModifier": 0.0
+}

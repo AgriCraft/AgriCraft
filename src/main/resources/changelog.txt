@@ -4,6 +4,7 @@ Changelog
 - CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
 - CHANGE: The AgriCraft config file now sits in the agricraft subdirectory
 - ADDED: Config option to allow mutations on cloning (set to false by default)
+- ADDED: Gravel and Clay as Botany Pots soils
 - FIXED: Chickens not accepting AgriCraft seeds as food
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
 - FIXED: Server crash when reading the journal
