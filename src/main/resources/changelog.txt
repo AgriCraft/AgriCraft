@@ -6,10 +6,11 @@ Changelog
 - ADDED: Config option to allow mutations on cloning (set to false by default)
 - ADDED: Gravel and Clay as Botany Pots soils
 - FIXED: Chickens not accepting AgriCraft seeds as food
-- FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
+- FIXED: Dynamic texture recipes (irrigation tanks and channels) not properly showing in JEI
 - FIXED: Server crash when reading the journal
 - FIXED: Crash following an AbstractMethodException (thrown by IItemHandler accessors of the Seed Analyzer)
 - FIXED: Crops not showing seeds on clients after connecting to a server
+- FIXED: Botany Pots growth requirements not working properly
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing

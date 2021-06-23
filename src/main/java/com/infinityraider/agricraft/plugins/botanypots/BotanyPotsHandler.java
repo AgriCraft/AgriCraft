@@ -7,9 +7,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
 import com.infinityraider.agricraft.util.CropHelper;
 import net.darkhax.botanypots.BotanyPotHelper;
-import net.darkhax.botanypots.api.events.BotanyPotHarvestedEvent;
-import net.darkhax.botanypots.api.events.LookupEvent;
-import net.darkhax.botanypots.api.events.PotGrowCropEvent;
+import net.darkhax.botanypots.api.events.*;
 import net.darkhax.botanypots.crop.CropInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.eventbus.api.Event;
@@ -51,6 +49,26 @@ public class BotanyPotsHandler {
         }
     }
 
+    // Plant callback
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onCropPlaced(CropPlaceEvent.Post event) {
+        if(event.getBotanyPot().getCrop() instanceof AgriCropInfo) {
+            event.getBotanyPot().getCapability(CropCapability.getCapability())
+                    .map(crop -> (BotanyPotAgriCropInstance.Impl) crop)
+                    .ifPresent(BotanyPotAgriCropInstance.Impl::updateGrowthRequirement);
+        }
+    }
+
+    // Plant callback
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onCropRemoved(CropRemovedEvent.Post event) {
+        event.getBotanyPot().getCapability(CropCapability.getCapability())
+                .map(crop -> (BotanyPotAgriCropInstance.Impl) crop)
+                .ifPresent(BotanyPotAgriCropInstance.Impl::updateGrowthRequirement);
+    }
+
     // Fertility checks and weeds
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -90,6 +108,8 @@ public class BotanyPotsHandler {
                             event.getBotanyPot().setCrop(null, ItemStack.EMPTY);
                             cancel = true;
                         }
+                    } else {
+                        cancel = !response.isFertile();
                     }
                 }
                 if(cancel) {

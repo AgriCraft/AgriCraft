@@ -41,7 +41,7 @@ public class Factory extends FactoryAbstract {
                 RequirementType.SOIL,
                 response,
                 Functions.SOIL,
-                Offsetters.SOIL,
+                Offsetters.NONE,
                 tooltips,
                 1,
                 IAgriGrowCondition.CacheType.BLOCK_UPDATE
@@ -55,7 +55,7 @@ public class Factory extends FactoryAbstract {
                 RequirementType.SOIL,
                 response,
                 Functions.soilProperty(mapper),
-                Offsetters.SOIL,
+                Offsetters.NONE,
                 tooltips,
                 1,
                 IAgriGrowCondition.CacheType.BLOCK_UPDATE
@@ -83,7 +83,7 @@ public class Factory extends FactoryAbstract {
                 RequirementType.REDSTONE,
                 response,
                 Functions.REDSTONE,
-                Offsetters.SOIL,
+                Offsetters.NONE,
                 tooltips,
                 1,
                 IAgriGrowCondition.CacheType.BLOCK_UPDATE
@@ -249,7 +249,8 @@ public class Factory extends FactoryAbstract {
     }
 
     private static final class Functions {
-        private static final BiFunction<World, BlockPos, IAgriSoil> SOIL = (world, pos) -> AgriApi.getSoil(world, pos).orElse(NoSoil.getInstance());
+        private static final BiFunction<World, BlockPos, IAgriSoil> SOIL = (world, pos) ->
+                AgriApi.getCrop(world, pos).flatMap(IAgriCrop::getSoil).orElse(NoSoil.getInstance());
 
         private static final BiFunction<World, BlockPos, Integer> LIGHT = IWorldReader::getLight;
 
@@ -299,7 +300,6 @@ public class Factory extends FactoryAbstract {
 
     private static final class Offsetters {
         private static final UnaryOperator<BlockPos> NONE = pos -> pos;
-        private static final UnaryOperator<BlockPos> SOIL = BlockPos::down;
 
         private Offsetters() {}
     }
