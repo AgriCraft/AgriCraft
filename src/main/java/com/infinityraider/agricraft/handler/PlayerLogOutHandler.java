@@ -19,7 +19,7 @@ public class PlayerLogOutHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onPlayerLogout(ClientPlayerNetworkEvent.LoggedOutEvent event) {
-        // This is also cared when an integrated server is being setup
+        // This is also called when an integrated server is being setup
         // We don't care though, as in that case, it is called before the CoreHandler would be initialized
         CoreHandler.onLogout();
     }
