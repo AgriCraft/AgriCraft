@@ -8,10 +8,7 @@ import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.plant.AgriWeed;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
-import com.infinityraider.agricraft.network.json.MessageSyncMutationJson;
-import com.infinityraider.agricraft.network.json.MessageSyncPlantJson;
-import com.infinityraider.agricraft.network.json.MessageSyncSoilJson;
-import com.infinityraider.agricraft.network.json.MessageSyncWeedJson;
+import com.infinityraider.agricraft.network.json.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,6 +34,8 @@ public class JsonSyncHandler {
         syncPlants(player);
         syncWeeds(player);
         syncMutations(player);
+        // Notify of sync complete
+        new MessageNotifySyncComplete().sendTo(player);
         // Notify magnifying glass tracker
         ItemMagnifyingGlass.setObserving(player, false);
         // Configure JEI

@@ -8,6 +8,7 @@ Changelog
 - FIXED: Dynamic texture recipes (irrigation tnaks and channels) not properly showing in JEI
 - FIXED: Server crash when reading the journal
 - FIXED: Crash following an AbstractMethodException (thrown by IItemHandler accessors of the Seed Analyzer)
+- FIXED: Crops not showing seeds on clients after connecting to a server
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
