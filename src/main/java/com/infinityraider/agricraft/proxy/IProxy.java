@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.capability.*;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
-import com.infinityraider.agricraft.content.world.GreenHouseStructures;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
@@ -18,7 +17,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.function.Function;
@@ -33,7 +31,6 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void onCommonSetupEvent(final FMLCommonSetupEvent event) {
         PluginHandler.onCommonSetup(event);
-        GreenHouseStructures.init();
     }
 
     @Override
@@ -77,11 +74,6 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void activateRequiredModules() {
         ModulePlayerAnimations.getInstance().activate();
-    }
-
-    @Override
-    default void onServerAboutToStartEvent(final FMLServerAboutToStartEvent event) {
-        GreenHouseStructures.inject(event.getServer().getDynamicRegistries());
     }
 
     @Override

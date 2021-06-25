@@ -99,6 +99,11 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
+    public AgriStructureRegistry getStructureRegistry() {
+        return AgriStructureRegistry.getInstance();
+    }
+
+    @Override
     public void registerMessages(INetworkWrapper wrapper) {
         wrapper.registerMessage(MessageCompareLight.class);
         wrapper.registerMessage(MessageIrrigationNeighbourUpdate.class);
