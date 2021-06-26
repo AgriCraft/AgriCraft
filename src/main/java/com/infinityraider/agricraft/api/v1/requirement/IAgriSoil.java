@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -217,22 +217,22 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
 
         private static ITextComponent tooltipHumidity(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(HUMIDITY).append(new StringTextComponent(": "))
-                    .append(soil.getHumidity().getDescription())
+                    .appendSibling(HUMIDITY).appendSibling(new StringTextComponent(": "))
+                    .appendSibling(soil.getHumidity().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
 
         private static ITextComponent tooltipAcidity(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(ACIDITY).append(new StringTextComponent(": "))
-                    .append(soil.getAcidity().getDescription())
+                    .appendSibling(ACIDITY).appendSibling(new StringTextComponent(": "))
+                    .appendSibling(soil.getAcidity().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
 
         private static ITextComponent tooltipNutrients(IAgriSoil soil) {
             return new StringTextComponent(" - ")
-                    .append(NUTRIENTS).append(new StringTextComponent(": "))
-                    .append(soil.getNutrients().getDescription())
+                    .appendSibling(NUTRIENTS).appendSibling(new StringTextComponent(": "))
+                    .appendSibling(soil.getNutrients().getDescription())
                     .mergeStyle(TextFormatting.DARK_GRAY);
         }
     }

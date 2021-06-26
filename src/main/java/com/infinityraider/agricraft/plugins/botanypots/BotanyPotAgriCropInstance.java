@@ -7,8 +7,8 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
@@ -123,7 +123,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
         private int weedCounter;
 
         // Requirement cache
-        private final RequirementCache requirement;
+        private RequirementCache requirement;
 
         private Impl(TileEntityBotanyPot pot) {
             this.pot = pot;
@@ -132,7 +132,13 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             this.weed = NoWeed.getInstance();
             this.weedStage = NoGrowth.getInstance();
             this.nextWeedStage = NoGrowth.getInstance();
-            this.requirement = RequirementCache.create(this);
+        }
+
+        protected RequirementCache getRequirement() {
+            if(this.requirement == null) {
+                this.requirement = RequirementCache.create(this);
+            }
+            return this.requirement;
         }
 
         @Override
@@ -220,12 +226,16 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
             return false;
         }
 
+        public void updateGrowthRequirement() {
+            this.requirement = RequirementCache.create(this);
+        }
+
         @Override
         public IAgriGrowthResponse getFertilityResponse() {
             if(this.world() == null) {
                 return IAgriGrowthResponse.INFERTILE;
             }
-            return this.requirement.check();
+            return this.getRequirement().check();
         }
 
         @Override
@@ -343,7 +353,7 @@ public class BotanyPotAgriCropInstance implements CropCapability.Instance<TileEn
 
         @Override
         public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
-            CropHelper.addDisplayInfo(this, this.requirement, consumer);
+            CropHelper.addDisplayInfo(this, this.getRequirement(), consumer);
         }
 
         @Override

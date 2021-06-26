@@ -2,17 +2,17 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.*;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
+import com.infinityraider.infinitylib.utility.inventory.ISidedInventoryWrapped;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -34,7 +34,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventory, IInventoryItemHandler, IDynamicCameraController {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventoryWrapped, IInventoryItemHandler, IDynamicCameraController {
     public static final int SLOT_SEED = 0;
     public static final int SLOT_JOURNAL = 1;
     private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
@@ -302,6 +302,11 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public ItemStack getStackInSlot(int index) {
+        return this.getStackInInvSlot(index);
+    }
+
+    @Override
+    public ItemStack getStackInInvSlot(int index) {
         switch (index) {
             case SLOT_SEED: return this.getSeed();
             case SLOT_JOURNAL: return this.getJournal();

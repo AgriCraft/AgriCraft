@@ -114,6 +114,14 @@ public final class CoreHandler {
         initialized = true;
     }
 
+    public static void onSyncComplete() {
+        initialized = true;
+    }
+
+    public static void onLogout() {
+        initialized = false;
+    }
+
     private static void initSoils() {
         // Announce Progress
         AgriCore.getLogger("agricraft").info("Registering Soils!");

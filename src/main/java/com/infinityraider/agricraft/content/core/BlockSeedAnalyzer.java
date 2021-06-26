@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.content.core;
 
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriSeedItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBaseTile;

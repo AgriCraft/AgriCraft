@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,6 +30,13 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("unused")
 public interface IDefaultGrowConditionFactory {
+    /**
+     * @return the AgriCraft IDefaultGrowConditionFactory instance
+     */
+    static IDefaultGrowConditionFactory getInstance() {
+        return AgriApi.getDefaultGrowConditionFactory();
+    }
+
     /*
      * ----
      * soil

@@ -75,7 +75,7 @@ public interface IProxy extends IProxyBase<Config> {
     default void activateRequiredModules() {
         ModulePlayerAnimations.getInstance().activate();
     }
-    
+
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {
         CoreHandler.init();

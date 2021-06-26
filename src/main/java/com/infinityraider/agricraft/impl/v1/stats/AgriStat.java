@@ -59,8 +59,8 @@ public class AgriStat implements IAgriStat {
     public void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value) {
         if(!this.isHidden()) {
             consumer.accept(new StringTextComponent("")
-                    .append(this.getDescription())
-                    .append(new StringTextComponent(": " + value))
+                    .appendSibling(this.getDescription())
+                    .appendSibling(new StringTextComponent(": " + value))
                     .mergeStyle(TextFormatting.DARK_GRAY));
         }
     }

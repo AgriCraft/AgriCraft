@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 

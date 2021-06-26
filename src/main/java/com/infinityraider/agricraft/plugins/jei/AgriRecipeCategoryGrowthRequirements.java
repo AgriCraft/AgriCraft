@@ -30,6 +30,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -74,9 +76,12 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
                 new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req_seasons.png"),
                 0, 0, 128, 128, 128, 128);
         this.tooltips = ImmutableSet.of(
-                new TooltipRegion(AgriToolTips.GROWTH, 102, 20, 111, 70),
-                new TooltipRegion(AgriApi.getStatRegistry().strengthStat().getDescription(), 114, 20, 123, 70),
-                new TooltipRegion(AgriToolTips.LIGHT, 31, 25, 36, 74),
+                new TooltipRegion((state) -> ImmutableList.of(
+                        AgriToolTips.getGrowthTooltip(state.getStage())), 102, 20, 111, 70),
+                new TooltipRegion((state) -> ImmutableList.of(
+                        new StringTextComponent("")
+                                .appendSibling(AgriApi.getStatRegistry().strengthStat().getDescription())
+                                .appendSibling(new StringTextComponent(": " + state.getStrength()))), 114, 20, 123, 70),
                 new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 36, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 49, AgriApi.getSeasonLogic()::isActive),
                 new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 29, 62, AgriApi.getSeasonLogic()::isActive),
@@ -181,7 +186,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         IncrementRenderer.getInstance().renderStrengthIncrements(transforms, strength);
         IncrementRenderer.getInstance().renderGrowthStageIncrements(transforms, stage);
         // Draw light levels
-        LightLevelRenderer.getInstance().renderLightLevels(transforms, 32, 26, light -> req.getLightLevelResponse(light, strength).isFertile());
+        LightLevelRenderer.getInstance().renderLightLevels(transforms, 32, 26, mouseX, mouseY, light -> req.getLightLevelResponse(light, strength).isFertile());
         // Draw Property icons
         Arrays.stream(IAgriSoil.Humidity.values()).filter(IAgriSoil.Humidity::isValid)
                 .filter(humidity -> req.getSoilHumidityResponse(humidity, strength).isFertile())
@@ -200,7 +205,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         state.drawGrowthStageButtons(transforms, mouseX, mouseY);
         state.drawStrengthButtons(transforms, mouseX, mouseY);
         // Draw tooltips
-        this.tooltips.forEach(tooltip -> tooltip.drawTooltip(transforms, mouseX, mouseY));
+        this.tooltips.forEach(tooltip -> tooltip.drawTooltip(transforms, mouseX, mouseY, state));
     }
 
     @Override
@@ -384,7 +389,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
     }
 
     private static final class TooltipRegion implements IRenderUtilities {
-        private final List<ITextComponent> tooltip;
+        private final Function<PlantRenderState, List<ITextComponent>> tooltip;
         private final int x1;
         private final int y1;
         private final int x2;
@@ -393,6 +398,10 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
         public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2) {
             this(ImmutableList.of(tooltip), x1, y1, x2, y2);
+        }
+
+        public TooltipRegion(Function<PlantRenderState, List<ITextComponent>> tooltip, int x1, int y1, int x2, int y2) {
+            this(tooltip, x1, y1, x2, y2, () -> true);
         }
 
         public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
@@ -404,6 +413,10 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         }
 
         public TooltipRegion(List<ITextComponent> tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
+            this((state) -> tooltip, x1, y1, x2, y2, isActive);
+        }
+
+        public TooltipRegion(Function<PlantRenderState, List<ITextComponent>> tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
             this.tooltip = tooltip;
             this.x1 = x1;
             this.y1 = y1;
@@ -412,12 +425,12 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
             this.isActive = isActive;
         }
 
-        public void drawTooltip(MatrixStack transforms, double mX, double mY) {
+        public void drawTooltip(MatrixStack transforms, double mX, double mY, PlantRenderState state) {
             if(this.isActive.getAsBoolean()) {
                 if (mX >= this.x1 && mX <= this.x2 && mY >= this.y1 && mY <= this.y2) {
                     int w = this.getScaledWindowWidth();
                     int h = this.getScaledWindowHeight();
-                    GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
+                    GuiUtils.drawHoveringText(transforms, this.tooltip.apply(state), (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
                 }
             }
         }
@@ -434,11 +447,22 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
         private LightLevelRenderer() {}
 
-        public void renderLightLevels(MatrixStack transforms, int x, int y, Predicate<Integer> predicate) {
+        public void renderLightLevels(MatrixStack transforms, int x, int y, double mX, double mY, Predicate<Integer> predicate) {
             this.bindTexture(this.texture);
             for(int i = 15; i >= 0; i--) {
-                if(predicate.test(i))
-                AbstractGui.blit(transforms, x, y + 3*(15-i), 3, 3, 0, 3*(15-i), 3, 3, 3, 48);
+                int y_i = y + 3 * (15 - i);
+                if(predicate.test(i)) {
+                    AbstractGui.blit(transforms, x, y_i, 3, 3, 0, 3 * (15 - i), 3, 3, 3, 48);
+                }
+                if(mX >= x && mX <= (x + 3) && mY >= y_i && mY < (y_i + 3)) {
+                    int w = this.getScaledWindowWidth();
+                    int h = this.getScaledWindowHeight();
+                    List<ITextComponent> tooltip = ImmutableList.of(new StringTextComponent("")
+                            .appendSibling(AgriToolTips.LIGHT)
+                            .appendSibling(new StringTextComponent(": " + i))
+                    );
+                    GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
+                }
             }
         }
     }

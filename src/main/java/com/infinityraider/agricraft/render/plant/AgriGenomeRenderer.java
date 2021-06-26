@@ -311,9 +311,9 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                             256,
                             State.getBuilder()
                                     .line(new LineState(OptionalDouble.of(aFloat)))
-                                    .layer(field_239235_M_)
+                                    .layer(VIEW_OFFSET_Z_LAYERING)
                                     .transparency(TRANSLUCENT_TRANSPARENCY)
-                                    .target(field_241712_U_)
+                                    .target(ITEM_ENTITY_TARGET)
                                     .writeMask(COLOR_DEPTH_WRITE)
                                     .build(false)));
         }

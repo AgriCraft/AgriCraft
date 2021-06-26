@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.impl.v1;
 
 import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;

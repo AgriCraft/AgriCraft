@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
@@ -11,6 +12,14 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
  * The implementation of this class can be obtained via AgriApi.getAgriMutationHandler()
  */
 public interface IAgriMutationHandler {
+    /**
+     * @return the AgriCraft IAgriMutationHandler instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriMutationHandler getInstance() {
+        return AgriApi.getAgriMutationHandler();
+    }
+
     /**
      * Sets the active IAgriMutationEngine object to be used by AgriCraft for cloning and mutating of plants;
      * @param engine the IAgriMutationEngine object

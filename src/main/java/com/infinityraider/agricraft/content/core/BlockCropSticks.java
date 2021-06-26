@@ -7,9 +7,9 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -305,7 +305,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
         if (AgriApi.getGenomeAdapterizer().hasAdapter(heldItem)) {
             return AgriApi.getGenomeAdapterizer().valueOf(heldItem)
                     .map(seed -> {
-                        if (crop.plantGenome(seed)) {
+                        if (crop.plantGenome(seed, player)) {
                             if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }

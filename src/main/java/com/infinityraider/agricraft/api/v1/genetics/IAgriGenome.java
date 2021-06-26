@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.misc.IAgriDisplayable;
+import com.infinityraider.agricraft.api.v1.util.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
@@ -144,6 +144,14 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
                 .filter(gene -> hidden || !gene.isHidden())
                 .map(this::getGenePair)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * @return a new genome builder initialized for the given plant
+     */
+    @SuppressWarnings("unused")
+    static Builder builder(IAgriPlant plant) {
+        return AgriApi.getAgriGenomeBuilder(plant);
     }
 
     /**

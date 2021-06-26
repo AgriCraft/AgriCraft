@@ -26,6 +26,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
+        private final ForgeConfigSpec.ConfigValue<Boolean> cloneMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> overrideVanillaFarming;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyMatureSeedDrops;
@@ -105,7 +106,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         public Common(ForgeConfigSpec.Builder builder) {
             super();
 
-            builder.push("debug");
+            builder.push("1) debug");
             this.debug = builder.comment("\nSet to true to enable debug mode")
                     .define("debug", false);
             this.enableLogging = builder.comment("\nSet to true to enable logging on the ${log} channel.")
@@ -124,6 +125,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Only fertile crops mutate", false);
             this.fertilizerMutations = builder.comment("\nSet to false if to disable triggering of mutations by using fertilizers on a cross crop.")
                     .define("Fertilizer mutations", true);
+            this.cloneMutations = builder.comment("\nSet to true to allow mutations on clone events (spreading from single crop).")
+                    .define("Clone mutations", false);
             this.overrideVanillaFarming = builder.comment("\nSet to true to override vanilla farming, meaning vanilla seeds will be converted to agricraft seeds on planting.")
                     .define("Override vanilla farming", true);
             this.growthMultiplier = builder.comment("\nThis is a global growth rate multiplier for crops planted on crop sticks.")
@@ -257,7 +260,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Progressive JEI", true);
             this.seasonLogic = builder.comment("\nDefines the mod controlling season logic in case multiple are installed\naccepted values are: " + SeasonPlugin.getConfigComment())
                     .defineInList("season logic", Names.Mods.SERENE_SEASONS, SeasonPlugin.getSeasonMods());
-            this.topControlledByMagnifyingGlass = builder.comment("\nDefines wether or not additional The One Probe data is rendered only when the magnifying glass is being used")
+            this.topControlledByMagnifyingGlass = builder.comment("\nDefines whether or not additional The One Probe data is rendered only when the magnifying glass is being used")
                     .define("TOP only with magnifying glass", true);
             this.enableBloodMagicCompat = builder.comment("\nSet to false to disable compatibility with Blood Magic (in case things break)")
                     .define("Enable Blood Magic compat", true);
@@ -298,6 +301,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean allowFertilizerMutations() {
             return this.fertilizerMutations.get();
+        }
+
+        @Override
+        public boolean allowCloneMutations() {
+            return this.cloneMutations.get();
         }
 
         @Override

@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedBagItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
-import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
@@ -54,12 +54,12 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
     @Override
     public boolean shouldApplyCapability(ItemStack stack) {
-        return stack.getItem() instanceof ItemSeedBag;
+        return stack.getItem() instanceof IAgriSeedBagItem;
     }
 
     @Override
     public Impl createNewValue(ItemStack stack) {
-        return new Impl();
+        return new Impl((IAgriSeedBagItem) stack.getItem());
     }
 
     @Override
@@ -72,7 +72,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         return ItemStack.class;
     }
 
-    public static class Impl implements IContents, ISerializable {
+    public static class Impl implements IAgriSeedBagItem.Contents, ISerializable {
+        private final IAgriSeedBagItem seedBag;
+
         private IAgriPlant plant;
 
         private final List<Entry> contents;
@@ -85,7 +87,8 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         private ItemStack firstStack;
         private ItemStack lastStack;
 
-        private Impl() {
+        private Impl(IAgriSeedBagItem seedBag) {
+            this.seedBag = seedBag;
             this.plant = NoPlant.getInstance();
             this.contents = Lists.newArrayList();
             this.count = 0;
@@ -93,6 +96,10 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
             this.setSorterIndex(0);
             this.firstStack = ItemStack.EMPTY;
             this.lastStack = ItemStack.EMPTY;
+        }
+
+        public IAgriSeedBagItem getSeedBag() {
+            return this.seedBag;
         }
 
         @Override
@@ -111,8 +118,8 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         }
 
         @Override
-        public ISorter getSorter() {
-            return ItemSeedBag.getSorter(this.getSorterIndex());
+        public Sorter getSorter() {
+            return this.getSeedBag().getSorter(this.getSorterIndex());
         }
 
         @Override

@@ -167,7 +167,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
                 return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }
             // Check if the bag contains seeds
-            ItemSeedBag.IContents contents = bag.getContents(stack);
+            ItemSeedBag.Contents contents = bag.getContents(stack);
             if(!contents.getPlant().isPlant()) {
                 return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
             }

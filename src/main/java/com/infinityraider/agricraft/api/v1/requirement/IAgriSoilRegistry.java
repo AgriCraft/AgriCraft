@@ -3,8 +3,9 @@ package com.infinityraider.agricraft.api.v1.requirement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
@@ -16,6 +17,14 @@ import java.util.Optional;
  * An interface for managing AgriCraft soils.
  */
 public interface IAgriSoilRegistry extends IAgriRegistry<IAgriSoil>, IAgriAdapter<IAgriSoil> {
+    /**
+     * @return the AgriCraft IAgriSoilRegistry instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriSoilRegistry getInstance() {
+        return AgriApi.getSoilRegistry();
+    }
+
     @Override
     default boolean accepts(@Nullable Object obj) {
         return obj instanceof BlockState && this.stream().anyMatch(soil -> soil.isVariant((BlockState) obj));

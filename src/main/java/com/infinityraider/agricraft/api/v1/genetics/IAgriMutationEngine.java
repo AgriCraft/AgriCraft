@@ -1,12 +1,11 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.util.Tuple;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -17,6 +16,22 @@ import java.util.stream.Stream;
  * Overriding implementations can be activated with the IAgriMutationHandler instance as well
  */
 public interface IAgriMutationEngine {
+    /**
+     * @return the active AgriCraft IAgriMutationEngine instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriMutationEngine getActiveInstance() {
+        return AgriApi.getAgriMutationHandler().getActiveMutationEngine();
+    }
+
+    /**
+     * @return the default AgriCraft IAgriMutationEngine instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriMutationEngine getDefaultInstance() {
+        return AgriApi.getAgriMutationHandler().getDefaultMutationEngine();
+    }
+
     /**
      * Handles a growth tick resulting in a mutation, is only fired for cross crops.
      * Any results from the success or failure of a mutation or clone, such as setting of the plant and genome must be fired from within this method as well.

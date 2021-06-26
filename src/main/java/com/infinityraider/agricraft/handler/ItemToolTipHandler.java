@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriJournalItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -121,7 +121,7 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journal = (IAgriJournalItem) stack.getItem();
             int count = journal.getDiscoveredSeeds(stack).size();
-            event.getToolTip().add(new StringTextComponent("" + count + " ").append(AgriToolTips.JOURNAL_SEEDS));
+            event.getToolTip().add(new StringTextComponent("" + count + " ").appendSibling(AgriToolTips.JOURNAL_SEEDS));
             event.getToolTip().add(AgriToolTips.JOURNAL_USE_1);
             event.getToolTip().add(AgriToolTips.JOURNAL_USE_2);
         }
@@ -178,7 +178,7 @@ public class ItemToolTipHandler {
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof ItemSeedBag) {
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
-            ItemSeedBag.IContents contents = bag.getContents(stack);
+            ItemSeedBag.Contents contents = bag.getContents(stack);
             if(bag.isActivated(stack)) {
                 // Remove previous tooltip
                 if(event.getToolTip().size() > 0) {
@@ -192,29 +192,29 @@ public class ItemToolTipHandler {
                 // Contents
                 if(contents.getPlant().isPlant()) {
                     event.getToolTip().add(new StringTextComponent("")
-                            .append(AgriToolTips.SEED_BAG_CONTENTS)
-                            .append(new StringTextComponent(" " + contents.getCount() + " "))
-                            .append(contents.getPlant().getSeedName()));
+                            .appendSibling(AgriToolTips.SEED_BAG_CONTENTS)
+                            .appendSibling(new StringTextComponent(" " + contents.getCount() + " "))
+                            .appendSibling(contents.getPlant().getSeedName()));
                 } else {
                     event.getToolTip().add(AgriToolTips.SEED_BAG_EMPTY);
                 }
                 // Sorter
                 event.getToolTip().add(new StringTextComponent("")
-                        .append(AgriToolTips.SEED_BAG_SORTER)
-                        .append(new StringTextComponent(" "))
-                        .append(contents.getSorter().getName()));
+                        .appendSibling(AgriToolTips.SEED_BAG_SORTER)
+                        .appendSibling(new StringTextComponent(" "))
+                        .appendSibling(contents.getSorter().getName()));
                 event.getToolTip().add(AgriToolTips.EMPTY_LINE);
                 // Usage
                 if(ModuleKeyboard.getInstance().isKeyPressed(Minecraft.getInstance().gameSettings.keyBindSneak)) {
                     event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_MAIN_HAND));
+                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_MAIN_HAND));
                     event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_OFF_HAND));
+                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_OFF_HAND));
                     event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_SCROLLING));
+                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_SCROLLING));
                 } else {
                     event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).append(AgriToolTips.SNEAK_INFO));
+                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SNEAK_INFO));
                 }
             } else {
                 event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_1);

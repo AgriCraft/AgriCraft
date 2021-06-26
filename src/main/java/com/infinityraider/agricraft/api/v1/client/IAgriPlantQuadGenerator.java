@@ -18,6 +18,7 @@ public interface IAgriPlantQuadGenerator {
     /**
      * @return the AgriCraft IAgriPlantQuadGenerator instance
      */
+    @SuppressWarnings("unused")
     static IAgriPlantQuadGenerator getInstance() {
         return AgriApi.getPlantQuadGenerator();
     }

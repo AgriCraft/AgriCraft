@@ -54,10 +54,13 @@ public class MinecraftPlugin implements IAgriPlugin {
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        // Define compost value
         float compostValue = AgriCraft.instance.getConfig().seedCompostValue();
         if(compostValue > 0) {
             ComposterBlock.CHANCES.put(AgriCraft.instance.getModItemRegistry().seed, compostValue);
         }
+        // Inject seed into chicken feed
+        ChickenBreedItemInjector.inject();
     }
 
     @Override

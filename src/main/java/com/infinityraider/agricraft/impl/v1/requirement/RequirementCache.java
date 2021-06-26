@@ -103,7 +103,7 @@ public abstract class RequirementCache {
             }
 
             public void addTooltip(Consumer<ITextComponent> consumer) {
-                this.getCondition().notMetDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").append(tooltip)));
+                this.getCondition().notMetDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").appendSibling(tooltip)));
             }
 
             public void flush() {}

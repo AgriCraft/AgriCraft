@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegistry;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 
@@ -9,6 +10,14 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public interface IAgriGeneRegistry extends IAgriRegistry<IAgriGene<?>> {
+    /**
+     * @return the AgriCraft IAgriGeneRegistry instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriGeneRegistry getInstance() {
+        return AgriApi.getGeneRegistry();
+    }
+
     /**
      * @return The gene responsible for the plant species
      */

@@ -109,16 +109,16 @@ public class AgriToolTips {
 
     public static ITextComponent getPlantTooltip(IAgriPlant plant) {
         return new StringTextComponent("")
-                .append(PLANT)
-                .append(new StringTextComponent(": "))
-                .append(plant.getPlantName());
+                .appendSibling(PLANT)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(plant.getPlantName());
     }
 
     public static ITextComponent getWeedTooltip(IAgriWeed weed) {
         return new StringTextComponent("")
-                .append(WEED)
-                .append(new StringTextComponent(": "))
-                .append(weed.getWeedName());
+                .appendSibling(WEED)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(weed.getWeedName());
     }
 
     public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth) {
@@ -128,43 +128,43 @@ public class AgriToolTips {
     public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth, double precise) {
         if (growth.isFinal()) {
             return new StringTextComponent("")
-                    .append(GROWTH)
-                    .append(new StringTextComponent(": "))
-                    .append(MATURE);
+                    .appendSibling(GROWTH)
+                    .appendSibling(new StringTextComponent(": "))
+                    .appendSibling(MATURE);
         } else {
             return new StringTextComponent("")
-                    .append(GROWTH)
-                    .append(new StringTextComponent(": " + ((int) (100 * precise) + "%")));
+                    .appendSibling(GROWTH)
+                    .appendSibling(new StringTextComponent(": " + ((int) (100 * precise) + "%")));
         }
     }
 
     public static ITextComponent getWeedGrowthTooltip(double growth) {
         return new StringTextComponent("")
-                .append(WEED_GROWTH)
-                .append(new StringTextComponent(": " + ((int) (100 * growth) + "%")));
+                .appendSibling(WEED_GROWTH)
+                .appendSibling(new StringTextComponent(": " + ((int) (100 * growth) + "%")));
     }
 
     public static ITextComponent getSoilTooltip(IAgriSoil soil) {
         return new StringTextComponent("")
-                .append(SOIL)
-                .append(new StringTextComponent(": "))
-                .append(soil.getName());
+                .appendSibling(SOIL)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(soil.getName());
     }
 
     public static ITextComponent getUnknownTooltip(ITextComponent source) {
         return new StringTextComponent("")
-                .append(source)
-                .append(new StringTextComponent(": "))
-                .append(UNKNOWN);
+                .appendSibling(source)
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(UNKNOWN);
     }
 
     public static ITextComponent getGeneTooltip(IAgriGenePair<?> genePair) {
         return new StringTextComponent("")
-                .append(genePair.getGene().getGeneDescription())
-                .append(new StringTextComponent(": "))
-                .append(genePair.getDominant().getTooltip())
-                .append(new StringTextComponent( " - "))
-                .append(genePair.getRecessive().getTooltip());
+                .appendSibling(genePair.getGene().getGeneDescription())
+                .appendSibling(new StringTextComponent(": "))
+                .appendSibling(genePair.getDominant().getTooltip())
+                .appendSibling(new StringTextComponent( " - "))
+                .appendSibling(genePair.getRecessive().getTooltip());
     }
 
     public static ITextComponent collect(Stream<ITextComponent> stream, String separator) {
@@ -183,9 +183,9 @@ public class AgriToolTips {
             public BiConsumer<IFormattableTextComponent, ITextComponent> accumulator() {
                 return (combined, toAdd) -> {
                     if(!combined.getString().isEmpty()) {
-                        combined.append(new StringTextComponent(separator));
+                        combined.appendSibling(new StringTextComponent(separator));
                     }
-                    combined.append(toAdd);
+                    combined.appendSibling(toAdd);
                 };
             }
 
@@ -193,9 +193,9 @@ public class AgriToolTips {
             public BinaryOperator<IFormattableTextComponent> combiner() {
                 return (a, b) -> {
                     if(a.getString().isEmpty()) {
-                        return a.append(new StringTextComponent(separator)).append(b);
+                        return a.appendSibling(new StringTextComponent(separator)).appendSibling(b);
                     } else {
-                        return a.append(b);
+                        return a.appendSibling(b);
                     }
                 };
             }

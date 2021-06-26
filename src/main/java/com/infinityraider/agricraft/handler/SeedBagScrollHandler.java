@@ -38,13 +38,13 @@ public class SeedBagScrollHandler {
             if(bag.incrementSorter(stack, delta)) {
                 new MessageSyncSeedBagSortMode(hand, bag.getContents(stack).getSorterIndex()).sendToServer();
                 SeedBagShakeHandler.getInstance().shake(hand);
-                ItemSeedBag.IContents contents = bag.getContents(stack);
+                ItemSeedBag.Contents contents = bag.getContents(stack);
                 IFormattableTextComponent message = new StringTextComponent("")
-                        .append(contents.getSorter().describe())
-                        .append(new StringTextComponent(", "))
-                        .append(AgriToolTips.MSG_SEED_BAG_SHAKE);
+                        .appendSibling(contents.getSorter().describe())
+                        .appendSibling(new StringTextComponent(", "))
+                        .appendSibling(AgriToolTips.MSG_SEED_BAG_SHAKE);
                 if(contents.getCount() <= 0) {
-                    message.append(new StringTextComponent(" ")).append(AgriToolTips.MSG_SEED_BAG_EMPTY);
+                    message.appendSibling(new StringTextComponent(" ")).appendSibling(AgriToolTips.MSG_SEED_BAG_EMPTY);
                 }
                 AgriCraft.instance.getClientPlayer().sendMessage(message, Util.DUMMY_UUID);
                 return true;

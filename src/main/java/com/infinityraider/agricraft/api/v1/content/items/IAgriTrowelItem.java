@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.api.v1.items;
+package com.infinityraider.agricraft.api.v1.content.items;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
@@ -42,5 +42,4 @@ public interface IAgriTrowelItem extends IAgriGeneCarrierItem {
      * @return Optional holding the growth stage, or empty if invalid
      */
     Optional<IAgriGrowthStage> getGrowthStage(ItemStack stack);
-
 }

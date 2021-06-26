@@ -1,8 +1,10 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
-import com.infinityraider.agricraft.api.v1.misc.IAgriRegisterable;
+import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -13,6 +15,18 @@ import java.util.Random;
  * More complex behaviour requires a custom implementation
  */
 public interface IAgriGrowthStage extends IAgriRegisterable<IAgriGrowthStage> {
+    /**
+     * A list of default AgriCraft growth stages for the desired number of stages.
+     * The first is the initial stage, the last is the mature and final stage.
+     *
+     * @param stages the number of stages required
+     * @return list containing IAgriGrowthStages following the default AgriCraft implementation
+     */
+    @SuppressWarnings("unused")
+    static List<IAgriGrowthStage> getDefaults(int stages) {
+        return AgriApi.getDefaultGrowthStages(stages);
+    }
+
     /**
      * @return true if the plant can be harvested at this growth stage
      */

@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.decoration;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.content.core.ItemCustomWood;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.item.BlockItemDynamicTexture;
 import net.minecraft.client.util.ITooltipFlag;
@@ -15,7 +16,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class ItemGrate extends BlockItemDynamicTexture {
+public class ItemGrate extends ItemCustomWood {
     public ItemGrate() {
         super(AgriCraft.instance.getModBlockRegistry().grate, new Properties()
                 .group(AgriTabs.TAB_AGRICRAFT)

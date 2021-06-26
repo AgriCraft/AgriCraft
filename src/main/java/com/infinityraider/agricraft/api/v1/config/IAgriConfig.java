@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.config;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -8,6 +9,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Its instance can be obtained via AgriApi.getAgriConfig()
  */
 public interface IAgriConfig {
+    /**
+     * @return the AgriCraft IAgriConfig instance
+     */
+    @SuppressWarnings("unused")
+    static IAgriConfig getInstance() {
+        return AgriApi.getAgriConfig();
+    }
+
     /*
      * --------------------
      * DEBUG CONFIG OPTIONS
@@ -88,6 +97,12 @@ public interface IAgriConfig {
      * @return false if fertilizers can not trigger mutations (global override for all IAgriFertilizer instances)
      */
     boolean allowFertilizerMutations();
+
+
+    /**
+     * @return true if mutations are allowed to occur on cloning
+     */
+    boolean allowCloneMutations();
 
     /**
      * @return true if vanilla farming is overridden

@@ -1,9 +1,11 @@
-package com.infinityraider.agricraft.api.v1.items;
+package com.infinityraider.agricraft.api.v1.content.items;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.infinityraider.agricraft.api.v1.util.IAgriItem;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -15,7 +17,7 @@ import net.minecraft.item.ItemStack;
  * If, for some reason you do not wish to interact with this interface, you can also use methods
  * provided by APIv2
  */
-public interface IAgriJournalItem {
+public interface IAgriJournalItem extends IAgriItem {
 
     /**
      * Checks if a plant is discovered in the journal.

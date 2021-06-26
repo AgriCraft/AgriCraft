@@ -45,7 +45,7 @@ public class MessagePlantResearched extends MessageBase {
                 buf.writeString(plant.getId());
 
         private final IMessageReader<IAgriPlant> reader = (buf) ->
-                AgriApi.getPlantRegistry().get(buf.readString()).orElse(AgriApi.getPlantRegistry().getNoPlant());
+                AgriApi.getPlantRegistry().get(buf.readString(32767)).orElse(AgriApi.getPlantRegistry().getNoPlant());
 
         @Override
         public boolean accepts(Class<IAgriPlant> clazz) {
