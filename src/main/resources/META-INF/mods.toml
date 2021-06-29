@@ -13,6 +13,7 @@ authors="InfinityRaider"
 description='''
 Agricultural farming extended
 '''
+itemIcon="agricraft:debugger"
 
 [[dependencies.agricraft]]
     modId="forge"

@@ -608,6 +608,26 @@
   "agricraft.plant.upgrade_aquatic_thorny_kelp.desc": "Watch your fingers.",
 
   "agricraft.plant.upgrade_aquatic_tongue_kelp.seed": "Tongue Kelp Seeds",
-  "agricraft.plant.upgrade_aquatic_tongue_kelp.desc": "Do you wanna be licked?"
+  "agricraft.plant.upgrade_aquatic_tongue_kelp.desc": "Do you wanna be licked?",
+
+  "agricraft.plant.abundance_amaranthus.seed": "Amaranthus Seeds",
+  "agricraft.plant.abundance_amaranthus.desc": "Catkin-like cymes of densely packed flowers.",
+
+  "agricraft.plant.abundance_chicory.seed": "Chicory Seeds",
+  "agricraft.plant.abundance_chicory.desc": "Use it alongside your coffee.",
+
+  "agricraft.plant.abundance_lavender.desc": "A stem filled with fragrant, honey-scented purple buds.",
+
+  "agricraft.plant.abundance_purple_african_daisy.seed": "Purple African Daisy Seeds",
+  "agricraft.plant.abundance_purple_african_daisy.desc": "Like a Daisy, but from Africa.",
+
+  "agricraft.plant.abundance_shady_marigold.seed": "Shady Marigold Seeds",
+  "agricraft.plant.abundance_shady_marigold.desc": "Flowered Moon.",
+
+  "agricraft.plant.abundance_sunny_marigold.seed": "Sunny Marigold Seeds",
+  "agricraft.plant.abundance_sunny_marigold.desc": "Flowered Sun.",
+
+  "agricraft.plant.abundance_yellow_african_daisy.seed": "Yellow African Daisy Seeds",
+  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color."
 
 }
