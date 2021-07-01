@@ -169,7 +169,11 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return CROSS_CROP.fetch(state) ? SHAPE_CROSS_CROP : SHAPE_DEFAULT;
+        if(AgriCraft.instance.getConfig().cropSticksCollide()) {
+            return CROSS_CROP.fetch(state) ? SHAPE_CROSS_CROP : SHAPE_DEFAULT;
+        } else {
+            return VoxelShapes.empty();
+        }
     }
 
     @Override

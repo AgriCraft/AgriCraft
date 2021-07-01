@@ -1,6 +1,7 @@
 Changelog
 ---------
 3.0.4
+ - ADDED: Config option to disable crop sticks collissions
  - ADDED: Default json support for Abundance (thanks to Nelson)
 
 3.0.3
