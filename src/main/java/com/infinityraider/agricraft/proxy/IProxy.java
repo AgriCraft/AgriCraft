@@ -81,6 +81,10 @@ public interface IProxy extends IProxyBase<Config> {
         CoreHandler.init();
     }
 
+    default boolean isValidRenderType(String renderType) {
+        return true;
+    }
+
     default void toggleSeedAnalyzerActive(boolean status) {}
 
     default void toggleSeedAnalyzerObserving(boolean status) {}

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriRenderType;
 import com.agricraft.agricore.plant.AgriSoilCondition;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -188,7 +187,7 @@ public class JsonPlant implements IAgriPlant {
         if(index < 0 || index >= this.plant.getGrowthStages()) {
             return 0;
         }
-        return this.plant.getGrowthStageHeight(index)*this.plant.getTexture().getRenderType().getHeightModifier();
+        return this.plant.getGrowthStageHeight(index);
     }
 
     @Override
@@ -257,33 +256,16 @@ public class JsonPlant implements IAgriPlant {
             return ImmutableList.of();
         }
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        final int height = this.plant.getGrowthStageHeight(index);
-        ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
         if(this.plant.getTexture().useModels()) {
             ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantModel(index));
-            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().fetchQuads(rl));
+            return AgriPlantQuadGenerator.getInstance().fetchQuads(rl);
         } else {
-            if(this.plant.getTexture().getRenderType() == AgriRenderType.GOURD) {
-                listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
-                        this, stage, face, new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[0]),
-                        0, this.plant.getTexture().getRenderType()));
-                if(stage.isFinal()) {
-                    listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
-                            this, stage, face, new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[1]),
-                            1, this.plant.getTexture().getRenderType()));
-                }
-            } else {
-                int layer = 0;
-                int layers = (int) Math.ceil(height / 16.0);
-                while ((16 * layer) < height) {
-                    ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantTextures(index)[layer]);
-                    listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
-                            this, stage, face, rl, layers - layer - 1, this.plant.getTexture().getRenderType()));
-                    layer++;
-                }
-            }
+            List<ResourceLocation> textures = Arrays.stream(plant.getTexture().getPlantTextures(index))
+                    .map(ResourceLocation::new)
+                    .collect(Collectors.toList());
+            return AgriPlantQuadGenerator.getInstance().bakeQuads(this, stage, this.plant.getTexture().getRenderType(),
+                    face, textures);
         }
-        return listBuilder.build();
     }
 
     @Nonnull

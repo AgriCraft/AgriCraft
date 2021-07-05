@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.proxy;
 
+import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
@@ -56,6 +57,11 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         IProxy.super.activateRequiredModules();
         ModuleDynamicCamera.getInstance().activate();
         ModuleKeyboard.getInstance().activate();
+    }
+
+    @Override
+    public boolean isValidRenderType(String renderType) {
+        return AgriPlantRenderType.fetchFromIdentifier(renderType).isPresent();
     }
 
     @Override

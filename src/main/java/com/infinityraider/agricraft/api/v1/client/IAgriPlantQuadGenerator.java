@@ -1,14 +1,19 @@
 package com.infinityraider.agricraft.api.v1.client;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.List;
+import java.util.function.IntFunction;
 
 /**
  * Interface for the AgriCraft default quad generator, its instance can be retrieved via AgriApi.getPlantQuadGenerator()
@@ -18,7 +23,6 @@ public interface IAgriPlantQuadGenerator {
     /**
      * @return the AgriCraft IAgriPlantQuadGenerator instance
      */
-    @SuppressWarnings("unused")
     static IAgriPlantQuadGenerator getInstance() {
         return AgriApi.getPlantQuadGenerator();
     }
@@ -27,30 +31,30 @@ public interface IAgriPlantQuadGenerator {
      * Generates quads for the HASH AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForHashPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForHashPattern(IAgriGrowable plant, IAgriGrowthStage stage, @Nullable Direction face, IntFunction<TextureAtlasSprite> spriteFunc);
 
     /**
      * Generates quads for the CROSS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForCrossPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForCrossPattern(IAgriGrowable plant, IAgriGrowthStage stage, @Nullable Direction face, IntFunction<TextureAtlasSprite> spriteFunc);
 
     /**
      * Generates quads for the PLUS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForPlusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForPlusPattern(IAgriGrowable plant, IAgriGrowthStage stage, @Nullable Direction face, IntFunction<TextureAtlasSprite> spriteFunc);
 
     /**
      * Generates quads for the RHOMBUS AgriPlantRenderType
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForRhombusPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForRhombusPattern(IAgriGrowable plant, IAgriGrowthStage stage, @Nullable Direction face, IntFunction<TextureAtlasSprite> spriteFunc);
 
     /**
      * Generates quads for the GOURD AgriPlantRenderType
      * here yOffset = 0 is the stem, and yOffset = 1 is the gourd
      */
     @Nonnull
-    List<BakedQuad> bakeQuadsForGourdPattern(@Nonnull TextureAtlasSprite sprite, int yOffset);
+    List<BakedQuad> bakeQuadsForGourdPattern(IAgriGrowable plant, IAgriGrowthStage stage, @Nullable Direction face, IntFunction<TextureAtlasSprite> spriteFunc);
 }
