@@ -422,105 +422,25 @@
   "agricraft.soil.warped_nylium.name": "Warped Nylium Soil",
 
 
-  "agricraft.plant.botania_black_flower.name": "Mystical Black Flower",
-  "agricraft.plant.botania_black_flower.seed": "Mystical Black Seeds",
-  "agricraft.plant.botania_black_flower.desc": "A beautiful flower that is as dark as the night.",
+  "agricraft.plant.abundance_amaranthus.seed": "Amaranthus Seeds",
+  "agricraft.plant.abundance_amaranthus.desc": "Catkin-like cymes of densely packed flowers.",
 
-  "agricraft.plant.botania_blue_flower.name": "Mystical Blue Flower",
-  "agricraft.plant.botania_blue_flower.seed": "Mystical Blue Seeds",
-  "agricraft.plant.botania_blue_flower.desc": "A beautiful flower that is as blue as the sea.",
+  "agricraft.plant.abundance_chicory.seed": "Chicory Seeds",
+  "agricraft.plant.abundance_chicory.desc": "Use it alongside your coffee.",
 
-  "agricraft.plant.botania_brown_flower.name": "Mystical Brown Flower",
-  "agricraft.plant.botania_brown_flower.seed": "Mystical Brown Seeds",
-  "agricraft.plant.botania_brown_flower.desc": "A beautiful flower that is as brown as the dirt.",
+  "agricraft.plant.abundance_lavender.desc": "A stem filled with fragrant, honey-scented purple buds.",
 
-  "agricraft.plant.botania_cyan_flower.name": "Mystical Cyan Flower",
-  "agricraft.plant.botania_cyan_flower.seed": "Mystical Cyan Seeds",
-  "agricraft.plant.botania_cyan_flower.desc": "A beautiful flower of indeterminate color, being both green and blue.",
+  "agricraft.plant.abundance_purple_african_daisy.seed": "Purple African Daisy Seeds",
+  "agricraft.plant.abundance_purple_african_daisy.desc": "Like a Daisy, but from Africa.",
 
-  "agricraft.plant.botania_gray_flower.name": "Mystical Gray Flower",
-  "agricraft.plant.botania_gray_flower.seed": "Mystical Gray Seeds",
-  "agricraft.plant.botania_gray_flower.desc": "A beautiful flower, albeit rather non-descript.",
+  "agricraft.plant.abundance_shady_marigold.seed": "Shady Marigold Seeds",
+  "agricraft.plant.abundance_shady_marigold.desc": "Flowered Moon.",
 
-  "agricraft.plant.botania_green_flower.name": "Mystical Green Flower",
-  "agricraft.plant.botania_green_flower.seed": "Mystical Green Seeds",
-  "agricraft.plant.botania_green_flower.desc": "This flower seems to be envious of its other cousins with better descriptions.",
+  "agricraft.plant.abundance_sunny_marigold.seed": "Sunny Marigold Seeds",
+  "agricraft.plant.abundance_sunny_marigold.desc": "Flowered Sun.",
 
-  "agricraft.plant.botania_light_blue_flower.name": "Mystical Light Blue Flower",
-  "agricraft.plant.botania_light_blue_flower.seed": "Mystical Light Blue Seeds",
-  "agricraft.plant.botania_light_blue_flower.desc": "A beautiful flower that is blue as the sky on a sunny day.",
-
-  "agricraft.plant.botania_light_gray_flower.name": "Mystical Light Gray Flower",
-  "agricraft.plant.botania_light_gray_flower.seed": "Mystical Light Gray Seeds",
-  "agricraft.plant.botania_light_gray_flower.desc": "A beautiful flower, albeit even more non-descript than its cousin, the Mystical Gray Flower.",
-
-  "agricraft.plant.botania_lime_flower.name": "Mystical Lime Flower",
-  "agricraft.plant.botania_lime_flower.seed": "Mystical Lime Seeds",
-  "agricraft.plant.botania_lime_flower.desc": "I wonder if this flower would taste sour?",
-
-  "agricraft.plant.botania_magenta_flower.name": "Mystical Magenta Flower",
-  "agricraft.plant.botania_magenta_flower.seed": "Mystical Magenta Seeds",
-  "agricraft.plant.botania_magenta_flower.desc": "A beautiful flower, of color which my printer is always out.",
-
-  "agricraft.plant.botania_orange_flower.name": "Mystical Orange Flower",
-  "agricraft.plant.botania_orange_flower.seed": "Mystical Orange Seeds",
-  "agricraft.plant.botania_orange_flower.desc": "A beautiful flower with a fiery disposition.",
-
-  "agricraft.plant.botania_pink_flower.name": "Mystical Pink Flower",
-  "agricraft.plant.botania_pink_flower.seed": "Mystical Pink Seeds",
-  "agricraft.plant.botania_pink_flower.desc": "A truly beautiful flower, emanating the throes of a powerful primal force.",
-
-  "agricraft.plant.botania_purple_flower.name": "Mystical Purple Flower",
-  "agricraft.plant.botania_purple_flower.seed": "Mystical Purple Seeds",
-  "agricraft.plant.botania_purple_flower.desc": "A beautiful flower with a regal color, it certainly is of the royal lineage.",
-
-  "agricraft.plant.botania_red_flower.name": "Mystical Red Flower",
-  "agricraft.plant.botania_red_flower.seed": "Mystical Red Seeds",
-  "agricraft.plant.botania_red_flower.desc": "A beautiful flower with a sanguine color.",
-
-  "agricraft.plant.botania_white_flower.name": "Mystical White Flower",
-  "agricraft.plant.botania_white_flower.seed": "Mystical White Seeds",
-  "agricraft.plant.botania_white_flower.desc": "A purely divine flower.",
-
-  "agricraft.plant.botania_yellow_flower.name": "Mystical Yellow Flower",
-  "agricraft.plant.botania_yellow_flower.seed": "Mystical Yellow Seeds",
-  "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed.",
-
-  "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3.",
-
-  "agricraft.plant.farmersdelight_cabbage.desc" : "Full of vitamin K.",
-  "agricraft.plant.farmersdelight_onion.desc" : "Goes well with pickles.",
-  "agricraft.plant.farmersdelight_rice.desc" : "Flood the fields.",
-  "agricraft.plant.farmersdelight_tomato.desc" : "A red and plump fruit.",
-
-  "agricraft.plant.thermal_barley.desc": "A cereal grain which can be ground into flour or malted to make beer or whiskey.",
-  "agricraft.plant.thermal_bell_pepper.desc": "A cultivar of peppers without the spice. Commonly chopped and used in dishes.",
-  "agricraft.plant.thermal_coffee.desc": "The fruit of a coffee tree, the pit of which can be roasted, ground, and brewed to make the lifeblood of mod devs.",
-  "agricraft.plant.thermal_corn.desc": "A staple grain prized for its versatility.",
-  "agricraft.plant.thermal_eggplant.desc": "A purple, spongy fruit used in many dishes. Tends to absorb other flavors.",
-  "agricraft.plant.thermal_frost_melon.desc": "A blue cultivar of melons. Those who consume it find that even the hottest of surfaces feel icy.",
-  "agricraft.plant.thermal_green_bean.desc": "The immature seed pods of a bean plant. Can be consumed alone or cooked in various dishes.",
-  "agricraft.plant.thermal_hops.desc": "The seed cones of a flowering hop vine. Used to flavor beer.",
-  "agricraft.plant.thermal_onion.desc": "A bulbous vegetable that is often used to add flavor to a savory dish. Brings people to tears.",
-  "agricraft.plant.thermal_peanut.desc": "The seeds of a peanut plant. Often roasted, pressed into oil, or ground into peanut butter.",
-  "agricraft.plant.thermal_radish.desc": "A root vegetable with a sharp flavor, typically eaten raw or steamed.",
-  "agricraft.plant.thermal_rice.desc": "The most widely consumed staple grain in the world. Laborious to harvest.",
-  "agricraft.plant.thermal_sadiroot.desc": "A medicinal spice known for its cleansing properties. Has a distinctive aroma.",
-  "agricraft.plant.thermal_spinach.desc": "The leaves of a spinach plant. Grants sailors an increase in muscle mass.",
-  "agricraft.plant.thermal_strawberry.desc": "A sweet, red fruit used in a variety of condiments and desserts.",
-  "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
-  "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups.",
-
-  "agricraft.plant.quark_glowshroom.desc": "Glow in the dark.",
-
-  "agricraft.plant.buzzier_bees_buttercup.seed": "Buttercup Seeds",
-  "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast.",
-
-  "agricraft.plant.buzzier_bees_white_clover.seed": "White Clover Seeds",
-  "agricraft.plant.buzzier_bees_white_clover.desc": "Also known as Dutch Clover.",
-
-  "agricraft.plant.buzzier_bees_pink_clover.seed": "Pink Clover Seeds",
-  "agricraft.plant.buzzier_bees_pink_clover.desc": "May the luck be with you.",
+  "agricraft.plant.abundance_yellow_african_daisy.seed": "Yellow African Daisy Seeds",
+  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color.",
 
   "agricraft.plant.atmospheric_aloe_vera.desc": "A succulent plant.",
 
@@ -547,88 +467,6 @@
 
   "agricraft.plant.autumnity_foul_berry.seed": "Foul Berry Seeds",
   "agricraft.plant.autumnity_foul_berry.desc": "Not so sweet.",
-
-  "agricraft.plant.environmental_bluebell.seed": "Bluebell Seeds",
-  "agricraft.plant.environmental_bluebell.desc": "Ring it.",
-
-  "agricraft.plant.environmental_cartwheel.seed": "Cartwheel Seeds",
-  "agricraft.plant.environmental_cartwheel.desc": "Turn! Turn! Turn!",
-
-  "agricraft.plant.environmental_cattail.desc": "Not really the tail of the cat.",
-
-  "agricraft.plant.environmental_dianthus.seed": "Dianthus Seeds",
-  "agricraft.plant.environmental_dianthus.desc": "Lil' ball of moss.",
-
-  "agricraft.plant.environmental_magenta_hibiscus.seed": "Magenta Hibiscus Seeds",
-  "agricraft.plant.environmental_magenta_hibiscus.desc": "Lighter variant of the purple hibiscus.",
-
-  "agricraft.plant.environmental_orange_hibiscus.seed": "Orange Hibiscus Seeds",
-  "agricraft.plant.environmental_orange_hibiscus.desc": "The child of the red hibiscus and the yellow hibiscus.",
-
-  "agricraft.plant.environmental_pink_hibiscus.seed": "Pink Hibiscus Seeds",
-  "agricraft.plant.environmental_pink_hibiscus.desc": "The girliest hibiscus.",
-
-  "agricraft.plant.environmental_purple_hibiscus.seed": "Purple Hibiscus Seeds",
-  "agricraft.plant.environmental_purple_hibiscus.desc": "Purplelicious.",
-
-  "agricraft.plant.environmental_red_hibiscus.seed": "Red Hibiscus Seeds",
-  "agricraft.plant.environmental_red_hibiscus.desc": "Next gen poppy.",
-
-  "agricraft.plant.environmental_yellow_hibiscus.seed": "Yellow Hibiscus Seeds",
-  "agricraft.plant.environmental_yellow_hibiscus.desc": "Shiny!",
-
-  "agricraft.plant.environmental_red_lotus_flower.seed": "Red Lotus Flower Seeds",
-  "agricraft.plant.environmental_red_lotus_flower.desc": "Embellish your ponds.",
-
-  "agricraft.plant.environmental_white_lotus_flower.seed": "White Lotus Flower Seeds",
-  "agricraft.plant.environmental_white_lotus_flower.desc": "Uncolored version of the red lotus flower.",
-
-  "agricraft.plant.environmental_violet.seed": "Violet Seeds",
-  "agricraft.plant.environmental_violet.desc": "A beautiful ornamental flower to use in your garden.",
-
-  "agricraft.plant.upgrade_aquatic_pink_searocket.seed": "Pink Searocket Seeds",
-  "agricraft.plant.upgrade_aquatic_pink_searocket.desc": "This plant has the potential to become a noxious weed.",
-
-  "agricraft.plant.upgrade_aquatic_white_searocket.seed": "White Searocket Seeds",
-  "agricraft.plant.upgrade_aquatic_white_searocket.desc": "Most commonly found on the beach.",
-
-  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.seed": "Blue Pickerelweed Seeds",
-  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.desc": "Pickerelweed or pickleweed?",
-
-  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.seed": "Purple Pickerelweed Seeds",
-  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.desc": "It once won the Royal Horticultural Society's Award of Garden Merit.",
-
-  "agricraft.plant.upgrade_aquatic_ochre_kelp.seed": "Ochre Kelp Seeds",
-  "agricraft.plant.upgrade_aquatic_ochre_kelp.desc": "Is it orange or yellow?",
-
-  "agricraft.plant.upgrade_aquatic_polar_kelp.seed": "Polar Kelp Seeds",
-  "agricraft.plant.upgrade_aquatic_polar_kelp.desc": "A type of kelp that lives in really cold region.",
-
-  "agricraft.plant.upgrade_aquatic_thorny_kelp.seed": "Thorny Kelp Seeds",
-  "agricraft.plant.upgrade_aquatic_thorny_kelp.desc": "Watch your fingers.",
-
-  "agricraft.plant.upgrade_aquatic_tongue_kelp.seed": "Tongue Kelp Seeds",
-  "agricraft.plant.upgrade_aquatic_tongue_kelp.desc": "Do you wanna be licked?",
-
-  "agricraft.plant.abundance_amaranthus.seed": "Amaranthus Seeds",
-  "agricraft.plant.abundance_amaranthus.desc": "Catkin-like cymes of densely packed flowers.",
-
-  "agricraft.plant.abundance_chicory.seed": "Chicory Seeds",
-  "agricraft.plant.abundance_chicory.desc": "Use it alongside your coffee.",
-
-  "agricraft.plant.abundance_lavender.desc": "A stem filled with fragrant, honey-scented purple buds.",
-
-  "agricraft.plant.abundance_purple_african_daisy.seed": "Purple African Daisy Seeds",
-  "agricraft.plant.abundance_purple_african_daisy.desc": "Like a Daisy, but from Africa.",
-
-  "agricraft.plant.abundance_shady_marigold.seed": "Shady Marigold Seeds",
-  "agricraft.plant.abundance_shady_marigold.desc": "Flowered Moon.",
-
-  "agricraft.plant.abundance_sunny_marigold.seed": "Sunny Marigold Seeds",
-  "agricraft.plant.abundance_sunny_marigold.desc": "Flowered Sun.",
-
-  "agricraft.plant.abundance_yellow_african_daisy.seed": "Yellow African Daisy Seeds",
-  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color.",
 
   "agricraft.plant.biomesoplenty_burning_blossom.seed": "Burning Blossom Seeds",
   "agricraft.plant.biomesoplenty_burning_blossom.desc": "Watch out for burns.",
@@ -664,6 +502,152 @@
   "agricraft.plant.biomesoplenty_wildflower.desc": "A type of flower that grows almost everywhere.",
 
   "agricraft.plant.biomesoplenty_wilted_lily.seed": "Wilted Lily Seeds",
-  "agricraft.plant.biomesoplenty_wilted_lily.desc": "That's what happens when you don't water your plants."
+  "agricraft.plant.biomesoplenty_wilted_lily.desc": "That's what happens when you don't water your plants.",
+
+  "agricraft.plant.botania_black_flower.seed": "Mystical Black Seeds",
+  "agricraft.plant.botania_black_flower.desc": "A beautiful flower that is as dark as the night.",
+
+  "agricraft.plant.botania_blue_flower.seed": "Mystical Blue Seeds",
+  "agricraft.plant.botania_blue_flower.desc": "A beautiful flower that is as blue as the sea.",
+
+  "agricraft.plant.botania_brown_flower.seed": "Mystical Brown Seeds",
+  "agricraft.plant.botania_brown_flower.desc": "A beautiful flower that is as brown as the dirt.",
+
+  "agricraft.plant.botania_cyan_flower.seed": "Mystical Cyan Seeds",
+  "agricraft.plant.botania_cyan_flower.desc": "A beautiful flower of indeterminate color, being both green and blue.",
+
+  "agricraft.plant.botania_gray_flower.seed": "Mystical Gray Seeds",
+  "agricraft.plant.botania_gray_flower.desc": "A beautiful flower, albeit rather non-descript.",
+
+  "agricraft.plant.botania_green_flower.seed": "Mystical Green Seeds",
+  "agricraft.plant.botania_green_flower.desc": "This flower seems to be envious of its other cousins with better descriptions.",
+
+  "agricraft.plant.botania_light_blue_flower.seed": "Mystical Light Blue Seeds",
+  "agricraft.plant.botania_light_blue_flower.desc": "A beautiful flower that is blue as the sky on a sunny day.",
+
+  "agricraft.plant.botania_light_gray_flower.seed": "Mystical Light Gray Seeds",
+  "agricraft.plant.botania_light_gray_flower.desc": "A beautiful flower, albeit even more non-descript than its cousin, the Mystical Gray Flower.",
+
+  "agricraft.plant.botania_lime_flower.seed": "Mystical Lime Seeds",
+  "agricraft.plant.botania_lime_flower.desc": "I wonder if this flower would taste sour?",
+
+  "agricraft.plant.botania_magenta_flower.seed": "Mystical Magenta Seeds",
+  "agricraft.plant.botania_magenta_flower.desc": "A beautiful flower, of color which my printer is always out.",
+
+  "agricraft.plant.botania_orange_flower.seed": "Mystical Orange Seeds",
+  "agricraft.plant.botania_orange_flower.desc": "A beautiful flower with a fiery disposition.",
+
+  "agricraft.plant.botania_pink_flower.seed": "Mystical Pink Seeds",
+  "agricraft.plant.botania_pink_flower.desc": "A truly beautiful flower, emanating the throes of a powerful primal force.",
+
+  "agricraft.plant.botania_purple_flower.seed": "Mystical Purple Seeds",
+  "agricraft.plant.botania_purple_flower.desc": "A beautiful flower with a regal color, it certainly is of the royal lineage.",
+
+  "agricraft.plant.botania_red_flower.seed": "Mystical Red Seeds",
+  "agricraft.plant.botania_red_flower.desc": "A beautiful flower with a sanguine color.",
+
+  "agricraft.plant.botania_white_flower.seed": "Mystical White Seeds",
+  "agricraft.plant.botania_white_flower.desc": "A purely divine flower.",
+
+  "agricraft.plant.botania_yellow_flower.seed": "Mystical Yellow Seeds",
+  "agricraft.plant.botania_yellow_flower.desc": "Almost as bad as ragweed.",
+
+  "agricraft.plant.buzzier_bees_buttercup.seed": "Buttercup Seeds",
+  "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast.",
+
+  "agricraft.plant.buzzier_bees_white_clover.seed": "White Clover Seeds",
+  "agricraft.plant.buzzier_bees_white_clover.desc": "Also known as Dutch Clover.",
+
+  "agricraft.plant.buzzier_bees_pink_clover.seed": "Pink Clover Seeds",
+  "agricraft.plant.buzzier_bees_pink_clover.desc": "May the luck be with you.",
+
+  "agricraft.plant.environmental_bluebell.seed": "Bluebell Seeds",
+  "agricraft.plant.environmental_bluebell.desc": "Ring it.",
+
+  "agricraft.plant.environmental_cartwheel.seed": "Cartwheel Seeds",
+  "agricraft.plant.environmental_cartwheel.desc": "Turn! Turn! Turn!",
+
+  "agricraft.plant.environmental_cattail.desc": "Not really the tail of the cat.",
+
+  "agricraft.plant.environmental_dianthus.seed": "Dianthus Seeds",
+  "agricraft.plant.environmental_dianthus.desc": "Lil' ball of moss.",
+
+  "agricraft.plant.environmental_magenta_hibiscus.seed": "Magenta Hibiscus Seeds",
+  "agricraft.plant.environmental_magenta_hibiscus.desc": "Lighter variant of the purple hibiscus.",
+
+  "agricraft.plant.environmental_orange_hibiscus.seed": "Orange Hibiscus Seeds",
+  "agricraft.plant.environmental_orange_hibiscus.desc": "The child of the red hibiscus and the yellow hibiscus.",
+
+  "agricraft.plant.environmental_pink_hibiscus.seed": "Pink Hibiscus Seeds",
+  "agricraft.plant.environmental_pink_hibiscus.desc": "The girliest hibiscus.",
+
+  "agricraft.plant.environmental_purple_hibiscus.seed": "Purple Hibiscus Seeds",
+  "agricraft.plant.environmental_purple_hibiscus.desc": "Purplelicious.",
+
+  "agricraft.plant.environmental_red_hibiscus.seed": "Red Hibiscus Seeds",
+  "agricraft.plant.environmental_red_hibiscus.desc": "Next gen poppy.",
+
+  "agricraft.plant.environmental_red_lotus_flower.seed": "Red Lotus Flower Seeds",
+  "agricraft.plant.environmental_red_lotus_flower.desc": "Embellish your ponds.",
+
+  "agricraft.plant.environmental_violet.seed": "Violet Seeds",
+  "agricraft.plant.environmental_violet.desc": "A beautiful ornamental flower to use in your garden.",
+
+  "agricraft.plant.environmental_white_lotus_flower.seed": "White Lotus Flower Seeds",
+  "agricraft.plant.environmental_white_lotus_flower.desc": "Uncolored version of the red lotus flower.",
+
+  "agricraft.plant.environmental_yellow_hibiscus.seed": "Yellow Hibiscus Seeds",
+  "agricraft.plant.environmental_yellow_hibiscus.desc": "Shiny!",
+
+  "agricraft.plant.farmersdelight_cabbage.desc" : "Full of vitamin K.",
+  "agricraft.plant.farmersdelight_onion.desc" : "Goes well with pickles.",
+  "agricraft.plant.farmersdelight_rice.desc" : "Flood the fields.",
+  "agricraft.plant.farmersdelight_tomato.desc" : "A red and plump fruit.",
+
+  "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3.",
+
+  "agricraft.plant.quark_glowshroom.desc": "Glow in the dark.",
+
+  "agricraft.plant.thermal_barley.desc": "A cereal grain which can be ground into flour or malted to make beer or whiskey.",
+  "agricraft.plant.thermal_bell_pepper.desc": "A cultivar of peppers without the spice. Commonly chopped and used in dishes.",
+  "agricraft.plant.thermal_coffee.desc": "The fruit of a coffee tree, the pit of which can be roasted, ground, and brewed to make the lifeblood of mod devs.",
+  "agricraft.plant.thermal_corn.desc": "A staple grain prized for its versatility.",
+  "agricraft.plant.thermal_eggplant.desc": "A purple, spongy fruit used in many dishes. Tends to absorb other flavors.",
+  "agricraft.plant.thermal_frost_melon.desc": "A blue cultivar of melons. Those who consume it find that even the hottest of surfaces feel icy.",
+  "agricraft.plant.thermal_green_bean.desc": "The immature seed pods of a bean plant. Can be consumed alone or cooked in various dishes.",
+  "agricraft.plant.thermal_hops.desc": "The seed cones of a flowering hop vine. Used to flavor beer.",
+  "agricraft.plant.thermal_onion.desc": "A bulbous vegetable that is often used to add flavor to a savory dish. Brings people to tears.",
+  "agricraft.plant.thermal_peanut.desc": "The seeds of a peanut plant. Often roasted, pressed into oil, or ground into peanut butter.",
+  "agricraft.plant.thermal_radish.desc": "A root vegetable with a sharp flavor, typically eaten raw or steamed.",
+  "agricraft.plant.thermal_rice.desc": "The most widely consumed staple grain in the world. Laborious to harvest.",
+  "agricraft.plant.thermal_sadiroot.desc": "A medicinal spice known for its cleansing properties. Has a distinctive aroma.",
+  "agricraft.plant.thermal_spinach.desc": "The leaves of a spinach plant. Grants sailors an increase in muscle mass.",
+  "agricraft.plant.thermal_strawberry.desc": "A sweet, red fruit used in a variety of condiments and desserts.",
+  "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
+  "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups.",
+
+  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.seed": "Blue Pickerelweed Seeds",
+  "agricraft.plant.upgrade_aquatic_blue_pickerelweed.desc": "Pickerelweed or pickleweed?",
+
+  "agricraft.plant.upgrade_aquatic_ochre_kelp.seed": "Ochre Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_ochre_kelp.desc": "Is it orange or yellow?",
+
+  "agricraft.plant.upgrade_aquatic_pink_searocket.seed": "Pink Searocket Seeds",
+  "agricraft.plant.upgrade_aquatic_pink_searocket.desc": "This plant has the potential to become a noxious weed.",
+
+  "agricraft.plant.upgrade_aquatic_polar_kelp.seed": "Polar Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_polar_kelp.desc": "A type of kelp that lives in really cold region.",
+
+  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.seed": "Purple Pickerelweed Seeds",
+  "agricraft.plant.upgrade_aquatic_purple_pickerelweed.desc": "It once won the Royal Horticultural Society's Award of Garden Merit.",
+
+  "agricraft.plant.upgrade_aquatic_thorny_kelp.seed": "Thorny Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_thorny_kelp.desc": "Watch your fingers.",
+
+  "agricraft.plant.upgrade_aquatic_tongue_kelp.seed": "Tongue Kelp Seeds",
+  "agricraft.plant.upgrade_aquatic_tongue_kelp.desc": "Do you wanna be licked?",
+
+  "agricraft.plant.upgrade_aquatic_white_searocket.seed": "White Searocket Seeds",
+  "agricraft.plant.upgrade_aquatic_white_searocket.desc": "Most commonly found on the beach."
 
 }

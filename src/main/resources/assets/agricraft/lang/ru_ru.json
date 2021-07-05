@@ -422,106 +422,6 @@
   "agricraft.soil.warped_nylium.name": "Почва с искаженным нилием",
 
 
-  "agricraft.plant.botania_black_flower.name": "Мистический черный цветок",
-  "agricraft.plant.botania_black_flower.seed": "Мистические черные семена",
-  "agricraft.plant.botania_black_flower.desc": "Прекрасный цветок, темный, как ночь.",
-
-  "agricraft.plant.botania_blue_flower.name": "Мистический синий цветок",
-  "agricraft.plant.botania_blue_flower.seed": "Мистические синие семена",
-  "agricraft.plant.botania_blue_flower.desc": "Прекрасный цветок, голубой, как море.",
-
-  "agricraft.plant.botania_brown_flower.name": "Мистический коричневый цветок",
-  "agricraft.plant.botania_brown_flower.seed": "Мистические коричневые семена",
-  "agricraft.plant.botania_brown_flower.desc": "Прекрасный цветок, такой же коричневый, как земля.",
-
-  "agricraft.plant.botania_cyan_flower.name": "Мистический голубой цветок",
-  "agricraft.plant.botania_cyan_flower.seed": "Мистические голубые семена",
-  "agricraft.plant.botania_cyan_flower.desc": "Красивый цветок неопределенного цвета, одновременно зеленый и синий.",
-
-  "agricraft.plant.botania_gray_flower.name": "Мистический серый цветок",
-  "agricraft.plant.botania_gray_flower.seed": "Мистические серые семена",
-  "agricraft.plant.botania_gray_flower.desc": "Красивый цветок, хотя и довольно неописуемый.",
-
-  "agricraft.plant.botania_green_flower.name": "Мистический зеленый цветок",
-  "agricraft.plant.botania_green_flower.seed": "Мистические зеленые семена",
-  "agricraft.plant.botania_green_flower.desc": "Этот цветок, кажется, завидует своим другим братьям с лучшими описаниями.",
-
-  "agricraft.plant.botania_light_blue_flower.name": "Мистический светло-голубой цветок",
-  "agricraft.plant.botania_light_blue_flower.seed": "Мистические светло-голубые семена",
-  "agricraft.plant.botania_light_blue_flower.desc": "Прекрасный цветок, голубой, как небо в солнечный день.",
-
-  "agricraft.plant.botania_light_gray_flower.name": "Мистический светло-серый цветок",
-  "agricraft.plant.botania_light_gray_flower.seed": "Мистические светло-серые семена",
-  "agricraft.plant.botania_light_gray_flower.desc": "Прекрасный цветок, хотя и еще более неописуемый, чем его двоюродный брат, мистический серый цветок.",
-
-  "agricraft.plant.botania_lime_flower.name": "Мистический лаймовый цветок",
-  "agricraft.plant.botania_lime_flower.seed": "Мистические лаймовые семена",
-  "agricraft.plant.botania_lime_flower.desc": "Интересно, будет ли этот цветок кислым на вкус?",
-
-  "agricraft.plant.botania_magenta_flower.name": "Мистический пурпурный цветок",
-  "agricraft.plant.botania_magenta_flower.seed": "Мистические пурпурные семена",
-  "agricraft.plant.botania_magenta_flower.desc": "Прекрасный цветок, цвета который всегда кончается у моего принтера.",
-
-  "agricraft.plant.botania_orange_flower.name": "Мистический оранжевый цветок",
-  "agricraft.plant.botania_orange_flower.seed": "Мистические оранжевые семена",
-  "agricraft.plant.botania_orange_flower.desc": "Прекрасный цветок с огненным характером.",
-
-  "agricraft.plant.botania_pink_flower.name": "Мистический розовый цветок",
-  "agricraft.plant.botania_pink_flower.seed": "Мистические розовые семена",
-  "agricraft.plant.botania_pink_flower.desc": "Поистине прекрасный цветок, излучающий агонию мощной первобытной силы.",
-
-  "agricraft.plant.botania_purple_flower.name": "Мистический фиолетовый цветок",
-  "agricraft.plant.botania_purple_flower.seed": "Мистические фиолетовые семена",
-  "agricraft.plant.botania_purple_flower.desc": "Красивый цветок с царственным цветом, он, безусловно, имеет королевское происхождение.",
-
-  "agricraft.plant.botania_red_flower.name": "Мистический красный цветок",
-  "agricraft.plant.botania_red_flower.seed": "Мистические красные семена",
-  "agricraft.plant.botania_red_flower.desc": "Красивый цветок с сангвиническим оттенком.",
-
-  "agricraft.plant.botania_white_flower.name": "Мистический белый цветок",
-  "agricraft.plant.botania_white_flower.seed": "Мистические белые семена",
-  "agricraft.plant.botania_white_flower.desc": "Чистый божественный цветок.",
-
-  "agricraft.plant.botania_yellow_flower.name": "Мистический желтый цветок",
-  "agricraft.plant.botania_yellow_flower.seed": "Мистические желтые семена",
-  "agricraft.plant.botania_yellow_flower.desc": "Почти так же плохо, как амброзия.",
-
-  "agricraft.plant.immersiveengineering_hemp.desc" : "Тестирование 1, 2, 3.",
-
-  "agricraft.plant.farmersdelight_cabbage.desc" : "Полный витамина К.",
-  "agricraft.plant.farmersdelight_onion.desc" : "Хорошо сочетается с солеными огурцами.",
-  "agricraft.plant.farmersdelight_rice.desc" : "Затопить поля.",
-  "agricraft.plant.farmersdelight_tomato.desc" : "Красный и пухлый фрукт.",
-
-  "agricraft.plant.thermal_barley.desc": "Зерно злака, которое можно измельчить в муку или солод, чтобы сделать пиво или виски.",
-  "agricraft.plant.thermal_bell_pepper.desc": "Сорт перца не для специй. Обычно нарезают и используют в блюдах.",
-  "agricraft.plant.thermal_coffee.desc": "Плод кофейного дерева, косточку которого можно обжарить, измельчить и сварить, чтобы восполнить жизненную силу разработчиков модов.",
-  "agricraft.plant.thermal_corn.desc": "Основное зерно ценится за свою универсальность.",
-  "agricraft.plant.thermal_eggplant.desc": "Фиолетовый, губчатый фрукт, используемый во многих блюдах. Имеет тенденцию поглощать другие ароматы.",
-  "agricraft.plant.thermal_frost_melon.desc": "Голубой сорт дыни. Те, кто его потребляет, обнаруживают, что даже самые горячие поверхности кажутся ледяными.",
-  "agricraft.plant.thermal_green_bean.desc": "Незрелые семенные стручки бобового растения. Можно употреблять отдельно или готовить в различных блюдах.",
-  "agricraft.plant.thermal_hops.desc": "Шишки цветущей лозы хмеля. Используется для ароматизации пива.",
-  "agricraft.plant.thermal_onion.desc": "Луковичный овощ, который часто используется для придания вкуса пикантному блюду. Доводит людей до слез.",
-  "agricraft.plant.thermal_peanut.desc": "Семена арахисового растения. Часто обжаривают, отжимают в растительное масло или растирают в арахисовую пасту.",
-  "agricraft.plant.thermal_radish.desc": "Корнеплод с острым вкусом, обычно едят сырым или пропаренным.",
-  "agricraft.plant.thermal_rice.desc": "Самый широко потребляемый основной вид зерна в мире. Изнуряюще тяжело собирать урожай.",
-  "agricraft.plant.thermal_sadiroot.desc": "Лекарственная специя, известная своими очищающими свойствами. Обладает характерным ароматом.",
-  "agricraft.plant.thermal_spinach.desc": "Листья растения шпината. Дает морякам увеличение мышечной массы.",
-  "agricraft.plant.thermal_strawberry.desc": "Сладкий, красный фрукт, используемый в различных приправах и десертах.",
-  "agricraft.plant.thermal_tea.desc": "Листья чайного растения. Часто сбрасывали за борт в океан во время Бостонского и других чаепитий.",
-  "agricraft.plant.thermal_tomato.desc": "Пикантный красный фрукт, часто нарезанный для блюд или выжатый для соусов и супов.",
-
-  "agricraft.plant.quark_brown_mushroom.desc": "Светятся в темноте.",
-
-  "agricraft.plant.buzzier_bees_buttercup.seed": "Семена лютика",
-  "agricraft.plant.buzzier_bees_buttercup.desc": "Не используйте на своем тосте.",
-
-  "agricraft.plant.buzzier_bees_white_clover.seed": "Семена белого клевера",
-  "agricraft.plant.buzzier_bees_white_clover.desc": "Также известен как голландский клевер.",
-
-  "agricraft.plant.buzzier_bees_pink_clover.seed": "Семена розового клевера",
-  "agricraft.plant.buzzier_bees_pink_clover.desc": "Пусть удача будет с тобой.",
-
   "agricraft.plant.atmospheric_aloe_vera.desc": "Суккулентное растение.",
 
   "agricraft.plant.atmospheric_gilia.seeds": "Семена Гилии",
@@ -547,6 +447,63 @@
 
   "agricraft.plant.autumnity_foul_berry.seed": "Семена мерзкой ягоды",
   "agricraft.plant.autumnity_foul_berry.desc": "Не так сладко.",
+
+  "agricraft.plant.botania_black_flower.seed": "Мистические черные семена",
+  "agricraft.plant.botania_black_flower.desc": "Прекрасный цветок, темный, как ночь.",
+
+  "agricraft.plant.botania_blue_flower.seed": "Мистические синие семена",
+  "agricraft.plant.botania_blue_flower.desc": "Прекрасный цветок, голубой, как море.",
+
+  "agricraft.plant.botania_brown_flower.seed": "Мистические коричневые семена",
+  "agricraft.plant.botania_brown_flower.desc": "Прекрасный цветок, такой же коричневый, как земля.",
+
+  "agricraft.plant.botania_cyan_flower.seed": "Мистические голубые семена",
+  "agricraft.plant.botania_cyan_flower.desc": "Красивый цветок неопределенного цвета, одновременно зеленый и синий.",
+
+  "agricraft.plant.botania_gray_flower.seed": "Мистические серые семена",
+  "agricraft.plant.botania_gray_flower.desc": "Красивый цветок, хотя и довольно неописуемый.",
+
+  "agricraft.plant.botania_green_flower.seed": "Мистические зеленые семена",
+  "agricraft.plant.botania_green_flower.desc": "Этот цветок, кажется, завидует своим другим братьям с лучшими описаниями.",
+
+  "agricraft.plant.botania_light_blue_flower.seed": "Мистические светло-голубые семена",
+  "agricraft.plant.botania_light_blue_flower.desc": "Прекрасный цветок, голубой, как небо в солнечный день.",
+
+  "agricraft.plant.botania_light_gray_flower.seed": "Мистические светло-серые семена",
+  "agricraft.plant.botania_light_gray_flower.desc": "Прекрасный цветок, хотя и еще более неописуемый, чем его двоюродный брат, мистический серый цветок.",
+
+  "agricraft.plant.botania_lime_flower.seed": "Мистические лаймовые семена",
+  "agricraft.plant.botania_lime_flower.desc": "Интересно, будет ли этот цветок кислым на вкус?",
+
+  "agricraft.plant.botania_magenta_flower.seed": "Мистические пурпурные семена",
+  "agricraft.plant.botania_magenta_flower.desc": "Прекрасный цветок, цвета который всегда кончается у моего принтера.",
+
+  "agricraft.plant.botania_orange_flower.seed": "Мистические оранжевые семена",
+  "agricraft.plant.botania_orange_flower.desc": "Прекрасный цветок с огненным характером.",
+
+  "agricraft.plant.botania_pink_flower.seed": "Мистические розовые семена",
+  "agricraft.plant.botania_pink_flower.desc": "Поистине прекрасный цветок, излучающий агонию мощной первобытной силы.",
+
+  "agricraft.plant.botania_purple_flower.seed": "Мистические фиолетовые семена",
+  "agricraft.plant.botania_purple_flower.desc": "Красивый цветок с царственным цветом, он, безусловно, имеет королевское происхождение.",
+
+  "agricraft.plant.botania_red_flower.seed": "Мистические красные семена",
+  "agricraft.plant.botania_red_flower.desc": "Красивый цветок с сангвиническим оттенком.",
+
+  "agricraft.plant.botania_white_flower.seed": "Мистические белые семена",
+  "agricraft.plant.botania_white_flower.desc": "Чистый божественный цветок.",
+
+  "agricraft.plant.botania_yellow_flower.seed": "Мистические желтые семена",
+  "agricraft.plant.botania_yellow_flower.desc": "Почти так же плохо, как амброзия.",
+
+  "agricraft.plant.buzzier_bees_buttercup.seed": "Семена лютика",
+  "agricraft.plant.buzzier_bees_buttercup.desc": "Не используйте на своем тосте.",
+
+  "agricraft.plant.buzzier_bees_white_clover.seed": "Семена белого клевера",
+  "agricraft.plant.buzzier_bees_white_clover.desc": "Также известен как голландский клевер.",
+
+  "agricraft.plant.buzzier_bees_pink_clover.seed": "Семена розового клевера",
+  "agricraft.plant.buzzier_bees_pink_clover.desc": "Пусть удача будет с тобой.",
 
   "agricraft.plant.environmental_bluebell.seed": "Семена колокольчика",
   "agricraft.plant.environmental_bluebell.desc": "Позвони в них.",
@@ -585,6 +542,33 @@
 
   "agricraft.plant.environmental_violet.seed": "Семена Фиалки",
   "agricraft.plant.environmental_violet.desc": "Красивый декоративный цветок для украшения вашего сада.",
+
+  "agricraft.plant.farmersdelight_cabbage.desc" : "Полный витамина К.",
+  "agricraft.plant.farmersdelight_onion.desc" : "Хорошо сочетается с солеными огурцами.",
+  "agricraft.plant.farmersdelight_rice.desc" : "Затопить поля.",
+  "agricraft.plant.farmersdelight_tomato.desc" : "Красный и пухлый фрукт.",
+
+  "agricraft.plant.immersiveengineering_hemp.desc" : "Тестирование 1, 2, 3.",
+
+  "agricraft.plant.quark_glowshroom.desc": "Светятся в темноте.",
+
+  "agricraft.plant.thermal_barley.desc": "Зерно злака, которое можно измельчить в муку или солод, чтобы сделать пиво или виски.",
+  "agricraft.plant.thermal_bell_pepper.desc": "Сорт перца не для специй. Обычно нарезают и используют в блюдах.",
+  "agricraft.plant.thermal_coffee.desc": "Плод кофейного дерева, косточку которого можно обжарить, измельчить и сварить, чтобы восполнить жизненную силу разработчиков модов.",
+  "agricraft.plant.thermal_corn.desc": "Основное зерно ценится за свою универсальность.",
+  "agricraft.plant.thermal_eggplant.desc": "Фиолетовый, губчатый фрукт, используемый во многих блюдах. Имеет тенденцию поглощать другие ароматы.",
+  "agricraft.plant.thermal_frost_melon.desc": "Голубой сорт дыни. Те, кто его потребляет, обнаруживают, что даже самые горячие поверхности кажутся ледяными.",
+  "agricraft.plant.thermal_green_bean.desc": "Незрелые семенные стручки бобового растения. Можно употреблять отдельно или готовить в различных блюдах.",
+  "agricraft.plant.thermal_hops.desc": "Шишки цветущей лозы хмеля. Используется для ароматизации пива.",
+  "agricraft.plant.thermal_onion.desc": "Луковичный овощ, который часто используется для придания вкуса пикантному блюду. Доводит людей до слез.",
+  "agricraft.plant.thermal_peanut.desc": "Семена арахисового растения. Часто обжаривают, отжимают в растительное масло или растирают в арахисовую пасту.",
+  "agricraft.plant.thermal_radish.desc": "Корнеплод с острым вкусом, обычно едят сырым или пропаренным.",
+  "agricraft.plant.thermal_rice.desc": "Самый широко потребляемый основной вид зерна в мире. Изнуряюще тяжело собирать урожай.",
+  "agricraft.plant.thermal_sadiroot.desc": "Лекарственная специя, известная своими очищающими свойствами. Обладает характерным ароматом.",
+  "agricraft.plant.thermal_spinach.desc": "Листья растения шпината. Дает морякам увеличение мышечной массы.",
+  "agricraft.plant.thermal_strawberry.desc": "Сладкий, красный фрукт, используемый в различных приправах и десертах.",
+  "agricraft.plant.thermal_tea.desc": "Листья чайного растения. Часто сбрасывали за борт в океан во время Бостонского и других чаепитий.",
+  "agricraft.plant.thermal_tomato.desc": "Пикантный красный фрукт, часто нарезанный для блюд или выжатый для соусов и супов.",
 
   "agricraft.plant.upgrade_aquatic_pink_searocket.seed": "Семена розовой морской горчицы",
   "agricraft.plant.upgrade_aquatic_pink_searocket.desc": "Это растение потенциально может стать вредным сорняком.",
