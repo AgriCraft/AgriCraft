@@ -41,9 +41,9 @@ ext.configFile = file('mod.properties')
 ext.config = parseConfig(configFile)
 
 // Mod Properties Transcription
-version = "${config.version_major}.${config.version_minor}.${config.version_patch}"
+version = "${config.version_minecraft}-${config.version_major}.${config.version_minor}.${config.version_patch}"
 group = "${config.package}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "${config.id}-${config.version_minecraft}-${config.version_major}.${config.version_minor}.${config.version_patch}"
+archivesBaseName = "${config.id}"
 
 // Set the source and target compatibility levels.
 // Required for eclipse task generates correctly.

@@ -253,8 +253,8 @@
   "agricraft.plant.crimson_fungus.seed": "Crimson Fungus Spores",
   "agricraft.plant.crimson_fungus.desc": "It secretes a peculiar red ooze.",
 
-  "agricraft.plant.daisy.name": "Daisy",
-  "agricraft.plant.daisy.seed": "Daisy Seeds",
+  "agricraft.plant.daisy.name": "Oxeye Daisy",
+  "agricraft.plant.daisy.seed": "Oxeye Daisy Seeds",
   "agricraft.plant.daisy.desc": "A rarity by any measure.",
 
   "agricraft.plant.dandelion.name": "Dandelion",
@@ -265,8 +265,8 @@
   "agricraft.plant.kelp.seed": "Kelp Seed",
   "agricraft.plant.kelp.desc": "The vegan mermaid's snack of preference.",
 
-  "agricraft.plant.lily.name": "Lily",
-  "agricraft.plant.lily.seed": "Lily Seeds",
+  "agricraft.plant.lily.name": "Lily of the Valley",
+  "agricraft.plant.lily.seed": "Lily of the Valley Seeds",
   "agricraft.plant.lily.desc": "Not only occurs in valleys.",
 
   "agricraft.plant.melon.name": "Melon",
@@ -281,13 +281,13 @@
   "agricraft.plant.orange_tulip.seed": "Orange Tulip Seeds",
   "agricraft.plant.orange_tulip.desc": "A rarity by any measure.",
 
-  "agricraft.plant.orchid.name": "Orchid",
-  "agricraft.plant.orchid.seed": "Orchid Seeds",
+  "agricraft.plant.orchid.name": "Blue Orchid",
+  "agricraft.plant.orchid.seed": "Blue Orchid Seeds",
   "agricraft.plant.orchid.desc": "A rarity by any measure.",
 
   "agricraft.plant.pink_tulip.name": "Pink Tulip",
   "agricraft.plant.pink_tulip.seed": "Pink Tulip Seeds",
-  "agricraft.plant.pink_tulip.desc": "A pink varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+  "agricraft.plant.pink_tulip.desc": "A pink varient of the perennial tulip plant. The plant is valued mostly for its distinctive blooms.",
 
   "agricraft.plant.poppy.name": "Poppy",
   "agricraft.plant.poppy.seed": "Poppy Seeds",
@@ -307,7 +307,7 @@
 
   "agricraft.plant.red_tulip.name": "Red Tulip",
   "agricraft.plant.red_tulip.seed": "Red Tulip Seeds",
-  "agricraft.plant.red_tulip.desc": "A vibrant red varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+  "agricraft.plant.red_tulip.desc": "A vibrant red varient of the perennial tulip plant. The plant is valued mostly for its distinctive blooms.",
 
   "agricraft.plant.sea_grass.name": "Sea Grass",
   "agricraft.plant.sea_grass.seed": "Sea Grass Seed",
@@ -327,15 +327,15 @@
 
   "agricraft.plant.warped_fungus.name": "Warped Fungus",
   "agricraft.plant.warped_fungus.seed": "Warped Fungus Spores",
-  "agricraft.plant.warped_fungus.desc": "Efficient Hoglin repellant.",
+  "agricraft.plant.warped_fungus.desc": "Efficient Hoglin repellent.",
 
   "agricraft.plant.wheat.name": "Wheat",
   "agricraft.plant.wheat.seed": "Wheat Seeds",
-  "agricraft.plant.wheat.desc": "The cornerstone of the Agriculutural Revolution.",
+  "agricraft.plant.wheat.desc": "The cornerstone of the Agricultural Revolution.",
 
   "agricraft.plant.white_tulip.name": "White Tulip",
   "agricraft.plant.white_tulip.seed": "White Tulip Seeds",
-  "agricraft.plant.white_tulip.desc": "A snow-white varient of the perrenial tulip plant. The plant is valued mostly for its distinctive blooms.",
+  "agricraft.plant.white_tulip.desc": "A snow-white varient of the perennial tulip plant. The plant is valued mostly for its distinctive blooms.",
 
   "agricraft.plant.wither_rose.name": "Wither Rose",
   "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
@@ -399,11 +399,11 @@
 
   "agricraft.plant.quartzanthemum.name": "Quartzanthemum",
   "agricraft.plant.quartzanthemum.seed": "Quartzanthemum Seeds",
-  "agricraft.plant.quartzanthemum.desc": "A suprisingly crystalline plant.",
+  "agricraft.plant.quartzanthemum.desc": "A surprisingly crystalline plant.",
 
   "agricraft.plant.redstodendron.name": "Redstodendron",
   "agricraft.plant.redstodendron.seed": "Redstodendron Seeds",
-  "agricraft.plant.redstodendron.desc": "Much more complex than the average red algea.",
+  "agricraft.plant.redstodendron.desc": "Much more complex than the average red algae.",
 
 
   "agricraft.weed.weed.name": "Weeds",
@@ -511,7 +511,7 @@
   "agricraft.plant.thermal_tea.desc": "The leaves of a tea plant. Often dumped into the ocean during tea parties.",
   "agricraft.plant.thermal_tomato.desc": "A savory, red fruit often sliced for dishes or squeezed for sauces and soups.",
 
-  "agricraft.plant.quark_brown_mushroom.desc": "Glow in the dark.",
+  "agricraft.plant.quark_glowshroom.desc": "Glow in the dark.",
 
   "agricraft.plant.buzzier_bees_buttercup.seed": "Buttercup Seeds",
   "agricraft.plant.buzzier_bees_buttercup.desc": "Do not use on your toast.",
@@ -628,6 +628,42 @@
   "agricraft.plant.abundance_sunny_marigold.desc": "Flowered Sun.",
 
   "agricraft.plant.abundance_yellow_african_daisy.seed": "Yellow African Daisy Seeds",
-  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color."
+  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color.",
+
+  "agricraft.plant.biomesoplenty_burning_blossom.seed": "Burning Blossom Seeds",
+  "agricraft.plant.biomesoplenty_burning_blossom.desc": "Watch out for burns.",
+
+  "agricraft.plant.biomesoplenty_glowflower.seed": "Glowflower Seeds",
+  "agricraft.plant.biomesoplenty_glowflower.desc": "A flower glowing in the dark.",
+
+  "agricraft.plant.biomesoplenty_glowshroom.seed": "Glowshroom Seeds",
+  "agricraft.plant.biomesoplenty_glowshroom.desc": "A mushroom glowing in the dark.",
+
+  "agricraft.plant.biomesoplenty_lavender.seed": "Lavender Seeds",
+  "agricraft.plant.biomesoplenty_lavender.desc": "A flower with multiple purple blossoms and a refreshing scent.",
+
+  "agricraft.plant.biomesoplenty_orange_cosmos.seed": "Orange Cosmos Seeds",
+  "agricraft.plant.biomesoplenty_orange_cosmos.desc": "Doesn't it look like the sun?",
+
+  "agricraft.plant.biomesoplenty_pink_daffodil.seed": "Pink Daffodil Seeds",
+  "agricraft.plant.biomesoplenty_pink_daffodil.desc": "This flower is generally found near ponds or lakes.",
+
+  "agricraft.plant.biomesoplenty_pink_hibiscus.seed": "Pink Hibiscus Seeds",
+  "agricraft.plant.biomesoplenty_pink_hibiscus.desc": "Its gigantic blooms are loved by bees, butterflies and hummingbirds.",
+
+  "agricraft.plant.biomesoplenty_rose.seed": "Rose Seeds",
+  "agricraft.plant.biomesoplenty_rose.desc": "One of the most popular and widely cultivated groups of flowering plants.",
+
+  "agricraft.plant.biomesoplenty_toadstool.seed": "Toadstool Seeds",
+  "agricraft.plant.biomesoplenty_toadstool.desc": "A type of edible mushroom found in the forest.",
+
+  "agricraft.plant.biomesoplenty_violet.seed": "Violet Seeds",
+  "agricraft.plant.biomesoplenty_violet.desc": "A delicate flower growing in meadows.",
+
+  "agricraft.plant.biomesoplenty_wildflower.seed": "Wildflower Seeds",
+  "agricraft.plant.biomesoplenty_wildflower.desc": "A type of flower that grows almost everywhere.",
+
+  "agricraft.plant.biomesoplenty_wilted_lily.seed": "Wilted Lily Seeds",
+  "agricraft.plant.biomesoplenty_wilted_lily.desc": "That's what happens when you don't water your plants."
 
 }
