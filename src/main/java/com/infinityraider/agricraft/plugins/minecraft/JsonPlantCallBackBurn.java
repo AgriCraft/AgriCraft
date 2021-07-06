@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
 
 import javax.annotation.Nonnull;
 
@@ -21,6 +20,6 @@ public class JsonPlantCallBackBurn extends JsonPlantCallback {
     }
 
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
-        entity.setFire(1);
+        entity.setFire((int) crop.getStats().getAverage());
     }
 }
