@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.5
+
+
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API
  - ADDED: Config option to disable crop sticks collissions

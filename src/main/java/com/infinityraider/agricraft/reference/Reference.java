@@ -8,11 +8,11 @@ public interface Reference {
 
     String VER_MAJOR = /*^${mod.version_major}^*/ "3";
     String VER_MINOR = /*^${mod.version_minor}^*/ "0";
-    String VER_PATCH = /*^${mod.version_patch}^*/ "4";
-    String MOD_VERSION = /*^${mod.version}^*/ "3.0.4";
-    String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "1.16.4-3.0.4";
+    String VER_PATCH = /*^${mod.version_patch}^*/ "5";
+    String MOD_VERSION = /*^${mod.version}^*/ VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH;;
+    String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "1.16.5-" + MOD_VERSION;
 
-    String VERSION_INFLIB = /*^${mod.version_inflib}^*/ "1.16.4-2.0.0";
+    String VERSION_INFLIB = /*^${mod.version_inflib}^*/ "1.16.5-2.0.6";
     String VERSION_FORGE = /*^${mod.version_forge}^*/ "0.0-0.0.0";
 
 }
