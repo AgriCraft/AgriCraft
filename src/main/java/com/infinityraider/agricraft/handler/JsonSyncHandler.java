@@ -10,8 +10,7 @@ import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -19,45 +18,27 @@ import java.util.Iterator;
 
 public class JsonSyncHandler {
     private static final AgriLogger LOG = AgriCore.getLogger("agricraft-net");
+    private static final JsonSyncHandler INSTANCE = new JsonSyncHandler();
 
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public static JsonSyncHandler getServerInstance() {
-        return Server.INSTANCE;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static JsonSyncHandler getLanInstance() {
-        return Lan.INSTANCE;
+    public static JsonSyncHandler getInstance() {
+        return INSTANCE;
     }
 
     private JsonSyncHandler() {}
 
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    private static final class Server extends JsonSyncHandler {
-        private static final Server INSTANCE = new Server();
-
-        @SubscribeEvent
-        @SuppressWarnings("unused")
-        public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
-            // should always be the case on dedicated servers
-            if(event.getPlayer() instanceof ServerPlayerEntity) {
-                this.syncJsons((ServerPlayerEntity) event.getPlayer());
-            }
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static final class Lan extends JsonSyncHandler {
-        private static final Lan INSTANCE = new Lan();
-
-        @SubscribeEvent
-        @SuppressWarnings("unused")
-        public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
-            // We only want to sync to
-            if(event.getPlayer() instanceof ServerPlayerEntity ) {
-                ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-                if(player.getServer() != null && player.getServer().getPublic()) {
-                    this.syncJsons((ServerPlayerEntity) event.getPlayer());
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
+        if(event.getPlayer() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+            MinecraftServer server = player.getServer();
+            if(server != null) {
+                if(server.isDedicatedServer()) {
+                    // always sync on dedicated servers
+                    this.syncJsons(player);
+                } else if(server.getPublic()) {
+                    // only sync when the server is open to LAN on integrated servers
+                    this.syncJsons(player);
                 }
             }
         }
@@ -77,7 +58,7 @@ public class JsonSyncHandler {
         CapabilityResearchedPlants.getInstance().configureJei(player);
     }
 
-    private void syncSoils(ServerPlayerEntity player) {
+    protected void syncSoils(ServerPlayerEntity player) {
         LOG.debug("Sending soils to player: " + player.getDisplayName().getString());
         final int count = AgriCore.getSoils().getAll().size();
         Iterator<AgriSoil> it = AgriCore.getSoils().getAll().iterator();
@@ -89,7 +70,7 @@ public class JsonSyncHandler {
         LOG.debug("Finished sending soils to player: " + player.getDisplayName().getString());
     }
 
-    private void syncPlants(ServerPlayerEntity player) {
+    protected void syncPlants(ServerPlayerEntity player) {
         LOG.debug("Sending plants to player: " + player.getDisplayName().getString());
         final int count = AgriCore.getPlants().getAllElements().size();
         Iterator<AgriPlant> it = AgriCore.getPlants().getAllElements().iterator();
@@ -101,7 +82,7 @@ public class JsonSyncHandler {
         LOG.debug("Finished sending plants to player: " + player.getDisplayName().getString());
     }
 
-    private void syncWeeds(ServerPlayerEntity player) {
+    protected void syncWeeds(ServerPlayerEntity player) {
         LOG.debug("Sending weeds to player: " + player.getDisplayName().getString());
         final int count = AgriCore.getWeeds().getAllElements().size();
         Iterator<AgriWeed> it = AgriCore.getWeeds().getAllElements().iterator();
@@ -113,7 +94,7 @@ public class JsonSyncHandler {
         LOG.debug("Finished sending plants to player: " + player.getDisplayName().getString());
     }
 
-    private void syncMutations(ServerPlayerEntity player) {
+    protected void syncMutations(ServerPlayerEntity player) {
         LOG.debug("Sending mutations to player: " + player.getDisplayName().getString());
         final int count = AgriCore.getMutations().getAll().size();
         final Iterator<AgriMutation> it = AgriCore.getMutations().getAll().iterator();
