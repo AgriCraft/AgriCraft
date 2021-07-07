@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Set;
 
@@ -39,6 +41,21 @@ public class VanillaPlantingHandler {
         return this.exceptions.contains(stack.getItem());
     }
 
+    public ItemStack attemptConvert(ItemStack stack) {
+        // the seed already is an agricraft seed
+        if(stack.getItem() instanceof IAgriSeedItem) {
+            return stack;
+        }
+        // the seed is an exception and should not be converted
+        if(this.isException(stack)) {
+            return stack;
+        }
+        // try to convert the seed
+        return AgriApi.getGenomeAdapterizer().valueOf(stack)
+                .map(genome -> genome.toSeedStack(stack.getCount()))
+                .orElse(stack);
+    }
+
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
@@ -51,7 +68,7 @@ public class VanillaPlantingHandler {
         final ItemStack stack = event.getItemStack();
 
         // If the item is an exception, cancel
-        if(this.isException(event.getItemStack())) {
+        if(this.isException(stack)) {
             return;
         }
 
@@ -70,9 +87,25 @@ public class VanillaPlantingHandler {
             // The player is attempting to plant a seed,
             // convert it to an agricraft crop
             return AgriApi.getSoil(event.getWorld(), pos.down()).map(soil -> {
+                // check if there are crop sticks above
+                MutableBoolean consumed = new MutableBoolean(false);
+                boolean cropSticks = AgriApi.getCrop(event.getWorld(), pos).map(crop -> {
+                    if(!crop.hasPlant() && !crop.isCrossCrop() && crop.plantGenome(seed, player)) {
+                        if (player == null || !player.isCreative()) {
+                            stack.shrink(1);
+                            consumed.setValue(true);
+                        }
+                    }
+                    return true;
+                }).orElse(false);
+                // if there were crop sticks, return the result of the crop sticks action
+                if(cropSticks) {
+                    return consumed.getValue();
+                }
+                // no crop sticks, try planting as a plant
                 BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, pos);
                 if (newState != null && world.setBlockState(pos, newState, 11)) {
-                    boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed)).orElse(false);
+                    boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed, player)).orElse(false);
                     if (planted) {
                         if (player == null || !player.isCreative()) {
                             stack.shrink(1);
