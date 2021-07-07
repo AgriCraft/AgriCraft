@@ -10,6 +10,8 @@ import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -17,18 +19,51 @@ import java.util.Iterator;
 
 public class JsonSyncHandler {
     private static final AgriLogger LOG = AgriCore.getLogger("agricraft-net");
-    private static final JsonSyncHandler INSTANCE = new JsonSyncHandler();
 
-    public static JsonSyncHandler getInstance() {
-        return INSTANCE;
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public static JsonSyncHandler getServerInstance() {
+        return Server.INSTANCE;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static JsonSyncHandler getLanInstance() {
+        return Lan.INSTANCE;
     }
 
     private JsonSyncHandler() {}
 
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
-        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    private static final class Server extends JsonSyncHandler {
+        private static final Server INSTANCE = new Server();
+
+        @SubscribeEvent
+        @SuppressWarnings("unused")
+        public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
+            // should always be the case on dedicated servers
+            if(event.getPlayer() instanceof ServerPlayerEntity) {
+                this.syncJsons((ServerPlayerEntity) event.getPlayer());
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static final class Lan extends JsonSyncHandler {
+        private static final Lan INSTANCE = new Lan();
+
+        @SubscribeEvent
+        @SuppressWarnings("unused")
+        public void onConnect(PlayerEvent.PlayerLoggedInEvent event) {
+            // We only want to sync to
+            if(event.getPlayer() instanceof ServerPlayerEntity ) {
+                ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                if(player.getServer() != null && player.getServer().getPublic()) {
+                    this.syncJsons((ServerPlayerEntity) event.getPlayer());
+                }
+            }
+        }
+    }
+
+    protected void syncJsons(ServerPlayerEntity player) {
         // Sync jsons
         syncSoils(player);
         syncPlants(player);

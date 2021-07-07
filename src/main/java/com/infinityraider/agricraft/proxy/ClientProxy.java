@@ -38,6 +38,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         this.registerEventHandler(BlockGreenHouseAirRenderer.getInstance());
         this.registerEventHandler(ItemToolTipHandler.getInstance());
         this.registerEventHandler(JournalViewPointHandler.getInstance());
+        this.registerEventHandler(JsonSyncHandler.getLanInstance());
         this.registerEventHandler(MagnifyingGlassViewHandler.getInstance());
         this.registerEventHandler(PlayerLogOutHandler.getInstance());
         this.registerEventHandler(SeedAnalyzerViewPointHandler.getInstance());
