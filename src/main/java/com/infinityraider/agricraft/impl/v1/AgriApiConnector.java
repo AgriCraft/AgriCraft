@@ -21,7 +21,7 @@ import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
-import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
+import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
@@ -197,12 +197,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public ItemStack attemptConversionToAgriSeed(ItemStack original) {
-        return VanillaPlantingHandler.getInstance().attemptConvert(original);
+        return VanillaSeedConversionHandler.getInstance().attemptConvert(original);
     }
 
     @Override
     public void registerVanillaPlantingOverrideException(Item seed) {
-        VanillaPlantingHandler.getInstance().registerException(seed);
+        VanillaSeedConversionHandler.getInstance().registerException(seed);
     }
 
     @Override

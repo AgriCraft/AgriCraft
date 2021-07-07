@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
-import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
+import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.util.CropHelper;
 import net.darkhax.botanypots.BotanyPotHelper;
 import net.darkhax.botanypots.api.events.*;
@@ -33,7 +33,7 @@ public class BotanyPotsHandler {
             if(!AgriCraft.instance.getConfig().overrideVanillaFarming()) {
                 return;
             }
-            if(VanillaPlantingHandler.getInstance().isException(event.getItemStack())) {
+            if(VanillaSeedConversionHandler.getInstance().isException(event.getItemStack())) {
                 return;
             }
             AgriApi.getGenomeAdapterizer().valueOf(event.getItemStack()).ifPresent(genome -> {

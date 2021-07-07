@@ -11,7 +11,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -24,16 +23,16 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Set;
 
-public class VanillaPlantingHandler {
-    private static final VanillaPlantingHandler INSTANCE = new VanillaPlantingHandler();
+public class VanillaSeedConversionHandler {
+    private static final VanillaSeedConversionHandler INSTANCE = new VanillaSeedConversionHandler();
 
-    public static VanillaPlantingHandler getInstance() {
+    public static VanillaSeedConversionHandler getInstance() {
         return INSTANCE;
     }
 
     private final Set<Item> exceptions;
 
-    private VanillaPlantingHandler() {
+    private VanillaSeedConversionHandler() {
         this.exceptions = Sets.newConcurrentHashSet();
     }
 
@@ -156,21 +155,5 @@ public class VanillaPlantingHandler {
                 return false;
             }).orElse(false);
         }).orElse(false);
-    }
-
-    /*
-     * Event handler to deny bonemeal while sneaking on crops that are not
-     * allowed to have bonemeal applied to them
-     */
-    @SuppressWarnings("unused")
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
-        if (!event.getEntityLiving().isSneaking()) {
-            return;
-        }
-        ItemStack heldItem = event.getEntityLiving().getActiveItemStack();
-        if (!heldItem.isEmpty() && heldItem.getItem() == Items.BONE_MEAL) {
-            AgriApi.getCrop(event.getWorld(), event.getPos()).ifPresent(crop -> event.setUseItem(Event.Result.DENY));
-        }
     }
 }

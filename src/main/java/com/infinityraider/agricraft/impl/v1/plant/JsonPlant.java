@@ -12,7 +12,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.handler.VanillaPlantingHandler;
+import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 
@@ -83,7 +83,7 @@ public class JsonPlant implements IAgriPlant {
                         return seed.convertAll(ItemStack.class).stream();
                     } else {
                         return seed.convertAll(ItemStack.class).stream() .peek(stack ->
-                                VanillaPlantingHandler.getInstance().registerException(stack.getItem())
+                                VanillaSeedConversionHandler.getInstance().registerException(stack.getItem())
                         );
                     }
                 })
