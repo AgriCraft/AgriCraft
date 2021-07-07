@@ -4,12 +4,16 @@ import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
+import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -58,38 +62,72 @@ public class VanillaPlantingHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void vanillaSeedPlanting(PlayerInteractEvent.RightClickBlock event) {
+    public void vanillaSeedConversion(PlayerInteractEvent.RightClickBlock event) {
+        // Pre checks
+        if(this.failsPreChecks(event.getWorld(), event.getPos(), event.getItemStack())) {
+            return;
+        }
+
+        // If sneak clicking a seed analyzer, we need to check to convert the seed as well
+        if(this.runSeedAnalyzerConversion(event.getWorld(), event.getPos(), event.getItemStack(), event.getEntityLiving(), event.getHand())) {
+            return;
+        }
+
+        // Run planting conversion, and if successful, cancel the event
+        if(this.runPlantingConversion(
+                event.getWorld(),
+                event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace()),
+                event.getItemStack(),
+                event.getPlayer())
+        ) {
+            // Cancel the event
+            event.setUseItem(Event.Result.DENY);
+            event.setCanceled(true);
+        }
+    }
+
+    protected boolean failsPreChecks(World world, BlockPos pos, ItemStack stack) {
         // If overriding is disabled, don't bother.
         if (!AgriCraft.instance.getConfig().overrideVanillaFarming()) {
-            return;
+            return true;
         }
-
-        // Fetch the event item stack.
-        final ItemStack stack = event.getItemStack();
-
         // If the item is an exception, cancel
         if(this.isException(stack)) {
-            return;
+            return true;
         }
-
         // If clicking crop tile, the crop will handle the logic
-        if (AgriApi.getCrop(event.getWorld(), event.getPos()).isPresent()) {
-            return;
+        return AgriApi.getCrop(world, pos).isPresent();
+    }
+
+    protected boolean runSeedAnalyzerConversion(World world, BlockPos pos, ItemStack stack, LivingEntity entity, Hand hand) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntitySeedAnalyzer) {
+            if(entity.isSneaking()) {
+                // already an agricraft seed, seed analyzer will cover the logic
+                if (stack.getItem() instanceof IAgriSeedItem) {
+                    return true;
+                }
+                // attempt to convert the seed and let the seed analyzer handle the logic
+                ItemStack converted = AgriApi.attemptConversionToAgriSeed(stack);
+                if (converted.getItem() instanceof IAgriSeedItem) {
+                    TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
+                    if(!analyzer.hasSeed()) {
+                        entity.setHeldItem(hand, converted);
+                    }
+                }
+            }
+            return true;
         }
+        return false;
+    }
 
-        // Pass the stack through the adapterizer
-        boolean success = AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
-            // Fetch world information.
-            BlockPos pos = event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace());
-            World world = event.getWorld();
-            PlayerEntity player = event.getPlayer();
-
-            // The player is attempting to plant a seed,
-            // convert it to an agricraft crop
-            return AgriApi.getSoil(event.getWorld(), pos.down()).map(soil -> {
+    protected boolean runPlantingConversion(World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
+        return AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
+            // The player is attempting to plant a seed, convert it to an agricraft crop
+            return AgriApi.getSoil(world, pos.down()).map(soil -> {
                 // check if there are crop sticks above
                 MutableBoolean consumed = new MutableBoolean(false);
-                boolean cropSticks = AgriApi.getCrop(event.getWorld(), pos).map(crop -> {
+                boolean cropSticks = AgriApi.getCrop(world, pos).map(crop -> {
                     if(!crop.hasPlant() && !crop.isCrossCrop() && crop.plantGenome(seed, player)) {
                         if (player == null || !player.isCreative()) {
                             stack.shrink(1);
@@ -118,12 +156,6 @@ public class VanillaPlantingHandler {
                 return false;
             }).orElse(false);
         }).orElse(false);
-
-        if(success) {
-            // Cancel the event
-            event.setUseItem(Event.Result.DENY);
-            event.setCanceled(true);
-        }
     }
 
     /*

@@ -89,6 +89,9 @@ public interface IAgriApiConnector {
     @Nonnull
     Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
 
+    @Nonnull
+    ItemStack attemptConversionToAgriSeed(ItemStack original);
+
     void registerVanillaPlantingOverrideException(Item seed);
 
     <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);

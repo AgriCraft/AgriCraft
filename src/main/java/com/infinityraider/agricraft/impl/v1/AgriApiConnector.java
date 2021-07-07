@@ -194,6 +194,12 @@ public class AgriApiConnector implements IAgriApiConnector {
         return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
     }
 
+    @Nonnull
+    @Override
+    public ItemStack attemptConversionToAgriSeed(ItemStack original) {
+        return VanillaPlantingHandler.getInstance().attemptConvert(original);
+    }
+
     @Override
     public void registerVanillaPlantingOverrideException(Item seed) {
         VanillaPlantingHandler.getInstance().registerException(seed);

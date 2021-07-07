@@ -7,6 +7,8 @@ Changelog
  - ADDED: Default json support for Biomes O' Plenty (thanks to Nelson)
  - ADDED: Russian translations (thanks to pgkrol)
  - FIXED: Sprinklers not dropping as blocks when mined
+ - FIXED: Vanilla seeds not automatically planting on crop sticks when clicking the soil below
+ - FIXED: Vanilla seeds not automatically converting when inserted in a seed analyzer
 
 3.0.3
 - CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
