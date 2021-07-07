@@ -5,6 +5,7 @@ Changelog
  - ADDED: Config option to disable crop sticks collissions
  - ADDED: Default json support for Abundance (thanks to Nelson)
  - ADDED: Default json support for Biomes O' Plenty (thanks to Nelson)
+ - ADDED: Default json support for Horticulture (thanks to Nelson)
  - ADDED: Russian translations (thanks to pgkrol)
  - FIXED: Json data not properly being synced to connecting clients on LAN worlds
  - FIXED: Sprinklers not dropping as blocks when mined
