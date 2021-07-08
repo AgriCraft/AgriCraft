@@ -24,6 +24,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> generateMissingDefaults;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableJsonWriteBack;
         private final ForgeConfigSpec.ConfigValue<Boolean> plantOffCropSticks;
+        private final ForgeConfigSpec.ConfigValue<Boolean> cropSticksCollide;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyFertileCropsSpread;
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> cloneMutations;
@@ -120,6 +121,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable JSON write back", true);
             this.plantOffCropSticks = builder.comment("\nSet to false to disable planting of (agricraft) seeds outside crop sticks")
                     .define("Plant outside crop sticks", true);
+            this.cropSticksCollide = builder.comment("\nSet to false to disable collision boxes on crop sticks")
+                    .define("Crop sticks collide", true);
             this.onlyFertileCropsSpread = builder.comment("\nSet to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action\n" +
                     "(note that this may cause issues with obtaining some specific plants)")
                     .define("Only fertile crops mutate", false);
@@ -291,6 +294,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean allowPlantingOutsideCropSticks() {
             return this.plantOffCropSticks.get();
+        }
+
+        @Override
+        public boolean cropSticksCollide() {
+            return this.cropSticksCollide.get();
         }
 
         @Override

@@ -158,7 +158,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         ItemStack heldItem = player.getHeldItem(hand);
         // Player is sneaking: insertion / extraction logic
         if(player.isSneaking()) {
-            // No sneak-action on the server
+            // No sneak-action on the client
             if (world.isRemote()) {
                 return ActionResultType.PASS;
             }
@@ -200,7 +200,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
                     }
                 }
             }
-            return ActionResultType.FAIL;
+            return ActionResultType.CONSUME;
         }
     }
 

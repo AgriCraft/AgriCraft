@@ -55,6 +55,11 @@ public class AgriValidatorImpl implements AgriValidator {
     }
 
     @Override
+    public boolean isValidRenderType(String renderType) {
+        return AgriCraft.instance.proxy().isValidRenderType(renderType);
+    }
+
+    @Override
     public boolean isValidSeason(String season) {
         return AgriSeason.fromString(season).isPresent();
     }

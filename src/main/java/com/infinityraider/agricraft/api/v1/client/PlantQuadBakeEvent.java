@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.api.v1.client;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.IntFunction;
 
 /**
  * Event fired by AgriCraft's default IAgriPlantQuadGenerator when the quads for a plant (or weed) and growth stage are baked.
@@ -24,28 +25,26 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class PlantQuadBakeEvent extends Event {
     private final IAgriPlantQuadGenerator quadGenerator;
-    private final IAgriRenderable plant;
+    private final IAgriGrowable plant;
     private final IAgriGrowthStage stage;
-    private final Direction direction;
-    private final ResourceLocation texture;
-    private final TextureAtlasSprite sprite;
+    private final Direction face;
+    private final List<ResourceLocation> textures;
+    private final IntFunction<TextureAtlasSprite> spriteFunc;
     private final AgriPlantRenderType renderType;
-    private final int yOffset;
 
     private final ImmutableList<BakedQuad> originalQuads;
     private final List<BakedQuad> quads;
 
-    public PlantQuadBakeEvent(IAgriPlantQuadGenerator quadGenerator, IAgriRenderable plant, IAgriGrowthStage stage,
-                              @Nullable Direction direction, ResourceLocation texture, TextureAtlasSprite sprite,
-                              AgriPlantRenderType renderType, int yOffset, List<BakedQuad> quads) {
+    public PlantQuadBakeEvent(IAgriPlantQuadGenerator quadGenerator, IAgriGrowable plant, IAgriGrowthStage stage,
+                              @Nullable Direction face, List<ResourceLocation> textures, IntFunction<TextureAtlasSprite> spriteFunc,
+                              AgriPlantRenderType renderType, List<BakedQuad> quads) {
         this.quadGenerator = quadGenerator;
         this.plant = plant;
         this.stage = stage;
-        this.direction = direction;
-        this.texture = texture;
-        this.sprite = sprite;
+        this.face = face;
+        this.textures = textures;
+        this.spriteFunc = spriteFunc;
         this.renderType = renderType;
-        this.yOffset = yOffset;
         this.originalQuads = ImmutableList.copyOf(quads);
         this.quads = Lists.newArrayList(quads);
     }
@@ -60,7 +59,7 @@ public class PlantQuadBakeEvent extends Event {
     /**
      * @return the plant (or weed) for which quads are being baked
      */
-    public IAgriRenderable getPlant() {
+    public IAgriGrowable getPlant() {
         return this.plant;
     }
 
@@ -76,21 +75,21 @@ public class PlantQuadBakeEvent extends Event {
      */
     @Nullable
     public Direction getCullFace() {
-        return this.direction;
+        return this.face;
     }
 
     /**
-     * @return the texture for which the quads are being baked
+     * @return the textures for which the quads are being baked
      */
-    public ResourceLocation getTexture() {
-        return this.texture;
+    public List<ResourceLocation> getTextures() {
+        return this.textures;
     }
 
     /**
-     * @return the sprite for which the quads are being baked (corresponds to the texture, but on the texture atlas)
+     * @return the sprite function to fetch sprites to bake quads with (corresponds to the texture, but on the texture atlas)
      */
-    public TextureAtlasSprite getSprite() {
-        return this.sprite;
+    public TextureAtlasSprite getSprite(int index) {
+        return this.spriteFunc.apply(index);
     }
 
     /**
@@ -98,13 +97,6 @@ public class PlantQuadBakeEvent extends Event {
      */
     public AgriPlantRenderType getRenderType() {
         return this.renderType;
-    }
-
-    /**
-     * @return The y-offset which has been applied to the quads
-     */
-    public int getYOffset() {
-        return this.yOffset;
     }
 
     /**

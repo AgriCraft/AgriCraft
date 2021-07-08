@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.irrigation;
 
+import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -12,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -21,8 +23,10 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
@@ -143,5 +147,13 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     @SuppressWarnings("deprecation")
     public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
         return this.getShape(state, world, pos, context);
+    }
+
+    @Nonnull
+    @Override
+    @Deprecated
+    @SuppressWarnings({"deprecation", "unchecked"})
+    public final List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
+        return ImmutableList.of(new ItemStack(this));
     }
 }

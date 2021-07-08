@@ -61,9 +61,11 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void registerEventHandlers() {
         this.registerEventHandler(BlockUpdateHandler.getInstance());
+        this.registerEventHandler(BonemealHandler.getInstance());
+        this.registerEventHandler(JsonSyncHandler.getInstance());
         this.registerEventHandler(SeedBagEnchantingHandler.getInstance());
         this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
-        this.registerEventHandler(VanillaPlantingHandler.getInstance());
+        this.registerEventHandler(VanillaSeedConversionHandler.getInstance());
     }
 
     @Override
@@ -79,6 +81,10 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void onServerStartingEvent(final FMLServerStartingEvent event) {
         CoreHandler.init();
+    }
+
+    default boolean isValidRenderType(String renderType) {
+        return true;
     }
 
     default void toggleSeedAnalyzerActive(boolean status) {}

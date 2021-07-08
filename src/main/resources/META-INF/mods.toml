@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
 [[mods]]
 modId="agricraft"
-version="1.16.5-3.0.3"
+version="1.16.5-3.0.5"
 displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
 logoFile="logo.png"
@@ -13,6 +13,7 @@ authors="InfinityRaider"
 description='''
 Agricultural farming extended
 '''
+itemIcon="agricraft:debugger"
 
 [[dependencies.agricraft]]
     modId="forge"
@@ -24,7 +25,7 @@ Agricultural farming extended
 [[dependencies.agricraft]]
     modId="infinitylib"
     mandatory=true
-    versionRange="[1.16.5-2.0.5,)"
+    versionRange="[1.16.5-2.0.6,)"
     ordering="AFTER"
     side="BOTH"
 

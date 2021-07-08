@@ -106,7 +106,7 @@ public class JsonWeed implements IAgriWeed {
         if(index < 0 || index >= this.weed.getGrowthStages()) {
             return 0;
         }
-        return this.weed.getGrowthStageHeight(index)*this.weed.getTexture().getRenderType().getHeightModifier();
+        return this.weed.getGrowthStageHeight(index);
     }
 
     @Override
@@ -122,16 +122,16 @@ public class JsonWeed implements IAgriWeed {
             return ImmutableList.of();
         }
         final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        final int height = this.weed.getGrowthStageHeight(index);
-        ImmutableList.Builder<BakedQuad> listBuilder = new ImmutableList.Builder<>();
-        int layer = 0;
-        while((16*layer) < height) {
-            ResourceLocation rl = new ResourceLocation(this.weed.getTexture().getPlantTextures(index)[layer]);
-            listBuilder.addAll(AgriPlantQuadGenerator.getInstance().bakeQuads(
-                    this, stage, face, rl, layer, this.weed.getTexture().getRenderType()));
-            layer++;
+        if(this.weed.getTexture().useModels()) {
+            ResourceLocation rl = new ResourceLocation(this.weed.getTexture().getPlantModel(index));
+            return AgriPlantQuadGenerator.getInstance().fetchQuads(rl);
+        } else {
+            List<ResourceLocation> textures = Arrays.stream(weed.getTexture().getPlantTextures(index))
+                    .map(ResourceLocation::new)
+                    .collect(Collectors.toList());
+            return AgriPlantQuadGenerator.getInstance().bakeQuads(this, stage, this.weed.getTexture().getRenderType(),
+                    face, textures);
         }
-        return listBuilder.build();
     }
 
     @Nonnull

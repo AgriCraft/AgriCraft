@@ -1,5 +1,20 @@
 Changelog
 ---------
+3.0.5
+
+
+3.0.4
+ - CHANGE: Modified the internal json plant render system to be easier to extend through the API
+ - ADDED: Config option to disable crop sticks collissions
+ - ADDED: Default json support for Abundance (thanks to Nelson)
+ - ADDED: Default json support for Biomes O' Plenty (thanks to Nelson)
+ - ADDED: Default json support for Horticulture (thanks to Nelson)
+ - ADDED: Russian translations (thanks to pgkrol)
+ - FIXED: Json data not properly being synced to connecting clients on LAN worlds
+ - FIXED: Sprinklers not dropping as blocks when mined
+ - FIXED: Vanilla seeds not automatically planting on crop sticks when clicking the soil below
+ - FIXED: Vanilla seeds not automatically converting when inserted in a seed analyzer
+
 3.0.3
 - CHANGE: Improved JEI tooltips for Growth Requirements to show numeric values for brightness, growth stage, and strength
 - CHANGE: The AgriCraft config file now sits in the agricraft subdirectory

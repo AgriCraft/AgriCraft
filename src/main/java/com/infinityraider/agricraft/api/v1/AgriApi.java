@@ -311,6 +311,24 @@ public final class AgriApi {
     }
 
     /**
+     * Attempts to convert an ItemStack to its AgriCraft counterpart
+     * Will either return a new ItemStack with the item converted to IAgriSeed, or the same stack in case conversion failed.
+     * Conversion may fail if the original stack does not contain a seed recognized by AgriCraft,
+     * or if the item has been registered as an exception (see registerVanillaPlantingOverrideException() below)
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param original the original stack
+     * @return the converted stack, or the original stack in case of conversion failure
+     */
+    @Nonnull
+    public static ItemStack attemptConversionToAgriSeed(ItemStack original) {
+        return AgriApi.CONNECTOR.attemptConversionToAgriSeed(original);
+    }
+
+    /**
      * Makes the item ignore the vanilla planting override rule.
      * The Vanilla planting override rule converts Agricraft-compatible crops to Agricraft crops when planted
      * <p>
