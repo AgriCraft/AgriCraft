@@ -70,9 +70,6 @@ public interface IAgriApiConnector {
     IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer();
 
     @Nonnull
-    IAgriAdapterizer<IAgriFertilizer> connectFertilizerAdapterizer();
-
-    @Nonnull
     IAgriFertilizerRegistry connectFertilizerRegistry();
 
     @Nonnull

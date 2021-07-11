@@ -35,7 +35,7 @@ import net.minecraftforge.fml.event.lifecycle.*;
  * <li> All {@link IAgriStat}s are registered using {@link #registerStats(IAgriStatRegistry)}
  * <li> All {@link IAgriGene}s are registered using {@link #registerGenes(IAgriGeneRegistry)}
  * <li> All {@link IAgriGenome} adapters are registered using {@link #registerGenomes(IAgriAdapterizer<IAgriGenome>)}
- * <li> All {@link IAgriFertilizer} adapters are registered using {@link #registerFertilizers(IAgriAdapterizer<IAgriFertilizer>)}
+ * <li> All {@link IAgriFertilizer}s are registered using {@link #registerFertilizers(IAgriFertilizerRegistry)}
  * </ol>
  */
 @SuppressWarnings("unused")

@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
@@ -283,8 +284,9 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
             return ActionResultType.PASS;
         }
         // Fertilization
-        if (AgriApi.getFertilizerAdapterizer().hasAdapter(heldItem)) {
-            return AgriApi.getFertilizerAdapterizer().valueOf(heldItem).map(fertilizer -> {
+        Optional<IAgriFertilizer> optFertilizer = AgriApi.getFertilizer(heldItem);
+        if (optFertilizer.isPresent()) {
+            return optFertilizer.map(fertilizer -> {
                 if(crop.acceptsFertilizer(fertilizer)) {
                     ActionResultType result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
                     if(result.isSuccessOrConsume()) {

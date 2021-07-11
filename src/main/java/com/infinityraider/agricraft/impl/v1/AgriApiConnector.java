@@ -64,7 +64,6 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriSoilRegistry soilRegistry;
     private final IAgriFertilizerRegistry fertilizerRegistry;
     private final IAgriAdapterizer<IAgriGenome> genomeAdapterizer;
-    private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     private final IAgriSeasonLogic seasonLogic;
     private final AgriMutationHandler mutator;
 
@@ -78,7 +77,6 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.soilRegistry =  AgriSoilRegistry.getInstance();
         this.fertilizerRegistry = AgriFertilizerRegistry.getInstance();
         this.genomeAdapterizer = new AgriAdapterizer<>();
-        this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.seasonLogic = SeasonLogic.getInstance();
         this.mutator = AgriMutationHandler.getInstance();
     }
@@ -147,12 +145,6 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer() {
         return this.genomeAdapterizer;
-    }
-
-    @Override
-    @Nonnull
-    public IAgriAdapterizer<IAgriFertilizer> connectFertilizerAdapterizer() {
-        return this.fertilizerAdapterizer;
     }
 
     public IAgriFertilizerRegistry connectFertilizerRegistry() {

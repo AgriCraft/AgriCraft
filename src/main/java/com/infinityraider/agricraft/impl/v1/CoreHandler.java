@@ -234,7 +234,7 @@ public final class CoreHandler {
         // Display Soils
         AgriCore.getLogger("agricraft").info("Registered Fertilizers ({0}/{1}):", count, raw);
         for (IAgriFertilizer fertilizer : AgriApi.getFertilizerRegistry().all()) {
-            AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getId());
+            AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getName());
         }
     }
 }

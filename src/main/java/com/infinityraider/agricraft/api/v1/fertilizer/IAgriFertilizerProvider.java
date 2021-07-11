@@ -10,4 +10,5 @@ public interface IAgriFertilizerProvider {
 
     @Nonnull
     Optional<IAgriFertilizer> getFertilizer(Item stack);
+
 }

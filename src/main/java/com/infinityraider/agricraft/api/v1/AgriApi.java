@@ -208,18 +208,15 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Fertilizer Adapterizer.
+     * Fetches the AgriCraft Fertilizer Registry.
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
      *
-     * @return the AgriCraft Fertilizer Adapterizer.
+     * @return the AgriCraft Fertilizer Registry.
      */
     @Nonnull
-    public static IAgriAdapterizer<IAgriFertilizer> getFertilizerAdapterizer() {
-        return AgriApi.CONNECTOR.connectFertilizerAdapterizer();
-    }
     public static IAgriFertilizerRegistry getFertilizerRegistry() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
@@ -315,6 +312,7 @@ public final class AgriApi {
     }
 
     @Nonnull
+    // TODO: 11/07/2021 javadoc
     public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
         return AgriApi.CONNECTOR.getFertilizer(itemStack);
     }

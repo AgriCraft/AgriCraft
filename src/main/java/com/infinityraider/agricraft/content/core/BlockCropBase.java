@@ -220,7 +220,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     @Override
     public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-        AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL).ifPresent(fertilizer ->
+        AgriApi.getFertilizer(BONE_MEAL).ifPresent(fertilizer ->
                 this.getCrop(world, pos).ifPresent(crop ->
                         fertilizer.applyFertilizer(world, pos, crop, BONE_MEAL, rand, null)));
     }
