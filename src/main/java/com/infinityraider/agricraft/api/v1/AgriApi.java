@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
@@ -217,6 +218,9 @@ public final class AgriApi {
      */
     @Nonnull
     public static IAgriAdapterizer<IAgriFertilizer> getFertilizerAdapterizer() {
+        return AgriApi.CONNECTOR.connectFertilizerAdapterizer();
+    }
+    public static IAgriFertilizerRegistry getFertilizerRegistry() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
 
@@ -308,6 +312,11 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
+    }
+
+    @Nonnull
+    public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
+        return AgriApi.CONNECTOR.getFertilizer(itemStack);
     }
 
     /**

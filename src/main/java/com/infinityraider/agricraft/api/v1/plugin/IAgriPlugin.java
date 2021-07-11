@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -94,7 +95,7 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
+    default void registerFertilizers(@Nonnull IAgriFertilizerRegistry fertilizerRegistry) {
         // Default Implementation: Do nothing.
     }
 

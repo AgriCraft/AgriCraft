@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResultType;
@@ -13,6 +14,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
@@ -32,6 +35,11 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
     @Override
     public boolean canTriggerWeeds() {
         return true;
+    }
+
+    @Override
+    public int getPotency() {
+        return 0;
     }
 
     @Override
@@ -63,5 +71,16 @@ public class BonemealWrapper implements IAgriFertilizer, IAgriAdapter<IAgriFerti
     @Override
     public String getId() {
         return BONE_MEAL.getItem().getRegistryName().toString();
+    }
+
+    @Nonnull
+    @Override
+    public Collection<Item> getVariants() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public boolean isFertilizer() {
+        return false;
     }
 }

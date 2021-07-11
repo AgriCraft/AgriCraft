@@ -1,16 +1,22 @@
 package com.infinityraider.agricraft.api.v1.fertilizer;
 
+import java.util.Collection;
 import java.util.Random;
 
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * An interface for managing AgriCraft fertilizers.
+ */
 public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
 
     /**
@@ -29,6 +35,13 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
     boolean canTriggerWeeds();
 
     /**
+     * The potency (power) of the fertilizer
+     *
+     * @return the value of the potency of the fertilizer
+     */
+    int getPotency();
+
+    /**
      * This is called when the fertilizer is used on a crop
      *
      * @param world The world in which the IAgriFertilizable is placed
@@ -42,4 +55,16 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
      */
     ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity);
 
+    @Nonnull
+    @Override
+    String getId();
+
+    @Nonnull
+    Collection<Item> getVariants();
+
+    default boolean isVariant(@Nonnull Item item) {
+        return this.getVariants().contains(item);
+    }
+
+    boolean isFertilizer();
 }

@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
@@ -69,7 +70,10 @@ public interface IAgriApiConnector {
     IAgriAdapterizer<IAgriGenome> connectGenomeAdapterizer();
 
     @Nonnull
-    IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry();
+    IAgriAdapterizer<IAgriFertilizer> connectFertilizerAdapterizer();
+
+    @Nonnull
+    IAgriFertilizerRegistry connectFertilizerRegistry();
 
     @Nonnull
     IAgriSeasonLogic connectSeasonLogic();
@@ -88,6 +92,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
+
+    @Nonnull
+    Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack);
 
     @Nonnull
     ItemStack attemptConversionToAgriSeed(ItemStack original);

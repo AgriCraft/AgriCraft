@@ -211,8 +211,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     @Override
     public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-        return AgriApi.getFertilizerAdapterizer().valueOf(BONE_MEAL)
-                .flatMap(fertilizer ->
+        return AgriApi.getFertilizer(BONE_MEAL).flatMap(fertilizer ->
                         this.getCrop(world, pos).map(crop ->
                                 !crop.isFullyGrown()
                                 && crop.acceptsFertilizer(fertilizer)))
