@@ -2,6 +2,7 @@ Changelog
 ---------
 3.0.5
  - FIXED: Planting and breaking crops not having sounds
+ - FIXED: Planting seeds not playing the arm swing animation
 
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API

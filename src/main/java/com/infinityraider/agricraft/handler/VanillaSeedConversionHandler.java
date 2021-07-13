@@ -74,14 +74,14 @@ public class VanillaSeedConversionHandler {
 
         // Run planting conversion, and if successful, cancel the event
         if(this.runPlantingConversion(
-                event.getWorld(),
-                event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace()),
-                event.getItemStack(),
-                event.getPlayer())
+                event.getWorld(), event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace()),
+                event.getItemStack(), event.getPlayer(), event.getHand())
         ) {
             // Cancel the event
             event.setUseItem(Event.Result.DENY);
             event.setCanceled(true);
+            // swing player arm
+            event.getPlayer().swingArm(event.getHand());
         }
     }
 
@@ -120,7 +120,7 @@ public class VanillaSeedConversionHandler {
         return false;
     }
 
-    protected boolean runPlantingConversion(World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
+    protected boolean runPlantingConversion(World world, BlockPos pos, ItemStack stack, PlayerEntity player, Hand hand) {
         return AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
             // The player is attempting to plant a seed, convert it to an agricraft crop
             return AgriApi.getSoil(world, pos.down()).map(soil -> {
@@ -131,6 +131,9 @@ public class VanillaSeedConversionHandler {
                         if (player == null || !player.isCreative()) {
                             stack.shrink(1);
                             consumed.setValue(true);
+                        }
+                        if(player != null) {
+                            player.swingArm(hand);
                         }
                     }
                     return true;

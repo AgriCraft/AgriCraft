@@ -255,9 +255,6 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (world.isRemote()) {
-            return ActionResultType.PASS;
-        }
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;
         }
@@ -313,6 +310,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                             if (!player.isCreative()) {
                                 player.getHeldItem(hand).shrink(1);
                             }
+                            player.swingArm(hand);
                             return ActionResultType.CONSUME;
                         } else {
                             return ActionResultType.PASS;
