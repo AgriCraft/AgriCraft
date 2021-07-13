@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.core;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.item.BlockItemBase;
 import net.minecraft.block.BlockState;
@@ -43,13 +44,8 @@ public class ItemCropSticks extends BlockItemBase {
     @Override
     @SuppressWarnings("deprecation")
     public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        // Skip if remote.
+        // Fetch target world, pos, tile, and state
         World world = context.getWorld();
-        if (world.isRemote) {
-            return ActionResultType.PASS;
-        }
-
-        // Fetch target pos, tile, and state
         BlockPos pos = context.getPos();
         TileEntity tile = world.getTileEntity(pos);
         BlockState state = world.getBlockState(pos);
@@ -100,7 +96,7 @@ public class ItemCropSticks extends BlockItemBase {
         this.consumeItem(context.getPlayer(), context.getHand());
 
         // Play placement sound.
-        this.playPlacementSound(world, pos);
+        CropHelper.playPlantingSound(world, pos, context.getPlayer());
 
         // Action was a success.
         return ActionResultType.SUCCESS;
@@ -112,7 +108,7 @@ public class ItemCropSticks extends BlockItemBase {
         BlockState newState = this.getVariant().getBlock().getDefaultState();
         newState = BlockCropBase.PLANT.mimic(state, newState);
         newState = BlockCropBase.LIGHT.mimic(state, newState);
-        newState = InfProperty.Defaults.waterlogged().mimic(state, newState);
+        newState = InfProperty.Defaults.fluidlogged().mimic(state, newState);
         world.setBlockState(pos, newState);
 
         // If there was trouble, reset and abort.
@@ -129,7 +125,7 @@ public class ItemCropSticks extends BlockItemBase {
         this.consumeItem(player, hand);
 
         // Play placement sound.
-        this.playPlacementSound(world, pos);
+        CropHelper.playPlantingSound(world, pos, player);
 
         // Action was a success.
         return ActionResultType.SUCCESS;
@@ -140,7 +136,7 @@ public class ItemCropSticks extends BlockItemBase {
         if(!crop.hasPlant() && !crop.hasWeeds() & !crop.isCrossCrop() && ((BlockCropSticks) crop.getBlockState().getBlock()).isVariant(this)) {
             crop.setCrossCrop(true);
             this.consumeItem(player, hand);
-            this.playPlacementSound(world, pos);
+            this.playCropStickSound(world, pos);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.FAIL;
@@ -156,9 +152,9 @@ public class ItemCropSticks extends BlockItemBase {
 
     }
 
-    protected void playPlacementSound(World world, BlockPos pos) {
+    protected void playCropStickSound(World world, BlockPos pos) {
         SoundType type = this.getVariant().getSound();
         world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5F, pos.getZ() + 0.5F, type.getPlaceSound(),
-                SoundCategory.PLAYERS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
+                SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
     }
 }

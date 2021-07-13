@@ -71,6 +71,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
                 .tickRandomly()
                 .notSolid()
                 .setLightLevel(LIGHT::fetch)
+                .sound(SoundType.CROP)
         );
     }
 
