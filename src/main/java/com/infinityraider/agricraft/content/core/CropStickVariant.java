@@ -7,7 +7,6 @@ import com.infinityraider.infinitylib.block.BlockBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -43,12 +42,12 @@ public enum CropStickVariant {
     private final int strength;
     private final SoundType sound;
     private final Material material;
-    private final Supplier<Supplier<Item>> itemSupplier;
+    private final Supplier<Supplier<ItemCropSticks>> itemSupplier;
     private final Supplier<Supplier<BlockBase>> blockSupplier;
     private final Predicate<Fluid> fluidPredicate;
 
     CropStickVariant(Material material, int strength, SoundType sound,
-                     Supplier<Supplier<Item>> itemSupplier,
+                     Supplier<Supplier<ItemCropSticks>> itemSupplier,
                      Supplier<Supplier<BlockBase>> blockSupplier,
                      Predicate<Fluid> fluidPredicate) {
         this.id = Names.Blocks.CROP_STICKS + "_" + this.name().toLowerCase();
@@ -76,7 +75,7 @@ public enum CropStickVariant {
         return this.material;
     }
 
-    public final Item getItem() {
+    public final ItemCropSticks getItem() {
         return this.itemSupplier.get().get();
     }
 

@@ -18,7 +18,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
@@ -132,7 +131,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     }
 
     @Override
-    public Item asItem() {
+    public ItemCropSticks asItem() {
         return this.getVariant().getItem();
     }
 
@@ -299,6 +298,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                 if (!player.isCreative()) {
                     player.getHeldItem(hand).shrink(1);
                 }
+                this.asItem().playCropStickSound(world, pos);
                 return ActionResultType.SUCCESS;
             }
         }
