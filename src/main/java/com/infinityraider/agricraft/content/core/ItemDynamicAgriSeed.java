@@ -69,9 +69,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         PlayerEntity player = context.getPlayer();
         // If crop sticks were clicked, attempt to plant the seed
         if (tile instanceof TileEntityCropSticks) {
-            return this.attemptSeedPlant(
-                    (TileEntityCropSticks) tile, stack, player == null || !player.isCreative()
-            );
+            return this.attemptSeedPlant((TileEntityCropSticks) tile, stack, player);
         }
         // If a soil was clicked, check the block on top of the soil and handle accordingly
         return AgriApi.getSoil(world, pos).map(soil -> {
@@ -79,17 +77,16 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             TileEntity above = world.getTileEntity(up);
             // There are currently crop sticks on the soil, attempt to plant on the crop sticks
             if (above instanceof TileEntityCropSticks) {
-                return this.attemptSeedPlant(
-                        (TileEntityCropSticks) above, stack, player == null || !player.isCreative()
-                );
+                return this.attemptSeedPlant((TileEntityCropSticks) above, stack, player);
             }
             // There are currently no crop sticks, check if the place is suitable and plant the plant directly
             if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
                 BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
                 if (newState != null && world.setBlockState(up, newState, 11)) {
                     boolean success = AgriApi.getCrop(world, up).map(crop ->
-                            this.getGenome(context.getItem()).map(crop::spawnGenome).map(result -> {
+                            this.getGenome(context.getItem()).map(genome -> crop.plantGenome(genome, player)).map(result -> {
                                 if (result) {
+                                    // consume item
                                     if (player == null || !player.isCreative()) {
                                         stack.shrink(1);
                                     }
@@ -108,11 +105,11 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         }).orElse(super.onItemUse(context));
     }
 
-    protected ActionResultType attemptSeedPlant(IAgriCrop crop, ItemStack stack, boolean consumeItem) {
+    protected ActionResultType attemptSeedPlant(IAgriCrop crop, ItemStack stack, PlayerEntity player) {
         return AgriApi.getGenomeAdapterizer().valueOf(stack)
                 .map(seed -> {
-                    if (crop.plantGenome(seed)) {
-                        if (consumeItem) {
+                    if (crop.plantGenome(seed, player)) {
+                        if (player != null && !player.isCreative()) {
                             stack.shrink(1);
                         }
                         return ActionResultType.CONSUME;

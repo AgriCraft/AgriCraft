@@ -11,12 +11,17 @@ import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class CropHelper {
@@ -123,5 +128,11 @@ public class CropHelper {
             consumer.accept(AgriToolTips.getUnknownTooltip(AgriToolTips.SOIL));
             return false;
         });
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void playPlantingSound(World world, BlockPos pos, @Nullable PlayerEntity player) {
+        SoundType sound = Blocks.WHEAT.getSoundType(Blocks.WHEAT.getDefaultState());
+        world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
     }
 }

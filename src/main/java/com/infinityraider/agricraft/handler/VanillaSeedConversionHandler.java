@@ -144,9 +144,11 @@ public class VanillaSeedConversionHandler {
                 if (newState != null && world.setBlockState(pos, newState, 11)) {
                     boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed, player)).orElse(false);
                     if (planted) {
+                        // reduce stack size
                         if (player == null || !player.isCreative()) {
                             stack.shrink(1);
                         }
+                        // return success
                         return true;
                     } else {
                         world.setBlockState(pos, Blocks.AIR.getDefaultState());
