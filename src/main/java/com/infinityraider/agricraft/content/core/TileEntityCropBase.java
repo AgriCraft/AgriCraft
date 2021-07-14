@@ -31,6 +31,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -518,6 +519,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     public boolean plantGenome(@Nonnull IAgriGenome genome, @Nullable LivingEntity entity) {
         if (this.acceptsGenome(genome) && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Pre(this, genome, entity))) {
             this.setGenomeImpl(genome);
+            if(this.getWorld() != null) {
+                CropHelper.playPlantingSound(this.getWorld(), this.getPos(), (entity instanceof PlayerEntity) ? (PlayerEntity) entity : null);
+            }
             this.getPlant().onPlanted(this, entity);
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Post(this, genome, entity));
             return true;
