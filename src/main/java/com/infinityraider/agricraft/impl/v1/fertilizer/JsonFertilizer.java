@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.impl.v1.fertilizer;
 
-import com.agricraft.agricore.plant.AgriFertilizer;
+import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
 import com.google.common.base.Preconditions;
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import net.minecraft.entity.LivingEntity;
@@ -18,10 +19,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class JsonFertilizer implements IAgriFertilizer {
+public class JsonFertilizer implements IAgriFertilizer, IAgriAdapter {
 
     private final String id;
     private final ITextComponent name;
@@ -94,4 +96,26 @@ public class JsonFertilizer implements IAgriFertilizer {
     }
 
 
+    @Override
+    public boolean accepts(@Nullable Object obj) {
+        if (obj instanceof Item) {
+            return variants.contains(obj);
+        }
+        if (obj instanceof ItemStack) {
+            return accepts(((ItemStack) obj).getItem());
+        }
+        return false;
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriFertilizer> valueOf(@Nullable Object obj) {
+        if (obj instanceof Item && variants.contains(obj)) {
+            return Optional.of(this);
+        }
+        if (obj instanceof ItemStack) {
+            return valueOf(((ItemStack) obj).getItem());
+        }
+        return Optional.empty();
+    }
 }

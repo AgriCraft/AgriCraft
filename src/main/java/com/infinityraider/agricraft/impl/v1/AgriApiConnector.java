@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
@@ -24,7 +23,6 @@ import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
-import com.infinityraider.agricraft.impl.v1.fertilizer.AgriFertilizerRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
@@ -62,8 +60,8 @@ public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriStatRegistry statRegistry;
     private final IAgriGeneRegistry geneRegistry;
     private final IAgriSoilRegistry soilRegistry;
-    private final IAgriFertilizerRegistry fertilizerRegistry;
     private final IAgriAdapterizer<IAgriGenome> genomeAdapterizer;
+    private final IAgriAdapterizer<IAgriFertilizer> fertilizerAdapterizer;
     private final IAgriSeasonLogic seasonLogic;
     private final AgriMutationHandler mutator;
 
@@ -75,8 +73,8 @@ public class AgriApiConnector implements IAgriApiConnector {
         this.statRegistry = AgriStatRegistry.getInstance();
         this.geneRegistry = AgriGeneRegistry.getInstance();
         this.soilRegistry =  AgriSoilRegistry.getInstance();
-        this.fertilizerRegistry = AgriFertilizerRegistry.getInstance();
         this.genomeAdapterizer = new AgriAdapterizer<>();
+        this.fertilizerAdapterizer = new AgriAdapterizer<>();
         this.seasonLogic = SeasonLogic.getInstance();
         this.mutator = AgriMutationHandler.getInstance();
     }
@@ -147,8 +145,8 @@ public class AgriApiConnector implements IAgriApiConnector {
         return this.genomeAdapterizer;
     }
 
-    public IAgriFertilizerRegistry connectFertilizerRegistry() {
-        return this.fertilizerRegistry;
+    public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
+        return this.fertilizerAdapterizer;
     }
 
     @Override
@@ -197,9 +195,10 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
-        IAgriFertilizerRegistry registry = this.connectFertilizerRegistry();
-        Optional<IAgriFertilizer> fertilizer = registry.valueOf(itemStack);
-        return fertilizer.isPresent() ? fertilizer : registry.getProvider(itemStack.getItem()).getFertilizer(itemStack.getItem());
+        if (fertilizerAdapterizer.hasAdapter(itemStack)) {
+            return fertilizerAdapterizer.valueOf(itemStack);
+        }
+        return Optional.empty();
     }
 
     @Nonnull

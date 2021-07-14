@@ -3,8 +3,6 @@ package com.infinityraider.agricraft.plugins.minecraft;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plugin.*;
@@ -71,15 +69,6 @@ public class MinecraftPlugin implements IAgriPlugin {
         adapterizer.registerAdapter(new SeedWrapper());
         adapterizer.registerAdapter(new GenomeWrapper());
     }
-
-//    @Override
-//    public void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
-//        adapterizer.registerAdapter(BonemealWrapper.INSTANCE);
-//    }
-//    @Override
-//    public void registerFertilizers(@Nonnull IAgriFertilizerRegistry fertilizerRegistry) {
-//        fertilizerRegistry.add(BonemealWrapper.INSTANCE);
-//    }
 
     @Override
     public void registerGenes(@Nonnull IAgriGeneRegistry geneRegistry) {

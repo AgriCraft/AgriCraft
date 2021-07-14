@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
@@ -208,16 +207,16 @@ public final class AgriApi {
     }
 
     /**
-     * Fetches the AgriCraft Fertilizer Registry.
+     * Fetches the AgriCraft Fertilizer Adapterizer.
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
      *
-     * @return the AgriCraft Fertilizer Registry.
+     * @return the AgriCraft Fertilizer Adapterizer.
      */
     @Nonnull
-    public static IAgriFertilizerRegistry getFertilizerRegistry() {
+    public static IAgriAdapterizer<IAgriFertilizer> getFertilizerAdapterizer() {
         return AgriApi.CONNECTOR.connectFertilizerRegistry();
     }
 

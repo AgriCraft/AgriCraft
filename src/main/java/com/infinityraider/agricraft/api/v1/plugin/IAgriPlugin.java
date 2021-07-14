@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizerRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -35,7 +34,7 @@ import net.minecraftforge.fml.event.lifecycle.*;
  * <li> All {@link IAgriStat}s are registered using {@link #registerStats(IAgriStatRegistry)}
  * <li> All {@link IAgriGene}s are registered using {@link #registerGenes(IAgriGeneRegistry)}
  * <li> All {@link IAgriGenome} adapters are registered using {@link #registerGenomes(IAgriAdapterizer<IAgriGenome>)}
- * <li> All {@link IAgriFertilizer}s are registered using {@link #registerFertilizers(IAgriFertilizerRegistry)}
+ * <li> All {@link IAgriFertilizer} adapters are registered using {@link #registerFertilizers(IAgriAdapterizer<IAgriFertilizer>)}
  * </ol>
  */
 @SuppressWarnings("unused")
@@ -95,7 +94,7 @@ public interface IAgriPlugin {
         // Default Implementation: Do nothing.
     }
 
-    default void registerFertilizers(@Nonnull IAgriFertilizerRegistry fertilizerRegistry) {
+    default void registerFertilizers(@Nonnull IAgriAdapterizer<IAgriFertilizer> adapterizer) {
         // Default Implementation: Do nothing.
     }
 
