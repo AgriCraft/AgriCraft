@@ -135,7 +135,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Override
     public boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer) {
-        return this.plant.canFertilize(fertilizer.getId());
+        // TODO: 14/07/2021 @nbrichau use fertilizer method instead
+        return true;
     }
 
     @Override

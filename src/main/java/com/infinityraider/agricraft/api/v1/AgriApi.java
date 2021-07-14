@@ -311,7 +311,7 @@ public final class AgriApi {
     }
 
     @Nonnull
-    // TODO: 11/07/2021 javadoc
+    // TODO: 11/07/2021 @nbrichau javadoc
     public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
         return AgriApi.CONNECTOR.getFertilizer(itemStack);
     }

@@ -160,7 +160,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
         Optional<IAgriFertilizer> optFertilizer = AgriApi.getFertilizer(heldItem);
         if (optFertilizer.isPresent()) {
             return optFertilizer.map(fertilizer -> {
-                if(crop.acceptsFertilizer(fertilizer)) {
+                if(fertilizer.canFertilize(crop)) {
                     ActionResultType result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
                     if(result.isSuccessOrConsume()) {
                         crop.onApplyFertilizer(fertilizer, world.getRandom());
