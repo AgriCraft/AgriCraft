@@ -4,6 +4,7 @@ import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
 import com.agricraft.agricore.plant.fertilizer.AgriFertilizerEffect;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import net.minecraft.entity.LivingEntity;
@@ -59,11 +60,6 @@ public class JsonFertilizer implements IAgriFertilizer {
         return this.id;
     }
 
-    @Override
-    public boolean isFertilizer() {
-        return true;
-    }
-
     public ITextComponent getName() {
         return this.name;
     }
@@ -82,14 +78,27 @@ public class JsonFertilizer implements IAgriFertilizer {
     public ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity) {
         for (int i = 0; i < this.potency; i++) {
             target.applyGrowthTick();
+            if (target instanceof IAgriCrop && ((IAgriCrop) target).hasPlant()) {
+                IAgriCrop crop = ((IAgriCrop) target);
+                if (fertilizerEffect.isNegativelyAffected(crop.getPlant().getId())) {
+                    if (fertilizerEffect.canReduceGrowth() && random.nextBoolean()) {
+                        IAgriGrowthStage current = crop.getGrowthStage();
+                        IAgriGrowthStage previous = current.getPreviousStage(crop, random);
+                        if(current.equals(previous)) {
+                            if (fertilizerEffect.canKillPlant()) {
+                                crop.removeGenome();
+                            }
+                        } else {
+                            crop.setGrowthStage(previous);
+                        }
+                    }
+                }
+            }
         }
         if ((entity instanceof PlayerEntity) && !(((PlayerEntity) entity).isCreative())) {
             stack.shrink(1);
         }
         this.spawnParticles(target, random);
-        // TODO: 14/07/2021 @nbrichau apply fertilizer effect
-        // to spawn the bone meal particles
-        //world.playEvent(2005, pos, 0);
         return ActionResultType.SUCCESS;
     }
 
@@ -99,16 +108,6 @@ public class JsonFertilizer implements IAgriFertilizer {
             return false;
         }
         return ((IAgriCrop) target).hasPlant() && this.fertilizerEffect.canFertilize(((IAgriCrop) target).getPlant().getId());
-    }
-
-    @Override
-    public boolean canReduceGrowth() {
-        return this.fertilizerEffect.canReduceGrowth();
-    }
-
-    @Override
-    public boolean canKillPlant() {
-        return this.fertilizerEffect.canKillPlant();
     }
 
     private void spawnParticles(IAgriFertilizable target, Random rand) {

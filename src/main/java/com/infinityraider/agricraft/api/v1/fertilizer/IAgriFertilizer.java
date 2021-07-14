@@ -17,9 +17,6 @@ import javax.annotation.Nullable;
  */
 public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer>, IAgriAdapter<IAgriFertilizer> {
 
-//    @Nonnull
-//    ITextComponent getName();
-
     /**
      * Whether or not this fertilizer can be used on a cross crop to trigger a mutation (does not override
      * configuration option).
@@ -35,12 +32,6 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer>, IAg
      */
     boolean canTriggerWeeds();
 
-    boolean canReduceGrowth();
-
-    boolean canKillPlant();
-
-    boolean isFertilizer();
-
     /**
      * This is called when the fertilizer is used on a crop
      *
@@ -55,6 +46,12 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer>, IAg
      */
     ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity);
 
+    /**
+     * Check if the target can be fertilized by the fertilizer
+     *
+     * @param target the fertilizable object
+     * @return true if the target can be fertilized
+     */
     boolean canFertilize(IAgriFertilizable target);
 
 }

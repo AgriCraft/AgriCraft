@@ -310,8 +310,17 @@ public final class AgriApi {
         return AgriApi.CONNECTOR.getSoil(world, pos);
     }
 
+    /**
+     * Fetches an IAgriFertilizer instance from an ItemStack
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param itemStack the ItemStack object
+     * @return Optional containing an IAgriFertilizer object, or empty if the ItemStack do not correspond with a fertilizer
+     */
     @Nonnull
-    // TODO: 11/07/2021 @nbrichau javadoc
     public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
         return AgriApi.CONNECTOR.getFertilizer(itemStack);
     }
