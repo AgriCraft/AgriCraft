@@ -236,6 +236,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
     //runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
 
+    //Jade
+    compileOnly fg.deobf("curse.maven:jade-324717:3302544")
+    //runtimeOnly fg.deobf("curse.maven:jade-324717:3302544")
+
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
     //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
