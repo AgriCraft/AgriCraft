@@ -73,14 +73,6 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     int getTier();
 
     /**
-     * Determines if the plant is affected by fertilizers. If false, this setting will prevent any
-     * fertilizer from being used on the plant.
-     *
-     * @return If the plant can be fertilized.
-     */
-    boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer);
-
-    /**
      * Retrieves the spread chance for a given plant. The spread chance is a normalized p-value that
      * represents the chance of the plant to overtake a neighboring crop each tick.
      *

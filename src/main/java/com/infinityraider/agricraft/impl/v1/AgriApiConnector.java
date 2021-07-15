@@ -145,8 +145,6 @@ public class AgriApiConnector implements IAgriApiConnector {
         return this.genomeAdapterizer;
     }
 
-    @Override
-    @Nonnull
     public IAgriAdapterizer<IAgriFertilizer> connectFertilizerRegistry() {
         return this.fertilizerAdapterizer;
     }
@@ -192,6 +190,15 @@ public class AgriApiConnector implements IAgriApiConnector {
         IAgriSoilRegistry registry = this.connectSoilRegistry();
         Optional<IAgriSoil> soil = registry.valueOf(state);
         return soil.isPresent() ? soil : registry.getProvider(state.getBlock()).getSoil(world, pos, state);
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
+        if (fertilizerAdapterizer.hasAdapter(itemStack)) {
+            return fertilizerAdapterizer.valueOf(itemStack);
+        }
+        return Optional.empty();
     }
 
     @Nonnull

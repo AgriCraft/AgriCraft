@@ -2,18 +2,18 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
-import com.agricraft.agricore.plant.AgriMutation;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriSoil;
-import com.agricraft.agricore.plant.AgriWeed;
+import com.agricraft.agricore.plant.*;
+import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.config.Config;
+import com.infinityraider.agricraft.impl.v1.fertilizer.JsonFertilizer;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
 import com.infinityraider.agricraft.impl.v1.plant.JsonWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
@@ -99,7 +99,8 @@ public final class CoreHandler {
                 AgriCore.getSoils(),
                 AgriCore.getPlants(),
                 AgriCore.getWeeds(),
-                AgriCore.getMutations()
+                AgriCore.getMutations(),
+                AgriCore.getFertilizers()
         );
         AgriCore.getLogger("agricraft").info("Finished trying to read AgriCraft JSONs!");
     }
@@ -110,6 +111,7 @@ public final class CoreHandler {
         initPlants();
         initWeeds();
         initMutations();
+        initFertilizers();
         // Set flag
         initialized = true;
     }
@@ -213,5 +215,25 @@ public final class CoreHandler {
         for (IAgriMutation mutation : AgriApi.getMutationRegistry().all()) {
             AgriCore.getLogger("agricraft").info(" - {0}", mutation);
         }
+    }
+
+    private static void initFertilizers() {
+        // Announce Progress
+        AgriCore.getLogger("agricraft").info("Registering Fertilizers!");
+
+        // See if fertilizers are valid...
+        final int raw = AgriCore.getFertilizers().getAll().size();
+        AgriCore.getFertilizers().validate();
+        final int count = AgriCore.getFertilizers().getAll().size();
+
+        //Transfer and display fertilizers
+        AgriCore.getLogger("agricraft").info("Registered Fertilizers ({0}/{1}):", count, raw);
+        AgriCore.getFertilizers().getAll().stream()
+                .filter(AgriFertilizer::isEnabled)
+                .map(JsonFertilizer::new)
+                .forEach(fertilizer -> {
+                    AgriApi.getFertilizerAdapterizer().registerAdapter(fertilizer);
+                    AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getId());
+                });
     }
 }

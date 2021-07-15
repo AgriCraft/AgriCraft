@@ -17,7 +17,7 @@ public interface IAgriFertilizable {
      *
      * @param fertilizer the fertilizer to be checked
      * @return true if either a) This is a cross crop (so a cross over can happen here), and
-     * fertilizer mutations are enabled, and this ferilizer has the ability to trigger mutations (ie
+     * fertilizer mutations are enabled, and this fertilizer has the ability to trigger mutations (ie
      * cross overs). -OR- b) This is an empty regular crop (so a plant (ie weed) can spawn here).
      * -OR- c) This is a regular crop with a plant that allows fertilizers. false if either a) This
      * is a cross crop, and the config is disabled or this fertilizer can't trigger mutations. -OR-

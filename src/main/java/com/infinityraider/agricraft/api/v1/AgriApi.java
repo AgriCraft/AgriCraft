@@ -311,6 +311,21 @@ public final class AgriApi {
     }
 
     /**
+     * Fetches an IAgriFertilizer instance from an ItemStack
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param itemStack the ItemStack object
+     * @return Optional containing an IAgriFertilizer object, or empty if the ItemStack do not correspond with a fertilizer
+     */
+    @Nonnull
+    public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
+        return AgriApi.CONNECTOR.getFertilizer(itemStack);
+    }
+
+    /**
      * Attempts to convert an ItemStack to its AgriCraft counterpart
      * Will either return a new ItemStack with the item converted to IAgriSeed, or the same stack in case conversion failed.
      * Conversion may fail if the original stack does not contain a seed recognized by AgriCraft,
