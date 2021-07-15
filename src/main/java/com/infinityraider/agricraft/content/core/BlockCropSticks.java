@@ -280,10 +280,9 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
             return ActionResultType.PASS;
         }
         // Fertilization
-        Optional<IAgriFertilizer> optFertilizer = AgriApi.getFertilizer(heldItem);
-        if (optFertilizer.isPresent()) {
-            return optFertilizer.map(fertilizer -> {
-                if(fertilizer.canFertilize(crop)) {
+        if (AgriApi.getFertilizerAdapterizer().hasAdapter(heldItem)) {
+            return AgriApi.getFertilizerAdapterizer().valueOf(heldItem).map(fertilizer -> {
+                if(crop.acceptsFertilizer(fertilizer)) {
                     ActionResultType result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
                     if(result.isSuccessOrConsume()) {
                         crop.onApplyFertilizer(fertilizer, world.getRandom());

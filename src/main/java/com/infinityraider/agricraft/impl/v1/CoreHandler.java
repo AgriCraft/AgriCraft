@@ -233,7 +233,7 @@ public final class CoreHandler {
                 .map(JsonFertilizer::new)
                 .forEach(fertilizer -> {
                     AgriApi.getFertilizerAdapterizer().registerAdapter(fertilizer);
-                    AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getName());
+                    AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getId());
                 });
     }
 }
