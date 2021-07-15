@@ -77,14 +77,13 @@ public class JsonFertilizer implements IAgriFertilizer {
     @Override
     public ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity) {
         for (int i = 0; i < this.potency; i++) {
-            target.applyGrowthTick();
             if (target instanceof IAgriCrop && ((IAgriCrop) target).hasPlant()) {
                 IAgriCrop crop = ((IAgriCrop) target);
                 if (fertilizerEffect.isNegativelyAffected(crop.getPlant().getId())) {
                     if (fertilizerEffect.canReduceGrowth() && random.nextBoolean()) {
                         IAgriGrowthStage current = crop.getGrowthStage();
                         IAgriGrowthStage previous = current.getPreviousStage(crop, random);
-                        if(current.equals(previous)) {
+                        if (current.equals(previous)) {
                             if (fertilizerEffect.canKillPlant()) {
                                 crop.removeGenome();
                             }
@@ -92,7 +91,11 @@ public class JsonFertilizer implements IAgriFertilizer {
                             crop.setGrowthStage(previous);
                         }
                     }
+                } else {
+                    target.applyGrowthTick();
                 }
+            } else {
+                target.applyGrowthTick();
             }
         }
         if ((entity instanceof PlayerEntity) && !(((PlayerEntity) entity).isCreative())) {
@@ -116,7 +119,7 @@ public class JsonFertilizer implements IAgriFertilizer {
         }
         IAgriCrop crop = ((IAgriCrop) target);
         final World world = crop.world();
-        if (world == null || crop.hasPlant()) {
+        if (world == null || !crop.hasPlant()) {
             return;
         }
         this.fertilizerEffect.getParticles(crop.getPlant().getId())
