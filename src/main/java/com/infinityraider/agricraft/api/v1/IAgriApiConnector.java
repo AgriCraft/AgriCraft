@@ -90,6 +90,9 @@ public interface IAgriApiConnector {
     Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
 
     @Nonnull
+    Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack);
+
+    @Nonnull
     ItemStack attemptConversionToAgriSeed(ItemStack original);
 
     void registerVanillaPlantingOverrideException(Item seed);

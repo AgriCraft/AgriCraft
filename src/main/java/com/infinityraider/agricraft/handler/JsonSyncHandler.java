@@ -6,6 +6,7 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.plant.AgriWeed;
+import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.*;
@@ -50,6 +51,7 @@ public class JsonSyncHandler {
         syncPlants(player);
         syncWeeds(player);
         syncMutations(player);
+        syncFertilizers(player);
         // Notify of sync complete
         new MessageNotifySyncComplete().sendTo(player);
         // Notify magnifying glass tracker
@@ -104,6 +106,18 @@ public class JsonSyncHandler {
             new MessageSyncMutationJson(mutation, i, count).sendTo(player);
         }
         LOG.debug("Finished sending mutations to player: " + player.getDisplayName().getString());
+    }
+
+    protected void syncFertilizers(ServerPlayerEntity player) {
+        LOG.debug("Sending fertilizers to player: " + player.getDisplayName().getString());
+        final int count = AgriCore.getFertilizers().getAll().size();
+        final Iterator<AgriFertilizer> it = AgriCore.getFertilizers().getAll().iterator();
+        for (int i = 0; it.hasNext(); i++) {
+            AgriFertilizer fertilizer = it.next();
+            LOG.debug("Sending fertilizer: ({0} of {1})", i + 1, count);
+            new MessageSyncFertilizerJson(fertilizer, i, count).sendTo(player);
+        }
+        LOG.debug("Finished sending fertilizers to player: " + player.getDisplayName().getString());
     }
 
 }
