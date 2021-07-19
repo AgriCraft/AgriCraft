@@ -24,15 +24,15 @@ import javax.annotation.Nonnull;
 public class AgriValidatorImpl implements AgriValidator {
 
     @Override
-    public <T> boolean isValidObject(Class<T> token, String object) {
+    public <T> boolean isValidObject(Class<T> token, String object, boolean useTag) {
         if (TypeHelper.isType(ItemStack.class, token)) {
-            return this.isValidItem(object);
+            return this.isValidItem(object, useTag);
         }
         if (TypeHelper.isType(BlockState.class, token)) {
-            return this.isValidBlock(object);
+            return this.isValidBlock(object, useTag);
         }
         if (TypeHelper.isType(FluidState.class, token)) {
-            return this.isValidFluid(object);
+            return this.isValidFluid(object, useTag);
         }
         return false;
     }
@@ -64,11 +64,11 @@ public class AgriValidatorImpl implements AgriValidator {
         return AgriSeason.fromString(season).isPresent();
     }
 
-    protected boolean isValidItem(String item) {
+    protected boolean isValidItem(String item, boolean useTag) {
         String[] parts = item.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (TagUtil.isValidTag(ItemTags.getCollection(), item)) {
+        } else if (useTag && TagUtil.isValidTag(ItemTags.getCollection(), item)) {
             return true;
         } else {
             try {
@@ -81,11 +81,11 @@ public class AgriValidatorImpl implements AgriValidator {
         }
     }
 
-    protected boolean isValidBlock(String block) {
+    protected boolean isValidBlock(String block, boolean useTag) {
         String[] parts = block.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (TagUtil.isValidTag(BlockTags.getCollection(), block)) {
+        } else if (useTag && TagUtil.isValidTag(BlockTags.getCollection(), block)) {
             return true;
         } else {
             try {
@@ -98,11 +98,11 @@ public class AgriValidatorImpl implements AgriValidator {
         }
     }
 
-    protected boolean isValidFluid(String fluid) {
+    protected boolean isValidFluid(String fluid, boolean useTag) {
         String[] parts = fluid.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (TagUtil.isValidTag(FluidTags.getCollection(), fluid)) {
+        } else if (useTag && TagUtil.isValidTag(FluidTags.getCollection(), fluid)) {
             return true;
         } else {
             try {
