@@ -121,6 +121,11 @@ public class JsonPlant implements IAgriPlant {
         return this.plant.getTier();
     }
 
+    @Override
+    public boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer) {
+        return true;
+    }
+
     @Nonnull
     @Override
     public Collection<ItemStack> getSeedItems() {

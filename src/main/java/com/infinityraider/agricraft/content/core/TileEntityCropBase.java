@@ -374,7 +374,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(this.isCrossCrop()) {
             return AgriCraft.instance.getConfig().allowFertilizerMutations() && fertilizer.canTriggerMutation();
         } else if(this.hasPlant()) {
-            return (!this.isFullyGrown()) && fertilizer.canFertilize(this);
+            return !this.isFullyGrown()
+                    && fertilizer.canFertilize(this)
+                    && this.getPlant().isFertilizable(this.getGrowthStage(), fertilizer);
         } else {
             return fertilizer.canTriggerWeeds();
         }

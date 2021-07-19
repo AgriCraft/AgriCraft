@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -76,11 +77,13 @@ public class JsonFertilizer implements IAgriFertilizer {
 
     @Override
     public ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity) {
-        for (int i = 0; i < this.potency; i++) {
-            if (target instanceof IAgriCrop && ((IAgriCrop) target).hasPlant()) {
-                IAgriCrop crop = ((IAgriCrop) target);
+        if (target instanceof IAgriPlantProvider) {
+            IAgriCrop crop = ((IAgriCrop) target);
+            String type = "neutral";
+            for (int i = 0; i < this.potency; i++) {
                 if (fertilizerEffect.isNegativelyAffected(crop.getPlant().getId())) {
                     if (fertilizerEffect.canReduceGrowth() && random.nextBoolean()) {
+                        type = "negative";
                         IAgriGrowthStage current = crop.getGrowthStage();
                         IAgriGrowthStage previous = current.getPreviousStage(crop, random);
                         if (current.equals(previous)) {
@@ -92,17 +95,25 @@ public class JsonFertilizer implements IAgriFertilizer {
                         }
                     }
                 } else {
-                    target.applyGrowthTick();
+                    if(crop.hasPlant() && this.fertilizerEffect.canFertilize(crop.getPlant().getId())) {
+                        target.applyGrowthTick();
+                        type = "positive";
+                    } else if(crop.isCrossCrop() && this.canTriggerMutation()) {
+                        target.applyGrowthTick();
+                        type = "positive";
+                    } else if(this.canTriggerWeeds()) {
+                        target.applyGrowthTick();
+                        type = "positive";
+                    }
                 }
-            } else {
-                target.applyGrowthTick();
             }
+            this.spawnParticles(world, pos, type, random);
+            if ((entity instanceof PlayerEntity) && !(((PlayerEntity) entity).isCreative())) {
+                stack.shrink(1);
+            }
+            return ActionResultType.SUCCESS;
         }
-        if ((entity instanceof PlayerEntity) && !(((PlayerEntity) entity).isCreative())) {
-            stack.shrink(1);
-        }
-        this.spawnParticles(target, random);
-        return ActionResultType.SUCCESS;
+        return ActionResultType.FAIL;
     }
 
     @Override
@@ -113,23 +124,14 @@ public class JsonFertilizer implements IAgriFertilizer {
         return ((IAgriCrop) target).hasPlant() && this.fertilizerEffect.canFertilize(((IAgriCrop) target).getPlant().getId());
     }
 
-    private void spawnParticles(IAgriFertilizable target, Random rand) {
-        if (!(target instanceof IAgriCrop)) {
-            return;
-        }
-        IAgriCrop crop = ((IAgriCrop) target);
-        final World world = crop.world();
-        if (world == null || !crop.hasPlant()) {
-            return;
-        }
-        this.fertilizerEffect.getParticles(crop.getPlant().getId())
+    protected void spawnParticles(World world, BlockPos pos, String type, Random rand) {
+        this.fertilizerEffect.getParticles(type)
                 .forEach(effect -> {
                     ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
                     if (!(particle instanceof IParticleData)) {
                         return;
                     }
                     for (int amount = 0; amount < effect.getAmount(); ++amount) {
-                        BlockPos pos = crop.getPosition();
                         double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
                         double y = pos.getY() + 0.5D + effect.getDeltaY() * rand.nextDouble();
                         double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();

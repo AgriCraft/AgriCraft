@@ -2,6 +2,7 @@ Changelog
 ---------
 3.0.5
  - ADDED: Support for Jade
+ - ADDED: Json support for fertilizers (thanks Nelson)
  - FIXED: Planting and breaking crops not having sounds
  - FIXED: Planting seeds not playing the arm swing animation
 
