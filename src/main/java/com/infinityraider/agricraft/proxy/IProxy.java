@@ -53,6 +53,7 @@ public interface IProxy extends IProxyBase<Config> {
     default void registerCapabilities() {
         this.registerCapability(CapabilityCrop.getInstance());
         this.registerCapability(CapabilityEatCropGoal.getInstance());
+        this.registerCapability(CapabilityGeneInspector.getInstance());
         this.registerCapability(CapabilityGreenHouseData.getInstance());
         this.registerCapability(CapabilityResearchedPlants.getInstance());
         this.registerCapability(CapabilitySeedBagContents.getInstance());

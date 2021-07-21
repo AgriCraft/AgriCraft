@@ -63,6 +63,7 @@ public abstract class Names {
 
     public static final class Objects {
         public static final String PLANT = "plant";
+        public static final String GENE_INSPECTOR = "gene_inspector";
         public static final String GREENHOUSE = "greenhouse";
         public static final String RESEARCH = "research";
         public static final String SEED_BAG_CONTENTS = "seed_bag_contents";
