@@ -145,6 +145,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
+    public Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
     public ItemStack attemptConversionToAgriSeed(ItemStack original) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }

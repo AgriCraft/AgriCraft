@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.event;
 
 import com.google.common.base.Preconditions;
+import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
@@ -100,6 +101,15 @@ public class AgriRegistryEvent<T extends IAgriRegisterable<T>> extends Event {
      */
     public static class Soil extends AgriRegistryEvent<IAgriSoil> {
         public Soil(IAgriRegistry<IAgriSoil> registry, IAgriSoil element) {
+            super(registry, element);
+        }
+    }
+
+    /**
+     * Fired right before IAgriFertilizer objects are registered
+     */
+    public static class Fertilizer extends AgriRegistryEvent<IAgriFertilizer> {
+        public Fertilizer(IAgriRegistry<IAgriFertilizer> registry, IAgriFertilizer element) {
             super(registry, element);
         }
     }

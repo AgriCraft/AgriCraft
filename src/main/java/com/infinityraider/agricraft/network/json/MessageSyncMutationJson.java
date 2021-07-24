@@ -41,9 +41,9 @@ public class MessageSyncMutationJson extends MessageBase {
             AgriCore.getMutations().clearElements();
         }
 
-        // Add the soil
+        // Add the mutation
         AgriCore.getMutations().addMutation(plant);
-        AgriCore.getLogger("agricraft-net").debug("Recieved Mutation ({0} of {1}).", index + 1, count);
+        AgriCore.getLogger("agricraft-net").debug("Received Mutation ({0} of {1}).", index + 1, count);
 
         if (this.index == this.count - 1) {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());

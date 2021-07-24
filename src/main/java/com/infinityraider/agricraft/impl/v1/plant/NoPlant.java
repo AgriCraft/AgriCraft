@@ -76,6 +76,11 @@ public final class NoPlant implements IAgriPlant {
         return 0;
     }
 
+    @Override
+    public boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer) {
+        return false;
+    }
+
     @Nonnull
     @Override
     public Collection<ItemStack> getSeedItems() {
@@ -86,11 +91,6 @@ public final class NoPlant implements IAgriPlant {
     @Override
     public IAgriGrowthRequirement getGrowthRequirement(IAgriGrowthStage stage) {
         return AgriGrowthRequirement.getNone();
-    }
-
-    @Override
-    public boolean isFertilizable(IAgriGrowthStage growthStage, IAgriFertilizer fertilizer) {
-        return false;
     }
 
     @Override

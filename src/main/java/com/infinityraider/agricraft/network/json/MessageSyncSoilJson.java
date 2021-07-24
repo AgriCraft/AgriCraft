@@ -41,7 +41,7 @@ public class MessageSyncSoilJson extends MessageBase {
 
         // Add the soil
         AgriCore.getSoils().addSoil(soil);
-        AgriCore.getLogger("agricraft-net").debug("Recieved Soil {0} ({1} of {2}).", soil.getLangKey(), index + 1, count);
+        AgriCore.getLogger("agricraft-net").debug("Received Soil {0} ({1} of {2}).", soil.getLangKey(), index + 1, count);
 
         if (this.index == this.count - 1) {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());

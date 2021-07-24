@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.fertilizer;
 
 import java.util.Random;
 
+import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,10 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
+/**
+ * An interface for managing AgriCraft fertilizers.
+ */
+public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer>, IAgriAdapter<IAgriFertilizer> {
 
     /**
      * Whether or not this fertilizer can be used on a cross crop to trigger a mutation (does not override
@@ -41,5 +45,13 @@ public interface IAgriFertilizer extends IAgriRegisterable<IAgriFertilizer> {
      * @return ActionResultType to handle the item use call chain
      */
     ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity);
+
+    /**
+     * Check if the target can be fertilized by the fertilizer
+     *
+     * @param target the fertilizable object
+     * @return true if the target can be fertilized
+     */
+    boolean canFertilize(IAgriFertilizable target);
 
 }

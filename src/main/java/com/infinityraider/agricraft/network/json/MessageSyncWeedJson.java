@@ -42,9 +42,9 @@ public class MessageSyncWeedJson extends MessageBase {
             AgriCore.getWeeds().clearElements();
         }
 
-        // Add the soil
+        // Add the weed
         AgriCore.getWeeds().addWeed(weed);
-        AgriCore.getLogger("agricraft-net").debug("Recieved Weed {0} ({1} of {2}).", weed.getId(), index + 1, count);
+        AgriCore.getLogger("agricraft-net").debug("Received Weed {0} ({1} of {2}).", weed.getId(), index + 1, count);
 
         if (this.index == this.count - 1) {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
