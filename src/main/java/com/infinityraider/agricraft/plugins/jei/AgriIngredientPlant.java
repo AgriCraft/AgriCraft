@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.reference.Names;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -103,6 +104,10 @@ public class AgriIngredientPlant {
             if(tex.size() > 0) {
                 this.bindTextureAtlas();
                 Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(0)));
+                if (plant.getId().startsWith(Names.Mods.MYSTICAL_AGRICULTURE) && stage.isFinal()) {
+                    //unfortunately the flower sprite is uncolored
+                    Screen.blit(transform, x, y, 0, 16, 16, this.getSprite(tex.get(1)));
+                }
             }
         }
 

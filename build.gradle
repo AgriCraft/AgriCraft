@@ -253,6 +253,9 @@ dependencies {
     //Straw Golems
     compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
     //runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
+
+    //Mystical Agriculture
+    compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
 }
 
 // Delete Old Plants
