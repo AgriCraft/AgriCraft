@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.handler;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.event.JournalRenderEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -38,6 +39,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -820,6 +822,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 }
                 // draw text
                 renderer.drawText(transforms, GROWTH_STAGES, 10, y0 - delta*rows + 4, 0.90F);
+                MinecraftForge.EVENT_BUS.post(new JournalRenderEvent.PostDrawGrothStages(renderer, transforms, plant, stages));
             }
 
             protected void drawProducts(IPageRenderer renderer, MatrixStack transforms) {
