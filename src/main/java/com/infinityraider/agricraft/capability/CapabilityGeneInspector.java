@@ -8,6 +8,7 @@ import com.infinityraider.infinitylib.utility.ISerializable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
@@ -61,8 +62,11 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
 
     @Override
     public boolean shouldApplyCapability(ItemStack carrier) {
-        return carrier.getItem() instanceof ArmorItem
-                && ((ArmorItem) carrier.getItem()).getEquipmentSlot() == EquipmentSlotType.HEAD;
+        return this.shouldApplyCapability(carrier.getItem());
+    }
+
+    public boolean shouldApplyCapability(Item item) {
+        return item instanceof ArmorItem && ((ArmorItem) item).getEquipmentSlot() == EquipmentSlotType.HEAD;
     }
 
     @Override

@@ -105,6 +105,7 @@ public class JeiPlugin implements IModPlugin {
         AgriRecipeCategoryProduce.registerRecipes(registration);
         AgriRecipeCategoryClipping.registerRecipes(registration);
         AgriRecipeCategoryGrowthRequirements.registerRecipes(registration);
+        AgriAnvilRecipes.registerRecipes(registration);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import java.text.MessageFormat;
 import java.util.Collection;
 
+import com.infinityraider.agricraft.capability.CapabilityGeneInspector;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
@@ -220,6 +221,14 @@ public class ItemToolTipHandler {
                 event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_1);
                 event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_2);
             }
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void addHelmetTooltip(ItemTooltipEvent event) {
+        if(CapabilityGeneInspector.getInstance().hasInspectionCapability(event.getItemStack())) {
+            event.getToolTip().add(AgriToolTips.GENE_INSPECTOR);
         }
     }
 

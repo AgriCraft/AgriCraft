@@ -61,6 +61,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     @Override
     default void registerEventHandlers() {
+        this.registerEventHandler(AnvilHandler.getInstance());
         this.registerEventHandler(BlockUpdateHandler.getInstance());
         this.registerEventHandler(BonemealHandler.getInstance());
         this.registerEventHandler(JsonSyncHandler.getInstance());

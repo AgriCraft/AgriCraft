@@ -56,6 +56,7 @@
   "agricraft.tooltip.unknown": "Unknown",
   "agricraft.tooltip.plant": "Plant",
   "agricraft.tooltip.no_plant": "No Plant",
+  "agricraft.tooltip.gene_inspector": "Magnifying glass built-in",
   "agricraft.tooltip.genome": "Genome",
   "agricraft.tooltip.growth": "Growth",
   "agricraft.tooltip.growth_stages": "Growth stages",
