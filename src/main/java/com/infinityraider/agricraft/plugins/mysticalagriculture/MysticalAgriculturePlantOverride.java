@@ -1,25 +1,44 @@
 package com.infinityraider.agricraft.plugins.mysticalagriculture;
 
-import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.util.mimic.MimickedPlant;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Map;
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class MysticalAgriculturePlantGuiRenderer implements IAgriGrowableGuiRenderer.WithSeed {
-    private final Map<String, Integer> flowerColors;
-    private final Map<String, Integer> seedColors;
+public class MysticalAgriculturePlantOverride extends MimickedPlant implements IAgriGrowableGuiRenderer.WithSeed {
+    private int flowerColor = Integer.MIN_VALUE;
+    private int seedColor = Integer.MIN_VALUE;
 
-    public MysticalAgriculturePlantGuiRenderer() {
-        this.flowerColors = Maps.newHashMap();
-        this.seedColors = Maps.newHashMap();
+    protected MysticalAgriculturePlantOverride(IAgriPlant original) {
+        super(original);
+    }
+
+    public int getFlowerColor() {
+        if(this.flowerColor ==  Integer.MIN_VALUE) {
+            this.flowerColor = MysticalAgricultureCompatClient.colorForFlower(this.getId());
+        }
+        return this.flowerColor;
+    }
+
+    public int getSeedColor() {
+        if(this.seedColor ==  Integer.MIN_VALUE) {
+            this.seedColor = MysticalAgricultureCompatClient.colorForSeed(this.getId());
+        }
+        return this.seedColor;
+    }
+
+    @Nonnull
+    @Override
+    public IAgriGrowableGuiRenderer.WithSeed getGuiRenderer() {
+        return this;
     }
 
     @Override
@@ -27,31 +46,20 @@ public class MysticalAgriculturePlantGuiRenderer implements IAgriGrowableGuiRend
                                 float x, float y, float w, float h) {
         IAgriGrowableGuiRenderer.WithSeed.super.drawGrowthStage(plant, stage, context, transforms, x, y, w, h);
         TextureAtlasSprite sprite = context.getSprite(plant.getTexturesFor(stage).get(1));
-        int flowerColor = this.getFlowerColor(((IAgriPlant) plant).getId());
-        if (flowerColor < 0) {
+        if (this.getFlowerColor() < 0) {
             context.draw(transforms, sprite, x, y, w, h, 255, 255, 255, 255);
         } else {
-            context.draw(transforms, sprite, x, y, w, h, ((flowerColor >> 16) & 0xFF), ((flowerColor >> 8) & 0xFF), ((flowerColor) & 0xFF), 255);
+            context.draw(transforms, sprite, x, y, w, h, ((this.getFlowerColor() >> 16) & 0xFF), ((this.getFlowerColor() >> 8) & 0xFF), ((this.getFlowerColor()) & 0xFF), 255);
         }
     }
 
     @Override
     public void drawSeed(IAgriGrowable.WithSeed plant, RenderContext context, MatrixStack transforms, float x, float y, float w, float h) {
-        int seedColor = this.getSeedColor(((IAgriPlant) plant).getId());
-        if (seedColor < 0) {
+        if (this.getSeedColor() < 0) {
             IAgriGrowableGuiRenderer.WithSeed.super.drawSeed(plant, context, transforms, x, y, w, h);
         } else {
             TextureAtlasSprite sprite =  context.getSprite(plant.getSeedTexture());
-            context.draw(transforms, sprite, x, y, w, h, ((seedColor >> 16) & 0xFF), ((seedColor >> 8) & 0xFF), ((seedColor) & 0xFF), 255);
+            context.draw(transforms, sprite, x, y, w, h, ((this.getSeedColor() >> 16) & 0xFF), ((this.getSeedColor() >> 8) & 0xFF), ((this.getSeedColor()) & 0xFF), 255);
         }
-
-    }
-
-    protected int getFlowerColor(String plantId) {
-        return this.flowerColors.computeIfAbsent(plantId, MysticalAgricultureCompatClient::colorForFlower);
-    }
-
-    protected int getSeedColor(String plantId) {
-        return this.seedColors.computeIfAbsent(plantId, MysticalAgricultureCompatClient::colorForSeed);
     }
 }

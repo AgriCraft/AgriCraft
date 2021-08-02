@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.plugins.mysticalagriculture;
 import com.blakebr0.mysticalagriculture.api.MysticalAgricultureAPI;
 import com.blakebr0.mysticalagriculture.api.crop.ICrop;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -25,9 +26,13 @@ import java.util.function.IntFunction;
 
 public class MysticalAgricultureCompatClient {
     public static void init() {
+        registerEventHandler();
         createPlantRenderType();
         registerItemColors();
+    }
 
+    private static void registerEventHandler() {
+        AgriCraft.instance.proxy().registerEventHandler(MysticalAgriculturePlantSubstitutor.getInstance());
     }
 
     // Creates the render type for Mystical Agriculture crops
@@ -132,7 +137,7 @@ public class MysticalAgricultureCompatClient {
     @SuppressWarnings("deprecation")
     public static ICrop getCropFromPlantId(String plantId) {
         String path = plantId.split(":")[1];
-        //We assume the plant id is "<modid>:<resource>_plant"
+        // We assume the plant id is "<modid>:<resource>_plant"
         ResourceLocation location = new ResourceLocation(Names.Mods.MYSTICAL_AGRICULTURE, path.substring(0, path.length() - "_plant".length()));
         return MysticalAgricultureAPI.getCropRegistry().getCropById(location);
     }
