@@ -102,6 +102,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCyclicCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableIndustrialForegoingCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableImmersiveEngineeringCompat;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableMysticalAgricultureCompat;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableStrawGolemRebornCompat;
 
         public Common(ForgeConfigSpec.Builder builder) {
@@ -281,6 +282,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable Industrial Foregoing compat", true);
             this.enableImmersiveEngineeringCompat = builder.comment("\nSet to false to disable compatibility with Immersive Engineering (in case things break)")
                     .define("Enable Immersive Engineering compat", true);
+            this.enableMysticalAgricultureCompat = builder.comment("\nSet to false to disable compatibility with Mystical Agriculture (in case things break)")
+                    .define("Enable Mystical Agriculture compat", true);
             this.enableStrawGolemRebornCompat = builder.comment("\nSet to false to disable compatibility with Straw Golem Reborn (in case things break)")
                     .define("Enable Straw Golem Reborn compat", true);
             builder.pop();
@@ -644,6 +647,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableImmersiveEngineeringCompat() {
             return this.enableImmersiveEngineeringCompat.get();
+        }
+
+        @Override
+        public boolean enableMysticalAgricultureCompat() {
+            return this.enableMysticalAgricultureCompat.get();
         }
 
         @Override
