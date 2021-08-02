@@ -98,7 +98,6 @@ public class MysticalAgricultureCompatClient {
             if (stack.getItem() instanceof IAgriSeedItem) {
                 IAgriSeedItem seedItem = (IAgriSeedItem) stack.getItem();
                 String id = seedItem.getPlant(stack).getId();
-                System.out.println("searching color for " + id);
                 if (!id.startsWith(Names.Mods.MYSTICAL_AGRICULTURE)) {
                     return -1;
                 }
@@ -120,7 +119,6 @@ public class MysticalAgricultureCompatClient {
         ICrop mysticalCrop = getCropFromPlantId(plantId);
         return mysticalCrop == null ? -1 : mysticalCrop.getFlowerColor();
     }
-
 
     /**
      * Search the seed's color of a mystical agriculture plant.
