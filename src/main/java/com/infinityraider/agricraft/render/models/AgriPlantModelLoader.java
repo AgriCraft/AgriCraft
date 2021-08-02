@@ -7,7 +7,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
-import com.infinityraider.agricraft.api.v1.plant.IAgriRenderable;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
@@ -79,7 +78,7 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
             return builder.build();
         }
 
-        protected <T extends IAgriRegisterable<T> & IAgriGrowable & IAgriRenderable> void processRegistryTextures(IAgriRegistry<T> registry, Consumer<ResourceLocation> consumer) {
+        protected <T extends IAgriRegisterable<T> & IAgriGrowable> void processRegistryTextures(IAgriRegistry<T> registry, Consumer<ResourceLocation> consumer) {
             registry.all().stream()
                     .flatMap((element) -> element.getGrowthStages()
                             .stream().flatMap(stage -> element.getTexturesFor(stage).stream()))

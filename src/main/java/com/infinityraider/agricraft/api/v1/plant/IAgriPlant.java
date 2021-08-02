@@ -20,7 +20,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
@@ -29,7 +28,7 @@ import net.minecraft.util.text.ITextComponent;
  * If you register your own ICropPlant object, it will be wrapped by the api. Meaning if you query
  * the ICropPlant object you registered, it will return a different object.
  */
-public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable, IAgriRenderable, IAllele<IAgriPlant> {
+public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable.WithSeed, IAllele<IAgriPlant> {
     /**
      * Creates a new Ingredient object for this plant with default genes
      * @return the ingredient
@@ -245,18 +244,6 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return true if this plant can single spread
      */
     boolean allowsCloning(IAgriGrowthStage stage);
-
-    /**
-     * @return The resource location for the texture of the seed
-     */
-    @Nonnull
-    ResourceLocation getSeedTexture();
-
-    /**
-     * @return The resource location for the model of the seed
-     */
-    @Nonnull
-    ResourceLocation getSeedModel();
 
     /**
      * Spawn custom particles if the current growth stage allow it.

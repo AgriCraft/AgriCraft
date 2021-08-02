@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
@@ -136,9 +135,6 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @Deprecated
     @SuppressWarnings("deprecation")
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if (world.isRemote()) {
-            return ActionResultType.PASS;
-        }
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;
         }

@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable, IAgriRenderable {
+public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable {
     /**
      * @return a text component representing the name of this weed for use in tooltips, etc.
      */

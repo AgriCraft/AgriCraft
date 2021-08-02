@@ -1,4 +1,4 @@
-package com.infinityraider.agricraft.render.items;
+package com.infinityraider.agricraft.render.items.journal;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
@@ -6,29 +6,23 @@ import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.commons.lang3.mutable.MutableFloat;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler.IPageRenderer, IRenderUtilities {
+public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
     private static final JournalRenderer INSTANCE = new JournalRenderer();
 
     private static final Vector3f COLOR_COVER;
@@ -36,9 +30,6 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
 
     private static final Quaternion ROTATION_RIGHT;
     private static final Quaternion ROTATION_LEFT;
-    private static final Quaternion ROTATION_180;
-
-    private static final Matrix4f PROJECTION;
 
     private static final float HEIGHT = 7.0F;
     private static final float WIDTH = 5.0F;
@@ -47,10 +38,11 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
     private static final float T_TOTAL = 2*T_COVER + T_PAPER;
     private static final float OPEN_ANGLE = 75.0F;
 
-    public static final int PAGE_WIDTH = 4*32;
-    public static final int PAGE_HEIGHT = 6*32;
-    private static final float SCALE_WIDTH = (WIDTH - 1.0F)/16.0F;
-    private static final float SCALE_HEIGHT = (HEIGHT - 1.0F)/16.0F;
+    protected static final float SHADE_LEFT = 0.7F;
+    protected static final float SHADE_RIGHT = 1.0F;
+
+    private static final PageRenderer RENDERER_LEFT = new PageRenderer(WIDTH, HEIGHT, SHADE_LEFT);
+    private static final PageRenderer RENDERER_RIGHT = new PageRenderer(WIDTH, HEIGHT , SHADE_RIGHT);
 
     public static JournalRenderer getInstance() {
         return INSTANCE;
@@ -192,9 +184,9 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
             transforms.rotate(ROTATION_RIGHT);
 
             if (flipProgress != 0) {
-                JournalViewPointHandler.getInstance().renderFlippedPageRight(this, transforms);
+                JournalViewPointHandler.getInstance().renderFlippedPageRight(RENDERER_RIGHT, transforms);
             } else {
-                JournalViewPointHandler.getInstance().renderViewedPageRight(this, transforms);
+                JournalViewPointHandler.getInstance().renderViewedPageRight(RENDERER_RIGHT, transforms);
             }
             transforms.pop();
         }
@@ -223,7 +215,7 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
             transforms.translate((WIDTH - 0.5F) / 16.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 - 0.00001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
             transforms.rotate(ROTATION_LEFT);
 
-            JournalViewPointHandler.getInstance().renderViewedPageLeft(this, transforms);
+            JournalViewPointHandler.getInstance().renderViewedPageLeft(RENDERER_LEFT, transforms);
 
             transforms.pop();
         }
@@ -253,13 +245,13 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
             transforms.push();
             transforms.translate(1.0F/32.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 + 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
             transforms.rotate(ROTATION_RIGHT);
-            JournalViewPointHandler.getInstance().renderViewedPageRight(this, transforms);
+            JournalViewPointHandler.getInstance().renderViewedPageRight(RENDERER_LEFT, transforms);
             transforms.pop();
 
             transforms.push();
             transforms.translate((WIDTH - 0.5F)/16.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 - 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
             transforms.rotate(ROTATION_LEFT);
-            JournalViewPointHandler.getInstance().renderFlippedPageLeft(this, transforms);
+            JournalViewPointHandler.getInstance().renderFlippedPageLeft(RENDERER_LEFT, transforms);
             transforms.pop();
 
             transforms.pop();
@@ -281,81 +273,6 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
 
     protected RenderType getRenderType() {
         return PosColorRenderType.INSTANCE;
-    }
-
-    @Override
-    public int getPageWidth() {
-        return PAGE_WIDTH;
-    }
-
-    @Override
-    public int getPageHeight() {
-        return PAGE_HEIGHT;
-    }
-
-    @Override
-    public void drawTexture(MatrixStack transforms, ResourceLocation texture,
-                            float x, float y, float w, float h, float u1, float v1, float u2, float v2, float c) {
-        this.bindTexture(texture);
-        this.drawTexture(transforms, x, y, w, h, u1, v1, u2, v2, c);
-    }
-
-    @Override
-    public void drawTexture(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float c) {
-        this.bindTextureAtlas();
-        this.drawTexture(transforms, x, y, w, h, texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(), c);
-    }
-
-    @SuppressWarnings("deprecation")
-    protected void drawTexture(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float c) {
-        BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        Matrix4f matrix = transforms.getLast().getMatrix();
-        float x1 = (SCALE_WIDTH*x)/this.getPageWidth();
-        float y1 = (SCALE_HEIGHT*y)/this.getPageHeight();
-        float x2 = (SCALE_WIDTH*(x + w))/this.getPageWidth();
-        float y2 = (SCALE_HEIGHT*(y + h))/this.getPageHeight();
-        bufferbuilder.pos(matrix, x1, y2, 0).tex(u1, v2).color(c, c, c, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x2, y2, 0).tex(u2, v2).color(c, c, c, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x2, y1, 0).tex(u2, v1).color(c, c, c, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x1, y1, 0).tex(u1, v1).color(c, c, c, 1.0F).endVertex();
-        bufferbuilder.finishDrawing();
-        RenderSystem.enableAlphaTest();
-        WorldVertexBufferUploader.draw(bufferbuilder);
-    }
-
-    @Override
-    public float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale) {
-        transforms.push();
-        transforms.translate((SCALE_WIDTH*x)/this.getPageWidth(), (SCALE_HEIGHT*y)/this.getPageHeight(), 0F);
-        float f = scale*SCALE_WIDTH/this.getPageWidth();
-        transforms.scale(f, f, 1);
-        // Split string
-        int l = (int) ((this.getPageWidth() - x - 2)/scale);
-        MutableFloat dy = new MutableFloat();
-        this.getFontRenderer().trimStringToWidth(text, l).forEach(t -> {
-            this.getFontRenderer().func_238422_b_(transforms, t, 0.0F, 0.0F, 0);
-            dy.add(this.getFontRenderer().FONT_HEIGHT);
-            transforms.translate(0, this.getFontRenderer().FONT_HEIGHT, 0);
-        });
-        transforms.pop();
-        return dy.getValue()*scale;
-    }
-
-    @Override
-    public void drawItem(MatrixStack transforms, ItemStack item, float x, float y) {
-        transforms.push();
-        transforms.translate((SCALE_WIDTH*(x + 8))/this.getPageWidth(), (SCALE_HEIGHT*(y + 8))/this.getPageHeight(), 0);
-        transforms.rotate(ROTATION_180);
-        transforms.push();
-        float f = SCALE_WIDTH/8.0F;
-        transforms.scale(f, f, 1);
-        transforms.push();
-        transforms.getLast().getMatrix().mul(PROJECTION);
-        this.renderItem(item, ItemCameraTransforms.TransformType.GUI, 15728880, transforms, this.getRenderTypeBuffer());
-        transforms.pop();
-        transforms.pop();
-        transforms.pop();
     }
 
     private static class PosColorRenderType extends RenderType {
@@ -380,13 +297,5 @@ public class JournalRenderer implements InfItemRenderer, JournalViewPointHandler
         ROTATION_RIGHT = Vector3f.XP.rotationDegrees(90);
         ROTATION_LEFT = Vector3f.XN.rotationDegrees(90);
         ROTATION_LEFT.multiply(Vector3f.ZP.rotationDegrees(180));
-        ROTATION_180 = Vector3f.ZP.rotationDegrees(180);
-        // Projection
-        PROJECTION = new Matrix4f(new float[]{
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 1
-        });
     }
 }

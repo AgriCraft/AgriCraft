@@ -142,7 +142,7 @@ public final class CoreHandler {
         // Display Soils
         AgriCore.getLogger("agricraft").info("Registered Soils ({0}/{1}):", count, raw);
         for (IAgriSoil soil : AgriApi.getSoilRegistry().all()) {
-            AgriCore.getLogger("agricraft").info(" - {0}", soil.getName());
+            AgriCore.getLogger("agricraft").info(" - {0}", soil.getId());
         }
     }
 

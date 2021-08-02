@@ -435,6 +435,11 @@ public interface IAgriConfig {
     boolean enableImmersiveEngineeringCompat();
 
     /**
+     * @return if Mystical Agriculture compatibility is enabled
+     */
+    boolean enableMysticalAgricultureCompat();
+
+    /**
      * @return if Straw Golem Reborn compatibility is enabled
      */
     boolean enableStrawGolemRebornCompat();
