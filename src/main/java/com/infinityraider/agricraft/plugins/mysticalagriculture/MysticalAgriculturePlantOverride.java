@@ -45,11 +45,13 @@ public class MysticalAgriculturePlantOverride extends MimickedPlant implements I
     public void drawGrowthStage(IAgriGrowable plant, IAgriGrowthStage stage, RenderContext context, MatrixStack transforms,
                                 float x, float y, float w, float h) {
         IAgriGrowableGuiRenderer.WithSeed.super.drawGrowthStage(plant, stage, context, transforms, x, y, w, h);
-        TextureAtlasSprite sprite = context.getSprite(plant.getTexturesFor(stage).get(1));
-        if (this.getFlowerColor() < 0) {
-            context.draw(transforms, sprite, x, y, w, h, 255, 255, 255, 255);
-        } else {
-            context.draw(transforms, sprite, x, y, w, h, ((this.getFlowerColor() >> 16) & 0xFF), ((this.getFlowerColor() >> 8) & 0xFF), ((this.getFlowerColor()) & 0xFF), 255);
+        if(stage.isFinal()) {
+            TextureAtlasSprite sprite = context.getSprite(plant.getTexturesFor(stage).get(1));
+            if (this.getFlowerColor() < 0) {
+                context.draw(transforms, sprite, x, y, w, h, 255, 255, 255, 255);
+            } else {
+                context.draw(transforms, sprite, x, y, w, h, ((this.getFlowerColor() >> 16) & 0xFF), ((this.getFlowerColor() >> 8) & 0xFF), ((this.getFlowerColor()) & 0xFF), 255);
+            }
         }
     }
 
