@@ -118,11 +118,8 @@ public class AgriIngredientPlant {
         @SuppressWarnings("deprecation")
         public void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float width, float height, float r, float g, float b, float a) {
             this.bindTextureAtlas();
-            GlStateManager.pushTextureAttributes();
-            GlStateManager.pushLightingAttributes();
             GlStateManager.color4f(r, g, b, a);
             Screen.blit(transforms, (int) x, (int) y, 0, (int) width, (int) height, texture);
-            GlStateManager.popAttributes();
         }
 
         @Override
