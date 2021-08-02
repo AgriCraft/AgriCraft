@@ -7,7 +7,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.agricraft.render.items.JournalRenderer;
+import com.infinityraider.agricraft.render.items.journal.JournalRenderer;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.entity.player.PlayerEntity;
