@@ -42,6 +42,8 @@ public class AgriToolTips {
     // Item tooltips
     public static final ITextComponent CLIPPER
             = new TranslationTextComponent("agricraft.tooltip.clipper").mergeStyle(TextFormatting.DARK_GRAY);
+    public static final ITextComponent GENE_INSPECTOR
+            = new TranslationTextComponent("agricraft.tooltip.gene_inspector").mergeStyle(TextFormatting.BLUE);
     public static final ITextComponent JOURNAL_USE_1
             = new TranslationTextComponent("agricraft.tooltip.journal_use_1").mergeStyle(TextFormatting.DARK_GRAY);
     public static final ITextComponent JOURNAL_USE_2

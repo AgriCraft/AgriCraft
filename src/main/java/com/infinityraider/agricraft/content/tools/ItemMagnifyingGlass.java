@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.tools;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.capability.CapabilityGeneInspector;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.network.MessageMagnifyingGlassObserving;
 import com.infinityraider.agricraft.reference.AgriToolTips;
@@ -29,7 +30,7 @@ public class ItemMagnifyingGlass extends ItemBase {
     private static final Map<UUID, Boolean> observers = Maps.newIdentityHashMap();
 
     public static boolean isObserving(PlayerEntity player) {
-        return player != null && observers.computeIfAbsent(player.getUniqueID(), uuid -> false);
+        return player != null && (observers.computeIfAbsent(player.getUniqueID(), uuid -> false) || CapabilityGeneInspector.getInstance().canInspect(player));
     }
 
     public static void setObserving(PlayerEntity player, boolean status) {

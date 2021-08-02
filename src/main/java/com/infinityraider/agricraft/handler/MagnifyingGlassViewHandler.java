@@ -325,6 +325,7 @@ public class MagnifyingGlassViewHandler {
                 this.lastPos = null;
                 this.genomeCache = null;
                 this.scrollPosition.reset();
+                MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), this.isActive());
                 return;
             }
             // Increment animation counter
