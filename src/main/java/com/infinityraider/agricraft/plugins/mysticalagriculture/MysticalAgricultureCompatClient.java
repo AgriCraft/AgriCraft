@@ -49,44 +49,55 @@ public class MysticalAgricultureCompatClient {
         if (face != null) {
             return ImmutableList.of();
         }
-        List<BakedQuad> baseQuads = AgriPlantQuadGenerator.getInstance().bakeQuadsForPlusPattern(growable, stage, face, spriteFunc);
+        ITessellator tessellator = AgriPlantQuadGenerator.getInstance().getTessellator();
+        TextureAtlasSprite sprite = spriteFunc.apply(0);
+
+        tessellator.startDrawingQuads();
+        tessellator.setFace((Direction) null);
+
+        tessellator.pushMatrix();
+
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, sprite, 4.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, sprite, 3.999F, 0, 0, 16, 16);
+
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, sprite, 4.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, sprite, 3.999F, 0, 0, 16, 16);
+
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, sprite, 12.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, sprite, 11.999F, 0, 0, 16, 16);
+
+        tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, sprite, 12.001F, 0, 0, 16, 16);
+        tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, sprite, 11.999F, 0, 0, 16, 16);
+
         if (stage.isFinal()) {
             IAgriPlant plant = ((IAgriPlant) growable);
             int flowerColor = MysticalAgricultureCompatClient.colorForFlower(plant.getId());
 
-            TextureAtlasSprite sprite = spriteFunc.apply(1);
-            ITessellator tessellator = AgriPlantQuadGenerator.getInstance().getTessellator();
-
-            tessellator.startDrawingQuads();
-            tessellator.setFace((Direction) null);
-
-            tessellator.pushMatrix();
+            TextureAtlasSprite flowerSprite = spriteFunc.apply(1);
 
             if (flowerColor != -1) {
                 tessellator.setColorRGB(((flowerColor >> 16) & 0xFF) / 255.0F, ((flowerColor >> 8) & 0xFF) / 255.0F, ((flowerColor) & 0xFF) / 255.0F);
             }
 
-            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, sprite, 4.001F, 0, 0, 16, 16);
-            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, sprite, 3.999F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, flowerSprite, 4.001F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, flowerSprite, 3.999F, 0, 0, 16, 16);
 
-            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, sprite, 4.001F, 0, 0, 16, 16);
-            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, sprite, 3.999F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, flowerSprite, 4.001F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, flowerSprite, 3.999F, 0, 0, 16, 16);
 
-            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, sprite, 12.001F, 0, 0, 16, 16);
-            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, sprite, 11.999F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.NORTH, flowerSprite, 12.001F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.NORTH, flowerSprite, 11.999F, 0, 0, 16, 16);
 
-            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, sprite, 12.001F, 0, 0, 16, 16);
-            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, sprite, 11.999F, 0, 0, 16, 16);
-
-            tessellator.popMatrix();
-
-            List<BakedQuad> flowerQuads = tessellator.getQuads();
-            tessellator.draw();
-
-            return new ImmutableList.Builder<BakedQuad>().addAll(baseQuads).addAll(flowerQuads).build();
-        } else {
-            return baseQuads;
+            tessellator.drawScaledFaceDouble(-2, 0, 10, 12, Direction.EAST, flowerSprite, 12.001F, 0, 0, 16, 16);
+            tessellator.drawScaledFaceDouble(6, 0, 18, 12, Direction.EAST, flowerSprite, 11.999F, 0, 0, 16, 16);
         }
+
+        tessellator.translate(0, 12.0F/16.0F, 0);
+
+        tessellator.popMatrix();
+        List<BakedQuad> quads = tessellator.getQuads();
+        tessellator.draw();
+        return quads;
     }
 
     // Registers the item colors for recoloring dynamically colored MA seeds
