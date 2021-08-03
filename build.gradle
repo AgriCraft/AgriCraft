@@ -240,6 +240,11 @@ dependencies {
     compileOnly fg.deobf("curse.maven:jade-324717:3302544")
     //runtimeOnly fg.deobf("curse.maven:jade-324717:3302544")
 
+    //Mystical Agriculture
+    compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
+    //runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
+    //runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
+
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
     //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
