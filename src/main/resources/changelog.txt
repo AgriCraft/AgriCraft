@@ -3,6 +3,8 @@ Changelog
 3.0.5
  - ADDED: Support for Jade
  - ADDED: Json support for fertilizers (thanks Nelson)
+ - ADDED: Mystical Agriculture support
+ - ADDED: Possibility to attach a magnifying glass to any head slot armor to show full TOP / JADE info at all times
  - FIXED: Planting and breaking crops not having sounds
  - FIXED: Planting seeds not playing the arm swing animation
  - FIXED: TOP keeping extended crop info after swapping out the magnifying glass
