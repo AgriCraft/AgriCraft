@@ -670,6 +670,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         //irrigation
         private final ForgeConfigSpec.ConfigValue<Boolean> disableParticles;
 
+        //animations
+        private final ForgeConfigSpec.ConfigValue<Integer> seedAnalyzerAnimationDuration;
+        private final ForgeConfigSpec.ConfigValue<Integer> journalAnimationDuration;
+
         public Client(ForgeConfigSpec.Builder builder) {
             super(builder);
 
@@ -685,6 +689,13 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("irrigation");
             this.disableParticles = builder.comment("\nSet to true to disable particles (Client only)")
                     .define("Disable particles", false);
+            builder.pop();
+
+            builder.push("animations");
+            this.seedAnalyzerAnimationDuration = builder.comment("\nConfigures the animation duration in ticks for the camera to snap to the seed analyzer, 0 disables it (Client only)")
+                    .defineInRange("Seed Analyzer Animation Duration", 15, 0, 40);
+            this.journalAnimationDuration = builder.comment("\nConfigures the animation duration in ticks for the camera to snap to the journal, 0 disables it (Client only)")
+                    .defineInRange("Journal Animation Duration", 10, 0, 40);
             builder.pop();
         }
 
@@ -706,6 +717,16 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean disableParticles() {
             return this.disableParticles.get();
+        }
+
+        @Override
+        public int seedAnalyzerAnimationDuration() {
+            return this.seedAnalyzerAnimationDuration.get();
+        }
+
+        @Override
+        public int journalAnimationDuration() {
+            return this.journalAnimationDuration.get();
         }
 
         @Override
@@ -741,6 +762,18 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @OnlyIn(Dist.CLIENT)
         public boolean disableParticles() {
             return false;
+        }
+
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public int seedAnalyzerAnimationDuration() {
+            return 0;
+        }
+
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public int journalAnimationDuration() {
+            return 0;
         }
 
         @Override

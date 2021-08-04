@@ -39,8 +39,6 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public static final int SLOT_JOURNAL = 1;
     private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
 
-    public static final int TRANSITION_DURATION = 15;
-
     private final AutoSyncedField<ItemStack> seed;
     private final AutoSyncedField<ItemStack> journal;
     private final LazyOptional<TileEntitySeedAnalyzer> capability;
@@ -93,7 +91,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public int getTransitionDuration() {
-        return TRANSITION_DURATION;
+        return AgriCraft.instance.getConfig().seedAnalyzerAnimationDuration();
     }
 
     public boolean setObserving(boolean value) {

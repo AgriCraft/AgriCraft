@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 public class JournalViewPointHandler implements IDynamicCameraController {
     private static final JournalViewPointHandler INSTANCE = new JournalViewPointHandler();
 
-    public static final int TRANSITION_DURATION = 10;
     private static final int OPENING_DURATION = 20;
 
     public static final double DX = 0.35;
@@ -196,7 +195,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public int getTransitionDuration() {
-        return TRANSITION_DURATION;
+        return AgriCraft.instance.getConfig().journalAnimationDuration();
     }
 
     @Override
