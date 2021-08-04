@@ -62,9 +62,6 @@ public class MysticalAgricultureCompatClient {
 
             tessellator.pushMatrix();
 
-            tessellator.translate(0.5f, 0, 0.5f);
-            tessellator.rotate(45, 0, 1, 0);
-            tessellator.translate(-0.5f, 0, -0.5f);
             if (flowerColor != -1) {
                 tessellator.setColorRGB(((flowerColor >> 16) & 0xFF) / 255.0F, ((flowerColor >> 8) & 0xFF) / 255.0F, ((flowerColor) & 0xFF) / 255.0F);
             }
