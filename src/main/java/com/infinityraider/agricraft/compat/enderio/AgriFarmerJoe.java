@@ -4,10 +4,10 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import crazypants.enderio.api.farm.*;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class AgriFarmerJoe extends AbstractFarmerJoe {
 
@@ -33,14 +33,10 @@ public class AgriFarmerJoe extends AbstractFarmerJoe {
         HarvestResult result = new HarvestResult();
         result.getHarvestedBlocks().add(pos);
 
-        double dropX = pos.getX() + 0.5;
-        double dropY = pos.getY() + 0.5;
-        double dropZ = pos.getZ() + 0.5;
-
         WorldHelper.getTile(farm.getWorld(), pos, IAgriCrop.class)
                 .ifPresent(tile -> {
                     tile.onHarvest(stack -> {
-                        result.getDrops().add(new EntityItem(farm.getWorld(), dropX, dropY, dropZ, stack));
+                        result.addDrop(pos, stack);
                     }, farm.getFakePlayer());
                 });
 
@@ -48,16 +44,23 @@ public class AgriFarmerJoe extends AbstractFarmerJoe {
 
         return result;
     }
-
+    
     private static class HarvestResult implements IHarvestResult {
-
-        final NonNullList<EntityItem> drops = NonNullList.create();
-        final NonNullList<BlockPos> harvestedBlocks = NonNullList.create();
-
-        public NonNullList<EntityItem> getDrops() {
+        private final NonNullList<Pair<BlockPos, ItemStack>> drops = NonNullList.create();
+        private final NonNullList<BlockPos> harvestedBlocks = NonNullList.create();
+        
+        @SuppressWarnings("unchecked")
+        @Override
+        public NonNullList<Pair<BlockPos, ItemStack>> getDrops() {
             return drops;
         }
 
+        @Override
+        public void addDrop(BlockPos pos, ItemStack stack) {
+            drops.add(Pair.of(pos, stack));
+        }
+
+        @Override
         public NonNullList<BlockPos> getHarvestedBlocks() {
             return harvestedBlocks;
         }
