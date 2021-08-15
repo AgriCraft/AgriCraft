@@ -443,4 +443,23 @@ public interface IAgriConfig {
      * @return if Straw Golem Reborn compatibility is enabled
      */
     boolean enableStrawGolemRebornCompat();
+
+
+    /*
+     * ------------------------
+     * ANIMATION CONFIG OPTIONS
+     * ------------------------
+     */
+
+    /**
+     * @return the animation duration for snapping the camera to the seed analyzer
+     */
+    @OnlyIn(Dist.CLIENT)
+    int seedAnalyzerAnimationDuration();
+
+    /**
+     * @return the animation duration for snapping the camera to the journal
+     */
+    @OnlyIn(Dist.CLIENT)
+    int journalAnimationDuration();
 }
