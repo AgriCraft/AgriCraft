@@ -2,10 +2,11 @@ Changelog
 ---------
 3.0.5
  - ADDED: Support for Jade
- - ADDED: Json support for fertilizers (thanks Nelson)
+ - ADDED: Json support for fertilizers (thanks Ketheroth)
  - ADDED: Mystical Agriculture support
  - ADDED: Possibility to attach a magnifying glass to any head slot armor to show full TOP / JADE info at all times
  - ADDED: Config options to change the animation duration for the seed analyzer and the journal
+ - ADDED: Config option to convert vanilla seeds only in the seed analyzer
  - ADDED: JEI growth requirement and products tabs for original plant seeds
  - FIXED: Planting and breaking crops not having sounds
  - FIXED: Planting seeds not playing the arm swing animation
@@ -16,9 +17,9 @@ Changelog
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API
  - ADDED: Config option to disable crop sticks collissions
- - ADDED: Default json support for Abundance (thanks to Nelson)
- - ADDED: Default json support for Biomes O' Plenty (thanks to Nelson)
- - ADDED: Default json support for Horticulture (thanks to Nelson)
+ - ADDED: Default json support for Abundance (thanks to Ketheroth)
+ - ADDED: Default json support for Biomes O' Plenty (thanks to Ketheroth)
+ - ADDED: Default json support for Horticulture (thanks to Ketheroth)
  - ADDED: Russian translations (thanks to pgkrol)
  - FIXED: Json data not properly being synced to connecting clients on LAN worlds
  - FIXED: Sprinklers not dropping as blocks when mined
@@ -39,9 +40,9 @@ Changelog
 
 3.0.2
 - CHANGE: Overhauled the internal plugin system to avoid bugs related to mod loading timing
-- ADDED: new vanilla plant: Azure Bluet (thanks Nelson)
-- ADDED: Default jsons for Environmental (thanks Nelson)
-- ADDED: Default jsons for Upgrade Aquatic (thanks Nelson)
+- ADDED: new vanilla plant: Azure Bluet (thanks Ketheroth)
+- ADDED: Default jsons for Environmental (thanks Ketheroth)
+- ADDED: Default jsons for Upgrade Aquatic (thanks Ketheroth)
 - ADDED: Season Compatibility with Simply Seasons
 - ADDED: Full Botany Pots compatibility
 - ADDED: Greenhouse groundwork (Greenhouses remain WIP, do not expect to find any in your world yet)
@@ -49,7 +50,7 @@ Changelog
 - FIXED: FOV not changing when applying effects such as swiftness, etc
 - FIXED: Crash with Create
 - FIXED: Server crash with Immersive Engineering
-- FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Nelson)
+- FIXED: Default json for Autumnity's foul berry use a seed instead of the berry itself (thanks Ketheroth)
 - FIXED: Seed Drop probabilities from grass being inverted
 - FIXED: Journal wobbling back and forth while reading, making it difficult to read
 
@@ -98,18 +99,18 @@ Changelog
 - ADDED: new vanilla plant: Warped Fungus
 - ADDED: new vanilla plant: Wither Rose
 - ADDED: new resource plant: Carbonation
-- ADDED: Default jsons for Atmospheric (thanks Nelson)
-- ADDED: Default jsons for Autumnity (thanks Nelson)
-- ADDED: Default jsons for Botania (thanks Nelson)
-- ADDED: Default jsons for Buzzier Bees (thanks Nelson)
-- ADDED: Default jsons for Farmer's Delight (thanks Nelson)
-- ADDED: Default jsons for Immersive Engineering (thanks Nelson)
-- ADDED: Default jsons for Metal Bushes (thanks Nelson)
-- ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Nelson)
-- ADDED: Default jsons for Quark (thanks Nelson)
-- ADDED: Default jsons for Simple Farming (thanks Nelson)
-- ADDED: Default jsons for Thermal Cultivation (thanks Nelson)
-- ADDED: Default jsons for XL Food Mod (thanks Nelson)
+- ADDED: Default jsons for Atmospheric (thanks Ketheroth)
+- ADDED: Default jsons for Autumnity (thanks Ketheroth)
+- ADDED: Default jsons for Botania (thanks Ketheroth)
+- ADDED: Default jsons for Buzzier Bees (thanks Ketheroth)
+- ADDED: Default jsons for Farmer's Delight (thanks Ketheroth)
+- ADDED: Default jsons for Immersive Engineering (thanks Ketheroth)
+- ADDED: Default jsons for Metal Bushes (thanks Ketheroth)
+- ADDED: Default jsons for Pam's Harvestcraft 2 (thanks Ketheroth)
+- ADDED: Default jsons for Quark (thanks Ketheroth)
+- ADDED: Default jsons for Simple Farming (thanks Ketheroth)
+- ADDED: Default jsons for Thermal Cultivation (thanks Ketheroth)
+- ADDED: Default jsons for XL Food Mod (thanks Ketheroth)
 - ADDED: Compatibility with Blood Magic Harvest Ritual
 - ADDED: Compatibility with Botania's Horn and Drum of the Wild
 - ADDED: Initial Compatibility with Botany Pots (requires elaboration on Botany Pots side to complete)

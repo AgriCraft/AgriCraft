@@ -114,6 +114,11 @@ public interface IAgriConfig {
     boolean overrideVanillaFarming();
 
     /**
+     * @return true if vanilla farming is overridden only in the seed analyzer
+     */
+    boolean convertSeedsOnlyInAnalyzer();
+
+    /**
      * @return global growth modifier for all AgriCraft crops
      */
     double growthMultiplier();

@@ -29,6 +29,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> fertilizerMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> cloneMutations;
         private final ForgeConfigSpec.ConfigValue<Boolean> overrideVanillaFarming;
+        private final ForgeConfigSpec.ConfigValue<Boolean> convertSeedsOnlyInAnalyzer;
         private final ForgeConfigSpec.ConfigValue<Double> growthMultiplier;
         private final ForgeConfigSpec.ConfigValue<Boolean> onlyMatureSeedDrops;
         private final ForgeConfigSpec.ConfigValue<Boolean> disableWeeds;
@@ -133,6 +134,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Clone mutations", false);
             this.overrideVanillaFarming = builder.comment("\nSet to true to override vanilla farming, meaning vanilla seeds will be converted to agricraft seeds on planting.")
                     .define("Override vanilla farming", true);
+            this.convertSeedsOnlyInAnalyzer = builder.comment("\nSet to true to convert seeds only in the analyzer. Has no effect if \"Override vanilla farming\" is set to false.")
+                    .define("Convert seeds only in analyzer", false);
             this.growthMultiplier = builder.comment("\nThis is a global growth rate multiplier for crops planted on crop sticks.")
                     .defineInRange("Growth rate multiplier", 1.0, 0.0, 3.0);
             this.onlyMatureSeedDrops = builder.comment("\nSet this to true to make only mature crops drop seeds (to encourage trowel usage).")
@@ -324,6 +327,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             return this.overrideVanillaFarming.get();
         }
 
+        @Override
+        public boolean convertSeedsOnlyInAnalyzer() {
+            return this.convertSeedsOnlyInAnalyzer.get();
+        }
         @Override
         public double growthMultiplier() {
             return this.growthMultiplier.get();

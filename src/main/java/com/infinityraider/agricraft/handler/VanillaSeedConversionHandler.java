@@ -121,7 +121,7 @@ public class VanillaSeedConversionHandler {
     }
 
     protected boolean runPlantingConversion(World world, BlockPos pos, ItemStack stack, PlayerEntity player, Hand hand) {
-        return AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
+        return !AgriCraft.instance.getConfig().convertSeedsOnlyInAnalyzer() && AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
             // The player is attempting to plant a seed, convert it to an agricraft crop
             return AgriApi.getSoil(world, pos.down()).map(soil -> {
                 // check if there are crop sticks above
