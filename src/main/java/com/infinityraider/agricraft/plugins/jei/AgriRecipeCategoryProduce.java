@@ -80,7 +80,8 @@ public class AgriRecipeCategoryProduce implements IRecipeCategory<IAgriPlant> {
     @Override
     public void setIngredients(IAgriPlant plant, IIngredients ingredients) {
         // Seed input
-        ingredients.setInputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(plant.toItemStack())));
+        List<ItemStack> seeds = new ImmutableList.Builder<ItemStack>().add(plant.toItemStack()).addAll(plant.getSeedItems()).build();
+        ingredients.setInputLists(VanillaTypes.ITEM, ImmutableList.of(seeds));
         // Plant input
         ingredients.setInputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(plant)));
         // Outputs

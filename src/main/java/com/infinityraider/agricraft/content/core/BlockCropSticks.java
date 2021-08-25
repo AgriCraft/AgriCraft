@@ -289,7 +289,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                     }
                     return result;
                 } else {
-                    return ActionResultType.PASS;
+                    return ActionResultType.CONSUME;
                 }
             }).orElse(ActionResultType.PASS);
         }
