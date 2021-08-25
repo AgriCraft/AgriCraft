@@ -10,6 +10,7 @@ Changelog
  - FIXED: Planting seeds not playing the arm swing animation
  - FIXED: TOP keeping extended crop info after swapping out the magnifying glass
  - FIXED: Dynamic texture tooltips not being localized (InfinityLib fix)
+ - FIXED: Crash related to partially unloading irrigation tanks spanning multiple chunks
 
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API
