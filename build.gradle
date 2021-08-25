@@ -103,7 +103,7 @@ dependencies {
     // *Special* Minecraft Mods
     // Have to disable transitive deps on this one since stupid stuff is going on...
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") { transitive = false }
-    deobfCompile ("com.enderio:EnderIO:1.12.2-5.0.44:api") { transitive = false }
+    deobfCompile ("com.enderio:EnderIO:1.12.2-5.3.70:api") { transitive = false }
 }
 
 // Delete Old Plants
