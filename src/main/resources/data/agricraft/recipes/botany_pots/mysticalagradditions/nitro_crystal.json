@@ -1,0 +1,20 @@
+{
+  "type": "agricraft:botany_pots_crop",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagradditions"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    }
+  ],
+  "plant": "mysticalagriculture:nitro_crystal_plant",
+  "growthTicks": 1846,
+  "growthStatFactor": 0.038461538461538464
+}

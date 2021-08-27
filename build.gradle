@@ -185,16 +185,16 @@ configurations {
 
 // List Deps.
 dependencies {
-	// Minecraft
+    // Minecraft
     minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
-	
+
     // AgriCore
     embed project('AgriCore');
     
     // InfinityLib
     compile project('InfinityLib')
 
-	//JEI
+    //JEI
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106")
 

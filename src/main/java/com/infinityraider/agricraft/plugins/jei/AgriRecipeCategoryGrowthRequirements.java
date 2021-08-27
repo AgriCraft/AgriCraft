@@ -130,7 +130,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         int strength = state.getStrength();
         IAgriGrowthStage stage = state.getStage();
         // Determine inputs
-        List<ItemStack> seeds = ImmutableList.of(plant.toItemStack());
+        List<ItemStack> seeds = new ImmutableList.Builder<ItemStack>().add(plant.toItemStack()).addAll(plant.getSeedItems()).build();
         List<ItemStack> soils = AgriApi.getSoilRegistry().stream()
                 .filter(soil -> {
                     IAgriGrowthRequirement req = plant.getGrowthRequirement(stage);

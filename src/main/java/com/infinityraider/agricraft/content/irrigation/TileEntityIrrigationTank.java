@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
+import com.infinityraider.infinitylib.utility.TileReference;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,11 +28,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.BiFunction;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IFluidHandler {
     private static final BlockPos DEFAULT = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+    private static final BiFunction<IWorldReader, BlockPos, TileEntityIrrigationTank> TANK_GETTER = (world, pos) -> {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityIrrigationTank) {
+            return (TileEntityIrrigationTank) tile;
+        }
+        return null;
+    };
 
     private static final float MIN_Y = 2*Constants.UNIT;
     private static final float MAX_Y = 1;
@@ -38,7 +48,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     private static final int HEIGHT_INTERVALS = 16;
     private static final float CONTENT_DELTA_FRACTION = 0.05F;
 
-    private TileEntityIrrigationTank origin;
+    private TileReference<TileEntityIrrigationTank> origin;
     private final AutoSyncedField<BlockPos> min;
     private final AutoSyncedField<BlockPos> max;
 
@@ -91,7 +101,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.isMultiBlockOrigin()) {
             return super.getContent();
         } else {
-            return this.getMultiBlockOrigin().getContent();
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                return origin.getContent();
+            }
+            return 0;
         }
     }
 
@@ -100,7 +115,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.isMultiBlockOrigin()) {
             return super.getLevel();
         } else {
-            return this.getMultiBlockOrigin().getLevel();
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                return origin.getLevel();
+            }
+            return 0;
         }
     }
 
@@ -113,7 +133,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             }
             return level;
         } else {
-            return this.getMultiBlockOrigin().getRenderLevel(partialTicks);
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                return origin.getRenderLevel(partialTicks);
+            }
+            return 0;
         }
     }
 
@@ -122,7 +147,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.isMultiBlockOrigin()) {
             return super.pushWater(max, execute);
         } else {
-            return this.getMultiBlockOrigin().pushWater(max, execute);
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                return origin.pushWater(max, execute);
+            }
+            return 0;
         }
     }
 
@@ -131,7 +161,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         if(this.isMultiBlockOrigin()) {
             return super.drainWater(max, execute);
         } else {
-            return this.getMultiBlockOrigin().drainWater(max, execute);
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                return origin.drainWater(max, execute);
+            }
+            return 0;
         }
     }
 
@@ -142,7 +177,11 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             super.setContent(content);
             this.updateMultiBlockFluidStates(before, this.getLevel());
         } else {
-            this.getMultiBlockOrigin().setContent(content);
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                origin.setContent(content);
+            }
         }
     }
 
@@ -153,7 +192,11 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             super.setLevel(level);
             this.updateMultiBlockFluidStates(before, this.getLevel());
         } else {
-            this.getMultiBlockOrigin().setLevel(level);
+            TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
+            if(origin != null) {
+                // origin can be null if the origin chunk is not loaded
+                this.getMultiBlockOrigin().setLevel(level);
+            }
         }
     }
 
@@ -185,6 +228,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         return this.getMinLevel() - this.getMultiBlockMin().getY() + (contents + 0.0F)*(this.getMaxLevel() - this.getMinLevel())/(this.getCapacity() + 0.0F);
     }
 
+    @Nullable
     public TileEntityIrrigationTank getMultiBlockOrigin() {
         if(this.getWorld() == null) {
             return this;
@@ -193,16 +237,17 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             return this;
         }
         if(this.origin == null) {
-            TileEntity tile = this.getWorld().getTileEntity(this.getMultiBlockMin());
-            if (tile instanceof TileEntityIrrigationTank) {
-                this.origin = (TileEntityIrrigationTank) tile;
-                return this.origin;
-            }
-        } else {
-            return this.origin;
+            this.origin = new TileReference<>(this. getMultiBlockMin(), TANK_GETTER);
         }
-        this.unFormMultiBlock();
-        return this;
+        TileEntityIrrigationTank tank = this.origin.getTile(world);
+        if(this.origin.isRemoved()) {
+            this.unFormMultiBlock();
+            return this;
+        }
+        if(this.origin.isUnloaded()) {
+            return null;
+        }
+        return tank;
     }
 
     public void checkAndFormMultiBlock() {

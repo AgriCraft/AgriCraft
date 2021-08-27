@@ -162,7 +162,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
                     }
                     return result;
                 } else {
-                    return ActionResultType.PASS;
+                    return ActionResultType.CONSUME;
                 }
             }).orElse(ActionResultType.PASS);
         }

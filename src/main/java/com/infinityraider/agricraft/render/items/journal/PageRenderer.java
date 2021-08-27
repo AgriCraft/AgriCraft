@@ -130,7 +130,7 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
     }
 
     static {
-        ROTATION_180 = Vector3f.ZP.rotationDegrees(180);
+        ROTATION_180 = Vector3f.XP.rotationDegrees(180);
         // Projection
         PROJECTION = new Matrix4f(new float[]{
                 1, 0, 0, 0,
