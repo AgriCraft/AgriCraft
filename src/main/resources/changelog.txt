@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.6
+
+
 3.0.5
  - ADDED: Support for Jade
  - ADDED: Json support for fertilizers (thanks Ketheroth)
