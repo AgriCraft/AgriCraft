@@ -14,6 +14,7 @@ Changelog
  - FIXED: Dynamic texture tooltips not being localized (InfinityLib fix)
  - FIXED: Crash related to partially unloading irrigation tanks spanning multiple chunks
  - FIXED: Identical genome seeds sometimes not stacking
+ - FIXED: Stat min and max config values being ignored
 
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API

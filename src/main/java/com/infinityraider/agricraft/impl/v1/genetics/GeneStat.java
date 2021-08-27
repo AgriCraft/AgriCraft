@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
@@ -27,19 +28,22 @@ import java.util.function.IntBinaryOperator;
 
 public class GeneStat implements IAgriGene<Integer> {
     private final IAgriStat stat;
-    private final Allele defaultAllele;
-    private final Set<IAllele<Integer>> alleles;
+    private final Map<Integer, Allele> alleleMap;
+    private final Set<IAllele<Integer>> allelesSet; // Need a separate set due to generics issues
     private final Vector3f colorDominant;
     private final Vector3f colorRecessive;
 
     public GeneStat(IAgriStat stat) {
         this.stat = stat;
-        this.defaultAllele = new Allele(this, this.getStat().getMin());
-        ImmutableSet.Builder<IAllele<Integer>> builder = ImmutableSet.builder();
+        ImmutableMap.Builder<Integer, Allele> mapBuilder = ImmutableMap.builder();
+        ImmutableSet.Builder<IAllele<Integer>> setBuilder = ImmutableSet.builder();
         for(int i = this.getStat().getMin(); i <= this.getStat().getMax(); i++) {
-            builder.add(i == this.getStat().getMin() ? this.defaultAllele : new Allele(this, i));
+            Allele allele = new Allele(this, i);
+            mapBuilder.put(i, allele);
+            setBuilder.add(allele);
         }
-        this.alleles = builder.build();
+        this.alleleMap = mapBuilder.build();
+        this.allelesSet = setBuilder.build();
         this.colorDominant = stat.getColor();
         this.colorRecessive = getRecessiveVector(stat.getColor());
     }
@@ -57,7 +61,7 @@ public class GeneStat implements IAgriGene<Integer> {
     }
 
     public Allele defaultAllele() {
-        return this.defaultAllele;
+        return this.alleleMap.get(this.getMin());
     }
 
     @Nonnull
@@ -70,9 +74,7 @@ public class GeneStat implements IAgriGene<Integer> {
     @Override
     public Allele getAllele(Integer value) {
         final int val = Math.max(this.getMin(), Math.min(this.getMax(), value));
-        return (Allele) this.allAlleles().stream()
-                .filter(allel -> allel.trait() == val)
-                .findFirst().orElse(this.defaultAllele());
+        return this.alleleMap.get(val);
     }
 
     @Nonnull
@@ -84,7 +86,7 @@ public class GeneStat implements IAgriGene<Integer> {
     @Nonnull
     @Override
     public Set<IAllele<Integer>> allAlleles() {
-        return this.alleles;
+        return this.allelesSet;
     }
 
     @Nonnull
