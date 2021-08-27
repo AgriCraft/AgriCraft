@@ -15,6 +15,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -49,15 +50,15 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     @Override
     public boolean writeToNBT(@Nonnull CompoundNBT tag) {
         ListNBT list = new ListNBT();
-        int index = 0;
-        for(IAgriGenePair<?> pair : this.geneMap.values()) {
-            CompoundNBT geneTag = new CompoundNBT();
-            geneTag.putString(AgriNBT.GENE, pair.getGene().getId());
-            geneTag.put(AgriNBT.DOMINANT, pair.getDominant().writeToNBT());
-            geneTag.put(AgriNBT.RECESSIVE, pair.getRecessive().writeToNBT());
-            list.addNBTByIndex(index, geneTag);
-            index++;
-        }
+        this.geneMap.values().stream()
+                .sorted(Comparator.comparing(a -> a.getGene().getId()))
+                .forEach(pair -> {
+                    CompoundNBT geneTag = new CompoundNBT();
+                    geneTag.putString(AgriNBT.GENE, pair.getGene().getId());
+                    geneTag.put(AgriNBT.DOMINANT, pair.getDominant().writeToNBT());
+                    geneTag.put(AgriNBT.RECESSIVE, pair.getRecessive().writeToNBT());
+                    list.add(geneTag);
+                });
         tag.put(AgriNBT.GENOME, list);
         return true;
     }
