@@ -117,6 +117,7 @@ public interface IAgriGrowable {
          */
         @Nonnull
         @Override
+        @OnlyIn(Dist.CLIENT)
         default IAgriGrowableGuiRenderer.WithSeed getGuiRenderer() {
             return IAgriGrowableGuiRenderer.WithSeed.DEFAULT;
         }
