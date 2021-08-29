@@ -1,6 +1,7 @@
 Changelog
 ---------
 3.0.6
+ - ADDED: API for magnifying glass inspection
  - FIXED: Weird ingredient rendering crash with seed models with CTM metadata when CTM is present
 
 3.0.5
