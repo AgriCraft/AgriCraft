@@ -90,15 +90,12 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
 
         @Nullable
         @Override
-        public IBakedModel getOverrideModel(@Nonnull IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity livingEntity) {
+        public IBakedModel getOverrideModel(@Nonnull IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
             if(stack.getItem() instanceof ItemDynamicAgriSeed) {
-                return this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel());
+                IBakedModel seedModel =  this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel());
+                return seedModel.getOverrides().getOverrideModel(seedModel, stack, world, entity);
             }
             return this.getModelManager().getMissingModel();
-        }
-
-        public TextureAtlasSprite getMissingSprite() {
-            return IRenderUtilities.super.getMissingSprite();
         }
     }
 
