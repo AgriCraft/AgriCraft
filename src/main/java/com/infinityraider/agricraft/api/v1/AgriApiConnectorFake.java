@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
@@ -215,6 +216,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Override
     public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 }

@@ -1,5 +1,9 @@
 Changelog
 ---------
+3.0.6
+ - ADDED: API for magnifying glass inspection
+ - FIXED: Weird ingredient rendering crash with seed models with CTM metadata when CTM is present
+
 3.0.5
  - ADDED: Support for Jade
  - ADDED: Json support for fertilizers (thanks Ketheroth)
@@ -14,6 +18,7 @@ Changelog
  - FIXED: Dynamic texture tooltips not being localized (InfinityLib fix)
  - FIXED: Crash related to partially unloading irrigation tanks spanning multiple chunks
  - FIXED: Identical genome seeds sometimes not stacking
+ - FIXED: Stat min and max config values being ignored
 
 3.0.4
  - CHANGE: Modified the internal json plant render system to be easier to extend through the API

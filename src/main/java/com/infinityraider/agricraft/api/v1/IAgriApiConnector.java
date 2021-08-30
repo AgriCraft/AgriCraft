@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
@@ -124,4 +125,7 @@ public interface IAgriApiConnector {
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback);
 
     boolean isObservingWithMagnifyingGlass(PlayerEntity player);
+
+    @OnlyIn(Dist.CLIENT)
+    void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector);
 }

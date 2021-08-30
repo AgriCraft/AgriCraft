@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
@@ -502,6 +503,20 @@ public final class AgriApi {
      */
     public static boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
         return AgriApi.CONNECTOR.isObservingWithMagnifyingGlass(player);
+    }
+
+    /**
+     * Registers a magnifying glass inspector
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param inspector the inspector
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector) {
+        AgriApi.CONNECTOR.registerMagnifyingGlassInspector(inspector);
     }
 
     /**

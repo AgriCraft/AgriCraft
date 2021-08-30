@@ -1,15 +1,10 @@
 package com.infinityraider.agricraft.handler;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
+import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.MessageMagnifyingGlassObserving;
-import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
-import com.infinityraider.agricraft.util.AnimatedScrollPosition;
-import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -37,7 +32,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Set;
 
 @OnlyIn(Dist.CLIENT)
 public class MagnifyingGlassViewHandler {
@@ -48,45 +43,49 @@ public class MagnifyingGlassViewHandler {
     }
 
     private static final int ANIMATION_DURATION = 20;
-    private static final int SCROLL_DURATION = 10;
 
     private static final double DX = 0.475;
     private static final double DY = -0.3125;
     private static final double DZ = 0.45;
 
     private static final double GENOME_OFFSET = 0.10;
-    private static final float GENOME_SCALE = 0.075F;
-    private static final double TEXT_OFFSET = -0.025;
-    private static final float TEXT_SCALE = 0.75F;
-    private static final Quaternion TEXT_FLIPPER = Vector3f.ZP.rotationDegrees(180);
 
     private static final float ANGLE = 45.0F;
     private static final Quaternion ROTATION_LEFT;
     private static final Quaternion ROTATION_RIGHT;
 
+    private final Set<IMagnifyingGlassInspector> inspectors;
+    private IMagnifyingGlassInspector inspector;
+    private BlockPos lastPos;
     private boolean active = false;
     private Hand hand = null;
     private int animationCounter = 0;
     private int animationCounterPrev = 0;
 
-    private final AnimatedScrollPosition scrollPosition;
-    private BlockPos lastPos;
-    private List<IAgriGenePair<?>> genomeCache;
-
     private MagnifyingGlassViewHandler() {
-        this.scrollPosition = new AnimatedScrollPosition(() -> SCROLL_DURATION, () -> this.genomeCache == null ? 0 : this.genomeCache.size());
+        this.inspectors = Sets.newIdentityHashSet();
+    }
+
+    public void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector) {
+        this.inspectors.add(inspector);
+    }
+
+    protected void endInspection() {
+        if(this.inspector != null) {
+            this.inspector.onInspectionEnd(AgriCraft.instance.getClientWorld(), this.lastPos, AgriCraft.instance.getClientPlayer());
+        }
+        this.inspector = null;
+        this.lastPos = null;
     }
 
     public void toggle(Hand hand) {
         if(this.isHandActive(hand)) {
             this.active = false;
-            this.lastPos = null;
-            this.genomeCache = null;
+            this.endInspection();
         } else {
             this.hand = hand;
             this.active = true;
         }
-        this.scrollPosition.reset();
         MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), this.isActive());
     }
 
@@ -121,14 +120,6 @@ public class MagnifyingGlassViewHandler {
         return MathHelper.lerp(partialTick, this.animationCounterPrev, this.animationCounter)/ANIMATION_DURATION;
     }
 
-    public int getScrollIndex() {
-        return this.scrollPosition.getIndex();
-    }
-
-    public float getScrollProgress(float partialTick) {
-        return this.scrollPosition.getProgress(partialTick);
-    }
-
     protected void manipulateMatrixStackLeft(MatrixStack stack, float partialTick) {
         if(this.isAnimationComplete(partialTick)) {
             stack.translate(DX, DY, DZ);
@@ -151,69 +142,27 @@ public class MagnifyingGlassViewHandler {
         }
     }
 
-    protected void updateGeneCache() {
+    protected void checkInspectedPosition() {
         RayTraceResult target = Minecraft.getInstance().objectMouseOver;
         if(target instanceof BlockRayTraceResult) {
             BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
             if(!blockTarget.getPos().equals(this.lastPos)) {
+                this.endInspection();
                 World world = AgriCraft.instance.getClientWorld();
-                this.scrollPosition.reset();
-                this.lastPos = blockTarget.getPos();
-                this.genomeCache = AgriApi.getCrop(world, lastPos)
-                        .map(crop -> crop.getGenome().map(IAgriGenome::getGeneList).orElse(ImmutableList.of()))
-                        .orElse(ImmutableList.of());
+                BlockPos pos = blockTarget.getPos();
+                PlayerEntity player = AgriCraft.instance.getClientPlayer();
+                this.inspectors.stream()
+                        .filter(inspector -> inspector.canInspect(world, pos, player))
+                        .findAny()
+                        .ifPresent(inspector -> {
+                            this.lastPos = blockTarget.getPos();
+                            this.inspector = inspector;
+                            this.inspector.onInspectionStart(world, pos, player);
+                        });
             }
         } else {
-            this.lastPos = null;
-            this.genomeCache = ImmutableList.of();
-            this.scrollPosition.reset();
+            this.endInspection();
         }
-    }
-
-    protected void renderDoubleHelix(List<IAgriGenePair<?>> genome, MatrixStack transforms, float partialTicks) {
-        // Push matrix for helix render
-        transforms.push();
-
-        // helix dimensions
-        float h = Constants.HALF;
-        float r = h / 10;
-
-        // Scale down
-        transforms.scale(GENOME_SCALE, GENOME_SCALE, GENOME_SCALE);
-
-        // Make sure the helix is centered
-        transforms.translate(0, -h/2, 0);
-
-        // Render helix
-        AgriGenomeRenderer.getInstance().renderDoubleHelix(
-                genome, transforms, this.getScrollIndex(), this.getScrollProgress(partialTicks), r, h, 1.0F, false);
-
-        // Pop matrix after helix render
-        transforms.pop();
-    }
-
-    protected void renderTextOverlay(List<IAgriGenePair<?>> genome, MatrixStack transforms) {
-        // Push matrix for overlay render
-        transforms.push();
-
-        // Translate down
-        transforms.translate(0, TEXT_OFFSET, 0);
-
-        // Flip text
-        transforms.rotate(TEXT_FLIPPER);
-
-        // Scale down
-        float width = AgriGenomeRenderer.getInstance().getScaledWindowWidth();
-        float height = AgriGenomeRenderer.getInstance().getScaledWindowHeight();
-        float scale = TEXT_SCALE/Math.max(width, height);
-        transforms.scale(scale, scale, scale);
-
-        // Render overlay
-        int index = Math.max(0, Math.min(genome.size() - 1, this.getScrollIndex()));
-        AgriGenomeRenderer.getInstance().renderTextOverlay(transforms, genome.get(index));
-
-        // Pop matrix for overlay render
-        transforms.pop();
     }
 
     @SubscribeEvent
@@ -244,9 +193,8 @@ public class MagnifyingGlassViewHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void renderGenome(RenderWorldLastEvent event) {
-        // Check if the genome can be rendered
-        List<IAgriGenePair<?>> genome = this.genomeCache;
-        if(genome == null || genome.size() <= 0) {
+        // Check if an inspection renderer is present
+        if(this.inspector == null) {
             return;
         }
 
@@ -286,11 +234,10 @@ public class MagnifyingGlassViewHandler {
         // Rotate for yaw
         transforms.rotate(Vector3f.YP.rotation(-yaw));
 
-        // Render helix
-        this.renderDoubleHelix(genome, transforms, event.getPartialTicks());
-
-        // Render text overlay
-        this.renderTextOverlay(genome, transforms);
+        // Render
+        transforms.push();
+        this.inspector.doInspectionRender(transforms, event.getPartialTicks());
+        transforms.pop();
 
         // Pop last transformation matrix from the stack
         transforms.pop();
@@ -322,9 +269,7 @@ public class MagnifyingGlassViewHandler {
             // Check if the player is still holding the item and if not, deactivate
             if(this.getActiveHand() == null || !(this.getPlayer().getHeldItem(this.getActiveHand()).getItem() instanceof ItemMagnifyingGlass)) {
                 this.active = false;
-                this.lastPos = null;
-                this.genomeCache = null;
-                this.scrollPosition.reset();
+                this.endInspection();
                 MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), this.isActive());
                 return;
             }
@@ -335,10 +280,16 @@ public class MagnifyingGlassViewHandler {
                 this.animationCounter = ANIMATION_DURATION;
             }
             if(this.isAnimationComplete()) {
-                // Tick scroll animator
-                this.scrollPosition.tick();
-                // Update the gene cache
-                this.updateGeneCache();
+                // Update inspected position
+                this.checkInspectedPosition();
+                // Tick inspector
+                if(this.inspector != null) {
+                    World world = AgriCraft.instance.getClientWorld();
+                    PlayerEntity player = AgriCraft.instance.getClientPlayer();
+                    if(!this.inspector.onInspectionTick(world, this.lastPos, player)) {
+                        this.endInspection();
+                    }
+                }
             }
         } else {
             // Decrement animation counter
@@ -356,8 +307,10 @@ public class MagnifyingGlassViewHandler {
     public void onMouseScroll(InputEvent.MouseScrollEvent event) {
         // Check if the handler is active
         if(this.isActive() && this.isAnimationComplete()) {
-            // Tell the scroll animation object that the player has scrolled
-            this.scrollPosition.scroll((int) event.getScrollDelta());
+            // Notify the inspector of the scrolling
+            if(this.inspector != null) {
+                this.inspector.onMouseScroll((int) event.getScrollDelta());
+            }
             // If this is active, we do not want any other scroll behaviour
             event.setResult(Event.Result.DENY);
             event.setCanceled(true);

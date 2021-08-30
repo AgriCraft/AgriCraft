@@ -11,10 +11,10 @@ import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.Direction;
@@ -32,6 +32,7 @@ import java.util.function.Function;
 @OnlyIn(Dist.CLIENT)
 public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.Geometry> {
     private static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "seed_model_loader");
+    private static final ModelOverride MODEL_OVERRIDE = new ModelOverride();
 
     private static final AgriSeedModelLoader INSTANCE = new AgriSeedModelLoader();
 
@@ -69,7 +70,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         @Override
         public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
                                 IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            return new BakedModel(owner, overrides);
+            return new BakedModel(owner);
         }
 
         @Override
@@ -82,13 +83,27 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         }
     }
 
-    public static class BakedModel implements IBakedModel, IRenderUtilities {
-        private final IModelConfiguration owner;
-        private final ItemOverrideList overrides;
+    public static class ModelOverride extends ItemOverrideList implements IRenderUtilities{
+        protected ModelOverride() {
+            super();
+        }
 
-        private BakedModel(IModelConfiguration owner, ItemOverrideList overrides) {
+        @Nullable
+        @Override
+        public IBakedModel getOverrideModel(@Nonnull IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+            if(stack.getItem() instanceof ItemDynamicAgriSeed) {
+                IBakedModel seedModel =  this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel());
+                return seedModel.getOverrides().getOverrideModel(seedModel, stack, world, entity);
+            }
+            return this.getModelManager().getMissingModel();
+        }
+    }
+
+    public static class BakedModel implements IBakedModel {
+        private final IModelConfiguration owner;
+
+        private BakedModel(IModelConfiguration owner) {
             this.owner = owner;
-            this.overrides = overrides;
         }
 
         @Nonnull
@@ -120,7 +135,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         @Nonnull
         @Override
         public TextureAtlasSprite getParticleTexture() {
-            return this.getMissingSprite();
+            return this.getOverrides().getMissingSprite();
         }
 
         @Nonnull
@@ -133,20 +148,8 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
 
         @Nonnull
         @Override
-        public ItemOverrideList getOverrides() {
-            return this.overrides;
-        }
-
-        @Override
-        public boolean isLayered() {
-            return true;
-        }
-
-        @Override
-        public List<Pair<IBakedModel, RenderType>> getLayerModels(ItemStack stack, boolean fabulous) {
-            return Collections.singletonList(Pair.of(
-                    this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel()),
-                    RenderTypeLookup.func_239219_a_(stack, fabulous)));
+        public ModelOverride getOverrides() {
+            return MODEL_OVERRIDE;
         }
     }
 }

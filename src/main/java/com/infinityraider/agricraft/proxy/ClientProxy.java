@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.render.blocks.BlockGreenHouseAirRenderer;
+import com.infinityraider.agricraft.render.items.magnfiyingglass.MagnifyingGlassGenomeInspector;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
@@ -30,6 +31,7 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     @Override
     public void onClientSetupEvent(FMLClientSetupEvent event) {
         PluginHandler.onClientSetup(event);
+        MagnifyingGlassGenomeInspector.init();
     }
 
     @Override

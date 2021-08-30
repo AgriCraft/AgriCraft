@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApiState;
 import com.infinityraider.agricraft.api.v1.IAgriApiConnector;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
@@ -21,6 +22,7 @@ import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.handler.MagnifyingGlassViewHandler;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
@@ -268,5 +270,11 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
         return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector) {
+        MagnifyingGlassViewHandler.getInstance().registerMagnifyingGlassInspector(inspector);
     }
 }
