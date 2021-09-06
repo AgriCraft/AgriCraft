@@ -398,7 +398,7 @@ public class MagnifyingGlassViewHandler {
 
             @Override
             public boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
-                return inspector.canInspect(world, this.target, player);
+                return this.target != null && inspector.canInspect(world, this.target, player);
             }
 
             @Override
@@ -408,7 +408,7 @@ public class MagnifyingGlassViewHandler {
 
             @Override
             public boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
-                return inspector.onInspectionTick(world, this.target, player);
+                return this.target != null && inspector.onInspectionTick(world, this.target, player);
             }
 
             @Override
