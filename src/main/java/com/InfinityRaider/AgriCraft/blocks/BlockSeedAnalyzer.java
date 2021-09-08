@@ -29,11 +29,21 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
-    public BlockSeedAnalyzer() {
-        super(Material.ground);
-        this.setCreativeTab(AgriCraftTab.agriCraftTab);
+	public BlockSeedAnalyzer(Material material) {
+		super(material);
+		
+		this.setCreativeTab(AgriCraftTab.agriCraftTab);
         this.isBlockContainer = true;
         this.setTickRandomly(false);
+
+        this.setBlockProps();
+	}
+	
+    public BlockSeedAnalyzer() {
+    	this(Material.ground);
+    }
+
+    protected void setBlockProps() {
         //set mining statistics
         this.setHardness(1);
         this.setResistance(1);
@@ -45,7 +55,11 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
         this.maxY = Constants.UNIT * Constants.QUARTER;
         this.minY = 0;
     }
-
+    
+    protected int getGuiID() {
+    	return GuiHandler.seedAnalyzerID;
+    }
+    
     //creates a new tile entity every time a block of this type is placed
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
@@ -107,7 +121,7 @@ public class BlockSeedAnalyzer extends BlockContainerAgriCraft {
             return false;
         }
         if(!world.isRemote) {
-            player.openGui(AgriCraft.instance, GuiHandler.seedAnalyzerID, world, x, y, z);
+            player.openGui(AgriCraft.instance, getGuiID(), world, x, y, z);
         }
         return true;
     }
