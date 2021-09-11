@@ -75,7 +75,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     public boolean isMultiBlockOrigin() {
         BlockPos origin = this.getMultiBlockMin();
-        return (this.origin != null && this.origin.getTile(world) == this) || DEFAULT.equals(origin) || this.getPos().equals(origin);
+        return DEFAULT.equals(origin) || this.getPos().equals(origin) || (this.origin != null && this.origin.getTile(world) == this);
     }
 
     @Override
