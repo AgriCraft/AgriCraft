@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
-import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
@@ -106,9 +105,6 @@ public class MysticalAgricultureCompatClient {
             if (stack.getItem() instanceof IAgriSeedItem) {
                 IAgriSeedItem seedItem = (IAgriSeedItem) stack.getItem();
                 String id = seedItem.getPlant(stack).getId();
-                if (!id.startsWith(Names.Mods.MYSTICAL_AGRICULTURE)) {
-                    return -1;
-                }
                 int color = colorForFlower(id);
                 return color == -1 ? -1 : (0xFF << 24) + color;
             }
@@ -144,7 +140,7 @@ public class MysticalAgricultureCompatClient {
     public static ICrop getCropFromPlantId(String plantId) {
         String path = plantId.split(":")[1];
         // We assume the plant id is "<modid>:<resource>_plant"
-        ResourceLocation location = new ResourceLocation(Names.Mods.MYSTICAL_AGRICULTURE, path.substring(0, path.length() - "_plant".length()));
+        ResourceLocation location = new ResourceLocation(path.substring(0, path.length() - 6)); // remove the "_plant" suffix
         return MysticalAgricultureAPI.getCropRegistry().getCropById(location);
     }
 }

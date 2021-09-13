@@ -11,13 +11,11 @@ import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
@@ -56,7 +54,8 @@ public class MagnifyingGlassViewHandler {
 
     private final Set<IMagnifyingGlassInspector> inspectors;
     private IMagnifyingGlassInspector inspector;
-    private BlockPos lastPos;
+    //private BlockPos lastPos;
+    private Target lastTarget;
     private boolean active = false;
     private Hand hand = null;
     private int animationCounter = 0;
@@ -71,11 +70,12 @@ public class MagnifyingGlassViewHandler {
     }
 
     protected void endInspection() {
-        if(this.inspector != null) {
-            this.inspector.onInspectionEnd(AgriCraft.instance.getClientWorld(), this.lastPos, AgriCraft.instance.getClientPlayer());
+        if(this.inspector != null && this.lastTarget != null) {
+            this.lastTarget.onInspectionEnd(AgriCraft.instance.getClientWorld(), this.inspector, AgriCraft.instance.getClientPlayer());
         }
         this.inspector = null;
-        this.lastPos = null;
+        this.lastTarget = null;
+        MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), false);
     }
 
     public void toggle(Hand hand) {
@@ -86,7 +86,6 @@ public class MagnifyingGlassViewHandler {
             this.hand = hand;
             this.active = true;
         }
-        MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), this.isActive());
     }
 
     @Nullable
@@ -143,25 +142,25 @@ public class MagnifyingGlassViewHandler {
     }
 
     protected void checkInspectedPosition() {
-        RayTraceResult target = Minecraft.getInstance().objectMouseOver;
-        if(target instanceof BlockRayTraceResult) {
-            BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
-            if(!blockTarget.getPos().equals(this.lastPos)) {
+        RayTraceResult hit = Minecraft.getInstance().objectMouseOver;
+        Target target = Target.getTarget(hit);
+        if(target == null) {
+            this.endInspection();
+            return;
+        }
+        if(target.isNewTarget(this.lastTarget)) {
                 this.endInspection();
+                MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), true);
                 World world = AgriCraft.instance.getClientWorld();
-                BlockPos pos = blockTarget.getPos();
                 PlayerEntity player = AgriCraft.instance.getClientPlayer();
                 this.inspectors.stream()
-                        .filter(inspector -> inspector.canInspect(world, pos, player))
+                        .filter(inspector -> target.canInspect(world, inspector, player))
                         .findAny()
                         .ifPresent(inspector -> {
-                            this.lastPos = blockTarget.getPos();
+                            this.lastTarget = target;
                             this.inspector = inspector;
-                            this.inspector.onInspectionStart(world, pos, player);
+                            this.lastTarget.onInspectionStart(world, inspector, player);
                         });
-            }
-        } else {
-            this.endInspection();
         }
     }
 
@@ -192,19 +191,21 @@ public class MagnifyingGlassViewHandler {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void renderGenome(RenderWorldLastEvent event) {
-        // Check if an inspection renderer is present
-        if(this.inspector == null) {
-            return;
-        }
-
+    public void inspectionRender(RenderWorldLastEvent event) {
         // Check if the player is in first person
         if(!Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
             return;
         }
 
-        // Check if the player is targeting something
-        if(this.lastPos == null) {
+        // Check if an inspection renderer is present and cache it (another thread might set it to null)
+        IMagnifyingGlassInspector inspector = this.inspector;
+        if(inspector == null) {
+            return;
+        }
+
+        // Check if the inspector has a target and cache (another thread might set it to null)
+        Target target = this.lastTarget;
+        if(target == null) {
             return;
         }
 
@@ -221,7 +222,7 @@ public class MagnifyingGlassViewHandler {
         transforms.translate(eyes.getX(), eyes.getY(), eyes.getZ());
 
         // Fetch the player's target
-        Vector3d hit = new Vector3d(this.lastPos.getX() + 0.5D, this.lastPos.getY() + 0.5D, this.lastPos.getZ() + 0.5D);
+        Vector3d hit = target.getTargetVector(event.getPartialTicks());
         Vector3d view = hit.subtract(eyes).normalize();
 
         // Translate offset
@@ -236,7 +237,7 @@ public class MagnifyingGlassViewHandler {
 
         // Render
         transforms.push();
-        this.inspector.doInspectionRender(transforms, event.getPartialTicks());
+        inspector.doInspectionRender(transforms, event.getPartialTicks(), target.getTargetEntity());
         transforms.pop();
 
         // Pop last transformation matrix from the stack
@@ -270,7 +271,6 @@ public class MagnifyingGlassViewHandler {
             if(this.getActiveHand() == null || !(this.getPlayer().getHeldItem(this.getActiveHand()).getItem() instanceof ItemMagnifyingGlass)) {
                 this.active = false;
                 this.endInspection();
-                MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), this.isActive());
                 return;
             }
             // Increment animation counter
@@ -283,10 +283,10 @@ public class MagnifyingGlassViewHandler {
                 // Update inspected position
                 this.checkInspectedPosition();
                 // Tick inspector
-                if(this.inspector != null) {
+                if(this.inspector != null && this.lastTarget != null) {
                     World world = AgriCraft.instance.getClientWorld();
                     PlayerEntity player = AgriCraft.instance.getClientPlayer();
-                    if(!this.inspector.onInspectionTick(world, this.lastPos, player)) {
+                    if(!this.lastTarget.onInspectionTick(world, this.inspector, player)) {
                         this.endInspection();
                     }
                 }
@@ -342,6 +342,150 @@ public class MagnifyingGlassViewHandler {
             event.getMovementInput().rightKeyDown = false;
             event.getMovementInput().jump = false;
             event.getMovementInput().sneaking = true;
+        }
+    }
+
+    private static abstract class Target {
+        @Nullable
+        public static Target getTarget(RayTraceResult hit) {
+            if(hit == null) {
+                return null;
+            }
+            if(hit.getType() == RayTraceResult.Type.MISS) {
+                return null;
+            }
+            if (hit instanceof EntityRayTraceResult) {
+                return new EntityTarget(((EntityRayTraceResult) hit).getEntity());
+            }
+            if (hit instanceof BlockRayTraceResult) {
+                return new BlockTarget(((BlockRayTraceResult) hit).getPos());
+            }
+            return null;
+        }
+
+        public abstract boolean isNewTarget(@Nullable Target other);
+
+        public abstract boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+
+        public abstract void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+
+        public abstract boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+
+        public abstract void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+
+        public abstract Vector3d getTargetVector(float partialTicks);
+
+        @Nullable
+        public abstract Entity getTargetEntity();
+
+        private static class EntityTarget extends Target {
+            private final Entity target;
+
+            private EntityTarget(Entity entity) {
+                this.target = entity;
+            }
+
+            @Override
+            public boolean isNewTarget(@Nullable Target other) {
+                if(other == this) {
+                    return false;
+                }
+                if(other instanceof EntityTarget) {
+                    return this.target != ((EntityTarget) other).target;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                return this.target != null && inspector.canInspect(world, this.target, player);
+            }
+
+            @Override
+            public void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                inspector.onInspectionStart(world, this.target, player);
+            }
+
+            @Override
+            public boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                return this.target != null && inspector.onInspectionTick(world, this.target, player);
+            }
+
+            @Override
+            public void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                inspector.onInspectionEnd(world, this.target, player);
+            }
+
+            @Override
+            public Vector3d getTargetVector(float partialTicks) {
+                double dw = this.target.getWidth() / 2;
+                double dh = this.target.getHeight() / 2;
+                return new Vector3d(
+                        MathHelper.lerp(partialTicks, this.target.prevPosX, this.target.getPosX()) + dw,
+                        MathHelper.lerp(partialTicks, this.target.prevPosY, this.target.getPosY()) + dh,
+                        MathHelper.lerp(partialTicks, this.target.prevPosZ, this.target.getPosZ()) + dw
+                );
+            }
+
+            @Nullable
+            @Override
+            public Entity getTargetEntity() {
+                return this.target;
+            }
+        }
+
+        private static class BlockTarget extends Target {
+            private final BlockPos target;
+
+            private BlockTarget(BlockPos pos) {
+                this.target = pos;
+            }
+
+            @Override
+            public boolean isNewTarget(@Nullable Target other) {
+                if(other == this) {
+                    return false;
+                }
+                if(other instanceof BlockTarget) {
+                    return !this.target.equals(((BlockTarget) other).target);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                return inspector.canInspect(world, this.target, player);
+            }
+
+            @Override
+            public void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                inspector.onInspectionStart(world, this.target, player);
+            }
+
+            @Override
+            public boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                return inspector.onInspectionTick(world, this.target, player);
+            }
+
+            @Override
+            public void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+                inspector.onInspectionEnd(world, this.target, player);
+            }
+
+            @Override
+            public Vector3d getTargetVector(float partialTicks) {
+                return new Vector3d(
+                        this.target.getX() + 0.5D,
+                        this.target.getY() + 0.5D,
+                        this.target.getZ() + 0.5D
+                );
+            }
+
+            @Nullable
+            @Override
+            public Entity getTargetEntity() {
+                return null;
+            }
         }
     }
 

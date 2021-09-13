@@ -3,12 +3,15 @@ package com.infinityraider.agricraft.render.items.magnfiyingglass;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
 import com.infinityraider.agricraft.util.AnimatedScrollPosition;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
@@ -17,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -52,6 +56,15 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
+    public boolean canInspect(World world, Entity entity, PlayerEntity player) {
+        if(entity.isAlive() && entity instanceof ItemEntity) {
+            ItemEntity item = (ItemEntity) entity;
+            return item.getItem().getItem() instanceof IAgriGeneCarrierItem;
+        }
+        return false;
+    }
+
+    @Override
     public void onInspectionStart(World world, BlockPos pos, PlayerEntity player) {
         this.genomeCache = AgriApi.getCrop(world, pos)
                 .map(crop -> crop.getGenome().map(IAgriGenome::getGeneList).orElse(ImmutableList.of()))
@@ -59,13 +72,32 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
+    public void onInspectionStart(World world, Entity entity, PlayerEntity player) {
+        ItemEntity item = (ItemEntity) entity;
+        IAgriGeneCarrierItem seed = (IAgriGeneCarrierItem) item.getItem().getItem();
+        this.genomeCache = seed.getGenome(item.getItem()).map(IAgriGenome::getGeneList).orElse(ImmutableList.of());
+    }
+
+    @Override
     public boolean onInspectionTick(World world, BlockPos pos, PlayerEntity player) {
         this.scrollPosition.tick();
-        return this.canInspect(world, pos, player);
+        return this.genomeCache != null && (!this.genomeCache.isEmpty()) && this.canInspect(world, pos, player);
+    }
+
+    @Override
+    public boolean onInspectionTick(World world, Entity entity, PlayerEntity player) {
+        this.scrollPosition.tick();
+        return this.genomeCache != null && (!this.genomeCache.isEmpty()) && this.canInspect(world, entity, player);
     }
 
     @Override
     public void onInspectionEnd(World world, BlockPos pos, PlayerEntity player) {
+        this.scrollPosition.reset();
+        this.genomeCache = null;
+    }
+
+    @Override
+    public void onInspectionEnd(World world, @Nullable Entity entity, PlayerEntity player) {
         this.scrollPosition.reset();
         this.genomeCache = null;
     }
@@ -76,7 +108,7 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
-    public void doInspectionRender(MatrixStack transforms, float partialTick) {
+    public void doInspectionRender(MatrixStack transforms, float partialTick, @Nullable Entity entity) {
         // Check if the genome can be rendered
         List<IAgriGenePair<?>> genome = this.genomeCache;
         if(genome == null || genome.size() <= 0) {
