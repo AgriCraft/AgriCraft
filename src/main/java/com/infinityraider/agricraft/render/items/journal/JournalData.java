@@ -91,6 +91,8 @@ public class JournalData {
         ImmutableList.Builder<Page> builder = new ImmutableList.Builder<>();
         builder.add(FrontPage.INSTANCE);
         builder.add(IntroductionPage.INSTANCE);
+        builder.add(DocPage.BREEDING_AND_STATS);
+        builder.add(DocPage.GROWTH_REQS);
         if (journal.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
             builder.addAll(getPlantPages(

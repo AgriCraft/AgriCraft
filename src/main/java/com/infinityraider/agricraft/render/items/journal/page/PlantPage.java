@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.render.items.journal.page;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -123,7 +124,7 @@ public final class PlantPage extends BasePage implements IRenderUtilities {
     }
 
     @Override
-    public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms) {
+    public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         // Title
         renderer.drawTexture(transforms, Textures.TITLE, 0, 2, 128, 20);
         renderer.drawText(transforms, this.plant.getSeedName(), 30, 10);
@@ -138,7 +139,7 @@ public final class PlantPage extends BasePage implements IRenderUtilities {
     }
 
     @Override
-    public void drawRightSheet(PageRenderer renderer, MatrixStack transforms) {
+    public void drawRightSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         // Products
         this.drawProducts(renderer, transforms);
         // Mutations

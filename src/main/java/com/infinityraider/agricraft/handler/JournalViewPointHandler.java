@@ -169,27 +169,27 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
-    public void renderViewedPageLeft(PageRenderer renderer, MatrixStack transforms) {
+    public void renderViewedPageLeft(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawLeftSheet(renderer, transforms);
+            this.getJournalData().getCurrentPage().drawLeftSheet(renderer, transforms, stack, journal);
         }
     }
 
-    public void renderViewedPageRight(PageRenderer renderer, MatrixStack transforms) {
+    public void renderViewedPageRight(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawRightSheet(renderer, transforms);
+            this.getJournalData().getCurrentPage().drawRightSheet(renderer, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageLeft(PageRenderer renderer, MatrixStack transforms) {
+    public void renderFlippedPageLeft(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawLeftSheet(renderer, transforms);
+            this.getJournalData().getFlippedPage().drawLeftSheet(renderer, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageRight(PageRenderer renderer, MatrixStack transforms) {
+    public void renderFlippedPageRight(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawRightSheet(renderer, transforms);
+            this.getJournalData().getFlippedPage().drawRightSheet(renderer, transforms, stack, journal);
         }
     }
 
