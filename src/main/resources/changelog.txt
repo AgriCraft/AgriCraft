@@ -6,6 +6,10 @@ Changelog
  - FIXED: Weird ingredient rendering crash with seed models with CTM metadata when CTM is present
  - FIXED: Chunk loading crash with multi-block tanks spanning multiple chunks
  - FIXED: Fertilizer json sync messages not being registered and causing issues
+ - FIXED: Create Compat (thanks Ketheroth)
+ - FIXED: Cyclic Compat (thanks Ketheroth)
+ - FIXED: Immersive Engineering Compat
+ - FIXED: Industrial Foregoing Compat (thanks Ketheroth)
 
 3.0.5
  - ADDED: Support for Jade
