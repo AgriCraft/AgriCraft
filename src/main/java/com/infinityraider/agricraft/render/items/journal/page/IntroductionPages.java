@@ -1,25 +1,74 @@
 package com.infinityraider.agricraft.render.items.journal.page;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.render.items.journal.PageRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public abstract class DocPage extends Page {
-    public static final Page BREEDING_AND_STATS = new BreedingAndStats();
+public abstract class IntroductionPages extends BasePage {
+    public static final Page INTRODUCTION = new Introduction();
+    public static final Page GENETICS = new Genetics();
     public static final Page GROWTH_REQS = new GrowthReqs();
 
-    private static class BreedingAndStats extends DocPage {
+    public static final Page[] PAGES = {INTRODUCTION, GENETICS, GROWTH_REQS};
 
+    private static final class Introduction extends IntroductionPages {
+        private final ITextComponent INTRODUCTION = new TranslationTextComponent("agricraft.journal.introduction");
+        private final ITextComponent PARAGRAPH_1 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_1");
+        private final ITextComponent PARAGRAPH_2 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_2");
+        private final ITextComponent PARAGRAPH_3 = new TranslationTextComponent("agricraft.journal.introduction.paragraph_3");
+        private final ITextComponent DISCOVERED = new TranslationTextComponent("agricraft.journal.introduction.discovered");
+
+        private Introduction() {
+        }
+
+        @Override
+        public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+            // Draw Nothing
+        }
+
+        @Override
+        public void drawRightSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+            float dy = 10;
+            float dx = 6;
+            float spacing = 4;
+            // Title
+            dy += renderer.drawText(transforms, INTRODUCTION, dx, dy);
+            dy += spacing;
+            // First paragraph
+            dy += renderer.drawText(transforms, PARAGRAPH_1, dx, dy, 0.70F);
+            dy += spacing;
+            // Second paragraph
+            dy += renderer.drawText(transforms, PARAGRAPH_2, dx, dy, 0.70F);
+            dy += spacing;
+            // Third paragraph
+            dy += renderer.drawText(transforms, PARAGRAPH_3, dx, dy, 0.70F);
+            dy += spacing;
+            dy += spacing;
+            // Final paragraph:
+            ITextComponent discovered = new StringTextComponent("")
+                    .appendSibling(DISCOVERED)
+                    .appendString(": " + journal.getDiscoveredSeeds(stack).size() + " / " + AgriApi.getPlantRegistry().count());
+            renderer.drawText(transforms, discovered, dx, dy, 0.70F);
+        }
+    }
+
+    private static final class Genetics extends IntroductionPages {
         private final ITextComponent CROP_BREEDING = new TranslationTextComponent("agricraft.journal.crop_breeding");
         private final ITextComponent PARAGRAPH_L_1 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_1");
         private final ITextComponent PARAGRAPH_L_2 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_2");
         private final ITextComponent PARAGRAPH_L_3 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_3");
+
+        private final ResourceLocation DNA_SCHEMATIC = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(),
+                "textures/journal/dna_schematic.png");
 
         private final ITextComponent STATS = new TranslationTextComponent("agricraft.journal.stats");
         private final ITextComponent PARAGRAPH_R_1 = new TranslationTextComponent("agricraft.journal.stats.paragraph_1");
@@ -41,10 +90,12 @@ public abstract class DocPage extends Page {
             // First paragraph
             dy += renderer.drawText(transforms, PARAGRAPH_L_1, dx, dy, 0.65F);
             dy += spacing;
-            // TODO: Add illustration
             // Second paragraph
             dy += renderer.drawText(transforms, PARAGRAPH_L_2, dx, dy, 0.65F);
             dy += spacing;
+            // Illustration
+            renderer.drawTexture(transforms, DNA_SCHEMATIC, dx, dy, 96, 32);
+            dy += (spacing + 32);
             // Third paragraph
             renderer.drawText(transforms, PARAGRAPH_L_3, dx, dy, 0.65F);
         }
@@ -58,7 +109,7 @@ public abstract class DocPage extends Page {
             dy += renderer.drawText(transforms, STATS, dx, dy);
             dy += spacing;
             // First paragraph
-            dy += renderer.drawText(transforms, PARAGRAPH_R_1, dx, dy, 0.50F);
+            dy += renderer.drawText(transforms, PARAGRAPH_R_1, dx, dy, 0.65F);
             dy += spacing;
             // Growth
             if (!AgriCraft.instance.getConfig().isGrowthStatHidden()) {
@@ -104,16 +155,60 @@ public abstract class DocPage extends Page {
         }
     }
 
-    private static class GrowthReqs extends DocPage {
+    private static final class GrowthReqs extends IntroductionPages {
+        private final ITextComponent GROWTH_REQS = new TranslationTextComponent("agricraft.journal.growth_reqs");
+        private final ITextComponent PARAGRAPH_L_1 = new TranslationTextComponent("agricraft.journal.growth_reqs.paragraph_1");
+        private final ITextComponent BRIGHTNESS = new TranslationTextComponent("agricraft.journal.growth_reqs.brightness");
+        private final ITextComponent PARAGRAPH_BRIGHTNESS = new TranslationTextComponent("agricraft.journal.growth_reqs.brightness.desc");
+        private final ITextComponent HUMIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.humidity");
+        private final ITextComponent PARAGRAPH_HUMIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.humidity.desc");
+        private final ITextComponent ACIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.acidity");
+        private final ITextComponent PARAGRAPH_ACIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.acidity.desc");
+        private final ITextComponent NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients");
+        private final ITextComponent PARAGRAPH_NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients.desc");
 
         @Override
         public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
-            //TODO
+            float dy = 10;
+            float dx = 6;
+            float spacing = 4;
+            // Title
+            dy += renderer.drawText(transforms, GROWTH_REQS, dx, dy);
+            dy += spacing;
+            // First paragraph
+            dy += renderer.drawText(transforms, PARAGRAPH_L_1, dx, dy, 0.65F);
+            dy += spacing;
+
+            // Brightness
+            dy += renderer.drawText(transforms, BRIGHTNESS, dx, dy, 0.65F);
+            renderer.drawTexture(transforms, Textures.BRIGHTNESS_BAR, 6, dy, 66, 8);
+            dy += (6 + spacing);
+            dy += renderer.drawText(transforms, PARAGRAPH_BRIGHTNESS, dx, dy, 0.50F);
+            dy += spacing;
+
+            // Humidity
+            dy += renderer.drawText(transforms, HUMIDITY, dx, dy, 0.65F);
+            dy += renderer.drawText(transforms, PARAGRAPH_HUMIDITY, dx, dy, 0.50F);
+            // TODO: different humidity levels
+            dy += spacing;
+
+            // Acidity
+            dy += renderer.drawText(transforms, ACIDITY, dx, dy, 0.65F);
+            dy += renderer.drawText(transforms, PARAGRAPH_ACIDITY, dx, dy, 0.50F);
+            // TODO: different acidity levels
+            dy += spacing;
+
+            // Nutrients
+            dy += renderer.drawText(transforms, NUTRIENTS, dx, dy, 0.65F);
+            dy += renderer.drawText(transforms, PARAGRAPH_NUTRIENTS, dx, dy, 0.50F);
+            // TODO: different nutrients levels
+            dy += spacing;
+
         }
 
         @Override
         public void drawRightSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
-            //TODO
+            //TODO: seasons
         }
     }
 }
