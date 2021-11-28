@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-abstract class BasePage extends Page {
+public abstract class BasePage extends Page {
     protected void drawMutation(PageRenderer renderer, MatrixStack transforms, int posX, int posY, List<IAgriPlant> plants) {
         renderer.drawTexture(transforms, Textures.MUTATION, posX, posY, 86, 18);
         transforms.push();

@@ -3,6 +3,7 @@ Changelog
 3.0.6
  - CHANGE: The magnifying glass can now also inspect entities (if such logic is implemented for the entity)
  - ADDED: API for magnifying glass inspection
+ - ADDED: Soil properties can now be inspected using the Magnifying Glass
  - ADDED: Some additional journal pages with documentation on crop breeding genetics, stats and growth requirements
  - FIXED: Weird ingredient rendering crash with seed models with CTM metadata when CTM is present
  - FIXED: Chunk loading crash with multi-block tanks spanning multiple chunks

@@ -38,7 +38,7 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     private final AnimatedScrollPosition scrollPosition;
     private List<IAgriGenePair<?>> genomeCache;
 
-    private MagnifyingGlassGenomeInspector() {
+    protected MagnifyingGlassGenomeInspector() {
         this.scrollPosition = new AnimatedScrollPosition(() -> SCROLL_DURATION, () -> this.genomeCache == null ? 0 : this.genomeCache.size());
     }
 
