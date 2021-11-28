@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.render.items.journal.page;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.render.items.journal.PageRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -166,12 +168,15 @@ public abstract class IntroductionPages extends BasePage {
         private final ITextComponent PARAGRAPH_ACIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.acidity.desc");
         private final ITextComponent NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients");
         private final ITextComponent PARAGRAPH_NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients.desc");
+        private final ITextComponent SEASONS = new TranslationTextComponent("agricraft.journal.growth_reqs.seasons");
+        private final ITextComponent PARAGRAPH_SEASONS = new TranslationTextComponent("agricraft.journal.growth_reqs.seasons.desc");
 
         @Override
         public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
             float dy = 10;
             float dx = 6;
             float spacing = 4;
+
             // Title
             dy += renderer.drawText(transforms, GROWTH_REQS, dx, dy);
             dy += spacing;
@@ -189,26 +194,59 @@ public abstract class IntroductionPages extends BasePage {
             // Humidity
             dy += renderer.drawText(transforms, HUMIDITY, dx, dy, 0.65F);
             dy += renderer.drawText(transforms, PARAGRAPH_HUMIDITY, dx, dy, 0.50F);
-            // TODO: different humidity levels
-            dy += spacing;
-
-            // Acidity
-            dy += renderer.drawText(transforms, ACIDITY, dx, dy, 0.65F);
-            dy += renderer.drawText(transforms, PARAGRAPH_ACIDITY, dx, dy, 0.50F);
-            // TODO: different acidity levels
-            dy += spacing;
-
-            // Nutrients
-            dy += renderer.drawText(transforms, NUTRIENTS, dx, dy, 0.65F);
-            dy += renderer.drawText(transforms, PARAGRAPH_NUTRIENTS, dx, dy, 0.50F);
-            // TODO: different nutrients levels
-            dy += spacing;
-
+            this.drawSoilProperties(renderer, transforms, dx, dy, spacing, IAgriSoil.Humidity.values(),
+                    Textures.HUMIDITY_OFFSETS, Textures.HUMIDITY_FILLED);
         }
 
         @Override
         public void drawRightSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
-            //TODO: seasons
+            float dy = 10;
+            float dx = 6;
+            float spacing = 4;
+
+            // Acidity
+            dy += renderer.drawText(transforms, ACIDITY, dx, dy, 0.65F);
+            dy += renderer.drawText(transforms, PARAGRAPH_ACIDITY, dx, dy, 0.50F);
+            dy = this.drawSoilProperties(renderer, transforms, dx, dy, spacing, IAgriSoil.Acidity.values(),
+                    Textures.ACIDITY_OFFSETS, Textures.ACIDITY_FILLED);
+
+            // Nutrients
+            dy += renderer.drawText(transforms, NUTRIENTS, dx, dy, 0.65F);
+            dy += renderer.drawText(transforms, PARAGRAPH_NUTRIENTS, dx, dy, 0.50F);
+            dy = this.drawSoilProperties(renderer, transforms, dx, dy, spacing, IAgriSoil.Nutrients.values(),
+                    Textures.NUTRIENTS_OFFSETS, Textures.NUTRIENTS_FILLED);
+
+            // Seasons
+            if(AgriApi.getSeasonLogic().isActive()) {
+                dy += renderer.drawText(transforms, SEASONS, dx, dy, 0.65F);
+                dy += renderer.drawText(transforms, PARAGRAPH_SEASONS, dx, dy, 0.50F);
+                float scale = 0.5F;
+                dy += spacing*scale;
+                for(int i = 0; i < AgriSeason.values().length - 1; i++) {
+                    int w = 10;
+                    int h = 12;
+                    float v1 = (0.0F + i*h)/48;
+                    float v2 = (0.0F + (i + 1)*h)/48;
+                    renderer.drawTexture(transforms, Textures.SEASONS_FILLED, dx, dy - spacing/2, scale*w, scale*h, 0, v1, 1, v2);
+                    dy += renderer.drawText(transforms, AgriSeason.values()[i].getDisplayName(), dx + 6, dy, 0.50F);
+                    dy += spacing/2;
+                }
+            }
+        }
+
+        protected float drawSoilProperties(PageRenderer renderer, MatrixStack transforms, float dx, float dy, float spacing,
+                                           IAgriSoil.SoilProperty[] property, int[] offsets, ResourceLocation texture) {
+            float scale = 0.5F;
+            dy += spacing*scale;
+            for(int i = 0; i < property.length - 1; i++) {
+                int w = offsets[i + 1] - offsets[i];
+                float u1 = (offsets[i] + 0.0F)/53.0F;
+                float u2 = (offsets[i] + w + 0.0F)/53.0F;
+                renderer.drawTexture(transforms, texture, dx, dy - spacing/2, scale*w, scale*12, u1, 0, u2, 1);
+                dy += renderer.drawText(transforms, property[i].getDescription(), dx + 6, dy, 0.50F);
+                dy += spacing/2;
+            }
+            return dy + spacing;
         }
     }
 }
