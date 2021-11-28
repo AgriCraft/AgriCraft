@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.0.7
+
+
 3.0.6
  - CHANGE: The magnifying glass can now also inspect entities (if such logic is implemented for the entity)
  - ADDED: API for magnifying glass inspection
