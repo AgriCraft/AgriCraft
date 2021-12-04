@@ -205,12 +205,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
+    public Optional<IJsonPlantCallback.Factory> getJsonPlantCallback(String id) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
-    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
+    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

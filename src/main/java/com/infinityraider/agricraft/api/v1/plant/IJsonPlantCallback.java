@@ -1,10 +1,13 @@
 package com.infinityraider.agricraft.api.v1.plant;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,30 +23,24 @@ import java.util.Optional;
  */
 public interface IJsonPlantCallback {
     /**
-     * Finds a registered json plant callback from their id
+     * Finds a registered json plant callback factory from their id
      *
      * @param id the id
      * @return optional containing the callback, or empty if no such callback is registered
      */
-    static Optional<IJsonPlantCallback> getCallback(String id) {
+    static Optional<IJsonPlantCallback.Factory> getCallback(String id) {
         return AgriApi.getJsonPlantCallback(id);
     }
 
     /**
      * Tries to register a json plant callback behaviour
      *
-     * @param callback the callback to register
+     * @param callback the callback factory to register
      * @return true if successful (will fail in case a callback with the same id is already registered)
      */
-    static boolean registerCallback(IJsonPlantCallback callback) {
+    static boolean registerCallback(IJsonPlantCallback.Factory callback) {
         return AgriApi.registerJsonPlantCallback(callback);
     }
-
-    /**
-     * The id used to refer to callback implementations in the json files, must be unique
-     * @return a unique string representing this callback behaviour
-     */
-    String getId();
 
     /**
      * Returns the light level emitted when this callback is present
@@ -124,4 +121,63 @@ public interface IJsonPlantCallback {
      * @param entity the entity which collided
      */
     default void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {}
+
+    /**
+     * Callback for custom actions before a crop is right clicked,
+     * does nothing by default, but can be overridden for special behaviours.
+     * Runs before default right click behaviour.
+     *
+     * @param crop the crop on which this plant was planted
+     * @param stack the stack with which was right clicked on the crop
+     * @param entity the entity which used the item, can be null if usage happens through automation
+     * @return an empty optional to allow continuation of default right click behaviour,
+     * an optional containing an action result to pass to the right click chain, prevents default behaviour
+     */
+    default Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return Optional.empty();
+    }
+
+    /**
+     * Callback for custom actions after a crop is right clicked,
+     * does nothing by default, but can be overridden for special behaviours.
+     * Runs after default right click behaviour.
+     *
+     * @param crop the crop on which this plant was planted
+     * @param stack the stack with which was right clicked on the crop
+     * @param entity the entity which used the item, can be null if usage happens through automation
+     * @return an optional containing an action result to pass to the right click chain, or empty to continue the default chain
+     */
+    default Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return Optional.empty();
+    }
+
+    /**
+     * Factory class to parse IJsonPlantCallback objects from json elements
+     */
+    interface Factory {
+        /**
+         * @return a unique ID for this callback factory
+         */
+        String getId();
+
+        /**
+         * Builds a callback based on the passed in json element
+         * @param json the json element to parse from
+         * @return a callback behaviour
+         * @throws JsonParseException in case an invalid json element was passed in
+         */
+        IJsonPlantCallback makeCallBack(JsonElement json) throws JsonParseException;
+
+        /**
+         * Utility method to register the factory
+         * @return the factory itself, or null if registration has failed
+         */
+        @Nullable
+        default Factory register() {
+            if(IJsonPlantCallback.registerCallback(this)) {
+                return this;
+            }
+            return null;
+        }
+    }
 }

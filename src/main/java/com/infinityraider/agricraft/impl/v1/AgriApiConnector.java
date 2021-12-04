@@ -32,7 +32,7 @@ import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
-import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriSoilRegistry;
 import com.infinityraider.agricraft.impl.v1.requirement.Factory;
@@ -258,13 +258,13 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
-        return JsonPlantCallback.get(id);
+    public Optional<IJsonPlantCallback.Factory> getJsonPlantCallback(String id) {
+        return JsonPlantCallbackManager.get(id);
     }
 
     @Override
-    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
-        return JsonPlantCallback.register(callback);
+    public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback) {
+        return JsonPlantCallbackManager.register(callback);
     }
 
     @Override
