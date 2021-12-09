@@ -220,21 +220,26 @@ dependencies {
     //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
     //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
 
-    //Create
-    compileOnly fg.deobf("curse.maven:create-328085:3278516")
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3278516")
+    //Create v1.16.5-0.3.2b
+    //do not use higher because it won't work in-dev (create/flywheel use official mappings and it cause some problems when remapped to mcp)
+    compileOnly fg.deobf("curse.maven:create-328085:3386319")
+//    runtimeOnly fg.deobf("curse.maven:create-328085:3386319")
+    compileOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency v1.16.5-0.1.1
+//    runtimeOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency
 
-    //Cyclic
-    compileOnly fg.deobf("curse.maven:cyclic-239286:3321623")
-    //runtimeOnly fg.deobf("curse.maven:cyclic-239286:3321623")
+
+    //Cyclic 1.16.5-1.5.1 // 1.2.1
+    compileOnly fg.deobf("curse.maven:cyclic-239286:3482950")
+//    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3482950")
 
     //Immersive Engineering
-    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
-    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.0-135")
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.5-140")
+//    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.5-140")
 
-    //Industrial Foregoing
-    compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
-    //runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3261176")
+    //Industrial Foregoing 1.16.5-3.2.14.5 // 3.2.11
+    compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3425275")
+//    runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3425275")
+//    runtimeOnly fg.deobf("curse.maven:titanium-287342:3346366") // Industrial Foregoing runtime dependency 1.16.5-3.2.8.4
 
     //Jade
     compileOnly fg.deobf("curse.maven:jade-324717:3302544")
@@ -242,12 +247,12 @@ dependencies {
 
     //Mystical Agriculture
     compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
-    //runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
-    //runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
+//    runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
+//    runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
 
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-    //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
 
     //Simply Seasons
     compileOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency

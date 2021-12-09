@@ -463,7 +463,7 @@ public final class AgriApi {
     }
 
     /**
-     * Finds a registered json plant callback from their id
+     * Finds a registered json plant callback factory from their id
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
@@ -473,7 +473,7 @@ public final class AgriApi {
      * @return optional containing the callback, or empty if no such callback is registered
      */
     @Nonnull
-    public static Optional<IJsonPlantCallback> getJsonPlantCallback(String id) {
+    public static Optional<IJsonPlantCallback.Factory> getJsonPlantCallback(String id) {
         return AgriApi.CONNECTOR.getJsonPlantCallback(id);
     }
 
@@ -484,10 +484,10 @@ public final class AgriApi {
      * version of AgriCraft is not currently installed.
      * </p>
      *
-     * @param callback the callback to register
+     * @param callback the callback factory to register
      * @return true if successful (will fail in case a callback with the same id is already registered)
      */
-    public static boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback) {
+    public static boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback) {
         return AgriApi.CONNECTOR.registerJsonPlantCallback(callback);
     }
 

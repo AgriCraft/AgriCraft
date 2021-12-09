@@ -132,17 +132,10 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     }
 
     @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onCropRightClicked(World world, BlockPos pos, IAgriCrop crop, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;
         }
-        Optional<IAgriCrop> optional = this.getCrop(world, pos);
-        if (!optional.isPresent()) {
-            return ActionResultType.FAIL;
-        }
-        IAgriCrop crop = optional.get();
         ItemStack heldItem = player.getHeldItem(hand);
         // Harvesting
         if (heldItem.isEmpty()) {

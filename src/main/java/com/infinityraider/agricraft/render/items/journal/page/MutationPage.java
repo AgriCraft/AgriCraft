@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.render.items.journal.page;
 
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.render.items.journal.PageRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public final class MutationPage extends BasePage {
     }
 
     @Override
-    public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms) {
+    public void drawLeftSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         int posX = 10;
         int posY = 6;
         int dy = 20;
@@ -36,7 +38,7 @@ public final class MutationPage extends BasePage {
     }
 
     @Override
-    public void drawRightSheet(PageRenderer renderer, MatrixStack transforms) {
+    public void drawRightSheet(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         int posX = 10;
         int posY = 6;
         int dy = 20;

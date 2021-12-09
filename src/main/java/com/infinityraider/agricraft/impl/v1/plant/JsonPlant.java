@@ -4,6 +4,7 @@ import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoilCondition;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -33,6 +34,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -70,7 +72,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthRequirement = initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
-        this.callbacks = JsonPlantCallback.get(plant.getCallbacks());
+        this.callbacks = this.initCallBacks(plant);
         this.seedTexture = new ResourceLocation(plant.getSeedTexture());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
     }
@@ -87,6 +89,24 @@ public class JsonPlant implements IAgriPlant {
                         );
                     }
                 })
+                .collect(Collectors.toList());
+    }
+
+    private List<IJsonPlantCallback> initCallBacks(AgriPlant plant) {
+        return plant.getCallbacks().stream()
+                .map(json ->
+                        JsonPlantCallbackManager.get(json).flatMap(factory -> {
+                            try {
+                                return Optional.of(factory.makeCallBack(json));
+                            } catch(Exception e) {
+                                AgriCraft.instance.getLogger().error("Failed to parse json plant callback");
+                                AgriCraft.instance.getLogger().error(json.getAsString());
+                                AgriCraft.instance.getLogger().printStackTrace(e);
+                            }
+                            return Optional.empty();
+                        }))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
@@ -372,6 +392,24 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
         this.callbacks.forEach(callback -> callback.onEntityCollision(crop, entity));
+    }
+
+    @Override
+    public Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return this.callbacks.stream()
+                .map(callback -> callback.onRightClickPre(crop, stack, entity))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
+    }
+
+    @Override
+    public Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return this.callbacks.stream()
+                .map(callback -> callback.onRightClickPost(crop, stack, entity))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
     }
 
     public static IAgriGrowthRequirement initGrowthRequirement(AgriPlant plant) {
