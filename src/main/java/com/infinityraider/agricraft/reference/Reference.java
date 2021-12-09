@@ -8,7 +8,7 @@ public interface Reference {
 
     String VER_MAJOR = /*^${mod.version_major}^*/ "3";
     String VER_MINOR = /*^${mod.version_minor}^*/ "0";
-    String VER_PATCH = /*^${mod.version_patch}^*/ "6";
+    String VER_PATCH = /*^${mod.version_patch}^*/ "7";
     String MOD_VERSION = /*^${mod.version}^*/ VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH;;
     String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "1.16.5-" + MOD_VERSION;
 

@@ -3,10 +3,11 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.util.AgriValidator;
 import com.agricraft.agricore.util.TypeHelper;
+import com.google.gson.JsonElement;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
+import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
 import com.infinityraider.agricraft.util.TagUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -129,8 +130,8 @@ public class AgriValidatorImpl implements AgriValidator {
     }
 
     @Override
-    public boolean isValidCallback(String callback) {
-        return JsonPlantCallback.get(callback).isPresent();
+    public boolean isValidCallback(JsonElement callback) {
+        return JsonPlantCallbackManager.get(callback).isPresent();
     }
 
     @Override

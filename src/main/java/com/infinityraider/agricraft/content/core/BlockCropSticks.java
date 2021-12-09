@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
@@ -252,17 +251,10 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
     }
 
     @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public ActionResultType onCropRightClicked(World world, BlockPos pos, IAgriCrop crop, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if(hand == Hand.OFF_HAND) {
             return ActionResultType.PASS;
         }
-        Optional<IAgriCrop> optional = this.getCrop(world, pos);
-        if (!optional.isPresent()) {
-            return ActionResultType.FAIL;
-        }
-        IAgriCrop crop = optional.get();
         ItemStack heldItem = player.getHeldItem(hand);
         // Harvesting (or de-cross-crop'ing)
         if (heldItem.isEmpty()) {

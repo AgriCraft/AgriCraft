@@ -71,7 +71,7 @@
   "agricraft.tooltip.no_weed": "No Weeds",
   "agricraft.tooltip.weed_growth": "Weed Growth",
   "agricraft.tooltip.soil": "Soil",
-  "agricraft.tooltip.magnifying_glass": "A tool to inspect the genome of crops",
+  "agricraft.tooltip.magnifying_glass": "A tool to inspect the genome of crops and other things",
   "agricraft.tooltip.clipper": "A tool to clip flowers or leaves of plants",
   "agricraft.tooltip.journal_use_1": "Sneak + Right click to place on a Seed Analyzer",
   "agricraft.tooltip.journal_use_2": "Right click to read, scroll to flip pages",
@@ -217,6 +217,34 @@
   "agricraft.journal.introduction.paragraph_1": "This is your very own Agricultural Journal, in here you can keep track of all the seeds you have discovered. To get started, simply place the journal on a seed analyzer and start analyzing seeds!",
   "agricraft.journal.introduction.paragraph_2": "When analyzing the genome of a seed, you learn one or two things about it, such as what kind of environments it likes, how it will grow, what fruits it might bear, and to and from which other species it might mutate.",
   "agricraft.journal.introduction.paragraph_3": "Can you discover all plant species?",
+  "agricraft.journal.introduction.discovered": "Discovered Seeds",
+
+  "agricraft.journal.crop_breeding": "Plant Breeding Genetics",
+  "agricraft.journal.crop_breeding.paragraph_1": "To cross-breed two plants, they must be planted on crop sticks, with one block space in between. Place double crop sticks on this spot in the middle.",
+  "agricraft.journal.crop_breeding.paragraph_2": "When both plants are mature, they have a probability of producing offspring, each passing on half of their DNA to their progeny.",
+  "agricraft.journal.crop_breeding.paragraph_3": "The plant DNA, its genome, defines the species and stats of a plant. A genome consists of a set of gene pairs, which give rise to the traits of the plants. It is one gene of each of these pairs that is passed on to offspring, resulting in a new gene pair. Be wary however, every time this happens, there is a chance for a mutation to occur, as is illustrated above.",
+
+  "agricraft.journal.stats": "Plant Stats",
+  "agricraft.journal.stats.paragraph_1": "Plants have a set of different stats which will define their behaviour:",
+  "agricraft.journal.stats.growth": "Governs the speed at which plants grow, a higher growth stats results in plants reaching maturity faster.",
+  "agricraft.journal.stats.gain": "Governs the amount of fruits which plants will yield when harvested, a higher gain stat results in more and/or better fruits.",
+  "agricraft.journal.stats.strength": "Stronger plants will be more resilient with regards to environmental conditions and will be able to grow in more hostile environments.",
+  "agricraft.journal.stats.resistance": "This is the plant's resistance against weeds, a higher resistance stat will result in lower chances of weeds sprouting and killing the host plant.",
+  "agricraft.journal.stats.fertility": "Governs the fertility of the plant, a higher fertility will increase the plant's probability to cross-breed with other plants and create progeny.",
+  "agricraft.journal.stats.mutativity": "Governs the mutativity of the plants genes, a higher mutativity results in higher chances of positive mutations while lowering the probability of negative mutations.",
+
+  "agricraft.journal.growth_reqs": "Growth Requirements",
+  "agricraft.journal.growth_reqs.paragraph_1": "Each plant has a different set of growth requirements which define where it is fertile and can grow, this includes brightness, soil properties, and more. The plant pages in this journal have for each plant a dedicated section on the plant's growth requirements. This page serves as a brief glossary for these requirements.",
+  "agricraft.journal.growth_reqs.brightness": "Brightness",
+  "agricraft.journal.growth_reqs.brightness.desc": "The bar above indicates the light level a plant needs to be able to grow.",
+  "agricraft.journal.growth_reqs.humidity": "Humidity",
+  "agricraft.journal.growth_reqs.humidity.desc": "The humidity of a soil describes the quantity of water that is held within.",
+  "agricraft.journal.growth_reqs.acidity": "Acidity",
+  "agricraft.journal.growth_reqs.acidity.desc": "Acidity ranges from acidic, over neutral, to alkaline, each plant having their preference.",
+  "agricraft.journal.growth_reqs.nutrients": "Nutrients",
+  "agricraft.journal.growth_reqs.nutrients.desc": "Some soils hold more nutrients than others.",
+  "agricraft.journal.growth_reqs.seasons": "Seasons",
+  "agricraft.journal.growth_reqs.seasons.desc": "Some plants choose to only grow during certain seasons, nobody really knows why.",
 
   "agricraft.plant.allium.name": "Allium",
   "agricraft.plant.allium.seed": "Allium Seeds",
@@ -626,6 +654,8 @@
   "agricraft.plant.immersiveengineering_hemp.desc" : "Testing 1, 2, 3.",
 
   "agricraft.plant.quark_glowshroom.desc": "Glow in the dark.",
+  
+  "agricraft.plant.supplementaries.flax.desc": "A plant prized for its natural cordage.",
 
   "agricraft.plant.thermal_barley.desc": "A cereal grain which can be ground into flour or malted to make beer or whiskey.",
   "agricraft.plant.thermal_bell_pepper.desc": "A cultivar of peppers without the spice. Commonly chopped and used in dishes.",

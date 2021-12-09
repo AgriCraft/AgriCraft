@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.IFluidLoggable;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -14,8 +15,11 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -66,6 +70,43 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
         return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
     }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        // fetch crop
+        Optional<IAgriCrop> optional = this.getCrop(world, pos);
+        if (!optional.isPresent()) {
+            return ActionResultType.FAIL;
+        }
+        IAgriCrop crop = optional.get();
+        // run pre logic
+        if(crop.hasPlant()) {
+            IAgriPlant plant = crop.getPlant();
+            if(plant.isPlant()) {
+                Optional<ActionResultType> result = plant.onRightClickPre(crop, player.getHeldItem(hand), player);
+                if(result.isPresent()) {
+                    return result.get();
+                }
+            }
+        }
+        // run default logic
+        ActionResultType result = this.onCropRightClicked(world, pos, crop, player, hand, hit);
+        // run post logic
+        if(crop.hasPlant()) {
+            IAgriPlant plant = crop.getPlant();
+            if(plant.isPlant()) {
+                Optional<ActionResultType> override = plant.onRightClickPost(crop, player.getHeldItem(hand), player);
+                if(override.isPresent()) {
+                    return override.get();
+                }
+            }
+        }
+        return result;
+    }
+
+    protected abstract ActionResultType onCropRightClicked(World world, BlockPos pos, IAgriCrop crop, PlayerEntity player, Hand hand, BlockRayTraceResult hit);
 
     @Override
     @Deprecated

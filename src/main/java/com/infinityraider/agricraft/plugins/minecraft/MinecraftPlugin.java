@@ -5,8 +5,8 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.plugin.*;
-import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallback;
 import com.infinityraider.agricraft.reference.Names;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.passive.*;
@@ -14,28 +14,48 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 @AgriPlugin(modId = Names.Mods.MINECRAFT, alwaysLoad = true)
 public class MinecraftPlugin implements IAgriPlugin {
-    public final JsonPlantCallback experience;
-    public final JsonPlantCallback brightness;
-    public final JsonPlantCallback redstone;
-    public final JsonPlantCallback thorns;
-    public final JsonPlantCallback withering;
-    public final JsonPlantCallback poisoning;
-    public final JsonPlantCallback bushy;
-    public final JsonPlantCallback burn;
+    public final IJsonPlantCallback.Factory brightness;
+    public final IJsonPlantCallback.Factory burn;
+    public final IJsonPlantCallback.Factory bushy;
+    public final IJsonPlantCallback.Factory experience;
+    public final IJsonPlantCallback.Factory fungus;
+    public final IJsonPlantCallback.Factory poisoning;
+    public final IJsonPlantCallback.Factory redstone;
+    public final IJsonPlantCallback.Factory thorns;
+    public final IJsonPlantCallback.Factory withering;
 
     public MinecraftPlugin() {
-        this.experience = JsonPlantCallBackExperience.getInstance();
-        this.brightness = JsonPlantCallBackBrightness.getInstance();
-        this.redstone = JsonPlantCallBackRedstone.getInstance();
-        this.thorns = JsonPlantCallBackThorns.getInstance();
-        this.withering = JsonPlantCallBackWithering.getInstance();
-        this.poisoning = JsonPlantCallBackPoisoning.getInstance();
-        this.bushy = JsonPlantCallBackBushy.getInstance();
-        this.burn = JsonPlantCallBackBurn.getInstance();
+        this.brightness = JsonPlantCallBackBrightness.getFactory();
+        this.burn = JsonPlantCallBackBurn.getFactory();
+        this.bushy = JsonPlantCallBackBushy.getFactory();
+        this.experience = JsonPlantCallBackExperience.getFactory();
+        this.fungus = JsonPlantCallBackFungus.getFactory();
+        this.poisoning = JsonPlantCallBackPoisoning.getFactory();
+        this.redstone = JsonPlantCallBackRedstone.getFactory();
+        this.thorns = JsonPlantCallBackThorns.getFactory();
+        this.withering = JsonPlantCallBackWithering.getFactory();
+    }
+
+    protected void registerCallBackFactories() {
+        Arrays.stream(this.getClass().getDeclaredFields())
+                .map(f -> {
+                    try {
+                        return f.get(this);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(obj -> obj instanceof IJsonPlantCallback.Factory)
+                .map(obj -> ((IJsonPlantCallback.Factory) obj).register())
+                .filter(Objects::nonNull)
+                .map(IJsonPlantCallback.Factory::getId)
+                .forEach(id -> AgriCraft.instance.getLogger().info("Registered Json Callback: " + id));
     }
 
     @Override
@@ -55,6 +75,8 @@ public class MinecraftPlugin implements IAgriPlugin {
 
     @Override
     public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        // Register callbacks
+        this.registerCallBackFactories();
         // Define compost value
         float compostValue = AgriCraft.instance.getConfig().seedCompostValue();
         if(compostValue > 0) {

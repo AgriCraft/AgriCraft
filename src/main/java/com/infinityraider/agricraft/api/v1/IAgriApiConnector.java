@@ -120,9 +120,9 @@ public interface IAgriApiConnector {
     IAgriPlantQuadGenerator getPlantQuadGenerator();
 
     @Nonnull
-    Optional<IJsonPlantCallback> getJsonPlantCallback(String id);
+    Optional<IJsonPlantCallback.Factory> getJsonPlantCallback(String id);
 
-    boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback callback);
+    boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback);
 
     boolean isObservingWithMagnifyingGlass(PlayerEntity player);
 

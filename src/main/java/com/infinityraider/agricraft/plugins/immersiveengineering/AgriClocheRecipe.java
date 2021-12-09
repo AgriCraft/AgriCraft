@@ -34,6 +34,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class AgriClocheRecipe extends ClocheRecipe {
+    private static final ItemStack FARMLAND = new ItemStack(Items.FARMLAND);
+
     public static final Serializer SERIALIZER = new Serializer();
     private static final List<ItemStack> SEED_STACK = ImmutableList.of(new ItemStack(AgriCraft.instance.getModItemRegistry().seed));
     private static final Random RANDOM = new Random();
@@ -65,6 +67,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
         return this.growthStatFactor;
     }
 
+
     protected IAgriPlant getPlant(ItemStack seed) {
         if(seed.getItem() instanceof IAgriSeedItem) {
             return ((IAgriSeedItem) seed.getItem()).getPlant(seed);
@@ -85,6 +88,21 @@ public class AgriClocheRecipe extends ClocheRecipe {
             return AgriApi.getSoilRegistry().valueOf(Blocks.FARMLAND).orElse(NoSoil.getInstance());
         }
         return AgriApi.getSoilRegistry().valueOf(soil).orElse(NoSoil.getInstance());
+    }
+
+    @Override
+    public boolean matches(ItemStack seed, ItemStack soil) {
+        return super.seed.test(seed) && (super.soil.test(soil) || super.soil.test(this.transformSoil(soil)));
+    }
+
+    protected ItemStack transformSoil(ItemStack soil) {
+        if(soil.isEmpty()) {
+            return soil;
+        }
+        if(soil.getItem() == Items.DIRT) {
+            return FARMLAND;
+        }
+        return soil;
     }
 
     @Override

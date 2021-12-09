@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 
@@ -355,6 +356,35 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @param entity the entity which collided
      */
     default void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {}
+
+    /**
+     * Callback for custom actions before a crop is right clicked,
+     * does nothing by default, but can be overridden for special behaviours.
+     * Runs before default right click behaviour.
+     *
+     * @param crop the crop on which this plant was planted
+     * @param stack the stack with which was right clicked on the crop
+     * @param entity the entity which used the item, can be null if usage happens through automation
+     * @return an empty optional to allow continuation of default right click behaviour,
+     * an optional containing an action result to pass to the right click chain, prevents default behaviour
+     */
+    default Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return Optional.empty();
+    }
+
+    /**
+     * Callback for custom actions after a crop is right clicked,
+     * does nothing by default, but can be overridden for special behaviours.
+     * Runs after default right click behaviour.
+     *
+     * @param crop the crop on which this plant was planted
+     * @param stack the stack with which was right clicked on the crop
+     * @param entity the entity which used the item, can be null if usage happens through automation
+     * @return an optional containing an action result to pass to the right click chain, or empty to continue the default chain
+     */
+    default Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+        return Optional.empty();
+    }
 
     /**
      * Method to check if this is an actual plant, or the default, non-null no_plant object
