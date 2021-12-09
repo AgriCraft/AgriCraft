@@ -1,0 +1,20 @@
+{
+  "type": "agricraft:agri_cloche_recipe",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "arcanefundamentals"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mana-and-artifice"
+    }
+  ],
+  "plant": "arcanefundamentals:wakebloom_plant",
+  "growthTicks": 1153,
+  "growthStatFactor": 0.038461538461538464
+}
