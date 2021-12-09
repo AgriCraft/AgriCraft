@@ -4,6 +4,8 @@ Changelog
 - CHANGE: Reworked the json callback system, it can now take arguments depending on the callback
 - ADDED: Fungus json callback, allows to convert mature fungus crops into fungus "trees" by using bonemeal
 - ADDED: Fungus json callback to crimson and warped fungus
+- ADDED: Default json support for Arcane Fundamentals (thanks to RatElemental)
+- ADDED: Default json support for Supplementaries (thanks to RatElemental)
 
 3.0.6
  - CHANGE: The magnifying glass can now also inspect entities (if such logic is implemented for the entity)
