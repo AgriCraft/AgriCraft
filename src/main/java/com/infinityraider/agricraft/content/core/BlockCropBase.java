@@ -163,10 +163,10 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     public void breakBlock(BlockState state, World world, BlockPos pos, boolean doDrops) {
         if(!world.isRemote()) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
             if(doDrops) {
                 spawnDrops(state, world, pos, world.getTileEntity(pos));
             }
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 
