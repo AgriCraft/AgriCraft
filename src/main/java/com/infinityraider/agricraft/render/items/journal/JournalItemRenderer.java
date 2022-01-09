@@ -23,8 +23,8 @@ import org.lwjgl.opengl.GL11;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
-    private static final JournalRenderer INSTANCE = new JournalRenderer();
+public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
+    private static final JournalItemRenderer INSTANCE = new JournalItemRenderer();
 
     private static final Vector3f COLOR_COVER;
     private static final Vector3f COLOR_PAGE;
@@ -42,16 +42,16 @@ public class JournalRenderer implements InfItemRenderer, IRenderUtilities {
     protected static final float SHADE_LEFT = 0.7F;
     protected static final float SHADE_RIGHT = 1.0F;
 
-    private static final PageRenderer RENDERER_LEFT = new PageRenderer(WIDTH, HEIGHT, SHADE_LEFT);
-    private static final PageRenderer RENDERER_RIGHT = new PageRenderer(WIDTH, HEIGHT , SHADE_RIGHT);
+    private static final JournalRenderContextInHand RENDERER_LEFT = new JournalRenderContextInHand(WIDTH, HEIGHT, SHADE_LEFT);
+    private static final JournalRenderContextInHand RENDERER_RIGHT = new JournalRenderContextInHand(WIDTH, HEIGHT , SHADE_RIGHT);
 
-    public static JournalRenderer getInstance() {
+    public static JournalItemRenderer getInstance() {
         return INSTANCE;
     }
 
     private final Map<IRenderTypeBuffer.Impl, ThreadLocal<ITessellator>> tessellators;
 
-    private JournalRenderer() {
+    private JournalItemRenderer() {
         this.tessellators = Maps.newConcurrentMap();
     }
 

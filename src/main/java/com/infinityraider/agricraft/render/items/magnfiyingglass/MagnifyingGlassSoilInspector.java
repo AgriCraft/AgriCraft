@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.requirement.NoSoil;
-import com.infinityraider.agricraft.render.items.journal.page.BasePage;
+import com.infinityraider.agricraft.render.items.journal.JournalDataDrawerBase;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -118,17 +118,17 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
         // Humidity
         transforms.translate(0, -3*DELTA_Y, 0);
         this.drawSoilProperty(transforms, soil.getHumidity(), IAgriSoil.Humidity.values(),
-                BasePage.Textures.HUMIDITY_FILLED, BasePage.Textures.HUMIDITY_EMPTY, BasePage.Textures.HUMIDITY_OFFSETS);
+                JournalDataDrawerBase.Textures.HUMIDITY_FILLED, JournalDataDrawerBase.Textures.HUMIDITY_EMPTY, JournalDataDrawerBase.Textures.HUMIDITY_OFFSETS);
 
         // Acidity
         transforms.translate(0, DELTA_Y, 0);
         this.drawSoilProperty(transforms, soil.getAcidity(), IAgriSoil.Acidity.values(),
-                BasePage.Textures.ACIDITY_FILLED, BasePage.Textures.ACIDITY_EMPTY, BasePage.Textures.ACIDITY_OFFSETS);
+                JournalDataDrawerBase.Textures.ACIDITY_FILLED, JournalDataDrawerBase.Textures.ACIDITY_EMPTY, JournalDataDrawerBase.Textures.ACIDITY_OFFSETS);
 
         // Nutrients
         transforms.translate(0, DELTA_Y, 0);
         this.drawSoilProperty(transforms, soil.getNutrients(), IAgriSoil.Nutrients.values(),
-                BasePage.Textures.NUTRIENTS_FILLED, BasePage.Textures.NUTRIENTS_EMPTY, BasePage.Textures.NUTRIENTS_OFFSETS);
+                JournalDataDrawerBase.Textures.NUTRIENTS_FILLED, JournalDataDrawerBase.Textures.NUTRIENTS_EMPTY, JournalDataDrawerBase.Textures.NUTRIENTS_OFFSETS);
 
         // Pop the matrix
         transforms.pop();

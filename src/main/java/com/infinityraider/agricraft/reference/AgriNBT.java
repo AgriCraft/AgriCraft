@@ -17,6 +17,7 @@ public interface AgriNBT {
     String GENE = "agri_gene";
     String GENOME = "agri_genome";
     String GROWTH = "agri_growth";
+    String INDEX = "agri_index";
     String KEY = "agri_key";
     String LEVEL = "agri_level";
     String LAYERS = "agri_layers";

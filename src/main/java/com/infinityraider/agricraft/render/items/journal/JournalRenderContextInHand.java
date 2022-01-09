@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.render.items.journal;
 
-import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
+import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -16,9 +16,12 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
-public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.RenderContext {
+@OnlyIn(Dist.CLIENT)
+public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRenderContext, IRenderUtilities {
     private static final Quaternion ROTATION_180;
     private static final Matrix4f PROJECTION;
     private final int page_width;
@@ -27,7 +30,7 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
     private final float scale_height;
     private final float colorModifier;
 
-    protected PageRenderer(float width, float height, float colorModifier) {
+    protected JournalRenderContextInHand(float width, float height, float colorModifier) {
         this.page_width = (int) (32*(width - 1));
         this.page_height = (int) (32*(height - 1));
         this.scale_width = (width - 1.0F)/16.0F;
@@ -35,28 +38,34 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
         this.colorModifier = colorModifier;
     }
 
+    @Override
     public int getPageWidth() {
         return this.page_width;
     }
 
-    int getPageHeight() {
+    @Override
+    public int getPageHeight() {
         return this.page_height;
     }
 
+    @Override
     public void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture) {
-        this.drawTexture(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
+        this.draw(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
     }
 
-    public void drawTexture(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
-        this.drawTexture(transforms, texture, x, y, w, h, 0, 0, 1, 1);
+    @Override
+    public void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
+        this.draw(transforms, texture, x, y, w, h, 0, 0, 1, 1);
     }
 
-    public void drawTexture(MatrixStack transforms, ResourceLocation texture,
+    @Override
+    public void draw(MatrixStack transforms, ResourceLocation texture,
                      float x, float y, float w, float h, float u1, float v1, float u2, float v2) {
         this.bindTexture(texture);
-        this.drawTexture(transforms, x, y, w, h, u1, v1, u2, v2, this.colorModifier, this.colorModifier, this.colorModifier, 1.0F);
+        this.draw(transforms, x, y, w, h, u1, v1, u2, v2, this.colorModifier, this.colorModifier, this.colorModifier, 1.0F);
     }
 
+    @Override
     public void draw(MatrixStack transforms, TextureAtlasSprite texture,
               float x, float y, float w, float h) {
         this.draw(transforms, texture, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -65,13 +74,13 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
     @Override
     public void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a) {
         this.bindTextureAtlas();
-        this.drawTexture(transforms, x, y, w, h, texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(),
+        this.draw(transforms, x, y, w, h, texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(),
                 this.colorModifier*r, this.colorModifier*g, this.colorModifier*b, a);
     }
 
+    @Override
     @SuppressWarnings("deprecation")
-    protected void drawTexture(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2,
-                               float r, float g, float b, float a) {
+    public void draw(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
         BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         Matrix4f matrix = transforms.getLast().getMatrix();
@@ -88,10 +97,12 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
         WorldVertexBufferUploader.draw(bufferbuilder);
     }
 
+    @Override
     public float drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
         return this.drawText(transforms, text, x, y, 1.0F);
     }
 
+    @Override
     public float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale) {
         transforms.push();
         transforms.translate((this.scale_width*x)/this.getPageWidth(), (this.scale_height*y)/this.getPageHeight(), 0F);
@@ -109,6 +120,7 @@ public class PageRenderer implements IRenderUtilities, IAgriGrowableGuiRenderer.
         return dy.getValue()*scale;
     }
 
+    @Override
     public void drawItem(MatrixStack transforms, ItemStack item, float x, float y) {
         transforms.push();
         transforms.translate((this.scale_width*(x + 8))/this.getPageWidth(), (this.scale_height*(y + 8))/this.getPageHeight(), 0);

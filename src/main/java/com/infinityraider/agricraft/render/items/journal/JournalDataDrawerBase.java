@@ -1,23 +1,27 @@
-package com.infinityraider.agricraft.render.items.journal.page;
+package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.render.items.journal.PageRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public abstract class BasePage extends Page {
-    protected void drawMutation(PageRenderer renderer, MatrixStack transforms, int posX, int posY, List<IAgriPlant> plants) {
-        renderer.drawTexture(transforms, Textures.MUTATION, posX, posY, 86, 18);
+@OnlyIn(Dist.CLIENT)
+public abstract class JournalDataDrawerBase<P extends IAgriJournalItem.IPage> implements IJournalDataDrawer<P> {
+    protected void drawMutation(IPageRenderContext context, MatrixStack transforms, int posX, int posY, List<IAgriPlant> plants) {
+        context.draw(transforms, Textures.MUTATION, posX, posY, 86, 18);
         transforms.push();
         transforms.translate(0, 0, -0.001F);
-        plants.get(0).getGuiRenderer().drawGrowthStage( plants.get(0), plants.get(0).getFinalStage(), renderer,
+        plants.get(0).getGuiRenderer().drawGrowthStage( plants.get(0), plants.get(0).getFinalStage(), context,
                 transforms, posX + 1, posY + 1, 16, 16);
-        plants.get(1).getGuiRenderer().drawGrowthStage( plants.get(1), plants.get(1).getFinalStage(), renderer,
+        plants.get(1).getGuiRenderer().drawGrowthStage( plants.get(1), plants.get(1).getFinalStage(), context,
                 transforms, posX + 35, posY + 1, 16, 16);
-        plants.get(2).getGuiRenderer().drawGrowthStage( plants.get(2), plants.get(2).getFinalStage(), renderer,
+        plants.get(2).getGuiRenderer().drawGrowthStage( plants.get(2), plants.get(2).getFinalStage(), context,
                 transforms, posX + 69, posY + 1, 16, 16);
         transforms.pop();
     }

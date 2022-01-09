@@ -1,9 +1,10 @@
 package com.infinityraider.agricraft.handler;
 
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
-import com.infinityraider.agricraft.render.items.journal.JournalData;
-import com.infinityraider.agricraft.render.items.journal.PageRenderer;
+import com.infinityraider.agricraft.render.items.journal.*;
 import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
@@ -31,10 +33,13 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class JournalViewPointHandler implements IDynamicCameraController {
     private static final JournalViewPointHandler INSTANCE = new JournalViewPointHandler();
+
+    private static final Map<ResourceLocation, IJournalDataDrawer<?>> PAGE_DRAWERS = Maps.newHashMap();
 
     private static final int OPENING_DURATION = 20;
 
@@ -61,7 +66,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     private float yawOffset;
 
     /** Journal data */
-    private JournalData journal;
+    private JournalClientData journal;
 
     /** Animation counter */
     private int openingCounter;
@@ -77,14 +82,14 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 return true;
             } else {
                 this.setActive(hand, true);
-                this.journal = new JournalData(journal);
+                this.journal = new JournalClientData(journal);
             }
         } else {
             Hand other = hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
             if(!this.isActive(other)) {
                 this.setActive(hand, true);
                 if(AgriCraft.instance.proxy().toggleDynamicCamera(this, true)) {
-                    this.journal = new JournalData(journal);
+                    this.journal = new JournalClientData(journal);
                     return true;
                 } else {
                     this.setActive(hand, false);
@@ -152,13 +157,13 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     }
 
     @Nullable
-    public JournalData getJournalData() {
+    public JournalClientData getJournalData() {
         return this.journal;
     }
 
     @Nullable
     public ItemStack getJournal() {
-        return this.getJournalData() == null ? null : this.getJournalData().getJournal();
+        return this.getJournalData() == null ? null : this.getJournalData().getJournalStack();
     }
 
     public float getOpeningProgress(float partialTicks) {
@@ -169,27 +174,35 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
-    public void renderViewedPageLeft(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    @SuppressWarnings("unchecked")
+    public void renderViewedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawLeftSheet(renderer, transforms, stack, journal);
+            IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
+            getPageDrawer(page).drawLeftSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderViewedPageRight(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    @SuppressWarnings("unchecked")
+    public void renderViewedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getCurrentPage().drawRightSheet(renderer, transforms, stack, journal);
+            IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
+            getPageDrawer(page).drawRightSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageLeft(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    @SuppressWarnings("unchecked")
+    public void renderFlippedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawLeftSheet(renderer, transforms, stack, journal);
+            IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
+            getPageDrawer(page).drawLeftSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageRight(PageRenderer renderer, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    @SuppressWarnings("unchecked")
+    public void renderFlippedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
-            this.getJournalData().getFlippedPage().drawRightSheet(renderer, transforms, stack, journal);
+            IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
+            getPageDrawer(page).drawRightSheet(page, context, transforms, stack, journal);
         }
     }
 
@@ -400,4 +413,22 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         }
     }
 
+    // Static methods
+    public static void registerJournalDataDrawer(IJournalDataDrawer<?> drawer) {
+        PAGE_DRAWERS.put(drawer.getId(), drawer);
+    }
+
+    public static  <P extends IAgriJournalItem.IPage> IJournalDataDrawer getPageDrawer(P page) {
+        return PAGE_DRAWERS.getOrDefault(page.getDataDrawerId(), JournalDataDrawerMissing.INSTANCE);
+    }
+
+    static {
+        //TODO: add API method to register data drawers
+        registerJournalDataDrawer(new JournalDataDrawerFrontPage());
+        registerJournalDataDrawer(new JournalDataDrawerGenetics());
+        registerJournalDataDrawer(new JournalDataDrawerGrowthReqs());
+        registerJournalDataDrawer(new JournalDataDrawerIntroduction());
+        registerJournalDataDrawer(new JournalDataDrawerMutations());
+        registerJournalDataDrawer(new JournalDataDrawerPlant());
+    }
 }

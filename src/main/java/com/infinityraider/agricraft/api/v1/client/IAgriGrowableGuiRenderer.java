@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * Class to draw
+ * Class to draw AgriCraft Growables (plants and weeds) in GUIs
  */
 @OnlyIn(Dist.CLIENT)
 public interface IAgriGrowableGuiRenderer {
@@ -33,6 +33,9 @@ public interface IAgriGrowableGuiRenderer {
                 context.draw(transforms, sprite, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F));
     }
 
+    /**
+     * Subtype of growables which also have a seed
+     */
     interface WithSeed extends IAgriGrowableGuiRenderer {
         WithSeed DEFAULT = new WithSeed() {};
 
@@ -53,13 +56,47 @@ public interface IAgriGrowableGuiRenderer {
         }
     }
 
+    /**
+     * Render context interface
+     */
     interface RenderContext {
+        /**
+         * Draws a TextureAtlasSprite with modified color
+         * @param transforms the transformation matrix
+         * @param texture the texture
+         * @param x the x position of the sprite
+         * @param y the y position of the sprite
+         * @param w the width of the sprite
+         * @param h the height of the sprite
+         * @param r the color red value
+         * @param g the color green value
+         * @param b the color blue value
+         * @param a the color alpha value
+         */
         void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a);
 
+        /**
+         * Draws a TextureAtlasSprite with modified color
+         * @param transforms the transformation matrix
+         * @param texture the texture
+         * @param x the x position of the sprite
+         * @param y the y position of the sprite
+         * @param w the width of the sprite
+         * @param h the height of the sprite
+         * @param r the color red value
+         * @param g the color green value
+         * @param b the color blue value
+         * @param a the color alpha value
+         */
         default void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, int r, int g, int b, int a) {
             this.draw(transforms, texture, x, y, w, h, r/255.0F, g/255.0F, b/255.0F, a/255.0F);
         }
 
+        /**
+         * Gets a TextureAtlasSprite from a resource location pointing to a texture
+         * @param texture the texture path
+         * @return the sprite
+         */
         TextureAtlasSprite getSprite(ResourceLocation texture);
     }
 }

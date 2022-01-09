@@ -6,7 +6,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.util.IAgriItem;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This interface is implemented in AgriCraft's agricultural item class for the journal. Can be used
@@ -47,4 +49,39 @@ public interface IAgriJournalItem extends IAgriItem {
      */
     @Nonnull
     List<IAgriPlant> getDiscoveredSeeds(@Nonnull ItemStack journal);
+
+    /**
+     * Gets the index for the current page of the journal
+     * @param journal the journal
+     * @return the index
+     */
+    int getCurrentPageIndex(@Nonnull ItemStack journal);
+
+    /**
+     * Gets an unmodifiable list of all the pages in this journal
+     * @param journal an ItemStack holding the journal
+     * @return a list of all pages in the journal, in order
+     */
+    @Nonnull
+    List<IPage> getPages(@Nonnull ItemStack journal);
+
+    /**
+     * Interface representing pages inside the journal
+     */
+    interface IPage {
+        /**
+         * @return a unique id for a data drawer to draw the contents of the page on the client side
+         */
+        @Nonnull
+        ResourceLocation getDataDrawerId();
+
+        /**
+         * Callback for when a player opens this page
+         * @param player the player
+         * @param stack the stack holding the journal
+         * @param journal the journal
+         */
+        void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal);
+
+    }
 }

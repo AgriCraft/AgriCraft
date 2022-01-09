@@ -2,8 +2,7 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.render.items.journal.JournalData;
-import com.infinityraider.agricraft.render.items.journal.page.PlantPage;
+import com.infinityraider.agricraft.impl.v1.journal.PlantPage;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
