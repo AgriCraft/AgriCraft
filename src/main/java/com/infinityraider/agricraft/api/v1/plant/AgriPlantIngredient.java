@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 public class AgriPlantIngredient extends Ingredient {
     private final IAgriPlant plant;
+    private ItemStack[] stacks;
 
     public AgriPlantIngredient(IAgriPlant plant) {
         super(Stream.of(new SingleItemList(plant.toItemStack())));
@@ -28,6 +29,19 @@ public class AgriPlantIngredient extends Ingredient {
 
     public boolean isValid() {
         return this.getPlant().isPlant();
+    }
+
+    @Override
+    @Nonnull
+    public ItemStack[] getMatchingStacks() {
+        if(this.stacks == null) {
+            if(this.isValid()) {
+                this.stacks = new ItemStack[]{this.getPlant().toItemStack()};
+            } else {
+                return new ItemStack[]{};
+            }
+        }
+        return this.stacks;
     }
 
     @Override
