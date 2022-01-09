@@ -1,0 +1,26 @@
+{
+  "type": "crafting_shaped",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    }
+  ],
+  "pattern": [
+    "EEE",
+    "ESE",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "mysticalagriculture:inferium_essence"
+    },
+    "S": {
+      "type": "agricraft:seed",
+      "plant": "vanilla:wheat_plant"
+    }
+  },
+  "result": {
+    "item": "mysticalagriculture:inferium_seeds"
+  }
+}

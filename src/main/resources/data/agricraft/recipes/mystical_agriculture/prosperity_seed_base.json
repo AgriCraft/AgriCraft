@@ -1,0 +1,26 @@
+{
+  "type": "crafting_shaped",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    }
+  ],
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "mysticalagriculture:prosperity_shard"
+    },
+    "X": {
+      "type": "agricraft:seed",
+      "plant": "vanilla:wheat_plant"
+    }
+  },
+  "result": {
+    "item": "mysticalagriculture:prosperity_seed_base"
+  }
+}
