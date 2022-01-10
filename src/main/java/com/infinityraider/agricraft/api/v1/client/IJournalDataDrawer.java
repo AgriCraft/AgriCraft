@@ -14,6 +14,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Client side class to draw contents on journal pages.
  * Use the static register method to register a drawer.
  *
+ * Existing AgriCraft data drawers are:
+ *  - "agricraft:front_page":           for the front page
+ *  - "agricraft:genetics_page":        for the genetics documentation page
+ *  - "agricraft:growth_reqs_page":     for the growth requirements documentation page
+ *  - "agricraft:introduction_page":    for the introduction page
+ *  - "agricraft:mutation_page":        for mutations pages
+ *  - "agricraft:plant_page":           for plant pages
+ *
  * @param <P> The type of the page this drawer is for
  */
 @OnlyIn(Dist.CLIENT)
