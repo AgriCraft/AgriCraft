@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.event.JournalContentsUpdatedEvent;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.capability.CapabilityJournalData;
 import com.infinityraider.agricraft.content.AgriTabs;
@@ -26,6 +27,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -105,14 +107,25 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     }
 
     public static class JournalData implements ISerializable {
+        private final ItemStack journal;
+
         private int index;
         private List<IAgriPlant> plants;
         private List<IPage> pages;
 
-        public JournalData(List<IAgriPlant> plants) {
+        public JournalData(ItemStack journal, List<IAgriPlant> plants) {
+            this.journal = journal;
             this.index = 0;
             this.plants = plants;
             this.initializePages();
+        }
+
+        public IAgriJournalItem getJournalItem() {
+            return (IAgriJournalItem) this.getJournalStack().getItem();
+        }
+
+        public ItemStack getJournalStack() {
+            return this.journal;
         }
 
         public int getCurrentIndex() {
@@ -199,8 +212,8 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             pages.add(GrowthReqsPage.INSTANCE);
 
             // Add pages for plants
-            plants.stream().sorted().forEach(plant -> {
-                PlantPage page = new PlantPage(plant, plants);
+            this.plants.stream().sorted().forEach(plant -> {
+                PlantPage page = new PlantPage(plant, this.plants);
                 pages.add(page);
                 List<List<IAgriPlant>> mutations = page.getOffPageMutations();
                 int size = mutations.size();
@@ -217,14 +230,16 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
                 }
             });
 
-            // TODO: fire event to modify journal contents
+            // Fire event to allow modification of journal contents
+            JournalContentsUpdatedEvent event = new JournalContentsUpdatedEvent(this.getJournalStack(), this.getJournalItem(), pages);
+            MinecraftForge.EVENT_BUS.post(event);
 
             // Set the journal data
-            this.pages = ImmutableList.copyOf(pages);
+            this.pages = ImmutableList.copyOf(event.getPages());
         }
 
         public static JournalData createFromLegacyTag(ItemStack stack) {
-            return new JournalData(getPlantsFromLegacyTag(stack));
+            return new JournalData(stack, getPlantsFromLegacyTag(stack));
         }
 
         private static List<IAgriPlant> getPlantsFromLegacyTag(ItemStack stack) {

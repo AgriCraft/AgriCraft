@@ -174,7 +174,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
-    @SuppressWarnings("unchecked")
     public void renderViewedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
@@ -182,7 +181,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void renderViewedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
@@ -190,7 +188,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void renderFlippedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
@@ -198,7 +195,6 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void renderFlippedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
@@ -418,12 +414,12 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         PAGE_DRAWERS.put(drawer.getId(), drawer);
     }
 
-    public static  <P extends IAgriJournalItem.IPage> IJournalDataDrawer getPageDrawer(P page) {
-        return PAGE_DRAWERS.getOrDefault(page.getDataDrawerId(), JournalDataDrawerMissing.INSTANCE);
+    @SuppressWarnings("unchecked")
+    public static  <P extends IAgriJournalItem.IPage> IJournalDataDrawer<P> getPageDrawer(P page) {
+        return (IJournalDataDrawer<P>) PAGE_DRAWERS.getOrDefault(page.getDataDrawerId(), JournalDataDrawerMissing.INSTANCE);
     }
 
     static {
-        //TODO: add API method to register data drawers
         registerJournalDataDrawer(new JournalDataDrawerFrontPage());
         registerJournalDataDrawer(new JournalDataDrawerGenetics());
         registerJournalDataDrawer(new JournalDataDrawerGrowthReqs());

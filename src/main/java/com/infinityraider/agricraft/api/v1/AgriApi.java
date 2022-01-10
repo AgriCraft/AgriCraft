@@ -1,9 +1,11 @@
 package com.infinityraider.agricraft.api.v1;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -517,6 +519,21 @@ public final class AgriApi {
     @OnlyIn(Dist.CLIENT)
     public static void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector) {
         AgriApi.CONNECTOR.registerMagnifyingGlassInspector(inspector);
+    }
+
+    /**
+     * Registers a journal data drawer
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param drawer the drawer
+     * @param <P> the type of page
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static <P extends IAgriJournalItem.IPage> void registerJournalDataDrawer(IJournalDataDrawer<P> drawer) {
+        AgriApi.CONNECTOR.registerJournalDataDrawer(drawer);
     }
 
     /**

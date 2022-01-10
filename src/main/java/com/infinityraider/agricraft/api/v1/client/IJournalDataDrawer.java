@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.client;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -9,8 +10,23 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+/**
+ * Client side class to draw contents on journal pages.
+ * Use the static register method to register a drawer.
+ *
+ * @param <P> The type of the page this drawer is for
+ */
 @OnlyIn(Dist.CLIENT)
 public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
+    /**
+     * Method to register a journal data drawer
+     * @param drawer the drawer
+     * @param <P> the type of page
+     */
+    static <P extends IAgriJournalItem.IPage> void register(IJournalDataDrawer<P> drawer) {
+        AgriApi.registerJournalDataDrawer(drawer);
+    }
+
     /**
      * @return a unique ID to represent this journal data drawer object
      */

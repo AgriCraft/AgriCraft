@@ -70,7 +70,9 @@ public interface IAgriJournalItem extends IAgriItem {
      */
     interface IPage {
         /**
-         * @return a unique id for a data drawer to draw the contents of the page on the client side
+         * This method gives a unique reference to a {@link com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer}
+         * The journal data drawer handles the drawing for this page on the client side
+         * @return a unique id for a data drawer
          */
         @Nonnull
         ResourceLocation getDataDrawerId();
