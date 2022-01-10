@@ -36,6 +36,12 @@ public final class MutationsPage implements IAgriJournalItem.IPage {
         return ID;
     }
 
+    @Nonnull
+    @Override
+    public Type getPageType() {
+        return Type.MUTATIONS;
+    }
+
     public List<List<IAgriPlant>> getMutationsLeft() {
         return this.mutationsLeft;
     }

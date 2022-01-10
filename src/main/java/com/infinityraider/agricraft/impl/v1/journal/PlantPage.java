@@ -91,6 +91,12 @@ public final class PlantPage implements IAgriJournalItem.IPage {
         return ID;
     }
 
+    @Nonnull
+    @Override
+    public Type getPageType() {
+        return Type.PLANT;
+    }
+
     public IAgriPlant getPlant() {
         return this.plant;
     }
@@ -158,7 +164,7 @@ public final class PlantPage implements IAgriJournalItem.IPage {
 
     protected boolean isPlantKnown(IAgriPlant plant) {
         if(AgriCraft.instance.getConfig().progressiveJEI()) {
-            return all.contains(plant)
+            return this.getAllDiscoveredPlants().contains(plant)
                     || CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), plant);
         }
         return true;

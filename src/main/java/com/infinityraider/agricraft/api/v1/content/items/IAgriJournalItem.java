@@ -20,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
  * provided by APIv2
  */
 public interface IAgriJournalItem extends IAgriItem {
-
     /**
      * Checks if a plant is discovered in the journal.
      *
@@ -58,6 +57,13 @@ public interface IAgriJournalItem extends IAgriItem {
     int getCurrentPageIndex(@Nonnull ItemStack journal);
 
     /**
+     * Sets the index for the current page of the journal
+     * @param index the index
+     * @param journal the journal
+     */
+    void setCurrentPageIndex(@Nonnull ItemStack journal, int index);
+
+    /**
      * Gets an unmodifiable list of all the pages in this journal
      * @param journal an ItemStack holding the journal
      * @return a list of all pages in the journal, in order
@@ -78,12 +84,41 @@ public interface IAgriJournalItem extends IAgriItem {
         ResourceLocation getDataDrawerId();
 
         /**
+         * @return The type of this page, helps to identify different pages
+         */
+        @Nonnull
+        Type getPageType();
+
+        /**
          * Callback for when a player opens this page
          * @param player the player
          * @param stack the stack holding the journal
          * @param journal the journal
          */
         void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal);
+
+        /**
+         * Enum describing types of pages, helps to identify different pages
+         */
+        enum Type {
+            /** For the front page of the journal */
+            FRONT,
+
+            /** For the introduction page of the journal */
+            INTRO,
+
+            /** For pages containing documentation */
+            DOCS,
+
+            /** For pages containing information about a plant */
+            PLANT,
+
+            /** for pages containing mutations (usually after a plant page for mutations that did not fit on it) */
+            MUTATIONS,
+
+            /** For any other purpose (does not occur in vanilla AgriCraft) */
+            OTHER
+        }
 
     }
 }

@@ -89,6 +89,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
         return this.getJournalData(journal).map(JournalData::getCurrentIndex).orElse(0);
     }
 
+    @Override
+    public void setCurrentPageIndex(@Nonnull ItemStack journal, int index) {
+        this.getJournalData(journal).ifPresent(data -> data.setCurrentIndex(index));
+    }
+
     @Nonnull
     @Override
     public List<IPage> getPages(@Nonnull ItemStack journal) {

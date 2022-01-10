@@ -21,6 +21,12 @@ public class FrontPage implements IAgriJournalItem.IPage {
         return ID;
     }
 
+    @Nonnull
+    @Override
+    public Type getPageType() {
+        return Type.FRONT;
+    }
+
     @Override
     public void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal) {}
 }
