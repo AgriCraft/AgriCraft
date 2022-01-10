@@ -81,7 +81,9 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param transforms the transformation matrix
          * @param texture the texture to draw
          */
-        void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture);
+        default void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture) {
+            this.draw(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
+        }
 
         /**
          * Draws a texture
@@ -92,7 +94,9 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param w the width of the texture
          * @param h the height of the texture
          */
-        void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) ;
+        default void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
+            this.draw(transforms, texture, x, y, w, h, 0, 0, 1, 1);
+        }
 
         /**
          * Draws a texture between UV's
@@ -118,7 +122,9 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param w the width of the sprite
          * @param h the height of the sprite
          */
-        void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h);
+        default void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h) {
+            this.draw(transforms, texture, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F);
+        }
 
         /**
          * Generic draw method
@@ -146,7 +152,9 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param y the text y position
          * @return the height of the drawn text
          */
-        float drawText(MatrixStack transforms, ITextComponent text, float x, float y);
+        default float drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+            return this.drawText(transforms, text, x, y, 1.0F);
+        }
 
         /**
          * Draws text with a custom scale

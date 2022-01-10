@@ -49,26 +49,10 @@ public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRende
     }
 
     @Override
-    public void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture) {
-        this.draw(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
-    }
-
-    @Override
-    public void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
-        this.draw(transforms, texture, x, y, w, h, 0, 0, 1, 1);
-    }
-
-    @Override
     public void draw(MatrixStack transforms, ResourceLocation texture,
                      float x, float y, float w, float h, float u1, float v1, float u2, float v2) {
         this.bindTexture(texture);
         this.draw(transforms, x, y, w, h, u1, v1, u2, v2, this.colorModifier, this.colorModifier, this.colorModifier, 1.0F);
-    }
-
-    @Override
-    public void draw(MatrixStack transforms, TextureAtlasSprite texture,
-              float x, float y, float w, float h) {
-        this.draw(transforms, texture, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -95,11 +79,6 @@ public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRende
         bufferbuilder.finishDrawing();
         RenderSystem.enableAlphaTest();
         WorldVertexBufferUploader.draw(bufferbuilder);
-    }
-
-    @Override
-    public float drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
-        return this.drawText(transforms, text, x, y, 1.0F);
     }
 
     @Override
