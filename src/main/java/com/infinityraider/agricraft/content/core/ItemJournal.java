@@ -138,7 +138,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
         }
 
         public void setCurrentIndex(int index) {
-            this.index = Math.min(this.getPlants().size() -1, Math.max(0, index));
+            this.index = Math.min(this.getPages().size() -1, Math.max(0, index));
         }
 
         @Nonnull

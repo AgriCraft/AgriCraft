@@ -11,7 +11,12 @@ public class MessageFlipJournalPage extends MessageBase {
     private int page;
     private Hand hand;
 
+    public MessageFlipJournalPage() {
+        super();
+    }
+
     public MessageFlipJournalPage(int page, Hand hand) {
+        this();
         this.page = page;
         this.hand = hand;
     }

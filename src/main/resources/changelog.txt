@@ -2,7 +2,7 @@ Changelog
 ---------
 3.0.8
  - CHANGE: Crop Sticks now uses a shapeless recipe to avoid recipe conflicts (thanks to Skillotic0703)
- - CHANGE: Journal contents logic is now fully server-side and should run faster
+ - CHANGE: Journal contents logic is now fully server-side, and remembers on which page it was
  - ADDED: API access to the journal contents, pages can be added, removed or changed
  - ADDED: Recipes for Mystical Agriculture with AgriCraft wheat seeds where needed
  - FIXED: Seeds not dropping when soil underneath a plant is broken

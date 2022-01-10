@@ -292,6 +292,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        // This must only run on the client thread
+        if(!event.player.getEntityWorld().isRemote()) {
+            return;
+        }
         // Check if the handler is active
         if (this.isActive()) {
             // Check if a journal is still being held

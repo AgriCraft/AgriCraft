@@ -29,6 +29,7 @@ public class JournalClientData {
         this.journalStack = journalStack;
         this.pages = journal.getPages(this.getJournalStack());
         this.hand = hand;
+        this.target = this.getJournal().getCurrentPageIndex(this.getJournalStack());
     }
 
     public IAgriJournalItem getJournal() {
@@ -84,6 +85,7 @@ public class JournalClientData {
             this.animationCounter -= 1;
             if(this.animationCounter <= 0) {
                 this.animationCounter = 0;
+                this.getJournal().setCurrentPageIndex(this.getJournalStack(), page + 1);
                 new MessageFlipJournalPage(page + 1, this.getHand()).sendToServer();
             }
         } else if(this.target < page) {
@@ -94,6 +96,7 @@ public class JournalClientData {
             this.animationCounter += 1;
             if(this.animationCounter >= 0) {
                 this.animationCounter = 0;
+                this.getJournal().setCurrentPageIndex(this.getJournalStack(), page - 1);
                 new MessageFlipJournalPage(page -1, this.getHand()).sendToServer();
             }
         }
