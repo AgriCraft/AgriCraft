@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.impl.v1.journal.PlantPage;
+import com.infinityraider.agricraft.render.items.journal.JournalDataDrawerPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
@@ -22,9 +22,9 @@ public class SoilPropertyIconRenderer implements IRenderUtilities {
         return INSTANCE;
     }
 
-    private final ResourceLocation texture_humidity = PlantPage.Textures.HUMIDITY_FILLED;
-    private final ResourceLocation texture_acidity = PlantPage.Textures.ACIDITY_FILLED;
-    private final ResourceLocation texture_nutrients = PlantPage.Textures.NUTRIENTS_FILLED;
+    private final ResourceLocation texture_humidity = JournalDataDrawerPlant.Textures.HUMIDITY_FILLED;
+    private final ResourceLocation texture_acidity = JournalDataDrawerPlant.Textures.ACIDITY_FILLED;
+    private final ResourceLocation texture_nutrients = JournalDataDrawerPlant.Textures.NUTRIENTS_FILLED;
 
     private final int[] dxHumidity = {8, 8, 10, 10, 10, 7};
     private final int[] dxAcidity = {7, 8, 7, 8, 8, 8, 6};

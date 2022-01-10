@@ -12,7 +12,6 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
-import com.infinityraider.agricraft.network.MessagePlantResearched;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -140,11 +139,11 @@ public final class PlantPage implements IAgriJournalItem.IPage {
     public List<List<IAgriPlant>> getOffPageMutations() {
         return this.mutationsOffPage;
     }
+
     @Override
     public void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal) {
-        // TODO
-        if(!CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), this.plant)) {
-            new MessagePlantResearched(this.plant).sendToServer();
+        if(!CapabilityResearchedPlants.getInstance().isPlantResearched(player, this.getPlant())) {
+            CapabilityResearchedPlants.getInstance().researchPlant(player, this.getPlant());
         }
     }
 
@@ -164,8 +163,7 @@ public final class PlantPage implements IAgriJournalItem.IPage {
 
     protected boolean isPlantKnown(IAgriPlant plant) {
         if(AgriCraft.instance.getConfig().progressiveJEI()) {
-            return this.getAllDiscoveredPlants().contains(plant)
-                    || CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), plant);
+            return this.getAllDiscoveredPlants().contains(plant);
         }
         return true;
     }

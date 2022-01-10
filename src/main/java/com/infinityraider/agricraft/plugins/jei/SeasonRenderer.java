@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
-import com.infinityraider.agricraft.impl.v1.journal.PlantPage;
+import com.infinityraider.agricraft.render.items.journal.JournalDataDrawerPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
@@ -17,7 +17,7 @@ public class SeasonRenderer implements IRenderUtilities {
         return INSTANCE;
     }
 
-    private final ResourceLocation texture = PlantPage.Textures.SEASONS_FILLED;
+    private final ResourceLocation texture = JournalDataDrawerPlant.Textures.SEASONS_FILLED;
 
     private SeasonRenderer() {
     }

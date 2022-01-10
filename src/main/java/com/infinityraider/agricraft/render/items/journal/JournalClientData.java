@@ -1,8 +1,9 @@
 package com.infinityraider.agricraft.render.items.journal;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.network.MessageFlipJournalPage;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,17 +17,18 @@ public class JournalClientData {
     private final IAgriJournalItem journal;
     private final ItemStack journalStack;
     private final List<IAgriJournalItem.IPage> pages;
+    private final Hand hand;
 
-    private int page;
     private int target;
 
     private int animationCounter;
     private int prevAnimationCounter;
 
-    public JournalClientData(ItemStack journalStack) {
+    public JournalClientData(ItemStack journalStack, Hand hand) {
         this.journal = (IAgriJournalItem) journalStack.getItem();
         this.journalStack = journalStack;
         this.pages = journal.getPages(this.getJournalStack());
+        this.hand = hand;
     }
 
     public IAgriJournalItem getJournal() {
@@ -37,19 +39,29 @@ public class JournalClientData {
         return this.journalStack;
     }
 
+    public Hand getHand() {
+        return this.hand;
+    }
+
+    public int getPageIndex() {
+        return this.getJournal().getCurrentPageIndex(this.getJournalStack());
+    }
+
     public IAgriJournalItem.IPage getCurrentPage() {
-        if(this.target >= this.page) {
-            return this.pages.get(this.page);
+        int page = this.getPageIndex();
+        if(this.target >= page) {
+            return this.pages.get(page);
         } else {
-            return this.pages.get(this.page - 1);
+            return this.pages.get(page - 1);
         }
     }
 
     public IAgriJournalItem.IPage getFlippedPage() {
-        if(this.target > this.page) {
-            return this.pages.get(this.page + 1);
+        int page = this.getPageIndex();
+        if(this.target > page) {
+            return this.pages.get(page + 1);
         } else  {
-            return this.pages.get(this.page);
+            return this.pages.get(page);
         }
     }
 
@@ -62,8 +74,9 @@ public class JournalClientData {
     }
 
     public void tick() {
+        int page = this.getPageIndex();
         this.prevAnimationCounter = this.animationCounter;
-        if(this.target > this.page) {
+        if(this.target > page) {
             if(this.animationCounter == 0) {
                 this.animationCounter = FLIPPING_DURATION;
                 this.prevAnimationCounter = this.animationCounter;
@@ -71,10 +84,9 @@ public class JournalClientData {
             this.animationCounter -= 1;
             if(this.animationCounter <= 0) {
                 this.animationCounter = 0;
-                this.page += 1;
-                this.pages.get(this.page).onPageOpened(AgriCraft.instance.getClientPlayer(), this.getJournalStack(), this.getJournal());
+                new MessageFlipJournalPage(page + 1, this.getHand()).sendToServer();
             }
-        } else if(this.target < this.page) {
+        } else if(this.target < page) {
             if(this.animationCounter == 0) {
                 this.animationCounter = -FLIPPING_DURATION;
                 this.prevAnimationCounter = this.animationCounter;
@@ -82,8 +94,7 @@ public class JournalClientData {
             this.animationCounter += 1;
             if(this.animationCounter >= 0) {
                 this.animationCounter = 0;
-                this.page -= 1;
-                this.pages.get(this.page).onPageOpened(AgriCraft.instance.getClientPlayer(), this.getJournalStack(), this.getJournal());
+                new MessageFlipJournalPage(page -1, this.getHand()).sendToServer();
             }
         }
     }

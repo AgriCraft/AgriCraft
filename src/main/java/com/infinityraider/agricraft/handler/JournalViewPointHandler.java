@@ -82,14 +82,14 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 return true;
             } else {
                 this.setActive(hand, true);
-                this.journal = new JournalClientData(journal);
+                this.journal = new JournalClientData(journal, hand);
             }
         } else {
             Hand other = hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
             if(!this.isActive(other)) {
                 this.setActive(hand, true);
                 if(AgriCraft.instance.proxy().toggleDynamicCamera(this, true)) {
-                    this.journal = new JournalClientData(journal);
+                    this.journal = new JournalClientData(journal, hand);
                     return true;
                 } else {
                     this.setActive(hand, false);

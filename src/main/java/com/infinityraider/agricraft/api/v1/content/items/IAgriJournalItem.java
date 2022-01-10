@@ -91,6 +91,8 @@ public interface IAgriJournalItem extends IAgriItem {
 
         /**
          * Callback for when a player opens this page
+         * Called on the server thread
+         *
          * @param player the player
          * @param stack the stack holding the journal
          * @param journal the journal

@@ -107,10 +107,10 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     public void registerMessages(INetworkWrapper wrapper) {
         // AgriCraft functional messages
         wrapper.registerMessage(MessageCompareLight.class);
+        wrapper.registerMessage(MessageFlipJournalPage.class);
         wrapper.registerMessage(MessageIrrigationNeighbourUpdate.class);
         wrapper.registerMessage(MessageMagnifyingGlassObserving.ToClient.class);
         wrapper.registerMessage(MessageMagnifyingGlassObserving.ToServer.class);
-        wrapper.registerMessage(MessagePlantResearched.class);
         wrapper.registerMessage(MessageSyncResearchCapability.class);
         wrapper.registerMessage(MessageSyncSeedBagSortMode.class);
         // Json sync messages
