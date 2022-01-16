@@ -7,6 +7,7 @@ Changelog
  - ADDED: Recipes for Mystical Agriculture with AgriCraft wheat seeds where needed
  - FIXED: Seeds not dropping when soil underneath a plant is broken
  - FIXED: Sugarcane plants dropping Bamboo seeds (thanks to Skillotic0703)
+ - FIXED: Conflicts with Not Enough Animations
 
 3.0.7
  - CHANGE: Reworked the json callback system, it can now take arguments depending on the callback
