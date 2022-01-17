@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
@@ -43,19 +43,16 @@ public class CropHelper {
         return world.getRandom().nextBoolean();
     }
 
-    public static boolean checkGrowthSpace(IAgriCrop crop) {
-        World world = crop.world();
+    public static boolean checkGrowthSpace(World world, BlockPos pos, IAgriGrowable plant, IAgriGrowthStage stage) {
         if(world == null) {
             return false;
         }
-        IAgriPlant plant = crop.getPlant();
-        IAgriGrowthStage stage = crop.getGrowthStage();
         double height = plant.getPlantHeight(stage);
         while(height > 16) {
             int offset = ((int) height) / 16;
-            BlockPos pos = crop.getPosition().up(offset);
-            BlockState state = world.getBlockState(pos);
-            if(!state.getBlock().isAir(state, world, pos)) {
+            BlockPos up = pos.up(offset);
+            BlockState state = world.getBlockState(up);
+            if(!state.getBlock().isAir(state, world, up)) {
                 return false;
             }
             height -= 16;

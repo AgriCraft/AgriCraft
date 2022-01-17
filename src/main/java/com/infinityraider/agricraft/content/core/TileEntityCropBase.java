@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
@@ -182,7 +183,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(!this.getPlant().getGrowthStages().contains(stage)) {
             return false;
         }
-        if(!this.checkGrowthSpace()) {
+        if(!this.checkGrowthSpace(this.getPlant(), stage)) {
             return false;
         }
         this.growth.set(stage);
@@ -190,8 +191,8 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         return true;
     }
 
-    protected boolean checkGrowthSpace() {
-        return CropHelper.checkGrowthSpace(this);
+    protected boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
+        return CropHelper.checkGrowthSpace(this.getWorld(),this.getPos(), plant, stage);
     }
 
     @Override
@@ -199,7 +200,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         if(this.getWorld() == null) {
             return IAgriGrowthResponse.INFERTILE;
         }
-        if(!this.checkGrowthSpace()) {
+        if(!this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())) {
             return IAgriGrowthResponse.INFERTILE;
         }
         return this.requirement.check();
@@ -461,14 +462,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             if(this.weedGrowth.get().equals(stage)) {
                 return false;
             }
-            if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace()) {
+            if(this.getWeeds().getGrowthStages().contains(stage) && this.checkGrowthSpace(this.getWeeds(), stage)) {
                 this.weedGrowth.set(stage);
                 this.getWeeds().onGrowthTick(this);
                 this.handlePlantUpdate();
                 return true;
             }
             return false;
-        } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace()) {
+        } else if(weed.getGrowthStages().contains(stage) && this.checkGrowthSpace(this.getWeeds(), stage)) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Pre(this, weed))) {
                 this.setWeedImpl(weed, stage);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Weed.Post(this, weed));
