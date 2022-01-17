@@ -156,6 +156,10 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
         }
         TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
         ItemStack heldItem = player.getHeldItem(hand);
+        // debugging
+        if(heldItem.getItem() instanceof ItemDebugger) {
+            return ActionResultType.PASS;
+        }
         // Player is sneaking: insertion / extraction logic
         if(player.isSneaking()) {
             // No sneak-action on the client

@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRend
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
+import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import com.infinityraider.infinitylib.utility.inventory.ISidedInventoryWrapped;
 import mcp.MethodsReturnNonnullByDefault;
@@ -31,10 +32,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventoryWrapped, IInventoryItemHandler, IDynamicCameraController {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventoryWrapped, IInventoryItemHandler, IDynamicCameraController, IDebuggable {
     public static final int SLOT_SEED = 0;
     public static final int SLOT_JOURNAL = 1;
     private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
@@ -414,6 +416,30 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     public static RenderFactory createRenderFactory() {
         return new RenderFactory();
+    }
+
+    @Override
+    public void addServerDebugInfo(Consumer<String> consumer) {
+        this.addDebugInfo(consumer);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addClientDebugInfo(Consumer<String> consumer) {
+        this.addDebugInfo(consumer);
+    }
+
+    protected void addDebugInfo(Consumer<String> consumer) {
+        ItemStack journalStack = this.getJournal();
+        if(journalStack.isEmpty() || !(journalStack.getItem() instanceof IAgriJournalItem)) {
+            consumer.accept("No journal present");
+        } else {
+            IAgriJournalItem journalItem = (IAgriJournalItem) journalStack.getItem();
+            consumer.accept("Journal ("+ journalItem.getDiscoveredSeeds(journalStack).size() + " plants):");
+            for(IAgriPlant plant : journalItem.getDiscoveredSeeds(journalStack)) {
+                consumer.accept(" - " + plant.getId());
+            }
+        }
     }
 
     private static class RenderFactory implements InfinityTileEntityType.IRenderFactory<TileEntitySeedAnalyzer> {
