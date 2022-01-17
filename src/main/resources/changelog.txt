@@ -1,22 +1,20 @@
 Changelog
 ---------
-3.0.8
- - CHANGE: Crop Sticks now uses a shapeless recipe to avoid recipe conflicts (thanks to Skillotic0703)
- - CHANGE: Journal contents logic is now fully server-side, and remembers on which page it was
- - ADDED: API access to the journal contents, pages can be added, removed or changed
- - ADDED: Recipes for Mystical Agriculture with AgriCraft wheat seeds where needed
- - FIXED: Seeds not dropping when soil underneath a plant is broken
- - FIXED: Sugarcane plants dropping Bamboo seeds (thanks to Skillotic0703)
- - FIXED: Tall crops not resetting growth stage when harvested with a block above them
- - FIXED: Conflicts with Not Enough Animations
-
 3.0.7
  - CHANGE: Reworked the json callback system, it can now take arguments depending on the callback
+ - CHANGE: Crop Sticks now uses a shapeless recipe to avoid recipe conflicts (thanks to Skillotic0703)
+ - CHANGE: Journal contents logic is now fully server-side, and remembers on which page it was
  - ADDED: Fungus json callback, allows to convert mature fungus crops into fungus "trees" by using bonemeal
  - ADDED: Fungus json callback to crimson and warped fungus
  - ADDED: Default json support for Arcane Fundamentals (thanks to RatElemental)
  - ADDED: Default json support for Supplementaries (thanks to RatElemental)
+ - ADDED: API access to the journal contents, pages can be added, removed or changed
+ - ADDED: Recipes for Mystical Agriculture with AgriCraft wheat seeds where needed
  - FIXED: Texture paths for Thermal Cultivation plants being outdated
+ - FIXED: Seeds not dropping when soil underneath a plant is broken
+ - FIXED: Sugarcane plants dropping Bamboo seeds (thanks to Skillotic0703)
+ - FIXED: Tall crops not resetting growth stage when harvested with a block above them
+ - FIXED: Conflicts with Not Enough Animations
 
 3.0.6
  - CHANGE: The magnifying glass can now also inspect entities (if such logic is implemented for the entity)
