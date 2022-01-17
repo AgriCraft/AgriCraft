@@ -251,6 +251,7 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             List<IAgriPlant> plants = Lists.newArrayList();
             CompoundNBT existingTag = stack.getTag();
             if(existingTag != null && existingTag.contains(AgriNBT.ENTRIES)) {
+                // extract plants from legacy tags
                 plants.addAll(existingTag.getList(AgriNBT.ENTRIES, 10).stream()
                         // filter for CompoundNBT, should always be the case, but is here for safety
                         .filter(tag -> tag instanceof CompoundNBT)
@@ -265,6 +266,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
                         // collect
                         .collect(Collectors.toList())
                 );
+                // Remove legacy tag
+                existingTag.remove(AgriNBT.ENTRIES);
+                if(existingTag.keySet().isEmpty()) {
+                    stack.setTag(null);
+                }
             }
             return plants;
         }
