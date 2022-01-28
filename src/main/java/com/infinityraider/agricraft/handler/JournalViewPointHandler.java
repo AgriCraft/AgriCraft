@@ -74,7 +74,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     private JournalViewPointHandler() {}
 
-    public boolean toggle(ItemStack journal, Hand hand) {
+    public boolean toggle(PlayerEntity player, Hand hand) {
         if(this.isActive(hand)) {
             this.setActive(hand, false);
             if(AgriCraft.instance.proxy().toggleDynamicCamera(this, false)) {
@@ -82,14 +82,14 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 return true;
             } else {
                 this.setActive(hand, true);
-                this.journal = new JournalClientData(journal, hand);
+                this.journal = new JournalClientData(player, hand);
             }
         } else {
             Hand other = hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
             if(!this.isActive(other)) {
                 this.setActive(hand, true);
                 if(AgriCraft.instance.proxy().toggleDynamicCamera(this, true)) {
-                    this.journal = new JournalClientData(journal, hand);
+                    this.journal = new JournalClientData(player, hand);
                     return true;
                 } else {
                     this.setActive(hand, false);

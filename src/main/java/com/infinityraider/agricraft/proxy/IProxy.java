@@ -6,10 +6,8 @@ import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
-import com.infinityraider.infinitylib.modules.playeranimations.ModulePlayerAnimations;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -92,7 +90,7 @@ public interface IProxy extends IProxyBase<Config> {
 
     default void toggleSeedAnalyzerObserving(boolean status) {}
 
-    default boolean toggleJournalObserving(ItemStack journal, Hand hand) {
+    default boolean toggleJournalObserving(PlayerEntity player, Hand hand) {
         return false;
     }
 

@@ -12,7 +12,6 @@ import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -79,8 +78,8 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public boolean toggleJournalObserving(ItemStack journal, Hand hand) {
-        return JournalViewPointHandler.getInstance().toggle(journal, hand);
+    public boolean toggleJournalObserving(PlayerEntity player, Hand hand) {
+        return JournalViewPointHandler.getInstance().toggle(player, hand);
     }
 
     @Override

@@ -22,13 +22,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,9 +57,12 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             return ActionResult.resultPass(stack);
         }
         if(world.isRemote()) {
-            if(AgriCraft.instance.proxy().toggleJournalObserving(stack, hand)) {
+            player.sendMessage(new StringTextComponent("[CLIENT] Journal has " + this.getDiscoveredSeeds(stack).size() + "Seeds"), Util.DUMMY_UUID);
+            if(AgriCraft.instance.proxy().toggleJournalObserving(player, hand)) {
                 return ActionResult.resultConsume(stack);
             }
+        } else {
+            player.sendMessage(new StringTextComponent("[SERVER] Journal has " + this.getDiscoveredSeeds(stack).size() + "Seeds"), Util.DUMMY_UUID);
         }
         return ActionResult.resultPass(stack);
     }
@@ -103,6 +109,55 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
         return true;
+    }
+
+    // Make sure NBT is synced to the client
+    @Override
+    public boolean shouldSyncTag() {
+        return true;
+    }
+
+    // Serialize the capabilities on the server to be sent to the client
+    @Nullable
+    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+        final CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
+        AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Writing Share Tag for journal (" + this.hashCode() + ")");
+        if(tag != null) {
+            // should always be the case
+            this.getJournalData(stack).ifPresent(data -> {
+                tag.put(AgriNBT.CONTENTS, data.writeToNBT());
+                AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Wrote " + data.getPlants().size() + "plants");
+            });
+        }
+        if(FMLEnvironment.dist == Dist.CLIENT) {
+            boolean bp = true;
+        } else {
+            boolean bp = true;
+        }
+        return tag;
+    }
+
+    // Read the capabilities on the client
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundNBT tag) {
+        AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Reading Share Tag for journal (" + this.hashCode() + ")");
+        if(tag != null && tag.contains(AgriNBT.CONTENTS)) {
+            // deserialize the journal data
+            this.getJournalData(stack).ifPresent(data -> data.readFromNBT(tag.getCompound(AgriNBT.CONTENTS)));
+        }
+        this.getJournalData(stack).map(data -> {
+            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Journal has " + data.getPlants().size() + " plants");
+            return data;
+        }).orElseGet(() -> {
+            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] No journal data found");
+            return null;
+        });
+        if(FMLEnvironment.dist == Dist.CLIENT) {
+            boolean bp = true;
+        } else {
+            boolean bp = true;
+        }
     }
 
     @Override
@@ -186,10 +241,23 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             this.initializePages();
             // read the index
             this.setCurrentIndex(tag.contains(AgriNBT.INDEX) ? tag.getInt(AgriNBT.INDEX) : 0);
+
+            // debug
+            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Reading journal (" + journal.hashCode() + ") capability data (" + this.getPlants().size() + " plants)");
+            if(FMLEnvironment.dist == Dist.CLIENT) {
+                boolean bp = true;
+            } else {
+                boolean bp = true;
+            }
         }
 
         @Override
         public CompoundNBT writeToNBT() {
+            if(FMLEnvironment.dist == Dist.CLIENT) {
+                boolean bp = true;
+            } else {
+                boolean bp = true;
+            }
             // Create new tag
             CompoundNBT tag = new CompoundNBT();
             // Write index

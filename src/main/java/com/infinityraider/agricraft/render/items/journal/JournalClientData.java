@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.network.MessageFlipJournalPage;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
@@ -14,8 +15,8 @@ import java.util.List;
 public class JournalClientData {
     private static final int FLIPPING_DURATION = 20;
 
+    private final PlayerEntity player;
     private final IAgriJournalItem journal;
-    private final ItemStack journalStack;
     private final List<IAgriJournalItem.IPage> pages;
     private final Hand hand;
 
@@ -24,12 +25,16 @@ public class JournalClientData {
     private int animationCounter;
     private int prevAnimationCounter;
 
-    public JournalClientData(ItemStack journalStack, Hand hand) {
-        this.journal = (IAgriJournalItem) journalStack.getItem();
-        this.journalStack = journalStack;
-        this.pages = journal.getPages(this.getJournalStack());
+    public JournalClientData(PlayerEntity player, Hand hand) {
+        this.player = player;
         this.hand = hand;
+        this.journal = (IAgriJournalItem) this.getJournalStack().getItem();
+        this.pages = journal.getPages(this.getJournalStack());
         this.target = this.getJournal().getCurrentPageIndex(this.getJournalStack());
+    }
+
+    public PlayerEntity getPlayer() {
+        return this.player;
     }
 
     public IAgriJournalItem getJournal() {
@@ -37,7 +42,7 @@ public class JournalClientData {
     }
 
     public ItemStack getJournalStack() {
-        return this.journalStack;
+        return this.getPlayer().getHeldItem(this.getHand());
     }
 
     public Hand getHand() {
