@@ -22,9 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -57,12 +55,9 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             return ActionResult.resultPass(stack);
         }
         if(world.isRemote()) {
-            player.sendMessage(new StringTextComponent("[CLIENT] Journal has " + this.getDiscoveredSeeds(stack).size() + "Seeds"), Util.DUMMY_UUID);
             if(AgriCraft.instance.proxy().toggleJournalObserving(player, hand)) {
                 return ActionResult.resultConsume(stack);
             }
-        } else {
-            player.sendMessage(new StringTextComponent("[SERVER] Journal has " + this.getDiscoveredSeeds(stack).size() + "Seeds"), Util.DUMMY_UUID);
         }
         return ActionResult.resultPass(stack);
     }
@@ -117,46 +112,43 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
         return true;
     }
 
-    // Serialize the capabilities on the server to be sent to the client
+    /*
+     In dedicated server play, there is a bug where the journal capability data is wiped whenever the player opens their
+     inventory, for this reason, the getShareTag and readShareTag methods are overridden, but only run logic on the
+     server and client side respectively.
+     If these methods are not overridden, the client does not receive the capability data, if they are overridden,
+     but run their logic regardless the side, the aforementioned bug occurs.
+
+     In single player, overriding these methods this way will have no effect, as the share tag is never written, it will
+     not exist when it is read.
+     */
+
+    // Serialize the capabilities only on the server to be sent to the client
     @Nullable
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
-        final CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
-        AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Writing Share Tag for journal (" + this.hashCode() + ")");
-        if(tag != null) {
-            // should always be the case
-            this.getJournalData(stack).ifPresent(data -> {
-                tag.put(AgriNBT.CONTENTS, data.writeToNBT());
-                AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Wrote " + data.getPlants().size() + "plants");
-            });
-        }
-        if(FMLEnvironment.dist == Dist.CLIENT) {
-            boolean bp = true;
+        if(FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
+            final CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
+            if (tag != null) {
+                // should always be the case
+                this.getJournalData(stack).ifPresent(data -> tag.put(AgriNBT.CONTENTS, data.writeToNBT()));
+            }
+            return tag;
         } else {
-            boolean bp = true;
+            return super.getShareTag(stack);
         }
-        return tag;
     }
 
-    // Read the capabilities on the client
+    // Read the capabilities on the client only
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT tag) {
-        AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Reading Share Tag for journal (" + this.hashCode() + ")");
-        if(tag != null && tag.contains(AgriNBT.CONTENTS)) {
-            // deserialize the journal data
-            this.getJournalData(stack).ifPresent(data -> data.readFromNBT(tag.getCompound(AgriNBT.CONTENTS)));
-        }
-        this.getJournalData(stack).map(data -> {
-            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Journal has " + data.getPlants().size() + " plants");
-            return data;
-        }).orElseGet(() -> {
-            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] No journal data found");
-            return null;
-        });
         if(FMLEnvironment.dist == Dist.CLIENT) {
-            boolean bp = true;
+            if (tag != null && tag.contains(AgriNBT.CONTENTS)) {
+                // deserialize the journal data
+                this.getJournalData(stack).ifPresent(data -> data.readFromNBT(tag.getCompound(AgriNBT.CONTENTS)));
+            }
         } else {
-            boolean bp = true;
+            super.readShareTag(stack, tag);
         }
     }
 
@@ -241,23 +233,10 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             this.initializePages();
             // read the index
             this.setCurrentIndex(tag.contains(AgriNBT.INDEX) ? tag.getInt(AgriNBT.INDEX) : 0);
-
-            // debug
-            AgriCraft.instance.getLogger().info("[" + FMLEnvironment.dist + "] Reading journal (" + journal.hashCode() + ") capability data (" + this.getPlants().size() + " plants)");
-            if(FMLEnvironment.dist == Dist.CLIENT) {
-                boolean bp = true;
-            } else {
-                boolean bp = true;
-            }
         }
 
         @Override
         public CompoundNBT writeToNBT() {
-            if(FMLEnvironment.dist == Dist.CLIENT) {
-                boolean bp = true;
-            } else {
-                boolean bp = true;
-            }
             // Create new tag
             CompoundNBT tag = new CompoundNBT();
             // Write index
