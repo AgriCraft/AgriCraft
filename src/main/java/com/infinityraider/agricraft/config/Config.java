@@ -680,6 +680,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         //animations
         private final ForgeConfigSpec.ConfigValue<Integer> seedAnalyzerAnimationDuration;
         private final ForgeConfigSpec.ConfigValue<Integer> journalAnimationDuration;
+        private final ForgeConfigSpec.ConfigValue<Boolean> useGUIs;
 
         public Client(ForgeConfigSpec.Builder builder) {
             super(builder);
@@ -703,6 +704,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Seed Analyzer Animation Duration", 15, 0, 40);
             this.journalAnimationDuration = builder.comment("\nConfigures the animation duration in ticks for the camera to snap to the journal, 0 disables it (Client only)")
                     .defineInRange("Journal Animation Duration", 10, 0, 40);
+            this.useGUIs = builder.comment("\nDetermine if the journal and the analyzer use guis instead of in-world animation (Client only)")
+                    .define("Use GUIs", false);
             builder.pop();
         }
 
@@ -734,6 +737,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public int journalAnimationDuration() {
             return this.journalAnimationDuration.get();
+        }
+
+        @Override
+        public boolean useGUIsInsteadOfAnimation() {
+            return this.useGUIs.get();
         }
 
         @Override
@@ -781,6 +789,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @OnlyIn(Dist.CLIENT)
         public int journalAnimationDuration() {
             return 0;
+        }
+
+        @Override
+        public boolean useGUIsInsteadOfAnimation() {
+            return false;
         }
 
         @Override
