@@ -17,6 +17,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraftforge.fml.client.gui.GuiUtils;
+
+import java.util.List;
 
 public class JournalScreenContext implements IJournalDataDrawer.IPageRenderContext, IRenderUtilities {
 
@@ -94,6 +97,11 @@ public class JournalScreenContext implements IJournalDataDrawer.IPageRenderConte
 	@Override
 	public void drawItem(MatrixStack transforms, ItemStack item, float x, float y) {
 		Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(item, (int) x+baseX+renderX, (int) y+baseY+renderY);
+	}
+
+	@Override
+	public void drawTooltip(MatrixStack transforms, List<ITextComponent> textLines, float x, float y) {
+		GuiUtils.drawHoveringText(transforms, textLines, (int) (x+baseX+renderX), (int) y+baseY+renderY, Minecraft.getInstance().getMainWindow().getScaledWidth(), Minecraft.getInstance().getMainWindow().getScaledHeight(), -1, Minecraft.getInstance().fontRenderer);
 	}
 
 	private void drawColored(MatrixStack matrixStack, float x1, float x2, float y1, float y2, float minU, float maxU, float minV, float maxV, float r, float g, float b, float a) {

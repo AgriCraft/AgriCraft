@@ -66,13 +66,13 @@ public class JournalScreen extends Screen {
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
 		AbstractGui.blit(matrixStack, renderX, renderY, this.getBlitOffset(), 0, 0, PAGE_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, PAGE_WIDTH);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		// TODO: @Ketheroth re-add tooltips
-//		this.func_243308_b(matrixStack, journalData.getCurrentPage().getTooltipList(mouseX, mouseY, renderX, renderY), mouseX, mouseY);
 		IAgriJournalItem.IPage page = this.journalData.getCurrentPage();
 		CONTEXT_RIGHT.setRenderXY(renderX, renderY);
 		CONTEXT_LEFT.setRenderXY(renderX, renderY);
 		JournalViewPointHandler.getPageDrawer(page).drawLeftSheet(page, CONTEXT_LEFT, matrixStack, journal, (IAgriJournalItem) journal.getItem());
 		JournalViewPointHandler.getPageDrawer(page).drawRightSheet(page, CONTEXT_RIGHT, matrixStack, journal, (IAgriJournalItem) journal.getItem());
+		JournalViewPointHandler.getPageDrawer(page).drawTooltipLeft(page, CONTEXT_LEFT, matrixStack, mouseX-renderX-8, mouseY-renderY-7);
+		JournalViewPointHandler.getPageDrawer(page).drawTooltipRight(page, CONTEXT_RIGHT, matrixStack, mouseX-renderX-145, mouseY-renderY);
 	}
 
 	@Override

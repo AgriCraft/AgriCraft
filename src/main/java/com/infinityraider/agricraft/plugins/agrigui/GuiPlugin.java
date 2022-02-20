@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.plugins.agrigui;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.plugins.agrigui.analyzer.SeedAnalyzerContainer;
 import com.infinityraider.agricraft.plugins.agrigui.analyzer.SeedAnalyzerScreen;
 import com.infinityraider.agricraft.plugins.agrigui.journal.GuiCompatClient;
@@ -20,12 +19,12 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -37,6 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 
 @SuppressWarnings("unused")
+@OnlyIn(Dist.CLIENT)
 @AgriPlugin(modId = Names.Mods.MINECRAFT, alwaysLoad = true)
 public class GuiPlugin implements IAgriPlugin {
 

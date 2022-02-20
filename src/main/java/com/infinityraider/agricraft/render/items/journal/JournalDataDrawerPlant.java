@@ -3,8 +3,12 @@ package com.infinityraider.agricraft.render.items.journal;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.journal.PlantPage;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -12,6 +16,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collections;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -174,4 +179,94 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
             posY += dy;
         }
     }
+
+    @Override
+    public void drawTooltipLeft(PlantPage page, IPageRenderContext context, MatrixStack transforms, int mouseX, int mouseY) {
+        // seed item
+        if (4 <= mouseX && mouseX <= 20 && 5 <= mouseY && mouseY <= 21) {
+            context.drawTooltip(transforms, Collections.singletonList(page.getPlant().getTooltip()), mouseX, mouseY);
+            return;
+        }
+
+        // Growth requirements
+        float offset = context.drawText(transforms, page.getPlant().getInformation(), -1000, -1000, 0.70F); // draw offscreen to get offset
+        float dy = Math.max(offset, 60);
+        dy += context.drawText(transforms, GROWTH_REQUIREMENTS, -1000, -1000, 0.80F) + 1; // draw offscreen to get offset
+        // Light level
+        for (int i = 0; i < page.brightnessMask().length; i++) {
+            if (6 + 4 * i <= mouseX && mouseX <= 6 + 4 * i + 4 && dy + 1 <= mouseY && mouseY <= dy + 9) {
+                context.drawTooltip(transforms, Collections.singletonList(new TranslationTextComponent("agricraft.tooltip.light").appendString(" " + i)), mouseX, mouseY);
+                return;
+            }
+        }
+        dy += 9;
+        // Seasons
+        if (AgriApi.getSeasonLogic().isActive()) {
+            for (int i = 0; i < page.seasonMask().length; i++) {
+                int w = 10;
+                int h = 12;
+                int x = (i % 2) * (w + 2) + 5 + 70;
+                int y = (i / 2) * (h + 2) + 6 + (int) dy;
+                if (x <= mouseX && mouseX <= x + w && y <= mouseY && mouseY <= y + h) {
+                    context.drawTooltip(transforms, Collections.singletonList(AgriSeason.values()[i].getDisplayName()), mouseX, mouseY);
+                    return;
+                }
+            }
+        }
+        // Humidity
+        for (int i = 0; i < page.humidityMask().length; i++) {
+            int dx = JournalDataDrawerBase.Textures.HUMIDITY_OFFSETS[i] + 10;
+            int w = JournalDataDrawerBase.Textures.HUMIDITY_OFFSETS[i + 1] - JournalDataDrawerBase.Textures.HUMIDITY_OFFSETS[i];
+            if (dx <= mouseX && mouseX <= dx + w && dy <= mouseY && mouseY <= dy + 12) {
+                context.drawTooltip(transforms, Collections.singletonList(IAgriSoil.Humidity.values()[i].getDescription()), mouseX, mouseY);
+                return;
+            }
+        }
+        dy += 13;
+        // Acidity
+        for (int i = 0; i < page.acidityMask().length; i++) {
+            int dx = JournalDataDrawerBase.Textures.ACIDITY_OFFSETS[i] + 10;
+            int w = JournalDataDrawerBase.Textures.ACIDITY_OFFSETS[i + 1] - JournalDataDrawerBase.Textures.ACIDITY_OFFSETS[i];
+            if (dx <= mouseX && mouseX <= dx + w && dy <= mouseY && mouseY <= dy + 12) {
+                context.drawTooltip(transforms, Collections.singletonList(IAgriSoil.Acidity.values()[i].getDescription()), mouseX, mouseY);
+                return;
+            }
+        }
+        dy += 13;
+        // Nutrients
+        for (int i = 0; i < page.nutrientsMask().length; i++) {
+            int dx = JournalDataDrawerBase.Textures.NUTRIENTS_OFFSETS[i] + 10;
+            int w = JournalDataDrawerBase.Textures.NUTRIENTS_OFFSETS[i + 1] - JournalDataDrawerBase.Textures.NUTRIENTS_OFFSETS[i];
+            if (dx <= mouseX && mouseX <= dx + w && dy <= mouseY && mouseY <= dy + 12) {
+                context.drawTooltip(transforms, Collections.singletonList(IAgriSoil.Nutrients.values()[i].getDescription()), mouseX, mouseY);
+                return;
+            }
+        }
+
+    }
+
+    @Override
+    public void drawTooltipRight(PlantPage page, IPageRenderContext context, MatrixStack transforms, int x, int y) {
+        // products tooltips
+        for (int i = 0; i < page.getDrops().size(); i++) {
+            if (11 + i * 20 <= x && x <= 11 + i * 20 + 16 && 20 <= y && y <= 20 + 16) {
+                context.drawTooltip(transforms, page.getDrops().get(i).getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL), x, y);
+            }
+        }
+        // mutation tooltips
+        int posX = 10;
+        int posY = 54;
+        int dy = 20;
+        for (List<IAgriPlant> plants : page.getOnPageMutations()) {
+            if (posX + 1 <= x && x <= posX + 17 && posY + 1 <= y && y <= posY + 17) {
+                context.drawTooltip(transforms, Collections.singletonList(plants.get(0).getTooltip()), x, y);
+            } else if (posX + 35 <= x && x <= posX + 51 && posY + 1 <= y && y <= posY + 17) {
+                context.drawTooltip(transforms, Collections.singletonList(plants.get(1).getTooltip()), x, y);
+            } else if (posX + 69 <= x && x <= posX + 85 && posY + 1 <= y && y <= posY + 17) {
+                context.drawTooltip(transforms, Collections.singletonList(plants.get(2).getTooltip()), x, y);
+            }
+            posY += dy;
+        }
+    }
+
 }
