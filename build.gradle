@@ -321,6 +321,21 @@ jar {
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar')
 
+task apiJar(type: Jar) {
+    archiveClassifier.set('api')
+    from(sourceSets.main.output)
+    include 'com/infinityraider/agricraft/api/**'
+}
+task apiSrcJar(type: Jar) {
+    archiveClassifier.set('api-sources')
+    from sourceSets.main.java
+    include 'com/infinityraider/agricraft/api/**'
+}
+
+artifacts {
+    archives apiJar, apiSrcJar
+}
+
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
