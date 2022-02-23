@@ -100,7 +100,7 @@ public class JsonPlant implements IAgriPlant {
                                 return Optional.of(factory.makeCallBack(json));
                             } catch(Exception e) {
                                 AgriCraft.instance.getLogger().error("Failed to parse json plant callback");
-                                AgriCraft.instance.getLogger().error(json.getAsString());
+                                AgriCraft.instance.getLogger().error(json.toString());
                                 AgriCraft.instance.getLogger().printStackTrace(e);
                             }
                             return Optional.empty();

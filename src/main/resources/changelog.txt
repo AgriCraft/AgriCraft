@@ -1,5 +1,9 @@
 Changelog
 ---------
+3.0.8
+ - FIXED: Potential Crash when logging an invalid json plant
+ - FIXED: AgriCraft crops ignoring the result of Forge CropGrowEvents
+
 3.0.7
  - CHANGE: Reworked the json callback system, it can now take arguments depending on the callback
  - CHANGE: Crop Sticks now uses a shapeless recipe to avoid recipe conflicts (thanks to Skillotic0703)
