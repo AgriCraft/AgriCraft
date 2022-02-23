@@ -10,6 +10,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.List;
+
 /**
  * Client side class to draw contents on journal pages.
  * Use the static register method to register a drawer.
@@ -59,6 +61,27 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
      * @param journal the IAgriJournalItem representing the journal which is being read
      */
     void drawRightSheet(P page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal);
+
+    /**
+     * Called to draw the tooltips of the left sheet of the page according to the position of the mouse
+     * @param page the page
+     * @param context the render context, use this to draw things
+     * @param transforms the transformation matrix, to be passed to the render context
+     * @param x the x position of the mouse in the page
+     * @param y the y position of the mouse in the page
+     */
+    default void drawTooltipLeft(P page, IPageRenderContext context, MatrixStack transforms, int x, int y) { }
+
+
+    /**
+     * Called to draw the tooltips of the right sheet of the page according to the position of the mouse
+     * @param page the page
+     * @param context the render context, use this to draw things
+     * @param transforms the transformation matrix, to be passed to the render context
+     * @param x the x position of the mouse in the page
+     * @param y the y position of the mouse in the page
+     */
+    default void drawTooltipRight(P page, IPageRenderContext context, MatrixStack transforms, int x, int y) { }
 
     /**
      * Render context passed to the IJournalDataDrawer to render page contents.
@@ -175,5 +198,15 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param y the y position to draw the item at
          */
         void drawItem(MatrixStack transforms, ItemStack item, float x, float y);
+
+        /**
+         * Draws a tooltip
+         * @param transforms the transformation matrix
+         * @param textLines the text lines to draw
+         * @param x the x position to draw the item at
+         * @param y the y position to draw the item at
+         */
+        default void drawTooltip(MatrixStack transforms, List<ITextComponent> textLines, float x, float y) {}
+
     }
 }

@@ -32,6 +32,8 @@
 
   "enchantment.agricraft.agri_seed_bag": "Seed Sorting",
 
+  "screen.agricraft.seed_analyzer" : "Seed Analyzer",
+
   "agricraft.stat.gain": "Gain",
   "agricraft.stat.growth": "Growth",
   "agricraft.stat.strength": "Strength",

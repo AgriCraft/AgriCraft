@@ -467,4 +467,11 @@ public interface IAgriConfig {
      */
     @OnlyIn(Dist.CLIENT)
     int journalAnimationDuration();
+
+    /**
+     * @return if GUIs should be used instead of animations for the journal and the analyzer
+     */
+    @OnlyIn(Dist.CLIENT)
+    boolean useGUIsInsteadOfAnimation();
+
 }
