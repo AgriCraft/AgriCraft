@@ -9,6 +9,7 @@ import com.infinityraider.infinitylib.utility.WorldHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -183,6 +184,21 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
+    public GrowConditionBase<Stream<TileEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response,
+                                                                    BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tootlips) {
+        BlockPos range = maxOffset.subtract(minOffset);
+        return new GrowConditionBase<>(
+                type,
+                response,
+                Functions.tileEntity(minOffset, maxOffset),
+                Offsetters.NONE,
+                tootlips,
+                range.getX()*range.getY()*range.getZ(),
+                IAgriGrowCondition.CacheType.NONE
+        );
+    }
+
+    @Override
     public GrowConditionBase<Stream<Entity>> entitiesNearby(BiFunction<Integer, Stream<Entity>, IAgriGrowthResponse> response,
                                              double range, List<ITextComponent> tooltips) {
         return new GrowConditionBase<>(
@@ -293,6 +309,10 @@ public class Factory extends FactoryAbstract {
 
         private static BiFunction<World, BlockPos, Stream<BlockState>> blockstate(BlockPos min, BlockPos max) {
             return (world, pos) -> WorldHelper.streamPositions(pos.add(min), pos.add(max)).map(world::getBlockState);
+        }
+
+        private static BiFunction<World, BlockPos, Stream<TileEntity>> tileEntity(BlockPos min, BlockPos max) {
+            return (world, pos) -> WorldHelper.streamTiles(world, pos.add(min), pos.add(max), TileEntity.class);
         }
 
         private Functions () {}

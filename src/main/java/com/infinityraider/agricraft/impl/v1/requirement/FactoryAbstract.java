@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.reference.AgriToolTips;
+import com.infinityraider.agricraft.util.NBTFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -13,6 +14,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -330,6 +333,12 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
+    public IAgriGrowCondition tileEntitiesNearby(BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response,
+                                                 BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+        return this.tileEntitiesNearby(RequirementType.TILES_NEARBY, response, minOffset, maxOffset, tooltips);
+    }
+
+    @Override
     public IAgriGrowCondition classNearby(BiFunction<Integer, Stream<Class<? extends Block>>, IAgriGrowthResponse> response,
                                           BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
         return this.blocksNearby((str, stream) -> response.apply(str, stream.map(Block::getClass)), minOffset, maxOffset, tooltips);
@@ -354,6 +363,14 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
+    public IAgriGrowCondition tileEntityNearby(NBTFilter filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
+        BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
+                stream.map(tile -> tile.write(new CompoundNBT())).filter(filter).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
+        return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(
+                Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)));
+    }
+
+    @Override
     public IAgriGrowCondition blocksNearby(Collection<Block> blocks, int amount, BlockPos minOffset, BlockPos maxOffset) {
         BiFunction<Integer, Stream<BlockState>, IAgriGrowthResponse> response = (str, stream) ->
                 stream.map(BlockState::getBlock).filter(blocks::contains).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
@@ -373,8 +390,20 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         ).collect(Collectors.toList()));
     }
 
+    @Override
+    public IAgriGrowCondition tileEntitiesNearby(Collection<NBTFilter> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
+        BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
+                stream.map(tile -> tile.write(new CompoundNBT())).filter(nbt ->
+                        filters.stream().allMatch(filter -> filter.test(nbt))
+                ).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
+        return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)));
+    }
+
     protected abstract GrowConditionBase<Stream<BlockState>> blockStatesNearby(RequirementType type, BiFunction<Integer, Stream<BlockState>,
             IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
+
+    protected abstract GrowConditionBase<Stream<TileEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<TileEntity>,
+            IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tootlips);
 
     @Override
     public IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, EntityType<?> entityType, double range) {

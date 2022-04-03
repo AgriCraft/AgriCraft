@@ -2,12 +2,14 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
+import com.infinityraider.agricraft.util.NBTFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -371,6 +373,12 @@ public interface IDefaultGrowConditionFactory {
                                          BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
 
     /**
+     * general tile entities nearby growth condition
+     */
+    IAgriGrowCondition tileEntitiesNearby(BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response,
+                                          BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
+
+    /**
      * general block classes nearby growth condition
      */
     IAgriGrowCondition classNearby(BiFunction<Integer, Stream<Class<? extends Block>>, IAgriGrowthResponse> response,
@@ -387,6 +395,11 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition blockStateNearby(BlockState state, int amount, BlockPos minOffset, BlockPos maxOffset);
 
     /**
+     * fertile if there is at least a specified amount of a certain tile entity nearby
+     */
+    IAgriGrowCondition tileEntityNearby(NBTFilter filter, int amount, BlockPos minOffset, BlockPos maxOffset);
+
+    /**
      * fertile if there is at least a specified amount of certain blocks nearby
      */
     IAgriGrowCondition blocksNearby(Collection<Block> blocks, int amount, BlockPos minOffset, BlockPos maxOffset);
@@ -395,6 +408,11 @@ public interface IDefaultGrowConditionFactory {
      * fertile if there is at least a specified amount of certain block states nearby
      */
     IAgriGrowCondition blockStatesNearby(Collection<BlockState> states, int amount, BlockPos minOffset, BlockPos maxOffset);
+
+    /**
+     * fertile if there is at least a specified amount of certain tile entities nearby
+     */
+    IAgriGrowCondition tileEntitiesNearby(Collection<NBTFilter> filters, int amount, BlockPos minOffset, BlockPos maxOffset);
 
 
     /*

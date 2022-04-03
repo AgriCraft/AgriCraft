@@ -40,6 +40,9 @@ public enum RequirementType {
     /** if the presence/absence of a certain amount of specific blocks is required nearby */
     BLOCKS_NEARBY,
 
+    /** if the presence/absence of a certain amount of specific tile entities is required nearby */
+    TILES_NEARBY,
+
     /** if the presence/absence of a specific entity nearby is required */
     ENTITY,
 
