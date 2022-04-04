@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import com.infinityraider.agricraft.util.NBTFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -363,7 +362,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
-    public IAgriGrowCondition tileEntityNearby(NBTFilter filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
+    public IAgriGrowCondition tileEntityNearby(Predicate<CompoundNBT> filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
         BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
                 stream.map(tile -> tile.write(new CompoundNBT())).filter(filter).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(
@@ -391,7 +390,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
-    public IAgriGrowCondition tileEntitiesNearby(Collection<NBTFilter> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
+    public IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundNBT>> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
         BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
                 stream.map(tile -> tile.write(new CompoundNBT())).filter(nbt ->
                         filters.stream().allMatch(filter -> filter.test(nbt))

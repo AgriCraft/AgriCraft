@@ -53,7 +53,9 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {}
+    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
+
+    }
 
     @Override
     @Nonnull
@@ -83,6 +85,10 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
                     .flatMap((element) -> element.getGrowthStages()
                             .stream().flatMap(stage -> element.getTexturesFor(stage).stream()))
                     .forEach(consumer);
+        }
+
+        protected void onResourceManagerReload() {
+
         }
     }
 }

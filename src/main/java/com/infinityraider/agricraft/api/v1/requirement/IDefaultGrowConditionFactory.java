@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.util.NBTFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
@@ -397,7 +397,7 @@ public interface IDefaultGrowConditionFactory {
     /**
      * fertile if there is at least a specified amount of a certain tile entity nearby
      */
-    IAgriGrowCondition tileEntityNearby(NBTFilter filter, int amount, BlockPos minOffset, BlockPos maxOffset);
+    IAgriGrowCondition tileEntityNearby(Predicate<CompoundNBT> filter, int amount, BlockPos minOffset, BlockPos maxOffset);
 
     /**
      * fertile if there is at least a specified amount of certain blocks nearby
@@ -412,7 +412,7 @@ public interface IDefaultGrowConditionFactory {
     /**
      * fertile if there is at least a specified amount of certain tile entities nearby
      */
-    IAgriGrowCondition tileEntitiesNearby(Collection<NBTFilter> filters, int amount, BlockPos minOffset, BlockPos maxOffset);
+    IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundNBT>> filters, int amount, BlockPos minOffset, BlockPos maxOffset);
 
 
     /*
