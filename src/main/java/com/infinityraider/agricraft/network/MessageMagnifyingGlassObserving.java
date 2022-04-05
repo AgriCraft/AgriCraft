@@ -2,27 +2,27 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public abstract class MessageMagnifyingGlassObserving extends MessageBase {
-    public static void sendToServer(PlayerEntity player, boolean status) {
+    public static void sendToServer(Player player, boolean status) {
         new ToServer(player, status).sendToServer();
     }
 
-    public static void sendToClient(PlayerEntity player, boolean status) {
+    public static void sendToClient(Player player, boolean status) {
         new ToClient(player, status).sendToAll();
     }
 
-    private PlayerEntity player;
+    private Player player;
     private boolean status;
 
     private MessageMagnifyingGlassObserving() {
         super();
     }
 
-    private MessageMagnifyingGlassObserving(PlayerEntity player, boolean status) {
+    private MessageMagnifyingGlassObserving(Player player, boolean status) {
         this();
         this.player = player;
         this.status = status;
@@ -39,7 +39,7 @@ public abstract class MessageMagnifyingGlassObserving extends MessageBase {
             super();
         }
 
-        protected ToServer(PlayerEntity player, boolean status) {
+        protected ToServer(Player player, boolean status) {
             super(player, status);
         }
 
@@ -55,7 +55,7 @@ public abstract class MessageMagnifyingGlassObserving extends MessageBase {
             super();
         }
 
-        protected ToClient(PlayerEntity player, boolean status) {
+        protected ToClient(Player player, boolean status) {
             super(player, status);
         }
 

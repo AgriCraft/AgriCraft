@@ -1,15 +1,17 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import net.minecraft.block.Blocks;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 public class TileEntityCropPlant extends TileEntityCropBase {
-    public TileEntityCropPlant() {
-        super(AgriCraft.instance.getModTileRegistry().crop_plant);
+    public TileEntityCropPlant(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.CROP_PLANT, pos, state);
     }
 
     @Override
@@ -36,8 +38,8 @@ public class TileEntityCropPlant extends TileEntityCropBase {
     @Override
     public boolean removeGenome() {
         boolean result = super.removeGenome();
-        if(result && this.getWorld() != null && !this.getWorld().isRemote()) {
-            this.getWorld().setBlockState(this.getPos(), Blocks.AIR.getDefaultState());
+        if(result && this.getLevel() != null && !this.getLevel().isClientSide()) {
+            this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
         }
         return result;
     }

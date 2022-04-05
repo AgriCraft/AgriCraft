@@ -9,8 +9,8 @@ import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.impl.v1.fertilizer.JsonFertilizer;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.nio.file.Path;
 import java.util.List;

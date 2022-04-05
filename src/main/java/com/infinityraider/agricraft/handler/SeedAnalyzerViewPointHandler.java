@@ -7,18 +7,18 @@ import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.DynamicCamera;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.reference.Constants;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.IngameMenuScreen;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.InputUpdateEvent;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -94,7 +94,7 @@ public class SeedAnalyzerViewPointHandler {
         return this.getScrollPosition().getProgress(partialTick);
     }
 
-    public void applySeedAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+    public void applySeedAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, PoseStack transforms) {
         this.getSeedAnimator().applyAnimation(analyzer, partialTicks, transforms);
     }
 
@@ -104,10 +104,10 @@ public class SeedAnalyzerViewPointHandler {
         // Check if the handler is active
         if(this.isActive()) {
             // Check for movement inputs
-            boolean up = Minecraft.getInstance().gameSettings.keyBindForward.isKeyDown();
-            boolean down = Minecraft.getInstance().gameSettings.keyBindBack.isKeyDown();
-            boolean left = Minecraft.getInstance().gameSettings.keyBindLeft.isKeyDown();
-            boolean right = Minecraft.getInstance().gameSettings.keyBindRight.isKeyDown();
+            boolean up = Minecraft.getInstance().options.keyUp.isDown();
+            boolean down = Minecraft.getInstance().options.keyDown.isDown();
+            boolean left = Minecraft.getInstance().options.keyLeft.isDown();
+            boolean right = Minecraft.getInstance().options.keyRight.isDown();
             if(up || down || left || right) {
                 // Stop observing
                 ModuleDynamicCamera.getInstance().stopObserving();
@@ -149,28 +149,28 @@ public class SeedAnalyzerViewPointHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onMovement(InputUpdateEvent event) {
+    public void onMovement(MovementInputUpdateEvent event) {
         // Check if the handler is active
         if(this.isActive()) {
             // If this is active, we do not want any jumping or sneaking
-            event.getMovementInput().sneaking = false;
-            event.getMovementInput().jump = false;
+            event.getInput().shiftKeyDown = false;
+            event.getInput().jumping = false;
         }
     }
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onGuiOpened(GuiOpenEvent event) {
+    public void onGuiOpened(ScreenOpenEvent event) {
         // Check if the handler is active
-        if(this.isActive() && event.getGui() != null) {
+        if(this.isActive() && event.getScreen() != null) {
             // Allow chatting
-            if(event.getGui() instanceof ChatScreen) {
+            if(event.getScreen() instanceof ChatScreen) {
                 return;
             }
             // Stop observing
             ModuleDynamicCamera.getInstance().stopObserving();
             // Cancel the event in case of pause
-            if(event.getGui() instanceof IngameMenuScreen) {
+            if(event.getScreen() instanceof PauseScreen) {
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
             }
@@ -202,7 +202,7 @@ public class SeedAnalyzerViewPointHandler {
             }
         }
 
-        protected void applyAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+        protected void applyAnimation(TileEntitySeedAnalyzer analyzer, float partialTicks, PoseStack transforms) {
             // translate to center of block
             transforms.translate(HALF, HALF, HALF);
             // animate according to observation status
@@ -224,44 +224,44 @@ public class SeedAnalyzerViewPointHandler {
             transforms.scale(HALF, HALF, HALF);
         }
 
-        protected void applyIdleTransformation(MatrixStack transforms) {
+        protected void applyIdleTransformation(PoseStack transforms) {
             // define rotation angle in function of system time
-            transforms.rotate(new Quaternion(Vector3f.YP, this.calculateAngle(), true));
+            transforms.mulPose(new Quaternion(Vector3f.YP, this.calculateAngle(), true));
         }
 
-        protected void applyPositioningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+        protected void applyPositioningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, PoseStack transforms) {
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
             // rotate yaw
-            float yaw = MathHelper.interpolateAngle(f, this.angle, analyzer.getHorizontalAngle());
-            transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            float yaw = Mth.rotLerp(f, this.angle, analyzer.getHorizontalAngle());
+            transforms.mulPose(new Quaternion(Vector3f.YP, yaw, true));
             // translate
-            transforms.translate(MathHelper.lerp(f,0, DX), MathHelper.lerp(f,0, DY), MathHelper.lerp(f,0, DZ));
+            transforms.translate(Mth.lerp(f,0, DX), Mth.lerp(f,0, DY), Mth.lerp(f,0, DZ));
             // rotate pitch
-            float pitch = MathHelper.lerp(f,0, PITCH);
-            transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
+            float pitch = Mth.lerp(f,0, PITCH);
+            transforms.mulPose(new Quaternion(Vector3f.XP, pitch, true));
         }
 
-        protected void applyObservingTransformation(TileEntitySeedAnalyzer analyzer, MatrixStack transforms) {
+        protected void applyObservingTransformation(TileEntitySeedAnalyzer analyzer, PoseStack transforms) {
             // rotate yaw
-            transforms.rotate(new Quaternion(Vector3f.YP, analyzer.getHorizontalAngle(), true));
+            transforms.mulPose(new Quaternion(Vector3f.YP, analyzer.getHorizontalAngle(), true));
             // translate
             transforms.translate(DX, DY, DZ);
             // rotate pitch
-            transforms.rotate(ROTATION_PITCH);
+            transforms.mulPose(ROTATION_PITCH);
         }
 
-        protected void applyReturningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, MatrixStack transforms) {
+        protected void applyReturningTransformation(TileEntitySeedAnalyzer analyzer, float partialTicks, PoseStack transforms) {
             // fetch animation progress
             float f = (this.getAnimationFrame(analyzer) + partialTicks)/analyzer.getTransitionDuration();
             // rotate yaw
-            float yaw = MathHelper.interpolateAngle(f, analyzer.getHorizontalAngle(), this.calculateAngle());
-            transforms.rotate(new Quaternion(Vector3f.YP, yaw, true));
+            float yaw = Mth.rotLerp(f, analyzer.getHorizontalAngle(), this.calculateAngle());
+            transforms.mulPose(new Quaternion(Vector3f.YP, yaw, true));
             // translate
-            transforms.translate(MathHelper.lerp(f, DX, 0), MathHelper.lerp(f, DY, 0), MathHelper.lerp(f, DZ, 0));
+            transforms.translate(Mth.lerp(f, DX, 0), Mth.lerp(f, DY, 0), Mth.lerp(f, DZ, 0));
             // rotate pitch
-            float pitch = MathHelper.lerp(f,PITCH, 0);
-            transforms.rotate(new Quaternion(Vector3f.XP, pitch, true));
+            float pitch = Mth.lerp(f,PITCH, 0);
+            transforms.mulPose(new Quaternion(Vector3f.XP, pitch, true));
         }
 
         protected DynamicCamera.Status getObservationStatus(TileEntitySeedAnalyzer analyzer) {

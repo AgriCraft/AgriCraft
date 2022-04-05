@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.AgriTags;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class GreenHouseHelper {
     public static boolean isGreenHouseGlass(BlockState state) {
-        return Tags.Blocks.GLASS.contains(state.getBlock()) || AgriTags.Blocks.GREENHOUSE_GLASS.contains(state.getBlock());
+        return state.is(Tags.Blocks.GLASS) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
     }
 
     /**

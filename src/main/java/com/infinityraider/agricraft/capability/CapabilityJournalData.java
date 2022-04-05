@@ -5,10 +5,11 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.content.core.ItemJournal;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class CapabilityJournalData implements IInfSerializableCapabilityImplementation<ItemStack, ItemJournal.JournalData> {
     private static final CapabilityJournalData INSTANCE = new CapabilityJournalData();
@@ -19,8 +20,7 @@ public class CapabilityJournalData implements IInfSerializableCapabilityImplemen
 
     public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), Names.Items.JOURNAL);
 
-    @CapabilityInject(ItemJournal.JournalData.class)
-    public static final Capability<ItemJournal.JournalData> CAPABILITY = null;
+    public static final Capability<ItemJournal.JournalData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private CapabilityJournalData() {}
 
@@ -41,7 +41,7 @@ public class CapabilityJournalData implements IInfSerializableCapabilityImplemen
 
     @Override
     public ItemJournal.JournalData createNewValue(ItemStack stack) {
-        return ItemJournal.JournalData.createFromLegacyTag(stack);
+        return new ItemJournal.JournalData(stack);
     }
 
     @Override

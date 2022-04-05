@@ -5,20 +5,11 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.network.MessageIrrigationNeighbourUpdate;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +41,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
     // neighbour cache
     private final NeighbourCache neighbours;
 
-    public TileEntityIrrigationComponent(TileEntityType<?> type, int capacity, float minLevel, float maxLevel) {
+    public TileEntityIrrigationComponent(BlockEntityType<?> type, BlockPos pos, BlockState state, int capacity, float minLevel, float maxLevel) {
         super(type);
         this.capacity = capacity;
         this.minLevel = minLevel;

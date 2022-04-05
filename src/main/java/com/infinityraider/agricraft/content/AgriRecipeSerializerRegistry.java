@@ -9,22 +9,9 @@ import com.infinityraider.agricraft.plugins.immersiveengineering.ImmersiveEngine
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
-public class AgriRecipeSerializerRegistry {
-    private static final AgriRecipeSerializerRegistry INSTANCE = new AgriRecipeSerializerRegistry();
-
-    public static AgriRecipeSerializerRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    public final IInfRecipeSerializer agri_cloche_recipe;
-    public final IInfRecipeSerializer botany_pots_crop_info;
-    public final IIngredientSerializer<AgriPlantIngredient> plant_ingredient;
-    public final IIngredientSerializer<AnySoilIngredient> any_soil_ingredient;
-
-    private AgriRecipeSerializerRegistry() {
-        this.agri_cloche_recipe = ImmersiveEngineeringPlugin.getAgriClocheRecipeSerializer();
-        this.botany_pots_crop_info = BotanyPotsPlugin.getAgriCropInfoSerializer();
-        this.plant_ingredient = new AgriPlantIngredientSerializer();
-        this.any_soil_ingredient = new AnySoilIngredientSerializer();
-    }
+public final class AgriRecipeSerializerRegistry {
+    public static final IInfRecipeSerializer AGRI_CLOCHE_RECIPE = ImmersiveEngineeringPlugin.getAgriClocheRecipeSerializer();
+    public static final IInfRecipeSerializer BOTANY_POTS_CROP_INFO = BotanyPotsPlugin.getAgriCropInfoSerializer();
+    public static final IIngredientSerializer<AgriPlantIngredient> PLANT_INGREDIENT = new AgriPlantIngredientSerializer();
+    public static final IIngredientSerializer<AnySoilIngredient> ANY_SOIL_INGREDIENT = new AnySoilIngredientSerializer();
 }

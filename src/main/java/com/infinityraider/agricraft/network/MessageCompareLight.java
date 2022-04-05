@@ -4,30 +4,30 @@ import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.util.LightHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageCompareLight extends MessageBase {
-    private RegistryKey<World> dimId;
+    private ResourceKey<Level> dimId;
     private BlockPos pos;
     private byte[] clientLightData;
 
     public MessageCompareLight() {}
 
     @OnlyIn(Dist.CLIENT)
-    public MessageCompareLight(World world, BlockPos pos) {
+    public MessageCompareLight(net.minecraft.world.level.Level world, BlockPos pos) {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
         
         // Set
-        this.dimId = world.getDimensionKey();
+        this.dimId = world.dimension();
         this.pos = pos;
         this.clientLightData = LightHelper.getLightData(world, pos);
     }
@@ -40,10 +40,10 @@ public class MessageCompareLight extends MessageBase {
     @Override
     protected void processMessage(NetworkEvent.Context ctx) {
         // Get world.
-        final World world = AgriCraft.instance.proxy().getWorldFromDimension(this.dimId);
+        final Level world = AgriCraft.instance.proxy().getWorldFromDimension(this.dimId);
 
         // Get player.
-        final PlayerEntity player = ctx.getSender();
+        final Player player = ctx.getSender();
 
         // Get server light data.
         final byte[] serverLightData = LightHelper.getLightData(world, this.pos);

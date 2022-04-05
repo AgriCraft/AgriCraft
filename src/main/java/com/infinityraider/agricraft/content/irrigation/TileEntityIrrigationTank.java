@@ -3,12 +3,14 @@ package com.infinityraider.agricraft.content.irrigation;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.utility.TileReference;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -54,8 +57,8 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     private final LazyOptional<IFluidHandler> capability;
 
-    public TileEntityIrrigationTank() {
-        super(AgriCraft.instance.getModTileRegistry().irrigation_tank, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
+    public TileEntityIrrigationTank(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.IRRIGATION_TANK, pos, state, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
         this.min = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.max = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.capability = LazyOptional.of(() -> this);

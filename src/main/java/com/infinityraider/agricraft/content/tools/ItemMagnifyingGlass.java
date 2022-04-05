@@ -25,7 +25,7 @@ public class ItemMagnifyingGlass extends ItemBase {
         return player != null && (observers.computeIfAbsent(player.getUniqueID(), uuid -> false) || CapabilityGeneInspector.getInstance().canInspect(player));
     }
 
-    public static void setObserving(PlayerEntity player, boolean status) {
+    public static void setObserving(Player player, boolean status) {
         if(player != null) {
             observers.put(player.getUniqueID(), status);
             if (!player.getEntityWorld().isRemote()) {

@@ -3,9 +3,9 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.util.AgriConverter;
 import com.agricraft.agricore.util.TypeHelper;
 import com.infinityraider.agricraft.util.TagUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.Collection;
 import java.util.Collections;

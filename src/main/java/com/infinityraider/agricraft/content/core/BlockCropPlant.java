@@ -1,9 +1,7 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
@@ -13,25 +11,17 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;#
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -58,25 +48,25 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
             .build();
 
     // TileEntity factory
-    private static final BiFunction<BlockState, IBlockReader, TileEntityCropPlant> TILE_FACTORY = (s, w) -> new TileEntityCropPlant();
+    private static final BiFunction<BlockPos, BlockState, TileEntityCropPlant> TILE_FACTORY = TileEntityCropPlant::new;
 
     private static final Map<Integer, VoxelShape> PLANT_SHAPES = Maps.newHashMap();
 
     public static VoxelShape getPlantShape(int height) {
-        return PLANT_SHAPES.computeIfAbsent(height, h -> Optional.of(Block.makeCuboidShape(3, 0, 3, 13, h, 13)).get());
+        return PLANT_SHAPES.computeIfAbsent(height, h -> Optional.of(Block.box(3, 0, 3, 13, h, 13)).get());
     }
 
     public BlockCropPlant() {
-        super(Names.Blocks.CROP_PLANT, Properties.create(Material.PLANTS)
-                .tickRandomly()
-                .notSolid()
-                .setLightLevel(LIGHT::fetch)
+        super(Names.Blocks.CROP_PLANT, Properties.of(Material.PLANT)
+                .randomTicks()
+                .noCollission()
+                .lightLevel(LIGHT::fetch)
                 .sound(SoundType.CROP)
         );
     }
 
     @Override
-    public BiFunction<BlockState, IBlockReader, TileEntityCropPlant> getTileEntityFactory() {
+    public BiFunction<BlockPos, BlockState, TileEntityCropPlant> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 
@@ -87,11 +77,11 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
 
     @Override
     public Item asItem() {
-        return AgriCraft.instance.getModItemRegistry().seed;
+        return AgriApi.getAgriContent().getItems().getSeedItem();
     }
 
     @Override
-    protected boolean onFluidChanged(World world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid) {
+    protected boolean onFluidChanged(Level world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid) {
         return this.getCrop(world, pos).map(crop -> {
             if(crop.hasPlant()) {
                 IAgriGrowthResponse response = crop.getPlant().getGrowthRequirement(crop.getGrowthStage()).getFluidResponse(newFluid, crop.getStats().getStrength());
@@ -108,7 +98,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, ISelectionContext context) {
         return getPlantShape(this.getCrop(world, pos)
                 .map(crop -> Math.max(
                         crop.getPlant().getPlantHeight(crop.getGrowthStage()),

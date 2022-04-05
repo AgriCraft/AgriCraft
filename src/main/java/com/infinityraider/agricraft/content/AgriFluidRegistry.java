@@ -2,22 +2,19 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.irrigation.FluidTankWater;
-public class AgriFluidRegistry implements IAgriContent.Fluids {
-    private static final AgriFluidRegistry INSTANCE = new AgriFluidRegistry();
+public class AgriFluidRegistry {
+    public static final IAgriContent.Fluids ACCESSOR = new Accessor();
 
-    public static AgriFluidRegistry getInstance() {
-        return INSTANCE;
-    }
+    // tank water
+    public static final FluidTankWater TANK_WATER = new FluidTankWater();
 
-    // crop plant
-    public final FluidTankWater tank_water;
+    private static final class Accessor implements IAgriContent.Fluids {
+        private Accessor() {
+        }
 
-    private AgriFluidRegistry() {
-        this.tank_water = new FluidTankWater();
-    }
-
-    @Override
-    public FluidTankWater getTankWater() {
-        return this.tank_water;
+        @Override
+        public FluidTankWater getTankWater() {
+            return TANK_WATER;
+        }
     }
 }

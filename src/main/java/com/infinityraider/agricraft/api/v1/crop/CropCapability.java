@@ -9,7 +9,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public final class CropCapability {
-    public static final Capability<IAgriCrop> CAPABILITY = CapabilityManager.get(new CapabilityToken<IAgriCrop>(){});
+    public static final Capability<IAgriCrop> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     public static final ResourceLocation KEY = new ResourceLocation("agricraft", "crop");
 

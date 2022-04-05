@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
@@ -13,6 +14,7 @@ import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
 import com.infinityraider.infinitylib.utility.inventory.ISidedInventoryWrapped;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,6 +22,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -53,8 +56,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     private List<IAgriGenePair<?>> genesToRender;
 
-    public TileEntitySeedAnalyzer() {
-        super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
+    public TileEntitySeedAnalyzer(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.SEED_ANALYZER, pos, state);
         this.seed = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
                 .withCallBack(seed -> addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal))
                 .build();

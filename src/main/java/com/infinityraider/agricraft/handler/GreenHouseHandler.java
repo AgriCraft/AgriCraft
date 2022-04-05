@@ -6,10 +6,10 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouseData;
 import com.infinityraider.agricraft.content.world.GreenHouse;
 import com.infinityraider.agricraft.util.GreenHouseHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
@@ -22,9 +22,9 @@ public class GreenHouseHandler {
 
     private GreenHouseHandler() {}
 
-    public void checkAndFormGreenHouse(World world, BlockPos pos) {
+    public void checkAndFormGreenHouse(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if(!state.getBlock().isAir(state, world, pos)) {
+        if(!state.isAir()) {
             return;
         }
         new GreenHouseFormer(world, pos).getGreenHouse().ifPresent(greenHouse -> {
@@ -36,7 +36,7 @@ public class GreenHouseHandler {
     }
 
     public static class GreenHouseFormer {
-        private final World world;
+        private final Level world;
 
         private final Set<BlockPos> toVisit;
         private final Map<BlockPos, GreenHouse.BlockType> visited;
@@ -45,7 +45,7 @@ public class GreenHouseHandler {
         private boolean valid;
         private GreenHouse greenHouse;
 
-        protected GreenHouseFormer(World world, BlockPos start) {
+        protected GreenHouseFormer(Level world, BlockPos start) {
             this.world = world;
             this.toVisit = Sets.newConcurrentHashSet();
             this.visited = Maps.newHashMap();
@@ -60,7 +60,7 @@ public class GreenHouseHandler {
             return Optional.ofNullable(this.greenHouse);
         }
 
-        public World getWorld() {
+        public Level getWorld() {
             return this.world;
         }
 
@@ -108,7 +108,7 @@ public class GreenHouseHandler {
         protected void checkPosition(BlockPos pos) {
             if(!this.hasVisited(pos)) {
                 BlockState state = this.getWorld().getBlockState(pos);
-                if(state.getBlock().isAir(state, this.getWorld(), pos)) {
+                if(state.isAir()) {
                     this.recordVisit(pos, GreenHouse.BlockType.INTERIOR_AIR);
                 } else {
                     // initial block is not air
@@ -116,7 +116,7 @@ public class GreenHouseHandler {
                 }
             }
             Arrays.stream(Direction.values()).forEach(dir -> {
-                BlockPos checkPos = pos.offset(dir);
+                BlockPos checkPos = pos.relative(dir);
                 BlockState state = this.getWorld().getBlockState(checkPos);
                 if(this.visited.containsKey(checkPos)) {
                     // If we already visited the position, check if it was a boundary, it might not be from another direction
@@ -131,7 +131,7 @@ public class GreenHouseHandler {
                     }
                 } else {
                     // Block is not yet visited, categorize it
-                    if(isAirBlock(state, checkPos)) {
+                    if(state.isAir()) {
                         this.recordVisit(checkPos, GreenHouse.BlockType.INTERIOR_AIR);
                         this.toVisit.add(checkPos);
                         this.interiorCount++;
@@ -148,12 +148,8 @@ public class GreenHouseHandler {
             });
         }
 
-        protected boolean isAirBlock(BlockState state, BlockPos pos) {
-            return state.getBlock().isAir(state, this.getWorld(), pos);
-        }
-
         protected boolean isSolidBlock(BlockState state, BlockPos pos, Direction dir) {
-            return state.isSolidSide(this.getWorld(), pos, dir) || state.isSolidSide(this.getWorld(), pos, dir.getOpposite());
+            return state.isFaceSturdy(this.getWorld(), pos, dir) || state.isFaceSturdy(this.getWorld(), pos, dir.getOpposite());
         }
 
         protected boolean isGreenHouseGlass(BlockState state) {

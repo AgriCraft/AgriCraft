@@ -5,24 +5,25 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.capability.CapabilityResearchedPlants.Impl;
 import com.infinityraider.agricraft.network.MessageSyncResearchCapability;
 import com.infinityraider.agricraft.plugins.jei.JeiBridge;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import com.infinityraider.infinitylib.utility.ISerializable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public class CapabilityResearchedPlants implements IInfSerializableCapabilityImplementation<PlayerEntity, CapabilityResearchedPlants.Impl> {
+public class CapabilityResearchedPlants implements IInfSerializableCapabilityImplementation<Player, Impl> {
     private static final CapabilityResearchedPlants INSTANCE = new CapabilityResearchedPlants();
 
     public static CapabilityResearchedPlants getInstance() {
@@ -31,26 +32,25 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
 
     public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), Names.Objects.RESEARCH);
 
-    @CapabilityInject(CapabilityResearchedPlants.Impl.class)
-    public static final Capability<Impl> CAPABILITY = null;
+    public static final Capability<Impl> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private CapabilityResearchedPlants() {}
 
-    public void researchPlant(@Nullable PlayerEntity player, IAgriPlant plant) {
+    public void researchPlant(@Nullable Player player, IAgriPlant plant) {
         if(player != null) {
             this.getCapability(player).ifPresent(impl -> impl.researchPlant(plant));
         }
     }
 
-    public boolean isPlantResearched(@Nullable PlayerEntity player, IAgriPlant plant) {
+    public boolean isPlantResearched(@Nullable Player player, IAgriPlant plant) {
         return player != null && this.getCapability(player).map(impl -> impl.isPlantResearched(plant)).orElse(false);
     }
 
-    public boolean isMutationResearched(@Nullable PlayerEntity player, IAgriMutation mutation) {
+    public boolean isMutationResearched(@Nullable Player player, IAgriMutation mutation) {
         return player != null && this.getCapability(player).map(impl -> impl.isMutationResearched(mutation)).orElse(false);
     }
 
-    public void configureJei(PlayerEntity player) {
+    public void configureJei(Player player) {
         this.getCapability(player).ifPresent(Impl::configureJei);
     }
 
@@ -65,12 +65,12 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
     }
 
     @Override
-    public boolean shouldApplyCapability(PlayerEntity carrier) {
+    public boolean shouldApplyCapability(Player carrier) {
         return true;
     }
 
     @Override
-    public Impl createNewValue(PlayerEntity carrier) {
+    public Impl createNewValue(Player carrier) {
         return new Impl(carrier);
     }
 
@@ -80,8 +80,8 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
     }
 
     @Override
-    public Class<PlayerEntity> getCarrierClass() {
-        return PlayerEntity.class;
+    public Class<Player> getCarrierClass() {
+        return Player.class;
     }
 
     @Override
@@ -89,17 +89,17 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
         to.copyFrom(from);
     }
 
-    public static class Impl implements ISerializable {
-        private final PlayerEntity player;
+    public static class Impl implements Serializable<Impl> {
+        private final Player player;
 
         private final Set<String> unlockedPlants;
 
-        protected Impl(PlayerEntity player) {
+        protected Impl(Player player) {
             this.player = player;
             this.unlockedPlants = Sets.newHashSet();
         }
 
-        public PlayerEntity getPlayer() {
+        public Player getPlayer() {
             return this.player;
         }
 
@@ -143,25 +143,31 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
         }
 
         @Override
-        public void readFromNBT(CompoundNBT tag) {
+        public void copyDataFrom(Impl from) {
             this.unlockedPlants.clear();
-            if(tag.contains(AgriNBT.ENTRIES)) {
-                ListNBT list = tag.getList(AgriNBT.ENTRIES, 8);
-                list.forEach(entry -> {
-                    if(entry instanceof StringNBT) {
-                        this.unlockedPlants.add(entry.getString());
-                    }
-                });
-            }
+            this.unlockedPlants.addAll(from.unlockedPlants);
         }
 
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
-            ListNBT list = new ListNBT();
-            this.unlockedPlants.stream().map(StringNBT::valueOf).forEach(list::add);
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = new CompoundTag();
+            ListTag list = new ListTag();
+            this.unlockedPlants.stream().map(StringTag::valueOf).forEach(list::add);
             tag.put(AgriNBT.ENTRIES, list);
             return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            this.unlockedPlants.clear();
+            if(tag.contains(AgriNBT.ENTRIES)) {
+                ListTag list = tag.getList(AgriNBT.ENTRIES, 8);
+                list.forEach(entry -> {
+                    if(entry instanceof StringTag) {
+                        this.unlockedPlants.add(entry.getAsString());
+                    }
+                });
+            }
         }
     }
 }

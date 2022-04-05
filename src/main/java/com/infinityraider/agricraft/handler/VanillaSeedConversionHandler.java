@@ -4,17 +4,18 @@ import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -74,18 +75,18 @@ public class VanillaSeedConversionHandler {
 
         // Run planting conversion, and if successful, cancel the event
         if(this.runPlantingConversion(
-                event.getWorld(), event.getFace() == null ? event.getPos() : event.getPos().offset(event.getFace()),
+                event.getWorld(), event.getFace() == null ? event.getPos() : event.getPos().relative(event.getFace()),
                 event.getItemStack(), event.getPlayer(), event.getHand())
         ) {
             // Cancel the event
             event.setUseItem(Event.Result.DENY);
             event.setCanceled(true);
             // swing player arm
-            event.getPlayer().swingArm(event.getHand());
+            event.getPlayer().swing(event.getHand());
         }
     }
 
-    protected boolean failsPreChecks(World world, BlockPos pos, ItemStack stack) {
+    protected boolean failsPreChecks(Level world, BlockPos pos, ItemStack stack) {
         // If overriding is disabled, don't bother.
         if (!AgriCraft.instance.getConfig().overrideVanillaFarming()) {
             return true;
@@ -98,10 +99,10 @@ public class VanillaSeedConversionHandler {
         return AgriApi.getCrop(world, pos).isPresent();
     }
 
-    protected boolean runSeedAnalyzerConversion(World world, BlockPos pos, ItemStack stack, LivingEntity entity, Hand hand) {
-        TileEntity tile = world.getTileEntity(pos);
+    protected boolean runSeedAnalyzerConversion(Level world, BlockPos pos, ItemStack stack, LivingEntity entity, InteractionHand hand) {
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tile instanceof TileEntitySeedAnalyzer) {
-            if(entity.isSneaking()) {
+            if(entity.isDiscrete()) {
                 // already an agricraft seed, seed analyzer will cover the logic
                 if (stack.getItem() instanceof IAgriSeedItem) {
                     return true;
@@ -111,7 +112,7 @@ public class VanillaSeedConversionHandler {
                 if (converted.getItem() instanceof IAgriSeedItem) {
                     TileEntitySeedAnalyzer analyzer = (TileEntitySeedAnalyzer) tile;
                     if(!analyzer.hasSeed()) {
-                        entity.setHeldItem(hand, converted);
+                        entity.setItemInHand(hand, converted);
                     }
                 }
             }
@@ -120,10 +121,10 @@ public class VanillaSeedConversionHandler {
         return false;
     }
 
-    protected boolean runPlantingConversion(World world, BlockPos pos, ItemStack stack, PlayerEntity player, Hand hand) {
+    protected boolean runPlantingConversion(Level world, BlockPos pos, ItemStack stack, Player player, InteractionHand hand) {
         return !AgriCraft.instance.getConfig().convertSeedsOnlyInAnalyzer() && AgriApi.getGenomeAdapterizer().valueOf(stack).map(seed -> {
             // The player is attempting to plant a seed, convert it to an agricraft crop
-            return AgriApi.getSoil(world, pos.down()).map(soil -> {
+            return AgriApi.getSoil(world, pos.below()).map(soil -> {
                 // check if there are crop sticks above
                 MutableBoolean consumed = new MutableBoolean(false);
                 boolean cropSticks = AgriApi.getCrop(world, pos).map(crop -> {
@@ -133,7 +134,7 @@ public class VanillaSeedConversionHandler {
                             consumed.setValue(true);
                         }
                         if(player != null) {
-                            player.swingArm(hand);
+                            player.swing(hand);
                         }
                     }
                     return true;
@@ -143,8 +144,8 @@ public class VanillaSeedConversionHandler {
                     return consumed.getValue();
                 }
                 // no crop sticks, try planting as a plant
-                BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, pos);
-                if (newState != null && world.setBlockState(pos, newState, 11)) {
+                BlockState newState = AgriBlockRegistry.CROP_PLANT.getStateForPlacement(world, pos);
+                if (newState != null && world.setBlock(pos, newState, 11)) {
                     boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed, player)).orElse(false);
                     if (planted) {
                         // reduce stack size
@@ -154,7 +155,7 @@ public class VanillaSeedConversionHandler {
                         // return success
                         return true;
                     } else {
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
                     }
                 }
                 return false;

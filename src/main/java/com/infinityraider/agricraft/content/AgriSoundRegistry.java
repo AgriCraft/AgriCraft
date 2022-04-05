@@ -5,26 +5,23 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.sound.SoundEventBase;
 
-public class AgriSoundRegistry implements IAgriContent.Sounds {
-    private static final AgriSoundRegistry INSTANCE = new AgriSoundRegistry();
+public final class AgriSoundRegistry {
+    public static final IAgriContent.Sounds ACCESSOR = new Accessor();
 
-    public static AgriSoundRegistry getInstance() {
-        return INSTANCE;
-    }
+    public static final SoundEventBase VALVE = new SoundEventBase(AgriCraft.instance.getModId(), Names.Sounds.VALVE) {
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+    };
 
-    public final SoundEventBase valve;
+    private static final class Accessor implements IAgriContent.Sounds {
+        private Accessor() {
+        }
 
-    private AgriSoundRegistry() {
-        this.valve = new SoundEventBase(AgriCraft.instance.getModId(), Names.Sounds.VALVE) {
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
-    }
-
-    @Override
-    public SoundEventBase getValveSound() {
-        return this.valve;
+        @Override
+        public SoundEventBase getValveSound() {
+            return VALVE;
+        }
     }
 }

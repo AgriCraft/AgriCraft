@@ -23,6 +23,7 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
+import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.handler.MagnifyingGlassViewHandler;
@@ -42,13 +43,13 @@ import com.infinityraider.agricraft.impl.v1.requirement.Factory;
 import com.infinityraider.agricraft.impl.v1.requirement.SeasonLogic;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -169,19 +170,19 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer() {
-        return AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient;
+        return AgriRecipeSerializerRegistry.PLANT_INGREDIENT;
     }
 
     @Nonnull
     @Override
     public IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer() {
-        return AgriCraft.instance.getModRecipeSerializerRegistry().any_soil_ingredient;
+        return AgriRecipeSerializerRegistry.ANY_SOIL_INGREDIENT;
     }
 
     @Nonnull
     @Override
-    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
+    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tile instanceof IAgriCrop) {
             return Optional.of((IAgriCrop) tile);
         }
@@ -190,7 +191,7 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         IAgriSoilRegistry registry = this.connectSoilRegistry();
         Optional<IAgriSoil> soil = registry.valueOf(state);
@@ -218,7 +219,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
-    public <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+    public <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
         CapabilityCrop.getInstance().registerInstance(instance);
     }
 
@@ -271,7 +272,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
-    public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+    public boolean isObservingWithMagnifyingGlass(Player player) {
         return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
     }
 

@@ -6,112 +6,91 @@ import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.world.*;
 
-public class AgriBlockRegistry implements IAgriContent.Blocks {
-
-    private static final AgriBlockRegistry INSTANCE = new AgriBlockRegistry();
-
-    public static AgriBlockRegistry getInstance() {
-        return INSTANCE;
-    }
+public final class AgriBlockRegistry {
+    public static final IAgriContent.Blocks ACCESSOR = new Accessor();
 
     // crop plant
-    public final BlockCropPlant crop_plant;
+    public static final BlockCropPlant CROP_PLANT = new BlockCropPlant();
 
     // crop sticks
-    public final BlockCropSticks crop_sticks_wood;
-    public final BlockCropSticks crop_sticks_iron;
-    public final BlockCropSticks crop_sticks_obsidian;
+    public static final BlockCropSticks CROP_STICKS_WOOD = new BlockCropSticks(CropStickVariant.WOOD);
+    public static final BlockCropSticks CROP_STICKS_IRON = new BlockCropSticks(CropStickVariant.IRON);
+    public static final BlockCropSticks CROP_STICKS_OBSIDIAN = new BlockCropSticks(CropStickVariant.OBSIDIAN);
 
     // analyzer
-    public final BlockSeedAnalyzer seed_analyzer;
+    public static final BlockSeedAnalyzer SEED_ANALYZER = new BlockSeedAnalyzer();
 
     // irrigation
-    public final BlockIrrigationTank tank;
-    public final BlockIrrigationChannelNormal channel;
-    public final BlockIrrigationChannelHollow channel_hollow;
-    public final BlockSprinkler sprinkler;
+    public static final BlockIrrigationTank TANK = new BlockIrrigationTank();
+    public static final BlockIrrigationChannelNormal CHANNEL = new BlockIrrigationChannelNormal();
+    public static final BlockIrrigationChannelHollow CHANNEL_HOLLOW = new BlockIrrigationChannelHollow();
+    public static final BlockSprinkler SPRINKLER = new BlockSprinkler();
 
     // Storage
-    //public final BlockBase seed_storage;
+    //public static final BlockBase SEED_STORAGE;
 
     // Decoration
-    public final BlockGrate grate;
+    public static final BlockGrate GRATE = new BlockGrate();
 
     // World
-    public final BlockGreenHouseAir greenhouse_air;
+    public static final BlockGreenHouseAir GREENHOUSE_AIR = new BlockGreenHouseAir();
 
-    private AgriBlockRegistry() {
-        this.crop_plant = new BlockCropPlant();
-        this.crop_sticks_wood = new BlockCropSticks(CropStickVariant.WOOD);
-        this.crop_sticks_iron = new BlockCropSticks(CropStickVariant.IRON);
-        this.crop_sticks_obsidian = new BlockCropSticks(CropStickVariant.OBSIDIAN);
+    private static final class Accessor implements IAgriContent.Blocks {
+        private Accessor() {}
 
-        this.seed_analyzer = new BlockSeedAnalyzer();
+        @Override
+        public BlockCropPlant getCropPlantBlock() {
+            return CROP_PLANT;
+        }
 
-        this.tank = new BlockIrrigationTank();
-        this.channel = new BlockIrrigationChannelNormal();
-        this.channel_hollow = new BlockIrrigationChannelHollow();
-        this.sprinkler = new BlockSprinkler();
+        @Override
+        public BlockCropSticks getWoodCropSticksBlock() {
+            return CROP_STICKS_WOOD;
+        }
 
-        //this.seed_storage = new BlockSeedStorage();
+        @Override
+        public BlockCropSticks getIronCropSticksBlock() {
+            return CROP_STICKS_IRON;
+        }
 
-        this.grate = new BlockGrate();
+        @Override
+        public BlockCropSticks getObsidianCropSticksBlock() {
+            return CROP_STICKS_OBSIDIAN;
+        }
 
-        this.greenhouse_air = new BlockGreenHouseAir();
-    }
+        @Override
+        public BlockSeedAnalyzer getSeedAnalyzerBlock() {
+            return SEED_ANALYZER;
+        }
 
-    @Override
-    public BlockCropPlant getCropPlantBlock() {
-        return this.crop_plant;
-    }
+        @Override
+        public BlockIrrigationTank getTankBlock() {
+            return TANK;
+        }
 
-    @Override
-    public BlockCropSticks getWoodCropSticksBlock() {
-        return this.crop_sticks_wood;
-    }
+        @Override
+        public BlockIrrigationChannelNormal getChannelBlock() {
+            return CHANNEL;
+        }
 
-    @Override
-    public BlockCropSticks getIronCropSticksBlock() {
-        return this.crop_sticks_iron;
-    }
+        @Override
+        public BlockIrrigationChannelHollow getHollowChannelBlock() {
+            return CHANNEL_HOLLOW;
+        }
 
-    @Override
-    public BlockCropSticks getObsidianCropSticksBlock() {
-        return this.crop_sticks_obsidian;
-    }
+        @Override
+        public BlockSprinkler getSprinklerBlock() {
+            return SPRINKLER;
+        }
 
-    @Override
-    public BlockSeedAnalyzer getSeedAnalyzerBlock() {
-        return this.seed_analyzer;
-    }
+        @Override
+        public BlockGrate getGrateBlock() {
+            return GRATE;
+        }
 
-    @Override
-    public BlockIrrigationTank getTankBlock() {
-        return this.tank;
-    }
-
-    @Override
-    public BlockIrrigationChannelNormal getChannelBlock() {
-        return this.channel;
-    }
-
-    @Override
-    public BlockIrrigationChannelHollow getHollowChannelBlock() {
-        return this.channel_hollow;
-    }
-
-    @Override
-    public BlockSprinkler getSprinklerBlock() {
-        return this.sprinkler;
-    }
-
-    @Override
-    public BlockGrate getGrateBlock() {
-        return this.grate;
-    }
-
-    @Override
-    public BlockGreenHouseAir getGreenHouseAirBlock() {
-        return this.greenhouse_air;
+        @Override
+        public BlockGreenHouseAir getGreenHouseAirBlock() {
+            return GREENHOUSE_AIR;
+        }
     }
 }

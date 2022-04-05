@@ -7,18 +7,19 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedBagItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.capability.CapabilitySeedBagContents.Impl;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import com.infinityraider.infinitylib.utility.ISerializable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -28,7 +29,7 @@ import java.util.Optional;
 
 import static com.infinityraider.agricraft.content.tools.ItemSeedBag.*;
 
-public class CapabilitySeedBagContents implements IInfSerializableCapabilityImplementation<ItemStack, CapabilitySeedBagContents.Impl> {
+public class CapabilitySeedBagContents implements IInfSerializableCapabilityImplementation<ItemStack, Impl> {
     private static final CapabilitySeedBagContents INSTANCE = new CapabilitySeedBagContents();
 
     public static CapabilitySeedBagContents getInstance() {
@@ -37,8 +38,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
 
     public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), Names.Items.SEED_BAG);
 
-    @CapabilityInject(CapabilitySeedBagContents.Impl.class)
-    public static final Capability<CapabilitySeedBagContents.Impl> CAPABILITY = null;
+    public static final Capability<CapabilitySeedBagContents.Impl> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private CapabilitySeedBagContents() {}
 
@@ -72,7 +72,7 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         return ItemStack.class;
     }
 
-    public static class Impl implements IAgriSeedBagItem.Contents, ISerializable {
+    public static class Impl implements IAgriSeedBagItem.Contents, Serializable<Impl> {
         private final IAgriSeedBagItem seedBag;
 
         private IAgriPlant plant;
@@ -302,7 +302,34 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
         }
 
         @Override
-        public void readFromNBT(CompoundNBT tag) {
+        public void copyDataFrom(Impl from) {
+            this.plant = from.plant;
+            this.count = from.count;
+            this.sorters.clear();
+            this.sorters.putAll(from.sorters);
+            this.sorterIndex = from.sorterIndex;
+            this.subSorter = from.subSorter;
+            this.firstStack = from.firstStack.copy();
+            this.lastStack = from.lastStack.copy();
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = new CompoundTag();
+            // Write plant
+            tag.putString(AgriNBT.PLANT, this.getPlant().getId());
+            // Write contents
+            ListTag entryTags = new ListTag();
+            this.contents.forEach(entry -> entryTags.add(entry.writeToTag()));
+            tag.put(AgriNBT.ENTRIES, entryTags);
+            // Write sorter
+            tag.putInt(AgriNBT.KEY, this.getSorterIndex());
+            // Return the tag
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
             this.contents.clear();
             this.count = 0;
             this.firstStack = ItemStack.EMPTY;
@@ -312,9 +339,9 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                     : NoPlant.getInstance();
             if (this.getPlant().isPlant()) {
                 if (tag.contains(AgriNBT.ENTRIES)) {
-                    ListNBT entryTags = tag.getList(AgriNBT.ENTRIES, 10);
-                    entryTags.stream().filter(entryTag -> entryTag instanceof CompoundNBT)
-                            .map(entryTag -> (CompoundNBT) entryTag).
+                    ListTag entryTags = tag.getList(AgriNBT.ENTRIES, 10);
+                    entryTags.stream().filter(entryTag -> entryTag instanceof CompoundTag)
+                            .map(entryTag -> (CompoundTag) entryTag).
                             forEach(entryTag -> Entry.readFromTag(entryTag).ifPresent(entry -> {
                                 this.contents.add(entry);
                                 this.count += entry.getAmount();
@@ -328,21 +355,6 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                 }
             }
             this.setSorterIndex(tag.contains(AgriNBT.KEY) ? tag.getInt(AgriNBT.KEY) : 0);
-        }
-
-        @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
-            // Write plant
-            tag.putString(AgriNBT.PLANT, this.getPlant().getId());
-            // Write contents
-            ListNBT entryTags = new ListNBT();
-            this.contents.forEach(entry -> entryTags.add(entry.writeToTag()));
-            tag.put(AgriNBT.ENTRIES, entryTags);
-            // Write sorter
-            tag.putInt(AgriNBT.KEY, this.getSorterIndex());
-            // Return the tag
-            return tag;
         }
 
         private static class Entry {
@@ -379,16 +391,16 @@ public class CapabilitySeedBagContents implements IInfSerializableCapabilityImpl
                 return this.getGenome().equals(genome);
             }
 
-            public CompoundNBT writeToTag() {
-                CompoundNBT tag = new CompoundNBT();
-                CompoundNBT genomeTag = new CompoundNBT();
+            public CompoundTag writeToTag() {
+                CompoundTag tag = new CompoundTag();
+                CompoundTag genomeTag = new CompoundTag();
                 this.getGenome().writeToNBT(genomeTag);
                 tag.put(AgriNBT.GENOME, genomeTag);
                 tag.putInt(AgriNBT.ENTRIES, this.getAmount());
                 return tag;
             }
 
-            public static Optional<Entry> readFromTag(CompoundNBT tag) {
+            public static Optional<Entry> readFromTag(CompoundTag tag) {
                 if(!tag.contains(AgriNBT.GENOME) || !tag.contains(AgriNBT.ENTRIES)) {
                     return Optional.empty();
                 }

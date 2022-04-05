@@ -1,11 +1,14 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,8 +25,8 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     private ValveState state = ValveState.NONE;
     private int counter = 0;
 
-    public TileEntityIrrigationChannel() {
-        super(AgriCraft.instance.getModTileRegistry().irrigation_channel, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
+    public TileEntityIrrigationChannel(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.IRRIGATION_CHANNEL, pos, state, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
     }
 
     public static RenderFactory createRenderFactory() {

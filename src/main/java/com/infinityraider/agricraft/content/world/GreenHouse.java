@@ -3,11 +3,10 @@ package com.infinityraider.agricraft.content.world;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nullable;
@@ -80,7 +79,7 @@ public class GreenHouse {
         return this.getType(pos).isInterior();
     }
 
-    public void convertAirBlocks(World world) {
+    public void convertAirBlocks(Level world) {
         this.parts.values().forEach(part -> part.replaceAirBlocks(world));
     }
 
@@ -133,8 +132,8 @@ public class GreenHouse {
                     .forEach(pos -> world.setBlockState(pos,air));
         }
 
-        public CompoundNBT writeToTag() {
-            CompoundNBT tag = new CompoundNBT();
+        public CompoundTag writeToTag() {
+            CompoundTag tag = new CompoundTag();
             //TODO
             return tag;
         }

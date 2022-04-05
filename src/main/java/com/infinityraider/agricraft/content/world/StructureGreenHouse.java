@@ -3,8 +3,7 @@ package com.infinityraider.agricraft.content.world;
 import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.infinitylib.world.IInfStructure;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Set;
 

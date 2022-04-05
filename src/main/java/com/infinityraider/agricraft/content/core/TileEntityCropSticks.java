@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 
@@ -10,10 +9,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TileEntityCropSticks extends TileEntityCropBase {
     // Auto synced fields
@@ -22,9 +24,9 @@ public class TileEntityCropSticks extends TileEntityCropBase {
     private final Map<Direction, Optional<IAgriCrop>> neighbours;
     private boolean needsCaching;
 
-    public TileEntityCropSticks() {
+    public TileEntityCropSticks(BlockPos pos, BlockState state) {
         // Super constructor with appropriate TileEntity Type
-        super(AgriCraft.instance.getModTileRegistry().crop_sticks);
+        super(AgriTileRegistry.CROP_STICKS, pos, state);
 
         // Initialize automatically synced fields
         this.crossCrop = this.getAutoSyncedFieldBuilder(false)

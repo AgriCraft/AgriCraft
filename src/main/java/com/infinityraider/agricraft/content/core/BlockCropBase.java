@@ -6,26 +6,13 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.IFluidLoggable;
 import com.infinityraider.infinitylib.block.property.InfProperty;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.*;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
@@ -74,7 +61,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public final ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public final InteractionResult onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         // fetch crop
         Optional<IAgriCrop> optional = this.getCrop(world, pos);
         if (!optional.isPresent()) {
@@ -153,7 +140,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     }
 
     @Nullable
-    public BlockState getStateForPlacement(World world, BlockPos pos) {
+    public BlockState getStateForPlacement(Level world, BlockPos pos) {
         BlockState state = this.getDefaultState();
         if(state.isValidPosition(world, pos)) {
             return this.fluidlog(state, world, pos);

@@ -5,22 +5,25 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.MessageMagnifyingGlassObserving;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
@@ -58,7 +61,7 @@ public class MagnifyingGlassViewHandler {
     //private BlockPos lastPos;
     private Target lastTarget;
     private boolean active = false;
-    private Hand hand = null;
+    private InteractionHand hand = null;
     private int animationCounter = 0;
     private int animationCounterPrev = 0;
 
@@ -90,11 +93,11 @@ public class MagnifyingGlassViewHandler {
     }
 
     @Nullable
-    public Hand getActiveHand() {
+    public InteractionHand getActiveHand() {
         return this.hand;
     }
 
-    public boolean isHandActive(@Nonnull Hand hand) {
+    public boolean isHandActive(@Nonnull InteractionHand hand) {
         return this.getActiveHand() == hand;
     }
 
@@ -102,7 +105,7 @@ public class MagnifyingGlassViewHandler {
         return active;
     }
 
-    protected PlayerEntity getPlayer() {
+    protected Player getPlayer() {
         return AgriCraft.instance.getClientPlayer();
     }
 
@@ -117,33 +120,33 @@ public class MagnifyingGlassViewHandler {
     }
 
     protected float getAnimationProgress(float partialTick) {
-        return MathHelper.lerp(partialTick, this.animationCounterPrev, this.animationCounter)/ANIMATION_DURATION;
+        return Mth.lerp(partialTick, this.animationCounterPrev, this.animationCounter)/ANIMATION_DURATION;
     }
 
-    protected void manipulateMatrixStackLeft(MatrixStack stack, float partialTick) {
+    protected void manipulateMatrixStackLeft(PoseStack stack, float partialTick) {
         if(this.isAnimationComplete(partialTick)) {
             stack.translate(DX, DY, DZ);
-            stack.rotate(ROTATION_LEFT);
+            stack.mulPose(ROTATION_LEFT);
         } else {
             float f = this.getAnimationProgress(partialTick);
             stack.translate(f*DX, f*DY, f*DZ);
-            stack.rotate(Vector3f.ZP.rotationDegrees(-f*ANGLE));
+            stack.mulPose(Vector3f.ZP.rotationDegrees(-f*ANGLE));
         }
     }
 
-    protected void manipulateMatrixStackRight(MatrixStack stack, float partialTick) {
+    protected void manipulateMatrixStackRight(PoseStack stack, float partialTick) {
         if(this.isAnimationComplete(partialTick)) {
             stack.translate(-DX, DY, DZ);
-            stack.rotate(ROTATION_RIGHT);
+            stack.mulPose(ROTATION_RIGHT);
         } else {
             float f = this.getAnimationProgress(partialTick);
             stack.translate(-f*DX, f*DY, f*DZ);
-            stack.rotate(Vector3f.ZP.rotationDegrees(f*ANGLE));
+            stack.mulPose(Vector3f.ZP.rotationDegrees(f*ANGLE));
         }
     }
 
     protected void checkInspectedPosition() {
-        RayTraceResult hit = Minecraft.getInstance().objectMouseOver;
+        HitResult hit = Minecraft.getInstance().hitResult;
         Target target = Target.getTarget(hit);
         if(target == null) {
             this.endInspection();
@@ -152,8 +155,8 @@ public class MagnifyingGlassViewHandler {
         if(target.isNewTarget(this.lastTarget)) {
                 this.endInspection();
                 MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), true);
-                World world = AgriCraft.instance.getClientWorld();
-                PlayerEntity player = AgriCraft.instance.getClientPlayer();
+                Level world = AgriCraft.instance.getClientWorld();
+                Player player = AgriCraft.instance.getClientPlayer();
                 this.inspectors.stream()
                         .filter(inspector -> target.canInspect(world, inspector, player))
                         .findAny()
@@ -168,23 +171,23 @@ public class MagnifyingGlassViewHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderHand(RenderHandEvent event) {
-        if(!(this.getPlayer().getHeldItem(event.getHand()).getItem() instanceof ItemMagnifyingGlass)) {
+        if(!(this.getPlayer().getItemInHand(event.getHand()).getItem() instanceof ItemMagnifyingGlass)) {
             return;
         }
         if(this.isHandActive(event.getHand())) {
             // Manipulate matrix stack
-            HandSide main = Minecraft.getInstance().gameSettings.mainHand;
-            if (event.getHand() == Hand.MAIN_HAND) {
-                if (main == HandSide.RIGHT) {
-                    this.manipulateMatrixStackRight(event.getMatrixStack(), event.getPartialTicks());
+            HumanoidArm main = Minecraft.getInstance().options.mainHand;
+            if (event.getHand() == InteractionHand.MAIN_HAND) {
+                if (main == HumanoidArm.RIGHT) {
+                    this.manipulateMatrixStackRight(event.getPoseStack(), event.getPartialTicks());
                 } else {
-                    this.manipulateMatrixStackLeft(event.getMatrixStack(), event.getPartialTicks());
+                    this.manipulateMatrixStackLeft(event.getPoseStack(), event.getPartialTicks());
                 }
             } else {
-                if (main == HandSide.LEFT) {
-                    this.manipulateMatrixStackRight(event.getMatrixStack(), event.getPartialTicks());
+                if (main == HumanoidArm.LEFT) {
+                    this.manipulateMatrixStackRight(event.getPoseStack(), event.getPartialTicks());
                 } else {
-                    this.manipulateMatrixStackLeft(event.getMatrixStack(), event.getPartialTicks());
+                    this.manipulateMatrixStackLeft(event.getPoseStack(), event.getPartialTicks());
                 }
             }
         }
@@ -192,9 +195,9 @@ public class MagnifyingGlassViewHandler {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void inspectionRender(RenderWorldLastEvent event) {
+    public void inspectionRender(RenderLevelLastEvent event) {
         // Check if the player is in first person
-        if(!Minecraft.getInstance().gameSettings.getPointOfView().func_243192_a()) {
+        if(!Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
             return;
         }
 
@@ -211,38 +214,38 @@ public class MagnifyingGlassViewHandler {
         }
 
         // Fetch and push matrix to the matrix stack
-        MatrixStack transforms = event.getMatrixStack();
-        transforms.push();
+        PoseStack transforms = event.getPoseStack();
+        transforms.pushPose();
 
         // Correct for render view
-        Vector3d projectedView = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
+        Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         transforms.translate(-projectedView.x, -projectedView.y, -projectedView.z);
 
         // Move to the player's eye position
-        Vector3d eyes = this.getPlayer().getEyePosition(event.getPartialTicks());
-        transforms.translate(eyes.getX(), eyes.getY(), eyes.getZ());
+        Vec3 eyes = this.getPlayer().getEyePosition(event.getPartialTick());
+        transforms.translate(eyes.x(), eyes.y(), eyes.z());
 
         // Fetch the player's target
-        Vector3d hit = target.getTargetVector(event.getPartialTicks());
-        Vector3d view = hit.subtract(eyes).normalize();
+        Vec3 hit = target.getTargetVector(event.getPartialTick());
+        Vec3 view = hit.subtract(eyes).normalize();
 
         // Translate offset
-        transforms.translate(GENOME_OFFSET*view.getX(), GENOME_OFFSET*view.getY(), GENOME_OFFSET*view.getZ());
+        transforms.translate(GENOME_OFFSET*view.x(), GENOME_OFFSET*view.y(), GENOME_OFFSET*view.z());
 
         // Fetch player look orientation;
-        float yaw = (float) (Math.PI*this.getPlayer().getYaw(event.getPartialTicks()))/180;
-        float pitch = (float) (Math.PI*this.getPlayer().getPitch(event.getPartialTicks()))/180;
+        float yaw = (float) (Math.PI*this.getPlayer().getViewYRot(event.getPartialTick()))/180;
+        float pitch = (float) (Math.PI*this.getPlayer().getViewXRot(event.getPartialTick()))/180;
 
         // Rotate for yaw
-        transforms.rotate(Vector3f.YP.rotation(-yaw));
+        transforms.mulPose(Vector3f.YP.rotation(-yaw));
 
         // Render
-        transforms.push();
-        inspector.doInspectionRender(transforms, event.getPartialTicks(), target.getTargetEntity());
-        transforms.pop();
+        transforms.pushPose();
+        inspector.doInspectionRender(transforms, event.getPartialTick(), target.getTargetEntity());
+        transforms.popPose();
 
         // Pop last transformation matrix from the stack
-        transforms.pop();
+        transforms.popPose();
     }
 
     @SuppressWarnings("unused")
@@ -250,15 +253,15 @@ public class MagnifyingGlassViewHandler {
     public void onPlayerRender(RenderPlayerEvent.Pre event) {
         if(this.isActive()) {
             PlayerRenderer renderer = event.getRenderer();
-            PlayerModel<AbstractClientPlayerEntity> model = renderer.getEntityModel();
-            Hand hand = this.getActiveHand();
-            HandSide side = Minecraft.getInstance().gameSettings.mainHand;
-            if((hand == Hand.MAIN_HAND && side == HandSide.RIGHT) || (hand == Hand.OFF_HAND && side == HandSide.LEFT)) {
-                model.rightArmPose = BipedModel.ArmPose.BLOCK;
-                model.leftArmPose = BipedModel.ArmPose.EMPTY;
-            } else if((hand == Hand.MAIN_HAND && side == HandSide.LEFT) || (hand == Hand.OFF_HAND && side == HandSide.RIGHT)) {
-                model.leftArmPose = BipedModel.ArmPose.BLOCK;
-                model.rightArmPose = BipedModel.ArmPose.EMPTY;
+            PlayerModel<AbstractClientPlayer> model = renderer.getModel();
+            InteractionHand hand = this.getActiveHand();
+            HumanoidArm side = Minecraft.getInstance().options.mainHand;
+            if((hand == InteractionHand.MAIN_HAND && side == HumanoidArm.RIGHT) || (hand == InteractionHand.OFF_HAND && side == HumanoidArm.LEFT)) {
+                model.rightArmPose = HumanoidModel.ArmPose.BLOCK;
+                model.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+            } else if((hand == InteractionHand.MAIN_HAND && side == HumanoidArm.LEFT) || (hand == InteractionHand.OFF_HAND && side == HumanoidArm.RIGHT)) {
+                model.leftArmPose = HumanoidModel.ArmPose.BLOCK;
+                model.rightArmPose = HumanoidModel.ArmPose.EMPTY;
             }
         }
     }
@@ -269,7 +272,7 @@ public class MagnifyingGlassViewHandler {
         this.animationCounterPrev = this.animationCounter;
         if(this.isActive()) {
             // Check if the player is still holding the item and if not, deactivate
-            if(this.getActiveHand() == null || !(this.getPlayer().getHeldItem(this.getActiveHand()).getItem() instanceof ItemMagnifyingGlass)) {
+            if(this.getActiveHand() == null || !(this.getPlayer().getItemInHand(this.getActiveHand()).getItem() instanceof ItemMagnifyingGlass)) {
                 this.active = false;
                 this.endInspection();
                 return;
@@ -285,8 +288,8 @@ public class MagnifyingGlassViewHandler {
                 this.checkInspectedPosition();
                 // Tick inspector
                 if(this.inspector != null && this.lastTarget != null) {
-                    World world = AgriCraft.instance.getClientWorld();
-                    PlayerEntity player = AgriCraft.instance.getClientPlayer();
+                    Level world = AgriCraft.instance.getClientWorld();
+                    Player player = AgriCraft.instance.getClientPlayer();
                     if(!this.lastTarget.onInspectionTick(world, this.inspector, player)) {
                         this.endInspection();
                     }
@@ -322,7 +325,7 @@ public class MagnifyingGlassViewHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onMouseClick(InputEvent.ClickInputEvent event) {
         if(this.isActive() ) {
-            if(event.getKeyBinding() == Minecraft.getInstance().gameSettings.keyBindAttack) {
+            if(event.getKeyMapping() == Minecraft.getInstance().options.keyAttack) {
                 // If this is active, we do not want left clicks to pass
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
@@ -332,49 +335,49 @@ public class MagnifyingGlassViewHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onMovementInput(InputUpdateEvent event) {
+    public void onMovementInput(MovementInputUpdateEvent event) {
         if(this.isActive()) {
             // Prevent player from moving and force sneak
-            event.getMovementInput().moveStrafe = 0;
-            event.getMovementInput().moveForward = 0;
-            event.getMovementInput().forwardKeyDown = false;
-            event.getMovementInput().backKeyDown = false;
-            event.getMovementInput().leftKeyDown = false;
-            event.getMovementInput().rightKeyDown = false;
-            event.getMovementInput().jump = false;
-            event.getMovementInput().sneaking = true;
+            event.getInput().leftImpulse = 0;
+            event.getInput().forwardImpulse = 0;
+            event.getInput().up = false;
+            event.getInput().down = false;
+            event.getInput().left = false;
+            event.getInput().right = false;
+            event.getInput().jumping = false;
+            event.getInput().shiftKeyDown = true;
         }
     }
 
     private static abstract class Target {
         @Nullable
-        public static Target getTarget(RayTraceResult hit) {
+        public static Target getTarget(HitResult hit) {
             if(hit == null) {
                 return null;
             }
-            if(hit.getType() == RayTraceResult.Type.MISS) {
+            if(hit.getType() == HitResult.Type.MISS) {
                 return null;
             }
-            if (hit instanceof EntityRayTraceResult) {
-                return new EntityTarget(((EntityRayTraceResult) hit).getEntity());
+            if (hit instanceof EntityHitResult) {
+                return new EntityTarget(((EntityHitResult) hit).getEntity());
             }
-            if (hit instanceof BlockRayTraceResult) {
-                return new BlockTarget(((BlockRayTraceResult) hit).getPos());
+            if (hit instanceof BlockHitResult) {
+                return new BlockTarget(((BlockHitResult) hit).getBlockPos());
             }
             return null;
         }
 
         public abstract boolean isNewTarget(@Nullable Target other);
 
-        public abstract boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+        public abstract boolean canInspect(Level world, IMagnifyingGlassInspector inspector, Player player);
 
-        public abstract void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+        public abstract void onInspectionStart(Level world, IMagnifyingGlassInspector inspector, Player player);
 
-        public abstract boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+        public abstract boolean onInspectionTick(Level world, IMagnifyingGlassInspector inspector, Player player);
 
-        public abstract void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player);
+        public abstract void onInspectionEnd(Level world, IMagnifyingGlassInspector inspector, Player player);
 
-        public abstract Vector3d getTargetVector(float partialTicks);
+        public abstract Vec3 getTargetVector(float partialTicks);
 
         @Nullable
         public abstract Entity getTargetEntity();
@@ -398,33 +401,33 @@ public class MagnifyingGlassViewHandler {
             }
 
             @Override
-            public boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public boolean canInspect(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 return this.target != null && inspector.canInspect(world, this.target, player);
             }
 
             @Override
-            public void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public void onInspectionStart(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 inspector.onInspectionStart(world, this.target, player);
             }
 
             @Override
-            public boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public boolean onInspectionTick(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 return this.target != null && inspector.onInspectionTick(world, this.target, player);
             }
 
             @Override
-            public void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public void onInspectionEnd(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 inspector.onInspectionEnd(world, this.target, player);
             }
 
             @Override
-            public Vector3d getTargetVector(float partialTicks) {
-                double dw = this.target.getWidth() / 2;
-                double dh = this.target.getHeight() / 2;
-                return new Vector3d(
-                        MathHelper.lerp(partialTicks, this.target.prevPosX, this.target.getPosX()) + dw,
-                        MathHelper.lerp(partialTicks, this.target.prevPosY, this.target.getPosY()) + dh,
-                        MathHelper.lerp(partialTicks, this.target.prevPosZ, this.target.getPosZ()) + dw
+            public Vec3 getTargetVector(float partialTicks) {
+                double dw = this.target.getBbWidth() / 2;
+                double dh = this.target.getBbHeight() / 2;
+                return new Vec3(
+                        Mth.lerp(partialTicks, this.target.xOld, this.target.getX()) + dw,
+                        Mth.lerp(partialTicks, this.target.yOld, this.target.getY()) + dh,
+                        Mth.lerp(partialTicks, this.target.zOld, this.target.getZ()) + dw
                 );
             }
 
@@ -454,28 +457,28 @@ public class MagnifyingGlassViewHandler {
             }
 
             @Override
-            public boolean canInspect(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public boolean canInspect(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 return inspector.canInspect(world, this.target, player);
             }
 
             @Override
-            public void onInspectionStart(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public void onInspectionStart(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 inspector.onInspectionStart(world, this.target, player);
             }
 
             @Override
-            public boolean onInspectionTick(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public boolean onInspectionTick(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 return inspector.onInspectionTick(world, this.target, player);
             }
 
             @Override
-            public void onInspectionEnd(World world, IMagnifyingGlassInspector inspector, PlayerEntity player) {
+            public void onInspectionEnd(Level world, IMagnifyingGlassInspector inspector, Player player) {
                 inspector.onInspectionEnd(world, this.target, player);
             }
 
             @Override
-            public Vector3d getTargetVector(float partialTicks) {
-                return new Vector3d(
+            public Vec3 getTargetVector(float partialTicks) {
+                return new Vec3(
                         this.target.getX() + 0.5D,
                         this.target.getY() + 0.5D,
                         this.target.getZ() + 0.5D

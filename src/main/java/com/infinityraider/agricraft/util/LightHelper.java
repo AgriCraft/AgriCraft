@@ -2,12 +2,13 @@ package com.infinityraider.agricraft.util;
 
 import com.google.common.base.Preconditions;
 import com.infinityraider.infinitylib.utility.MessageUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 
 /**
  *
@@ -25,7 +26,7 @@ public final class LightHelper {
     public static final int LIGHT_METHOD_COUNT = LIGHT_METHOD_NAMES.length;
 
     @Nonnull
-    public static byte[] getLightData(@Nonnull World world, @Nonnull BlockPos pos) {
+    public static byte[] getLightData(@Nonnull Level world, @Nonnull BlockPos pos) {
         // Validate
         Preconditions.checkNotNull(world);
         Preconditions.checkNotNull(pos);
@@ -34,15 +35,15 @@ public final class LightHelper {
         final byte[] lightData = new byte[LIGHT_METHOD_COUNT];
 
         // Fill the array.
-        lightData[0] = (byte) world.getLight(pos);
-        lightData[1] = (byte) world.getLightValue(pos);
-        lightData[2] = (byte) world.getLightFor(LightType.SKY, pos);
-        lightData[3] = (byte) world.getLightFor(LightType.BLOCK, pos);
+        lightData[0] = (byte) world.getBrightness(pos);
+        lightData[1] = (byte) world.getLightEmission(pos);
+        lightData[2] = (byte) world.getBrightness(LightLayer.SKY, pos);
+        lightData[3] = (byte) world.getBrightness(LightLayer.BLOCK, pos);
         // Return the array.
         return lightData;
     }
 
-    public static void messageLightData(@Nullable PlayerEntity player, @Nonnull byte[] clientLightData, @Nonnull byte[] serverLightData) {
+    public static void messageLightData(@Nullable Player player, @Nonnull byte[] clientLightData, @Nonnull byte[] serverLightData) {
         // Validate
         Preconditions.checkNotNull(clientLightData);
         Preconditions.checkNotNull(serverLightData);

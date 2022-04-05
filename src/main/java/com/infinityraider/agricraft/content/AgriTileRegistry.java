@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.content;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
@@ -10,7 +10,6 @@ import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
-import net.minecraft.tileentity.TileEntityType;
 
 public class AgriTileRegistry {
     private static final AgriTileRegistry INSTANCE = new AgriTileRegistry();
@@ -19,51 +18,41 @@ public class AgriTileRegistry {
         return INSTANCE;
     }
 
-    public final TileEntityType<TileEntityCropPlant> crop_plant;
-    public final TileEntityType<TileEntityCropSticks> crop_sticks;
-    public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
-    public final TileEntityType<TileEntityIrrigationTank> irrigation_tank;
-    public final TileEntityType<TileEntityIrrigationChannel> irrigation_channel;
-    public final TileEntityType<TileEntitySprinkler> sprinkler;
-    public final TileEntityType<TileEntityGrate> grate;
+    public static final InfinityTileEntityType<TileEntityCropPlant> CROP_PLANT = InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
+            .addBlock(AgriApi.getAgriContent().getBlocks().getCropPlantBlock())
+            .build();
 
-    private AgriTileRegistry() {
-        this.crop_plant = InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().crop_plant)
-                .build();
+    public static final InfinityTileEntityType<TileEntityCropSticks> CROP_STICKS = InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
+            .addBlocks(
+                    AgriApi.getAgriContent().getBlocks().getWoodCropSticksBlock(),
+                    AgriApi.getAgriContent().getBlocks().getIronCropSticksBlock(),
+                    AgriApi.getAgriContent().getBlocks().getObsidianCropSticksBlock())
+            .build();
 
-        this.crop_sticks = InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
-                .addBlocks(
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian)
-                .build();
+    public static final InfinityTileEntityType<TileEntitySeedAnalyzer> SEED_ANALYZER = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
+            .addBlock(AgriApi.getAgriContent().getBlocks().getSeedAnalyzerBlock())
+            .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
+            .build();
 
-        this.seed_analyzer = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().seed_analyzer)
-                .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
-                .build();
+    public static final InfinityTileEntityType<TileEntityIrrigationTank> IRRIGATION_TANK = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
+            .addBlock(AgriApi.getAgriContent().getBlocks().getTankBlock())
+            .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
+            .build();
 
-        this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().tank)
-                .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
-                .build();
+    public static final InfinityTileEntityType<TileEntityIrrigationChannel> IRRIGATION_CHANNEL = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
+            .addBlocks(
+                    AgriApi.getAgriContent().getBlocks().getChannelBlock(),
+                    AgriApi.getAgriContent().getBlocks().getHollowChannelBlock()
+            )
+            .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
+            .build();
 
-        this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
-                .addBlocks(
-                        AgriCraft.instance.getModBlockRegistry().channel,
-                        AgriCraft.instance.getModBlockRegistry().channel_hollow
-                )
-                .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
-                .build();
+    public static final InfinityTileEntityType<TileEntitySprinkler> SPRINKLER = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
+            .addBlock(AgriApi.getAgriContent().getBlocks().getSprinklerBlock())
+            .setRenderFactory(TileEntitySprinkler.createRenderFactory())
+            .build();
 
-        this.sprinkler = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().sprinkler)
-                .setRenderFactory(TileEntitySprinkler.createRenderFactory())
-                .build();
-
-        this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().grate)
-                .build();
-    }
+    public static final InfinityTileEntityType<TileEntityGrate> GRATE = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
+            .addBlock(AgriApi.getAgriContent().getBlocks().getGrateBlock())
+            .build();
 }

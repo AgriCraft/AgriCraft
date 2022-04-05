@@ -3,16 +3,17 @@ package com.infinityraider.agricraft.capability;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.plugins.minecraft.GeneAnimalAttractant;
 import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class CapabilityEatCropGoal implements IInfCapabilityImplementation<MobEntity, CapabilityEatCropGoal.Impl> {
+public class CapabilityEatCropGoal implements IInfCapabilityImplementation<Mob, CapabilityEatCropGoal.Impl> {
     private static final CapabilityEatCropGoal INSTANCE = new CapabilityEatCropGoal();
 
     public static CapabilityEatCropGoal getInstance() {
@@ -21,15 +22,14 @@ public class CapabilityEatCropGoal implements IInfCapabilityImplementation<MobEn
 
     public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), "eat_crop_goal");
 
-    @CapabilityInject(Impl.class)
-    public static final Capability<Impl> CAPABILITY = null;
+    public static final Capability<Impl> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
-    public GeneAnimalAttractant.EatCropGoal getCropEatGoal(MobEntity entity) {
+    public GeneAnimalAttractant.EatCropGoal getCropEatGoal(Mob entity) {
         return this.getCapability(entity).map(impl -> impl)
                 .flatMap(impl -> Optional.ofNullable(impl.getGoal())).orElse(null);
     }
 
-    public void setCropEatGoal(MobEntity entity, GeneAnimalAttractant.EatCropGoal goal) {
+    public void setCropEatGoal(Mob entity, GeneAnimalAttractant.EatCropGoal goal) {
         this.getCapability(entity).ifPresent(impl -> impl.setGoal(goal));
     }
 
@@ -39,12 +39,12 @@ public class CapabilityEatCropGoal implements IInfCapabilityImplementation<MobEn
     }
 
     @Override
-    public boolean shouldApplyCapability(MobEntity carrier) {
+    public boolean shouldApplyCapability(Mob carrier) {
         return true;
     }
 
     @Override
-    public Impl createNewValue(MobEntity carrier) {
+    public Impl createNewValue(Mob carrier) {
         return new Impl();
     }
 
@@ -54,8 +54,8 @@ public class CapabilityEatCropGoal implements IInfCapabilityImplementation<MobEn
     }
 
     @Override
-    public Class<MobEntity> getCarrierClass() {
-        return MobEntity.class;
+    public Class<Mob> getCarrierClass() {
+        return Mob.class;
     }
 
     @Override
@@ -67,12 +67,12 @@ public class CapabilityEatCropGoal implements IInfCapabilityImplementation<MobEn
     public Serializer<Impl> getSerializer() {
         return new Serializer<Impl>() {
             @Override
-            public CompoundNBT writeToNBT(Impl object) {
-                return new CompoundNBT();
+            public CompoundTag writeToNBT(Impl object) {
+                return new CompoundTag();
             }
 
             @Override
-            public void readFromNBT(Impl object, CompoundNBT nbt) {
+            public void readFromNBT(Impl object, CompoundTag nbt) {
                 //NOOP
             }
         };

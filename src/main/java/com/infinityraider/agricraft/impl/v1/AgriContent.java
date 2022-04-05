@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.impl.v1;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
-import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.content.*;
 
 public final class AgriContent implements IAgriContent {
     private static final AgriContent INSTANCE = new AgriContent();
@@ -15,27 +14,27 @@ public final class AgriContent implements IAgriContent {
 
     @Override
     public Blocks getBlocks() {
-        return AgriCraft.instance.getModBlockRegistry();
+        return AgriBlockRegistry.ACCESSOR;
     }
 
     @Override
     public Enchantments getEnchantments() {
-        return AgriCraft.instance.getModEnchantmentRegistry();
+        return AgriEnchantmentRegistry.ACCESSOR;
     }
 
     @Override
     public Fluids getFluids() {
-        return AgriCraft.instance.getModFluidRegistry();
+        return AgriFluidRegistry.ACCESSOR;
     }
 
     @Override
     public Items getItems() {
-        return AgriCraft.instance.getModItemRegistry();
+        return AgriItemRegistry.ACCESSOR;
     }
 
     @Override
     public Sounds getSounds() {
-        return AgriCraft.instance.getModSoundRegistry();
+        return AgriSoundRegistry.ACCESSOR;
     }
 
     @Override

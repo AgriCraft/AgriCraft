@@ -3,41 +3,21 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.world.StructureGreenHouse;
 import com.infinityraider.agricraft.content.world.StructureGreenHouseIrrigated;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-public class AgriStructureRegistry {
-    private static final AgriStructureRegistry INSTANCE = new AgriStructureRegistry();
+public final class AgriStructureRegistry {
+    public static final StructureGreenHouse STANDARD_DESERT = new StructureGreenHouse(GreenHouses.Standard.DESERT, Pools.DESERT);
+    public static final StructureGreenHouse STANDARD_PLAINS = new StructureGreenHouse(GreenHouses.Standard.PLAINS, Pools.PLAINS);
+    public static final StructureGreenHouse STANDARD_SAVANNA = new StructureGreenHouse(GreenHouses.Standard.SAVANNA, Pools.SAVANNA);
+    public static final StructureGreenHouse STANDARD_SNOWY = new StructureGreenHouse(GreenHouses.Standard.SNOWY, Pools.SNOWY);
+    public static final StructureGreenHouse STANDARD_TAIGA = new StructureGreenHouse(GreenHouses.Standard.TAIGA, Pools.TAIGA);
 
-    public static AgriStructureRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    public final StructureGreenHouse standard_desert;
-    public final StructureGreenHouse standard_plains;
-    public final StructureGreenHouse standard_savanna;
-    public final StructureGreenHouse standard_snowy;
-    public final StructureGreenHouse standard_taiga;
-
-    public final StructureGreenHouseIrrigated irrigated_desert;
-    public final StructureGreenHouseIrrigated irrigated_plains;
-    public final StructureGreenHouseIrrigated irrigated_savanna;
-    public final StructureGreenHouseIrrigated irrigated_snowy;
-    public final StructureGreenHouseIrrigated irrigated_taiga;
-
-    private AgriStructureRegistry() {
-        this.standard_desert = new StructureGreenHouse(GreenHouses.Standard.DESERT, Pools.DESERT);
-        this.standard_plains = new StructureGreenHouse(GreenHouses.Standard.PLAINS, Pools.PLAINS);
-        this.standard_savanna = new StructureGreenHouse(GreenHouses.Standard.SAVANNA, Pools.SAVANNA);
-        this.standard_snowy = new StructureGreenHouse(GreenHouses.Standard.SNOWY, Pools.SNOWY);
-        this.standard_taiga = new StructureGreenHouse(GreenHouses.Standard.TAIGA, Pools.TAIGA);
-
-        // TODO: design irrigated greenhouses
-        this.irrigated_desert =  null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
-        this.irrigated_plains =  null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.PLAINS, Pools.PLAINS);
-        this.irrigated_savanna =  null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SAVANNA, Pools.SAVANNA);
-        this.irrigated_snowy =  null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SNOWY, Pools.SNOWY);
-        this.irrigated_taiga =  null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
-    }
+    // TODO: design irrigated greenhouses
+    public static final StructureGreenHouseIrrigated IRRIGATED_DESERT = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
+    public static final StructureGreenHouseIrrigated IRRIGATED_PLAINS = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.PLAINS, Pools.PLAINS);
+    public static final StructureGreenHouseIrrigated IRRIGATED_SAVANNA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SAVANNA, Pools.SAVANNA);
+    public static final StructureGreenHouseIrrigated IRRIGATED_SNOWY = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SNOWY, Pools.SNOWY);
+    public static final StructureGreenHouseIrrigated IRRIGATED_TAIGA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
 
     public static final class GreenHouses {
         public static final class Standard {

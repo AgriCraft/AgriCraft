@@ -218,7 +218,7 @@ repositories {
 // Add "embedded" configuration
 configurations {
     embed
-    compile.extendsFrom(embed)
+    compileOnly.extendsFrom(embed)
 }
 
 // List Deps.
@@ -227,7 +227,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.19'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 
     // AgriCore
-    embed project('AgriCore');
+    embed project(':AgriCore')
     
     // InfinityLib
     compileOnly project(":InfinityLib")

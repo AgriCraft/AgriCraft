@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.handler;
 
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.DataPackRegistries;
-import net.minecraft.resources.IFutureReloadListener;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.server.ReloadableServerResources;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -24,17 +24,17 @@ public class ResourceHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onReloadListenerRegistration(AddReloadListenerEvent event) {
-        event.addListener(new AgriJsonReloadListener(event.getDataPackRegistries()));
+        event.addListener(new AgriJsonReloadListener(event.getServerResources()));
     }
 
-    public static class AgriJsonReloadListener implements IFutureReloadListener {
-        private final DataPackRegistries dataPacks;
+    public static class AgriJsonReloadListener implements PreparableReloadListener {
+        private final ReloadableServerResources dataPacks;
 
-        private AgriJsonReloadListener(DataPackRegistries dataPacks) {
+        private AgriJsonReloadListener(ReloadableServerResources dataPacks) {
             this.dataPacks = dataPacks;
         }
 
-        public DataPackRegistries getDataPacks() {
+        public ReloadableServerResources getDataPacks() {
             return this.dataPacks;
         }
         // TODO: multi-thread magic which:
@@ -45,27 +45,26 @@ public class ResourceHandler {
         @Override
         @Nonnull
         @ParametersAreNonnullByDefault
-        public CompletableFuture<Void> reload(IStage stage, IResourceManager resourceManager, IProfiler preparationsProfiler,
-                                              IProfiler reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+        public CompletableFuture<Void> reload(PreparationBarrier barrier, ResourceManager resourceManager, ProfilerFiller prepProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
             return CompletableFuture.runAsync(() -> this.readJsons(resourceManager), backgroundExecutor)
                     .thenAccept((v) -> this.uploadTextures(resourceManager))
                     .thenAccept((v) -> this.uploadModels(resourceManager))
                     .thenAccept((v) -> this.finalize(resourceManager));
         }
 
-        protected void readJsons(IResourceManager manager) {
+        protected void readJsons(ResourceManager manager) {
 
         }
 
-        protected void uploadTextures(IResourceManager manager) {
+        protected void uploadTextures(ResourceManager manager) {
 
         }
 
-        protected void uploadModels(IResourceManager manager) {
+        protected void uploadModels(ResourceManager manager) {
 
         }
 
-        public void finalize(IResourceManager manager) {
+        public void finalize(ResourceManager manager) {
 
         }
     }

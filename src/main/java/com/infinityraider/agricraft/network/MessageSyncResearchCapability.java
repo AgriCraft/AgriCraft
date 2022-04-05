@@ -3,13 +3,13 @@ package com.infinityraider.agricraft.network;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageSyncResearchCapability extends MessageBase {
-    private CompoundNBT tag;
+    private CompoundTag tag;
 
     public MessageSyncResearchCapability() {
         super();
@@ -17,7 +17,7 @@ public class MessageSyncResearchCapability extends MessageBase {
 
     public MessageSyncResearchCapability(CapabilityResearchedPlants.Impl capability) {
         this();
-        this.tag = capability.writeToNBT();
+        this.tag = capability.serializeNBT();
     }
 
     @Override
@@ -27,10 +27,10 @@ public class MessageSyncResearchCapability extends MessageBase {
 
     @Override
     protected void processMessage(NetworkEvent.Context ctx) {
-        PlayerEntity player = AgriCraft.instance.getClientPlayer();
+        Player player = AgriCraft.instance.getClientPlayer();
         if (player != null && this.tag != null) {
             CapabilityResearchedPlants.getInstance().getCapability(player).ifPresent(impl -> {
-                impl.readFromNBT(this.tag);
+                impl.deserializeNBT(this.tag);
                 impl.configureJei();
             });
         }

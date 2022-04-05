@@ -13,18 +13,12 @@ import com.infinityraider.agricraft.impl.v1.journal.*;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.render.items.journal.JournalItemRenderer;
+import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
-import com.infinityraider.infinitylib.utility.ISerializable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -158,17 +152,17 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
         return JournalItemRenderer.getInstance();
     }
 
-    public static class JournalData implements ISerializable {
+    public static class JournalData implements IInfSerializableCapabilityImplementation.Serializable<JournalData> {
         private final ItemStack journal;
 
         private int index;
         private List<IAgriPlant> plants;
         private List<IPage> pages;
 
-        public JournalData(ItemStack journal, List<IAgriPlant> plants) {
+        public JournalData(ItemStack journal) {
             this.journal = journal;
             this.index = 0;
-            this.plants = plants;
+            this.plants = Lists.newArrayList();
             this.initializePages();
         }
 
@@ -208,53 +202,6 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
         public boolean isPlantDiscovered(IAgriPlant plant) {
             return this.getPlants().contains(plant);
         }
-
-        @Override
-        public void readFromNBT(CompoundNBT tag) {
-            // read the plants
-            if(tag.contains(AgriNBT.ENTRIES)) {
-                this.plants = tag.getList(AgriNBT.ENTRIES, 10).stream()
-                        // filter for CompoundNBT, should always be the case, but is here for safety
-                        .filter(plantTag -> plantTag instanceof CompoundNBT)
-                        // cast to CompoundNBT
-                        .map(plantTag -> (CompoundNBT) plantTag)
-                        // fetch plant from NBT
-                        .map(plantTag -> AgriApi.getPlantRegistry().get(plantTag.getString(AgriNBT.PLANT)))
-                        // filter for presence of plant in optional
-                        .filter(Optional::isPresent)
-                        // get plants from optionals
-                        .map(Optional::get)
-                        // collect to list
-                        .collect(Collectors.toList());
-            } else {
-                this.plants = new ArrayList<>();
-            }
-            // Populate pages
-            this.initializePages();
-            // read the index
-            this.setCurrentIndex(tag.contains(AgriNBT.INDEX) ? tag.getInt(AgriNBT.INDEX) : 0);
-        }
-
-        @Override
-        public CompoundNBT writeToNBT() {
-            // Create new tag
-            CompoundNBT tag = new CompoundNBT();
-            // Write index
-            tag.putInt(AgriNBT.INDEX, this.getCurrentIndex());
-            // Write plants
-            ListNBT list = new ListNBT();
-            this.getPlants().forEach(plant -> {
-                // create new entry for the plant
-                CompoundNBT plantTag = new CompoundNBT();
-                plantTag.putString(AgriNBT.PLANT, plant.getId());
-                // add new entry to the list
-                list.add(plantTag);
-            });
-            tag.put(AgriNBT.ENTRIES, list);
-            // return the tag
-            return tag;
-        }
-
         protected void initializePages() {
             // Initialize fixed pages
             List<IPage> pages = Lists.newArrayList();
@@ -290,36 +237,62 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             this.pages = ImmutableList.copyOf(event.getPages());
         }
 
-        public static JournalData createFromLegacyTag(ItemStack stack) {
-            return new JournalData(stack, getPlantsFromLegacyTag(stack));
+        @Override
+        public void copyDataFrom(JournalData from) {
+            // copy plants
+            this.plants.clear();
+            this.plants.addAll(from.getPlants());
+            // copy index
+            this.setCurrentIndex(from.getCurrentIndex());
+            // copy pages
+            this.pages.clear();;
+            this.pages.addAll(from.getPages());
         }
 
-        private static List<IAgriPlant> getPlantsFromLegacyTag(ItemStack stack) {
-            List<IAgriPlant> plants = Lists.newArrayList();
-            CompoundNBT existingTag = stack.getTag();
-            if(existingTag != null && existingTag.contains(AgriNBT.ENTRIES)) {
-                // extract plants from legacy tags
-                plants.addAll(existingTag.getList(AgriNBT.ENTRIES, 10).stream()
+        @Override
+        public CompoundTag serializeNBT() {
+            // Create new tag
+            CompoundTag tag = new CompoundTag();
+            // Write index
+            tag.putInt(AgriNBT.INDEX, this.getCurrentIndex());
+            // Write plants
+            ListTag list = new ListTag();
+            this.getPlants().forEach(plant -> {
+                // create new entry for the plant
+                CompoundTag plantTag = new CompoundTag();
+                plantTag.putString(AgriNBT.PLANT, plant.getId());
+                // add new entry to the list
+                list.add(plantTag);
+            });
+            tag.put(AgriNBT.ENTRIES, list);
+            // return the tag
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            // read the plants
+            if(tag.contains(AgriNBT.ENTRIES)) {
+                this.plants = tag.getList(AgriNBT.ENTRIES, 10).stream()
                         // filter for CompoundNBT, should always be the case, but is here for safety
-                        .filter(tag -> tag instanceof CompoundNBT)
+                        .filter(plantTag -> plantTag instanceof CompoundTag)
                         // cast to CompoundNBT
-                        .map(tag -> (CompoundNBT) tag)
+                        .map(plantTag -> (CompoundTag) plantTag)
                         // fetch plant from NBT
-                        .map(tag -> AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)))
+                        .map(plantTag -> AgriApi.getPlantRegistry().get(plantTag.getString(AgriNBT.PLANT)))
                         // filter for presence of plant in optional
                         .filter(Optional::isPresent)
                         // get plants from optionals
                         .map(Optional::get)
-                        // collect
-                        .collect(Collectors.toList())
-                );
-                // Remove legacy tag
-                existingTag.remove(AgriNBT.ENTRIES);
-                if(existingTag.keySet().isEmpty()) {
-                    stack.setTag(null);
-                }
+                        // collect to list
+                        .collect(Collectors.toList());
+            } else {
+                this.plants = new ArrayList<>();
             }
-            return plants;
+            // Populate pages
+            this.initializePages();
+            // read the index
+            this.setCurrentIndex(tag.contains(AgriNBT.INDEX) ? tag.getInt(AgriNBT.INDEX) : 0);
         }
     }
 }

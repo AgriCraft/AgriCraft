@@ -27,20 +27,12 @@ import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
@@ -82,9 +74,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     // Capabilities
     private final LazyOptional<IAgriCrop> cropCapability;
 
-    public TileEntityCropBase(TileEntityType<?> type) {
+    public TileEntityCropBase(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         // Super constructor with appropriate TileEntity Type
-        super(type);
+        super(type, pos, state);
 
         // Initialize model data map
         this.data = new ModelDataMap.Builder()
@@ -98,7 +90,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         this.genome = this.createAutoSyncedField(
                 Optional.empty(),
                 (optional, tag) -> optional.ifPresent(genome -> {
-                    CompoundNBT geneTag = new CompoundNBT();
+                    CompoundTag geneTag = new CompoundTag();
                     genome.writeToNBT(geneTag);
                     tag.put(AgriNBT.GENOME, geneTag);
                 }),
@@ -142,14 +134,14 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public void dropItem(ItemStack item) {
-        if(this.getWorld() == null || this.getWorld().isRemote) {
+        if(this.getLevel() == null || this.getLevel().isRemote) {
             return;
         }
-        this.getWorld().addEntity(new ItemEntity(
-                this.getWorld(),
-                this.getPos().getX(),
-                this.getPos().getY(),
-                this.getPos().getZ(),
+        this.getLevel().addFreshEntity(new ItemEntity(
+                this.getLevel(),
+                this.getPosition().getX(),
+                this.getPosition().getY(),
+                this.getPosition().getZ(),
                 item));
     }
 
@@ -161,7 +153,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     @Override
     @Nonnull
     public BlockPos getPosition() {
-        return this.getPos();
+        return this.getBlockPos();
     }
 
     @Nonnull

@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.render.blocks.TileEntitySprinklerRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.block.IGrowable;
+import net.minecraft.core.BlockPos;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
@@ -21,6 +23,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,8 +57,8 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     private int prevAngle;
     private int particleCounter;
 
-    public TileEntitySprinkler() {
-        super(AgriCraft.instance.getModTileRegistry().sprinkler);
+    public TileEntitySprinkler(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.SPRINKLER, pos, state);
         this.active = this.getAutoSyncedFieldBuilder(false).build();
     }
 

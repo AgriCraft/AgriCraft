@@ -9,10 +9,11 @@ import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+
 import java.nio.file.Path;
 import java.util.List;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MessageSyncSoilJson extends MessageBase {
     private AgriSoil soil;
