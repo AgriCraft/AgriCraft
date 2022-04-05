@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,8 +59,8 @@ public enum AgriSeason {
     /**
      * @return Text Component for the display name of the season
      */
-    public TranslationTextComponent getDisplayName() {
-        return new TranslationTextComponent("agricraft.season." + this.name().toLowerCase());
+    public TranslatableComponent getDisplayName() {
+        return new TranslatableComponent("agricraft.season." + this.name().toLowerCase());
     }
 
     /**
@@ -70,7 +70,7 @@ public enum AgriSeason {
      * @param pos the position
      * @return the season
      */
-    public static AgriSeason getSeason(World world, BlockPos pos) {
+    public static AgriSeason getSeason(Level world, BlockPos pos) {
         return AgriApi.getSeasonLogic().getSeason(world, pos);
     }
 

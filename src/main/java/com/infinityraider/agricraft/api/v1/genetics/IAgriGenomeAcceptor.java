@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

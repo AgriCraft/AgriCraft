@@ -21,6 +21,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -74,7 +76,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     private JournalViewPointHandler() {}
 
-    public boolean toggle(PlayerEntity player, Hand hand) {
+    public boolean toggle(Player player, InteractionHand hand) {
         if(this.isActive(hand)) {
             this.setActive(hand, false);
             if(AgriCraft.instance.proxy().toggleDynamicCamera(this, false)) {

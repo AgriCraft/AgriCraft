@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
 
@@ -45,7 +45,7 @@ public interface IAgriGenePair<T> {
      *
      * @param consumer the consumer for the description
      */
-    void addTooltipDescription(Consumer<ITextComponent> consumer);
+    void addTooltipDescription(Consumer<Component> consumer);
 
     /**
      * Checks if another gene pair is equal to this one

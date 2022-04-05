@@ -6,7 +6,10 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import net.minecraft.util.text.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -17,193 +20,193 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 public class AgriToolTips {
-    public static final TranslationTextComponent UNKNOWN = new TranslationTextComponent("agricraft.tooltip.unknown");
+    public static final TranslatableComponent UNKNOWN = new TranslatableComponent("agricraft.tooltip.unknown");
 
-    public static final ITextComponent GENOME = new TranslationTextComponent("agricraft.tooltip.genome")
-            .mergeStyle(TextFormatting.DARK_GREEN, TextFormatting.BOLD);
+    public static final MutableComponent GENOME = new TranslatableComponent("agricraft.tooltip.genome")
+            .withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD);
 
     // Crop tooltips
-    public static final ITextComponent PLANT = new TranslationTextComponent("agricraft.tooltip.plant");
-    public static final ITextComponent NO_PLANT = new TranslationTextComponent("agricraft.tooltip.no_plant");
-    public static final ITextComponent GROWTH = new TranslationTextComponent("agricraft.tooltip.growth");
-    public static final ITextComponent MATURE = new TranslationTextComponent("agricraft.tooltip.mature");
-    public static final ITextComponent WEED = new TranslationTextComponent("agricraft.tooltip.weed");
-    public static final ITextComponent NO_WEED = new TranslationTextComponent("agricraft.tooltip.no_weed");
-    public static final ITextComponent WEED_GROWTH = new TranslationTextComponent("agricraft.tooltip.weed_growth");
-    public static final ITextComponent FERTILE = new TranslationTextComponent("agricraft.tooltip.fertile");
-    public static final ITextComponent NOT_FERTILE = new TranslationTextComponent("agricraft.tooltip.not_fertile");
-    public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil");
-    public static final ITextComponent LIGHT = new TranslationTextComponent("agricraft.tooltip.light");
+    public static final MutableComponent PLANT = new TranslatableComponent("agricraft.tooltip.plant");
+    public static final MutableComponent NO_PLANT = new TranslatableComponent("agricraft.tooltip.no_plant");
+    public static final MutableComponent GROWTH = new TranslatableComponent("agricraft.tooltip.growth");
+    public static final MutableComponent MATURE = new TranslatableComponent("agricraft.tooltip.mature");
+    public static final MutableComponent WEED = new TranslatableComponent("agricraft.tooltip.weed");
+    public static final MutableComponent NO_WEED = new TranslatableComponent("agricraft.tooltip.no_weed");
+    public static final MutableComponent WEED_GROWTH = new TranslatableComponent("agricraft.tooltip.weed_growth");
+    public static final MutableComponent FERTILE = new TranslatableComponent("agricraft.tooltip.fertile");
+    public static final MutableComponent NOT_FERTILE = new TranslatableComponent("agricraft.tooltip.not_fertile");
+    public static final MutableComponent SOIL = new TranslatableComponent("agricraft.tooltip.soil");
+    public static final MutableComponent LIGHT = new TranslatableComponent("agricraft.tooltip.light");
 
     // Valve tooltips
-    public static final ITextComponent VALVE_INFO_OPEN = new TranslationTextComponent("agricraft.tooltip.valve.open");
-    public static final ITextComponent VALVE_INFO_CLOSED = new TranslationTextComponent("agricraft.tooltip.valve.closed");
+    public static final MutableComponent VALVE_INFO_OPEN = new TranslatableComponent("agricraft.tooltip.valve.open");
+    public static final MutableComponent VALVE_INFO_CLOSED = new TranslatableComponent("agricraft.tooltip.valve.closed");
 
     // Item tooltips
-    public static final ITextComponent CLIPPER
-            = new TranslationTextComponent("agricraft.tooltip.clipper").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent GENE_INSPECTOR
-            = new TranslationTextComponent("agricraft.tooltip.gene_inspector").mergeStyle(TextFormatting.BLUE);
-    public static final ITextComponent JOURNAL_USE_1
-            = new TranslationTextComponent("agricraft.tooltip.journal_use_1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent JOURNAL_USE_2
-            = new TranslationTextComponent("agricraft.tooltip.journal_use_2").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent JOURNAL_SEEDS
-            = new TranslationTextComponent("agricraft.tooltip.journal_seeds").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent MAGNIFYING_GLASS
-            = new TranslationTextComponent("agricraft.tooltip.magnifying_glass").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent RAKE
-            = new TranslationTextComponent("agricraft.tooltip.rake").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent TROWEL
-            = new TranslationTextComponent("agricraft.tooltip.trowel").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_ACTIVE
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_active").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_CONTENTS
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_contents").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_EMPTY
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_empty").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_SORTER
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_sorter").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_SORTER_DEFAULT
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_sorter_default").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_MAIN_HAND
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_main_hand").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_OFF_HAND
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_off_hand").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_SCROLLING
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_scrolling").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_INACTIVE_1
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_inactive_1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_BAG_INACTIVE_2
-            = new TranslationTextComponent("agricraft.tooltip.seed_bag_inactive_2").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_ANALYZER_L1
-            = new TranslationTextComponent("agricraft.tooltip.analyzer.l1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SEED_ANALYZER_L2
-            = new TranslationTextComponent("agricraft.tooltip.analyzer.l2").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent GRATE_L1
-            = new TranslationTextComponent("agricraft.tooltip.grate.l1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent GRATE_L2
-            = new TranslationTextComponent("agricraft.tooltip.grate.l2").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent TANK_L1
-            = new TranslationTextComponent("agricraft.tooltip.tank.l1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent SPRINKLER
-            = new TranslationTextComponent("agricraft.tooltip.sprinkler.l1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent VALVE_L1
-            = new TranslationTextComponent("agricraft.tooltip.valve.l1").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent VALVE_L2
-            = new TranslationTextComponent("agricraft.tooltip.valve.l2").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent VALVE_L3
-            = new TranslationTextComponent("agricraft.tooltip.valve.l3").mergeStyle(TextFormatting.DARK_GRAY);
+    public static final MutableComponent CLIPPER
+            = new TranslatableComponent("agricraft.tooltip.clipper").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GENE_INSPECTOR
+            = new TranslatableComponent("agricraft.tooltip.gene_inspector").withStyle(ChatFormatting.BLUE);
+    public static final MutableComponent JOURNAL_USE_1
+            = new TranslatableComponent("agricraft.tooltip.journal_use_1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent JOURNAL_USE_2
+            = new TranslatableComponent("agricraft.tooltip.journal_use_2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent JOURNAL_SEEDS
+            = new TranslatableComponent("agricraft.tooltip.journal_seeds").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent MAGNIFYING_GLASS
+            = new TranslatableComponent("agricraft.tooltip.magnifying_glass").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent RAKE
+            = new TranslatableComponent("agricraft.tooltip.rake").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent TROWEL
+            = new TranslatableComponent("agricraft.tooltip.trowel").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_ACTIVE
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_active").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_CONTENTS
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_contents").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_EMPTY
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_empty").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_SORTER
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_sorter").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_SORTER_DEFAULT
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_sorter_default").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_MAIN_HAND
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_main_hand").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_OFF_HAND
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_off_hand").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_SCROLLING
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_scrolling").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_INACTIVE_1
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_inactive_1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_BAG_INACTIVE_2
+            = new TranslatableComponent("agricraft.tooltip.seed_bag_inactive_2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_ANALYZER_L1
+            = new TranslatableComponent("agricraft.tooltip.analyzer.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_ANALYZER_L2
+            = new TranslatableComponent("agricraft.tooltip.analyzer.l2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GRATE_L1
+            = new TranslatableComponent("agricraft.tooltip.grate.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GRATE_L2
+            = new TranslatableComponent("agricraft.tooltip.grate.l2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent TANK_L1
+            = new TranslatableComponent("agricraft.tooltip.tank.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SPRINKLER
+            = new TranslatableComponent("agricraft.tooltip.sprinkler.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent VALVE_L1
+            = new TranslatableComponent("agricraft.tooltip.valve.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent VALVE_L2
+            = new TranslatableComponent("agricraft.tooltip.valve.l2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent VALVE_L3
+            = new TranslatableComponent("agricraft.tooltip.valve.l3").withStyle(ChatFormatting.DARK_GRAY);
 
-    public static final ITextComponent SNEAK_INFO
-            = new TranslationTextComponent("agricraft.tooltip.sneak_info").mergeStyle(TextFormatting.DARK_GRAY);
-    public static final ITextComponent EMPTY_LINE = new StringTextComponent("");
+    public static final MutableComponent SNEAK_INFO
+            = new TranslatableComponent("agricraft.tooltip.sneak_info").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent EMPTY_LINE = new TextComponent("");
 
     // Feedback messages
-    public static final ITextComponent MSG_ANALYZER_VIEW_BLOCKED = new TranslationTextComponent("agricraft.message.analyzer_view_blocked");
-    public static final ITextComponent MSG_CLIPPING_IMPOSSIBLE = new TranslationTextComponent("agricraft.message.clipping_impossible");
-    public static final ITextComponent MSG_SEED_BAG_SHAKE = new TranslationTextComponent("agricraft.message.seed_bag_shake");
-    public static final ITextComponent MSG_SEED_BAG_EMPTY = new TranslationTextComponent("agricraft.message.seed_bag_empty");
-    public static final ITextComponent MSG_SEED_BAG_DEFAULT_SORTER = new TranslationTextComponent("agricraft.message.seed_bag_sorter.default");
-    public static final ITextComponent MSG_TROWEL_WEED = new TranslationTextComponent("agricraft.message.trowel_weed");
-    public static final ITextComponent MSG_TROWEL_PLANT = new TranslationTextComponent("agricraft.message.trowel_plant");
-    public static final ITextComponent MSG_TROWEL_NO_PLANT = new TranslationTextComponent("agricraft.message.trowel_no_plant");
+    public static final MutableComponent MSG_ANALYZER_VIEW_BLOCKED = new TranslatableComponent("agricraft.message.analyzer_view_blocked");
+    public static final MutableComponent MSG_CLIPPING_IMPOSSIBLE = new TranslatableComponent("agricraft.message.clipping_impossible");
+    public static final MutableComponent MSG_SEED_BAG_SHAKE = new TranslatableComponent("agricraft.message.seed_bag_shake");
+    public static final MutableComponent MSG_SEED_BAG_EMPTY = new TranslatableComponent("agricraft.message.seed_bag_empty");
+    public static final MutableComponent MSG_SEED_BAG_DEFAULT_SORTER = new TranslatableComponent("agricraft.message.seed_bag_sorter.default");
+    public static final MutableComponent MSG_TROWEL_WEED = new TranslatableComponent("agricraft.message.trowel_weed");
+    public static final MutableComponent MSG_TROWEL_PLANT = new TranslatableComponent("agricraft.message.trowel_plant");
+    public static final MutableComponent MSG_TROWEL_NO_PLANT = new TranslatableComponent("agricraft.message.trowel_no_plant");
 
-    public static ITextComponent getPlantTooltip(IAgriPlant plant) {
-        return new StringTextComponent("")
-                .appendSibling(PLANT)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(plant.getPlantName());
+    public static MutableComponent getPlantTooltip(IAgriPlant plant) {
+        return new TextComponent("")
+                .append(PLANT)
+                .append(new TextComponent(": "))
+                .append(plant.getPlantName());
     }
 
-    public static ITextComponent getWeedTooltip(IAgriWeed weed) {
-        return new StringTextComponent("")
-                .appendSibling(WEED)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(weed.getWeedName());
+    public static MutableComponent getWeedTooltip(IAgriWeed weed) {
+        return new TextComponent("")
+                .append(WEED)
+                .append(new TextComponent(": "))
+                .append(weed.getWeedName());
     }
 
-    public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth) {
+    public static MutableComponent getGrowthTooltip(IAgriGrowthStage growth) {
         return getGrowthTooltip(growth, growth.growthPercentage());
     }
 
-    public static ITextComponent getGrowthTooltip(IAgriGrowthStage growth, double precise) {
+    public static MutableComponent getGrowthTooltip(IAgriGrowthStage growth, double precise) {
         if (growth.isFinal()) {
-            return new StringTextComponent("")
-                    .appendSibling(GROWTH)
-                    .appendSibling(new StringTextComponent(": "))
-                    .appendSibling(MATURE);
+            return new TextComponent("")
+                    .append(GROWTH)
+                    .append(new TextComponent(": "))
+                    .append(MATURE);
         } else {
-            return new StringTextComponent("")
-                    .appendSibling(GROWTH)
-                    .appendSibling(new StringTextComponent(": " + ((int) (100 * precise) + "%")));
+            return new TextComponent("")
+                    .append(GROWTH)
+                    .append(new TextComponent(": " + ((int) (100 * precise) + "%")));
         }
     }
 
-    public static ITextComponent getWeedGrowthTooltip(double growth) {
-        return new StringTextComponent("")
-                .appendSibling(WEED_GROWTH)
-                .appendSibling(new StringTextComponent(": " + ((int) (100 * growth) + "%")));
+    public static MutableComponent getWeedGrowthTooltip(double growth) {
+        return new TextComponent("")
+                .append(WEED_GROWTH)
+                .append(new TextComponent(": " + ((int) (100 * growth) + "%")));
     }
 
-    public static ITextComponent getSoilTooltip(IAgriSoil soil) {
-        return new StringTextComponent("")
-                .appendSibling(SOIL)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(soil.getName());
+    public static MutableComponent getSoilTooltip(IAgriSoil soil) {
+        return new TextComponent("")
+                .append(SOIL)
+                .append(new TextComponent(": "))
+                .append(soil.getName());
     }
 
-    public static ITextComponent getUnknownTooltip(ITextComponent source) {
-        return new StringTextComponent("")
-                .appendSibling(source)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(UNKNOWN);
+    public static MutableComponent getUnknownTooltip(MutableComponent source) {
+        return new TextComponent("")
+                .append(source)
+                .append(new TextComponent(": "))
+                .append(UNKNOWN);
     }
 
-    public static ITextComponent getGeneTooltip(IAgriGenePair<?> genePair) {
-        return new StringTextComponent("")
-                .appendSibling(genePair.getGene().getGeneDescription())
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(genePair.getDominant().getTooltip())
-                .appendSibling(new StringTextComponent( " - "))
-                .appendSibling(genePair.getRecessive().getTooltip());
+    public static MutableComponent getGeneTooltip(IAgriGenePair<?> genePair) {
+        return new TextComponent("")
+                .append(genePair.getGene().getGeneDescription())
+                .append(new TextComponent(": "))
+                .append(genePair.getDominant().getTooltip())
+                .append(new TextComponent( " - "))
+                .append(genePair.getRecessive().getTooltip());
     }
 
-    public static ITextComponent collect(Stream<ITextComponent> stream, String separator) {
+    public static MutableComponent collect(Stream<MutableComponent> stream, String separator) {
         return stream.collect(collector(separator));
     }
 
-    private static Collector<ITextComponent, IFormattableTextComponent, ITextComponent> collector(String separator) {
-        return new Collector<ITextComponent, IFormattableTextComponent, ITextComponent>() {
+    private static Collector<MutableComponent, MutableComponent, MutableComponent> collector(String separator) {
+        return new Collector<MutableComponent, MutableComponent, MutableComponent>() {
 
             @Override
-            public Supplier<IFormattableTextComponent> supplier() {
-                return () -> new StringTextComponent("");
+            public Supplier<MutableComponent> supplier() {
+                return () -> new TextComponent("");
             }
 
             @Override
-            public BiConsumer<IFormattableTextComponent, ITextComponent> accumulator() {
+            public BiConsumer<MutableComponent, MutableComponent> accumulator() {
                 return (combined, toAdd) -> {
                     if(!combined.getString().isEmpty()) {
-                        combined.appendSibling(new StringTextComponent(separator));
+                        combined.append(new TextComponent(separator));
                     }
-                    combined.appendSibling(toAdd);
+                    combined.append(toAdd);
                 };
             }
 
             @Override
-            public BinaryOperator<IFormattableTextComponent> combiner() {
+            public BinaryOperator<MutableComponent> combiner() {
                 return (a, b) -> {
                     if(a.getString().isEmpty()) {
-                        return a.appendSibling(new StringTextComponent(separator)).appendSibling(b);
+                        return a.append(new TextComponent(separator)).append(b);
                     } else {
-                        return a.appendSibling(b);
+                        return a.append(b);
                     }
                 };
             }
 
             @Override
-            public Function<IFormattableTextComponent, ITextComponent> finisher() {
+            public Function<MutableComponent, MutableComponent> finisher() {
                 return text -> text;
             }
 

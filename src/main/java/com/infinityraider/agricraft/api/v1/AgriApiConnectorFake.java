@@ -19,12 +19,12 @@ import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -136,13 +136,13 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Nonnull
     @Override
-    public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
@@ -164,7 +164,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     }
 
     @Override
-    public <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+    public <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
@@ -217,7 +217,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     }
 
     @Override
-    public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+    public boolean isObservingWithMagnifyingGlass(Player player) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

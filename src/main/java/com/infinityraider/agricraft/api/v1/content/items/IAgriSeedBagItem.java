@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.util.IAgriItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.Comparator;
@@ -141,11 +141,11 @@ public interface IAgriSeedBagItem extends IAgriItem {
         /**
          * @return the name of the seed sorter
          */
-        ITextComponent getName();
+        Component getName();
 
         /**
          * @return a description of the seed sorter (used for item tooltips)
          */
-        ITextComponent describe();
+        Component describe();
     }
 }

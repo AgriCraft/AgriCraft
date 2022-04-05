@@ -10,14 +10,14 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenomeProvider;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +39,7 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
      * @return an Optional IAgriCrop from the world
      */
     @SuppressWarnings("unused")
-    static Optional<IAgriCrop> fetchFromWorld(IBlockReader world, BlockPos pos) {
+    static Optional<IAgriCrop> fetchFromWorld(BlockGetter world, BlockPos pos) {
         return AgriApi.getCrop(world, pos);
     }
 
@@ -183,15 +183,15 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
      * @return The World in which this crop exists (may be null if the tile is invalid)
      */
     @Nullable
-    default World world() {
-        return this.asTile().getWorld();
+    default Level world() {
+        return this.asTile().getLevel();
     }
 
     /**
      * @return this, but cast to a TileEntity
      */
-    default TileEntity asTile() {
-        return (TileEntity) this;
+    default BlockEntity asTile() {
+        return (BlockEntity) this;
     }
 
     void dropItem(ItemStack item);

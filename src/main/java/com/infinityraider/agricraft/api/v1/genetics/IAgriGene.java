@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.api.v1.genetics;
 
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.IFormattableTextComponent;
+import com.mojang.math.Vector3f;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.MutableComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -43,7 +43,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return the allel
      */
     @Nonnull
-    IAllele<A> readAlleleFromNBT(@Nonnull CompoundNBT tag);
+    IAllele<A> readAlleleFromNBT(@Nonnull CompoundTag tag);
 
     /**
      * @return the set of all allowed alleles for this gene.
@@ -70,7 +70,7 @@ public interface IAgriGene<A> extends IAgriRegisterable<IAgriGene<?>> {
      * @return an ITextComponent to describe this gene on the client
      */
     @Nonnull
-    IFormattableTextComponent getGeneDescription();
+    MutableComponent getGeneDescription();
 
     /**
      * @return the RGB values to color the dominant part of the DNA helix for this gene, only used client side

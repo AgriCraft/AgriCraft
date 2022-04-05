@@ -11,11 +11,12 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Class for interacting with AgriCraft soil definitions.
@@ -30,7 +31,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     String getId();
 
     @Nonnull
-    ITextComponent getName();
+    Component getName();
 
     @Nonnull
     Collection<BlockState> getVariants();
@@ -53,7 +54,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     }
 
     @Override
-    default void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
+    default void addDisplayInfo(@Nonnull Consumer<Component> consumer) {
         consumer.accept(Tooltips.SOIL);
         consumer.accept(Tooltips.tooltipHumidity(this));
         consumer.accept(Tooltips.tooltipAcidity(this));
@@ -72,11 +73,11 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         FLOODED,
         INVALID;
 
-        private final ITextComponent textComponent;
+        private final Component textComponent;
         private final List<String> synonyms;
 
         Humidity(String... synonyms) {
-            this.textComponent = new TranslationTextComponent("agricraft.tooltip.humidity." + this.name().toLowerCase());
+            this.textComponent = new TranslatableComponent("agricraft.tooltip.humidity." + this.name().toLowerCase());
             ImmutableList.Builder<String> builder = ImmutableList.builder();
             builder.add(this.name());
             builder.add(synonyms);
@@ -84,7 +85,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return this.textComponent;
         }
 
@@ -116,11 +117,11 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline"),
         INVALID;
 
-        private final ITextComponent textComponent;
+        private final Component textComponent;
         private final List<String> synonyms;
 
         Acidity(String... synonyms) {
-            this.textComponent = new TranslationTextComponent("agricraft.tooltip.acidity." + this.name().toLowerCase());
+            this.textComponent = new TranslatableComponent("agricraft.tooltip.acidity." + this.name().toLowerCase());
             ImmutableList.Builder<String> builder = ImmutableList.builder();
             builder.add(this.name());
             builder.add(synonyms);
@@ -128,7 +129,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return this.textComponent;
         }
 
@@ -159,11 +160,11 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         VERY_HIGH("rich"),
         INVALID;
 
-        private final ITextComponent textComponent;
+        private final Component textComponent;
         private final List<String> synonyms;
 
         Nutrients(String... synonyms) {
-            this.textComponent = new TranslationTextComponent("agricraft.tooltip.nutrients." + this.name().toLowerCase());
+            this.textComponent = new TranslatableComponent("agricraft.tooltip.nutrients." + this.name().toLowerCase());
             ImmutableList.Builder<String> builder = ImmutableList.builder();
             builder.add(this.name());
             builder.add(synonyms);
@@ -171,7 +172,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return this.textComponent;
         }
 
@@ -191,7 +192,7 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     }
 
     interface SoilProperty {
-        ITextComponent getDescription();
+        Component getDescription();
 
         List<String> getSynonyms();
 
@@ -209,31 +210,31 @@ public interface IAgriSoil extends IAgriRegisterable<IAgriSoil>, IAgriDisplayabl
     final class Tooltips {
         private Tooltips() {}
 
-        public static final ITextComponent SOIL = new TranslationTextComponent("agricraft.tooltip.soil").mergeStyle(TextFormatting.DARK_GRAY);
+        public static final Component SOIL = new TranslatableComponent("agricraft.tooltip.soil").withStyle(ChatFormatting.DARK_GRAY);
 
-        public static final ITextComponent HUMIDITY = new TranslationTextComponent("agricraft.tooltip.humidity").mergeStyle(TextFormatting.DARK_GRAY);
-        public static final ITextComponent ACIDITY = new TranslationTextComponent("agricraft.tooltip.acidity").mergeStyle(TextFormatting.DARK_GRAY);
-        public static final ITextComponent NUTRIENTS = new TranslationTextComponent("agricraft.tooltip.nutrients").mergeStyle(TextFormatting.DARK_GRAY);
+        public static final Component HUMIDITY = new TranslatableComponent("agricraft.tooltip.humidity").withStyle(ChatFormatting.DARK_GRAY);
+        public static final Component ACIDITY = new TranslatableComponent("agricraft.tooltip.acidity").withStyle(ChatFormatting.DARK_GRAY);
+        public static final Component NUTRIENTS = new TranslatableComponent("agricraft.tooltip.nutrients").withStyle(ChatFormatting.DARK_GRAY);
 
-        private static ITextComponent tooltipHumidity(IAgriSoil soil) {
-            return new StringTextComponent(" - ")
-                    .appendSibling(HUMIDITY).appendSibling(new StringTextComponent(": "))
-                    .appendSibling(soil.getHumidity().getDescription())
-                    .mergeStyle(TextFormatting.DARK_GRAY);
+        private static Component tooltipHumidity(IAgriSoil soil) {
+            return new TextComponent(" - ")
+                    .append(HUMIDITY).append(new TextComponent(": "))
+                    .append(soil.getHumidity().getDescription())
+                    .withStyle(ChatFormatting.DARK_GRAY);
         }
 
-        private static ITextComponent tooltipAcidity(IAgriSoil soil) {
-            return new StringTextComponent(" - ")
-                    .appendSibling(ACIDITY).appendSibling(new StringTextComponent(": "))
-                    .appendSibling(soil.getAcidity().getDescription())
-                    .mergeStyle(TextFormatting.DARK_GRAY);
+        private static Component tooltipAcidity(IAgriSoil soil) {
+            return new TextComponent(" - ")
+                    .append(ACIDITY).append(new TextComponent(": "))
+                    .append(soil.getAcidity().getDescription())
+                    .withStyle(ChatFormatting.DARK_GRAY);
         }
 
-        private static ITextComponent tooltipNutrients(IAgriSoil soil) {
-            return new StringTextComponent(" - ")
-                    .appendSibling(NUTRIENTS).appendSibling(new StringTextComponent(": "))
-                    .appendSibling(soil.getNutrients().getDescription())
-                    .mergeStyle(TextFormatting.DARK_GRAY);
+        private static Component tooltipNutrients(IAgriSoil soil) {
+            return new TextComponent(" - ")
+                    .append(NUTRIENTS).append(new TextComponent(": "))
+                    .append(soil.getNutrients().getDescription())
+                    .withStyle(ChatFormatting.DARK_GRAY);
         }
     }
 }

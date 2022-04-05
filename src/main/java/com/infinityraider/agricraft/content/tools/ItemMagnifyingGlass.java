@@ -8,15 +8,7 @@ import com.infinityraider.agricraft.network.MessageMagnifyingGlassObserving;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,7 +21,7 @@ import java.util.UUID;
 public class ItemMagnifyingGlass extends ItemBase {
     private static final Map<UUID, Boolean> observers = Maps.newIdentityHashMap();
 
-    public static boolean isObserving(PlayerEntity player) {
+    public static boolean isObserving(Player player) {
         return player != null && (observers.computeIfAbsent(player.getUniqueID(), uuid -> false) || CapabilityGeneInspector.getInstance().canInspect(player));
     }
 

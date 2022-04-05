@@ -19,6 +19,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -78,7 +79,7 @@ public class MagnifyingGlassViewHandler {
         MessageMagnifyingGlassObserving.sendToServer(this.getPlayer(), false);
     }
 
-    public void toggle(Hand hand) {
+    public void toggle(InteractionHand hand) {
         if(this.isHandActive(hand)) {
             this.active = false;
             this.endInspection();

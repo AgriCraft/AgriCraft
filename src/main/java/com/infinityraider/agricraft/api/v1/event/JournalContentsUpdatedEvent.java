@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.event;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;

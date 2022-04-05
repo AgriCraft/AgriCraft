@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import java.util.Collections;
@@ -113,17 +113,17 @@ public interface IAgriGrowthResponse {
 
         @Override
         public void onPlantKilled(IAgriCrop crop) {
-            World world = crop.world();
-            if(world instanceof ServerWorld) {
+            Level world = crop.world();
+            if(world instanceof ServerLevel) {
                 double x = crop.getPosition().getX() + 0.5;
                 double y = crop.getPosition().getY() + 0.5;
                 double z = crop.getPosition().getZ() + 0.5;
                 for(int i = 0; i < 3; i++) {
-                    ((ServerWorld) world).spawnParticle(ParticleTypes.LARGE_SMOKE,
+                    ((ServerLevel) world).addParticle(ParticleTypes.LARGE_SMOKE,
                             x + 0.25*world.getRandom().nextDouble(), y, z + 0.25*world.getRandom().nextDouble(),
-                            1, 0, 1, 0, 0.05);
+                            1, 0, 1);
                 }
-                world.playSound(null, x, y, z, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS,
+                world.playSound(null, x, y, z, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS,
                         0.2F + world.getRandom().nextFloat() * 0.2F, 0.9F + world.getRandom().nextFloat() * 0.15F);
             }
         }

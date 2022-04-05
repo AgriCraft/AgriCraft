@@ -3,12 +3,14 @@ package com.infinityraider.agricraft.api.v1.util.mimic;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +35,7 @@ public class MimickedWeed implements IAgriWeed {
 
     @Nonnull
     @Override
-    public ITextComponent getWeedName() {
+    public Component getWeedName() {
         return this.getOriginal().getWeedName();
     }
 
@@ -63,7 +65,7 @@ public class MimickedWeed implements IAgriWeed {
     }
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         this.getOriginal().addTooltip(consumer);
     }
 
@@ -86,6 +88,7 @@ public class MimickedWeed implements IAgriWeed {
 
     @Nonnull
     @Override
+    @OnlyIn(Dist.CLIENT)
     public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         return this.getOriginal().bakeQuads(face, stage);
     }

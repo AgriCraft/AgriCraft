@@ -6,8 +6,8 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -101,7 +101,7 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
      * @param tag The tag to serialize to.
      * @return if the transcription was successful.
      */
-    boolean writeToNBT(@Nonnull CompoundNBT tag);
+    boolean writeToNBT(@Nonnull CompoundTag tag);
 
     /**
      * Reads the genome from CompoundNBT.
@@ -109,7 +109,7 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
      * @param tag The tag to serialize to.
      * @return if the transcription was successful.
      */
-    boolean readFromNBT(@Nonnull CompoundNBT tag);
+    boolean readFromNBT(@Nonnull CompoundTag tag);
 
     /**
      * Checks if another genome is equal to this one (meaning it is a clone)

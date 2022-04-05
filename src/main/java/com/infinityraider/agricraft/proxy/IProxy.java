@@ -7,15 +7,15 @@ import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.function.Function;
 
@@ -70,7 +70,7 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
-    default void registerFMLEventHandlers(IEventBus bus) {
+    default void registerModBusEventHandlers(IEventBus bus) {
         bus.addListener(DataHandler.getInstance()::onGatherDataEvent);
     }
 
@@ -78,7 +78,7 @@ public interface IProxy extends IProxyBase<Config> {
     default void activateRequiredModules() {}
 
     @Override
-    default void onServerStartingEvent(final FMLServerStartingEvent event) {
+    default void onServerStartingEvent(final ServerStartingEvent event) {
         CoreHandler.init();
     }
 
@@ -90,13 +90,13 @@ public interface IProxy extends IProxyBase<Config> {
 
     default void toggleSeedAnalyzerObserving(boolean status) {}
 
-    default boolean toggleJournalObserving(PlayerEntity player, Hand hand) {
+    default boolean toggleJournalObserving(Player player, InteractionHand hand) {
         return false;
     }
 
-    default void toggleMagnifyingGlassObserving(Hand hand) {}
+    default void toggleMagnifyingGlassObserving(InteractionHand hand) {}
 
-    default boolean isMagnifyingGlassObserving(PlayerEntity player) {
+    default boolean isMagnifyingGlassObserving(Player player) {
         return ItemMagnifyingGlass.isObserving(player);
     }
 

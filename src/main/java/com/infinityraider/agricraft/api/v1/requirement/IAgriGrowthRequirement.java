@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -96,7 +96,7 @@ public interface IAgriGrowthRequirement {
      * @return the growth response
      */
     default IAgriGrowthResponse check(IAgriCrop crop, final int strength) {
-        final World world = crop.world();
+        final Level world = crop.world();
         if(world == null) {
             return IAgriGrowthResponse.INFERTILE;
         }
@@ -111,7 +111,7 @@ public interface IAgriGrowthRequirement {
      * @param strength the strength
      * @return the growth response
      */
-    default IAgriGrowthResponse check(World world, BlockPos pos, int strength) {
+    default IAgriGrowthResponse check(Level world, BlockPos pos, int strength) {
         return this.getGrowConditions().stream()
                 .map(condition -> condition.check(world, pos, strength))
                 // filter out the fertile ones to avoid additional checks in the collection

@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.reference;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 import java.util.stream.Stream;
 
@@ -37,7 +37,7 @@ public interface AgriNBT {
     String U1 = "agri_u1";
     String V1 = "agri_v1";
 
-    static Stream<CompoundNBT> stream(ListNBT list) {
-        return list.stream().filter(tag -> tag instanceof CompoundNBT).map(tag -> (CompoundNBT) tag);
+    static Stream<CompoundTag> stream(ListTag list) {
+        return list.stream().filter(tag -> tag instanceof CompoundTag).map(tag -> (CompoundTag) tag);
     }
 }

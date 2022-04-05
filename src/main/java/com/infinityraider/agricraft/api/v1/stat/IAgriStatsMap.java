@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.api.v1.stat;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -67,7 +67,7 @@ public interface IAgriStatsMap {
      * @param tag the tag to write to
      * @return true if the serialization was successful
      */
-    boolean writeToNBT(@Nonnull CompoundNBT tag);
+    boolean writeToNBT(@Nonnull CompoundTag tag);
 
 
     /**
@@ -75,7 +75,7 @@ public interface IAgriStatsMap {
      * @param tag the tag to read from
      * @return true if the deserialization was successful
      */
-    boolean readFromNBT(@Nonnull CompoundNBT tag);
+    boolean readFromNBT(@Nonnull CompoundTag tag);
 
     /**
      * Checks if the stats are equal
@@ -91,7 +91,7 @@ public interface IAgriStatsMap {
      * Adds tooltips for the stats
      * @param consumer function to consume the tooltips
      */
-    default void addTooltips(@Nonnull Consumer<ITextComponent> consumer) {
+    default void addTooltips(@Nonnull Consumer<Component> consumer) {
         IAgriStatRegistry.getInstance().stream().forEach(stat -> stat.addTooltip(consumer, this.getValue(stat)));
     }
 }

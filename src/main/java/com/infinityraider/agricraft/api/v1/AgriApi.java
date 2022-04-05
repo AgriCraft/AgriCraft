@@ -27,12 +27,12 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.OperationNotSupportedException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -293,7 +293,7 @@ public final class AgriApi {
      * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
      */
     @Nonnull
-    public static Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+    public static Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         return AgriApi.CONNECTOR.getCrop(world, pos);
     }
 
@@ -309,7 +309,7 @@ public final class AgriApi {
      * @return Optional containing an IAgriSoil object, or empty if the coordinates do not correspond with a soil
      */
     @Nonnull
-    public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+    public static Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
     }
 
@@ -371,7 +371,7 @@ public final class AgriApi {
      * @param <T> the exact type of the TileEntity to attach to
      * @param <C> the parent type of the IAgriCrop being attached
      */
-    public static <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+    public static <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
         AgriApi.CONNECTOR.registerCapabilityCropInstance(instance);
     }
 
@@ -503,7 +503,7 @@ public final class AgriApi {
      * @param player the player
      * @return true if the player is currently looking through the magnifying glass
      */
-    public static boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+    public static boolean isObservingWithMagnifyingGlass(Player player) {
         return AgriApi.CONNECTOR.isObservingWithMagnifyingGlass(player);
     }
 

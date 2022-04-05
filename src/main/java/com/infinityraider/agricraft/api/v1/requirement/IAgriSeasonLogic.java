@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -36,7 +36,7 @@ public interface IAgriSeasonLogic {
      * @param pos the position
      * @return the season, will return ANY if no season logic exists
      */
-    AgriSeason getSeason(World world, BlockPos pos);
+    AgriSeason getSeason(Level world, BlockPos pos);
 
     /**
      * Fetches the plugin which has currently claimed the logic.
@@ -53,5 +53,5 @@ public interface IAgriSeasonLogic {
      * @param plugin the plugin responsible for the season logic
      * @param getter the getter
      */
-    void claim(IAgriPlugin plugin, BiFunction<World, BlockPos, AgriSeason> getter);
+    void claim(IAgriPlugin plugin, BiFunction<Level, BlockPos, AgriSeason> getter);
 }

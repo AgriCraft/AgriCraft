@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+
 import java.util.Set;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
 
 /**
  * Interface representing a single grow condition,
@@ -29,7 +29,7 @@ public interface IAgriGrowCondition {
      *
      * @return the response.
      */
-    IAgriGrowthResponse check(@Nonnull World world, @Nonnull BlockPos pos, int strength);
+    IAgriGrowthResponse check(@Nonnull Level world, @Nonnull BlockPos pos, int strength);
 
     /**
      * @return a set of all block positions, relative to the crop which need to be checked for this condition, can be empty (e.g in case of dimension)
@@ -41,13 +41,13 @@ public interface IAgriGrowCondition {
      *
      * @param consumer a consumer accepting the lines of text for a tooltip when the condition is not met.
      */
-    void notMetDescription(@Nonnull Consumer<ITextComponent> consumer);
+    void notMetDescription(@Nonnull Consumer<Component> consumer);
 
     /**
      * Determines the computational complexity associated with the evaluation of this condition.
      * <p>
      * The higher the value, the higher the cost associated with invoking
-     * {@link #check(World, BlockPos, int)}, and the later in the sequence that this condition will be
+     * {@link #check(Level, BlockPos, int)}, and the later in the sequence that this condition will be
      * evaluated
      * <p>
      * <em>It is best to think of this value as the number of blocks that have to be examined as to

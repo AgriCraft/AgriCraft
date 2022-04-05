@@ -2,12 +2,12 @@ package com.infinityraider.agricraft.api.v1.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.*;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nullable;
 
@@ -241,10 +241,10 @@ public interface IAgriContent {
     @SuppressWarnings("unused")
     interface Tabs {
         /** @return the AgriCraft main item group */
-        ItemGroup getAgriCraftTab();
+        CreativeModeTab getAgriCraftTab();
 
         /** @return the AgriCraft seeds item group */
-        ItemGroup getSeedsTab();
+        CreativeModeTab getSeedsTab();
     }
     
 }

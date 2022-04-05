@@ -1,15 +1,15 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public final class CropCapability {
-    @CapabilityInject(IAgriCrop.class)
-    public static final Capability<IAgriCrop> CAPABILITY = null;
+    public static final Capability<IAgriCrop> CAPABILITY = CapabilityManager.get(new CapabilityToken<IAgriCrop>(){});
 
     public static final ResourceLocation KEY = new ResourceLocation("agricraft", "crop");
 
@@ -30,7 +30,7 @@ public final class CropCapability {
      * @param <T> the exact type of the TileEntity to attach to
      * @param <C> the parent type of the IAgriCrop being attached
      */
-    public static <T extends TileEntity, C extends IAgriCrop> void registerInstance(Instance<T, C> instance) {
+    public static <T extends BlockEntity, C extends IAgriCrop> void registerInstance(Instance<T, C> instance) {
         AgriApi.registerCapabilityCropInstance(instance);
     }
 
@@ -39,7 +39,7 @@ public final class CropCapability {
      * @param <T> the exact type of the TileEntity to attach to
      * @param <C> the parent type of the IAgriCrop being attached
      */
-    public interface Instance<T extends TileEntity, C extends IAgriCrop> {
+    public interface Instance<T extends BlockEntity, C extends IAgriCrop> {
         /**
          * Agricraft will automatically attach an IAgriCrop object to TileEntities of this class
          * @return the carrier class
@@ -65,14 +65,14 @@ public final class CropCapability {
          * @param tag the tag to write to
          * @param crop the IAgriCrop object being serialized
          */
-        void writeToNBT(CompoundNBT tag, C crop);
+        void writeToNBT(CompoundTag tag, C crop);
 
         /**
          * Method to deserialize the IAgriCrop objects
          * @param tag the tag to read from
          * @param crop the IAgriCrop object being deserialized
          */
-        void readFromNBT(CompoundNBT tag, C crop);
+        void readFromNBT(CompoundTag tag, C crop);
     }
 
 

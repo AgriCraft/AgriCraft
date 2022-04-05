@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
 
 /**
  * Interface for harvestable objects.
@@ -30,6 +30,6 @@ public interface IAgriHarvestable {
      * @return if the harvest was successful.
      */
     @Nonnull
-    ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
+    InteractionResult harvest(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity);
 
 }

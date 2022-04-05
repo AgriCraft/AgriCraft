@@ -20,12 +20,12 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -87,10 +87,10 @@ public interface IAgriApiConnector {
     IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer();
 
     @Nonnull
-    Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
+    Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos);
 
     @Nonnull
-    Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
+    Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos);
 
     @Nonnull
     Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack);
@@ -100,7 +100,7 @@ public interface IAgriApiConnector {
 
     void registerVanillaPlantingOverrideException(Item seed);
 
-    <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);
+    <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);
 
     @Nonnull
     IAgriGrowthRequirement.Builder getGrowthRequirementBuilder();
@@ -126,7 +126,7 @@ public interface IAgriApiConnector {
 
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback);
 
-    boolean isObservingWithMagnifyingGlass(PlayerEntity player);
+    boolean isObservingWithMagnifyingGlass(Player player);
 
     @OnlyIn(Dist.CLIENT)
     void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector);

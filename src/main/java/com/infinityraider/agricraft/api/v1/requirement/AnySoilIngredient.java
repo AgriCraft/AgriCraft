@@ -1,10 +1,10 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
@@ -21,7 +21,7 @@ public final class AnySoilIngredient extends Ingredient {
     private ItemStack[] matchingStacks;
 
     private AnySoilIngredient() {
-        super(Stream.of(new SingleItemList(new ItemStack(Blocks.FARMLAND))));
+        super(Stream.of(new ItemValue(new ItemStack(Blocks.FARMLAND))));
     }
 
     @Override
@@ -31,7 +31,7 @@ public final class AnySoilIngredient extends Ingredient {
 
     @Nonnull
     @Override
-    public ItemStack[] getMatchingStacks() {
+    public ItemStack[] getItems() {
         this.determineMatchingStacks();
         return this.matchingStacks;
     }
