@@ -9,10 +9,10 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -48,12 +48,12 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     }
 
     @Override
-    public boolean writeToNBT(@Nonnull CompoundNBT tag) {
-        ListNBT list = new ListNBT();
+    public boolean writeToNBT(@Nonnull CompoundTag tag) {
+        ListTag list = new ListTag();
         this.geneMap.values().stream()
                 .sorted(Comparator.comparing(a -> a.getGene().getId()))
                 .forEach(pair -> {
-                    CompoundNBT geneTag = new CompoundNBT();
+                    CompoundTag geneTag = new CompoundTag();
                     geneTag.putString(AgriNBT.GENE, pair.getGene().getId());
                     geneTag.put(AgriNBT.DOMINANT, pair.getDominant().writeToNBT());
                     geneTag.put(AgriNBT.RECESSIVE, pair.getRecessive().writeToNBT());
@@ -65,11 +65,11 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean readFromNBT(@Nonnull CompoundNBT tag) {
+    public boolean readFromNBT(@Nonnull CompoundTag tag) {
         if(tag.contains(AgriNBT.GENOME)) {
-            ListNBT list = tag.getList(AgriNBT.GENOME, 10);
+            ListTag list = tag.getList(AgriNBT.GENOME, 10);
             for (int i = 0; i < list.size(); i++) {
-                CompoundNBT geneTag = list.getCompound(i);
+                CompoundTag geneTag = list.getCompound(i);
                 AgriGeneRegistry.getInstance().get(geneTag.getString(AgriNBT.GENE))
                         .ifPresent(gene -> {
                             this.geneMap.put(gene, this.generateGenePairFromNBT(gene, geneTag));
@@ -80,7 +80,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
         return false;
     }
 
-    private <T> IAgriGenePair<T> generateGenePairFromNBT(IAgriGene<T> gene, CompoundNBT tag) {
+    private <T> IAgriGenePair<T> generateGenePairFromNBT(IAgriGene<T> gene, CompoundTag tag) {
         IAllele<T> dominant = gene.readAlleleFromNBT(tag.getCompound(AgriNBT.DOMINANT));
         IAllele<T> recessive = gene.readAlleleFromNBT(tag.getCompound(AgriNBT.RECESSIVE));
         return  gene.generateGenePair(dominant, recessive);
@@ -99,7 +99,7 @@ public class AgriGenome implements IAgriGenome, IAgriStatsMap, IAgriStatProvider
     }
 
     @Override
-    public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
+    public void addDisplayInfo(@Nonnull Consumer<Component> consumer) {
         this.geneMap.values().forEach(genePair -> genePair.addTooltipDescription(consumer));
     }
 

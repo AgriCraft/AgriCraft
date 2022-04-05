@@ -14,18 +14,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.tags.*;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 public final class TagUtil {
     /**
@@ -34,9 +27,9 @@ public final class TagUtil {
      * @param element the string representation of the oredict entry, should start with ItemStackUtil.PREFIX_TAG.
      * @return {@literal true} if and only if the given string represents a valid oredict entry, {@literal false} otherwise.
      */
-    public static final boolean isValidTag(@Nonnull ITagCollection<?> registry, @Nullable String element) {
+    public static final boolean isValidTag(@Nullable ITagManager<?> registry, @Nullable String element) {
         // If null or empty return nothing.
-        if (element == null || element.isEmpty()) {
+        if (registry == null || element == null || element.isEmpty()) {
             return false;
         }
 

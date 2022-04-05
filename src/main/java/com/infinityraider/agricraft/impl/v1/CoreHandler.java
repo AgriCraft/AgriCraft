@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.loading.moddiscovery.ModFile;
-import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
+import net.minecraftforge.forgespi.language.IModFileInfo;
+import net.minecraftforge.forgespi.locating.IModFile;
 
 public final class CoreHandler {
     public static final Pattern JSON_FILE_PATTERN = Pattern.compile(".*\\.json", Pattern.CASE_INSENSITIVE);
@@ -84,7 +84,7 @@ public final class CoreHandler {
         // Transfer Defaults
         if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {
             ResourceHelper.copyResources(
-                    ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
+                    ModList.get().getModFiles().stream().map(IModFileInfo::getFile).map(IModFile::getFilePath),
                     JSON_FILE_PATTERN.asPredicate(),
                     AGRI_FOLDER_PATTERN.asPredicate().and(MOD_FILTER),
                     configDir::resolve,

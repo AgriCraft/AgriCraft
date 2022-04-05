@@ -6,19 +6,18 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
 import com.infinityraider.infinitylib.utility.WorldHelper;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<IAgriSoil> soil(BiFunction<Integer, IAgriSoil, IAgriGrowthResponse> response,
-                                             List<ITextComponent> tooltips) {
+                                             List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.SOIL,
                 response,
@@ -51,7 +50,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     protected <P extends IAgriSoil.SoilProperty> GrowConditionBase<P> soilProperty(
-            BiFunction<Integer, P, IAgriGrowthResponse> response, Function<IAgriSoil, P> mapper, P invalid, List<ITextComponent> tooltips) {
+            BiFunction<Integer, P, IAgriGrowthResponse> response, Function<IAgriSoil, P> mapper, P invalid, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.SOIL,
                 response,
@@ -65,7 +64,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Integer> light(
-            BiFunction<Integer, Integer, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+            BiFunction<Integer, Integer, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.LIGHT,
                 response,
@@ -79,7 +78,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Integer> redstone(
-            BiFunction<Integer, Integer, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+            BiFunction<Integer, Integer, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.REDSTONE,
                 response,
@@ -93,7 +92,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Fluid> fluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response,
-                                          List<ITextComponent> tooltips) {
+                                          List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.LIQUID,
                 response,
@@ -107,7 +106,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Biome> biome(
-            BiFunction<Integer, Biome, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+            BiFunction<Integer, Biome, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.BIOME,
                 response,
@@ -120,8 +119,8 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
-    public GrowConditionBase<RegistryKey<World>> dimensionFromKey(
-            BiFunction<Integer, RegistryKey<World>, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<ResourceKey<Level>> dimensionFromKey(
+            BiFunction<Integer, ResourceKey<Level>, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionAmbient<>(
                 RequirementType.DIMENSION,
                 response,
@@ -133,7 +132,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<DimensionType> dimensionFromType(BiFunction<Integer, DimensionType, IAgriGrowthResponse> response,
-                                                              List<ITextComponent> tooltips) {
+                                                              List<Component> tooltips) {
         return new GrowConditionAmbient<>(
                 RequirementType.DIMENSION,
                 response,
@@ -145,7 +144,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<IAgriWeed> weed(BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response,
-                                             List<ITextComponent> tooltips) {
+                                             List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.WEEDS,
                 response,
@@ -159,7 +158,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Long> time(BiFunction<Integer, Long, IAgriGrowthResponse> response,
-                                        List<ITextComponent> tooltips) {
+                                        List<Component> tooltips) {
         return new GrowConditionAmbient<>(
                 RequirementType.TIME,
                 response,
@@ -171,7 +170,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Stream<BlockState>> blockStatesNearby(RequirementType type, BiFunction<Integer, Stream<BlockState>, IAgriGrowthResponse> response,
-                                                                   BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+                                                                   BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 type,
                 response,
@@ -184,8 +183,8 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
-    public GrowConditionBase<Stream<TileEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response,
-                                                                    BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tootlips) {
+    public GrowConditionBase<Stream<BlockEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response,
+                                                                     BlockPos minOffset, BlockPos maxOffset, List<Component> tootlips) {
         BlockPos range = maxOffset.subtract(minOffset);
         return new GrowConditionBase<>(
                 type,
@@ -200,7 +199,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<Stream<Entity>> entitiesNearby(BiFunction<Integer, Stream<Entity>, IAgriGrowthResponse> response,
-                                             double range, List<ITextComponent> tooltips) {
+                                                            double range, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.ENTITY,
                 response,
@@ -213,7 +212,7 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
-    public GrowConditionBase<Boolean> rain(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<Boolean> rain(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.RAIN,
                 response,
@@ -226,7 +225,7 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
-    public GrowConditionBase<Boolean> snow(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<Boolean> snow(BiFunction<Integer, Boolean, IAgriGrowthResponse> response, List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.SNOW,
                 response,
@@ -240,7 +239,7 @@ public class Factory extends FactoryAbstract {
 
     @Override
     public GrowConditionBase<AgriSeason> season(BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response,
-                                                List<ITextComponent> tooltips) {
+                                                List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.SEASON,
                 response,
@@ -252,8 +251,8 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
-    public GrowConditionBase<Stream<Structure<?>>> structure(BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response,
-                                                             List<ITextComponent> tooltips) {
+    public GrowConditionBase<Stream<StructureFeature<?>>> structure(BiFunction<Integer, Stream<StructureFeature<?>>, IAgriGrowthResponse> response,
+                                                                    List<Component> tooltips) {
         return new GrowConditionBase<>(
                 RequirementType.STRUCTURE,
                 response,
@@ -265,54 +264,56 @@ public class Factory extends FactoryAbstract {
     }
 
     private static final class Functions {
-        private static final BiFunction<World, BlockPos, IAgriSoil> SOIL = (world, pos) ->
+        private static final BiFunction<Level, BlockPos, IAgriSoil> SOIL = (world, pos) ->
                 AgriApi.getCrop(world, pos).flatMap(IAgriCrop::getSoil).orElse(NoSoil.getInstance());
 
-        private static final BiFunction<World, BlockPos, Integer> LIGHT = IWorldReader::getLight;
+        private static final BiFunction<Level, BlockPos, Integer> LIGHT = Level::getLightEmission;
 
-        private static final BiFunction<World, BlockPos, Fluid> FLUID = (world, pos) -> world.getBlockState(pos).getFluidState().getFluid();
+        private static final BiFunction<Level, BlockPos, Fluid> FLUID = (world, pos) -> world.getBlockState(pos).getFluidState().getType();
 
-        private static final BiFunction<World, BlockPos, Integer> REDSTONE = World::getRedstonePowerFromNeighbors;
+        private static final BiFunction<Level, BlockPos, Integer> REDSTONE = Level::getBestNeighborSignal;
 
-        private static final BiFunction<World, BlockPos, Biome> BIOME = World::getBiome;
+        private static final BiFunction<Level, BlockPos, Biome> BIOME = (level, pos) -> level.getBiome(pos).value();
 
-        private static final Function<World, RegistryKey<World>> DIMENSION_KEY = World::getDimensionKey;
+        private static final Function<Level, ResourceKey<Level>> DIMENSION_KEY = Level::dimension;
 
-        private static final Function<World, DimensionType> DIMENSION_TYPE = World::getDimensionType;
-        private static final Function<World, Long> TIME = World::getDayTime;
+        private static final Function<Level, DimensionType> DIMENSION_TYPE = Level::dimensionType;
+        private static final Function<Level, Long> TIME = Level::getDayTime;
 
-        private static final BiFunction<World, BlockPos, Boolean> RAIN = (world, pos) ->
-                world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.RAIN;
+        private static final BiFunction<Level, BlockPos, Boolean> RAIN = (world, pos) ->
+                world.isRainingAt(pos) && world.getBiome(pos).value().getPrecipitation() == Biome.Precipitation.RAIN;
 
-        private static final BiFunction<World, BlockPos, Boolean> SNOW = (world, pos) ->
-                world.isRainingAt(pos) && world.getBiome(pos).getPrecipitation() == Biome.RainType.SNOW;
+        private static final BiFunction<Level, BlockPos, Boolean> SNOW = (world, pos) ->
+                world.isRainingAt(pos) && world.getBiome(pos).value().getPrecipitation() == Biome.Precipitation.SNOW;
 
-        private static final BiFunction<World, BlockPos, AgriSeason> SEASON = (world, pos) ->
+        private static final BiFunction<Level, BlockPos, AgriSeason> SEASON = (world, pos) ->
                 AgriApi.getSeasonLogic().getSeason(world, pos);
 
-        private static final BiFunction<World, BlockPos, Optional<IAgriCrop>> CROP = AgriApi::getCrop;
+        private static final BiFunction<Level, BlockPos, Optional<IAgriCrop>> CROP = AgriApi::getCrop;
 
-        private static final BiFunction<World, BlockPos, Stream<Structure<?>>> STRUCTURE = (world, pos) ->
-                world.getChunkAt(pos).getStructureReferences().entrySet().stream()
+        private static final BiFunction<Level, BlockPos, Stream<StructureFeature<?>>> STRUCTURE = (world, pos) ->
+                world.getChunkAt(pos).getAllReferences().entrySet().stream()
                         .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
-                        .map(Map.Entry::getKey);
+                        .map(Map.Entry::getKey).map(feature -> (Object) feature)
+                        .filter(obj -> obj instanceof StructureFeature<?>)  // TODO figure out why the f intellij is bitching about casting here
+                        .map(obj -> (StructureFeature<?>) obj);
 
-        private static <P extends IAgriSoil.SoilProperty> BiFunction<World, BlockPos, P> soilProperty(Function<IAgriSoil, P> mapper) {
+        private static <P extends IAgriSoil.SoilProperty> BiFunction<Level, BlockPos, P> soilProperty(Function<IAgriSoil, P> mapper) {
             return SOIL.andThen(mapper);
         }
 
-        private static BiFunction<World, BlockPos, Stream<Entity>> entity(double range) {
+        private static BiFunction<Level, BlockPos, Stream<Entity>> entity(double range) {
             return (world, pos) ->
-                    world.getEntitiesWithinAABBExcludingEntity(
-                            null, new AxisAlignedBB(pos.add(-range, -range, -range), pos.add(range, range, range))).stream();
+                    world.getEntities(
+                            null, new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range))).stream();
         }
 
-        private static BiFunction<World, BlockPos, Stream<BlockState>> blockstate(BlockPos min, BlockPos max) {
-            return (world, pos) -> WorldHelper.streamPositions(pos.add(min), pos.add(max)).map(world::getBlockState);
+        private static BiFunction<Level, BlockPos, Stream<BlockState>> blockstate(BlockPos min, BlockPos max) {
+            return (world, pos) -> WorldHelper.streamPositions(pos.offset(min), pos.offset(max)).map(world::getBlockState);
         }
 
-        private static BiFunction<World, BlockPos, Stream<TileEntity>> tileEntity(BlockPos min, BlockPos max) {
-            return (world, pos) -> WorldHelper.streamTiles(world, pos.add(min), pos.add(max), TileEntity.class);
+        private static BiFunction<Level, BlockPos, Stream<BlockEntity>> tileEntity(BlockPos min, BlockPos max) {
+            return (world, pos) -> WorldHelper.streamTiles(world, pos.offset(min), pos.offset(max), BlockEntity.class);
         }
 
         private Functions () {}

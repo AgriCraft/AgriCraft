@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -190,26 +191,26 @@ public interface IDefaultGrowConditionFactory {
     /**
      * fertile if in any of the biomes, or if the strength predicate passes
      */
-    default IAgriGrowCondition biomes(IntPredicate strength, Function<Biome, Component> nameFunction, Biome... biomes) {
+    default IAgriGrowCondition biomes(IntPredicate strength, Function<Biome, MutableComponent> nameFunction, Biome... biomes) {
         return this.biomes(strength, Arrays.asList(biomes), nameFunction);
     }
 
     /**
      * fertile if in any of the biome category, or if the strength predicate passes
      */
-    default IAgriGrowCondition biomeCategories(IntPredicate strength, Function<Biome.BiomeCategory, Component> nameFunction, Biome.BiomeCategory... categories) {
+    default IAgriGrowCondition biomeCategories(IntPredicate strength, Function<Biome.BiomeCategory, MutableComponent> nameFunction, Biome.BiomeCategory... categories) {
         return this.biomeCategories(strength, Arrays.asList(categories), nameFunction);
     }
 
     /**
      * fertile if in any of the biomes, or if the strength predicate passes
      */
-    IAgriGrowCondition biomes(IntPredicate strength, Collection<Biome> biomes, Function<Biome, Component> nameFunction);
+    IAgriGrowCondition biomes(IntPredicate strength, Collection<Biome> biomes, Function<Biome, MutableComponent> nameFunction);
 
     /**
      * fertile if in any of the biome category, or if the strength predicate passes
      */
-    IAgriGrowCondition biomeCategories(IntPredicate strength, Collection<Biome.BiomeCategory> categories, Function<Biome.BiomeCategory, Component> nameFunction);
+    IAgriGrowCondition biomeCategories(IntPredicate strength, Collection<Biome.BiomeCategory> categories, Function<Biome.BiomeCategory, MutableComponent> nameFunction);
 
 
     /*

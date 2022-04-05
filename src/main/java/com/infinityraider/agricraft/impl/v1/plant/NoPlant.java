@@ -11,13 +11,13 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -61,13 +61,13 @@ public final class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getPlantName() {
+    public TranslatableComponent getPlantName() {
         return AgriToolTips.UNKNOWN;
     }
 
     @Nonnull
     @Override
-    public TranslationTextComponent getSeedName() {
+    public TranslatableComponent getSeedName() {
         return AgriToolTips.UNKNOWN;
     }
 
@@ -148,12 +148,12 @@ public final class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getInformation() {
+    public TranslatableComponent getInformation() {
         return AgriToolTips.UNKNOWN;
     }
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(this.getPlantName());
     }
 
@@ -198,7 +198,7 @@ public final class NoPlant implements IAgriPlant {
     public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {}
 
     @Override
-    public TranslationTextComponent getTooltip() {
+    public TranslatableComponent getTooltip() {
         return AgriToolTips.UNKNOWN;
     }
 

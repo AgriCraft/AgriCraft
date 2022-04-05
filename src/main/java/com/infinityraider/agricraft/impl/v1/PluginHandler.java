@@ -126,15 +126,15 @@ public final class PluginHandler {
     @Nonnull
     private static <A extends Annotation, T> List<T> getInstances(ModFileScanData data, Class<A> anno, Class<T> type, Predicate<A> predicate) {
         return data.getAnnotations().stream()
-                .filter(annotationData -> Type.getType(anno).equals(annotationData.getAnnotationType()))
+                .filter(annotationData -> Type.getType(anno).equals(annotationData.annotationType()))
                 .filter(annotationData -> checkAnnotationPredicate(anno, predicate, annotationData))
                 .map(annotationData -> {
                     try {
-                        return Class.forName(annotationData.getClassType().getClassName()).asSubclass(type).newInstance();
+                        return Class.forName(annotationData.clazz().getClassName()).asSubclass(type).newInstance();
                     } catch (ClassNotFoundException | NoClassDefFoundError | IllegalAccessException | InstantiationException e) {
                         AgriCore.getLogger("agricraft-plugins").debug(
                                 "%nFailed to load AgriPlugin%n\tOf class: {0}!%n\tFor annotation: {1}!%n\tAs Instanceof: {2}!",
-                                annotationData.getTargetType(),
+                                annotationData.targetType(),
                                 anno.getCanonicalName(),
                                 type.getCanonicalName()
                         );
@@ -146,9 +146,9 @@ public final class PluginHandler {
 
     private static <A extends Annotation> boolean checkAnnotationPredicate(Class<A> anno, Predicate<A> predicate, ModFileScanData.AnnotationData data) {
         try {
-            return predicate.test(Class.forName(data.getMemberName()).getAnnotation(anno));
+            return predicate.test(Class.forName(data.memberName()).getAnnotation(anno));
         } catch (Exception e) {
-            AgriCore.getLogger("agricraft-plugins").error("Failed to check plugin " + data.getMemberName());
+            AgriCore.getLogger("agricraft-plugins").error("Failed to check plugin " + data.memberName());
             return false;
         }
     }

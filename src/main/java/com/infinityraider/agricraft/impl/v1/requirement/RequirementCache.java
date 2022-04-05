@@ -6,11 +6,11 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.handler.BlockUpdateHandler;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -25,7 +25,7 @@ public abstract class RequirementCache {
         }
 
         @Override
-        public void addTooltip(Consumer<ITextComponent> consumer) {
+        public void addTooltip(Consumer<Component> consumer) {
             consumer.accept(AgriToolTips.UNKNOWN);
         }
     };
@@ -39,7 +39,7 @@ public abstract class RequirementCache {
 
     public abstract IAgriGrowthResponse check();
 
-    public abstract void addTooltip(Consumer<ITextComponent> consumer);
+    public abstract void addTooltip(Consumer<Component> consumer);
 
     public void flush() {}
 
@@ -60,7 +60,7 @@ public abstract class RequirementCache {
         }
 
         @Override
-        public void addTooltip(Consumer<ITextComponent> consumer) {
+        public void addTooltip(Consumer<Component> consumer) {
             IAgriGrowthResponse response = this.check();
             if(response.isFertile()) {
                 consumer.accept(AgriToolTips.FERTILE);
@@ -102,8 +102,8 @@ public abstract class RequirementCache {
                 return this.getCondition().check(this.getWorld(), this.getPos(), this.getStrength());
             }
 
-            public void addTooltip(Consumer<ITextComponent> consumer) {
-                this.getCondition().notMetDescription(tooltip -> consumer.accept(new StringTextComponent(" - ").appendSibling(tooltip)));
+            public void addTooltip(Consumer<Component> consumer) {
+                this.getCondition().notMetDescription(tooltip -> consumer.accept(new TextComponent(" - ").append(tooltip)));
             }
 
             public void flush() {}
@@ -113,7 +113,7 @@ public abstract class RequirementCache {
             }
 
             @Nullable
-            protected World getWorld() {
+            protected Level getWorld() {
                 return this.getCrop().world();
             }
 
@@ -139,7 +139,7 @@ public abstract class RequirementCache {
                     this.status = IAgriGrowthResponse.INFERTILE;
                     this.update = true;
                     this.unloadedPositions = Sets.newHashSet();
-                    this.getCondition().offsetsToCheck().forEach(offset -> this.unloadedPositions.add(this.getPos().add(offset)));
+                    this.getCondition().offsetsToCheck().forEach(offset -> this.unloadedPositions.add(this.getPos().offset(offset)));
                 }
 
                 @Override
@@ -173,21 +173,21 @@ public abstract class RequirementCache {
                 public void flush() {
                     this.getCondition().offsetsToCheck().forEach(pos ->
                             BlockUpdateHandler.getInstance().removeListener(
-                                    this.getWorld(), this.getPos().add(pos), this));
+                                    this.getWorld(), this.getPos().offset(pos), this));
                 }
 
                 @Override
-                public void onBlockUpdate(ServerWorld world, BlockPos pos) {
+                public void onBlockUpdate(ServerLevel world, BlockPos pos) {
                     this.update = true;
                 }
 
                 @Override
-                public void onChunkUnloaded(ServerWorld world, BlockPos pos) {
+                public void onChunkUnloaded(ServerLevel world, BlockPos pos) {
                     this.unloadedPositions.add(pos);
                 }
 
                 @Override
-                public void onWorldUnloaded(ServerWorld world, BlockPos pos) {}
+                public void onWorldUnloaded(ServerLevel world, BlockPos pos) {}
             }
 
             private static class FullCache extends Condition {

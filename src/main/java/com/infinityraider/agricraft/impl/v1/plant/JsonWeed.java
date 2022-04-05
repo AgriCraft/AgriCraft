@@ -8,13 +8,13 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,20 +27,20 @@ import java.util.stream.Collectors;
 public class JsonWeed implements IAgriWeed {
     private final AgriWeed weed;
 
-    private final ITextComponent name;
-    private final ITextComponent description;
+    private final Component name;
+    private final Component description;
     private final List<IAgriGrowthStage> growthStages;
 
     public JsonWeed(AgriWeed weed) {
         this.weed = weed;
-        this.name = new TranslationTextComponent(weed.getWeedLangKey());
-        this.description = new TranslationTextComponent(weed.getDescLangKey());
+        this.name = new TranslatableComponent(weed.getWeedLangKey());
+        this.description = new TranslatableComponent(weed.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.weed.getGrowthStages());
     }
 
     @Nonnull
     @Override
-    public ITextComponent getWeedName() {
+    public Component getWeedName() {
         return this.name;
     }
 
@@ -110,7 +110,7 @@ public class JsonWeed implements IAgriWeed {
     }
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(this.description);
     }
 

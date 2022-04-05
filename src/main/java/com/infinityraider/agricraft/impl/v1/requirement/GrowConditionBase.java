@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -16,16 +16,16 @@ import java.util.function.*;
 public class GrowConditionBase<T> implements IAgriGrowCondition, BiPredicate<Integer, T>, BiFunction<Integer, T, IAgriGrowthResponse> {
     private final RequirementType type;
     private final BiFunction<Integer, T, IAgriGrowthResponse> response;
-    private final BiFunction<World, BlockPos, T> getter;
+    private final BiFunction<Level, BlockPos, T> getter;
     private final UnaryOperator<BlockPos> offsetter;
     private final Set<BlockPos> offsets;
-    private final List<ITextComponent> descriptions;
+    private final List<Component> descriptions;
     private final int complexity;
     private final CacheType cacheType;
 
     public GrowConditionBase(RequirementType type, BiFunction<Integer, T, IAgriGrowthResponse> response,
-                             BiFunction<World, BlockPos, T> getter, UnaryOperator<BlockPos> offsetter,
-                             List<ITextComponent> descriptions, int complexity, CacheType cacheType) {
+                             BiFunction<Level, BlockPos, T> getter, UnaryOperator<BlockPos> offsetter,
+                             List<Component> descriptions, int complexity, CacheType cacheType) {
         this.type = type;
         this.response = response;
         this.getter = getter;
@@ -42,7 +42,7 @@ public class GrowConditionBase<T> implements IAgriGrowCondition, BiPredicate<Int
     }
 
     @Override
-    public IAgriGrowthResponse check(@Nonnull World world, @Nonnull BlockPos pos, int strength) {
+    public IAgriGrowthResponse check(@Nonnull Level world, @Nonnull BlockPos pos, int strength) {
         return this.response.apply(strength, this.getter.apply(world, this.offsetter.apply(pos)));
     }
 
@@ -52,7 +52,7 @@ public class GrowConditionBase<T> implements IAgriGrowCondition, BiPredicate<Int
     }
 
     @Override
-    public void notMetDescription(@Nonnull Consumer<ITextComponent> consumer) {
+    public void notMetDescription(@Nonnull Consumer<Component> consumer) {
         this.descriptions.forEach(consumer);
     }
 

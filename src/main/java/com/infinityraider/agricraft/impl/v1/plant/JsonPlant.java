@@ -23,24 +23,24 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -52,9 +52,9 @@ public class JsonPlant implements IAgriPlant {
 
     private final AgriPlant plant;
 
-    private final TranslationTextComponent plantName;
-    private final TranslationTextComponent seedName;
-    private final TranslationTextComponent description;
+    private final TranslatableComponent plantName;
+    private final TranslatableComponent seedName;
+    private final TranslatableComponent description;
 
     private final List<IAgriGrowthStage> growthStages;
     private final IAgriGrowthRequirement growthRequirement;
@@ -66,9 +66,9 @@ public class JsonPlant implements IAgriPlant {
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
-        this.plantName = new TranslationTextComponent(plant.getPlantLangKey());
-        this.seedName = new TranslationTextComponent(plant.getSeedLangKey());
-        this.description = new TranslationTextComponent(plant.getDescLangKey());
+        this.plantName = new TranslatableComponent(plant.getPlantLangKey());
+        this.seedName = new TranslatableComponent(plant.getSeedLangKey());
+        this.description = new TranslatableComponent(plant.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
         this.growthRequirement = initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
@@ -126,13 +126,13 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getPlantName() {
+    public TranslatableComponent getPlantName() {
         return this.plantName;
     }
 
     @Nonnull
     @Override
-    public TranslationTextComponent getSeedName() {
+    public TranslatableComponent getSeedName() {
         return this.seedName;
     }
 
@@ -217,12 +217,12 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getInformation() {
+    public TranslatableComponent getInformation() {
         return this.description;
     }
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(this.getPlantName());
         consumer.accept(this.getInformation());
     }
@@ -311,7 +311,7 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {
         final int index = IncrementalGrowthLogic.getGrowthIndex(crop.getGrowthStage());
-        final World world = crop.world();
+        final Level world = crop.world();
         if (index == -1 || world == null) {
             return;
         }
@@ -319,7 +319,7 @@ public class JsonPlant implements IAgriPlant {
                 .filter(effect -> effect.allowParticles(index))
                 .forEach(effect -> {
                     ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
-                    if (!(particle instanceof IParticleData)) {
+                    if (!(particle instanceof ParticleOptions)) {
                         return;
                     }
                     for (int amount = 0; amount < 3; ++amount) {
@@ -328,7 +328,7 @@ public class JsonPlant implements IAgriPlant {
                             double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
                             double y = pos.getY() + 0.5D + effect.getDeltaY() * rand.nextDouble();
                             double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();
-                            world.addParticle((IParticleData) particle, x, y, z, 0.0D, 0.0D, 0.0D);
+                            world.addParticle((ParticleOptions) particle, x, y, z, 0.0D, 0.0D, 0.0D);
                         }
                     }
                 });
@@ -395,7 +395,7 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    public Optional<InteractionResult> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return this.callbacks.stream()
                 .map(callback -> callback.onRightClickPre(crop, stack, entity))
                 .filter(Optional::isPresent)
@@ -404,7 +404,7 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    public Optional<InteractionResult> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return this.callbacks.stream()
                 .map(callback -> callback.onRightClickPost(crop, stack, entity))
                 .filter(Optional::isPresent)
@@ -490,7 +490,7 @@ public class JsonPlant implements IAgriPlant {
 
         // Define requirement for fluids
         List<Fluid> fluids = plant.getRequirement().getFluid().convertAll(FluidState.class).stream()
-                .map(FluidState::getFluid)
+                .map(FluidState::getType)
                 .distinct()
                 .collect(Collectors.toList());
         BiFunction<Integer, Fluid, IAgriGrowthResponse> response = (strength, fluid) -> {

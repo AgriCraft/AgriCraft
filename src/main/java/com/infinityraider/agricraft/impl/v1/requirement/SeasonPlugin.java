@@ -5,8 +5,8 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nonnull;
@@ -56,5 +56,5 @@ public abstract class SeasonPlugin implements IAgriPlugin {
         }
     }
 
-    protected abstract BiFunction<World, BlockPos, AgriSeason> getSeasonGetter();
+    protected abstract BiFunction<Level, BlockPos, AgriSeason> getSeasonGetter();
 }

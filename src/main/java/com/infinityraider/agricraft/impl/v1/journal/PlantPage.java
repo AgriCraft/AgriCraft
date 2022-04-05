@@ -12,9 +12,9 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -141,7 +141,7 @@ public final class PlantPage implements IAgriJournalItem.IPage {
     }
 
     @Override
-    public void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal) {
+    public void onPageOpened(Player player, ItemStack stack, IAgriJournalItem journal) {
         if(!CapabilityResearchedPlants.getInstance().isPlantResearched(player, this.getPlant())) {
             CapabilityResearchedPlants.getInstance().researchPlant(player, this.getPlant());
         }

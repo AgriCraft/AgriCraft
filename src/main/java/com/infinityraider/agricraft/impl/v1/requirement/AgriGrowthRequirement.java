@@ -5,9 +5,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -171,17 +171,17 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     }
 
     public static final class Tooltips {
-        public static final List<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.humidity.general"));
-        public static final List<ITextComponent> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.acidity.general"));
-        public static final List<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients.general"));
-        public static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.light.general"));
-        public static final List<ITextComponent> FLUID_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> FLUID_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.fluid.general"));
-        public static final List<ITextComponent> SEASON_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> SEASON_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.season.general"));
 
         private Tooltips() {}

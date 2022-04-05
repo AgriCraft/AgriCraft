@@ -6,25 +6,26 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,20 +40,20 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     protected FactoryAbstract() {}
 
     protected abstract <P extends IAgriSoil.SoilProperty> GrowConditionBase<P> soilProperty(
-            BiFunction<Integer, P, IAgriGrowthResponse> response, Function<IAgriSoil, P> mapper, P invalid, List<ITextComponent> tooltips);
+            BiFunction<Integer, P, IAgriGrowthResponse> response, Function<IAgriSoil, P> mapper, P invalid, List<Component> tooltips);
 
     @Override
-    public GrowConditionBase<IAgriSoil.Humidity> soilHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<IAgriSoil.Humidity> soilHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.soilProperty(response, IAgriSoil::getHumidity, IAgriSoil.Humidity.INVALID, tooltips);
     }
 
     @Override
-    public GrowConditionBase<IAgriSoil.Acidity> soilAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<IAgriSoil.Acidity> soilAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.soilProperty(response, IAgriSoil::getAcidity, IAgriSoil.Acidity.INVALID, tooltips);
     }
 
     @Override
-    public GrowConditionBase<IAgriSoil.Nutrients> soilNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public GrowConditionBase<IAgriSoil.Nutrients> soilNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.soilProperty(response, IAgriSoil::getNutrients, IAgriSoil.Nutrients.INVALID, tooltips);
     }
 
@@ -71,12 +72,12 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
-    public IAgriGrowCondition fluidState(BiFunction<Integer, FluidState, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
-        return this.blockStatesNearby(RequirementType.LIQUID, (str, stream) -> response.apply(str, stream.findAny().map(BlockState::getFluidState).orElse(Fluids.EMPTY.getDefaultState())), Offsets.NONE, Offsets.NONE, tooltips);
+    public IAgriGrowCondition fluidState(BiFunction<Integer, FluidState, IAgriGrowthResponse> response, List<Component> tooltips) {
+        return this.blockStatesNearby(RequirementType.LIQUID, (str, stream) -> response.apply(str, stream.findAny().map(BlockState::getFluidState).orElse(Fluids.EMPTY.defaultFluidState())), Offsets.NONE, Offsets.NONE, tooltips);
     }
 
     @Override
-    public IAgriGrowCondition fluidClass(BiFunction<Integer, Class<? extends Fluid>, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition fluidClass(BiFunction<Integer, Class<? extends Fluid>, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.fluid((str, fluid) -> response.apply(str, fluid.getClass()), tooltips);
     }
 
@@ -85,11 +86,11 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Fluid, IAgriGrowthResponse> response =
                 (str, aFluid) -> strength.test(str) || fluid.equals(aFluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluid(response,
-                ImmutableList.of(new StringTextComponent("")
-                        .appendSibling(Descriptions.FLUID)
-                        .appendSibling(new StringTextComponent(": "))
-                        .appendSibling(new TranslationTextComponent(fluid.getDefaultState().getBlockState().getBlock().getTranslationKey()))
-                ));
+                ImmutableList.of(new TextComponent("")
+                        .append(Descriptions.FLUID)
+                        .append(new TextComponent(": "))
+                        .append(fluid.defaultFluidState().createLegacyBlock().getBlock().getName()))
+                );
     }
 
     @Override
@@ -97,15 +98,15 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, FluidState, IAgriGrowthResponse> response =
                 (str, aFluid) -> strength.test(str) || fluid.equals(aFluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluidState(response,
-                ImmutableList.of(new StringTextComponent("")
-                        .appendSibling(Descriptions.FLUID)
-                        .appendSibling(new StringTextComponent(": "))
-                        .appendSibling(new TranslationTextComponent(fluid.getBlockState().getBlock().getTranslationKey()))
+                ImmutableList.of(new TextComponent("")
+                        .append(Descriptions.FLUID)
+                        .append(new TextComponent(": "))
+                        .append(fluid.createLegacyBlock().getBlock().getName())
                 ));
     }
 
     @Override
-    public IAgriGrowCondition fluidClass(IntPredicate strength, Class<? extends Fluid> fluid, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition fluidClass(IntPredicate strength, Class<? extends Fluid> fluid, List<Component> tooltips) {
         BiFunction<Integer, Fluid, IAgriGrowthResponse> response =
                 (str, aFluid) -> strength.test(str) || fluid.isInstance(aFluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluid(response, tooltips);
@@ -116,12 +117,11 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, Fluid, IAgriGrowthResponse> response =
                 (str, fluid) -> strength.test(str) || fluids.contains(fluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluid(response,
-                ImmutableList.of(new StringTextComponent("")
-                        .appendSibling(Descriptions.FLUID)
-                        .appendSibling(new StringTextComponent(": "))
-                        .appendSibling(AgriToolTips.collect(fluids.stream()
-                                .map(fluid -> fluid.getDefaultState().getBlockState().getBlock().getTranslationKey())
-                                .map(TranslationTextComponent::new), ", "))
+                ImmutableList.of(new TextComponent("")
+                        .append(Descriptions.FLUID)
+                        .append(new TextComponent(": "))
+                        .append(AgriToolTips.collect(fluids.stream()
+                                .map(fluid -> fluid.defaultFluidState().createLegacyBlock().getBlock().getName()), ", "))
                 ));
     }
 
@@ -130,106 +130,109 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
         BiFunction<Integer, FluidState, IAgriGrowthResponse> response =
                 (str, fluid) -> strength.test(str) || fluids.contains(fluid) ? Responses.FERTILE : Responses.INFERTILE;
         return this.fluidState(response,
-                ImmutableList.of(new StringTextComponent("")
-                        .appendSibling(Descriptions.FLUID)
-                        .appendSibling(new StringTextComponent(": "))
-                        .appendSibling(AgriToolTips.collect(fluids.stream()
-                                .map(fluid -> fluid.getBlockState().getBlock().getTranslationKey())
-                                .map(TranslationTextComponent::new), ", "))
+                ImmutableList.of(new TextComponent("")
+                        .append(Descriptions.FLUID)
+                        .append(new TextComponent(": "))
+                        .append(AgriToolTips.collect(fluids.stream()
+                                .map(fluid -> fluid.createLegacyBlock().getBlock().getName()), ", "))
                 ));
     }
 
     @Override
-    public IAgriGrowCondition biomeCategory(BiFunction<Integer, Biome.Category, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
-        return this.biome((str, biome) -> response.apply(str, biome.getCategory()), tooltips);
+    public IAgriGrowCondition biomeCategory(BiFunction<Integer, Biome.BiomeCategory, IAgriGrowthResponse> response, List<Component> tooltips) {
+        return this.biome((str, biome) -> response.apply(str, this.getCategory(biome)), tooltips);
     }
 
     @Override
-    public IAgriGrowCondition biome(IntPredicate strength, Biome biome, ITextComponent biomeName) {
+    public IAgriGrowCondition biome(IntPredicate strength, Biome biome, Component biomeName) {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, aBiome) -> strength.test(str) || biome.equals(aBiome) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.BIOME)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(biomeName)
+        return this.biome(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.BIOME)
+                .append(new TextComponent(": "))
+                .append(biomeName)
         ));
     }
 
     @Override
-    public IAgriGrowCondition biomeCategory(IntPredicate strength, Biome.Category category, ITextComponent categoryName) {
+    public IAgriGrowCondition biomeCategory(IntPredicate strength, Biome.BiomeCategory category, Component categoryName) {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
-                (str, biome) -> strength.test(str) || biome.getCategory().equals(category) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.BIOME_CATEGORY)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(categoryName)
+                (str, biome) -> strength.test(str) || this.getCategory(biome).equals(category) ? Responses.FERTILE : Responses.INFERTILE;
+        return this.biome(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.BIOME_CATEGORY)
+                .append(new TextComponent(": "))
+                .append(categoryName)
         ));
     }
 
     @Override
-    public IAgriGrowCondition biomes(IntPredicate strength, Collection<Biome> biomes, Function<Biome, ITextComponent> nameFunction) {
+    public IAgriGrowCondition biomes(IntPredicate strength, Collection<Biome> biomes, Function<Biome, MutableComponent> nameFunction) {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, aBiome) -> strength.test(str) || biomes.contains(aBiome) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.BIOME)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(AgriToolTips.collect(biomes.stream().map(nameFunction), ", "))
+        return this.biome(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.BIOME)
+                .append(new TextComponent(": "))
+                .append(AgriToolTips.collect(biomes.stream().map(nameFunction), ", "))
         ));
     }
 
     @Override
-    public IAgriGrowCondition biomeCategories(IntPredicate strength, Collection<Biome.Category> categories, Function<Biome.Category, ITextComponent> nameFunction) {
+    public IAgriGrowCondition biomeCategories(IntPredicate strength, Collection<Biome.BiomeCategory> categories, Function<Biome.BiomeCategory, MutableComponent> nameFunction) {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
-                (str, biome) -> strength.test(str) || categories.contains(biome.getCategory()) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.biome(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.BIOME)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(AgriToolTips.collect(categories.stream().map(nameFunction), ", "))
+                (str, biome) -> strength.test(str) || categories.contains(this.getCategory(biome)) ? Responses.FERTILE : Responses.INFERTILE;
+        return this.biome(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.BIOME)
+                .append(new TextComponent(": "))
+                .append(AgriToolTips.collect(categories.stream().map(nameFunction), ", "))
         ));
     }
 
     @Override
-    public IAgriGrowCondition climate(BiFunction<Integer, Biome.Climate, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition climate(BiFunction<Integer, Biome.ClimateSettings, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.biome((str, biome) -> response.apply(str, this.getClimate(biome)), tooltips);
     }
 
     @Override
-    public IAgriGrowCondition climate(IntPredicate strength, Biome.Climate climate, List<ITextComponent> tooltips) {
-        BiFunction<Integer, Biome.Climate, IAgriGrowthResponse> response =
+    public IAgriGrowCondition climate(IntPredicate strength, Biome.ClimateSettings climate, List<Component> tooltips) {
+        BiFunction<Integer, Biome.ClimateSettings, IAgriGrowthResponse> response =
                 (str, aClimate) -> strength.test(str) || climate.equals(aClimate) ? Responses.FERTILE : Responses.INFERTILE;
         return this.climate(response, tooltips);
     }
 
     @Override
-    public IAgriGrowCondition climates(IntPredicate strength, Collection<Biome.Climate> climates, List<ITextComponent> tooltips) {
-        BiFunction<Integer, Biome.Climate, IAgriGrowthResponse> response =
+    public IAgriGrowCondition climates(IntPredicate strength, Collection<Biome.ClimateSettings> climates, List<Component> tooltips) {
+        BiFunction<Integer, Biome.ClimateSettings, IAgriGrowthResponse> response =
                 (str, aClimate) -> strength.test(str) || climates.contains(aClimate) ? Responses.FERTILE : Responses.INFERTILE;
         return this.climate(response, tooltips);
     }
 
-    private Biome.Climate getClimate(Biome biome) {
-        return ObfuscationReflectionHelper.getPrivateValue(Biome.class, biome, "field_242423_j");
+    private Biome.BiomeCategory getCategory(Biome biome) {
+        return ObfuscationReflectionHelper.getPrivateValue(Biome.class, biome, "f_47442_");
+    }
+
+    private Biome.ClimateSettings getClimate(Biome biome) {
+        return ObfuscationReflectionHelper.getPrivateValue(Biome.class, biome, "field_26393");
     }
 
     @Override
-    public IAgriGrowCondition dimension(IntPredicate strength, RegistryKey<World> dimension, ITextComponent dimensionName) {
-        BiFunction<Integer, RegistryKey<World>, IAgriGrowthResponse> response =
+    public IAgriGrowCondition dimension(IntPredicate strength, ResourceKey<Level> dimension, Component dimensionName) {
+        BiFunction<Integer, ResourceKey<Level>, IAgriGrowthResponse> response =
                 (str, aDimension) -> strength.test(str) || aDimension.equals(dimension) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.dimensionFromKey(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.DIMENSION)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(dimensionName)
+        return this.dimensionFromKey(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.DIMENSION)
+                .append(new TextComponent(": "))
+                .append(dimensionName)
         ));
     }
 
     @Override
-    public IAgriGrowCondition dimension(IntPredicate strength, DimensionType dimension, ITextComponent dimensionName) {
+    public IAgriGrowCondition dimension(IntPredicate strength, DimensionType dimension, Component dimensionName) {
         BiFunction<Integer, DimensionType, IAgriGrowthResponse> response =
                 (str, aDimension) -> strength.test(str) || aDimension.equals(dimension) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.dimensionFromType(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.DIMENSION)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(dimensionName)
+        return this.dimensionFromType(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.DIMENSION)
+                .append(new TextComponent(": "))
+                .append(dimensionName)
         ));
     }
 
@@ -244,10 +247,10 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition withWeed(IntPredicate strength, IAgriWeed weed) {
         BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response =
                 (str, aWeed) -> strength.test(str) || aWeed.equals(weed) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.weed(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.WITH_WEED)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(weed.getWeedName())
+        return this.weed(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.WITH_WEED)
+                .append(new TextComponent(": "))
+                .append(weed.getWeedName())
         ));
     }
 
@@ -262,10 +265,10 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition withoutWeed(IntPredicate strength, IAgriWeed weed) {
         BiFunction<Integer, IAgriWeed, IAgriGrowthResponse> response =
                 (str, aWeed) -> strength.test(str) || !aWeed.equals(weed) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.weed(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.WITHOUT_WEED)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(weed.getWeedName())
+        return this.weed(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.WITHOUT_WEED)
+                .append(new TextComponent(": "))
+                .append(weed.getWeedName())
         ));
     }
 
@@ -298,12 +301,12 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
-    public IAgriGrowCondition blockBelow(BiFunction<Integer, Block, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition blockBelow(BiFunction<Integer, Block, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.stateBelow((str, state) -> response.apply(str, state.getBlock()), tooltips);
     }
 
     @Override
-    public IAgriGrowCondition stateBelow(BiFunction<Integer, BlockState, IAgriGrowthResponse> response, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition stateBelow(BiFunction<Integer, BlockState, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.blockStatesNearby(
                 RequirementType.BLOCK_BELOW,
                 (strength, stream) -> response.apply(strength, stream.findAny().get()),
@@ -315,31 +318,31 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     @Override
     public IAgriGrowCondition classBelow(BiFunction<Integer, Class<? extends Block>, IAgriGrowthResponse> response,
-                                         List<ITextComponent> tooltips) {
+                                         List<Component> tooltips) {
         return this.blockBelow((str, block) -> response.apply(str, block.getClass()), tooltips);
     }
 
     @Override
     public IAgriGrowCondition blocksNearby(BiFunction<Integer, Stream<Block>, IAgriGrowthResponse> response,
-                                           BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+                                           BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips) {
         return this.blockStatesNearby((str, stream) -> response.apply(str, stream.map(BlockState::getBlock)), minOffset, maxOffset, tooltips);
     }
 
     @Override
     public IAgriGrowCondition blockStatesNearby(BiFunction<Integer, Stream<BlockState>, IAgriGrowthResponse> response,
-                                                BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+                                                BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips) {
         return this.blockStatesNearby(RequirementType.BLOCKS_NEARBY, response, minOffset, maxOffset, tooltips);
     }
 
     @Override
-    public IAgriGrowCondition tileEntitiesNearby(BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response,
-                                                 BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+    public IAgriGrowCondition tileEntitiesNearby(BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response,
+                                                 BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips) {
         return this.tileEntitiesNearby(RequirementType.TILES_NEARBY, response, minOffset, maxOffset, tooltips);
     }
 
     @Override
     public IAgriGrowCondition classNearby(BiFunction<Integer, Stream<Class<? extends Block>>, IAgriGrowthResponse> response,
-                                          BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips) {
+                                          BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips) {
         return this.blocksNearby((str, stream) -> response.apply(str, stream.map(Block::getClass)), minOffset, maxOffset, tooltips);
     }
 
@@ -349,7 +352,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 stream.map(BlockState::getBlock).filter(block::equals).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.blockStatesNearby(response, minOffset, maxOffset, ImmutableList.of(
                 Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount),
-                new TranslationTextComponent(block.getTranslationKey())));
+                block.getName()));
     }
 
     @Override
@@ -358,13 +361,13 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 stream.filter(state::equals).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.blockStatesNearby(response, minOffset, maxOffset, ImmutableList.of(
                 Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount),
-                new TranslationTextComponent(state.getBlock().getTranslationKey())));
+               state.getBlock().getName()));
     }
 
     @Override
-    public IAgriGrowCondition tileEntityNearby(Predicate<CompoundNBT> filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
-        BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
-                stream.map(tile -> tile.write(new CompoundNBT())).filter(filter).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
+    public IAgriGrowCondition tileEntityNearby(Predicate<CompoundTag> filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
+        BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response = (str, stream) ->
+                stream.map(BlockEntity::saveWithFullMetadata).filter(filter).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(
                 Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)));
     }
@@ -375,7 +378,7 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 stream.map(BlockState::getBlock).filter(blocks::contains).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.blockStatesNearby(response, minOffset, maxOffset, Stream.concat(
                 Stream.of(Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)),
-                blocks.stream().map(Block::getTranslationKey).map(TranslationTextComponent::new)
+                blocks.stream().map(Block::getName)
         ).collect(Collectors.toList()));
     }
 
@@ -385,24 +388,24 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 stream.filter(states::contains).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.blockStatesNearby(response, minOffset, maxOffset, Stream.concat(
                 Stream.of(Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)),
-                states.stream().map(BlockState::getBlock).map(Block::getTranslationKey).map(TranslationTextComponent::new)
+                states.stream().map(BlockState::getBlock).map(Block::getName)
         ).collect(Collectors.toList()));
     }
 
     @Override
-    public IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundNBT>> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
-        BiFunction<Integer, Stream<TileEntity>, IAgriGrowthResponse> response = (str, stream) ->
-                stream.map(tile -> tile.write(new CompoundNBT())).filter(nbt ->
+    public IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundTag>> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
+        BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response = (str, stream) ->
+                stream.map(BlockEntity::saveWithFullMetadata).filter(nbt ->
                         filters.stream().allMatch(filter -> filter.test(nbt))
                 ).count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
         return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)));
     }
 
     protected abstract GrowConditionBase<Stream<BlockState>> blockStatesNearby(RequirementType type, BiFunction<Integer, Stream<BlockState>,
-            IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tooltips);
+            IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<Component> tooltips);
 
-    protected abstract GrowConditionBase<Stream<TileEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<TileEntity>,
-            IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<ITextComponent> tootlips);
+    protected abstract GrowConditionBase<Stream<BlockEntity>> tileEntitiesNearby(RequirementType type, BiFunction<Integer, Stream<BlockEntity>,
+            IAgriGrowthResponse> response, BlockPos minOffset, BlockPos maxOffset, List<Component> tootlips);
 
     @Override
     public IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, EntityType<?> entityType, double range) {
@@ -414,15 +417,15 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 return Responses.INFERTILE;
             }
         };
-        return this.entitiesNearby(response, range, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.ENTITY_NEARBY)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(entityType.getName())
+        return this.entitiesNearby(response, range, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.ENTITY_NEARBY)
+                .append(new TextComponent(": "))
+                .append(entityType.getDescription())
         ));
     }
 
     @Override
-    public IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, Class<? extends Entity> entityClass, double range, ITextComponent entityName) {
+    public IAgriGrowCondition entityNearby(IntUnaryOperator strengthToAmount, Class<? extends Entity> entityClass, double range, Component entityName) {
         BiFunction<Integer, Stream<Entity>, IAgriGrowthResponse> response = (str, stream) -> {
             int amount = strengthToAmount.applyAsInt(str);
             if (amount <= 0 || amount <= stream.filter(entityClass::isInstance).count()) {
@@ -431,10 +434,10 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
                 return Responses.INFERTILE;
             }
         };
-        return this.entitiesNearby(response, range, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.ENTITY_NEARBY)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(entityName)
+        return this.entitiesNearby(response, range, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.ENTITY_NEARBY)
+                .append(new TextComponent(": "))
+                .append(entityName)
         ));
     }
 
@@ -470,10 +473,10 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition season(IntPredicate strength, AgriSeason season) {
         BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response = (str, aSeason) ->
                 strength.test(str) || season.matches(aSeason) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.season(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.SEASON)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(season.getDisplayName())
+        return this.season(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.SEASON)
+                .append(new TextComponent(": "))
+                .append(season.getDisplayName())
         ));
     }
 
@@ -481,247 +484,247 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     public IAgriGrowCondition seasons(IntPredicate strength, Collection<AgriSeason> seasons) {
         BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response = (str, aSeason) ->
                 strength.test(str) || seasons.stream().anyMatch(aSeason::matches) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.season(response,ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.SEASON)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(AgriToolTips.collect(seasons.stream().map(AgriSeason::getDisplayName), ", "))
+        return this.season(response,ImmutableList.of(new TextComponent("")
+                .append(Descriptions.SEASON)
+                .append(new TextComponent(": "))
+                .append(AgriToolTips.collect(seasons.stream().map(AgriSeason::getDisplayName), ", "))
         ));
     }
 
     @Override
     public IAgriGrowCondition inVillage(IntPredicate strength) {
-        return this.inStructure(strength, Structure.VILLAGE, StructureNames.VILLAGE);
+        return this.inStructure(strength, StructureFeature.VILLAGE, StructureNames.VILLAGE);
     }
 
     @Override
     public IAgriGrowCondition inPillagerOutpost(IntPredicate strength) {
-        return this.inStructure(strength, Structure.PILLAGER_OUTPOST, StructureNames.PILLAGER_OUTPOST);
+        return this.inStructure(strength, StructureFeature.PILLAGER_OUTPOST, StructureNames.PILLAGER_OUTPOST);
     }
 
     @Override
     public IAgriGrowCondition inMineshaft(IntPredicate strength) {
-        return this.inStructure(strength, Structure.MINESHAFT, StructureNames.MINESHAFT);
+        return this.inStructure(strength, StructureFeature.MINESHAFT, StructureNames.MINESHAFT);
     }
 
     @Override
     public IAgriGrowCondition inMansion(IntPredicate strength) {
-        return this.inStructure(strength, Structure.WOODLAND_MANSION, StructureNames.WOODLAND_MANSION);
+        return this.inStructure(strength, StructureFeature.WOODLAND_MANSION, StructureNames.WOODLAND_MANSION);
     }
 
     @Override
     public IAgriGrowCondition inPyramid(IntPredicate strength) {
-        BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response = (str, stream) -> {
+        BiFunction<Integer, Stream<StructureFeature<?>>, IAgriGrowthResponse> response = (str, stream) -> {
             if (strength.test(str)) {
                 return Responses.FERTILE;
             }
-            if (stream.anyMatch(structure -> structure.equals(Structure.DESERT_PYRAMID) || structure.equals(Structure.JUNGLE_PYRAMID))) {
+            if (stream.anyMatch(structure -> structure.equals(StructureFeature.DESERT_PYRAMID) || structure.equals(StructureFeature.JUNGLE_TEMPLE))) {
                 return Responses.FERTILE;
             }
             return Responses.INFERTILE;
         };
-        return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.OUT_STRUCTURE)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(StructureNames.PYRAMID)
+        return this.structure(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.OUT_STRUCTURE)
+                .append(new TextComponent(": "))
+                .append(StructureNames.PYRAMID)
         ));
     }
 
     @Override
     public IAgriGrowCondition inJunglePyramid(IntPredicate strength) {
-        return this.inStructure(strength, Structure.JUNGLE_PYRAMID, StructureNames.JUNGLE_PYRAMID);
+        return this.inStructure(strength, StructureFeature.JUNGLE_TEMPLE, StructureNames.JUNGLE_PYRAMID);
     }
 
     @Override
     public IAgriGrowCondition inDesertPyramid(IntPredicate strength) {
-        return this.inStructure(strength, Structure.DESERT_PYRAMID, StructureNames.DESERT_PYRAMID);
+        return this.inStructure(strength, StructureFeature.DESERT_PYRAMID, StructureNames.DESERT_PYRAMID);
     }
 
     @Override
     public IAgriGrowCondition inIgloo(IntPredicate strength) {
-        return this.inStructure(strength, Structure.IGLOO, StructureNames.IGLOO);
+        return this.inStructure(strength, StructureFeature.IGLOO, StructureNames.IGLOO);
     }
 
     @Override
     public IAgriGrowCondition inRuinedPortal(IntPredicate strength) {
-        return this.inStructure(strength, Structure.RUINED_PORTAL, StructureNames.RUINED_PORTAL);
+        return this.inStructure(strength, StructureFeature.RUINED_PORTAL, StructureNames.RUINED_PORTAL);
     }
 
     @Override
     public IAgriGrowCondition inShipwreck(IntPredicate strength) {
-        return this.inStructure(strength, Structure.SHIPWRECK, StructureNames.SHIPWRECK);
+        return this.inStructure(strength, StructureFeature.SHIPWRECK, StructureNames.SHIPWRECK);
     }
 
     @Override
     public IAgriGrowCondition inSwampHut(IntPredicate strength) {
-        return this.inStructure(strength, Structure.SWAMP_HUT, StructureNames.SWAMP_HUT);
+        return this.inStructure(strength, StructureFeature.SWAMP_HUT, StructureNames.SWAMP_HUT);
     }
 
     @Override
     public IAgriGrowCondition inStronghold(IntPredicate strength) {
-        return this.inStructure(strength, Structure.STRONGHOLD, StructureNames.STRONGHOLD);
+        return this.inStructure(strength, StructureFeature.STRONGHOLD, StructureNames.STRONGHOLD);
     }
 
     @Override
     public IAgriGrowCondition inMonument(IntPredicate strength) {
-        return this.inStructure(strength, Structure.MONUMENT, StructureNames.MONUMENT);
+        return this.inStructure(strength, StructureFeature.OCEAN_MONUMENT, StructureNames.MONUMENT);
     }
 
     @Override
     public IAgriGrowCondition inOceanRuin(IntPredicate strength) {
-        return this.inStructure(strength, Structure.OCEAN_RUIN, StructureNames.OCEAN_RUIN);
+        return this.inStructure(strength, StructureFeature.OCEAN_RUIN, StructureNames.OCEAN_RUIN);
     }
 
     @Override
     public IAgriGrowCondition inFortress(IntPredicate strength) {
-        return this.inStructure(strength, Structure.FORTRESS, StructureNames.FORTRESS);
+        return this.inStructure(strength, StructureFeature.FORTRESS, StructureNames.FORTRESS);
     }
 
     @Override
     public IAgriGrowCondition inEndCity(IntPredicate strength) {
-        return this.inStructure(strength, Structure.END_CITY, StructureNames.END_CITY);
+        return this.inStructure(strength, StructureFeature.END_CITY, StructureNames.END_CITY);
     }
 
     @Override
     public IAgriGrowCondition inBuriedTreasure(IntPredicate strength) {
-        return this.inStructure(strength, Structure.BURIED_TREASURE, StructureNames.BURIED_TREASURE);
+        return this.inStructure(strength, StructureFeature.BURIED_TREASURE, StructureNames.BURIED_TREASURE);
     }
 
     @Override
     public IAgriGrowCondition inNetherFossil(IntPredicate strength) {
-        return this.inStructure(strength, Structure.NETHER_FOSSIL, StructureNames.NETHER_FOSSIL);
+        return this.inStructure(strength, StructureFeature.NETHER_FOSSIL, StructureNames.NETHER_FOSSIL);
     }
 
     @Override
     public IAgriGrowCondition inBastionRemnant(IntPredicate strength) {
-        return this.inStructure(strength, Structure.BASTION_REMNANT, StructureNames.BASTION_REMNANT);
+        return this.inStructure(strength, StructureFeature.BASTION_REMNANT, StructureNames.BASTION_REMNANT);
     }
 
     @Override
     public IAgriGrowCondition notInVillage(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.VILLAGE, StructureNames.VILLAGE);
+        return this.notInStructure(strength, StructureFeature.VILLAGE, StructureNames.VILLAGE);
     }
 
     @Override
     public IAgriGrowCondition notInPillagerOutpost(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.PILLAGER_OUTPOST, StructureNames.PILLAGER_OUTPOST);
+        return this.notInStructure(strength, StructureFeature.PILLAGER_OUTPOST, StructureNames.PILLAGER_OUTPOST);
     }
 
     @Override
     public IAgriGrowCondition notInMineshaft(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.MINESHAFT, StructureNames.MINESHAFT);
+        return this.notInStructure(strength, StructureFeature.MINESHAFT, StructureNames.MINESHAFT);
     }
 
     @Override
     public IAgriGrowCondition notInMansion(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.WOODLAND_MANSION, StructureNames.WOODLAND_MANSION);
+        return this.notInStructure(strength, StructureFeature.WOODLAND_MANSION, StructureNames.WOODLAND_MANSION);
     }
 
     @Override
     public IAgriGrowCondition notInPyramid(IntPredicate strength) {
-        BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response = (str, stream) -> {
+        BiFunction<Integer, Stream<StructureFeature<?>>, IAgriGrowthResponse> response = (str, stream) -> {
             if (strength.test(str)) {
                 return Responses.FERTILE;
             }
-            if (stream.anyMatch(structure -> structure.equals(Structure.DESERT_PYRAMID) || structure.equals(Structure.JUNGLE_PYRAMID))) {
+            if (stream.anyMatch(structure -> structure.equals(StructureFeature.DESERT_PYRAMID) || structure.equals(StructureFeature.JUNGLE_TEMPLE))) {
                 return Responses.INFERTILE;
             }
             return Responses.FERTILE;
         };
-        return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.OUT_STRUCTURE)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(StructureNames.PYRAMID)
+        return this.structure(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.OUT_STRUCTURE)
+                .append(new TextComponent(": "))
+                .append(StructureNames.PYRAMID)
         ));
     }
 
     @Override
     public IAgriGrowCondition notInJunglePyramid(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.JUNGLE_PYRAMID, StructureNames.JUNGLE_PYRAMID);
+        return this.notInStructure(strength, StructureFeature.JUNGLE_TEMPLE, StructureNames.JUNGLE_PYRAMID);
     }
 
     @Override
     public IAgriGrowCondition notInDesertPyramid(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.DESERT_PYRAMID, StructureNames.DESERT_PYRAMID);
+        return this.notInStructure(strength, StructureFeature.DESERT_PYRAMID, StructureNames.DESERT_PYRAMID);
     }
 
     @Override
     public IAgriGrowCondition notInIgloo(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.IGLOO, StructureNames.IGLOO);
+        return this.notInStructure(strength, StructureFeature.IGLOO, StructureNames.IGLOO);
     }
 
     @Override
     public IAgriGrowCondition notInRuinedPortal(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.RUINED_PORTAL, StructureNames.RUINED_PORTAL);
+        return this.notInStructure(strength, StructureFeature.RUINED_PORTAL, StructureNames.RUINED_PORTAL);
     }
 
     @Override
     public IAgriGrowCondition notInShipwreck(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.SHIPWRECK, StructureNames.SHIPWRECK);
+        return this.notInStructure(strength, StructureFeature.SHIPWRECK, StructureNames.SHIPWRECK);
     }
 
     @Override
     public IAgriGrowCondition notInSwampHut(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.SWAMP_HUT, StructureNames.SWAMP_HUT);
+        return this.notInStructure(strength, StructureFeature.SWAMP_HUT, StructureNames.SWAMP_HUT);
     }
 
     @Override
     public IAgriGrowCondition notInStronghold(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.STRONGHOLD, StructureNames.STRONGHOLD);
+        return this.notInStructure(strength, StructureFeature.STRONGHOLD, StructureNames.STRONGHOLD);
     }
 
     @Override
     public IAgriGrowCondition notInMonument(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.MONUMENT, StructureNames.MONUMENT);
+        return this.notInStructure(strength, StructureFeature.OCEAN_MONUMENT, StructureNames.MONUMENT);
     }
 
     @Override
     public IAgriGrowCondition notInOceanRuin(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.OCEAN_RUIN, StructureNames.OCEAN_RUIN);
+        return this.notInStructure(strength, StructureFeature.OCEAN_RUIN, StructureNames.OCEAN_RUIN);
     }
 
     @Override
     public IAgriGrowCondition notInFortress(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.FORTRESS, StructureNames.FORTRESS);
+        return this.notInStructure(strength, StructureFeature.FORTRESS, StructureNames.FORTRESS);
     }
 
     @Override
     public IAgriGrowCondition notInEndCity(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.END_CITY, StructureNames.END_CITY);
+        return this.notInStructure(strength, StructureFeature.END_CITY, StructureNames.END_CITY);
     }
 
     @Override
     public IAgriGrowCondition notInBuriedTreasure(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.BURIED_TREASURE, StructureNames.BURIED_TREASURE);
+        return this.notInStructure(strength, StructureFeature.BURIED_TREASURE, StructureNames.BURIED_TREASURE);
     }
 
     @Override
     public IAgriGrowCondition notInNetherFossil(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.NETHER_FOSSIL, StructureNames.NETHER_FOSSIL);
+        return this.notInStructure(strength, StructureFeature.NETHER_FOSSIL, StructureNames.NETHER_FOSSIL);
     }
 
     public IAgriGrowCondition notInBastionRemnant(IntPredicate strength) {
-        return this.notInStructure(strength, Structure.BASTION_REMNANT, StructureNames.BASTION_REMNANT);
+        return this.notInStructure(strength, StructureFeature.BASTION_REMNANT, StructureNames.BASTION_REMNANT);
     }
 
     @Override
-    public IAgriGrowCondition inStructure(IntPredicate predicate, Structure<?> structure, ITextComponent structureName) {
-        BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response =
+    public IAgriGrowCondition inStructure(IntPredicate predicate, StructureFeature<?> structure, Component structureName) {
+        BiFunction<Integer, Stream<StructureFeature<?>>, IAgriGrowthResponse> response =
                 (str, stream) -> predicate.test(str) || stream.anyMatch(structure::equals) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.IN_STRUCTURE)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(structureName)
+        return this.structure(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.IN_STRUCTURE)
+                .append(new TextComponent(": "))
+                .append(structureName)
         ));
     }
 
     @Override
-    public IAgriGrowCondition notInStructure(IntPredicate predicate, Structure<?> structure, ITextComponent structureName) {
-        BiFunction<Integer, Stream<Structure<?>>, IAgriGrowthResponse> response =
+    public IAgriGrowCondition notInStructure(IntPredicate predicate, StructureFeature<?> structure, Component structureName) {
+        BiFunction<Integer, Stream<StructureFeature<?>>, IAgriGrowthResponse> response =
                 (str, stream) -> predicate.test(str) || stream.noneMatch(structure::equals) ? Responses.FERTILE : Responses.INFERTILE;
-        return this.structure(response, ImmutableList.of(new StringTextComponent("")
-                .appendSibling(Descriptions.IN_STRUCTURE)
-                .appendSibling(new StringTextComponent(": "))
-                .appendSibling(structureName)
+        return this.structure(response, ImmutableList.of(new TextComponent("")
+                .append(Descriptions.IN_STRUCTURE)
+                .append(new TextComponent(": "))
+                .append(structureName)
         ));
     }
 
@@ -739,116 +742,116 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     public static final class Descriptions {
-        public static ITextComponent inRange(ITextComponent base, int min, int max) {
-            return new StringTextComponent("").appendSibling(base).appendSibling(new StringTextComponent("[" + min + "; " + max + "]"));
+        public static Component inRange(Component base, int min, int max) {
+            return new TextComponent("").append(base).append(new TextComponent("[" + min + "; " + max + "]"));
         }
 
-        public static ITextComponent equalTo(ITextComponent base, int value) {
-            return new StringTextComponent("").appendSibling(base).appendSibling(new StringTextComponent("" + value));
+        public static Component equalTo(Component base, int value) {
+            return new TextComponent("").append(base).append(new TextComponent("" + value));
         }
 
-        public static ITextComponent weed(IAgriWeed weed, IAgriGrowthStage stage) {
-            return new StringTextComponent("")
-                    .appendSibling(weed.getWeedName())
-                    .appendSibling(new StringTextComponent(" ("))
-                    .appendSibling(AgriToolTips.getGrowthTooltip(stage))
-                    .appendSibling(new StringTextComponent(")"));
+        public static Component weed(IAgriWeed weed, IAgriGrowthStage stage) {
+            return new TextComponent("")
+                    .append(weed.getWeedName())
+                    .append(new TextComponent(" ("))
+                    .append(AgriToolTips.getGrowthTooltip(stage))
+                    .append(new TextComponent(")"));
         }
 
-        public static final ITextComponent SOIL = new TranslationTextComponent(
+        public static final Component SOIL = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil");
-        public static final ITextComponent SOIL_HUMIDITY = new TranslationTextComponent(
+        public static final Component SOIL_HUMIDITY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.humidity");
-        public static final ITextComponent SOIL_ACIDITY = new TranslationTextComponent(
+        public static final Component SOIL_ACIDITY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.acidity");
-        public static final ITextComponent SOIL_NUTRIENTS = new TranslationTextComponent(
+        public static final Component SOIL_NUTRIENTS = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients");
-        public static final ITextComponent LIGHT = new TranslationTextComponent(
+        public static final Component LIGHT = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.light");
-        public static final ITextComponent REDSTONE = new TranslationTextComponent(
+        public static final Component REDSTONE = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.redstone");
-        public static final ITextComponent FLUID = new TranslationTextComponent(
+        public static final Component FLUID = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.fluid");
-        public static final ITextComponent BIOME = new TranslationTextComponent(
+        public static final Component BIOME = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.biome");
-        public static final ITextComponent BIOME_CATEGORY = new TranslationTextComponent(
+        public static final Component BIOME_CATEGORY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.biome_category");
-        public static final ITextComponent DIMENSION = new TranslationTextComponent(
+        public static final Component DIMENSION = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.dimension");
-        public static final ITextComponent WITH_WEED = new TranslationTextComponent(
+        public static final Component WITH_WEED = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.with_weed");
-        public static final ITextComponent WITHOUT_WEED = new TranslationTextComponent(
+        public static final Component WITHOUT_WEED = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.without_weed");
-        public static final List<ITextComponent> DAY = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> DAY = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.day"));
-        public static final List<ITextComponent> DUSK = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> DUSK = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.dusk"));
-        public static final List<ITextComponent> NIGHT = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> NIGHT = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.night"));
-        public static final List<ITextComponent> DAWN = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> DAWN = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.dawn"));
-        public static final ITextComponent BLOCK_BELOW = new TranslationTextComponent(
+        public static final Component BLOCK_BELOW = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.block_below");
-        public static final ITextComponent BLOCK_NEARBY = new TranslationTextComponent(
+        public static final Component BLOCK_NEARBY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.block_nearby");
-        public static final ITextComponent ENTITY_NEARBY = new TranslationTextComponent(
+        public static final Component ENTITY_NEARBY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.entity_nearby");
-        private static final ITextComponent NO_RAIN = new TranslationTextComponent(
+        private static final Component NO_RAIN = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.no_rain");
-        private static final ITextComponent RAIN = new TranslationTextComponent(
+        private static final Component RAIN = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.rain");
-        private static final ITextComponent NO_SNOW = new TranslationTextComponent(
+        private static final Component NO_SNOW = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.no_snow");
-        private static final ITextComponent SNOW = new TranslationTextComponent(
+        private static final Component SNOW = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.snow");
-        public static final ITextComponent SEASON = new TranslationTextComponent(
+        public static final Component SEASON = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.season");
-        public static final ITextComponent IN_STRUCTURE = new TranslationTextComponent(
+        public static final Component IN_STRUCTURE = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.structure_in");
-        public static final ITextComponent OUT_STRUCTURE = new TranslationTextComponent(
+        public static final Component OUT_STRUCTURE = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.structure_out");
 
         private Descriptions() {}
     }
 
     private static final class StructureNames {
-        private static final ITextComponent VILLAGE = new TranslationTextComponent(
+        private static final Component VILLAGE = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.village");
-        private static final ITextComponent PILLAGER_OUTPOST = new TranslationTextComponent(
+        private static final Component PILLAGER_OUTPOST = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.pillager_outpost");
-        private static final ITextComponent MINESHAFT = new TranslationTextComponent(
+        private static final Component MINESHAFT = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.mineshaft");
-        private static final ITextComponent WOODLAND_MANSION = new TranslationTextComponent(
+        private static final Component WOODLAND_MANSION = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.woodland_mansion");
-        private static final ITextComponent PYRAMID = new TranslationTextComponent(
+        private static final Component PYRAMID = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.pyramid");
-        private static final ITextComponent JUNGLE_PYRAMID = new TranslationTextComponent(
+        private static final Component JUNGLE_PYRAMID = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.jungle_pyramid");
-        private static final ITextComponent DESERT_PYRAMID = new TranslationTextComponent(
+        private static final Component DESERT_PYRAMID = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.desert_pyramid");
-        private static final ITextComponent IGLOO = new TranslationTextComponent(
+        private static final Component IGLOO = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.igloo");
-        private static final ITextComponent RUINED_PORTAL = new TranslationTextComponent(
+        private static final Component RUINED_PORTAL = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.ruined_portal");
-        private static final ITextComponent SHIPWRECK = new TranslationTextComponent(
+        private static final Component SHIPWRECK = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.shipwreck");
-        private static final ITextComponent SWAMP_HUT = new TranslationTextComponent(
+        private static final Component SWAMP_HUT = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.swamp_hut");
-        private static final ITextComponent STRONGHOLD = new TranslationTextComponent(
+        private static final Component STRONGHOLD = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.stronghold");
-        private static final ITextComponent MONUMENT = new TranslationTextComponent(
+        private static final Component MONUMENT = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.monument");
-        private static final ITextComponent OCEAN_RUIN = new TranslationTextComponent(
+        private static final Component OCEAN_RUIN = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.ocean_ruin");
-        private static final ITextComponent FORTRESS = new TranslationTextComponent(
+        private static final Component FORTRESS = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.fortress");
-        private static final ITextComponent END_CITY = new TranslationTextComponent(
+        private static final Component END_CITY = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.end_city");
-        private static final ITextComponent BURIED_TREASURE = new TranslationTextComponent(
+        private static final Component BURIED_TREASURE = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.buried_treasure");
-        private static final ITextComponent NETHER_FOSSIL = new TranslationTextComponent(
+        private static final Component NETHER_FOSSIL = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.nether_fossil");
-        private static final ITextComponent BASTION_REMNANT = new TranslationTextComponent(
+        private static final Component BASTION_REMNANT = new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".structure.bastion_remnant");
 
         private StructureNames() {}

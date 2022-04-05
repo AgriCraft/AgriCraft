@@ -9,14 +9,11 @@ import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
 import com.infinityraider.agricraft.util.TagUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -69,7 +66,7 @@ public class AgriValidatorImpl implements AgriValidator {
         String[] parts = item.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (useTag && TagUtil.isValidTag(ItemTags.getCollection(), item)) {
+        } else if (useTag && TagUtil.isValidTag(ForgeRegistries.ITEMS.tags(), item)) {
             return true;
         } else {
             try {
@@ -86,7 +83,7 @@ public class AgriValidatorImpl implements AgriValidator {
         String[] parts = block.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (useTag && TagUtil.isValidTag(BlockTags.getCollection(), block)) {
+        } else if (useTag && TagUtil.isValidTag(ForgeRegistries.BLOCKS.tags(), block)) {
             return true;
         } else {
             try {
@@ -103,7 +100,7 @@ public class AgriValidatorImpl implements AgriValidator {
         String[] parts = fluid.split(":");
         if (parts.length != 2) {
             return false;
-        } else if (useTag && TagUtil.isValidTag(FluidTags.getCollection(), fluid)) {
+        } else if (useTag && TagUtil.isValidTag(ForgeRegistries.FLUIDS.tags(), fluid)) {
             return true;
         } else {
             try {
