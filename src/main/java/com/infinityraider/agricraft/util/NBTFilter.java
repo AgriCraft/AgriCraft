@@ -2,27 +2,27 @@ package com.infinityraider.agricraft.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 
 import java.util.function.Predicate;
 
-public class NBTFilter implements Predicate<CompoundNBT> {
+public class NBTFilter implements Predicate<CompoundTag> {
     private final String key;
-    private final Predicate<INBT> test;
+    private final Predicate<Tag> test;
 
     @SuppressWarnings("unchecked")
-    public NBTFilter(String key, Predicate<? extends INBT> test) {
+    public NBTFilter(String key, Predicate<? extends Tag> test) {
         this.key = key;
-        this.test = (Predicate<INBT>) test;
+        this.test = (Predicate<Tag>) test;
     }
 
     public NBTFilter(String key, String value) {
-        this(key, tag -> tag.getString().equals(value));
+        this(key, tag -> tag.getAsString().equals(value));
     }
 
     @Override
-    public boolean test(CompoundNBT tag) {
+    public boolean test(CompoundTag tag) {
         return tag.contains(this.key)  && this.test.test(tag.get(this.key));
     }
 

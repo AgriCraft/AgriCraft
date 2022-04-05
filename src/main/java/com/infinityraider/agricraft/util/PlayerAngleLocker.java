@@ -1,37 +1,37 @@
 package com.infinityraider.agricraft.util;
 
 import com.infinityraider.agricraft.AgriCraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class PlayerAngleLocker {
 
     /** Player orientation trackers */
     private static float yaw;
-    private static float yawCamera;
-    private static float yawOffset;
+    private static float bob;
+    private static float bodyYawy;
     private static float yawHead;
     private static float pitch;
 
     public static void storePlayerAngles() {
-        PlayerEntity player = AgriCraft.instance.getClientPlayer();
-        yaw = player.rotationYaw;
-        yawCamera = player.cameraYaw;
-        yawOffset = player.renderYawOffset;
-        yawHead = player.rotationYawHead;
-        pitch = player.rotationPitch;
+        Player player = AgriCraft.instance.getClientPlayer();
+        yaw = player.getYRot();
+        bob = player.bob;
+        bodyYawy = player.yBodyRot;
+        yawHead = player.yHeadRot;
+        pitch = player.getXRot();
     }
 
     public static void forcePlayerAngles() {
-        PlayerEntity player = AgriCraft.instance.getClientPlayer();
-        player.rotationYaw = yaw;
-        player.prevRotationYaw = yaw;
-        player.cameraYaw = yawCamera;
-        player.prevCameraYaw = yawCamera;
-        player.renderYawOffset = yawOffset;
-        player.prevRenderYawOffset = yawOffset;
-        player.rotationYawHead = yawHead;
-        player.prevRotationYawHead = yawHead;
-        player.rotationPitch = pitch;
-        player.prevRotationPitch = pitch;
+        Player player = AgriCraft.instance.getClientPlayer();
+        player.setYRot(yaw);
+        player.yRotO = yaw;
+        player.bob = bob;
+        player.oBob = bob;
+        player.yBodyRot = bodyYawy;
+        player.yBodyRotO = bodyYawy;
+        player.yHeadRot = yawHead;
+        player.yHeadRotO = yawHead;
+        player.setYRot(pitch);
+        player.yRotO = pitch;
     }
 }

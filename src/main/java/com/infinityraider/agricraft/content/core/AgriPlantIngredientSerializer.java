@@ -7,8 +7,8 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.infinitylib.crafting.IInfIngredientSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -24,8 +24,8 @@ public class AgriPlantIngredientSerializer implements IInfIngredientSerializer<A
 
     @Nonnull
     @Override
-    public AgriPlantIngredient parse(PacketBuffer buffer) {
-        String id = buffer.readString();
+    public AgriPlantIngredient parse(FriendlyByteBuf buffer) {
+        String id = buffer.readUtf();
         IAgriPlant plant = AgriApi.getPlantRegistry().get(id).orElse(AgriApi.getPlantRegistry().getNoPlant());
         if(plant.isPlant()) {
             return new AgriPlantIngredient(plant);
@@ -50,8 +50,8 @@ public class AgriPlantIngredientSerializer implements IInfIngredientSerializer<A
     }
 
     @Override
-    public void write(@Nonnull PacketBuffer buffer, @Nonnull AgriPlantIngredient ingredient) {
-        buffer.writeString(ingredient.getPlantId());
+    public void write(@Nonnull FriendlyByteBuf buffer, @Nonnull AgriPlantIngredient ingredient) {
+        buffer.writeUtf(ingredient.getPlantId());
     }
 
     public static class AgriLazyPlantIngredient extends AgriPlantIngredient {

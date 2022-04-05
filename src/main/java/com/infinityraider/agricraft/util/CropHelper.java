@@ -10,15 +10,15 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.requirement.RequirementCache;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ public class CropHelper {
         if(AgriCraft.instance.getConfig().disableWeeds()) {
             return false;
         }
-        World world = crop.world();
+        Level world = crop.world();
         if(world == null) {
             return false;
         }
@@ -43,16 +43,16 @@ public class CropHelper {
         return world.getRandom().nextBoolean();
     }
 
-    public static boolean checkGrowthSpace(World world, BlockPos pos, IAgriGrowable plant, IAgriGrowthStage stage) {
+    public static boolean checkGrowthSpace(Level world, BlockPos pos, IAgriGrowable plant, IAgriGrowthStage stage) {
         if(world == null) {
             return false;
         }
         double height = plant.getPlantHeight(stage);
         while(height > 16) {
             int offset = ((int) height) / 16;
-            BlockPos up = pos.up(offset);
+            BlockPos up = pos.above(offset);
             BlockState state = world.getBlockState(up);
-            if(!state.getBlock().isAir(state, world, up)) {
+            if(!state.isAir()) {
                 return false;
             }
             height -= 16;
@@ -61,7 +61,7 @@ public class CropHelper {
     }
 
     public static void spawnWeeds(IAgriCrop crop) {
-        World world = crop.world();
+        Level world = crop.world();
         if(world == null) {
             return;
         }
@@ -83,7 +83,7 @@ public class CropHelper {
     }
 
     public static void executePlantHarvestRolls(IAgriCrop crop, @Nonnull Consumer<ItemStack> consumer) {
-        World world = crop.world();
+        Level world = crop.world();
         if(world == null) {
             return;
         }
@@ -92,7 +92,7 @@ public class CropHelper {
         }
     }
 
-    public static void addDisplayInfo(IAgriCrop crop, RequirementCache requirement, @Nonnull Consumer<ITextComponent> consumer) {
+    public static void addDisplayInfo(IAgriCrop crop, RequirementCache requirement, @Nonnull Consumer<Component> consumer) {
         // Validate
         Preconditions.checkNotNull(consumer);
 
@@ -128,8 +128,8 @@ public class CropHelper {
     }
 
     @SuppressWarnings("deprecation")
-    public static void playPlantingSound(World world, BlockPos pos, @Nullable PlayerEntity player) {
-        SoundType sound = Blocks.WHEAT.getSoundType(Blocks.WHEAT.getDefaultState());
-        world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+    public static void playPlantingSound(Level world, BlockPos pos, @Nullable Player player) {
+        SoundType sound = Blocks.WHEAT.getSoundType(Blocks.WHEAT.defaultBlockState());
+        world.playSound(player, pos, sound.getPlaceSound(), SoundSource.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
     }
 }

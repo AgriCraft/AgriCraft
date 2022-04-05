@@ -2,14 +2,17 @@ package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
+
+import javax.annotation.Nullable;
 
 public class ItemAgriNugget extends ItemBase {
     public ItemAgriNugget(String name) {
-        super(Names.Items.NUGGET + "_" + name, new Properties().group(ItemGroup.MATERIALS));
+        super(Names.Items.NUGGET + "_" + name, new Properties().tab(CreativeModeTab.TAB_MATERIALS));
     }
 
     public static class Burnable extends ItemAgriNugget {
@@ -19,8 +22,8 @@ public class ItemAgriNugget extends ItemBase {
         }
 
         @Override
-        public int getBurnTime(ItemStack itemStack) {
-            return ForgeHooks.getBurnTime(REFERENCE) / 9;
+        public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
+            return ForgeHooks.getBurnTime(REFERENCE, recipeType) / 9;
         }
     }
 }

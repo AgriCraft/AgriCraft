@@ -1,40 +1,41 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.util.FluidPredicates;
 import com.infinityraider.infinitylib.block.BlockBase;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public enum CropStickVariant {
     WOOD(
-            Material.PLANTS,
+            Material.PLANT,
             3,
             SoundType.WOOD,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_wood,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
+            () -> () -> AgriItemRegistry.CROP_STICKS_WOOD,
+            () -> () -> AgriBlockRegistry.CROP_STICKS_WOOD,
             FluidPredicates.NOT_LAVA
     ),
 
     IRON(
-            Material.PLANTS,
+            Material.PLANT,
             7,
             SoundType.ANVIL,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_iron,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
+            () -> () -> AgriItemRegistry.CROP_STICKS_IRON,
+            () -> () -> AgriBlockRegistry.CROP_STICKS_IRON,
             FluidPredicates.ANY_FLUID
     ),
 
-    OBSIDIAN(Material.PLANTS,
+    OBSIDIAN(Material.PLANT,
             7,
             SoundType.BASALT,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_obsidian,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian,
+            () -> () -> AgriItemRegistry.CROP_STICKS_OBSIDIAN,
+            () -> () -> AgriBlockRegistry.CROP_STICKS_OBSIDIAN,
             FluidPredicates.ANY_FLUID
     );
 

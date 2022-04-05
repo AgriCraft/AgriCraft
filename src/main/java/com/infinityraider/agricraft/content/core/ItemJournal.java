@@ -18,7 +18,11 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,14 +40,14 @@ import java.util.stream.Collectors;
 public class ItemJournal extends ItemBase implements IAgriJournalItem {
     public ItemJournal() {
         super(Names.Items.JOURNAL, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
-                .maxStackSize(1)
+                .tab(AgriTabs.TAB_AGRICRAFT)
+                .stacksTo(1)
         );
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResult<ItemStack> onItemRightClick(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if(player.isSneaking()) {
             return ActionResult.resultPass(stack);

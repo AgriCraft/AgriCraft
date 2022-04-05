@@ -5,20 +5,19 @@ import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.item.BlockItemBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +26,7 @@ public class ItemCropSticks extends BlockItemBase {
     private final CropStickVariant variant;
 
     public ItemCropSticks(CropStickVariant variant) {
-        super(variant.getBlock(), new Properties().group(AgriTabs.TAB_AGRICRAFT));
+        super(variant.getBlock(), new Properties().tab(AgriTabs.TAB_AGRICRAFT));
         this.variant = variant;
     }
 
@@ -35,19 +34,14 @@ public class ItemCropSticks extends BlockItemBase {
         return this.variant;
     }
 
-    @Override
-    public void onUse(@Nonnull World world, @Nonnull LivingEntity entity, @Nonnull ItemStack stack, int count) {
-        super.onUse(world, entity, stack, count);
-    }
-
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
         // Fetch target world, pos, tile, and state
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        TileEntity tile = world.getTileEntity(pos);
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        BlockEntity tile = world.getBlockEntity(pos);
         BlockState state = world.getBlockState(pos);
 
         // Try placing on same block
@@ -60,12 +54,12 @@ public class ItemCropSticks extends BlockItemBase {
         }
 
         // Fetch pos, tile, and state above
-        pos = pos.offset(context.getFace());
-        tile = world.getTileEntity(pos);
+        pos = pos.relative(context.getClickedFace());
+        tile = world.getBlockEntity(pos);
         state = world.getBlockState(pos);
-        if (state.isAir(world, pos) || state.getFluidState().getFluid() == Fluids.WATER) {
+        if (state.isAir() || state.getFluidState().getType() == Fluids.WATER) {
             // Place on soil
-            return this.placeCropSticksOnSoil(world, pos, new BlockItemUseContext(context));
+            return this.placeCropSticksOnSoil(world, pos, new BlockPlaceContext(context));
         } else if(tile instanceof TileEntityCropPlant) {
             // Place on existing plant
             return this.placeCropSticksOnPlant(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropPlant) tile, state);
@@ -73,23 +67,23 @@ public class ItemCropSticks extends BlockItemBase {
             // Make cross crop
             return this.tryMakeCrossCrop(world, pos, context.getPlayer(), context.getHand(), (TileEntityCropSticks) tile);
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    protected ActionResultType placeCropSticksOnSoil(World world, BlockPos pos, BlockItemUseContext context) {
+    protected InteractionResult placeCropSticksOnSoil(Level world, BlockPos pos, BlockPlaceContext context) {
         // Test if the placement is valid
         BlockState newState = this.getVariant().getBlock().getStateForPlacement(context);
         if(newState == null) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Set the block to a crop.
-        final boolean success = world.setBlockState(pos, newState);
+        final boolean success = world.setBlock(pos, newState, 3);
 
         // If there was trouble, abort.
         if (!success) {
             AgriCore.getCoreLogger().debug("ItemCrop#onItemUse failed to create the BlockCrop!");
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
 
         // Remove the crop used from the stack.
@@ -99,23 +93,23 @@ public class ItemCropSticks extends BlockItemBase {
         CropHelper.playPlantingSound(world, pos, context.getPlayer());
 
         // Action was a success.
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    protected ActionResultType placeCropSticksOnPlant(World world, BlockPos pos, @Nullable PlayerEntity player, Hand hand,
-                                                      TileEntityCropPlant plant, BlockState state) {
+    protected InteractionResult placeCropSticksOnPlant(Level world, BlockPos pos, @Nullable Player player, InteractionHand hand,
+                                                       TileEntityCropPlant plant, BlockState state) {
         // Attempt to convert to crop sticks
-        BlockState newState = this.getVariant().getBlock().getDefaultState();
+        BlockState newState = this.getVariant().getBlock().defaultBlockState();
         newState = BlockCropBase.PLANT.mimic(state, newState);
         newState = BlockCropBase.LIGHT.mimic(state, newState);
         newState = InfProperty.Defaults.fluidlogged().mimic(state, newState);
-        world.setBlockState(pos, newState);
+        world.setBlock(pos, newState, 3);
 
         // If there was trouble, reset and abort.
-        TileEntity tile = world.getTileEntity(pos);
+        BlockEntity tile = world.getBlockEntity(pos);
         if(!(tile instanceof TileEntityCropSticks)) {
-            world.setBlockState(pos, state);
-            return ActionResultType.FAIL;
+            world.setBlock(pos, state, 3);
+            return InteractionResult.FAIL;
         }
 
         // Mimic plant and weed
@@ -128,23 +122,23 @@ public class ItemCropSticks extends BlockItemBase {
         CropHelper.playPlantingSound(world, pos, player);
 
         // Action was a success.
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    protected ActionResultType tryMakeCrossCrop(World world, BlockPos pos,  @Nullable PlayerEntity player, Hand hand,
+    protected InteractionResult tryMakeCrossCrop(Level world, BlockPos pos,  @Nullable Player player, InteractionHand hand,
                                                 TileEntityCropSticks crop) {
         if(!crop.hasPlant() && !crop.hasWeeds() & !crop.isCrossCrop() && ((BlockCropSticks) crop.getBlockState().getBlock()).isVariant(this)) {
             crop.setCrossCrop(true);
             this.consumeItem(player, hand);
             this.playCropStickSound(world, pos);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    protected void consumeItem(@Nullable PlayerEntity player, Hand hand) {
+    protected void consumeItem(@Nullable Player player, InteractionHand hand) {
         if(player != null) {
-            ItemStack stack = player.getHeldItem(hand);
+            ItemStack stack = player.getItemInHand(hand);
             if(!player.isCreative()) {
                 stack.shrink(1);
             }
@@ -152,9 +146,9 @@ public class ItemCropSticks extends BlockItemBase {
 
     }
 
-    protected void playCropStickSound(World world, BlockPos pos) {
+    protected void playCropStickSound(Level world, BlockPos pos) {
         SoundType type = this.getVariant().getSound();
         world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5F, pos.getZ() + 0.5F, type.getPlaceSound(),
-                SoundCategory.BLOCKS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
+                SoundSource.BLOCKS, (type.getVolume() + 1.0F) / 4.0F, type.getPitch() * 0.8F);
     }
 }

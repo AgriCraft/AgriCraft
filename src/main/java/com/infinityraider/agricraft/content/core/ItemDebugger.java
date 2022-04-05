@@ -13,7 +13,7 @@ public class ItemDebugger extends ItemDebuggerBase {
             new DebugModeCheckIrrigationComponent(),
             new DebugModeFillIrrigationComponent(),
             new DebugModeDrainIrrigationComponent(),
-            new DebugModeIGrowable(),
+            new DebugModeBonemeal(),
             new DebugModeDiffLight(),
             new DebugModeGreenHouse()
     );

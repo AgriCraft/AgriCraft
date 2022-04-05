@@ -3,21 +3,21 @@ package com.infinityraider.agricraft.util.debug;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.WorldHelper;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class DebugModeIGrowable extends DebugMode {
+public class DebugModeBonemeal extends DebugMode {
 
     // Saved copies of the texts that do not change. Unicode 00A7 is the formatting code squiggle. 'r' is reset.
     private static final String chatTrue =  "`2True  `r";                               // '2' is dark green.
@@ -33,27 +33,27 @@ public class DebugModeIGrowable extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
-        if (context.getWorld().isRemote) {
+    public void debugActionBlockClicked(ItemStack stack, UseOnContext context) {
+        if (context.getLevel().isClientSide()) {
             return;
         }
-        BlockPos pos = context.getPos();
-        PlayerEntity player = context.getPlayer();
-        World world = context.getWorld();
+        BlockPos pos = context.getClickedPos();
+        Player player = context.getPlayer();
+        Level world = context.getLevel();
         // Start with the position of the block that was clicked on. '7' is gray. Btw, the chat font is not fixed width. :(
         StringBuilder outputRaw = new StringBuilder(String.format("`7%1$4d,%2$4d,%3$4d`r ", pos.getX(), pos.getY(), pos.getZ()));
 
         // Check if the clicked on block has the IGrowable interface.
-        final IGrowable crop = WorldHelper.getBlock(world, pos, IGrowable.class).orElse(null);
+        final BonemealableBlock crop = WorldHelper.getBlock(world, pos, BonemealableBlock.class).orElse(null);
         if (crop == null) {
             // If it does not, add a nicely formatted report, then skip onward.
             outputRaw.append(chatNotIG);
-        } else if(world instanceof ServerWorld) {
+        } else if(world instanceof ServerLevel) {
             // Otherwise run the tests and record the results.
             BlockState state = world.getBlockState(pos);
-            outputRaw.append(crop.canGrow(world, pos, state, false) ? chatTrue : chatFalse); // canGrow
-            outputRaw.append(crop.canUseBonemeal(world, world.rand, pos, state) ? chatTrue : chatFalse); // canUseBonemeal
-            crop.grow((ServerWorld) world, world.rand, pos, state);                                                    // grow
+            outputRaw.append(crop.isValidBonemealTarget(world, pos, state, false) ? chatTrue : chatFalse); // canGrow
+            outputRaw.append(crop.isBonemealSuccess(world, world.getRandom(), pos, state) ? chatTrue : chatFalse); // canUseBonemeal
+            crop.performBonemeal((ServerLevel) world, world.getRandom(), pos, state);                                                    // grow
 
             // It's also helpful to also make clear what block was being tested.
             outputRaw.append("`3"); // '3' is dark aqua.
@@ -65,26 +65,26 @@ public class DebugModeIGrowable extends DebugMode {
         outputRaw.append(" `8[...]`r"); // '8' is dark gray.
 
         // Create a hover box with explanatory information.
-        StringTextComponent hoverComponent = new StringTextComponent(MessageUtil.colorize(chatInfo));
+        TextComponent hoverComponent = new TextComponent(MessageUtil.colorize(chatInfo));
         HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent);
 
         // Turn the output String into a chat message.
-        StringTextComponent outputComponent = new StringTextComponent(MessageUtil.colorize(outputRaw.toString()));
+        TextComponent outputComponent = new TextComponent(MessageUtil.colorize(outputRaw.toString()));
 
         // Add the hover box to the chat message.
-        outputComponent.getStyle().setHoverEvent(hoverEvent);
+        outputComponent.getStyle().withHoverEvent(hoverEvent);
 
         // Now send the completed chat message.
-        player.sendMessage(outputComponent, Util.DUMMY_UUID);
+        player.sendMessage(outputComponent, Util.NIL_UUID);
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+    public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
         // NOPE
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+    public void debugActionEntityClicked(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         // NOPE
     }
 }

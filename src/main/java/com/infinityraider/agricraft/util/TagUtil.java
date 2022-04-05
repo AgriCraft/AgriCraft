@@ -14,10 +14,19 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.tags.ITagManager;
 
 public final class TagUtil {
@@ -56,13 +65,13 @@ public final class TagUtil {
      * @param suffix
      * @return {@literal true} if and only if the given string represents a valid oredict entry, {@literal false} otherwise.
      */
-    public static final boolean isValidTag(@Nonnull ITagCollection<?> registry, @Nonnull String prefix, @Nonnull String suffix) {
+    public static final <T extends IForgeRegistryEntry<T>> boolean isValidTag(@Nonnull ITagManager<T> registry, @Nonnull String prefix, @Nonnull String suffix) {
         // Validate
         Preconditions.checkNotNull(prefix, "A stack identifier must have a non-null prefix!");
         Preconditions.checkNotNull(suffix, "A stack identifier must have a non-null suffix!");
 
         // Check that the tag registry contains the given object.
-        if (!registry.getRegisteredTags().contains(new ResourceLocation(prefix, suffix))) {
+        if (registry.getTag(registry.createTagKey(new ResourceLocation(prefix, suffix))).isEmpty()) {
             AgriCore.getLogger("agricraft").error("Unable to resolve Item Tag Entry: \"{0}:{1}\".", prefix, suffix);
             return false;
         } else {
@@ -78,15 +87,13 @@ public final class TagUtil {
      * optional.
      */
     @Nonnull
-    public static Optional<ItemStack> getFirstStack(@Nonnull ITagCollection<Item> registry, @Nonnull ResourceLocation id) {
-        return Optional.ofNullable(registry.get(id))
-                .flatMap(tag -> tag.getAllElements().stream().findFirst())
-                .flatMap(obj -> createStackFromObject(obj, 1));
+    public static <T extends IForgeRegistryEntry<T>> Optional<ItemStack> getFirstStack(@Nonnull ITagManager<Item> registry, @Nonnull ResourceLocation id) {
+        return registry.getTag(registry.createTagKey(id)).stream().findFirst().flatMap(obj -> createStackFromObject(obj, 1));
     }
 
     private static Optional<ItemStack> createStackFromObject(Object object, int amount) {
-        if(object instanceof IItemProvider) {
-            return Optional.of(new ItemStack((IItemProvider) object, amount));
+        if(object instanceof ItemLike) {
+            return Optional.of(new ItemStack((ItemLike) object, amount));
         } else {
             return Optional.empty();
         }
@@ -170,14 +177,16 @@ public final class TagUtil {
 
     @Nonnull
     private static Collection<ItemStack> makeItemStackFromTag(@Nonnull String prefix, @Nonnull String suffix, int amount, String data, List<String> ignoredData) {
-        return Optional.ofNullable(TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(prefix, suffix)))
-                .map(tag -> tag.getAllElements()
-                        .stream()
-                        .map(item -> addNbtData(new ItemStack(item, amount), data))//TODO: ignored NBT values
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList())
-                ).orElse(Collections.emptyList());
+        ITagManager<Item> registry = ForgeRegistries.ITEMS.tags();
+        if(registry == null) {
+            return ImmutableList.of();
+        }
+        TagKey<Item> key = registry.createTagKey(new ResourceLocation(prefix, suffix));
+        return registry.getTag(key).stream()
+                .map(item -> addNbtData(new ItemStack(item, amount), data)) //TODO: ignored NBT values
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Nonnull
@@ -191,11 +200,11 @@ public final class TagUtil {
         }
 
         // Step 2. Get the tag instance.
-        final CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
+        final CompoundTag tag = stack.hasTag() ? stack.getTag() : new CompoundTag();
 
         // Step 3. Parse the tags.
         try {
-            final CompoundNBT added = JsonToNBT.getTagFromJson(tags);
+            final CompoundTag added = TagParser.parseTag(tags);
             tag.merge(added);
             stack.setTag(tag);
             return Optional.of(stack);
@@ -265,20 +274,18 @@ public final class TagUtil {
         }
 
         // Step 2. Return the block
-        return block.getStateContainer().getValidStates();  // TODO: filter based on data and ignoredData
+        return block.getStateDefinition().getPossibleStates();  // TODO: filter based on data and ignoredData
     }
 
     @Nonnull
     private static Collection<BlockState> fetchBlockStatesFromTag(@Nonnull String prefix, @Nonnull String suffix, @Nullable String data, List<String> ignoredData) {
         // Do the thing.
-        return Optional.ofNullable(TagCollectionManager.getManager().getBlockTags().get(new ResourceLocation(prefix, suffix)))
-                .map(tag -> tag.getAllElements()
-                        .stream()
-                        .flatMap(block -> block.getStateContainer().getValidStates()
-                                .stream())
-                        .filter(state -> true)  // TODO: filter based on data and ignoredData
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        ITagManager<Block> registry = ForgeRegistries.BLOCKS.tags();
+        TagKey<Block> key = registry.createTagKey(new ResourceLocation(prefix, suffix));
+        return registry.getTag(key).stream()
+                .flatMap(block -> block.getStateDefinition().getPossibleStates().stream())
+                .filter(state -> true)  // TODO: filter based on data and ignoredData
+                .collect(Collectors.toList());
     }
 
     /**
@@ -341,20 +348,18 @@ public final class TagUtil {
         }
 
         // Step 2. Return the Fluid States
-        return fluid.getStateContainer().getValidStates();  // TODO: filter based on data and ignoredData
+        return fluid.getStateDefinition().getPossibleStates();  // TODO: filter based on data and ignoredData
     }
 
     @Nonnull
     private static Collection<FluidState> fetchFluidStatesFromTag(@Nonnull String prefix, @Nonnull String suffix, @Nullable String data, List<String> ignoredData) {
         // Do the thing.
-        return Optional.ofNullable(TagCollectionManager.getManager().getFluidTags().get(new ResourceLocation(prefix, suffix)))
-                .map(tag -> tag.getAllElements()
-                        .stream()
-                        .flatMap(fluid -> fluid.getStateContainer().getValidStates()
-                                .stream())
-                        .filter(state -> true)  // TODO: filter based on data and ignoredData
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+        ITagManager<Fluid> registry = ForgeRegistries.FLUIDS.tags();
+        TagKey<Fluid> key = registry.createTagKey(new ResourceLocation(prefix, suffix));
+        return registry.getTag(key).stream()
+                .flatMap(fluid -> fluid.getStateDefinition().getPossibleStates().stream())
+                .filter(state -> true)  // TODO: filter based on data and ignoredData
+                .collect(Collectors.toList());
     }
 
     /**

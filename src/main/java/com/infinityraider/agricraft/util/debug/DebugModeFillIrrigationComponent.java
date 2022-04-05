@@ -2,13 +2,13 @@ package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationComponent;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class DebugModeFillIrrigationComponent extends DebugMode {
     @Override
@@ -17,11 +17,11 @@ public class DebugModeFillIrrigationComponent extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
-        if(context.getWorld().isRemote()) {
+    public void debugActionBlockClicked(ItemStack stack, UseOnContext context) {
+        if(context.getLevel().isClientSide()) {
             return;
         }
-        TileEntity tile = context.getWorld().getTileEntity(context.getPos());
+        BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
         if(tile instanceof TileEntityIrrigationComponent) {
             TileEntityIrrigationComponent component = (TileEntityIrrigationComponent) tile;
             component.pushWater(component.getCapacity(), true);
@@ -29,12 +29,12 @@ public class DebugModeFillIrrigationComponent extends DebugMode {
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+    public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
 
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+    public void debugActionEntityClicked(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
 
     }
 }
