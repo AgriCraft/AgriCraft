@@ -9,12 +9,15 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.content.core.TileEntityCropBase;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.QuadCache;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
@@ -29,16 +32,16 @@ import java.util.Random;
 import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
-public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Function<RenderMaterial, TextureAtlasSprite> {
+public class AgriPlantModelBridge implements BakedModel, IRenderUtilities, Function<Material, TextureAtlasSprite> {
     private final IModelConfiguration config;
     private final QuadTransformer transformer;
-    private final ItemOverrideList overrides;
-    private final Function<RenderMaterial, TextureAtlasSprite> spriteGetter;
+    private final ItemOverrides overrides;
+    private final Function<Material, TextureAtlasSprite> spriteGetter;
 
     private static final Map<IAgriPlant, Map<IAgriGrowthStage, QuadCache>> plantQuads = Maps.newConcurrentMap();
     private static final Map<IAgriWeed, Map<IAgriGrowthStage, QuadCache>> weedQuads = Maps.newConcurrentMap();
 
-    protected AgriPlantModelBridge(IModelConfiguration config, ItemOverrideList overrides, Function<RenderMaterial, TextureAtlasSprite> spriteGetter) {
+    protected AgriPlantModelBridge(IModelConfiguration config, ItemOverrides overrides, Function<Material, TextureAtlasSprite> spriteGetter) {
         this.config = config;
         this.transformer = new QuadTransformer(this.getModelConfig().getCombinedTransform().getRotation());
         this.overrides = overrides;
@@ -68,7 +71,7 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     }
 
     @Override
-    public TextureAtlasSprite apply(RenderMaterial renderMaterial) {
+    public TextureAtlasSprite apply(Material renderMaterial) {
         return this.spriteGetter.apply(renderMaterial);
     }
 
@@ -94,7 +97,7 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     }
 
     @Override
-    public @Nonnull IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData data) {
+    public @Nonnull IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData data) {
         // Fetch plant and weed data from the tile
         AgriApi.getCrop(world, pos).ifPresent(crop -> {
             data.setData(TileEntityCropBase.PROPERTY_PLANT, crop.getPlant());
@@ -106,7 +109,7 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
@@ -116,24 +119,24 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
     }
 
     @Override
-    public boolean isSideLit() {
+    public boolean usesBlockLight() {
         return false;
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Nonnull
     @Override
-    public TextureAtlasSprite getParticleTexture() {
+    public TextureAtlasSprite getParticleIcon() {
         return this.getMissingSprite();
     }
 
     @Nonnull
     @Override
-    public TextureAtlasSprite getParticleTexture(@Nonnull IModelData data) {
+    public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
         if(data.hasProperty(TileEntityCropBase.PROPERTY_PLANT) && data.hasProperty(TileEntityCropBase.PROPERTY_PLANT_GROWTH)) {
             IAgriPlant plant = data.getData(TileEntityCropBase.PROPERTY_PLANT);
             if(plant != null) {
@@ -147,12 +150,12 @@ public class AgriPlantModelBridge implements IBakedModel, IRenderUtilities, Func
             }
 
         }
-        return this.getParticleTexture();
+        return this.getParticleIcon();
     }
 
     @Override
     @Nonnull
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
         return this.overrides;
     }
 }

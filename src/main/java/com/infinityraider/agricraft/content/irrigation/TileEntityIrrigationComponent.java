@@ -121,7 +121,7 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
         return this.contentBuffer;
     }
 
-    public float getLevel() {
+    public float getWaterLevel() {
         return this.levelBuffer + this.getPos().getY();
     }
 

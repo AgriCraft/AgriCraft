@@ -5,12 +5,12 @@ import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.infinitylib.render.tile.ITileRenderer;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,7 +20,7 @@ import java.util.Map;
 public class TileEntitySprinklerRenderer implements ITileRenderer<TileEntitySprinkler>, IRenderUtilities {
     private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft:block/iron_block");
 
-    private final Map<IRenderTypeBuffer.Impl, ThreadLocal<ITessellator>> tessellators;
+    private final Map<MultiBufferSource.BufferSource, ThreadLocal<ITessellator>> tessellators;
     private TextureAtlasSprite sprite;
 
     public TileEntitySprinklerRenderer() {
@@ -28,21 +28,21 @@ public class TileEntitySprinklerRenderer implements ITileRenderer<TileEntitySpri
     }
 
     @Override
-    public void render(TileEntitySprinkler tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
-        if(buffer instanceof IRenderTypeBuffer.Impl) {
+    public void render(TileEntitySprinkler tile, float partialTicks, PoseStack transforms, MultiBufferSource buffer, int light, int overlay) {
+        if(buffer instanceof MultiBufferSource.BufferSource) {
             // Apply transformation
-            transforms.push();
+            transforms.pushPose();
             transforms.translate(0.5, 0, 0.5);
-            transforms.rotate(Vector3f.YP.rotationDegrees(tile.getAngle(partialTicks)));
+            transforms.mulPose(Vector3f.YP.rotationDegrees(tile.getAngle(partialTicks)));
             transforms.translate(-0.5, 0, -0.5);
 
             // Fetch tessellator and start drawing
-            ITessellator tessellator = this.getTessellator((IRenderTypeBuffer.Impl) buffer);
+            ITessellator tessellator = this.getTessellator((MultiBufferSource.BufferSource) buffer);
             tessellator.startDrawingQuads();
 
             // Configure tessellator
             tessellator.pushMatrix();
-            tessellator.applyTransformation(transforms.getLast().getMatrix());
+            tessellator.applyTransformation(transforms.last().pose());
             tessellator.setBrightness(light).setOverlay(overlay);
 
             // Draw
@@ -50,7 +50,7 @@ public class TileEntitySprinklerRenderer implements ITileRenderer<TileEntitySpri
 
             // End drawing
             tessellator.popMatrix().draw();
-            transforms.pop();
+            transforms.popPose();
         }
     }
 
@@ -67,12 +67,12 @@ public class TileEntitySprinklerRenderer implements ITileRenderer<TileEntitySpri
         return sprite;
     }
 
-    protected ITessellator getTessellator(IRenderTypeBuffer.Impl buffer) {
+    protected ITessellator getTessellator(MultiBufferSource.BufferSource buffer) {
         return this.tessellators.computeIfAbsent(buffer, aBuffer -> ThreadLocal.withInitial(
                 () -> this.getVertexBufferTessellator(aBuffer, this.getRenderType()))).get();
     }
 
     protected RenderType getRenderType() {
-        return RenderType.getSolid();
+        return RenderType.solid();
     }
 }

@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,14 +21,14 @@ public class JournalDataDrawerMissing extends JournalDataDrawerBase<IAgriJournal
     }
 
     @Override
-    public void drawLeftSheet(IAgriJournalItem.IPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
-        StringTextComponent text = new StringTextComponent("Missing Journal Data Drawer: " + page.getDataDrawerId().toString());
+    public void drawLeftSheet(IAgriJournalItem.IPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
+        TextComponent text = new TextComponent("Missing Journal Data Drawer: " + page.getDataDrawerId().toString());
         context.drawText(transforms, text, 0, 0);
     }
 
     @Override
-    public void drawRightSheet(IAgriJournalItem.IPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
-        StringTextComponent text = new StringTextComponent("Missing Journal Data Drawer: " + page.getDataDrawerId().toString());
+    public void drawRightSheet(IAgriJournalItem.IPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
+        TextComponent text = new TextComponent("Missing Journal Data Drawer: " + page.getDataDrawerId().toString());
         context.drawText(transforms, text, 0, 0);
     }
 }

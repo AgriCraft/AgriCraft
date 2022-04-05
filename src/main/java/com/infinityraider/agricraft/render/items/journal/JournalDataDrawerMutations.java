@@ -3,10 +3,10 @@ package com.infinityraider.agricraft.render.items.journal;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.journal.MutationsPage;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,7 +22,7 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
     }
 
     @Override
-    public void drawLeftSheet(MutationsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawLeftSheet(MutationsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         int posX = 10;
         int posY = 6;
         int dy = 20;
@@ -33,7 +33,7 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
     }
 
     @Override
-    public void drawRightSheet(MutationsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawRightSheet(MutationsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         int posX = 10;
         int posY = 6;
         int dy = 20;
@@ -45,7 +45,7 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
     }
 
     @Override
-    public void drawTooltipLeft(MutationsPage page, IPageRenderContext context, MatrixStack transforms, int x, int y) {
+    public void drawTooltipLeft(MutationsPage page, IPageRenderContext context, PoseStack transforms, int x, int y) {
         int posX = 10;
         int posY = 6;
         int dy = 20;
@@ -56,7 +56,7 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
     }
 
     @Override
-    public void drawTooltipRight(MutationsPage page, IPageRenderContext context, MatrixStack transforms, int x, int y) {
+    public void drawTooltipRight(MutationsPage page, IPageRenderContext context, PoseStack transforms, int x, int y) {
         int posX = 10;
         int posY = 6;
         int dy = 20;
@@ -66,7 +66,7 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
         }
     }
 
-    private List<ITextComponent> getTextLines(int x, int y, int posX, int posY, List<IAgriPlant> plants) {
+    private List<Component> getTextLines(int x, int y, int posX, int posY, List<IAgriPlant> plants) {
         if (posX + 1 <= x && x <= posX + 17 && posY + 1 <= y && y <= posY + 17) {
             return Collections.singletonList(plants.get(0).getTooltip());
         } else if (posX + 35 <= x && x <= posX + 51 && posY + 35 <= y && y <= posY + 51) {

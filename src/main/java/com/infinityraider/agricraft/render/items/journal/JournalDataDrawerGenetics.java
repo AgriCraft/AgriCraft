@@ -4,33 +4,33 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.impl.v1.journal.GeneticsPage;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class JournalDataDrawerGenetics extends JournalDataDrawerBase<GeneticsPage> {
-    private final ITextComponent CROP_BREEDING = new TranslationTextComponent("agricraft.journal.crop_breeding");
-    private final ITextComponent PARAGRAPH_L_1 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_1");
-    private final ITextComponent PARAGRAPH_L_2 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_2");
-    private final ITextComponent PARAGRAPH_L_3 = new TranslationTextComponent("agricraft.journal.crop_breeding.paragraph_3");
+    private final Component CROP_BREEDING = new TranslatableComponent("agricraft.journal.crop_breeding");
+    private final Component PARAGRAPH_L_1 = new TranslatableComponent("agricraft.journal.crop_breeding.paragraph_1");
+    private final Component PARAGRAPH_L_2 = new TranslatableComponent("agricraft.journal.crop_breeding.paragraph_2");
+    private final Component PARAGRAPH_L_3 = new TranslatableComponent("agricraft.journal.crop_breeding.paragraph_3");
 
     private final ResourceLocation DNA_SCHEMATIC = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(),
             "textures/journal/dna_schematic.png");
 
-    private final ITextComponent STATS = new TranslationTextComponent("agricraft.journal.stats");
-    private final ITextComponent PARAGRAPH_R_1 = new TranslationTextComponent("agricraft.journal.stats.paragraph_1");
-    private final ITextComponent PARAGRAPH_GROWTH = new TranslationTextComponent("agricraft.journal.stats.growth");
-    private final ITextComponent PARAGRAPH_GAIN = new TranslationTextComponent("agricraft.journal.stats.gain");
-    private final ITextComponent PARAGRAPH_STRENGTH = new TranslationTextComponent("agricraft.journal.stats.strength");
-    private final ITextComponent PARAGRAPH_RESISTANCE = new TranslationTextComponent("agricraft.journal.stats.resistance");
-    private final ITextComponent PARAGRAPH_FERTILITY = new TranslationTextComponent("agricraft.journal.stats.fertility");
-    private final ITextComponent PARAGRAPH_MUTATIVITY = new TranslationTextComponent("agricraft.journal.stats.mutativity");
+    private final Component STATS = new TranslatableComponent("agricraft.journal.stats");
+    private final Component PARAGRAPH_R_1 = new TranslatableComponent("agricraft.journal.stats.paragraph_1");
+    private final Component PARAGRAPH_GROWTH = new TranslatableComponent("agricraft.journal.stats.growth");
+    private final Component PARAGRAPH_GAIN = new TranslatableComponent("agricraft.journal.stats.gain");
+    private final Component PARAGRAPH_STRENGTH = new TranslatableComponent("agricraft.journal.stats.strength");
+    private final Component PARAGRAPH_RESISTANCE = new TranslatableComponent("agricraft.journal.stats.resistance");
+    private final Component PARAGRAPH_FERTILITY = new TranslatableComponent("agricraft.journal.stats.fertility");
+    private final Component PARAGRAPH_MUTATIVITY = new TranslatableComponent("agricraft.journal.stats.mutativity");
 
     @Override
     public ResourceLocation getId() {
@@ -38,7 +38,7 @@ public class JournalDataDrawerGenetics extends JournalDataDrawerBase<GeneticsPag
     }
 
     @Override
-    public void drawLeftSheet(GeneticsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawLeftSheet(GeneticsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         float dy = 10;
         float dx = 6;
         float spacing = 4;
@@ -59,7 +59,7 @@ public class JournalDataDrawerGenetics extends JournalDataDrawerBase<GeneticsPag
     }
 
     @Override
-    public void drawRightSheet(GeneticsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawRightSheet(GeneticsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         float dy = 10;
         float dx = 6;
         float spacing = 4;
@@ -71,42 +71,42 @@ public class JournalDataDrawerGenetics extends JournalDataDrawerBase<GeneticsPag
         dy += spacing;
         // Growth
         if (!AgriCraft.instance.getConfig().isGrowthStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().growthStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().growthStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             dy += context.drawText(transforms, PARAGRAPH_GROWTH, dx, dy, 0.50F);
             dy += spacing;
         }
         // Gain
         if (!AgriCraft.instance.getConfig().isGainStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().gainStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().gainStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             dy += context.drawText(transforms, PARAGRAPH_GAIN, dx, dy, 0.50F);
             dy += spacing;
         }
         // Strength
         if (!AgriCraft.instance.getConfig().isStrengthStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().strengthStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().strengthStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             dy += context.drawText(transforms, PARAGRAPH_STRENGTH, dx, dy, 0.50F);
             dy += spacing;
         }
         // Resistance
         if (!AgriCraft.instance.getConfig().isResistanceStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().resistanceStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().resistanceStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             dy += context.drawText(transforms, PARAGRAPH_RESISTANCE, dx, dy, 0.50F);
             dy += spacing;
         }
         // Fertility
         if (!AgriCraft.instance.getConfig().isFertilityStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().fertilityStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().fertilityStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             dy += context.drawText(transforms, PARAGRAPH_FERTILITY, dx, dy, 0.50F);
             dy += spacing;
         }
         // Mutativity
         if (!AgriCraft.instance.getConfig().isMutativityStatHidden()) {
-            dy += context.drawText(transforms, AgriStatRegistry.getInstance().mutativityStat().getDescription().mergeStyle(TextFormatting.UNDERLINE),
+            dy += context.drawText(transforms, AgriStatRegistry.getInstance().mutativityStat().getDescription().withStyle(ChatFormatting.UNDERLINE),
                     dx, dy, 0.65F);
             context.drawText(transforms, PARAGRAPH_MUTATIVITY, dx, dy, 0.50F);
         }

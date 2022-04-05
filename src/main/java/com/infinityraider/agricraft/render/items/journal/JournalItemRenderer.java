@@ -6,19 +6,18 @@ import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
@@ -49,23 +48,23 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         return INSTANCE;
     }
 
-    private final Map<IRenderTypeBuffer.Impl, ThreadLocal<ITessellator>> tessellators;
+    private final Map<MultiBufferSource.BufferSource, ThreadLocal<ITessellator>> tessellators;
 
     private JournalItemRenderer() {
         this.tessellators = Maps.newConcurrentMap();
     }
 
     @Override
-    public void render(ItemStack stack, ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
-                       IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(ItemStack stack, ItemTransforms.TransformType perspective, PoseStack transforms,
+                       MultiBufferSource buffer, int light, int overlay) {
         if(stack.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journal = (IAgriJournalItem) stack.getItem();
             if (this.renderFull3D(perspective)) {
-                if (buffer instanceof IRenderTypeBuffer.Impl) {
+                if (buffer instanceof MultiBufferSource.BufferSource) {
                     if (JournalViewPointHandler.getInstance().getJournal() == stack) {
-                        this.renderJournalOpen(perspective, transforms, stack, journal, (IRenderTypeBuffer.Impl) buffer, light, overlay);
+                        this.renderJournalOpen(perspective, transforms, stack, journal, (MultiBufferSource.BufferSource) buffer, light, overlay);
                     } else {
-                        this.renderJournalClosed(perspective, transforms, (IRenderTypeBuffer.Impl) buffer, light, overlay);
+                        this.renderJournalClosed(perspective, transforms, (MultiBufferSource.BufferSource) buffer, light, overlay);
                     }
                 } else {
                     this.renderFlat(stack, perspective, transforms, buffer, light, overlay);
@@ -76,15 +75,15 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         }
     }
 
-    protected void renderFlat(ItemStack stack, ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
-                              IRenderTypeBuffer buffer, int light, int overlay) {
+    protected void renderFlat(ItemStack stack, ItemTransforms.TransformType perspective, PoseStack transforms,
+                              MultiBufferSource buffer, int light, int overlay) {
         this.renderItem(stack, perspective, light, overlay, transforms, buffer);
     }
 
-    protected void renderJournalClosed(ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
-                                       IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+    protected void renderJournalClosed(ItemTransforms.TransformType perspective, PoseStack transforms,
+                                       MultiBufferSource.BufferSource buffer, int light, int overlay) {
         // Apply transformations to the stack
-        transforms.push();
+        transforms.pushPose();
         this.applyTransformations(perspective, transforms);
 
         // Fetch tessellator and start drawing
@@ -93,7 +92,7 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
 
         // Configure tessellator
         tessellator.pushMatrix();
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
         tessellator.setBrightness(light).setOverlay(overlay);
 
         // Draw Book
@@ -109,21 +108,21 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         // Finalize drawing
         tessellator.popMatrix();
         tessellator.draw();
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void renderJournalOpen(ItemCameraTransforms.TransformType perspective, MatrixStack transforms,
+    protected void renderJournalOpen(ItemTransforms.TransformType perspective, PoseStack transforms,
                                      ItemStack stack, IAgriJournalItem journal,
-                                     IRenderTypeBuffer.Impl buffer, int light, int overlay) {
+                                     MultiBufferSource.BufferSource buffer, int light, int overlay) {
         // Fetch animation progress
         float openProgress = JournalViewPointHandler.getInstance().getOpeningProgress(this.getPartialTick());
         float flipProgress = JournalViewPointHandler.getInstance().getFlippingProgress(this.getPartialTick());
 
         // Apply transformations to the stack
-        transforms.push();
+        transforms.pushPose();
         this.applyTransformations(perspective, transforms);
-        if(!perspective.isFirstPerson()) {
-            transforms.rotate(Vector3f.ZP.rotationDegrees(90*openProgress));
+        if(!perspective.firstPerson()) {
+            transforms.mulPose(Vector3f.ZP.rotationDegrees(90*openProgress));
         }
 
         // Fetch tessellator
@@ -142,40 +141,40 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         this.drawOpenFlipped(tessellator, transforms, stack, journal, flipProgress, light, overlay);
 
         // Pop transformations from the stack
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void applyTransformations(ItemCameraTransforms.TransformType perspective, MatrixStack transforms) {
+    protected void applyTransformations(ItemTransforms.TransformType perspective, PoseStack transforms) {
         transforms.translate(0.5F, 0.425F, 5.0F/16F);
-        if(!perspective.isFirstPerson()) {
+        if(!perspective.firstPerson()) {
             transforms.translate(-WIDTH/32, T_TOTAL/32, 0.25F);
-            transforms.rotate(Vector3f.XN.rotationDegrees(-90));
+            transforms.mulPose(Vector3f.XN.rotationDegrees(-90));
         }
     }
 
-    protected void drawOpenBack(ITessellator tessellator, MatrixStack transforms, float openProgress, int light, int overlay) {
+    protected void drawOpenBack(ITessellator tessellator, PoseStack transforms, float openProgress, int light, int overlay) {
         tessellator.startDrawingQuads().setBrightness(light).setOverlay(overlay).pushMatrix();
-        transforms.push();
+        transforms.pushPose();
 
         transforms.translate(-openProgress/32.0F, 0, 0);
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
 
         tessellator.setColorRGB(COLOR_COVER)
                 .drawScaledPrism(0, - T_TOTAL/2, -HEIGHT, 0.5F, T_TOTAL/2, 0);
 
-        transforms.pop();
+        transforms.popPose();
         tessellator.popMatrix().draw();
     }
 
-    protected void drawOpenRight(ITessellator tessellator, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal,
+    protected void drawOpenRight(ITessellator tessellator, PoseStack transforms, ItemStack stack, IAgriJournalItem journal,
                                  float openProgress, float flipProgress, int light, int overlay) {
         tessellator.startDrawingQuads().setBrightness(light).setOverlay(overlay).pushMatrix();
-        transforms.push();
+        transforms.pushPose();
 
         transforms.translate(1.0F/32.0F, 0, 0);
-        transforms.rotate(Vector3f.ZP.rotationDegrees(-openProgress*OPEN_ANGLE));
+        transforms.mulPose(Vector3f.ZP.rotationDegrees(-openProgress*OPEN_ANGLE));
         transforms.translate(-1.0F/32.0F, 0, 0);
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
 
         tessellator.setColorRGB(COLOR_COVER)
                 .drawScaledPrism(0, -T_TOTAL/2, -HEIGHT, WIDTH, T_COVER - T_TOTAL/2, 0);
@@ -185,30 +184,30 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.popMatrix().draw();
 
         if(openProgress > 0) {
-            transforms.push();
+            transforms.pushPose();
             transforms.translate(1.0F / 32.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 + 0.00001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
-            transforms.rotate(ROTATION_RIGHT);
+            transforms.mulPose(ROTATION_RIGHT);
 
             if (flipProgress != 0) {
                 JournalViewPointHandler.getInstance().renderFlippedPageRight(RENDERER_RIGHT, transforms, stack, journal);
             } else {
                 JournalViewPointHandler.getInstance().renderViewedPageRight(RENDERER_RIGHT, transforms, stack, journal);
             }
-            transforms.pop();
+            transforms.popPose();
         }
 
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void drawOpenLeft(ITessellator tessellator, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal,
+    protected void drawOpenLeft(ITessellator tessellator, PoseStack transforms, ItemStack stack, IAgriJournalItem journal,
                                 float openProgress, int light, int overlay) {
         tessellator.startDrawingQuads().setBrightness(light).setOverlay(overlay).pushMatrix();
-        transforms.push();
+        transforms.pushPose();
 
         transforms.translate(1.0F/32.0F, 0, 0);
-        transforms.rotate(Vector3f.ZP.rotationDegrees(openProgress*OPEN_ANGLE));
+        transforms.mulPose(Vector3f.ZP.rotationDegrees(openProgress*OPEN_ANGLE));
         transforms.translate(-1.0F/32.0F, 0, 0);
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
 
         tessellator.setColorRGB(COLOR_COVER)
                 .drawScaledPrism(0, T_COVER + T_PAPER - T_TOTAL/2, -HEIGHT, WIDTH, T_TOTAL/2, 0);
@@ -218,63 +217,63 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         tessellator.popMatrix().draw();
 
         if(openProgress > 0) {
-            transforms.push();
+            transforms.pushPose();
             transforms.translate((WIDTH - 0.5F) / 16.0F, (T_COVER + T_PAPER / 2 - T_TOTAL / 2 - 0.00001F) / 16.0F, (-HEIGHT + 0.5F) / 16.0F);
-            transforms.rotate(ROTATION_LEFT);
+            transforms.mulPose(ROTATION_LEFT);
 
             JournalViewPointHandler.getInstance().renderViewedPageLeft(RENDERER_LEFT, transforms, stack, journal);
 
-            transforms.pop();
+            transforms.popPose();
         }
 
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void drawOpenFlipped(ITessellator tessellator, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal,
+    protected void drawOpenFlipped(ITessellator tessellator, PoseStack transforms, ItemStack stack, IAgriJournalItem journal,
                                    float flipProgress, int light, int overlay) {
         if(flipProgress != 0) {
             tessellator.startDrawingQuads().setBrightness(light).setOverlay(overlay).pushMatrix();
-            transforms.push();
+            transforms.pushPose();
 
             transforms.translate(1.0F/32.0F, 0, 0);
             if(flipProgress < 0) {
-                transforms.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(-flipProgress, -OPEN_ANGLE, OPEN_ANGLE)));
+                transforms.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(-flipProgress, -OPEN_ANGLE, OPEN_ANGLE)));
             } else {
-                transforms.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(flipProgress, OPEN_ANGLE, -OPEN_ANGLE)));
+                transforms.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(flipProgress, OPEN_ANGLE, -OPEN_ANGLE)));
             }
             transforms.translate(-1.0F/32.0F, 0, 0);
-            tessellator.applyTransformation(transforms.getLast().getMatrix());
+            tessellator.applyTransformation(transforms.last().pose());
 
             tessellator.setColorRGB(COLOR_PAGE)
                     .drawScaledFaceDouble(0.5F, -HEIGHT + 0.5F, WIDTH - 0.5F, -0.5F, Direction.UP, 0.0F);
 
             tessellator.popMatrix().draw();
 
-            transforms.push();
+            transforms.pushPose();
             transforms.translate(1.0F/32.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 + 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
-            transforms.rotate(ROTATION_RIGHT);
+            transforms.mulPose(ROTATION_RIGHT);
             JournalViewPointHandler.getInstance().renderViewedPageRight(RENDERER_LEFT, transforms, stack, journal);
-            transforms.pop();
+            transforms.popPose();
 
-            transforms.push();
+            transforms.pushPose();
             transforms.translate((WIDTH - 0.5F)/16.0F, (T_COVER + T_PAPER/2 - T_TOTAL/2 - 0.001F)/16.0F, (-HEIGHT + 0.5F)/16.0F);
-            transforms.rotate(ROTATION_LEFT);
+            transforms.mulPose(ROTATION_LEFT);
             JournalViewPointHandler.getInstance().renderFlippedPageLeft(RENDERER_LEFT, transforms, stack, journal);
-            transforms.pop();
+            transforms.popPose();
 
-            transforms.pop();
+            transforms.popPose();
         }
 
     }
 
-    protected boolean renderFull3D(ItemCameraTransforms.TransformType perspective) {
-        return perspective == ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND
-                || perspective == ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND
-                || perspective == ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND
-                || perspective == ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+    protected boolean renderFull3D(ItemTransforms.TransformType perspective) {
+        return perspective == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND
+                || perspective == ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND
+                || perspective == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND
+                || perspective == ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
     }
 
-    protected ITessellator getTessellator(IRenderTypeBuffer.Impl buffer) {
+    protected ITessellator getTessellator(MultiBufferSource.BufferSource buffer) {
         return this.tessellators.computeIfAbsent(buffer, aBuffer -> ThreadLocal.withInitial(
                 () -> this.getVertexBufferTessellator(aBuffer, this.getRenderType()))).get();
     }
@@ -285,16 +284,16 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
 
     private static class PosColorRenderType extends RenderType {
         // Need to have a constructor...
-        public PosColorRenderType(String name, VertexFormat format, int i1, int i2, boolean b1, boolean b2, Runnable runnablePre, Runnable runnablePost) {
-            super(name, format, i1, i2, b1, b2, runnablePre, runnablePost);
+        public PosColorRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean crumbling, boolean sorted, Runnable runnablePre, Runnable runnablePost) {
+            super(name, format, mode, bufferSize, crumbling, sorted, runnablePre, runnablePost);
         }
 
-        private static final RenderType INSTANCE = makeType("colored_quads",
-                DefaultVertexFormats.POSITION_COLOR_LIGHTMAP, GL11.GL_QUADS, 256,
-                RenderType.State.getBuilder()
-                        .shadeModel(SHADE_ENABLED)
-                        .lightmap(LIGHTMAP_ENABLED)
-                        .build(false));
+        private static final RenderType INSTANCE = create("colored_quads",
+                DefaultVertexFormat.POSITION_COLOR_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, false,
+                RenderType.CompositeState.builder()
+                        .setShaderState(BLOCK_SHADER)
+                        .setLightmapState(LIGHTMAP)
+                        .createCompositeState(false));
     }
 
     static {
@@ -304,6 +303,6 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
         // Initialize rotations
         ROTATION_RIGHT = Vector3f.XP.rotationDegrees(90);
         ROTATION_LEFT = Vector3f.XN.rotationDegrees(90);
-        ROTATION_LEFT.multiply(Vector3f.ZP.rotationDegrees(180));
+        ROTATION_LEFT.mul(Vector3f.ZP.rotationDegrees(180));
     }
 }

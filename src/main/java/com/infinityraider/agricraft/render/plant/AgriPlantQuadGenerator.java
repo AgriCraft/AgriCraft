@@ -11,10 +11,13 @@ import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -54,11 +57,11 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
 
     @SuppressWarnings("deprecation")
     public List<BakedQuad> fetchQuads(@Nonnull ResourceLocation location) {
-        ModelLoader loader = ModelLoader.instance();
+        ForgeModelBakery loader = ForgeModelBakery.instance();
         if(loader == null) {
             return ImmutableList.of();
         }
-        BakedModel model = loader.getBakedModel(location, ModelRotation.X0_Y0, this::getSprite);
+        BakedModel model = loader.bake(location, BlockModelRotation.X0_Y0, this::getSprite);
         return model == null ? ImmutableList.of() : model.getQuads(null, null, this.getRandom());
     }
 
@@ -188,7 +191,7 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
         tessellator.startDrawingQuads();
         tessellator.setFace((Direction) null);
 
-        float d = MathHelper.sqrt(128);
+        float d = Mth.sqrt(128);
 
         tessellator.pushMatrix();
         tessellator.translate(0, 0, 0.5F);

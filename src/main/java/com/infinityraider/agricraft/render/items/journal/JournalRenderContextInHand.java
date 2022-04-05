@@ -2,20 +2,15 @@ package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.mutable.MutableFloat;
@@ -49,70 +44,69 @@ public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRende
     }
 
     @Override
-    public void draw(MatrixStack transforms, ResourceLocation texture,
+    public void draw(PoseStack transforms, ResourceLocation texture,
                      float x, float y, float w, float h, float u1, float v1, float u2, float v2) {
         this.bindTexture(texture);
         this.draw(transforms, x, y, w, h, u1, v1, u2, v2, this.colorModifier, this.colorModifier, this.colorModifier, 1.0F);
     }
 
     @Override
-    public void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a) {
+    public void draw(PoseStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a) {
         this.bindTextureAtlas();
-        this.draw(transforms, x, y, w, h, texture.getMinU(), texture.getMinV(), texture.getMaxU(), texture.getMaxV(),
+        this.draw(transforms, x, y, w, h, texture.getU0(), texture.getV0(), texture.getU1(), texture.getV1(),
                 this.colorModifier*r, this.colorModifier*g, this.colorModifier*b, a);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public void draw(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
-        BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        Matrix4f matrix = transforms.getLast().getMatrix();
+    public void draw(PoseStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        Matrix4f matrix = transforms.last().pose();
         float x1 = (this.scale_width*x)/this.getPageWidth();
         float y1 = (this.scale_height*y)/this.getPageHeight();
         float x2 = (this.scale_width*(x + w))/this.getPageWidth();
         float y2 = (this.scale_height*(y + h))/this.getPageHeight();
-        bufferbuilder.pos(matrix, x1, y2, 0).tex(u1, v2).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(matrix, x2, y2, 0).tex(u2, v2).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(matrix, x2, y1, 0).tex(u2, v1).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(matrix, x1, y1, 0).tex(u1, v1).color(r, g, b, a).endVertex();
-        bufferbuilder.finishDrawing();
-        RenderSystem.enableAlphaTest();
-        WorldVertexBufferUploader.draw(bufferbuilder);
+        bufferbuilder.vertex(matrix, x1, y2, 0).uv(u1, v2).color(r, g, b, a).endVertex();
+        bufferbuilder.vertex(matrix, x2, y2, 0).uv(u2, v2).color(r, g, b, a).endVertex();
+        bufferbuilder.vertex(matrix, x2, y1, 0).uv(u2, v1).color(r, g, b, a).endVertex();
+        bufferbuilder.vertex(matrix, x1, y1, 0).uv(u1, v1).color(r, g, b, a).endVertex();
+        bufferbuilder.end();
+        BufferUploader.end(bufferbuilder);
     }
 
     @Override
-    public float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale) {
-        transforms.push();
+    public float drawText(PoseStack transforms, Component text, float x, float y, float scale) {
+        transforms.pushPose();
         transforms.translate((this.scale_width*x)/this.getPageWidth(), (this.scale_height*y)/this.getPageHeight(), 0F);
         float f = scale*this.scale_width/this.getPageWidth();
         transforms.scale(f, f, 1);
         // Split string
         int l = (int) ((this.getPageWidth() - x - 2)/scale);
         MutableFloat dy = new MutableFloat();
-        this.getFontRenderer().trimStringToWidth(text, l).forEach(t -> {
-            this.getFontRenderer().func_238422_b_(transforms, t, 0.0F, 0.0F, 0);
-            dy.add(this.getFontRenderer().FONT_HEIGHT);
-            transforms.translate(0, this.getFontRenderer().FONT_HEIGHT, 0);
+        this.getFontRenderer().split(text, l).forEach(t -> {
+            this.getFontRenderer().draw(transforms, t, 0.0F, 0.0F, 0);
+            dy.add(this.getFontRenderer().lineHeight);
+            transforms.translate(0, this.getFontRenderer().lineHeight, 0);
         });
-        transforms.pop();
+        transforms.popPose();
         return dy.getValue()*scale;
     }
 
     @Override
-    public void drawItem(MatrixStack transforms, ItemStack item, float x, float y) {
-        transforms.push();
+    public void drawItem(PoseStack transforms, ItemStack item, float x, float y) {
+        transforms.pushPose();
         transforms.translate((this.scale_width*(x + 8))/this.getPageWidth(), (this.scale_height*(y + 8))/this.getPageHeight(), 0);
-        transforms.rotate(ROTATION_180);
-        transforms.push();
+        transforms.mulPose(ROTATION_180);
+        transforms.pushPose();
         float f = this.scale_width/8.0F;
         transforms.scale(f, f, 1);
-        transforms.push();
-        transforms.getLast().getMatrix().mul(PROJECTION);
-        this.renderItem(item, ItemCameraTransforms.TransformType.GUI, 15728880, transforms, this.getRenderTypeBuffer());
-        transforms.pop();
-        transforms.pop();
-        transforms.pop();
+        transforms.pushPose();
+        transforms.last().pose().multiply(PROJECTION);
+        this.renderItem(item, ItemTransforms.TransformType.GUI, 15728880, transforms, this.getRenderTypeBuffer());
+        transforms.popPose();
+        transforms.popPose();
+        transforms.popPose();
     }
 
     @Override

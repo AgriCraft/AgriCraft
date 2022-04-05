@@ -8,14 +8,14 @@ import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tile.ITileRenderer;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,14 +26,14 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
     private static final Quaternion TEXT_ROTATION = new Quaternion(Vector3f.XP, 90, true);
 
     static {
-        TEXT_ROTATION.multiply(new Quaternion(Vector3f.ZP, 180, true));
-        TEXT_ROTATION.multiply(new Quaternion(Vector3f.XP, 22.5F, true));
+        TEXT_ROTATION.mul(new Quaternion(Vector3f.ZP, 180, true));
+        TEXT_ROTATION.mul(new Quaternion(Vector3f.XP, 22.5F, true));
     }
 
     public TileEntitySeedAnalyzerSeedRenderer() {}
 
     @Override
-    public void render(TileEntitySeedAnalyzer tile, float partialTick, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
+    public void render(TileEntitySeedAnalyzer tile, float partialTick, PoseStack transforms, MultiBufferSource buffer, int light, int overlay) {
         // Render the seed
         if(this.renderSeed(tile, partialTick, transforms, buffer, light, overlay)) {
             // Render the genome if a seed is rendered and if the tile is observed
@@ -43,7 +43,7 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         }
     }
 
-    protected boolean renderSeed(TileEntitySeedAnalyzer tile, float partialTick, MatrixStack transforms, IRenderTypeBuffer buffer, int light, int overlay) {
+    protected boolean renderSeed(TileEntitySeedAnalyzer tile, float partialTick, PoseStack transforms, MultiBufferSource buffer, int light, int overlay) {
         // Fetch the seed
         ItemStack seed = tile.getSeed();
         // If there is no seed, not much more to do here
@@ -52,22 +52,22 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         }
 
         // push a new matrix to the stack
-        transforms.push();
+        transforms.pushPose();
 
         // Apply animation
         SeedAnalyzerViewPointHandler.getInstance().applySeedAnimation(tile, partialTick, transforms);
 
         // draw the seed
-        this.renderItem(seed, ItemCameraTransforms.TransformType.GROUND, light, overlay, transforms, buffer);
+        this.renderItem(seed, ItemTransforms.TransformType.GROUND, light, overlay, transforms, buffer);
 
         // pop the matrix off the stack
-        transforms.pop();
+        transforms.popPose();
 
         // return true
         return true;
     }
 
-    protected void renderGenome(TileEntitySeedAnalyzer tile, float partialTick, MatrixStack transforms, IRenderTypeBuffer buffer) {
+    protected void renderGenome(TileEntitySeedAnalyzer tile, float partialTick, PoseStack transforms, MultiBufferSource buffer) {
         // fetch genes
         List<IAgriGenePair<?>> genes = tile.getGenesToRender();
         if(genes == null) {
@@ -76,7 +76,7 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         }
 
         // push a new matrix to the stack
-        transforms.push();
+        transforms.pushPose();
 
         // fetch helpers
         SeedAnalyzerViewPointHandler viewHandler = SeedAnalyzerViewPointHandler.getInstance();
@@ -95,27 +95,27 @@ public class TileEntitySeedAnalyzerSeedRenderer implements ITileRenderer<TileEnt
         float r = h / 10;
 
         // transform to the desired position
-        float dx = Constants.HALF + Constants.UNIT*dir.getXOffset();
+        float dx = Constants.HALF + Constants.UNIT*dir.getStepX();
         float dy = 5 * Constants.UNIT;
-        float dz = Constants.HALF + Constants.UNIT*dir.getZOffset();
+        float dz = Constants.HALF + Constants.UNIT*dir.getStepZ();
         transforms.translate(dx, dy ,dz);
-        transforms.rotate(new Quaternion(Vector3f.YP, tile.getHorizontalAngle(), true));
+        transforms.mulPose(new Quaternion(Vector3f.YP, tile.getHorizontalAngle(), true));
 
         // render the helix
         renderer.renderDoubleHelix(genes, transforms, buffer, index, partial, r, h,1.0F, false);
 
         // render the text
         if(index >= 0 && index < genes.size()) {
-            transforms.push();
+            transforms.pushPose();
             transforms.translate(0, 0, -3*Constants.UNIT);
-            transforms.rotate(TEXT_ROTATION);
+            transforms.mulPose(TEXT_ROTATION);
             float scale = 2.0F/Math.max(this.getScaledWindowWidth(), this.getScaledWindowHeight());
             transforms.scale(scale, scale, 1);
             renderer.renderTextOverlay(transforms, genes.get(index));
-            transforms.pop();
+            transforms.popPose();
         }
 
         // pop the matrix off the stack
-        transforms.pop();
+        transforms.popPose();
     }
 }

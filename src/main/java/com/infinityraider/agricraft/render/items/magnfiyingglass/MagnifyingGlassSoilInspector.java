@@ -7,22 +7,17 @@ import com.infinityraider.agricraft.impl.v1.requirement.NoSoil;
 import com.infinityraider.agricraft.render.items.journal.JournalDataDrawerBase;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.gui.Font;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -44,42 +39,42 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
     protected MagnifyingGlassSoilInspector() {}
 
     @Override
-    public boolean canInspect(World world, BlockPos pos, PlayerEntity player) {
+    public boolean canInspect(Level world, BlockPos pos, Player player) {
         return AgriApi.getSoil(world, pos).map(IAgriSoil::isSoil).orElse(false);
     }
 
     @Override
-    public boolean canInspect(World world, Entity entity, PlayerEntity player) {
+    public boolean canInspect(Level world, Entity entity, Player player) {
         return false;
     }
 
     @Override
-    public void onInspectionStart(World world, BlockPos pos, PlayerEntity player) {
+    public void onInspectionStart(Level world, BlockPos pos, Player player) {
         this.cachedSoil = AgriApi.getSoil(world, pos).orElse(NoSoil.getInstance());
     }
 
     @Override
-    public void onInspectionStart(World world, Entity entity, PlayerEntity player) {
+    public void onInspectionStart(Level world, Entity entity, Player player) {
         // Do nothing
     }
 
     @Override
-    public boolean onInspectionTick(World world, BlockPos pos, PlayerEntity player) {
+    public boolean onInspectionTick(Level world, BlockPos pos, Player player) {
         return this.cachedSoil != null && this.cachedSoil.isSoil();
     }
 
     @Override
-    public boolean onInspectionTick(World world, Entity entity, PlayerEntity player) {
+    public boolean onInspectionTick(Level world, Entity entity, Player player) {
         return false;
     }
 
     @Override
-    public void onInspectionEnd(World world, BlockPos pos, PlayerEntity player) {
+    public void onInspectionEnd(Level world, BlockPos pos, Player player) {
         this.cachedSoil = null;
     }
 
     @Override
-    public void onInspectionEnd(World world, @Nullable Entity entity, PlayerEntity player) {
+    public void onInspectionEnd(Level world, @Nullable Entity entity, Player player) {
         // Do nothing
     }
 
@@ -89,7 +84,7 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
     }
 
     @Override
-    public void doInspectionRender(MatrixStack transforms, float partialTick, @Nullable Entity entity) {
+    public void doInspectionRender(PoseStack transforms, float partialTick, @Nullable Entity entity) {
         // Check if soil is still valid
         IAgriSoil soil = this.cachedSoil;
         if(soil == null || !soil.isSoil()) {
@@ -97,8 +92,8 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
         }
 
         // Push matrix for render, flip y, and apply y offset
-        transforms.push();
-        transforms.rotate(FLIP_Y);
+        transforms.pushPose();
+        transforms.mulPose(FLIP_Y);
         transforms.translate(0, DELTA_Y, 0);
 
         // Draw the soil property icons
@@ -108,12 +103,12 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
         this.drawSoilPropertyText(transforms, soil);
 
         // Pop the matrix
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void drawSoilPropertyIcons(MatrixStack transforms, IAgriSoil soil) {
+    protected void drawSoilPropertyIcons(PoseStack transforms, IAgriSoil soil) {
         // Push the matrix
-        transforms.push();
+        transforms.pushPose();
 
         // Humidity
         transforms.translate(0, -3*DELTA_Y, 0);
@@ -131,12 +126,12 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
                 JournalDataDrawerBase.Textures.NUTRIENTS_FILLED, JournalDataDrawerBase.Textures.NUTRIENTS_EMPTY, JournalDataDrawerBase.Textures.NUTRIENTS_OFFSETS);
 
         // Pop the matrix
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void drawSoilPropertyText(MatrixStack transforms, IAgriSoil soil) {
+    protected void drawSoilPropertyText(PoseStack transforms, IAgriSoil soil) {
         // Push the matrix
-        transforms.push();
+        transforms.pushPose();
 
         // Scale down
         float width = this.getScaledWindowWidth();
@@ -147,22 +142,22 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
         // Humidity
         float dy = DELTA_Y/scale;
         transforms.translate(0, -2.5*dy, 0);
-        this.renderText(transforms, soil.getHumidity().getDescription().func_241878_f());
+        this.renderText(transforms, soil.getHumidity().getDescription().getVisualOrderText());
 
         // Acidity
         transforms.translate(0, dy, 0);
-        this.renderText(transforms, soil.getAcidity().getDescription().func_241878_f());
+        this.renderText(transforms, soil.getAcidity().getDescription().getVisualOrderText());
 
         // Nutrients
         transforms.translate(0, dy, 0);
-        this.renderText(transforms, soil.getNutrients().getDescription().func_241878_f());
+        this.renderText(transforms, soil.getNutrients().getDescription().getVisualOrderText());
 
         // Pop the matrix
-        transforms.pop();
+        transforms.popPose();
     }
 
     protected <T extends IAgriSoil.SoilProperty> void drawSoilProperty(
-            MatrixStack transforms, T property, T[] properties, ResourceLocation filledTexture, ResourceLocation emptyTexture, int[] textureOffsets) {
+            PoseStack transforms, T property, T[] properties, ResourceLocation filledTexture, ResourceLocation emptyTexture, int[] textureOffsets) {
         for(int i = 0; i < properties.length - 1; i++) {
             int dx = textureOffsets[i];
             int w = textureOffsets[i + 1] - textureOffsets[i];
@@ -177,33 +172,32 @@ public class MagnifyingGlassSoilInspector implements IMagnifyingGlassInspector, 
     }
 
     @SuppressWarnings("deprecation")
-    protected void drawSoilPropertyTexture(MatrixStack transforms, ResourceLocation texture, float x, float w, float u1, float u2) {
+    protected void drawSoilPropertyTexture(PoseStack transforms, ResourceLocation texture, float x, float w, float u1, float u2) {
         this.bindTexture(texture);
-        BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        Matrix4f matrix = transforms.getLast().getMatrix();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        Matrix4f matrix = transforms.last().pose();
         float x1 = x* ICON_SCALE;
         float y1 = 0;
         float x2 = x1 + w* ICON_SCALE;
         float y2 = y1 + 12* ICON_SCALE;
         float v1 = 0.0F;
         float v2 = 1.0F;
-        bufferbuilder.pos(matrix, x1, y2, 0).tex(u1, v2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x2, y2, 0).tex(u2, v2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x2, y1, 0).tex(u2, v1).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        bufferbuilder.pos(matrix, x1, y1, 0).tex(u1, v1).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        bufferbuilder.finishDrawing();
-        RenderSystem.enableAlphaTest();
-        WorldVertexBufferUploader.draw(bufferbuilder);
+        bufferbuilder.vertex(matrix, x1, y2, 0).uv(u1, v2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrix, x2, y2, 0).uv(u2, v2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrix, x2, y1, 0).uv(u2, v1).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrix, x1, y1, 0).uv(u1, v1).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+        bufferbuilder.end();
+        BufferUploader.end(bufferbuilder);
     }
 
-    public void renderText(MatrixStack transforms, IReorderingProcessor text) {
+    public void renderText(PoseStack transforms, FormattedCharSequence text) {
         // Fetch font renderer
-        FontRenderer fontRenderer = this.getFontRenderer();
+        Font fontRenderer = this.getFontRenderer();
         // Calculate positions
-        float x = (-fontRenderer.func_243245_a(text) + 0.0F)/2;
+        float x = (-fontRenderer.width(text) + 0.0F)/2;
         // Render text
         int color = 0;
-        this.getFontRenderer().func_238422_b_(transforms, text, x, 0, color);
+        this.getFontRenderer().draw(transforms, text, x, 0, color);
     }
 }

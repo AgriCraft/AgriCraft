@@ -7,8 +7,14 @@ import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -18,18 +24,18 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
     public  static final ResourceLocation MODEL_HANDWHEEL = new ResourceLocation(AgriCraft.instance.getModId(), "block/channel/valve_wheel");
     public  static final ResourceLocation TEXTURE_VALVE = new ResourceLocation("minecraft", "block/iron_block");
 
-    private IBakedModel handWheelModel;
+    private BakedModel handWheelModel;
     private TextureAtlasSprite valveSprite;
 
     @Override
-    protected void renderWater(TileEntityIrrigationChannel tile, float partialTicks, MatrixStack transforms, IRenderTypeBuffer.Impl buffer, int light, int overlay) {
-        float level = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
-        float min = tile.getMinLevel() - tile.getPos().getY();
+    protected void renderWater(TileEntityIrrigationChannel tile, float partialTicks, PoseStack transforms, MultiBufferSource.BufferSource buffer, int light, int overlay) {
+        float level = tile.getRenderLevel(partialTicks) - tile.getBlockPos().getY();
+        float min = tile.getMinLevel() - tile.getBlockPos().getY();
         level = level == 0 ? min : level;
 
         ITessellator tessellator = this.getTessellator(buffer);
         this.applyWaterColor(tile, tessellator.startDrawingQuads()).setBrightness(light).setOverlay(overlay).pushMatrix();
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
 
         if(tile.getContent() > 0 && tile.isOpen()) {
             tessellator.drawScaledFace(6, 6, 10, 10, Direction.UP, this.getWaterTexture(), Constants.WHOLE * level);
@@ -53,7 +59,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getBlockPos().getY();
         float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
@@ -78,7 +84,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getBlockPos().getY();
         float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
@@ -103,7 +109,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getBlockPos().getY();
         float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
@@ -128,7 +134,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         if(component == null) {
             return;
         }
-        float y1 = tile.getRenderLevel(partialTicks) - tile.getPos().getY();
+        float y1 = tile.getRenderLevel(partialTicks) - tile.getBlockPos().getY();
         float y2 = this.getConnectionLevel(tile, component, partialTicks);
         if(dontRenderConnection(tile, component, y2)) {
             return;
@@ -162,10 +168,10 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
     }
 
     protected float getConnectionLevel(TileEntityIrrigationChannel self, TileEntityIrrigationComponent other, float partialTicks) {
-        float ownLevel = self.getRenderLevel(partialTicks) - self.getPos().getY();
-        float level = other.getRenderLevel(partialTicks) - other.getPos().getY();
-        float minLevel = self.getMinLevel() - self.getPos().getY();
-        float maxLevel = self.getMaxLevel() - self.getPos().getY();
+        float ownLevel = self.getRenderLevel(partialTicks) - self.getBlockPos().getY();
+        float level = other.getRenderLevel(partialTicks) - other.getBlockPos().getY();
+        float minLevel = self.getMinLevel() - self.getBlockPos().getY();
+        float maxLevel = self.getMaxLevel() - self.getBlockPos().getY();
         if(other instanceof TileEntityIrrigationChannel) {
             if(((TileEntityIrrigationChannel) other).isOpen()) {
                 return (ownLevel + level) / 2;
@@ -179,22 +185,22 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         }
     }
 
-    protected void renderValveHandWheel(ITessellator tessellator, TileEntityIrrigationChannel channel, MatrixStack transforms, float partialTicks) {
+    protected void renderValveHandWheel(ITessellator tessellator, TileEntityIrrigationChannel channel, PoseStack transforms, float partialTicks) {
         // fetch animation state
         float f = channel.getValveAnimationProgress(partialTicks);
-        float minY = MathHelper.lerp(f, 6, 9);
-        float maxY = MathHelper.lerp(f, 10, 13);
+        float minY = Mth.lerp(f, 6, 9);
+        float maxY = Mth.lerp(f, 10, 13);
 
         // draw valve block
         tessellator.setColorRGBA(1.0F, 1.0F, 1.0F, 1.0F);
-        tessellator.applyTransformation(transforms.getLast().getMatrix());
+        tessellator.applyTransformation(transforms.last().pose());
         tessellator.pushMatrix();
         tessellator.drawScaledPrism(6, minY, 6, 10, maxY, 10, this.getValveSprite());
 
         // draw hand wheel
         tessellator.pushMatrix();
         tessellator.translate(0.5F, 0, 0.5F);
-        tessellator.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(f, 0, 180)));
+        tessellator.rotate(Vector3f.YP.rotationDegrees(Mth.lerp(f, 0, 180)));
         tessellator.translate(-0.5F, 0, -0.5F);
         tessellator.addQuads(this.getHandWheelModel().getQuads(null, null, channel.getRandom(), EmptyModelData.INSTANCE));
         tessellator.popMatrix();
@@ -202,7 +208,7 @@ public class TileEntityIrrigationChannelRenderer extends TileEntityIrrigationCom
         tessellator.popMatrix();
     }
 
-    protected IBakedModel getHandWheelModel() {
+    protected BakedModel getHandWheelModel() {
         if(this.handWheelModel == null) {
             this.handWheelModel = this.getModelManager().getModel(MODEL_HANDWHEEL);
         }

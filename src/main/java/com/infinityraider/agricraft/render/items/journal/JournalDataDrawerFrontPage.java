@@ -3,9 +3,9 @@ package com.infinityraider.agricraft.render.items.journal;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.impl.v1.journal.FrontPage;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,12 +22,12 @@ public class JournalDataDrawerFrontPage extends JournalDataDrawerBase<FrontPage>
     }
 
     @Override
-    public void drawLeftSheet(FrontPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawLeftSheet(FrontPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
 
     }
 
     @Override
-    public void drawRightSheet(FrontPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawRightSheet(FrontPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         context.drawFullPageTexture(transforms, BACKGROUND_FRONT_RIGHT);
     }
 }

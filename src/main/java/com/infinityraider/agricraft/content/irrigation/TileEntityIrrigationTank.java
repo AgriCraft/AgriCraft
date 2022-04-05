@@ -114,14 +114,14 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     @Override
-    public float getLevel() {
+    public float getWaterLevel() {
         if(this.isMultiBlockOrigin()) {
-            return super.getLevel();
+            return super.getWaterLevel();
         } else {
             TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
             if(origin != null) {
                 // origin can be null if the origin chunk is not loaded
-                return origin.getLevel();
+                return origin.getWaterLevel();
             }
             return 0;
         }

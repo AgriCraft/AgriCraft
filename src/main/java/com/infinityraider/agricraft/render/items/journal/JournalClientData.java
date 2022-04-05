@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.network.MessageFlipJournalPage;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +42,7 @@ public class JournalClientData {
     }
 
     public ItemStack getJournalStack() {
-        return this.getPlayer().getHeldItem(this.getHand());
+        return this.getPlayer().getItemInHand(this.getHand());
     }
 
     public InteractionHand getHand() {
@@ -107,6 +108,6 @@ public class JournalClientData {
     }
 
     public float getFlippingProgress(float partialTicks) {
-        return MathHelper.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/ FLIPPING_DURATION;
+        return Mth.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/ FLIPPING_DURATION;
     }
 }

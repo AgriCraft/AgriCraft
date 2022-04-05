@@ -1,23 +1,24 @@
 package com.infinityraider.agricraft.render.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
 import com.infinityraider.agricraft.util.debug.DebugModeGreenHouse;
 import com.infinityraider.infinitylib.reference.Constants;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,31 +39,31 @@ public class BlockGreenHouseAirRenderer {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void render(RenderWorldLastEvent event) {
-        PlayerEntity player = AgriCraft.instance.getClientPlayer();
-        ItemStack stack = player.getHeldItemMainhand();
-        if(stack.getItem() != AgriCraft.instance.getModItemRegistry().debugger) {
+    public void render(RenderLevelLastEvent event) {
+        Player player = AgriCraft.instance.getClientPlayer();
+        ItemStack stack = player.getMainHandItem();
+        if(stack.getItem() != AgriItemRegistry.DEBUGGER) {
             return;
         }
-        if(AgriCraft.instance.getModItemRegistry().debugger.getDebugMode(stack) instanceof DebugModeGreenHouse) {
-            this.highlightGreenHouseAirBlocks(player.getEntityWorld(), player.getPosition(), event.getMatrixStack());
+        if(AgriItemRegistry.DEBUGGER.getDebugMode(stack) instanceof DebugModeGreenHouse) {
+            this.highlightGreenHouseAirBlocks(player.getLevel(), player.blockPosition(), event.getPoseStack());
         }
     }
 
-    protected void highlightGreenHouseAirBlocks(World world, BlockPos origin, MatrixStack transforms) {
-        IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        IVertexBuilder builder = buffer.getBuffer(this.getRenderType());
+    protected void highlightGreenHouseAirBlocks(Level world, BlockPos origin, PoseStack transforms) {
+        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+        VertexConsumer builder = buffer.getBuffer(this.getRenderType());
 
-        transforms.push();
-        Vector3d projectedView = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
+        transforms.pushPose();
+        Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         transforms.translate(-projectedView.x, -projectedView.y, -projectedView.z);
-        Matrix4f matrix4f = transforms.getLast().getMatrix();
+        Matrix4f matrix4f = transforms.last().pose();
 
-        BlockPos.Mutable pos = origin.toMutable();
+        BlockPos.MutableBlockPos pos = origin.mutable();
         for(int x = -RANGE; x <= RANGE; x++) {
             for(int y = -RANGE; y <= RANGE; y++) {
                 for(int z = -RANGE; z <= RANGE; z++) {
-                    pos.setPos(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
+                    pos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                     if(world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir) {
                         this.renderWireFrameCube(builder, matrix4f, pos);
                     }
@@ -70,11 +71,11 @@ public class BlockGreenHouseAirRenderer {
             }
         }
 
-        transforms.pop();
-        buffer.finish(this.getRenderType());
+        transforms.popPose();
+        buffer.endBatch(this.getRenderType());
     }
 
-    protected void renderWireFrameCube(IVertexBuilder builder, Matrix4f transforms, BlockPos pos) {
+    protected void renderWireFrameCube(VertexConsumer builder, Matrix4f transforms, BlockPos pos) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -95,16 +96,14 @@ public class BlockGreenHouseAirRenderer {
         this.drawLine(builder, transforms, x + P2, y + P2, z + P1, x + P2, y + P2, z + P2);
     }
 
-    protected void drawLine(IVertexBuilder builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2) {
-        builder.pos(transforms, x1, y1, z1)
-                .color(0.0F, 1.0F, 0.0F, 1.0F)
-                .endVertex();
-        builder.pos(transforms, x2, y2, z2)
+    protected void drawLine(VertexConsumer builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2) {
+        builder.vertex(transforms, x1, y1, z1)
+                .normal(x2, y2, z2)
                 .color(0.0F, 1.0F, 0.0F, 1.0F)
                 .endVertex();
     }
 
     protected RenderType getRenderType() {
-        return RenderType.getLines();
+        return RenderType.lineStrip();
     }
 }
