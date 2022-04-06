@@ -36,6 +36,7 @@ public class AgriTileRegistry {
 
     public static final InfinityTileEntityType<TileEntityIrrigationTank> IRRIGATION_TANK = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
             .addBlock(AgriApi.getAgriContent().getBlocks().getTankBlock())
+            .setTicking()
             .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
             .build();
 
@@ -44,12 +45,14 @@ public class AgriTileRegistry {
                     AgriApi.getAgriContent().getBlocks().getChannelBlock(),
                     AgriApi.getAgriContent().getBlocks().getHollowChannelBlock()
             )
+            .setTicking()
             .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
             .build();
 
     public static final InfinityTileEntityType<TileEntitySprinkler> SPRINKLER = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
             .addBlock(AgriApi.getAgriContent().getBlocks().getSprinklerBlock())
             .setRenderFactory(TileEntitySprinkler.createRenderFactory())
+            .setTicking()
             .build();
 
     public static final InfinityTileEntityType<TileEntityGrate> GRATE = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)

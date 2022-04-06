@@ -3,22 +3,21 @@ package com.infinityraider.agricraft.content.irrigation;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.infinityraider.infinitylib.utility.TileReference;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -37,8 +36,8 @@ import java.util.function.BiFunction;
 @MethodsReturnNonnullByDefault
 public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IFluidHandler {
     private static final BlockPos DEFAULT = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
-    private static final BiFunction<IWorldReader, BlockPos, TileEntityIrrigationTank> TANK_GETTER = (world, pos) -> {
-        TileEntity tile = world.getTileEntity(pos);
+    private static final BiFunction<LevelAccessor, BlockPos, TileEntityIrrigationTank> TANK_GETTER = (world, pos) -> {
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tile instanceof TileEntityIrrigationTank) {
             return (TileEntityIrrigationTank) tile;
         }
@@ -65,7 +64,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     public BlockIrrigationTank getBlock() {
-        return AgriCraft.instance.getModBlockRegistry().tank;
+        return AgriBlockRegistry.TANK;
     }
 
     public BlockPos getMultiBlockMin() {
@@ -78,7 +77,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     public boolean isMultiBlockOrigin() {
         BlockPos origin = this.getMultiBlockMin();
-        return DEFAULT.equals(origin) || this.getPos().equals(origin) || (this.origin != null && this.origin.getTile(world) == this);
+        return DEFAULT.equals(origin) || this.getBlockPos().equals(origin) || (this.origin != null && this.origin.getTile(this.getLevel()) == this);
     }
 
     @Override
@@ -86,9 +85,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     @Override
     protected void runNetherLogic() {
-        if (this.getPos().getY() == (int) this.getLevel()) {
+        if (this.getBlockPos().getY() == (int) this.getWaterLevel()) {
             super.runNetherLogic();
-        } else if(this.getPos().getY() == this.getMultiBlockMax().getY() && this.getContent() == this.getCapacity()) {
+        } else if(this.getBlockPos().getY() == this.getMultiBlockMax().getY() && this.getContent() == this.getCapacity()) {
             // For the first tick when the tank is completely full
             super.runNetherLogic();
         }
@@ -176,9 +175,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     @Override
     protected void setContent(int content) {
         if(this.isMultiBlockOrigin()) {
-            float before = this.getLevel();
+            float before = this.getWaterLevel();
             super.setContent(content);
-            this.updateMultiBlockFluidStates(before, this.getLevel());
+            this.updateMultiBlockFluidStates(before, this.getWaterLevel());
         } else {
             TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
             if(origin != null) {
@@ -191,9 +190,9 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     @Override
     protected void setLevel(float level) {
         if(this.isMultiBlockOrigin()) {
-            float before = this.getLevel();
+            float before = this.getWaterLevel();
             super.setLevel(level);
-            this.updateMultiBlockFluidStates(before, this.getLevel());
+            this.updateMultiBlockFluidStates(before, this.getWaterLevel());
         } else {
             TileEntityIrrigationTank origin = this.getMultiBlockOrigin();
             if(origin != null) {
@@ -233,15 +232,15 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     @Nullable
     public TileEntityIrrigationTank getMultiBlockOrigin() {
-        if(this.getWorld() == null || this.isMultiBlockOrigin()) {
+        if(this.getLevel() == null || this.isMultiBlockOrigin()) {
             return this;
         }
         if(this.origin != null) {
-            return this.origin.getTile(this.getWorld());
+            return this.origin.getTile(this.getLevel());
         }
 
-        this.origin = new TileReference<>(this. getMultiBlockMin(), TANK_GETTER);
-        TileEntityIrrigationTank tank = this.origin.getTile(world);
+        this.origin = new TileReference<>(this.getMultiBlockMin(), TANK_GETTER);
+        TileEntityIrrigationTank tank = this.origin.getTile(this.getLevel());
 
         if(this.origin.isRemoved()) {
             this.unFormMultiBlock();
@@ -256,22 +255,22 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     public void checkAndFormMultiBlock() {
         // Safety check
-        if(this.getWorld() == null || this.getWorld().isRemote()) {
+        if(this.getLevel() == null || this.getLevel().isClientSide()) {
             return;
         }
         // Set min and max
-        this.min.set(this.getPos());
-        this.max.set(this.getPos());
+        this.min.set(this.getBlockPos());
+        this.max.set(this.getBlockPos());
         // Form multi-block
         new MultiBlockFormer(this).formMultiBlock();
     }
 
     public void onNeighbourChanged(BlockPos fromPos) {
-        if(this.getWorld() == null) {
+        if(this.getLevel() == null) {
             return;
         }
         if(isInMultiBlock(fromPos)) {
-            TileEntity tile = this.getWorld().getTileEntity(fromPos);
+            BlockEntity tile = this.getLevel().getBlockEntity(fromPos);
             if(tile instanceof TileEntityIrrigationTank) {
                 TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
                 if(tank.isSameMaterial(this)) {
@@ -297,24 +296,24 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
     public void unFormMultiBlock() {
         // Safety check
-        if(this.getWorld() == null) {
+        if(this.getLevel() == null) {
             return;
         }
-        float level = super.getLevel();
+        float level = super.getWaterLevel();
         BlockPos min = new BlockPos(this.getMultiBlockMin());
         BlockPos max = new BlockPos(this.getMultiBlockMax());
-        BlockPos.Mutable pos = new BlockPos.Mutable(0, 0, 0);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
         for(int x = min.getX(); x <= max.getX(); x++) {
             for(int y = min.getY(); y <= max.getY(); y++) {
                 for (int z = min.getZ(); z <= max.getZ(); z++) {
-                    pos.setPos(x, y, z);
-                    TileEntity tile = this.getWorld().getTileEntity(pos);
+                    pos.set(x, y, z);
+                    BlockEntity tile = this.getLevel().getBlockEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
-                        tank.origin = this.getWorld().isRemote() ? new TileReference<>(tank.getPos(), TANK_GETTER) : null;
-                        tank.min.set(tank.getPos());
-                        tank.max.set(tank.getPos());
-                        this.getWorld().setBlockState(tank.getPos(), AgriCraft.instance.getModBlockRegistry().tank.getDefaultState());
+                        tank.origin = this.getLevel().isClientSide() ? new TileReference<>(tank.getBlockPos(), TANK_GETTER) : null;
+                        tank.min.set(tank.getBlockPos());
+                        tank.max.set(tank.getBlockPos());
+                        this.getLevel().setBlock(tank.getBlockPos(), AgriBlockRegistry.TANK.defaultBlockState(), 3);
                         tank.setLevel(level);
                     }
                 }
@@ -323,8 +322,8 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     protected void updateMultiBlockFluidStates(float before, float after) {
-        World world = this.getWorld();
-        if(world == null || world.isRemote()) {
+        Level world = this.getLevel();
+        if(world == null || world.isClientSide()) {
             return;
         }
         // map before and after to ordered variables
@@ -344,12 +343,12 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         BlockPos max = this.getMultiBlockMax();
         int y1 = Math.max((int) d1, min.getY());
         int y2 = Math.min(1 + (int) d2, max.getY());
-        BlockPos.Mutable pos = new BlockPos.Mutable(0, 0, 0);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
         for(int x = min.getX(); x <= max.getX(); x++) {
             for(int y = y1; y <= y2; y++) {
                 for(int z = min.getZ(); z <= max.getZ(); z++) {
-                    pos.setPos(x, y, z);
-                    this.getBlock().updateFluidState(this.getWorld(), pos, world.getBlockState(pos), after);
+                    pos.set(x, y, z);
+                    this.getBlock().updateFluidState(this.getLevel(), pos, world.getBlockState(pos), after);
                 }
             }
         }
@@ -429,31 +428,31 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     }
 
     public static class MultiBlockFormer {
-        private final World world;
+        private final Level world;
         private final ItemStack material;
 
-        private final BlockPos.Mutable min;
-        private final BlockPos.Mutable max;
+        private final BlockPos.MutableBlockPos min;
+        private final BlockPos.MutableBlockPos max;
 
         private final Set<Unchecked> unchecked;
         private final Map<BlockPos, Checked> checked;
 
         protected MultiBlockFormer(TileEntityIrrigationTank tank) {
-            this.world = Objects.requireNonNull(tank.getWorld(), "Invalid state, can not form multi-block with non-world tile entity");
+            this.world = Objects.requireNonNull(tank.getLevel(), "Invalid state, can not form multi-block with non-world tile entity");
             this.material = tank.getMaterial().copy();
-            this.min = tank.getPos().toMutable();
-            this.max = tank.getPos().toMutable();
+            this.min = tank.getBlockPos().mutable();
+            this.max = tank.getBlockPos().mutable();
             this.unchecked = Sets.newConcurrentHashSet();
             this.checked = Maps.newHashMap();
             this.unchecked.add(new Unchecked(tank));
         }
 
-        public final World getWorld() {
+        public final Level getWorld() {
             return this.world;
         }
 
         public final boolean checkMaterial(ItemStack material) {
-            return ItemStack.areItemsEqual(this.material, material);
+            return ItemStack.matches(this.material, material);
         }
 
         public void formMultiBlock() {
@@ -485,7 +484,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                         state = this.handleDirection(state, tank, Direction.NORTH, z == this.min.getZ());
                         state = this.handleDirection(state, tank, Direction.SOUTH, z == this.max.getZ());
                         // Update the block state
-                        this.getWorld().setBlockState(tank.getPos(), state);
+                        this.getWorld().setBlock(tank.getBlockPos(), state, 3);
                     }
                 }
             }
@@ -508,7 +507,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                     // Expand the unchecked region to cover the tank's multi-block
                     this.expand(checked.getTank());
                     // Check neighbouring blocks if there are other tanks
-                    Arrays.stream(Direction.values()).forEach(dir ->  this.scanPos(pos.offset(dir)));
+                    Arrays.stream(Direction.values()).forEach(dir ->  this.scanPos(pos.relative(dir)));
                     return false;
                 }).orElse(true);
                 // If an invalid position was found, return false
@@ -551,42 +550,42 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                 // add new sites
                 this.addSites(this.max.getX() + 1, this.min.getY(), this.min.getZ(), pos.getX(), this.max.getY(), this.max.getZ());
                 // Update max
-                this.max.setPos(pos.getX(), this.max.getY(), this.max.getZ());
+                this.max.set(pos.getX(), this.max.getY(), this.max.getZ());
             }
             // Check max y
             if (this.max.getY() < pos.getY()) {
                 // add new sites
                 this.addSites(this.min.getX(), this.max.getY() + 1, this.min.getZ(), this.max.getX(), pos.getY(), this.max.getZ());
                 // Update max
-                this.max.setPos(this.max.getX(), pos.getY(), this.max.getZ());
+                this.max.set(this.max.getX(), pos.getY(), this.max.getZ());
             }
             // Check max z
             if (this.max.getZ() < pos.getZ()) {
                 // add new sites
                 this.addSites(this.min.getX(), this.min.getY(), this.max.getZ() + 1, this.max.getX(), this.max.getY(), pos.getZ());
                 // Update max
-                this.max.setPos(this.max.getX(), this.max.getY(), pos.getZ());
+                this.max.set(this.max.getX(), this.max.getY(), pos.getZ());
             }
             // Check min x
             if (this.min.getX() > pos.getX()) {
                 // add new sites
                 this.addSites(pos.getX(), this.min.getY(), this.min.getZ(), this.min.getX() - 1, this.max.getY(), this.max.getZ());
                 // Update min
-                this.min.setPos(pos.getX(), this.min.getY(), this.min.getZ());
+                this.min.set(pos.getX(), this.min.getY(), this.min.getZ());
             }
             // Check min y
             if (this.min.getY() > pos.getY()) {
                 // add new sites
                 this.addSites(this.min.getX(), pos.getY(), this.min.getZ(), this.max.getX(), this.min.getY() - 1, this.max.getZ());
                 // Update min
-                this.min.setPos(this.min.getX(), pos.getY(), this.min.getZ());
+                this.min.set(this.min.getX(), pos.getY(), this.min.getZ());
             }
             // Check min z
             if (this.min.getZ() > pos.getZ()) {
                 // add new sites
                 this.addSites(this.min.getX(), this.min.getY(), pos.getZ(), this.max.getX(), this.max.getY(), this.min.getZ() - 1);
                 // Update min
-                this.min.setPos(this.min.getX(), this.min.getY(), pos.getZ());
+                this.min.set(this.min.getX(), this.min.getY(), pos.getZ());
             }
         }
 
@@ -604,7 +603,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
         }
 
         protected BlockState handleDirection(final BlockState state, TileEntityIrrigationTank tank, Direction dir, boolean edge) {
-            if (tank.getWorld() == null || tank.getWorld().isRemote()) {
+            if (tank.getLevel() == null || tank.getLevel().isClientSide()) {
                 return state;
             }
             if (dir.getAxis().isVertical()) {
@@ -613,13 +612,13 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
             return BlockIrrigationTank.getConnection(dir)
                     .map((connection) -> {
                         if (edge) {
-                            BlockPos offset = tank.getPos().offset(dir);
-                            TileEntity tile = tank.getWorld().getTileEntity(offset);
+                            BlockPos offset = tank.getBlockPos().relative(dir);
+                            BlockEntity tile = tank.getLevel().getBlockEntity(offset);
                             if (tile instanceof TileEntityIrrigationChannel) {
                                 if (((TileEntityIrrigationChannel) tile).canConnect(tank)) {
                                     // The block is next to a channel, update channel block state
                                     BlockIrrigationChannelAbstract.getConnection(dir.getOpposite()).ifPresent(channelCon ->
-                                            tank.getWorld().setBlockState(offset, channelCon.apply(tile.getBlockState(), true)));
+                                            tank.getLevel().setBlock(offset, channelCon.apply(tile.getBlockState(), true), 3));
                                     // And return the tank block state
                                     return connection.apply(state, BlockIrrigationTank.Connection.CHANNEL);
                                 }
@@ -634,16 +633,16 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
 
         public static class Unchecked {
             private final BlockPos pos;
-            private final TileEntity tile;
+            private final BlockEntity tile;
 
-            public Unchecked(TileEntity tile) {
-                this.pos = tile.getPos();
+            public Unchecked(BlockEntity tile) {
+                this.pos = tile.getBlockPos();
                 this.tile = tile;
             }
 
             public Unchecked(MultiBlockFormer former, BlockPos pos) {
                 this.pos = pos;
-                this.tile = former.getWorld().getTileEntity(pos);
+                this.tile = former.getWorld().getBlockEntity(pos);
             }
 
             public final BlockPos getPos() {

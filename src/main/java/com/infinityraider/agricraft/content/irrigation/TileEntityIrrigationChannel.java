@@ -6,8 +6,8 @@ import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRen
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -64,7 +64,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
 
     @Override
     protected void tickComponent() {
-        if(this.getWorld() != null && this.getWorld().isRemote()) {
+        if(this.getLevel() != null && this.getLevel().isClientSide()) {
             if (this.counter > 0) {
                 this.counter -= 1;
                 if (this.counter <= 0) {
@@ -128,7 +128,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
         public float getAnimationProgress(int counter, float partialTick) {
             if(this.hasAnimation()) {
                 // to and from are inverted as the counter is counting down
-                return MathHelper.lerp(Math.min(1.0F, (counter + partialTick)/this.getDuration()), this.to.target, this.from.target);
+                return Mth.lerp(Math.min(1.0F, (counter + partialTick)/this.getDuration()), this.to.target, this.from.target);
             }
             return this.target;
         }

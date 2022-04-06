@@ -1,16 +1,14 @@
 package com.infinityraider.agricraft.content.irrigation;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.content.core.ItemCustomWood;
-import com.infinityraider.infinitylib.item.BlockItemDynamicTexture;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
 
 public class ItemIrrigationChannel extends ItemCustomWood {
     public ItemIrrigationChannel() {
-        super(AgriCraft.instance.getModBlockRegistry().channel, new Item.Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
+        super(AgriBlockRegistry.CHANNEL, new Item.Properties()
+                .tab(AgriTabs.TAB_AGRICRAFT)
         );
     }
 }

@@ -50,7 +50,7 @@ public final class AgriItemRegistry {
             ? new ItemAgriNugget(Names.Nuggets.QUARTZ)
             : null;
 
-    public static final ItemGrate grate = new ItemGrate();
+    public static final ItemGrate GRATE = new ItemGrate();
     
     private static final class Accessor implements IAgriContent.Items {
         private Accessor() {
@@ -148,7 +148,7 @@ public final class AgriItemRegistry {
 
         @Override
         public ItemGrate getGrateItem() {
-            return grate;
+            return GRATE;
         }
 
         @Nullable

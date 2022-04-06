@@ -4,16 +4,16 @@ import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,36 +24,36 @@ import java.util.List;
 public class ItemChannelValve extends ItemBase {
     public ItemChannelValve() {
         super(Names.Items.VALVE, new Item.Properties()
-                .group(AgriTabs.TAB_AGRICRAFT));
+                .tab(AgriTabs.TAB_AGRICRAFT));
     }
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        BlockState state = world.getBlockState(context.getPos());
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        BlockState state = world.getBlockState(context.getClickedPos());
         if(state.getBlock() instanceof BlockIrrigationChannelAbstract) {
             if(!BlockIrrigationChannelAbstract.VALVE.fetch(state).hasValve()) {
-                world.setBlockState(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, BlockIrrigationChannelAbstract.Valve.OPEN));
-                if(world.isRemote()) {
-                    TileEntity tile = world.getTileEntity(pos);
+                world.setBlock(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, BlockIrrigationChannelAbstract.Valve.OPEN), 3);
+                if(world.isClientSide()) {
+                    BlockEntity tile = world.getBlockEntity(pos);
                     if(tile instanceof TileEntityIrrigationChannel) {
                         ((TileEntityIrrigationChannel) tile).setValveState(TileEntityIrrigationChannel.ValveState.OPEN);
                     }
                 }
                 if(context.getPlayer() != null && !context.getPlayer().isCreative()) {
-                    context.getPlayer().getHeldItem(context.getHand()).shrink(1);
+                    context.getPlayer().getItemInHand(context.getHand()).shrink(1);
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flag) {
         tooltip.add(AgriToolTips.VALVE_L1);
         tooltip.add(AgriToolTips.VALVE_L2);
         tooltip.add(AgriToolTips.VALVE_L3);

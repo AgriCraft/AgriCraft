@@ -7,35 +7,11 @@ import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import com.infinityraider.infinitylib.reference.Constants;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -227,7 +203,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
         }
     }
 
-    protected void updateFluidState(World world, BlockPos pos, BlockState state, float waterLevel) {
+    protected void updateFluidState(Level world, BlockPos pos, BlockState state, float waterLevel) {
         boolean shouldHaveWater = waterLevel - pos.getY() > 0.5;
         boolean hasWater = WATER.fetch(state);
         if(shouldHaveWater != hasWater) {
