@@ -12,17 +12,16 @@ import com.infinityraider.agricraft.capability.CapabilityEatCropGoal;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGenePair;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.infinitylib.utility.EntityHelper;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -50,7 +49,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     private final String id;
 
-    private final Class<? extends MobEntity> clazz;
+    private final Class<? extends Mob> clazz;
     private final List<String> defaultPlantIds;
 
     private final IAllele<Boolean> alleleTrue;
@@ -58,20 +57,20 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     private final Set<IAllele<Boolean>> alleles;
 
-    private final TranslationTextComponent geneDescription;
-    private final TranslationTextComponent genePairDescription;
+    private final TranslatableComponent geneDescription;
+    private final TranslatableComponent genePairDescription;
     private final Vector3f colorDom;
     private final Vector3f colorRec;
 
-    public GeneAnimalAttractant(String id, Class<? extends MobEntity> clazz, List<String> defaultPlantIds, Vector3f colorDom, Vector3f colorRec) {
+    public GeneAnimalAttractant(String id, Class<? extends Mob> clazz, List<String> defaultPlantIds, Vector3f colorDom, Vector3f colorRec) {
         this.id = id;
         this.clazz = clazz;
         this.defaultPlantIds = defaultPlantIds;
         this.alleleTrue = new Allele(this, true);
         this.alleleFalse = new Allele(this, false);
         this.alleles = ImmutableSet.of(this.alleleTrue, this.alleleFalse);
-        this.geneDescription = new TranslationTextComponent(AgriCraft.instance.getModId() + ".gene.animal_attractant." + this.getId());
-        this.genePairDescription = new TranslationTextComponent(AgriCraft.instance.getModId() + ".tooltip.gene.animal_attractant." + this.getId());
+        this.geneDescription = new TranslatableComponent(AgriCraft.instance.getModId() + ".gene.animal_attractant." + this.getId());
+        this.genePairDescription = new TranslatableComponent(AgriCraft.instance.getModId() + ".tooltip.gene.animal_attractant." + this.getId());
         this.colorDom = colorDom;
         this.colorRec = colorRec;
         AgriCraft.instance.proxy().registerEventHandler(this);
@@ -101,7 +100,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     @Nonnull
     @Override
-    public IAllele<Boolean> readAlleleFromNBT(@Nonnull CompoundNBT tag) {
+    public IAllele<Boolean> readAlleleFromNBT(@Nonnull CompoundTag tag) {
         return this.getAllele(tag.contains(AgriNBT.KEY) && tag.getBoolean(AgriNBT.KEY));
     }
 
@@ -125,12 +124,12 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
     @Nonnull
     @Override
-    public IFormattableTextComponent getGeneDescription() {
+    public TranslatableComponent getGeneDescription() {
         return this.geneDescription;
     }
 
     @Nonnull
-    public IFormattableTextComponent getGenePairDescription() {
+    public TranslatableComponent getGenePairDescription() {
         return this.genePairDescription;
     }
 
@@ -160,8 +159,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onEntitySpawned(EntityJoinWorldEvent event) {
-        if(!event.getWorld().isRemote() && this.clazz.isInstance(event.getEntity())) {
-            MobEntity entity = this.clazz.cast(event.getEntity());
+        if(!event.getWorld().isClientSide() && this.clazz.isInstance(event.getEntity())) {
+            Mob entity = this.clazz.cast(event.getEntity());
             EatCropGoal goal = new EatCropGoal(this, entity, SPEED, COOLDOWN, this.defaultPlantIds);
             if(EntityHelper.injectGoal(entity, goal, PRIORITY)) {
                 CapabilityEatCropGoal.getInstance().setCropEatGoal(entity, goal);
@@ -173,10 +172,10 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
     @SuppressWarnings("unused")
     public void onCropGrowthTick(AgriCropEvent.Grow.General.Post event) {
         if(event.getCrop().world() != null && event.getCrop().hasPlant() && event.getCrop().isMature()) {
-            BlockPos min = event.getCrop().getPosition().add(-RANGE, -RANGE, -RANGE);
-            BlockPos max = event.getCrop().getPosition().add(RANGE, RANGE, RANGE);
-            AxisAlignedBB range = new AxisAlignedBB(min, max);
-            event.getCrop().world().getEntitiesWithinAABB(this.clazz, range, (entity) -> true).stream()
+            BlockPos min = event.getCrop().getPosition().offset(-RANGE, -RANGE, -RANGE);
+            BlockPos max = event.getCrop().getPosition().offset(RANGE, RANGE, RANGE);
+            AABB range = new AABB(min, max);
+            event.getCrop().world().getEntitiesOfClass(this.clazz, range, (entity) -> true).stream()
                     .map(entity -> CapabilityEatCropGoal.getInstance().getCropEatGoal(entity))
                     .filter(Objects::nonNull)
                     .filter(goal -> goal.isSuitableTarget(event.getCrop()))
@@ -209,7 +208,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         }
 
         @Override
-        public IFormattableTextComponent getTooltip() {
+        public TranslatableComponent getTooltip() {
             return null;
         }
 
@@ -220,8 +219,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
         @Nonnull
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
+        public CompoundTag writeToNBT() {
+            CompoundTag tag = new CompoundTag();
             tag.putBoolean(AgriNBT.KEY, this.trait());
             return tag;
         }
@@ -240,7 +239,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
 
         @Override
-        public void addTooltipDescription(Consumer<ITextComponent> consumer) {
+        public void addTooltipDescription(Consumer<Component> consumer) {
             if(this.getTrait()) {
                 consumer.accept(this.getGene().getGenePairDescription());
             }
@@ -309,7 +308,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         private static final double DIST_SQ = 1.25 * 1.25;
 
         private final GeneAnimalAttractant gene;
-        private final MobEntity entity;
+        private final Mob entity;
         private final double speed;
         private final int cooldown;
         private final List<String> plantIds;
@@ -323,7 +322,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
 
         private int cooldownCounter;
 
-        private EatCropGoal(GeneAnimalAttractant gene, MobEntity entity, double speed, int cooldown, List<String> plantIds) {
+        private EatCropGoal(GeneAnimalAttractant gene, Mob entity, double speed, int cooldown, List<String> plantIds) {
             this.gene = gene;
             this.entity = entity;
             this.speed = speed;
@@ -336,7 +335,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
             return this.gene;
         }
 
-        protected MobEntity getEntity() {
+        protected Mob getEntity() {
             return this.entity;
         }
 
@@ -346,7 +345,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         }
 
         @Override
-        public boolean shouldExecute() {
+        public boolean canUse() {
             if (this.cooldownCounter > 0) {
                 --this.cooldownCounter;
                 return false;
@@ -362,12 +361,12 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         }
 
         @Override
-        public boolean shouldContinueExecuting() {
+        public boolean canContinueToUse() {
             return this.isSuitableTarget(this.getTarget());
         }
 
         @Override
-        public void startExecuting() {
+        public void start() {
             if(this.getTarget() != null) {
                 this.targetX = this.getTarget().getPosition().getX() + 0.5;
                 this.targetY = this.getTarget().getPosition().getY() + 0.5;
@@ -376,33 +375,33 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         }
 
         @Override
-        public void resetTask() {
+        public void stop() {
             this.target = null;
-            this.getEntity().getNavigator().clearPath();
+            this.getEntity().getNavigation().stop();
             this.setCooldown();
         }
 
         @Override
         public void tick() {
             if(this.getTarget() == null) {
-                this.resetTask();
+                this.stop();
                 return;
             }
-            this.getEntity().getLookController().setLookPosition(
+            this.getEntity().getLookControl().setLookAt(
                     this.targetX, this.targetY, this.targetZ,
-                    (float)(this.getEntity().getHorizontalFaceSpeed() + 20),
-                    (float)this.getEntity().getVerticalFaceSpeed());
-            double distSq = this.getEntity().getDistanceSq(this.targetX, this.targetY, this.targetZ);
-            double criterion = Math.max(DIST_SQ, this.getEntity().getWidth()*this.getEntity().getWidth());
+                    (float)(this.getEntity().getHeadRotSpeed() + 20),
+                    (float)this.getEntity().getMaxHeadXRot());
+            double distSq = this.getEntity().distanceToSqr(this.targetX, this.targetY, this.targetZ);
+            double criterion = Math.max(DIST_SQ, this.getEntity().getBbWidth()*this.getEntity().getBbWidth());
             if (distSq <= criterion) {
-                this.getEntity().getNavigator().clearPath();
+                this.getEntity().getNavigation().stop();
                 this.target.setGrowthStage(this.getTarget().getPlant().getInitialGrowthStage());
-                if(this.getEntity() instanceof AnimalEntity) {
-                   ((AnimalEntity) this.getEntity()).setInLove(100);
+                if(this.getEntity() instanceof Animal) {
+                   ((Animal) this.getEntity()).setInLoveTime(100);
                 }
-                this.resetTask();
+                this.stop();
             } else {
-                this.getEntity().getNavigator().tryMoveToXYZ(this.targetX, this.targetY, this.targetZ, this.speed);
+                this.getEntity().getNavigation().moveTo(this.targetX, this.targetY, this.targetZ, this.speed);
             }
 
         }
@@ -415,8 +414,8 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         protected IAgriCrop findSuitableTarget() {
             this.potentialTargets.removeIf(crop -> !this.isSuitableTarget(crop));
             return this.potentialTargets.stream().min((a, b) -> {
-                        double dA = 100 * this.getEntity().getDistanceSq(a.getPosition().getX() + 0.5, a.getPosition().getY() + 0.5, a.getPosition().getZ() + 0.5);
-                        double dB = 100 * this.getEntity().getDistanceSq(b.getPosition().getX() + 0.5, b.getPosition().getY() + 0.5, b.getPosition().getZ() + 0.5);
+                        double dA = 100 * this.getEntity().distanceToSqr(a.getPosition().getX() + 0.5, a.getPosition().getY() + 0.5, a.getPosition().getZ() + 0.5);
+                        double dB = 100 * this.getEntity().distanceToSqr(b.getPosition().getX() + 0.5, b.getPosition().getY() + 0.5, b.getPosition().getZ() + 0.5);
                         return (int) (dA - dB);
                     }).orElse(null);
         }

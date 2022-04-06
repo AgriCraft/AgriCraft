@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.plugins.agrigui.journal;
 
+import com.infinityraider.agricraft.plugins.agrigui.GuiPlugin;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 
 public class GuiCompatClient {
 
-	public static void openScreen(PlayerEntity player, Hand hand) {
-		Minecraft.getInstance().displayGuiScreen(new JournalScreen(new TranslationTextComponent("journalgui"), player, hand));
+	public static void openScreen(Player player, InteractionHand hand) {
+		Minecraft.getInstance().setScreen(new JournalScreen(GuiPlugin.TITLE_JOURNAL, player, hand));
 	}
 
 }

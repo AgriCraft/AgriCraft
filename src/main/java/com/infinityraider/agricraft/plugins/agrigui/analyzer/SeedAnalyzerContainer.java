@@ -7,15 +7,14 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.plugins.agrigui.GuiPlugin;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -26,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class SeedAnalyzerContainer extends Container {
+public class SeedAnalyzerContainer extends AbstractContainerMenu {
 
 	private final IItemHandler playerInventory;
 	private final TileEntitySeedAnalyzer seedAnalyzer;
@@ -35,11 +34,11 @@ public class SeedAnalyzerContainer extends Container {
 	private final ItemStackHandler seedHandler;
 	private final ItemStackHandler journalHandler;
 
-	public SeedAnalyzerContainer(int id, World world, PlayerInventory playerInventory, BlockPos seedAnalyzerPos) {
+	public SeedAnalyzerContainer(int id, Level world, Inventory playerInventory, BlockPos seedAnalyzerPos) {
 		super(GuiPlugin.SEED_ANALYZER_CONTAINER.get(), id);
 		this.playerInventory = new InvWrapper(playerInventory);
 		this.seedAnalyzerPos = seedAnalyzerPos;
-		this.seedAnalyzer = (TileEntitySeedAnalyzer) world.getTileEntity(seedAnalyzerPos);
+		this.seedAnalyzer = (TileEntitySeedAnalyzer) world.getBlockEntity(seedAnalyzerPos);
 		this.seedHandler = new ItemStackHandler(1) {
 			@Override
 			public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -98,13 +97,13 @@ public class SeedAnalyzerContainer extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity player) {
-		return player.getDistanceSq(seedAnalyzerPos.getX(), seedAnalyzerPos.getY(), seedAnalyzerPos.getZ()) < 8.0F;
+	public boolean stillValid(Player player) {
+		return player.distanceToSqr(seedAnalyzerPos.getX(), seedAnalyzerPos.getY(), seedAnalyzerPos.getZ()) < 8.0F;
 	}
 
 	@Override
-	public void onContainerClosed(@Nonnull PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity) {
+	public void removed(@Nonnull Player player) {
+		if (player instanceof ServerPlayer) {
 			ItemStack seedStack = this.seedHandler.extractItem(0, 64, false);
 			if (!seedStack.isEmpty()) {
 				this.seedAnalyzer.insertSeed(seedStack);
@@ -118,31 +117,31 @@ public class SeedAnalyzerContainer extends Container {
 
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
 		ItemStack itemStack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack slotStack = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot.hasItem()) {
+			ItemStack slotStack = slot.getItem();
 			itemStack = slotStack.copy();
 			if (index <= 1) {// shift-click in seed/journal slot
-				if (!this.mergeItemStack(slotStack, 2, 38, true)) {
+				if (!this.moveItemStackTo(slotStack, 2, 38, true)) {
 					return ItemStack.EMPTY;
 				}
 			} else if (index <= 38) {// shift-click in inventory slots
 				if (slotStack.getItem() instanceof IAgriSeedItem) {
-					if (!this.mergeItemStack(slotStack, 0, 1, false)) {
+					if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
 				} else if (slotStack.getItem() instanceof IAgriJournalItem) {
-					if (!this.mergeItemStack(slotStack, 1, 2, false)) {
+					if (!this.moveItemStackTo(slotStack, 1, 2, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
 			}
 			if (slotStack.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 			if (slotStack.getCount() == itemStack.getCount()) {
 				return ItemStack.EMPTY;

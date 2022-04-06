@@ -5,10 +5,10 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,8 +40,8 @@ public class JsonPlantCallBackExperience implements IJsonPlantCallback {
 
     @Override
     public void onHarvest(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
-        World world = crop.world();
-        if(world != null && !world.isRemote()) {
+        Level world = crop.world();
+        if(world != null && !world.isClientSide()) {
             for (int i = 0; i < crop.getStats().getGain(); i++) {
                 if(i == 0 || world.getRandom().nextDouble() < 0.5) {
                     this.spawnExperience(world, crop.getPosition());
@@ -50,9 +50,9 @@ public class JsonPlantCallBackExperience implements IJsonPlantCallback {
         }
     }
 
-    protected void spawnExperience(World world, BlockPos pos) {
-        world.addEntity(
-                new ExperienceOrbEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, XP)
+    protected void spawnExperience(Level world, BlockPos pos) {
+        world.addFreshEntity(
+                new ExperienceOrb(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, XP)
         );
     }
 }
