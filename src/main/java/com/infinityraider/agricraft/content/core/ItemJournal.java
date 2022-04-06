@@ -15,14 +15,17 @@ import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.render.items.journal.JournalItemRenderer;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.render.item.IClientItemProperties;
 import com.infinityraider.infinitylib.render.item.InfItemRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ItemJournal extends ItemBase implements IAgriJournalItem {
@@ -47,17 +51,17 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 
     @Nonnull
     @Override
-    public InteractionResult<ItemStack> onItemRightClick(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if(player.isSneaking()) {
-            return ActionResult.resultPass(stack);
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if(player.isDiscrete()) {
+            return InteractionResultHolder.pass(stack);
         }
-        if(world.isRemote()) {
+        if(world.isClientSide()) {
             if(AgriCraft.instance.proxy().toggleJournalObserving(player, hand)) {
-                return ActionResult.resultConsume(stack);
+                return InteractionResultHolder.consume(stack);
             }
         }
-        return ActionResult.resultPass(stack);
+        return InteractionResultHolder.pass(stack);
     }
 
     public LazyOptional<JournalData> getJournalData(@Nonnull ItemStack journal) {
@@ -100,13 +104,15 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) {
         return true;
     }
 
+
+
     // Make sure NBT is synced to the client
     @Override
-    public boolean shouldSyncTag() {
+    public boolean shouldOverrideMultiplayerNbt() {
         return true;
     }
 
@@ -124,12 +130,12 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     // Serialize the capabilities only on the server to be sent to the client
     @Nullable
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
+    public CompoundTag getShareTag(ItemStack stack) {
         if(FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            final CompoundNBT tag = stack.hasTag() ? stack.getTag() : new CompoundNBT();
+            final CompoundTag tag = stack.hasTag() ? stack.getTag() : new CompoundTag();
             if (tag != null) {
                 // should always be the case
-                this.getJournalData(stack).ifPresent(data -> tag.put(AgriNBT.CONTENTS, data.writeToNBT()));
+                this.getJournalData(stack).ifPresent(data -> tag.put(AgriNBT.CONTENTS, data.serializeNBT()));
             }
             return tag;
         } else {
@@ -139,11 +145,11 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
 
     // Read the capabilities on the client only
     @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT tag) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag tag) {
         if(FMLEnvironment.dist == Dist.CLIENT) {
             if (tag != null && tag.contains(AgriNBT.CONTENTS)) {
                 // deserialize the journal data
-                this.getJournalData(stack).ifPresent(data -> data.readFromNBT(tag.getCompound(AgriNBT.CONTENTS)));
+                this.getJournalData(stack).ifPresent(data -> data.deserializeNBT(tag.getCompound(AgriNBT.CONTENTS)));
             }
         } else {
             super.readShareTag(stack, tag);
@@ -151,9 +157,8 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public InfItemRenderer getItemRenderer() {
-        return JournalItemRenderer.getInstance();
+    public Supplier<IClientItemProperties> getClientItemProperties() {
+        return ClientProperties::new;
     }
 
     public static class JournalData implements IInfSerializableCapabilityImplementation.Serializable<JournalData> {
@@ -297,6 +302,15 @@ public class ItemJournal extends ItemBase implements IAgriJournalItem {
             this.initializePages();
             // read the index
             this.setCurrentIndex(tag.contains(AgriNBT.INDEX) ? tag.getInt(AgriNBT.INDEX) : 0);
+        }
+    }
+
+    public static class ClientProperties implements IClientItemProperties {
+        @Nullable
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public InfItemRenderer getItemRenderer() {
+            return JournalItemRenderer.getInstance();
         }
     }
 }

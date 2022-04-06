@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.core;
 
+import com.agricraft.agricore.util.TypeHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -12,15 +13,25 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;#
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -77,7 +88,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
 
     @Override
     public Item asItem() {
-        return AgriApi.getAgriContent().getItems().getSeedItem();
+        return AgriApi.getAgriContent().getItems().getSeedItem().toItem();
     }
 
     @Override
@@ -87,7 +98,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
                 IAgriGrowthResponse response = crop.getPlant().getGrowthRequirement(crop.getGrowthStage()).getFluidResponse(newFluid, crop.getStats().getStrength());
                 if(response.killInstantly()) {
                     response.onPlantKilled(crop);
-                    world.setBlockState(pos, newFluid.getDefaultState().getBlockState());
+                    world.setBlock(pos, newFluid.defaultFluidState().createLegacyBlock(), 3);
                     return true;
                 }
             }
@@ -98,7 +109,7 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getPlantShape(this.getCrop(world, pos)
                 .map(crop -> Math.max(
                         crop.getPlant().getPlantHeight(crop.getGrowthStage()),
@@ -110,44 +121,44 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return VoxelShapes.empty();
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return Shapes.empty();
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     @Override
-    public ActionResultType onCropRightClicked(World world, BlockPos pos, IAgriCrop crop, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        if(hand == Hand.OFF_HAND) {
-            return ActionResultType.PASS;
+    public InteractionResult onCropRightClicked(Level world, BlockPos pos, IAgriCrop crop, Player player, InteractionHand hand, BlockHitResult hit) {
+        if(hand == InteractionHand.OFF_HAND) {
+            return InteractionResult.PASS;
         }
-        ItemStack heldItem = player.getHeldItem(hand);
+        ItemStack heldItem = player.getItemInHand(hand);
         // Harvesting
         if (heldItem.isEmpty()) {
             return crop.harvest(stack -> this.spawnItem(crop, stack), player);
         }
         // Specific item interactions
         if (TypeHelper.isAnyType(heldItem.getItem(), ITEM_EXCLUDES)) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
         // Fertilization
         if (AgriApi.getFertilizerAdapterizer().hasAdapter(heldItem)) {
             return AgriApi.getFertilizerAdapterizer().valueOf(heldItem).map(fertilizer -> {
                 if(crop.acceptsFertilizer(fertilizer)) {
-                    ActionResultType result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
-                    if(result.isSuccessOrConsume()) {
+                    InteractionResult result = fertilizer.applyFertilizer(world, pos, crop, heldItem, world.getRandom(), player);
+                    if(result == InteractionResult.CONSUME || result == InteractionResult.SUCCESS) {
                         crop.onApplyFertilizer(fertilizer, world.getRandom());
                     }
                     return result;
                 } else {
-                    return ActionResultType.CONSUME;
+                    return InteractionResult.CONSUME;
                 }
-            }).orElse(ActionResultType.PASS);
+            }).orElse(InteractionResult.PASS);
         }
         // Fall Back to harvesting
         return crop.harvest(stack -> this.spawnItem(crop, stack), player);
@@ -158,12 +169,12 @@ public class BlockCropPlant extends BlockCropBase<TileEntityCropPlant> {
     @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
         List<ItemStack> drops = Lists.newArrayList();
-        TileEntity tile = context.get(LootParameters.BLOCK_ENTITY);
+        BlockEntity tile = context.getParameter(LootContextParams.BLOCK_ENTITY);
         if (tile instanceof IAgriCrop) {
             IAgriCrop crop = (IAgriCrop) tile;
             if (crop.hasPlant()) {
                 // add plant fruits
-                crop.getPlant().getHarvestProducts(drops::add, crop.getGrowthStage(), crop.getStats(), context.getWorld().getRandom());
+                crop.getPlant().getHarvestProducts(drops::add, crop.getGrowthStage(), crop.getStats(), context.getLevel().getRandom());
                 // drop the seed
                 if(crop.getGrowthStage().canDropSeed()) {
                     crop.getGenome().map(IAgriGenome::toSeedStack).ifPresent(drops::add);

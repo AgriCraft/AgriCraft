@@ -10,11 +10,9 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.content.AgriTileRegistry;
-import net.minecraft.block.BlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class TileEntityCropSticks extends TileEntityCropBase {
@@ -31,15 +29,15 @@ public class TileEntityCropSticks extends TileEntityCropBase {
         // Initialize automatically synced fields
         this.crossCrop = this.getAutoSyncedFieldBuilder(false)
                 .withCallBack(status -> {
-                    if (this.getWorld() != null) {
-                        this.getWorld().setBlockState(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getBlockState(), status));
+                    if (this.getLevel() != null) {
+                        this.getLevel().setBlock(this.getPosition(), BlockCropSticks.CROSS_CROP.apply(this.getBlockState(), status), 3);
                     }})
                 .withRenderUpdate()
                 .build();
 
         // Initialize neighbour cache
         this.neighbours = Maps.newEnumMap(Direction.class);
-        Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, Optional.empty()));
+        Direction.Plane.HORIZONTAL.stream().forEach(dir -> neighbours.put(dir, Optional.empty()));
         this.needsCaching = true;
     }
 
@@ -83,8 +81,8 @@ public class TileEntityCropSticks extends TileEntityCropBase {
 
     // Initialize neighbours cache
     protected void readNeighbours() {
-        if(this.getWorld() != null) {
-            Direction.Plane.HORIZONTAL.getDirectionValues().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getWorld(), this.getPos().offset(dir))));
+        if(this.getLevel() != null) {
+            Direction.Plane.HORIZONTAL.stream().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getLevel(), this.getBlockPos().relative(dir))));
             this.needsCaching = false;
         }
     }
@@ -92,8 +90,8 @@ public class TileEntityCropSticks extends TileEntityCropBase {
     // Update neighbour cache
     protected void onNeighbourChange(Direction direction, BlockPos pos, BlockState newState) {
         if(newState.getBlock() instanceof BlockCropSticks) {
-            if(this.getWorld() != null) {
-                this.neighbours.put(direction, AgriApi.getCrop(this.getWorld(), pos));
+            if(this.getLevel() != null) {
+                this.neighbours.put(direction, AgriApi.getCrop(this.getLevel(), pos));
             }
         } else {
             this.neighbours.put(direction, Optional.empty());
@@ -101,7 +99,7 @@ public class TileEntityCropSticks extends TileEntityCropBase {
     }
 
     @Override
-    protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    protected void readTileNBT(@Nonnull CompoundTag tag) {
         // A cache update will be required though (either on the client, or on the server after being loaded)
         this.needsCaching = true;
     }

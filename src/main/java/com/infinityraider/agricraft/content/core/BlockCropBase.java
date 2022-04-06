@@ -9,9 +9,25 @@ import com.infinityraider.infinitylib.block.property.InfProperty;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,7 +40,7 @@ import java.util.Random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockBaseTile<T> implements IFluidLoggable, IGrowable, IPlantable {
+public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockBaseTile<T> implements IFluidLoggable, BonemealableBlock, IPlantable {
     // Properties
     public static final InfProperty<Boolean> PLANT = InfProperty.Creators.create("plant", false);
     public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
@@ -33,58 +49,58 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         super(name, properties);
     }
 
-    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         return AgriApi.getCrop(world, pos);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getVisualShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public final InteractionResult onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+    public final InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         // fetch crop
         Optional<IAgriCrop> optional = this.getCrop(world, pos);
         if (!optional.isPresent()) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
         IAgriCrop crop = optional.get();
         // run pre logic
         if(crop.hasPlant()) {
             IAgriPlant plant = crop.getPlant();
             if(plant.isPlant()) {
-                Optional<ActionResultType> result = plant.onRightClickPre(crop, player.getHeldItem(hand), player);
+                Optional<InteractionResult> result = plant.onRightClickPre(crop, player.getItemInHand(hand), player);
                 if(result.isPresent()) {
                     return result.get();
                 }
             }
         }
         // run default logic
-        ActionResultType result = this.onCropRightClicked(world, pos, crop, player, hand, hit);
+        InteractionResult result = this.onCropRightClicked(world, pos, crop, player, hand, hit);
         // run post logic
         if(crop.hasPlant()) {
             IAgriPlant plant = crop.getPlant();
             if(plant.isPlant()) {
-                Optional<ActionResultType> override = plant.onRightClickPost(crop, player.getHeldItem(hand), player);
+                Optional<InteractionResult> override = plant.onRightClickPost(crop, player.getItemInHand(hand), player);
                 if(override.isPresent()) {
                     return override.get();
                 }
@@ -93,14 +109,14 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
         return result;
     }
 
-    protected abstract ActionResultType onCropRightClicked(World world, BlockPos pos, IAgriCrop crop, PlayerEntity player, Hand hand, BlockRayTraceResult hit);
+    protected abstract InteractionResult onCropRightClicked(Level world, BlockPos pos, IAgriCrop crop, Player player, InteractionHand hand, BlockHitResult hit);
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        if(fromPos.up().equals(pos)) {
-            if(!state.isValidPosition(world, pos)) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        if(fromPos.above().equals(pos)) {
+            if(!state.canSurvive(world, pos)) {
                 this.breakBlock(state, world, pos, true);
             }
         }
@@ -110,92 +126,104 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         // Detect fluid state change
         if(oldState.getBlock() == newState.getBlock()) {
-            Fluid oldFluid = this.getFluidState(oldState).getFluid();
-            Fluid newFluid = this.getFluidState(newState).getFluid();
+            Fluid oldFluid = this.getFluidState(oldState).getType();
+            Fluid newFluid = this.getFluidState(newState).getType();
             if(oldFluid != newFluid && this.onFluidChanged(world, pos, newState, oldFluid, newFluid)) {
                 return;
             }
         }
         // Call super
-        super.onReplaced(oldState, world, pos, newState, isMoving);
+        super.onRemove(oldState, world, pos, newState, isMoving);
     }
 
-    protected abstract boolean onFluidChanged(World world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid);
+    protected abstract boolean onFluidChanged(Level world, BlockPos pos, BlockState state, Fluid oldFluid, Fluid newFluid);
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.down()).isPresent();
+        return current.getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.below()).isPresent();
     }
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getStateForPlacement(context.getWorld(), context.getPos());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.getStateForPlacement(context.getLevel(), context.getClickedPos());
     }
 
     @Nullable
     public BlockState getStateForPlacement(Level world, BlockPos pos) {
-        BlockState state = this.getDefaultState();
-        if(state.isValidPosition(world, pos)) {
+        BlockState state = this.defaultBlockState();
+        if(state.canSurvive(world, pos)) {
             return this.fluidlog(state, world, pos);
         }
         return null;
     }
 
-    public void breakBlock(BlockState state, World world, BlockPos pos, boolean doDrops) {
-        if(!world.isRemote()) {
+    public void breakBlock(BlockState state, Level world, BlockPos pos, boolean doDrops) {
+        if(!world.isClientSide()) {
             if(doDrops) {
-                spawnDrops(state, world, pos, world.getTileEntity(pos));
+                dropResources(state, world, pos, world.getBlockEntity(pos));
             }
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         this.getCrop(world, pos).ifPresent(IAgriCrop::applyGrowthTick);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public void attack(BlockState state, Level world, BlockPos pos, Player player) {
         this.getCrop(world, pos).ifPresent(crop -> crop.breakCrop(player));
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         this.getCrop(world, pos).ifPresent(crop -> crop.getPlant().onEntityCollision(crop, entity));
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public boolean canProvidePower(BlockState state) {
+    public boolean isSignalSource(BlockState state) {
         return PLANT.fetch(state);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public int getWeakPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-        return this.getStrongPower(state, world, pos, side);
+    public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
+        return this.getDirectSignal(state, world, pos, side);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public int getStrongPower(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return PLANT.fetch(state);
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+        return this.getDirectSignal(state, world, pos, null);
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public int getDirectSignal(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return PLANT.fetch(state)
                 ? this.getCrop(world, pos).map(crop -> crop.getPlant().getRedstonePower(crop)).orElse(0)
                 : 0;
@@ -204,11 +232,11 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     @Override
     @OnlyIn(Dist.CLIENT)
     public RenderType getRenderType() {
-        return RenderType.getCutout();
+        return RenderType.cutout();
     }
 
     public void spawnItem(IAgriCrop crop, ItemStack stack) {
-        World world = crop.world();
+        Level world = crop.world();
         if(world != null) {
             this.spawnItem(world, crop.getPosition(), stack);
         }
@@ -216,7 +244,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level world, BlockPos pos, Random rand) {
         this.getCrop(world, pos).ifPresent(crop -> {
             if(crop.hasPlant()) {
                 crop.getPlant().spawnParticles(crop, rand);
@@ -226,19 +254,19 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
 
     /**
      * -------------------------
-     * Vanilla IGrowable methods
+     * Vanilla BonemealableBlock methods
      * -------------------------
      */
 
     @Override
-    public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
         return this.getCrop(world, pos).map(crop -> crop.isFertile() && !crop.isFullyGrown()).orElse(true);
     }
 
     private static final ItemStack BONE_MEAL = new ItemStack(Items.BONE_MEAL);
 
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, Random rand, BlockPos pos, BlockState state) {
         return AgriApi.getFertilizer(BONE_MEAL).flatMap(fertilizer ->
                         this.getCrop(world, pos).map(crop ->
                                 !crop.isFullyGrown()
@@ -247,7 +275,7 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
     }
 
     @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState state) {
         AgriApi.getFertilizer(BONE_MEAL).ifPresent(fertilizer ->
                 this.getCrop(world, pos).ifPresent(crop ->
                         fertilizer.applyFertilizer(world, pos, crop, BONE_MEAL, rand, null)));
@@ -260,9 +288,9 @@ public abstract class BlockCropBase<T extends TileEntityCropBase> extends BlockB
      */
 
     @Override
-    public BlockState getPlant(IBlockReader world, BlockPos pos) {
+    public BlockState getPlant(BlockGetter world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if(world instanceof World) {
+        if(world instanceof Level) {
             return this.getCrop(world, pos)
                     .flatMap(crop -> crop.getPlant().asBlockState(crop.getGrowthStage()))
                     .orElse(state);

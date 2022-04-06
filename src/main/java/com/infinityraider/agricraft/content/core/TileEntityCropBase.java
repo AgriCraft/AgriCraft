@@ -28,11 +28,19 @@ import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.MinecraftForge;
@@ -134,7 +142,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public void dropItem(ItemStack item) {
-        if(this.getLevel() == null || this.getLevel().isRemote) {
+        if(this.getLevel() == null || this.getLevel().isClientSide()) {
             return;
         }
         this.getLevel().addFreshEntity(new ItemEntity(
@@ -147,7 +155,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public boolean isValid() {
-        return this.getWorld() != null && !this.isRemoved();
+        return this.getLevel() != null && !this.isRemoved();
     }
 
     @Override
@@ -185,12 +193,12 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     protected boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
-        return CropHelper.checkGrowthSpace(this.getWorld(),this.getPos(), plant, stage);
+        return CropHelper.checkGrowthSpace(this.getLevel(),this.getBlockPos(), plant, stage);
     }
 
     @Override
     public IAgriGrowthResponse getFertilityResponse() {
-        if(this.getWorld() == null) {
+        if(this.getLevel() == null) {
             return IAgriGrowthResponse.INFERTILE;
         }
         if(!this.checkGrowthSpace(this.getPlant(), this.getGrowthStage())) {
@@ -212,20 +220,20 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     @Nonnull
     @Override
     public Optional<IAgriSoil> getSoil() {
-        return Optional.ofNullable(this.getWorld())
-                .flatMap(world -> AgriApi.getSoil(world, this.getPosition().down()));
+        return Optional.ofNullable(this.getLevel())
+                .flatMap(world -> AgriApi.getSoil(world, this.getPosition().below()));
     }
 
     @Override
     public void breakCrop(@Nullable LivingEntity entity) {
-        if(this.getWorld() == null) {
+        if(this.getLevel() == null) {
             return;
         }
         if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Pre(this, entity))) {
             IAgriPlant plant = this.getPlant();
             IAgriWeed weed = this.getWeeds();
-            Block.spawnDrops(this.getBlockState(), this.getWorld(), this.getPosition(), this);
-            this.getWorld().setBlockState(this.getPosition(), Blocks.AIR.getDefaultState());
+            Block.dropResources(this.getBlockState(), this.getLevel(), this.getPosition(), this);
+            this.getLevel().setBlock(this.getPosition(), Blocks.AIR.defaultBlockState(), 3);
             plant.onBroken(this, entity);
             weed.onBroken(this, entity);
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Post(this, entity));
@@ -234,7 +242,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public void applyGrowthTick() {
-        if (this.getWorld() == null || this.getWorld().isRemote) {
+        if (this.getLevel() == null || this.getLevel().isClientSide()) {
             return;
         }
         if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.General.Pre(this))) {
@@ -334,13 +342,13 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             BlockState state = this.getBlockState();
             if (this.calculateGrowthRate() > this.getRandom().nextDouble() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Pre(this))) {
                 // also do the MinecraftForge BlockEvent for crop growth
-                BlockEvent.CropGrowEvent.Pre blockEvent = new BlockEvent.CropGrowEvent.Pre(this.getWorld(), this.getPos(), state);
+                BlockEvent.CropGrowEvent.Pre blockEvent = new BlockEvent.CropGrowEvent.Pre(this.getLevel(), this.getBlockPos(), state);
                 MinecraftForge.EVENT_BUS.post(blockEvent);
                 if(blockEvent.getResult() == Event.Result.ALLOW || blockEvent.getResult() == Event.Result.DEFAULT) {
                     this.setGrowthStage(this.getGrowthStage().getNextStage(this, this.getRandom()));
                     this.getPlant().onGrowth(this);
                     MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Plant.Post(this));
-                    MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(this.getWorld(), this.getPos(), state, state));
+                    MinecraftForge.EVENT_BUS.post(new BlockEvent.CropGrowEvent.Post(this.getLevel(), this.getBlockPos(), state, state));
                 }
             }
         }
@@ -391,17 +399,17 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Nonnull
     @Override
-    public ActionResultType harvest(@Nonnull Consumer<ItemStack> consumer, LivingEntity entity) {
-        if (this.getWorld() != null && this.canBeHarvested(entity)) {
+    public InteractionResult harvest(@Nonnull Consumer<ItemStack> consumer, LivingEntity entity) {
+        if (this.getLevel() != null && this.canBeHarvested(entity)) {
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Pre(this, entity))) {
                 CropHelper.executePlantHarvestRolls(this, consumer);
                 this.setGrowthStage(this.getPlant().getGrowthStageAfterHarvest());
                 this.getPlant().onHarvest(this, entity);
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Harvest.Post(this, entity));
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -411,7 +419,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     public boolean rake(@Nonnull Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
-        if(this.getWorld() == null || this.getWorld().isRemote()) {
+        if(this.getLevel() == null || this.getLevel().isClientSide()) {
             return false;
         }
         IAgriWeed weed = this.getWeeds();
@@ -518,8 +526,8 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     public boolean plantGenome(@Nonnull IAgriGenome genome, @Nullable LivingEntity entity) {
         if (this.acceptsGenome(genome) && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Pre(this, genome, entity))) {
             this.setGenomeImpl(genome);
-            if(this.getWorld() != null) {
-                CropHelper.playPlantingSound(this.getWorld(), this.getPos(), (entity instanceof PlayerEntity) ? (PlayerEntity) entity : null);
+            if(this.getLevel() != null) {
+                CropHelper.playPlantingSound(this.getLevel(), this.getBlockPos(), (entity instanceof Player) ? (Player) entity : null);
             }
             this.getPlant().onPlanted(this, entity);
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Plant.Post(this, genome, entity));
@@ -551,18 +559,18 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    protected void writeTileNBT(@Nonnull CompoundNBT tag) {
+    protected void writeTileNBT(@Nonnull CompoundTag tag) {
         // No need to write anything since everything is covered by the AutoSyncedFields
     }
 
     @Override
-    protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    protected void readTileNBT(@Nonnull CompoundTag tag) {
         // No need to read anything since everything is covered by the AutoSyncedFields
     }
 
 
     protected void handlePlantUpdate()  {
-        if(this.getWorld() != null) {
+        if(this.getLevel() != null) {
             BlockState oldState = this.getBlockState();
             BlockState newState = oldState;
             // Update brightness
@@ -577,7 +585,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             }
             // Set block state if necessary
             if(newState != oldState) {
-                this.getWorld().setBlockState(this.getPos(), newState);
+                this.getLevel().setBlock(this.getBlockPos(), newState, 3);
             }
             // Update growth requirement
             this.requirement.flush();
@@ -613,10 +621,12 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         super.onChunkUnloaded();
     }
 
+
+
     @Override
-    public void remove() {
+    public void setRemoved() {
         this.requirement.flush();
-        super.remove();
+        super.setRemoved();
     }
 
     @Override
@@ -658,7 +668,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     }
 
     @Override
-    public void addDisplayInfo(@Nonnull Consumer<ITextComponent> consumer) {
+    public void addDisplayInfo(@Nonnull Consumer<Component> consumer) {
         CropHelper.addDisplayInfo(this, this.requirement, consumer);
     }
 
