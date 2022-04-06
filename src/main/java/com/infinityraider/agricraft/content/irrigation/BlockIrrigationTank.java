@@ -2,16 +2,43 @@ package com.infinityraider.agricraft.content.irrigation;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriFluidRegistry;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockDynamicTexture;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import com.infinityraider.infinitylib.reference.Constants;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -57,16 +84,16 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     // TileEntity factory
-    private static final BiFunction<BlockState, IBlockReader, TileEntityIrrigationTank> TILE_FACTORY = (s, w) -> new TileEntityIrrigationTank();
+    private static final BiFunction<BlockPos, BlockState, TileEntityIrrigationTank> TILE_FACTORY = TileEntityIrrigationTank::new;
 
     // VoxelShapes
-    public static final VoxelShape SHAPE_DOWN = Block.makeCuboidShape(0, 0, 0, 16, 2, 16);
+    public static final VoxelShape SHAPE_DOWN = Block.box(0, 0, 0, 16, 2, 16);
 
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newConcurrentMap();
 
     public static VoxelShape getShape(BlockState state) {
         if (!(state.getBlock() instanceof BlockIrrigationTank)) {
-            return VoxelShapes.empty();
+            return Shapes.empty();
         }
         return SHAPES.computeIfAbsent(state, (aState) ->
                 Stream.concat(
@@ -77,19 +104,17 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                                         .map(connection -> connection.getShape(direction)))
                                 .filter(Optional::isPresent)
                                 .map(Optional::get),
-                        Stream.of(DOWN.fetch(aState) ? VoxelShapes.empty() : SHAPE_DOWN)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).orElse(VoxelShapes.fullCube()));
+                        Stream.of(DOWN.fetch(aState) ? Shapes.empty() : SHAPE_DOWN)
+                ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).orElse(Shapes.block()));
     }
 
     public BlockIrrigationTank() {
-        super(Names.Blocks.TANK, Properties.create(Material.WOOD)
-                .notSolid()
-        );
+        super(Names.Blocks.TANK, Properties.of(Material.WOOD));
     }
 
     @Override
     public ItemIrrigationTank asItem() {
-        return AgriCraft.instance.getModItemRegistry().tank;
+        return AgriItemRegistry.TANK;
     }
 
     @Override
@@ -98,61 +123,61 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     @Override
-    public BiFunction<BlockState, IBlockReader, TileEntityIrrigationTank> getTileEntityFactory() {
+    public BiFunction<BlockPos, BlockState, TileEntityIrrigationTank> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-            ItemStack stack = player.getHeldItem(hand);
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+            ItemStack stack = player.getItemInHand(hand);
             if(stack.getItem() instanceof BucketItem) {
                 BucketItem bucket = (BucketItem) stack.getItem();
                 Fluid fluid = bucket.getFluid();
                 if(fluid == Fluids.WATER) {
                     // try to fill from a bucket
-                    TileEntity tile = world.getTileEntity(pos);
+                    BlockEntity tile = world.getBlockEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
                         if(tank.pushWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
                             tank.pushWater(FluidAttributes.BUCKET_VOLUME, true);
                             if(!player.isCreative()) {
-                                player.setHeldItem(hand, new ItemStack(Items.BUCKET));
+                                player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                             }
-                            return ActionResultType.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 } else if(fluid == Fluids.EMPTY) {
                     // try to drain to a bucket
-                    TileEntity tile = world.getTileEntity(pos);
+                    BlockEntity tile = world.getBlockEntity(pos);
                     if(tile instanceof TileEntityIrrigationTank) {
                         TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
                         if(tank.drainWater(FluidAttributes.BUCKET_VOLUME, false) == FluidAttributes.BUCKET_VOLUME) {
                             tank.drainWater(FluidAttributes.BUCKET_VOLUME, true);
-                            player.setHeldItem(hand, new ItemStack(Items.WATER_BUCKET));
-                            return ActionResultType.SUCCESS;
+                            player.setItemInHand(hand, new ItemStack(Items.WATER_BUCKET));
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
             } else if(stack.getItem() == Items.LADDER) {
                 // try to place a ladder
                 if(!LADDER.fetch(state)) {
-                    if(!world.isRemote()) {
-                        world.setBlockState(pos, LADDER.apply(state, true));
+                    if(!world.isClientSide()) {
+                        world.setBlock(pos, LADDER.apply(state, true), 3);
                         if(!player.isCreative()) {
-                            player.getHeldItem(hand).shrink(1);
+                            player.getItemInHand(hand).shrink(1);
                         }
                     }
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
-                                ItemStack stack, @Nullable TileEntity tile) {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
+                            ItemStack stack, @Nullable BlockEntity tile) {
         if(tile instanceof TileEntityIrrigationTank) {
             ((TileEntityIrrigationTank) tile).checkAndFormMultiBlock();
         }
@@ -160,14 +185,14 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState updatePostPlacement(BlockState ownState, Direction dir, BlockState otherState, IWorld world, BlockPos pos, BlockPos otherPos) {
+    public BlockState updateShape(BlockState ownState, Direction dir, BlockState otherState, LevelAccessor world, BlockPos pos, BlockPos otherPos) {
         return getConnection(dir).map(prop -> {
             if(prop.fetch(ownState).isTank()) {
                 // tank logic is handled from within the tile entity
                 return ownState;
             }
-            TileEntity ownTile = world.getTileEntity(pos);
-            TileEntity otherTile = world.getTileEntity(otherPos);
+            BlockEntity ownTile = world.getBlockEntity(pos);
+            BlockEntity otherTile = world.getBlockEntity(otherPos);
             if(ownTile instanceof TileEntityIrrigationTank && otherTile instanceof TileEntityIrrigationChannel) {
                 TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) otherTile;
                 if (channel.canConnect((TileEntityIrrigationTank) ownTile)) {
@@ -175,14 +200,14 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 }
             }
             return prop.apply(ownState, Connection.NONE);
-        }).orElse(super.updatePostPlacement(ownState, dir, otherState, world, pos, otherPos));
+        }).orElse(super.updateShape(ownState, dir, otherState, world, pos, otherPos));
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        TileEntity tile = world.getTileEntity(pos);
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof TileEntityIrrigationTank) {
             TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
             tank.onNeighbourChanged(fromPos);
@@ -192,13 +217,15 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     @Override
-    public void fillWithRain(World world, BlockPos pos) {
-        int rate = AgriCraft.instance.getConfig().rainFillRate();
-        if(rate > 0) {
-            TileEntity tile = world.getTileEntity(pos);
-            if(tile instanceof TileEntityIrrigationTank) {
-                TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
-                tank.pushWater(rate, true);
+    public void handlePrecipitation(BlockState state, Level world, BlockPos pos, Biome.Precipitation precipitation) {
+        if(precipitation == Biome.Precipitation.RAIN) {
+            int rate = AgriCraft.instance.getConfig().rainFillRate();
+            if (rate > 0) {
+                BlockEntity tile = world.getBlockEntity(pos);
+                if (tile instanceof TileEntityIrrigationTank) {
+                    TileEntityIrrigationTank tank = (TileEntityIrrigationTank) tile;
+                    tank.pushWater(rate, true);
+                }
             }
         }
     }
@@ -211,7 +238,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
             // 4: Prevent render update
             // 16: Prevent neighbour reactions
             // 32: Prevent neighbour drops
-            world.setBlockState(pos, WATER.apply(state, shouldHaveWater), 2 + 4 + 16 + 32);
+            world.setBlock(pos, WATER.apply(state, shouldHaveWater), 2 + 4 + 16 + 32);
         }
     }
 
@@ -219,53 +246,53 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Deprecated
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state) {
-        return WATER.fetch(state) ? AgriCraft.instance.getModFluidRegistry().tank_water.getDefaultState() : Fluids.EMPTY.getDefaultState();
+        return (WATER.fetch(state) ? AgriFluidRegistry.TANK_WATER : Fluids.EMPTY).defaultFluidState();
     }
 
     @Override
-    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
+    public boolean isLadder(BlockState state, LevelReader world, BlockPos pos, LivingEntity entity) {
         return LADDER.fetch(state);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getVisualShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getShape(state);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
@@ -279,33 +306,33 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Override
     @OnlyIn(Dist.CLIENT)
     public RenderType getRenderType() {
-        return RenderType.getCutout();
+        return RenderType.cutout();
     }
 
-    public enum Connection implements IStringSerializable {
+    public enum Connection implements StringRepresentable {
         NONE(false, false,
-                Block.makeCuboidShape(0, 0, 0, 16, 16, 2),
-                Block.makeCuboidShape(0, 0, 0, 2, 16, 16)
+                Block.box(0, 0, 0, 16, 16, 2),
+                Block.box(0, 0, 0, 2, 16, 16)
         ),
 
         TANK(true, false,
-                VoxelShapes.empty(),
-                VoxelShapes.empty()
+                Shapes.empty(),
+                Shapes.empty()
         ),
 
         CHANNEL(false, true,
                 Stream.of(
-                        Block.makeCuboidShape(0, 0, 0, 16, 6, 2),
-                        Block.makeCuboidShape(0, 6, 0, 6, 10, 2),
-                        Block.makeCuboidShape(10, 6, 0, 16, 10, 2),
-                        Block.makeCuboidShape(0, 10, 0, 16, 16, 2)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get(),
+                        Block.box(0, 0, 0, 16, 6, 2),
+                        Block.box(0, 6, 0, 6, 10, 2),
+                        Block.box(10, 6, 0, 16, 10, 2),
+                        Block.box(0, 10, 0, 16, 16, 2)
+                ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get(),
                 Stream.of(
-                        Block.makeCuboidShape(0, 0, 0, 2, 6, 16),
-                        Block.makeCuboidShape(0, 6, 0, 2, 10, 6),
-                        Block.makeCuboidShape(0, 6, 10, 2, 10, 16),
-                        Block.makeCuboidShape(0, 10, 0, 2, 16, 16)
-                ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get()
+                        Block.box(0, 0, 0, 2, 6, 16),
+                        Block.box(0, 6, 0, 2, 10, 6),
+                        Block.box(0, 6, 10, 2, 10, 16),
+                        Block.box(0, 10, 0, 2, 16, 16)
+                ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get()
         );
 
         private final boolean tank;
@@ -320,9 +347,9 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
             this.tank = tank;
             this.channel = channel;
             this.north = north;
-            this.south = north.withOffset(0, 0, 14 * Constants.UNIT);
+            this.south = north.move(0, 0, 14 * Constants.UNIT);
             this.west = west;
-            this.east = west.withOffset(14 * Constants.UNIT, 0, 0);
+            this.east = west.move(14 * Constants.UNIT, 0, 0);
         }
 
         public boolean isTank() {
@@ -344,11 +371,11 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
                 case WEST:
                     return this.west;
             }
-            return VoxelShapes.empty();
+            return Shapes.empty();
         }
 
         @Override
-        public String getString() {
+        public String getSerializedName() {
             return this.name().toLowerCase();
         }
     }

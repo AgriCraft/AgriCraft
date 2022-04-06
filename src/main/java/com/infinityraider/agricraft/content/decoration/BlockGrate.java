@@ -150,8 +150,8 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     }
 
     @Override
-    public void onBlockPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state,
-                                @Nullable LivingEntity placer, @Nonnull ItemStack stack, @Nullable BlockEntity tile) {
+    public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state,
+                            @Nullable LivingEntity placer, @Nonnull ItemStack stack, @Nullable BlockEntity tile) {
     }
 
     @Override
