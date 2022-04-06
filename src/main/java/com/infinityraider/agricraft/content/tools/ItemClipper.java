@@ -8,12 +8,12 @@ import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -22,30 +22,30 @@ import java.util.List;
 public class ItemClipper extends ItemBase implements IAgriClipperItem {
     public ItemClipper() {
         super(Names.Items.CLIPPER, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
-                .maxStackSize(1)
+                .tab(AgriTabs.TAB_AGRICRAFT)
+                .stacksTo(1)
         );
     }
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        World world = context.getWorld();
-        if(world.isRemote()) {
-            return ActionResultType.PASS;
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        Level world = context.getLevel();
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
         }
-        BlockPos pos = context.getPos();
-        ItemStack stack = context.getItem();
-        PlayerEntity player = context.getPlayer();
+        BlockPos pos = context.getClickedPos();
+        ItemStack stack = context.getItemInHand();
+        Player player = context.getPlayer();
         return AgriApi.getCrop(world, pos).map(crop -> {
             if(!crop.hasPlant() || !crop.getPlant().allowsClipping(crop.getGrowthStage(), stack, player)) {
                 if(player != null) {
-                    player.sendMessage(AgriToolTips.MSG_CLIPPING_IMPOSSIBLE, player.getUniqueID());
+                    player.sendMessage(AgriToolTips.MSG_CLIPPING_IMPOSSIBLE, player.getUUID());
                 }
-                return ActionResultType.FAIL;
+                return InteractionResult.FAIL;
             }
             if(MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Clip.Pre(crop, stack, player))) {
-                return ActionResultType.FAIL;
+                return InteractionResult.FAIL;
             }
             List<ItemStack> drops = Lists.newArrayList();
             crop.getPlant().getClipProducts(drops::add, stack, crop.getGrowthStage(), crop.getStats(), world.getRandom());
@@ -54,7 +54,7 @@ public class ItemClipper extends ItemBase implements IAgriClipperItem {
             AgriCropEvent.Clip.Post event = new AgriCropEvent.Clip.Post(crop, stack, drops, player);
             MinecraftForge.EVENT_BUS.post(event);
             event.getDrops().forEach(crop::dropItem);
-            return ActionResultType.SUCCESS;
-        }).orElse(ActionResultType.FAIL);
+            return InteractionResult.SUCCESS;
+        }).orElse(InteractionResult.FAIL);
     }
 }

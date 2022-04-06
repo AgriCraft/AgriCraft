@@ -10,10 +10,10 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -23,8 +23,8 @@ import java.util.List;
 public class ItemRake extends ItemBase implements IAgriRakeItem {
     public static RakeLogic WOOD_LOGIC = new RakeLogic(Names.Items.RAKE_WOOD) {
         @Override
-        public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.world() == null || crop.world().isRemote()) {
+        public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
+            if(crop.world() == null || crop.world().isClientSide()) {
                 return false;
             }
             if(!crop.hasWeeds()) {
@@ -43,8 +43,8 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
 
     public static RakeLogic IRON_LOGIC = new RakeLogic(Names.Items.RAKE_IRON) {
         @Override
-        public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.world() == null || crop.world().isRemote()) {
+        public boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
+            if(crop.world() == null || crop.world().isClientSide()) {
                 return false;
             }
             if(!crop.hasWeeds()) {
@@ -58,8 +58,8 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
 
     public ItemRake(RakeLogic logic) {
         super(logic.getName(), new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
-                .maxStackSize(1)
+                .tab(AgriTabs.TAB_AGRICRAFT)
+                .stacksTo(1)
         );
         this.logic = logic;
     }
@@ -70,10 +70,10 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        return AgriApi.getCrop(context.getWorld(), context.getPos())
-                .map(crop -> this.getRakeLogic().applyLogic(crop, context.getItem(), context.getPlayer()))
-                .orElse(ActionResultType.FAIL);
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        return AgriApi.getCrop(context.getLevel(), context.getClickedPos())
+                .map(crop -> this.getRakeLogic().applyLogic(crop, context.getItemInHand(), context.getPlayer()))
+                .orElse(InteractionResult.FAIL);
     }
 
     public static abstract class RakeLogic {
@@ -87,9 +87,9 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
             return this.name;
         }
 
-        public final ActionResultType applyLogic(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-            if(crop.world() == null || crop.world().isRemote()) {
-                return ActionResultType.PASS;
+        public final InteractionResult applyLogic(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
+            if(crop.world() == null || crop.world().isClientSide()) {
+                return InteractionResult.PASS;
             }
             if(!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Rake.Pre(crop, stack, player))) {
                 IAgriWeed weeds = crop.getWeeds();
@@ -100,12 +100,12 @@ public class ItemRake extends ItemBase implements IAgriRakeItem {
                     AgriCropEvent.Rake.Post event = new AgriCropEvent.Rake.Post(crop, stack, drops, player);
                     MinecraftForge.EVENT_BUS.post(event);
                     event.getDrops().forEach(crop::dropItem);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
 
-        protected abstract boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player);
+        protected abstract boolean doRakeAction(IAgriCrop crop, ItemStack stack, @Nullable Player player);
     }
 }

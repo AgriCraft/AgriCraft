@@ -9,6 +9,8 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.capability.CapabilitySeedBagContents;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.AgriEnchantmentRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
@@ -18,22 +20,22 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,14 +44,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
-    private static final ITextComponent NAME_DEACTIVATED = new TranslationTextComponent("item.agricraft.agri_seed_bag_inactive");
+    private static final Component NAME_DEACTIVATED = new TranslatableComponent("item.agricraft.agri_seed_bag_inactive");
 
     private final List<Sorter> sorters;
 
     public ItemSeedBag() {
         super(Names.Items.SEED_BAG, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
-                .maxStackSize(1)
+                .tab(AgriTabs.TAB_AGRICRAFT)
+                .stacksTo(1)
         );
         this.sorters = Lists.newArrayList();
         this.addSorter(DEFAULT_SORTER);
@@ -62,7 +64,7 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
 
     @Override
     public boolean isActivated(ItemStack stack) {
-        return EnchantmentHelper.getEnchantments(stack).containsKey(AgriCraft.instance.getModEnchantmentRegistry().seed_bag);
+        return EnchantmentHelper.getEnchantments(stack).containsKey(AgriEnchantmentRegistry.SEED_BAG);
     }
 
     @Override
@@ -99,44 +101,44 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        Contents contents = this.getContents(context.getItem());
-        if(this.isActivated(context.getItem())) {
-            Hand hand = context.getHand();
-            PlayerEntity player = context.getPlayer();
-            if (hand == Hand.OFF_HAND) {
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        Contents contents = this.getContents(context.getItemInHand());
+        if(this.isActivated(context.getItemInHand())) {
+            InteractionHand hand = context.getHand();
+            Player player = context.getPlayer();
+            if (hand == InteractionHand.OFF_HAND) {
                 // From off hand: interact with main to insert / extract seeds
                 if (player != null && this.attemptExtractOrInsertSeed(player, contents)) {
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else {
                 // From main hand: interact with the world to plant the seed
-                if (this.attemptPlantSeed(context.getWorld(), context.getPos(), contents, player)) {
-                    return ActionResultType.SUCCESS;
+                if (this.attemptPlantSeed(context.getLevel(), context.getClickedPos(), contents, player)) {
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         // From off hand: interact with main to insert / extract seeds
-        if(hand == Hand.OFF_HAND) {
-            ItemStack stack = player.getHeldItem(hand);
+        if(hand == InteractionHand.OFF_HAND) {
+            ItemStack stack = player.getItemInHand(hand);
             Contents contents = this.getContents(stack);
             if(this.isActivated(stack) && this.attemptExtractOrInsertSeed(player, contents)) {
-                return ActionResult.resultSuccess(stack);
+                return InteractionResultHolder.success(stack);
             }
         }
         // From main hand: world-interaction behaviour which is not handled in this method
-        return ActionResult.resultPass(player.getHeldItem(hand));
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 
-    protected boolean attemptPlantSeed(World world, BlockPos pos, Contents contents, @Nullable  PlayerEntity player) {
+    protected boolean attemptPlantSeed(Level world, BlockPos pos, Contents contents, @Nullable  Player player) {
         if (contents.getCount() > 0) {
-            TileEntity tile = world.getTileEntity(pos);
+            BlockEntity tile = world.getBlockEntity(pos);
             if (tile instanceof TileEntityCropSticks) {
                 // Attempt to plant on crop sticks
                 if(this.attemptPlantOnCrops((TileEntityCropSticks) tile, contents.extractFirstSeed(1, true), player)) {
@@ -144,8 +146,8 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
                     return true;
                 }
             } else {
-                BlockPos up = pos.up();
-                tile = world.getTileEntity(up);
+                BlockPos up = pos.above();
+                tile = world.getBlockEntity(up);
                 if(tile instanceof TileEntityCropSticks) {
                     // Attempt to plant above
                     if(this.attemptPlantOnCrops((TileEntityCropSticks) tile, contents.extractFirstSeed(1, true), player)) {
@@ -164,49 +166,50 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
         return false;
     }
 
-    protected boolean attemptPlantOnCrops(IAgriCrop crop, ItemStack seedStack, @Nullable  PlayerEntity player) {
+    protected boolean attemptPlantOnCrops(IAgriCrop crop, ItemStack seedStack, @Nullable  Player player) {
         return AgriApi.getGenomeAdapterizer().valueOf(seedStack).map(seed -> crop.plantGenome(seed, player)).orElse(false);
     }
 
-    protected boolean attemptPlantOnSoil(World world, BlockPos pos, ItemStack seedStack, @Nullable  PlayerEntity player) {
-        BlockPos up = pos.up();
+    protected boolean attemptPlantOnSoil(Level world, BlockPos pos, ItemStack seedStack, @Nullable  Player player) {
+        BlockPos up = pos.above();
         return AgriApi.getSoil(world, pos).map(soil -> {
-            BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
-            if (newState != null && world.setBlockState(up, newState, 11)) {
+            BlockState newState = AgriBlockRegistry.CROP_PLANT.getStateForPlacement(world, up);
+            if (newState != null && world.setBlock(up, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, up).map(crop ->
                         this.attemptPlantOnCrops(crop, seedStack, player))
                         .orElse(false);
                 if (success) {
                     return true;
                 } else {
-                    world.setBlockState(up, Blocks.AIR.getDefaultState());
+                    world.setBlock(up, Blocks.AIR.defaultBlockState(), 3);
                 }
             }
             return false;
         }).orElse(false);
     }
 
-    protected boolean attemptExtractOrInsertSeed(PlayerEntity player, Contents contents) {
-        ItemStack held = player.getHeldItem(Hand.MAIN_HAND);
+    protected boolean attemptExtractOrInsertSeed(Player player, Contents contents) {
+        // insertion / extraction of seeds is always executed from the main hand
+        ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
         if(held.isEmpty()) {
-            boolean last = player.isSneaking();
+            boolean last = player.isDiscrete();
             if(last) {
                 ItemStack out = contents.extractLastSeed(1, true);
                 if(!out.isEmpty()) {
-                    player.setHeldItem(Hand.MAIN_HAND, contents.extractLastSeed(1, false));
+                    player.setItemInHand(InteractionHand.MAIN_HAND, contents.extractLastSeed(1, false));
                     return true;
                 }
             } else {
                 ItemStack out =  contents.extractFirstSeed(1, true);
                 if(!out.isEmpty()) {
-                    player.setHeldItem(Hand.MAIN_HAND, contents.extractFirstSeed(1, false));
+                    player.setItemInHand(InteractionHand.MAIN_HAND, contents.extractFirstSeed(1, false));
                     return true;
                 }
             }
         } else if(held.getItem() instanceof ItemDynamicAgriSeed) {
             ItemStack remaining = contents.insertSeed(held, true);
             if(remaining.isEmpty() || remaining.getCount() != held.getCount()) {
-                player.setHeldItem(Hand.MAIN_HAND, contents.insertSeed(held, false));
+                player.setItemInHand(InteractionHand.MAIN_HAND, contents.insertSeed(held, false));
                 return true;
             }
         }
@@ -219,7 +222,7 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 1;
     }
 
@@ -235,27 +238,27 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
 
     @Nonnull
     @Override
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    public Component getName(@Nonnull ItemStack stack) {
         return this.isActivated(stack)
-                ? super.getDisplayName(stack)
+                ? super.getName(stack)
                 : NAME_DEACTIVATED;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull  List<ITextComponent> tooltip, @Nonnull  ITooltipFlag flag) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull  List<Component> tooltip, @Nonnull TooltipFlag flag) {
         // Overriding this method to leave a note:
         // We are handling the tooltip from an event handler to remove the enchantment tooltip
-        super.addInformation(stack, world, tooltip, flag);
+        super.appendHoverText(stack, world, tooltip, flag);
     }
 
     public static class StatSorter implements Sorter {
         private final IAgriStat stat;
-        private final ITextComponent description;
+        private final Component description;
 
         protected StatSorter(IAgriStat stat) {
             this.stat = stat;
-            this.description = new TranslationTextComponent("agricraft.message.seed_bag_sorter." + stat.getId());
+            this.description = new TranslatableComponent("agricraft.message.seed_bag_sorter." + stat.getId());
         }
 
         public IAgriStat getStat() {
@@ -263,12 +266,12 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
         }
 
         @Override
-        public ITextComponent getName() {
+        public Component getName() {
             return this.getStat().getDescription();
         }
 
         @Override
-        public ITextComponent describe() {
+        public Component describe() {
             return this.description;
         }
 
@@ -285,12 +288,12 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
 
     public static final Sorter DEFAULT_SORTER = new Sorter() {
         @Override
-        public ITextComponent getName() {
+        public Component getName() {
             return AgriToolTips.SEED_BAG_SORTER_DEFAULT;
         }
 
         @Override
-        public ITextComponent describe() {
+        public Component describe() {
             return AgriToolTips.MSG_SEED_BAG_DEFAULT_SORTER;
         }
 

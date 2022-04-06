@@ -7,10 +7,10 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.loot.IInfLootModifierSerializer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -32,7 +32,7 @@ public class LootModifierGrassDrops extends LootModifier {
     private final Entry[] entries;
     private final int totalWeight;
 
-    protected LootModifierGrassDrops(ILootCondition[] conditions, boolean reset, double chance, Entry[] entries) {
+    protected LootModifierGrassDrops(LootItemCondition[] conditions, boolean reset, double chance, Entry[] entries) {
         super(conditions);
         this.reset = reset;
         this.chance = chance;
@@ -152,7 +152,7 @@ public class LootModifierGrassDrops extends LootModifier {
         }
 
         @Override
-        public LootModifierGrassDrops read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
+        public LootModifierGrassDrops read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
             return new LootModifierGrassDrops(
                     conditions,
                     object.get("reset").getAsBoolean(),

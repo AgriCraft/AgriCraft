@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.infinitylib.world.IInfStructure;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class StructureGreenHouse implements IInfStructure {
     }
 
     @Override
-    public JigsawPattern.PlacementBehaviour placement() {
-        return JigsawPattern.PlacementBehaviour.RIGID;
+    public StructureTemplatePool.Projection placement() {
+        return StructureTemplatePool.Projection.RIGID;
     }
 }

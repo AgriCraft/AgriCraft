@@ -3,10 +3,12 @@ package com.infinityraider.agricraft.content.world;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nullable;
@@ -19,14 +21,14 @@ public class GreenHouse {
     private final Properties properties;
 
     public GreenHouse(Map<BlockPos, GreenHouse.BlockType> blocks) {
-        BlockPos.Mutable min = new BlockPos.Mutable(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-        BlockPos.Mutable max = new BlockPos.Mutable(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+        BlockPos.MutableBlockPos min = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        BlockPos.MutableBlockPos max = new BlockPos.MutableBlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
         MutableInt interiorCounter = new MutableInt(0);
         MutableInt ceilingCounter = new MutableInt(0);
         MutableInt ceilingGlassCounter = new MutableInt(0);
         this.parts = blocks.entrySet().stream().collect(Collectors.toMap(
                 entry -> new ChunkPos(entry.getKey()),
-                entry -> handleMapEntry(entry, !blocks.containsKey(entry.getKey().up()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
+                entry -> handleMapEntry(entry, !blocks.containsKey(entry.getKey().above()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
                 GreenHouse::mergeMaps
         )).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -124,12 +126,12 @@ public class GreenHouse {
             return this.gaps.size() > 0;
         }
 
-        protected void replaceAirBlocks(World world) {
-            BlockState air = AgriCraft.instance.getModBlockRegistry().greenhouse_air.getDefaultState();
+        protected void replaceAirBlocks(Level world) {
+            BlockState air = AgriBlockRegistry.GREENHOUSE_AIR.defaultBlockState();
             this.blocks.values().stream()
                     .filter(block -> block.getType().isAir())
                     .map(Block::getPos)
-                    .forEach(pos -> world.setBlockState(pos,air));
+                    .forEach(pos -> world.setBlock(pos,air, 3));
         }
 
         public CompoundTag writeToTag() {
@@ -172,8 +174,8 @@ public class GreenHouse {
         private int ceilingGlassCount;
 
         public Properties(BlockPos min, BlockPos max, int interiorCount, int ceilingCount, int ceilingGlassCount) {
-            this.min = min.toImmutable();
-            this.max = max.toImmutable();
+            this.min = min.immutable();
+            this.max = max.immutable();
             this.interiorCount = interiorCount;
             this.ceilingCount = ceilingCount;
             this.ceilingGlassCount = ceilingGlassCount;
@@ -237,7 +239,7 @@ public class GreenHouse {
     }
 
     private static Map<BlockPos, GreenHouse.Block> handleMapEntry(
-            Map.Entry<BlockPos, GreenHouse.BlockType> entry, boolean ceiling, BlockPos.Mutable min, BlockPos.Mutable max,
+            Map.Entry<BlockPos, GreenHouse.BlockType> entry, boolean ceiling, BlockPos.MutableBlockPos min, BlockPos.MutableBlockPos max,
             MutableInt interiorCounter, MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
         Map<BlockPos, GreenHouse.Block> map = Maps.newHashMap();
         map.put(entry.getKey(), new Block(entry.getKey(), entry.getValue(), ceiling));
@@ -250,12 +252,12 @@ public class GreenHouse {
                 ceilingGlassCounter.increment();
             }
         }
-        min.setPos(
+        min.set(
                 Math.min(entry.getKey().getX(), min.getX()),
                 Math.min(entry.getKey().getY(), min.getY()),
                 Math.min(entry.getKey().getZ(), min.getZ())
         );
-        max.setPos(
+        max.set(
                 Math.max(entry.getKey().getX(), max.getX()),
                 Math.max(entry.getKey().getY(), max.getY()),
                 Math.max(entry.getKey().getZ(), max.getZ())
