@@ -229,12 +229,11 @@ dependencies {
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
     runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
-    //Create v1.16.5-0.3.2b
-    //do not use higher because it won't work in-dev (create/flywheel use official mappings and it cause some problems when remapped to mcp)
-    //compileOnly fg.deobf("curse.maven:create-328085:3386319")
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3386319")
-    //compileOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency v1.16.5-0.1.1
-    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency
+    //Create
+    compileOnly fg.deobf("curse.maven:create-328085:3737418")
+    runtimeOnly fg.deobf("curse.maven:create-328085:3737418")
+    compileOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency v1.16.5-0.1.1
+    runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
 
 
     //Cyclic 1.16.5-1.5.1 // 1.2.1
