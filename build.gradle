@@ -236,9 +236,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
 
 
-    //Cyclic 1.16.5-1.5.1 // 1.2.1
-    //compileOnly fg.deobf("curse.maven:cyclic-239286:3482950")
-    //runtimeOnly fg.deobf("curse.maven:cyclic-239286:3482950")
+    //Cyclic
+    compileOnly fg.deobf("curse.maven:cyclic-239286:3708026")
+    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
 
     //Immersive Engineering
     //compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.5-140")
