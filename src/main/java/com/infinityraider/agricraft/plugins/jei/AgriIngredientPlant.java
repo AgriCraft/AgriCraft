@@ -1,42 +1,46 @@
 package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.registration.IModIngredientRegistration;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @OnlyIn(Dist.CLIENT)
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AgriIngredientPlant {
     public static final IIngredientType<IAgriPlant> TYPE = () -> IAgriPlant.class;
+    private static final Map<IAgriPlant, ResourceLocation> IDS = Maps.newIdentityHashMap();
 
-    private static final IIngredientHelper<IAgriPlant> HELPER = new IIngredientHelper<IAgriPlant>() {
+    private static final IIngredientHelper<IAgriPlant> HELPER = new IIngredientHelper<>() {
         @Override
-        public IAgriPlant getMatch(Iterable<IAgriPlant> iterable, @Nonnull IAgriPlant plant) {
-            return StreamSupport.stream(iterable.spliterator(), false)
-                    .filter(aPlant -> aPlant == plant)
-                    .findFirst().orElse(plant);
+        public IIngredientType<IAgriPlant> getIngredientType() {
+            return TYPE;
         }
 
         @Override
@@ -45,19 +49,27 @@ public class AgriIngredientPlant {
         }
 
         @Override
-        public String getUniqueId(IAgriPlant plant) {
+        public String getUniqueId(IAgriPlant plant, UidContext context) {
             return plant.getId();
         }
 
-        @Nonnull
         @Override
+        @Deprecated
+        @SuppressWarnings("deprecation")
         public String getModId(IAgriPlant plant) {
-            return plant.getSeedModel().getNamespace();
+            return this.getResourceLocation(plant).getNamespace();
         }
 
         @Override
+        @Deprecated
+        @SuppressWarnings("deprecation")
         public String getResourceId(IAgriPlant plant) {
-            return plant.getId();
+            return this.getResourceLocation(plant).getPath();
+        }
+
+        @Override
+        public  ResourceLocation getResourceLocation(IAgriPlant plant) {
+            return IDS.computeIfAbsent(plant, p -> new ResourceLocation(p.getSeedModel().getNamespace(), p.getId()));
         }
 
         @Nonnull
@@ -87,38 +99,37 @@ public class AgriIngredientPlant {
         }
 
         @Override
-        public void render(@Nonnull MatrixStack transform, int x, int y, @Nullable IAgriPlant plant) {
+        public void render(@Nonnull PoseStack transform, @Nullable IAgriPlant plant) {
             if(plant == null) {
                 return;
             }
             Optional.ofNullable(stageMap.remove(plant)).map(stage -> {
-                    this.renderStage(transform, x, y, plant, stage);
+                    this.renderStage(transform, plant, stage);
                     return true;
             }).orElseGet(() ->  {
                 plant.getGrowthStages().stream().filter(IAgriGrowthStage::isMature).findFirst().ifPresent(stage ->
-                    this.renderStage(transform, x, y, plant, stage));
+                    this.renderStage(transform, plant, stage));
                 return false;
             });
         }
 
-        private void renderStage(@Nonnull MatrixStack transform, int x, int y, IAgriPlant plant, IAgriGrowthStage stage) {
+        private void renderStage(@Nonnull PoseStack transform, IAgriPlant plant, IAgriGrowthStage stage) {
             this.bindTextureAtlas();
-            plant.getGuiRenderer().drawGrowthStage(plant, stage, this, transform, x, y, 16, 16);
+            plant.getGuiRenderer().drawGrowthStage(plant, stage, this, transform, 0, 0, 16, 16);
         }
 
         @Nonnull
         @Override
-        public List<ITextComponent> getTooltip(IAgriPlant plant, @Nonnull ITooltipFlag iTooltipFlag) {
-            List<ITextComponent> tooltip = Lists.newArrayList();
+        public List<Component> getTooltip(IAgriPlant plant, @Nonnull TooltipFlag iTooltipFlag) {
+            List<Component> tooltip = Lists.newArrayList();
             plant.addTooltip(tooltip::add);
             return tooltip;
         }
 
         @Override
-        @SuppressWarnings("deprecation")
-        public void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float width, float height, float r, float g, float b, float a) {
+        public void draw(PoseStack transforms, TextureAtlasSprite texture, float x, float y, float width, float height, float r, float g, float b, float a) {
             this.bindTextureAtlas();
-            GlStateManager.color4f(r, g, b, a);
+            RenderSystem.setShaderColor(r, g, b, a);
             Screen.blit(transforms, (int) x, (int) y, 0, (int) width, (int) height, texture);
         }
 

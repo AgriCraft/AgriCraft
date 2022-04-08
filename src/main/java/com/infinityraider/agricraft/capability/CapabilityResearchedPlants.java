@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.capability;
 
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants.Impl;
@@ -121,13 +120,7 @@ public class CapabilityResearchedPlants implements IInfSerializableCapabilityImp
         public void configureJei() {
             if(AgriCraft.instance.getEffectiveSide().isClient()) {
                 if (AgriCraft.instance.getConfig().progressiveJEI()) {
-                    AgriApi.getMutationRegistry().stream().forEach(mutation -> {
-                        if (this.isMutationResearched(mutation)) {
-                            JeiBridge.unHideMutation(mutation);
-                        } else {
-                            JeiBridge.hideMutation(mutation);
-                        }
-                    });
+                    JeiBridge.hideAndUnhideMutations(this.player);
                 }
             } else {
                 new MessageSyncResearchCapability(this).sendTo(this.player);

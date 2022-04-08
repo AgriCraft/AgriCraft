@@ -63,7 +63,7 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
     @Override
     public boolean shouldApplyCapability(ItemStack carrier) {
         Item item = carrier.getItem();
-        return item instanceof ArmorItem && ((ArmorItem) item).getEquipmentSlot(carrier) == EquipmentSlot.HEAD;
+        return item instanceof ArmorItem && item.getEquipmentSlot(carrier) == EquipmentSlot.HEAD;
     }
 
     @Override
