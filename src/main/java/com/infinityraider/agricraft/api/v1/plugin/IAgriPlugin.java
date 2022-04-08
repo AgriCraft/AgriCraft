@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.plugin;
 
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
@@ -15,6 +16,8 @@ import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.event.lifecycle.*;
 
 /**
@@ -100,5 +103,10 @@ public interface IAgriPlugin {
 
     default void registerSeasonLogic(@Nonnull IAgriSeasonLogic seasonLogic) {
         // Default Implementation: Do nothing.
+    }
+
+    default <T> LazyOptional<T> getCropCapability(@Nonnull Capability<T> cap, IAgriCrop crop) {
+        // Default Implementation: Return empty optional.
+        return LazyOptional.empty();
     }
 }

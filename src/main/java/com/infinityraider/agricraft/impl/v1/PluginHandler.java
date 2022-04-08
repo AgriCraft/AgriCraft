@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -26,6 +27,8 @@ import javax.annotation.Nonnull;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.forgespi.language.ModFileScanData;
@@ -159,5 +162,13 @@ public final class PluginHandler {
                 plugin.getDescription(),
                 plugin.isEnabled() ? "Enabled" : "Disabled"
         );
+    }
+
+    public static <T> LazyOptional<T> getCropCapability(Capability<T> capability, IAgriCrop crop) {
+        return PLUGINS.stream()
+                .map(plugin -> plugin.getCropCapability(capability, crop))
+                .filter(LazyOptional::isPresent)
+                .findFirst()
+                .orElse(LazyOptional.empty());
     }
 }

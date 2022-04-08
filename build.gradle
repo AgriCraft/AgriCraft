@@ -249,8 +249,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
 
     //Botania
-    //compileOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT:api")
-    //runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT")
+    compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
     //Botany pots
     //compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")

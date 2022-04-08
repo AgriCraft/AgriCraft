@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
+import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoWeed;
@@ -676,5 +677,16 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     @Override
     public final ModelDataMap getModelData() {
         return this.data;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+        LazyOptional<T> fromPlugins = PluginHandler.getCropCapability(cap, this);
+        if(fromPlugins.isPresent()) {
+            return fromPlugins;
+        } else {
+            return super.getCapability(cap);
+        }
     }
 }
