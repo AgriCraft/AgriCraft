@@ -225,14 +225,6 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
 
-    //Better Weather
-    //compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
-    //runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
-
-    //Blood Magic
-    //compileOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
-    //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
-
     //Botania
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
     runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
