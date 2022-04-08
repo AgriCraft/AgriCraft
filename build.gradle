@@ -269,19 +269,6 @@ processResources {
         into 'json/defaults'
     }
     outputs.upToDateWhen{ false }
-	
-	// make sure to include mods.toml from the main mod
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version': project.version
-    }
-
-    // from the main mod, copy everything else, that's not the mods.toml
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml', '**/psd/**'
-    }
 }
 
 jar {
