@@ -186,13 +186,7 @@ repositories {
     }
 
     maven {
-        // for TOP
-        name 'tterrag maven'
-        url "https://maven.tterrag.com/"
-    }
-
-    maven {
-        // for Botania and Botany pots
+        // for Botania
         url 'https://maven.blamejared.com'
     }
 
@@ -203,11 +197,6 @@ repositories {
             includeGroup 'blusunrize.immersiveengineering'
             includeGroup 'malte0811'
         }
-    }
-
-    maven {
-        // for Simply Seasons
-        url 'https://maven.joshiejack.uk/'
     }
 
     // For AgriCore dependencies
@@ -236,10 +225,6 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
 
-    //TOP
-    //compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
-    //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
-
     //Better Weather
     //compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
     //runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
@@ -252,7 +237,7 @@ dependencies {
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
     runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
-    //Botany pots
+    //Botany pots //(not yet available for 1.18.2)
     //compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
     //compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
     //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
@@ -289,14 +274,8 @@ dependencies {
 	//runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
 
     //Serene Seasons
-    //compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-    //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-
-    //Simply Seasons
-    //compileOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
-    //compileOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
-    //runtimeOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
-    //runtimeOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
+    compileOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
+    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
 
     //Straw Golems
     //compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")

@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.plugins.sereneseasons;
 
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
-import net.minecraft.block.AbstractGlassBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractGlassBlock;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;
 import sereneseasons.config.FertilityConfig;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 
-public class SereneSeasonsSeasonGetter implements BiFunction<World, BlockPos, AgriSeason> {
+public class SereneSeasonsSeasonGetter implements BiFunction<Level, BlockPos, AgriSeason> {
     private static final SereneSeasonsSeasonGetter INSTANCE = new SereneSeasonsSeasonGetter();
 
     public static SereneSeasonsSeasonGetter getInstance() {
@@ -35,7 +35,7 @@ public class SereneSeasonsSeasonGetter implements BiFunction<World, BlockPos, Ag
     }
 
     @Override
-    public AgriSeason apply(World world, BlockPos pos) {
+    public AgriSeason apply(Level world, BlockPos pos) {
         // Serene Seasons cave stuff
         if (FertilityConfig.undergroundFertilityLevel.get() > -1
                 && pos.getY() < FertilityConfig.undergroundFertilityLevel.get()
@@ -43,9 +43,9 @@ public class SereneSeasonsSeasonGetter implements BiFunction<World, BlockPos, Ag
             return AgriSeason.ANY;
         }
         // Serene Seasons greenhouse stuff
-        BlockPos.Mutable mutablePos = pos.toMutable();
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         for(int i = 0; i < 16; ++i) {
-            mutablePos.setPos(pos.getX(), pos.getY() + i, pos.getZ());
+            mutablePos.set(pos.getX(), pos.getY() + i, pos.getZ());
             if (world.getBlockState(mutablePos).getBlock() instanceof AbstractGlassBlock) {
                 return AgriSeason.ANY;
             }
