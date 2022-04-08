@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.plugins.mysticalagriculture;
 
 import com.blakebr0.mysticalagriculture.api.MysticalAgricultureAPI;
-import com.blakebr0.mysticalagriculture.api.crop.ICrop;
+import com.blakebr0.mysticalagriculture.api.crop.Crop;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
@@ -13,10 +13,10 @@ import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -109,7 +109,7 @@ public class MysticalAgricultureCompatClient {
                 return color == -1 ? -1 : (0xFF << 24) + color;
             }
             return -1;
-        }, AgriItemRegistry.getInstance().seed);
+        }, AgriItemRegistry.SEED);
     }
 
     /**
@@ -120,7 +120,7 @@ public class MysticalAgricultureCompatClient {
      */
     @SuppressWarnings("deprecation")
     public static int colorForFlower(String plantId) {
-        ICrop mysticalCrop = getCropFromPlantId(plantId);
+        Crop mysticalCrop = getCropFromPlantId(plantId);
         return mysticalCrop == null ? -1 : mysticalCrop.getFlowerColor();
     }
 
@@ -132,12 +132,12 @@ public class MysticalAgricultureCompatClient {
      */
     @SuppressWarnings("deprecation")
     public static int colorForSeed(String plantId) {
-        ICrop crop = getCropFromPlantId(plantId);
+        Crop crop = getCropFromPlantId(plantId);
         return crop != null && crop.isSeedColored() ? crop.getSeedColor() : -1;
     }
 
     @SuppressWarnings("deprecation")
-    public static ICrop getCropFromPlantId(String plantId) {
+    public static Crop getCropFromPlantId(String plantId) {
         String[] split = plantId.split(":");
         if(split.length > 1) {
             String path = split[1];
