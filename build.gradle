@@ -223,34 +223,34 @@ dependencies {
 
     //Botania
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
-    runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
+    //runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
     //Create
     compileOnly fg.deobf("curse.maven:create-328085:3737418")
-    runtimeOnly fg.deobf("curse.maven:create-328085:3737418")
     compileOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency v1.16.5-0.1.1
-    runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
+    //runtimeOnly fg.deobf("curse.maven:create-328085:3737418")
+    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
 
     //Cyclic
     compileOnly fg.deobf("curse.maven:cyclic-239286:3708026")
-    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
+    //runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
 
     //Immersive Engineering
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
-    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
+    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
     //Jade
     compileOnly fg.deobf("curse.maven:jade-324717:3681449")
-    runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
+    //runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
 
     //Mystical Agriculture
     compileOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
-	runtimeOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
-	runtimeOnly fg.deobf("com.blakebr0.cucumber:Cucumber:1.18.2-5.1.0")   //Mystical Agriculture runtime dependency
+	//runtimeOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
+	//runtimeOnly fg.deobf("com.blakebr0.cucumber:Cucumber:1.18.2-5.1.0")   //Mystical Agriculture runtime dependency
 
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
-    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
+    //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
 
     //The One Probe
     compileOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
