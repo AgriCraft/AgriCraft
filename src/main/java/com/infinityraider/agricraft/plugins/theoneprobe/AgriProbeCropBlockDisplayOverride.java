@@ -4,26 +4,25 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.core.BlockCropPlant;
 import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
 import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class AgriProbeCropBlockDisplayOverride implements IBlockDisplayOverride {
-    private static final ITextComponent MOD_ID = new StringTextComponent("{=m=}Agricraft"); // TOP uses {=m=} to format the text
+    private static final TextComponent MOD_ID = new TextComponent("{=m=}Agricraft"); // TOP uses {=m=} to format the text
 
     protected AgriProbeCropBlockDisplayOverride() {
         super();
     }
 
     @Override
-    public boolean overrideStandardInfo(ProbeMode mode, IProbeInfo info, PlayerEntity playerEntity, World world,
+    public boolean overrideStandardInfo(ProbeMode mode, IProbeInfo info, Player playerEntity, Level world,
                                         BlockState state, IProbeHitData hitData) {
         if(state.getBlock() instanceof BlockCropPlant) {
-            TileEntity tile = world.getTileEntity(hitData.getPos());
+            BlockEntity tile = world.getBlockEntity(hitData.getPos());
             if(tile instanceof TileEntityCropPlant) {
                 TileEntityCropPlant crop = (TileEntityCropPlant) tile;
                 IAgriPlant plant = crop.getPlant();

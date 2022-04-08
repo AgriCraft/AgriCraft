@@ -251,6 +251,10 @@ dependencies {
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
     runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
+
+    //The One Probe
+    compileOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
+    runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
 }
 
 // Delete Old Plants
