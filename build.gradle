@@ -236,8 +236,8 @@ dependencies {
     runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
     //Jade
-    //compileOnly fg.deobf("curse.maven:jade-324717:3302544")
-    //runtimeOnly fg.deobf("curse.maven:jade-324717:3302544")
+    compileOnly fg.deobf("curse.maven:jade-324717:3681449")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
 
     //Mystical Agriculture
     //compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
