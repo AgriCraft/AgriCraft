@@ -5,10 +5,10 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import org.apache.commons.lang3.tuple.Pair;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Transformation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class AgriRenderFunction implements ClocheRenderFunction {
     }
 
     @Override
-    public Collection<Pair<BlockState, TransformationMatrix>> getBlocks(ItemStack stack, float growth) {
+    public Collection<Pair<BlockState, Transformation>> getBlocks(ItemStack stack, float growth) {
         return Collections.emptyList();
     }
 

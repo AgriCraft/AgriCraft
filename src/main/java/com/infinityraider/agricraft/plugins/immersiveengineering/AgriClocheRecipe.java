@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.plugins.immersiveengineering;
 import blusunrize.immersiveengineering.api.crafting.ClocheRecipe;
 import blusunrize.immersiveengineering.api.crafting.ClocheRenderFunction;
 import blusunrize.immersiveengineering.api.crafting.IERecipeSerializer;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -16,41 +15,46 @@ import com.infinityraider.agricraft.api.v1.requirement.AnySoilIngredient;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
+import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.requirement.NoSoil;
 import com.infinityraider.agricraft.impl.v1.stats.NoStats;
 import com.infinityraider.infinitylib.crafting.IInfIngredientSerializer;
 import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.util.Lazy;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AgriClocheRecipe extends ClocheRecipe {
     private static final ItemStack FARMLAND = new ItemStack(Items.FARMLAND);
 
     public static final Serializer SERIALIZER = new Serializer();
-    private static final List<ItemStack> SEED_STACK = ImmutableList.of(new ItemStack(AgriCraft.instance.getModItemRegistry().seed));
     private static final Random RANDOM = new Random();
 
     private static final ClocheRenderFunction.ClocheRenderReference RENDER_REFERENCE =
             new ClocheRenderFunction.ClocheRenderReference(
                     AgriCraft.instance.getModId(),
-                    AgriCraft.instance.getModBlockRegistry().crop_plant
+                    AgriBlockRegistry.CROP_PLANT
             );
 
     private final AgriPlantIngredient seed;
     private final float growthStatFactor;
 
     public AgriClocheRecipe(ResourceLocation id, AgriPlantIngredient seed, int time, float growthStatFactor) {
-        super(id, SEED_STACK, seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
+        super(id, Lazy.of(() -> new ItemStack(AgriItemRegistry.SEED)), seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
         this.seed = seed;
         this.growthStatFactor = growthStatFactor;
     }
@@ -106,7 +110,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
     }
 
     @Override
-    public List<ItemStack> getOutputs(ItemStack seed, ItemStack soil) {
+    public List<Lazy<ItemStack>> getOutputs(ItemStack seed, ItemStack soil) {
         List<ItemStack> outputs = Lists.newArrayList();
         IAgriPlant plant = this.getPlant(seed);
         if(plant.isPlant()) {
@@ -117,7 +121,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
                     RANDOM
             );
         }
-        return outputs;
+        return outputs.stream().map(stack -> Lazy.of(() -> stack)).collect(Collectors.toList());
     }
 
     @Override
@@ -146,7 +150,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         MutableObject<ItemStack> product = new MutableObject<>();
         this.getSeed().getPlant().getAllPossibleProducts(stack -> {
             if(product.getValue() == null) {
@@ -162,7 +166,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
         return SERIALIZER;
     }
 
-    private static class Serializer extends IERecipeSerializer<ClocheRecipe> implements IRecipeSerializer<ClocheRecipe>, IInfRecipeSerializer {
+    private static class Serializer extends IERecipeSerializer<ClocheRecipe> implements RecipeSerializer<ClocheRecipe>, IInfRecipeSerializer {
         private static final String ID = "agri_cloche_recipe";
 
         @Nonnull
@@ -183,11 +187,11 @@ public class AgriClocheRecipe extends ClocheRecipe {
 
         @Override
         public ItemStack getIcon() {
-            return new ItemStack(AgriCraft.instance.getModItemRegistry().debugger);
+            return new ItemStack(AgriItemRegistry.DEBUGGER);
         }
 
         @Override
-        public AgriClocheRecipe readFromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
+        public AgriClocheRecipe fromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json) {
             if(!json.has("plant")) {
                 throw new JsonParseException("Agricraft botany pots crop must have a \"plant\" property");
             }
@@ -197,18 +201,23 @@ public class AgriClocheRecipe extends ClocheRecipe {
             if(!json.has("growthStatFactor")) {
                 throw new JsonParseException("Agricraft botany pots crop must have a \"growthStatFactor\" property");
             }
-            AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.parse(json);
+            AgriPlantIngredient plant = AgriRecipeSerializerRegistry.PLANT_INGREDIENT.parse(json);
             int growthTicks = json.get("growthTicks").getAsInt();
             float growthStatFactor = json.get("growthStatFactor").getAsFloat();
             Map<String, ClocheRenderFunction.ClocheRenderFunctionFactory> RENDER_FUNCTION_FACTORIES = ClocheRenderFunction.RENDER_FUNCTION_FACTORIES;
             return new AgriClocheRecipe(recipeId, plant, growthTicks, growthStatFactor);
         }
 
+        @Override
+        public AgriClocheRecipe readFromJson(@Nonnull ResourceLocation recipeId, @Nonnull JsonObject json, ICondition.IContext context) {
+            return this.fromJson(recipeId, json);
+        }
+
         @Nullable
         @Override
-        public AgriClocheRecipe read(@Nonnull ResourceLocation recipeId, @Nonnull PacketBuffer buffer) {
+        public AgriClocheRecipe fromNetwork(@Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer) {
             if(buffer.readBoolean()) {
-                AgriPlantIngredient plant = AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.parse(buffer);
+                AgriPlantIngredient plant = AgriRecipeSerializerRegistry.PLANT_INGREDIENT.parse(buffer);
                 int growthTicks = buffer.readInt();
                 float growthStatFactor = buffer.readFloat();
                 return new AgriClocheRecipe(recipeId, plant, growthTicks, growthStatFactor);
@@ -218,11 +227,11 @@ public class AgriClocheRecipe extends ClocheRecipe {
         }
 
         @Override
-        public void write(@Nonnull PacketBuffer buffer, @Nonnull ClocheRecipe clocheRecipe) {
+        public void toNetwork(@Nonnull FriendlyByteBuf buffer, @Nonnull ClocheRecipe clocheRecipe) {
             if(clocheRecipe instanceof AgriClocheRecipe) {
                 AgriClocheRecipe recipe = (AgriClocheRecipe) clocheRecipe;
                 buffer.writeBoolean(true);
-                AgriCraft.instance.getModRecipeSerializerRegistry().plant_ingredient.write(buffer, recipe.getSeed());
+                AgriRecipeSerializerRegistry.PLANT_INGREDIENT.write(buffer, recipe.getSeed());
                 buffer.writeInt(recipe.getGrowthTicks());
                 buffer.writeFloat(recipe.getGrowthStatFactor());
             } else {
