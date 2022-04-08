@@ -229,12 +229,6 @@ dependencies {
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
     runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
-    //Botany pots //(not yet available for 1.18.2)
-    //compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
-    //compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
-    //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
-    //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
-
     //Create v1.16.5-0.3.2b
     //do not use higher because it won't work in-dev (create/flywheel use official mappings and it cause some problems when remapped to mcp)
     //compileOnly fg.deobf("curse.maven:create-328085:3386319")
