@@ -85,7 +85,7 @@ public final class CoreHandler {
         if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {
             ResourceHelper.copyResources(
                     ModList.get().getModFiles().stream().map(IModFileInfo::getFile).map(IModFile::getFilePath),
-                    JSON_FILE_PATTERN.asPredicate(),
+                    JSON_FILE_PATTERN,
                     AGRI_FOLDER_PATTERN.asPredicate().and(MOD_FILTER),
                     configDir::resolve,
                     false);
