@@ -98,6 +98,10 @@ minecraft {
                     //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
                     source project("InfinityLib").sourceSets.main
                 }
+                agricore {
+                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
+                    source project("AgriCore").sourceSets.main
+                }
             }
         }
 
@@ -213,6 +217,7 @@ dependencies {
 
     // AgriCore
     embed project(':AgriCore')
+    implementation project(':AgriCore' )
     
     // InfinityLib
     compileOnly project(":InfinityLib")
