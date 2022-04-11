@@ -98,10 +98,6 @@ minecraft {
                     //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
                     source project("InfinityLib").sourceSets.main
                 }
-                agricore {
-                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
-                    source project("AgriCore").sourceSets.main
-                }
             }
         }
 
@@ -207,7 +203,15 @@ repositories {
 // Add "embedded" configuration
 configurations {
     embed
-    compileOnly.extendsFrom(embed)
+    implementation.extendsFrom(embed)
+}
+
+// To make sure Forge does not ignore the embedded projects
+// See: https://gist.github.com/SizableShrimp/66b22f1b24c255e1491c8d98d3f11f83
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.embed.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
 }
 
 // List Deps.
@@ -217,7 +221,6 @@ dependencies {
 
     // AgriCore
     embed project(':AgriCore')
-    implementation project(':AgriCore' )
     
     // InfinityLib
     compileOnly project(":InfinityLib")
