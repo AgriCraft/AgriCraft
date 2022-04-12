@@ -10,52 +10,80 @@ import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
+import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
+import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
-public class AgriTileRegistry {
+public class AgriTileRegistry extends ModContentRegistry {
     private static final AgriTileRegistry INSTANCE = new AgriTileRegistry();
 
     public static AgriTileRegistry getInstance() {
         return INSTANCE;
     }
 
-    public static final InfinityTileEntityType<TileEntityCropPlant> CROP_PLANT = InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
-            .addBlock(AgriApi.getAgriContent().getBlocks().getCropPlantBlock())
-            .build();
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityCropPlant>> crop_plant;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityCropSticks>> crop_sticks;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntitySeedAnalyzer>> seed_analyzer;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationTank>> irrigation_tank;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationChannel>> irrigation_channel;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntitySprinkler>> sprinkler;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityGrate>> grate;
 
-    public static final InfinityTileEntityType<TileEntityCropSticks> CROP_STICKS = InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
-            .addBlocks(
-                    AgriApi.getAgriContent().getBlocks().getWoodCropSticksBlock(),
-                    AgriApi.getAgriContent().getBlocks().getIronCropSticksBlock(),
-                    AgriApi.getAgriContent().getBlocks().getObsidianCropSticksBlock())
-            .build();
+    private AgriTileRegistry() {
+        super();
 
-    public static final InfinityTileEntityType<TileEntitySeedAnalyzer> SEED_ANALYZER = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
-            .addBlock(AgriApi.getAgriContent().getBlocks().getSeedAnalyzerBlock())
-            .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
-            .build();
+        this.crop_plant = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getCropPlantBlock())
+                        .build()
+        );
 
-    public static final InfinityTileEntityType<TileEntityIrrigationTank> IRRIGATION_TANK = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
-            .addBlock(AgriApi.getAgriContent().getBlocks().getTankBlock())
-            .setTicking()
-            .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
-            .build();
+        this.crop_sticks = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
+                        .addBlocks(
+                                AgriApi.getAgriContent().getBlocks().getWoodCropSticksBlock(),
+                                AgriApi.getAgriContent().getBlocks().getIronCropSticksBlock(),
+                                AgriApi.getAgriContent().getBlocks().getObsidianCropSticksBlock())
+                        .build()
+        );
 
-    public static final InfinityTileEntityType<TileEntityIrrigationChannel> IRRIGATION_CHANNEL = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
-            .addBlocks(
-                    AgriApi.getAgriContent().getBlocks().getChannelBlock(),
-                    AgriApi.getAgriContent().getBlocks().getHollowChannelBlock()
-            )
-            .setTicking()
-            .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
-            .build();
+        this.seed_analyzer = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getSeedAnalyzerBlock())
+                        .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
+                        .build()
+        );
 
-    public static final InfinityTileEntityType<TileEntitySprinkler> SPRINKLER = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
-            .addBlock(AgriApi.getAgriContent().getBlocks().getSprinklerBlock())
-            .setRenderFactory(TileEntitySprinkler.createRenderFactory())
-            .setTicking()
-            .build();
+        this.irrigation_tank = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getTankBlock())
+                        .setTicking()
+                        .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
+                        .build()
+        );
 
-    public static final InfinityTileEntityType<TileEntityGrate> GRATE = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
-            .addBlock(AgriApi.getAgriContent().getBlocks().getGrateBlock())
-            .build();
+        this.irrigation_channel = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
+                        .addBlocks(
+                                AgriApi.getAgriContent().getBlocks().getChannelBlock(),
+                                AgriApi.getAgriContent().getBlocks().getHollowChannelBlock()
+                        )
+                        .setTicking()
+                        .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
+                        .build()
+        );
+
+        this.sprinkler = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getSprinklerBlock())
+                        .setRenderFactory(TileEntitySprinkler.createRenderFactory())
+                        .setTicking()
+                        .build()
+        );
+
+        this.grate = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getGrateBlock())
+                        .build()
+        );
+    }
 }

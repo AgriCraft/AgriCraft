@@ -64,7 +64,7 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
 
     @Override
     public boolean isActivated(ItemStack stack) {
-        return EnchantmentHelper.getEnchantments(stack).containsKey(AgriEnchantmentRegistry.SEED_BAG);
+        return EnchantmentHelper.getEnchantments(stack).containsKey(AgriEnchantmentRegistry.seed_bag);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
     protected boolean attemptPlantOnSoil(Level world, BlockPos pos, ItemStack seedStack, @Nullable  Player player) {
         BlockPos up = pos.above();
         return AgriApi.getSoil(world, pos).map(soil -> {
-            BlockState newState = AgriBlockRegistry.CROP_PLANT.getStateForPlacement(world, up);
+            BlockState newState = AgriBlockRegistry.crop_plant.getStateForPlacement(world, up);
             if (newState != null && world.setBlock(up, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, up).map(crop ->
                         this.attemptPlantOnCrops(crop, seedStack, player))

@@ -23,7 +23,7 @@ public class ChickenBreedItemInjector {
             // Create new ingredient based on the old one and add the agricraft seed
             Ingredient ingredient = Ingredient.of(Stream.concat(
                     Arrays.stream(((Ingredient) field.get(null)).getItems()),
-                    Stream.of(new ItemStack(AgriItemRegistry.SEED))
+                    Stream.of(new ItemStack(AgriItemRegistry.seed))
             ));
             // Set the ingredient
             if(!UnsafeUtil.getInstance().replaceStaticField(field, ingredient)) {

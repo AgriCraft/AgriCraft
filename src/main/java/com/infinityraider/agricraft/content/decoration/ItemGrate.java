@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class ItemGrate extends ItemCustomWood {
     public ItemGrate() {
-        super(AgriBlockRegistry.GRATE, new Properties()
+        super(AgriBlockRegistry.grate, new Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
         );
     }

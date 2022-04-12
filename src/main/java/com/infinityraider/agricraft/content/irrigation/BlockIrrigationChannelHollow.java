@@ -76,7 +76,7 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
     @Nonnull
     @Override
     public ItemIrrigationChannelHollow asItem() {
-        return AgriItemRegistry.CHANNEL_HOLLOW;
+        return AgriItemRegistry.channel_hollow;
     }
 
     @Override

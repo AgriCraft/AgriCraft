@@ -42,10 +42,10 @@ public class BlockGreenHouseAirRenderer {
     public void render(RenderLevelLastEvent event) {
         Player player = AgriCraft.instance.getClientPlayer();
         ItemStack stack = player.getMainHandItem();
-        if(stack.getItem() != AgriItemRegistry.DEBUGGER) {
+        if(stack.getItem() != AgriItemRegistry.debugger) {
             return;
         }
-        if(AgriItemRegistry.DEBUGGER.getDebugMode(stack) instanceof DebugModeGreenHouse) {
+        if(AgriItemRegistry.debugger.getDebugMode(stack) instanceof DebugModeGreenHouse) {
             this.highlightGreenHouseAirBlocks(player.getLevel(), player.blockPosition(), event.getPoseStack());
         }
     }

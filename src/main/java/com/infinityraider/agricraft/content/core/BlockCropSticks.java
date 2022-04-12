@@ -238,7 +238,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                 }
             } else {
                 // no more crop sticks, but still plant, and fluid
-                BlockState newState = AgriBlockRegistry.CROP_PLANT.defaultBlockState();
+                BlockState newState = AgriBlockRegistry.crop_plant.defaultBlockState();
                 newState = BlockCropBase.PLANT.mimic(state, newState);
                 newState = BlockCropBase.LIGHT.mimic(state, newState);
                 newState = InfProperty.Defaults.fluidlogged().mimic(state, newState);

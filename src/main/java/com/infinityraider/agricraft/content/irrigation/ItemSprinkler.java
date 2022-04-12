@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ItemSprinkler extends BlockItemBase {
     public ItemSprinkler() {
-        super(AgriBlockRegistry.SPRINKLER, new Item.Properties()
+        super(AgriBlockRegistry.sprinkler, new Item.Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT));
     }
 

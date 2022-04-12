@@ -51,7 +51,7 @@ public class AgriWailaCropBlockInfoProvider extends AgriWailaBlockInfoProviderAb
         AgriApi.getCrop(accessor.getLevel(), accessor.getPosition()).ifPresent(crop -> {
             Player player = accessor.getPlayer();
             // Add data including full genome if in creative mode
-            if(player.getMainHandItem().getItem() == AgriItemRegistry.DEBUGGER) {
+            if(player.getMainHandItem().getItem() == AgriItemRegistry.debugger) {
                 crop.addDisplayInfo(tooltip::add);
                 tooltip.add(AgriToolTips.GENOME);
                 crop.getGenome().map(genome -> {

@@ -4,24 +4,30 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.sound.SoundEventBase;
+import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
+import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
-public final class AgriSoundRegistry {
-    public static final IAgriContent.Sounds ACCESSOR = new Accessor();
+public final class AgriSoundRegistry extends ModContentRegistry implements IAgriContent.Sounds {
+    private static final AgriSoundRegistry INSTANCE = new AgriSoundRegistry();
 
-    public static final SoundEventBase VALVE = new SoundEventBase(AgriCraft.instance.getModId(), Names.Sounds.VALVE) {
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
-    };
+    public static AgriSoundRegistry getInstance() {
+        return INSTANCE;
+    }
 
-    private static final class Accessor implements IAgriContent.Sounds {
-        private Accessor() {
-        }
+    public final RegistryInitializer<SoundEventBase> valve;
 
-        @Override
-        public SoundEventBase getValveSound() {
-            return VALVE;
-        }
+    private AgriSoundRegistry() {
+        super();
+        this.valve = this.sound(() -> new SoundEventBase(AgriCraft.instance.getModId(), Names.Sounds.VALVE) {
+            @Override
+            public boolean isEnabled() {
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public SoundEventBase getValveSound() {
+        return valve.get();
     }
 }

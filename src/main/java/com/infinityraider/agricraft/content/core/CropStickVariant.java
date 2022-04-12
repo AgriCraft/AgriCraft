@@ -17,8 +17,8 @@ public enum CropStickVariant {
             Material.PLANT,
             3,
             SoundType.WOOD,
-            () -> () -> AgriItemRegistry.CROP_STICKS_WOOD,
-            () -> () -> AgriBlockRegistry.CROP_STICKS_WOOD,
+            () -> () -> AgriItemRegistry.crop_sticks_wood,
+            () -> () -> AgriBlockRegistry.crop_sticks_wood,
             FluidPredicates.NOT_LAVA
     ),
 
@@ -26,16 +26,16 @@ public enum CropStickVariant {
             Material.PLANT,
             7,
             SoundType.ANVIL,
-            () -> () -> AgriItemRegistry.CROP_STICKS_IRON,
-            () -> () -> AgriBlockRegistry.CROP_STICKS_IRON,
+            () -> () -> AgriItemRegistry.crop_sticks_iron,
+            () -> () -> AgriBlockRegistry.crop_sticks_iron,
             FluidPredicates.ANY_FLUID
     ),
 
     OBSIDIAN(Material.PLANT,
             7,
             SoundType.BASALT,
-            () -> () -> AgriItemRegistry.CROP_STICKS_OBSIDIAN,
-            () -> () -> AgriBlockRegistry.CROP_STICKS_OBSIDIAN,
+            () -> () -> AgriItemRegistry.crop_sticks_obsidian,
+            () -> () -> AgriBlockRegistry.crop_sticks_obsidian,
             FluidPredicates.ANY_FLUID
     );
 

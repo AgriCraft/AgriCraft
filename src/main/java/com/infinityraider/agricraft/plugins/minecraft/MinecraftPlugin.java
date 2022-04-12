@@ -81,7 +81,7 @@ public class MinecraftPlugin implements IAgriPlugin {
         // Define compost value
         float compostValue = AgriCraft.instance.getConfig().seedCompostValue();
         if(compostValue > 0) {
-            ComposterBlock.COMPOSTABLES.put(AgriItemRegistry.SEED, compostValue);
+            ComposterBlock.COMPOSTABLES.put(AgriItemRegistry.seed, compostValue);
         }
         // Inject seed into chicken feed
         ChickenBreedItemInjector.inject();

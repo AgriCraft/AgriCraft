@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.AgriToolTips;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class ItemSeedAnalyzer extends BlockItemBase {
     public ItemSeedAnalyzer() {
-        super(AgriBlockRegistry.SEED_ANALYZER, new Properties()
+        super(AgriBlockRegistry.seed_analyzer, new Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
                 .stacksTo(1));
     }

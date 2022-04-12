@@ -114,7 +114,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
 
     @Override
     public ItemIrrigationTank asItem() {
-        return AgriItemRegistry.TANK;
+        return AgriItemRegistry.tank;
     }
 
     @Override
@@ -246,7 +246,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     @Deprecated
     @SuppressWarnings("deprecation")
     public FluidState getFluidState(BlockState state) {
-        return (WATER.fetch(state) ? AgriFluidRegistry.TANK_WATER : Fluids.EMPTY).defaultFluidState();
+        return (WATER.fetch(state) ? AgriFluidRegistry.tank_water : Fluids.EMPTY).defaultFluidState();
     }
 
     @Override

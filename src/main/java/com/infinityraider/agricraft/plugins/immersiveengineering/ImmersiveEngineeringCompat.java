@@ -7,7 +7,7 @@ import com.infinityraider.infinitylib.crafting.IInfRecipeSerializer;
 public class ImmersiveEngineeringCompat {
     private static final ClocheRenderFunction.ClocheRenderFunctionFactory DEFAULT = (block) -> null;
 
-    public static IInfRecipeSerializer getAgriClocheRecipeSerializer() {
+    public static IInfRecipeSerializer<?> getAgriClocheRecipeSerializer() {
         return AgriClocheRecipe.SERIALIZER;
     }
 

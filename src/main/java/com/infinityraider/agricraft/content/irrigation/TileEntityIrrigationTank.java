@@ -57,14 +57,14 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
     private final LazyOptional<IFluidHandler> capability;
 
     public TileEntityIrrigationTank(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.IRRIGATION_TANK, pos, state, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
+        super(AgriTileRegistry.irrigation_tank, pos, state, AgriCraft.instance.getConfig().tankCapacity(), MIN_Y, MAX_Y);
         this.min = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.max = this.getAutoSyncedFieldBuilder(DEFAULT).build();
         this.capability = LazyOptional.of(() -> this);
     }
 
     public BlockIrrigationTank getBlock() {
-        return AgriBlockRegistry.TANK;
+        return AgriBlockRegistry.irrigation_tank;
     }
 
     public BlockPos getMultiBlockMin() {
@@ -313,7 +313,7 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                         tank.origin = this.getLevel().isClientSide() ? new TileReference<>(tank.getBlockPos(), TANK_GETTER) : null;
                         tank.min.set(tank.getBlockPos());
                         tank.max.set(tank.getBlockPos());
-                        this.getLevel().setBlock(tank.getBlockPos(), AgriBlockRegistry.TANK.defaultBlockState(), 3);
+                        this.getLevel().setBlock(tank.getBlockPos(), AgriBlockRegistry.irrigation_tank.defaultBlockState(), 3);
                         tank.setLevel(level);
                     }
                 }

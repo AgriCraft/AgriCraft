@@ -54,48 +54,48 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
-    public Class<?> getModBlockRegistry() {
-        return AgriBlockRegistry.class;
+    public AgriBlockRegistry getModBlockRegistry() {
+        return AgriBlockRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModItemRegistry() {
-        return AgriItemRegistry.class;
+    public AgriItemRegistry getModItemRegistry() {
+        return AgriItemRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModFluidRegistry() {
-        return AgriFluidRegistry.class;
+    public AgriFluidRegistry getModFluidRegistry() {
+        return AgriFluidRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModTileRegistry() {
-        return AgriTileRegistry.class;
+    public AgriTileRegistry getModTileRegistry() {
+        return AgriTileRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModEnchantmentRegistry() {
-        return AgriEnchantmentRegistry.class;
+    public AgriEnchantmentRegistry getModEnchantmentRegistry() {
+        return AgriEnchantmentRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModRecipeSerializerRegistry() {
-        return AgriRecipeSerializerRegistry.class;
+    public AgriRecipeSerializerRegistry getModRecipeSerializerRegistry() {
+        return AgriRecipeSerializerRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModLootModifierSerializerRegistry() {
-        return AgriLootModifierRegistry.class;
+    public AgriLootModifierRegistry getModLootModifierSerializerRegistry() {
+        return AgriLootModifierRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModSoundRegistry() {
-        return AgriSoundRegistry.class;
+    public AgriSoundRegistry getModSoundRegistry() {
+        return AgriSoundRegistry.getInstance();
     }
 
     @Override
-    public Class<?> getModParticleRegistry() {
-        return AgriParticleRegistry.class;
+    public AgriParticleRegistry getModParticleRegistry() {
+        return AgriParticleRegistry.getInstance();
     }
 
     @Override

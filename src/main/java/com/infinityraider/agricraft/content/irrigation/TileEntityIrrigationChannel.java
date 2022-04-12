@@ -26,7 +26,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     private int counter = 0;
 
     public TileEntityIrrigationChannel(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.IRRIGATION_CHANNEL, pos, state, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
+        super(AgriTileRegistry.irrigation_channel, pos, state, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
     }
 
     public static RenderFactory createRenderFactory() {

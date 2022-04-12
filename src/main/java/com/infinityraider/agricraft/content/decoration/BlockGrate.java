@@ -146,7 +146,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
     @Nonnull
     @Override
     public ItemGrate asItem() {
-        return AgriItemRegistry.GRATE;
+        return AgriItemRegistry.grate;
     }
 
     @Override

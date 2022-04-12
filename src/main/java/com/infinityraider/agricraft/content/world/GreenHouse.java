@@ -127,7 +127,7 @@ public class GreenHouse {
         }
 
         protected void replaceAirBlocks(Level world) {
-            BlockState air = AgriBlockRegistry.GREENHOUSE_AIR.defaultBlockState();
+            BlockState air = AgriBlockRegistry.greenhouse_air.defaultBlockState();
             this.blocks.values().stream()
                     .filter(block -> block.getType().isAir())
                     .map(Block::getPos)

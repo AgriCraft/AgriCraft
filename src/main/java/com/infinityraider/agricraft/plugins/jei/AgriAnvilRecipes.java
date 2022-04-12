@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class AgriAnvilRecipes {
     public static void registerRecipes(IRecipeRegistration registration) {
-        final List<ItemStack> magnifyingGlass = Collections.singletonList(new ItemStack(AgriItemRegistry.MAGNIFYING_GLASS));
+        final List<ItemStack> magnifyingGlass = Collections.singletonList(new ItemStack(AgriItemRegistry.magnifying_glass));
         registration.addRecipes(
                 ForgeRegistries.ITEMS.getValues().stream()
                         .map(ItemStack::new)

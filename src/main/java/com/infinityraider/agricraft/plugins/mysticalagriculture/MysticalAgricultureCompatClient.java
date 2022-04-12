@@ -109,7 +109,7 @@ public class MysticalAgricultureCompatClient {
                 return color == -1 ? -1 : (0xFF << 24) + color;
             }
             return -1;
-        }, AgriItemRegistry.SEED);
+        }, AgriItemRegistry.seed);
     }
 
     /**

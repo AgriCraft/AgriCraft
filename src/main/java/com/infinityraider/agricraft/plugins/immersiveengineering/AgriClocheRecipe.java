@@ -15,8 +15,6 @@ import com.infinityraider.agricraft.api.v1.requirement.AnySoilIngredient;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import com.infinityraider.agricraft.content.AgriBlockRegistry;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.impl.v1.requirement.NoSoil;
@@ -47,14 +45,14 @@ public class AgriClocheRecipe extends ClocheRecipe {
     private static final ClocheRenderFunction.ClocheRenderReference RENDER_REFERENCE =
             new ClocheRenderFunction.ClocheRenderReference(
                     AgriCraft.instance.getModId(),
-                    AgriBlockRegistry.CROP_PLANT
+                    AgriApi.getAgriContent().getBlocks().getCropPlantBlock()
             );
 
     private final AgriPlantIngredient seed;
     private final float growthStatFactor;
 
     public AgriClocheRecipe(ResourceLocation id, AgriPlantIngredient seed, int time, float growthStatFactor) {
-        super(id, Lazy.of(() -> new ItemStack(AgriItemRegistry.SEED)), seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
+        super(id, Lazy.of(() -> new ItemStack(AgriApi.getAgriContent().getItems().getSeedItem().toItem())), seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
         this.seed = seed;
         this.growthStatFactor = growthStatFactor;
     }
@@ -166,7 +164,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
         return SERIALIZER;
     }
 
-    private static class Serializer extends IERecipeSerializer<ClocheRecipe> implements RecipeSerializer<ClocheRecipe>, IInfRecipeSerializer {
+    private static class Serializer extends IERecipeSerializer<ClocheRecipe> implements RecipeSerializer<ClocheRecipe>, IInfRecipeSerializer<ClocheRecipe> {
         private static final String ID = "agri_cloche_recipe";
 
         @Nonnull
@@ -187,7 +185,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
 
         @Override
         public ItemStack getIcon() {
-            return new ItemStack(AgriItemRegistry.DEBUGGER);
+            return new ItemStack(AgriApi.getAgriContent().getItems().getDebuggerItem());
         }
 
         @Override
@@ -201,7 +199,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
             if(!json.has("growthStatFactor")) {
                 throw new JsonParseException("Agricraft botany pots crop must have a \"growthStatFactor\" property");
             }
-            AgriPlantIngredient plant = AgriRecipeSerializerRegistry.PLANT_INGREDIENT.parse(json);
+            AgriPlantIngredient plant = AgriRecipeSerializerRegistry.getInstance().plant_ingredient.parse(json);
             int growthTicks = json.get("growthTicks").getAsInt();
             float growthStatFactor = json.get("growthStatFactor").getAsFloat();
             Map<String, ClocheRenderFunction.ClocheRenderFunctionFactory> RENDER_FUNCTION_FACTORIES = ClocheRenderFunction.RENDER_FUNCTION_FACTORIES;
@@ -217,7 +215,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
         @Override
         public AgriClocheRecipe fromNetwork(@Nonnull ResourceLocation recipeId, @Nonnull FriendlyByteBuf buffer) {
             if(buffer.readBoolean()) {
-                AgriPlantIngredient plant = AgriRecipeSerializerRegistry.PLANT_INGREDIENT.parse(buffer);
+                AgriPlantIngredient plant = AgriRecipeSerializerRegistry.getInstance().plant_ingredient.parse(buffer);
                 int growthTicks = buffer.readInt();
                 float growthStatFactor = buffer.readFloat();
                 return new AgriClocheRecipe(recipeId, plant, growthTicks, growthStatFactor);
@@ -231,7 +229,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
             if(clocheRecipe instanceof AgriClocheRecipe) {
                 AgriClocheRecipe recipe = (AgriClocheRecipe) clocheRecipe;
                 buffer.writeBoolean(true);
-                AgriRecipeSerializerRegistry.PLANT_INGREDIENT.write(buffer, recipe.getSeed());
+                AgriRecipeSerializerRegistry.getInstance().plant_ingredient.write(buffer, recipe.getSeed());
                 buffer.writeInt(recipe.getGrowthTicks());
                 buffer.writeFloat(recipe.getGrowthStatFactor());
             } else {

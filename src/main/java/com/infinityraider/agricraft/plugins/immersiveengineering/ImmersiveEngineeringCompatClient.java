@@ -16,7 +16,7 @@ public class ImmersiveEngineeringCompatClient {
         ClocheRenderFunction.RENDER_FUNCTION_FACTORIES.put(
                 AgriCraft.instance.getModId(),
                 (block) -> {
-                    if (block == AgriBlockRegistry.CROP_PLANT) {
+                    if (block == AgriBlockRegistry.crop_plant) {
                         return AgriRenderFunction.INSTANCE;
                     } else {
                         throw new IllegalArgumentException("Block " + block.getDescriptionId() + " is not an agricraft crop");

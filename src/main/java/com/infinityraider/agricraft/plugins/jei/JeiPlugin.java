@@ -97,7 +97,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         // Register All The Seeds.
-        registration.registerSubtypeInterpreter(AgriItemRegistry.SEED, (stack, context) -> {
+        registration.registerSubtypeInterpreter(AgriItemRegistry.seed, (stack, context) -> {
             Optional<IAgriGenome> genome = AgriApi.getGenomeAdapterizer().valueOf(stack);
             return genome.map(s -> s.getPlant().getId()).orElse("generic");
         });

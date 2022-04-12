@@ -56,7 +56,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyCo
     private List<IAgriGenePair<?>> genesToRender;
 
     public TileEntitySeedAnalyzer(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.SEED_ANALYZER, pos, state);
+        super(AgriTileRegistry.seed_analyzer, pos, state);
         this.seed = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
                 .withCallBack(seed -> addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal))
                 .build();

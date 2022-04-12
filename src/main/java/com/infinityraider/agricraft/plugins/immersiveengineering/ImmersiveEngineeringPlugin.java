@@ -39,7 +39,7 @@ public class ImmersiveEngineeringPlugin implements IAgriPlugin {
     }
 
     @Nullable
-    public static IInfRecipeSerializer getAgriClocheRecipeSerializer() {
+    public static IInfRecipeSerializer<?> getAgriClocheRecipeSerializer() {
         if (ModList.get().isLoaded(Names.Mods.IMMERSIVE_ENGINEERING) && AgriCraft.instance.getConfig().enableImmersiveEngineeringCompat()) {
             return ImmersiveEngineeringCompat.getAgriClocheRecipeSerializer();
         } else {

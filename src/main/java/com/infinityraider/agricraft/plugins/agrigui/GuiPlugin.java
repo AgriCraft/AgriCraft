@@ -82,7 +82,7 @@ public class GuiPlugin implements IAgriPlugin {
 		if (!event.getPlayer().getLevel().isClientSide() || event.getPlayer().isDiscrete()) {
 			return;
 		}
-		if (event.getItemStack().getItem() != AgriItemRegistry.JOURNAL) {
+		if (event.getItemStack().getItem() != AgriItemRegistry.journal) {
 			return;
 		}
 		event.setCancellationResult(InteractionResult.SUCCESS);
@@ -98,7 +98,7 @@ public class GuiPlugin implements IAgriPlugin {
 		if (event.getPlayer().isDiscrete()) {
 			return;
 		}
-		if (state.getBlock() != AgriBlockRegistry.SEED_ANALYZER) {
+		if (state.getBlock() != AgriBlockRegistry.seed_analyzer) {
 			return;
 		}
 		event.setCancellationResult(InteractionResult.SUCCESS);

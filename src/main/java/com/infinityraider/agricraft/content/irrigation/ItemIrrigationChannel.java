@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 
 public class ItemIrrigationChannel extends ItemCustomWood {
     public ItemIrrigationChannel() {
-        super(AgriBlockRegistry.CHANNEL, new Item.Properties()
+        super(AgriBlockRegistry.irrigation_channel, new Item.Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
         );
     }
