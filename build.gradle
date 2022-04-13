@@ -223,7 +223,7 @@ dependencies {
     embed project(':AgriCore')
     
     // InfinityLib
-    compileOnly project(":InfinityLib")
+    implementation project(":InfinityLib")
 
     //JEI
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153:api")
