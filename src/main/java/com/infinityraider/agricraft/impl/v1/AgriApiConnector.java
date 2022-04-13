@@ -170,13 +170,13 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public IIngredientSerializer<AgriPlantIngredient> connectPlantIngredientSerializer() {
-        return AgriRecipeSerializerRegistry.plant_ingredient;
+        return AgriRecipeSerializerRegistry.getInstance().plant_ingredient;
     }
 
     @Nonnull
     @Override
     public IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer() {
-        return AgriRecipeSerializerRegistry.any_soil_ingredient;
+        return AgriRecipeSerializerRegistry.getInstance().any_soil_ingredient;
     }
 
     @Nonnull

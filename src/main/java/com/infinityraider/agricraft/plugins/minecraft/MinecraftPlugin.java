@@ -2,12 +2,12 @@ package com.infinityraider.agricraft.plugins.minecraft;
 
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapterizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.plugin.*;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.entity.animal.*;
@@ -81,7 +81,7 @@ public class MinecraftPlugin implements IAgriPlugin {
         // Define compost value
         float compostValue = AgriCraft.instance.getConfig().seedCompostValue();
         if(compostValue > 0) {
-            ComposterBlock.COMPOSTABLES.put(AgriItemRegistry.seed, compostValue);
+            ComposterBlock.COMPOSTABLES.put(AgriApi.getAgriContent().getItems().getSeedItem().toItem(), compostValue);
         }
         // Inject seed into chicken feed
         ChickenBreedItemInjector.inject();

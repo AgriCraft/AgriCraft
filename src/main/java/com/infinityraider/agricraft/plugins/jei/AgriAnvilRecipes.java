@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.plugins.jei;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.capability.CapabilityGeneInspector;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class AgriAnvilRecipes {
     public static void registerRecipes(IRecipeRegistration registration) {
-        final List<ItemStack> magnifyingGlass = Collections.singletonList(new ItemStack(AgriItemRegistry.magnifying_glass));
+        final List<ItemStack> magnifyingGlass = Collections.singletonList(new ItemStack(AgriApi.getAgriContent().getItems().getMagnifyingGlassItem()));
         registration.addRecipes(
                 ForgeRegistries.ITEMS.getValues().stream()
                         .map(ItemStack::new)

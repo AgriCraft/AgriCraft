@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 
 public class ItemIrrigationChannelHollow extends ItemCustomWood {
     public ItemIrrigationChannelHollow() {
-        super(AgriBlockRegistry.irrigation_channel_hollow, new Item.Properties()
+        super(AgriBlockRegistry.getInstance().irrigation_channel_hollow.get(), new Item.Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
         );
     }

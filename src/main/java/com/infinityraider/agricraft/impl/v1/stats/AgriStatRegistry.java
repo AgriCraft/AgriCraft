@@ -62,7 +62,7 @@ public class AgriStatRegistry extends AgriRegistryAbstract<IAgriStat> implements
             // Also add a gene for this stat
             AgriGeneRegistry.getInstance().addGeneForStat(element);
             // Add a seed bag sorter for this stat
-            AgriItemRegistry.seed_bag.addSorter(element);
+            AgriItemRegistry.getInstance().seed_bag.get().addSorter(element);
         }
         return result;
     }

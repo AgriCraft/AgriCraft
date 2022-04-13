@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class ItemIrrigationTank extends ItemCustomWood {
     public ItemIrrigationTank() {
-        super(AgriBlockRegistry.irrigation_tank, new Properties()
+        super(AgriBlockRegistry.getInstance().irrigation_tank.get(), new Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
         );
     }

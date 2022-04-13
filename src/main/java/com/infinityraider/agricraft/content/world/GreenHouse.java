@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.content.world;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
@@ -127,7 +127,7 @@ public class GreenHouse {
         }
 
         protected void replaceAirBlocks(Level world) {
-            BlockState air = AgriBlockRegistry.greenhouse_air.defaultBlockState();
+            BlockState air = AgriApi.getAgriContent().getBlocks().getGreenHouseAirBlock().defaultBlockState();
             this.blocks.values().stream()
                     .filter(block -> block.getType().isAir())
                     .map(Block::getPos)

@@ -56,7 +56,7 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture {
     private int particleCounter;
 
     public TileEntitySprinkler(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.sprinkler, pos, state);
+        super(AgriTileRegistry.getInstance().sprinkler.get(), pos, state);
         this.active = this.getAutoSyncedFieldBuilder(false).build();
     }
 
@@ -240,7 +240,7 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture {
                     ParticleOptions particle = ParticleTypes.CLOUD;
                     this.getLevel().addParticle(particle, x + xOffset, y, z + zOffset, 0.15*cosA, 0.25, 0.15*sinA);
                 } else {
-                    ParticleOptions particle = AgriParticleRegistry.sprinkler.createParticleData(Fluids.WATER, 0.2F, 0.7F);
+                    ParticleOptions particle = AgriParticleRegistry.getInstance().sprinkler.get().createParticleData(Fluids.WATER, 0.2F, 0.7F);
                     for (int j = 0; j <= 4; j++) {
                         float beta = -j * ((float) Math.PI) / (8.0F);
                         this.getLevel().addParticle(particle,

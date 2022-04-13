@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.plugins.minecraft;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.infinitylib.utility.UnsafeUtil;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,7 @@ public class ChickenBreedItemInjector {
             // Create new ingredient based on the old one and add the agricraft seed
             Ingredient ingredient = Ingredient.of(Stream.concat(
                     Arrays.stream(((Ingredient) field.get(null)).getItems()),
-                    Stream.of(new ItemStack(AgriItemRegistry.seed))
+                    Stream.of(new ItemStack(AgriApi.getAgriContent().getItems().getSeedItem().toItem()))
             ));
             // Set the ingredient
             if(!UnsafeUtil.getInstance().replaceStaticField(field, ingredient)) {

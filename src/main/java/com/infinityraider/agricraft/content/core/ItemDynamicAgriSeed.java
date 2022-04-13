@@ -44,7 +44,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
 
     public static ItemStack toStack(IAgriGenome genome, int amount) {
         // Create the stack.
-        ItemStack stack = new ItemStack(AgriItemRegistry.seed, amount);
+        ItemStack stack = new ItemStack(AgriItemRegistry.getInstance().seed.get(), amount);
         // Create the tag.
         CompoundTag tag = new CompoundTag();
         genome.writeToNBT(tag);
@@ -83,7 +83,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             }
             // There are currently no crop sticks, check if the place is suitable and plant the plant directly
             if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-                BlockState newState = AgriBlockRegistry.crop_plant.getStateForPlacement(world, up);
+                BlockState newState = AgriBlockRegistry.getInstance().crop_plant.get().getStateForPlacement(world, up);
                 if (newState != null && world.setBlock(up, newState, 11)) {
                     boolean success = AgriApi.getCrop(world, up).map(crop ->
                             this.getGenome(context.getItemInHand()).map(genome -> crop.plantGenome(genome, player)).map(result -> {

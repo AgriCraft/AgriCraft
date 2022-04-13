@@ -4,12 +4,12 @@ import com.blakebr0.mysticalagriculture.api.MysticalAgricultureAPI;
 import com.blakebr0.mysticalagriculture.api.crop.Crop;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import net.minecraft.client.Minecraft;
@@ -109,7 +109,7 @@ public class MysticalAgricultureCompatClient {
                 return color == -1 ? -1 : (0xFF << 24) + color;
             }
             return -1;
-        }, AgriItemRegistry.seed);
+        }, AgriApi.getAgriContent().getItems().getSeedItem().toItem());
     }
 
     /**

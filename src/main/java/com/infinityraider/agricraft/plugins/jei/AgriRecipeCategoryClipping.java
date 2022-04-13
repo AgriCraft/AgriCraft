@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -48,10 +47,10 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_wood), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_iron), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_obsidian), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.clipper), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getWoodCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getIronCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getObsidianCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getClipperItem().toItem()), TYPE);
     }
 
     public AgriRecipeCategoryClipping() {

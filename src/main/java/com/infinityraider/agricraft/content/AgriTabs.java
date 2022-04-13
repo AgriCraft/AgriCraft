@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.reference.Reference;
 import net.minecraft.world.item.CreativeModeTab;
@@ -10,7 +11,7 @@ public class AgriTabs {
     public static final CreativeModeTab TAB_AGRICRAFT = new CreativeModeTab(Reference.MOD_ID) {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(AgriItemRegistry.ACCESSOR.getDebuggerItem());
+            return new ItemStack(AgriApi.getAgriContent().getItems().getDebuggerItem());
         }
     };
 

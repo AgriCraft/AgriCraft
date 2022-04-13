@@ -5,7 +5,6 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.core.BlockCropPlant;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import mcp.mobius.waila.api.BlockAccessor;
@@ -51,7 +50,7 @@ public class AgriWailaCropBlockInfoProvider extends AgriWailaBlockInfoProviderAb
         AgriApi.getCrop(accessor.getLevel(), accessor.getPosition()).ifPresent(crop -> {
             Player player = accessor.getPlayer();
             // Add data including full genome if in creative mode
-            if(player.getMainHandItem().getItem() == AgriItemRegistry.debugger) {
+            if(player.getMainHandItem().getItem() == AgriApi.getAgriContent().getItems().getDebuggerItem()) {
                 crop.addDisplayInfo(tooltip::add);
                 tooltip.add(AgriToolTips.GENOME);
                 crop.getGenome().map(genome -> {

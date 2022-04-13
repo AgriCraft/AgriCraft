@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -40,9 +39,9 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_wood), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_iron), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_obsidian), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getWoodCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getIronCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getObsidianCropSticksItem()), TYPE);
     }
 
     public AgriRecipeCategoryMutation() {

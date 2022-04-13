@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ItemSeedAnalyzer extends BlockItemBase {
     public ItemSeedAnalyzer() {
-        super(AgriBlockRegistry.seed_analyzer, new Properties()
+        super(AgriBlockRegistry.getInstance().seed_analyzer.get(), new Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT)
                 .stacksTo(1));
     }

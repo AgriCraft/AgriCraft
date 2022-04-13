@@ -65,7 +65,7 @@ public class BlockIrrigationChannelNormal extends BlockIrrigationChannelAbstract
     @Nonnull
     @Override
     public ItemIrrigationChannel asItem() {
-        return AgriItemRegistry.channel;
+        return AgriItemRegistry.getInstance().channel.get();
     }
 
     @Override

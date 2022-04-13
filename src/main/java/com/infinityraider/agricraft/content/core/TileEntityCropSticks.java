@@ -24,7 +24,7 @@ public class TileEntityCropSticks extends TileEntityCropBase {
 
     public TileEntityCropSticks(BlockPos pos, BlockState state) {
         // Super constructor with appropriate TileEntity Type
-        super(AgriTileRegistry.crop_sticks, pos, state);
+        super(AgriTileRegistry.getInstance().crop_sticks.get(), pos, state);
 
         // Initialize automatically synced fields
         this.crossCrop = this.getAutoSyncedFieldBuilder(false)

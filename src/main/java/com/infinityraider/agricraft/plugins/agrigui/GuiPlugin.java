@@ -1,10 +1,9 @@
 package com.infinityraider.agricraft.plugins.agrigui;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.plugin.AgriPlugin;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
-import com.infinityraider.agricraft.content.AgriBlockRegistry;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.plugins.agrigui.analyzer.SeedAnalyzerContainer;
 import com.infinityraider.agricraft.plugins.agrigui.analyzer.SeedAnalyzerScreen;
 import com.infinityraider.agricraft.plugins.agrigui.journal.GuiCompatClient;
@@ -82,7 +81,7 @@ public class GuiPlugin implements IAgriPlugin {
 		if (!event.getPlayer().getLevel().isClientSide() || event.getPlayer().isDiscrete()) {
 			return;
 		}
-		if (event.getItemStack().getItem() != AgriItemRegistry.journal) {
+		if (event.getItemStack().getItem() != AgriApi.getAgriContent().getItems().getJournalItem()) {
 			return;
 		}
 		event.setCancellationResult(InteractionResult.SUCCESS);
@@ -98,7 +97,7 @@ public class GuiPlugin implements IAgriPlugin {
 		if (event.getPlayer().isDiscrete()) {
 			return;
 		}
-		if (state.getBlock() != AgriBlockRegistry.seed_analyzer) {
+		if (state.getBlock() != AgriApi.getAgriContent().getBlocks().getSeedAnalyzerBlock()) {
 			return;
 		}
 		event.setCancellationResult(InteractionResult.SUCCESS);

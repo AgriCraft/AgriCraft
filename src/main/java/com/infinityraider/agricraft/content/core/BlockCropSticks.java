@@ -11,7 +11,6 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
-import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
@@ -238,7 +237,7 @@ public class BlockCropSticks extends BlockCropBase<TileEntityCropSticks> {
                 }
             } else {
                 // no more crop sticks, but still plant, and fluid
-                BlockState newState = AgriBlockRegistry.crop_plant.defaultBlockState();
+                BlockState newState = AgriApi.getAgriContent().getBlocks().getCropPlantBlock().defaultBlockState();
                 newState = BlockCropBase.PLANT.mimic(state, newState);
                 newState = BlockCropBase.LIGHT.mimic(state, newState);
                 newState = InfProperty.Defaults.fluidlogged().mimic(state, newState);

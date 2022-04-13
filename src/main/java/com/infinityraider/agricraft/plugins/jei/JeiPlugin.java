@@ -4,7 +4,6 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.IModPlugin;
@@ -97,7 +96,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         // Register All The Seeds.
-        registration.registerSubtypeInterpreter(AgriItemRegistry.seed, (stack, context) -> {
+        registration.registerSubtypeInterpreter(AgriApi.getAgriContent().getItems().getSeedItem().toItem(), (stack, context) -> {
             Optional<IAgriGenome> genome = AgriApi.getGenomeAdapterizer().valueOf(stack);
             return genome.map(s -> s.getPlant().getId()).orElse("generic");
         });

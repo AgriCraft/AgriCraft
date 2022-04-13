@@ -9,7 +9,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.render.plant.gui.LightLevelRenderer;
 import com.infinityraider.agricraft.render.plant.gui.SeasonRenderer;
@@ -73,9 +72,9 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_wood), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_iron), TYPE);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.crop_sticks_obsidian), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getWoodCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getIronCropSticksItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getObsidianCropSticksItem()), TYPE);
     }
 
     public AgriRecipeCategoryGrowthRequirements(IGuiHelper helper) {

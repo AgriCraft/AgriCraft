@@ -17,8 +17,8 @@ public enum CropStickVariant {
             Material.PLANT,
             3,
             SoundType.WOOD,
-            () -> () -> AgriItemRegistry.crop_sticks_wood,
-            () -> () -> AgriBlockRegistry.crop_sticks_wood,
+            () -> () -> AgriItemRegistry.getInstance().crop_sticks_wood.get(),
+            () -> () -> AgriBlockRegistry.getInstance().crop_sticks_wood.get(),
             FluidPredicates.NOT_LAVA
     ),
 
@@ -26,16 +26,16 @@ public enum CropStickVariant {
             Material.PLANT,
             7,
             SoundType.ANVIL,
-            () -> () -> AgriItemRegistry.crop_sticks_iron,
-            () -> () -> AgriBlockRegistry.crop_sticks_iron,
+            () -> () -> AgriItemRegistry.getInstance().crop_sticks_iron.get(),
+            () -> () -> AgriBlockRegistry.getInstance().crop_sticks_iron.get(),
             FluidPredicates.ANY_FLUID
     ),
 
     OBSIDIAN(Material.PLANT,
             7,
             SoundType.BASALT,
-            () -> () -> AgriItemRegistry.crop_sticks_obsidian,
-            () -> () -> AgriBlockRegistry.crop_sticks_obsidian,
+            () -> () -> AgriItemRegistry.getInstance().crop_sticks_obsidian.get(),
+            () -> () -> AgriBlockRegistry.getInstance().crop_sticks_obsidian.get(),
             FluidPredicates.ANY_FLUID
     );
 

@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class TileEntityCropPlant extends TileEntityCropBase {
     public TileEntityCropPlant(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.crop_plant, pos, state);
+        super(AgriTileRegistry.getInstance().crop_plant.get(), pos, state);
     }
 
     @Override

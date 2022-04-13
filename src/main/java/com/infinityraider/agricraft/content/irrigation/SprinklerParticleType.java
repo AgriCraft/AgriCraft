@@ -102,7 +102,7 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
         @Nonnull
         @Override
         public ParticleType<?> getType() {
-            return AgriParticleRegistry.sprinkler;
+            return AgriParticleRegistry.getInstance().sprinkler.get();
         }
 
         @Override

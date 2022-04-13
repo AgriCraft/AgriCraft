@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public class TileEntityGrate extends TileEntityDynamicTexture {
     public TileEntityGrate(BlockPos pos, BlockState state) {
-        super(AgriTileRegistry.grate, pos, state);
+        super(AgriTileRegistry.getInstance().grate.get(), pos, state);
     }
 
     @Override

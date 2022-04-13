@@ -14,27 +14,27 @@ public final class AgriContent implements IAgriContent {
 
     @Override
     public Blocks getBlocks() {
-        return AgriBlockRegistry.ACCESSOR;
+        return AgriBlockRegistry.getInstance();
     }
 
     @Override
     public Enchantments getEnchantments() {
-        return AgriEnchantmentRegistry.ACCESSOR;
+        return AgriEnchantmentRegistry.getInstance();
     }
 
     @Override
     public Fluids getFluids() {
-        return AgriFluidRegistry.ACCESSOR;
+        return AgriFluidRegistry.getInstance();
     }
 
     @Override
     public Items getItems() {
-        return AgriItemRegistry.ACCESSOR;
+        return AgriItemRegistry.getInstance();
     }
 
     @Override
     public Sounds getSounds() {
-        return AgriSoundRegistry.ACCESSOR;
+        return AgriSoundRegistry.getInstance();
     }
 
     @Override
