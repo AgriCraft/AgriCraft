@@ -263,6 +263,9 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                 // Add vertices
                 this.addVertex(buffer, matrix, prevPos, normal, prevCol, alpha, width);
                 this.addVertex(buffer, matrix, nextPos, normal, nextCol, alpha, width);
+                // Add reverse vertices
+                this.addVertex(buffer, matrix, nextPos, normal, nextCol, alpha, width);
+                this.addVertex(buffer, matrix, prevPos, normal, prevCol, alpha, width);
                 // refresh previous positions and color
                 prevPos = nextPos;
                 prevCol = nextCol;
