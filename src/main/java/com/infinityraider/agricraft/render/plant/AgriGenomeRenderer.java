@@ -314,6 +314,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                             RenderType.CompositeState.builder()
                                     .setLineState(new LineStateShard(OptionalDouble.of(aFloat)))
                                     .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+                                    .setShaderState(RENDERTYPE_LINES_SHADER)
                                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                                     .setOutputState(ITEM_ENTITY_TARGET)
                                     .setWriteMaskState(COLOR_DEPTH_WRITE)
