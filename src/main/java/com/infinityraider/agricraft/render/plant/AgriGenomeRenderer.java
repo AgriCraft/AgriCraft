@@ -177,9 +177,8 @@ public class AgriGenomeRenderer implements IRenderUtilities {
 
     protected void drawHelix(List<IAgriGenePair<?>> genePairs, int active, float radius, float phase, float dHeight, float dAngle,
                              int points, MultiBufferSource buffer, Matrix4f matrix, boolean dominant, float alpha, boolean color) {
-        float x_1 = radius * Mth.cos(-phase);
-        float y_1 = dHeight*points;
-        float z_1 = radius * Mth.sin(-phase);
+        Vector3f prev = new Vector3f(radius * Mth.cos(-phase), dHeight*points, radius * Mth.sin(-phase));
+        Vector3f next;
         for(int i = 0; i < points; i++) {
             // Determine color and width
             int index = i/POINTS_PER_GENE;
@@ -189,7 +188,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
             float r = colorVec.x();
             float g = colorVec.y();
             float b = colorVec.z();
-            float w = this.getLineWidth(index == active);
+            float width = this.getLineWidth(index == active);
             if(partial < POINTS_PER_GENE/2) {
                 int prevIndex = (index - 1) < 0 ? index : index - 1;
                 IAgriGene<?> prevGene = genePairs.get(prevIndex).getGene();
@@ -199,7 +198,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                 r = Mth.lerp(f, prevColor.x(), r);
                 g = Mth.lerp(f, prevColor.y(), g);
                 b = Mth.lerp(f, prevColor.z(), b);
-                w = Mth.lerp(f, prevWidth, w);
+                width = Mth.lerp(f, prevWidth, width);
             } else if(partial > POINTS_PER_GENE/2) {
                 int nextIndex = (index + 1) >= genePairs.size() ? index : index + 1;
                 IAgriGene<?> nextGene = genePairs.get(nextIndex).getGene();
@@ -209,19 +208,18 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                 r = Mth.lerp(f, r, nextColor.x());
                 g = Mth.lerp(f, g, nextColor.y());
                 b = Mth.lerp(f, b, nextColor.z());
-                w = Mth.lerp(f, w, nextWidth);
+                width = Mth.lerp(f, width, nextWidth);
             }
-            // Determine coordinates
-            float x_2 = radius * Mth.cos(-((1 + i)*dAngle + phase));
-            float y_2 = dHeight*(points - i);
-            float z_2 = radius * Mth.sin(-((1 + i)*dAngle + phase));
+            // Determine next coordinates
+            next = new Vector3f( radius * Mth.cos(-((1 + i)*dAngle + phase)), dHeight*(points - i), radius * Mth.sin(-((1 + i)*dAngle + phase)));
+            // Determine normal
+            Vector3f normal = new Vector3f(next.x() - prev.x(), next.y() - prev.y(), next.z() - prev.z());
+            normal.normalize();
             // Add vertices for line segment
-            this.addVertex(buffer, matrix, x_1, y_1, z_1, r, g, b, alpha, w);
-            this.addVertex(buffer, matrix, x_2, y_2, z_2, r, g, b, alpha, w);
+            this.addVertex(buffer, matrix, prev, normal, r, g, b, alpha, width);
+            this.addVertex(buffer, matrix, next, normal, r, g, b, alpha, width);
             // Update previous coordinates
-            x_1 = x_2;
-            y_1 = y_2;
-            z_1 = z_2;
+            prev = next;
         }
     }
 
@@ -229,42 +227,61 @@ public class AgriGenomeRenderer implements IRenderUtilities {
                               float dHeight, float dAngle, MultiBufferSource buffer, Matrix4f matrix, float alpha, boolean color) {
         for(int spoke = 0; spoke < genePairs.size(); spoke++) {
             // Find equivalent point index
-            int i = spoke*POINTS_PER_GENE + POINTS_PER_GENE/2;
-            float angle = i*dAngle;
+            int i = spoke * POINTS_PER_GENE + POINTS_PER_GENE / 2;
+            float angle = i * dAngle;
             // Find positions
-            float x1 = radius*Mth.cos(-(angle + phase1));
-            float x2 = radius*Mth.cos(-(angle + phase2));
+            float x1 = radius * Mth.cos(-(angle + phase1));
+            float x2 = radius * Mth.cos(-(angle + phase2));
             float y = dHeight * (POINTS_PER_GENE * genePairs.size() - i);
-            float z1 = radius*Mth.sin(-(angle + phase1));
-            float z2 = radius*Mth.sin(-(angle + phase2));
+            float z1 = radius * Mth.sin(-(angle + phase1));
+            float z2 = radius * Mth.sin(-(angle + phase2));
             // find colors
             IAgriGene<?> gene = genePairs.get(spoke).getGene();
             Vector3f dom = this.getColor(gene, active == spoke, true, color);
             Vector3f rec = this.getColor(gene, active == spoke, false, color);
             // find width
-            float w = this.getLineWidth(active == spoke);
-            // First vertex of the first segment
-            this.addVertex(buffer, matrix, x1, y, z1, dom.x(), dom.y(), dom.z(), alpha, w);
-            for(int j = 1; j < POINTS_PER_GENE; j++) {
-                float x = Mth.lerp((j + 0.0F)/POINTS_PER_GENE, x1, x2);
-                float z = Mth.lerp((j + 0.0F)/POINTS_PER_GENE, z1, z2);
-                float r = Mth.lerp((j + 0.0F)/POINTS_PER_GENE, dom.z(), rec.z());
-                float g = Mth.lerp((j + 0.0F)/POINTS_PER_GENE, dom.y(), rec.y());
-                float b = Mth.lerp((j + 0.0F)/POINTS_PER_GENE, dom.z(), rec.z());
-                // Second vertex of the previous segment
-                this.addVertex(buffer, matrix, x, y, z, r, g, b, alpha, w);
-                // First vertex of the next segment
-                this.addVertex(buffer, matrix, x, y, z, r, g, b, alpha, w);
+            float width = this.getLineWidth(active == spoke);
+            // Positions and color
+            Vector3f prevPos = new Vector3f(x1, y, z1);
+            Vector3f nextPos;
+            Vector3f prevCol = dom;
+            Vector3f nextCol;
+            for (float j = 1.0F; j <= POINTS_PER_GENE; j++) {
+                // positions, color and normal
+                nextPos = new Vector3f(
+                        Mth.lerp(j / POINTS_PER_GENE, x1, x2),
+                        y,
+                        Mth.lerp(j / POINTS_PER_GENE, z1, z2)
+                );
+                nextCol = new Vector3f(
+                        Mth.lerp(j / POINTS_PER_GENE, dom.x(), rec.x()),
+                        Mth.lerp(j / POINTS_PER_GENE, dom.y(), rec.y()),
+                        Mth.lerp(j / POINTS_PER_GENE, dom.z(), rec.z())
+                );
+                Vector3f normal = new Vector3f(nextPos.x() - prevPos.x(), nextPos.y() - prevPos.y(), nextPos.z() - prevPos.z());
+                normal.normalize();
+                // Add vertices
+                this.addVertex(buffer, matrix, prevPos, normal, prevCol, alpha, width);
+                this.addVertex(buffer, matrix, nextPos, normal, nextCol, alpha, width);
+                // refresh previous positions and color
+                prevPos = nextPos;
+                prevCol = nextCol;
             }
-            // Second vertex of the last segment
-            this.addVertex(buffer, matrix, x2, y, z2, rec.x(), rec.y(), rec.z(), alpha, w);
         }
     }
+    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, Vector3f pos, Vector3f normal, Vector3f color, float a, float width) {
+        this.addVertex(buffer, matrix, pos, normal, color.x(), color.y(), color.z(), a, width);
+    }
 
-    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, float x, float y, float z, float r, float g, float b, float a, float w) {
-        VertexConsumer builder = this.getVertexBuilder(buffer, this.getRenderType(w));
+    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, Vector3f pos, Vector3f normal, float r, float g, float b, float a, float width) {
+        this.addVertex(buffer, matrix, pos.x(), pos.y(), pos.z(), normal.x(), normal.y(), normal.z(), r, g, b, a, width);
+    }
+
+    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a, float width) {
+        VertexConsumer builder = this.getVertexBuilder(buffer, this.getRenderType(width));
         builder.vertex(matrix, x, y, z)
                 .color(r, g, b, a)
+                .normal(nx, ny, nz)
                 .endVertex();
     }
 
@@ -306,7 +323,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         public static RenderType get(float width) {
             return CACHE.computeIfAbsent(width, aFloat ->
                     create(RENDER_TYPE_KEY + "_" + aFloat,
-                            DefaultVertexFormat.POSITION_COLOR,
+                            DefaultVertexFormat.POSITION_COLOR_NORMAL,
                             VertexFormat.Mode.LINES,
                             256,
                             false,
