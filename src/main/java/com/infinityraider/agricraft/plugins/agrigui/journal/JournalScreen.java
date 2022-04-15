@@ -6,7 +6,6 @@ import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.render.items.journal.JournalClientData;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -62,7 +61,7 @@ public class JournalScreen extends Screen {
 	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		Minecraft.getInstance().getTextureManager().bindForSetup(PAGE_BACKGROUND);
+		RenderSystem.setShaderTexture(0, PAGE_BACKGROUND);
 		int renderX = (this.width - PAGE_WIDTH) / 2;
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
 		Screen.blit(matrixStack, renderX, renderY, this.getBlitOffset(), 0, 0, PAGE_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, PAGE_WIDTH);
@@ -120,7 +119,7 @@ public class JournalScreen extends Screen {
 		@Override
 		public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			Minecraft.getInstance().getTextureManager().bindForSetup(PAGE_BACKGROUND);
+			RenderSystem.setShaderTexture(0, PAGE_BACKGROUND);
 			int xOffset = 0;
 			if (this.isHoveredOrFocused()) {
 				xOffset += 18;

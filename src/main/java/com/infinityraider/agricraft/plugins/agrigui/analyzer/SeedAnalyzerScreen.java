@@ -41,7 +41,7 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerCont
 	@Override
 	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindForSetup(GUI);
+		RenderSystem.setShaderTexture(0, GUI);
 		int relX = (this.width - this.imageWidth) / 2;
 		int relY = (this.height - this.imageHeight) / 2;
 		// background
@@ -107,7 +107,7 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerCont
 				yy += this.font.lineHeight + 4;
 			}
 			// shape of the dna
-			this.minecraft.getTextureManager().bindForSetup(GUI);
+			RenderSystem.setShaderTexture(0, GUI);
 			this.blit(matrixStack, DNA_X, relY + 26, 186, 0, 19, 73);
 		}
 	}

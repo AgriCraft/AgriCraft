@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
@@ -50,7 +49,6 @@ public class SprinklerParticle extends AgriParticle implements IRenderUtilities 
     private static final ParticleRenderType RENDER_TYPE = new ParticleRenderType() {
         @Override
         public void begin(BufferBuilder bufferBuilder, TextureManager textureManager) {
-            textureManager.bindForSetup(InventoryMenu.BLOCK_ATLAS);
             RenderSystem.depthMask(true);
             RenderSystem.enableBlend();
             RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
