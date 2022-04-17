@@ -123,7 +123,8 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     }
 
     @Nonnull
-    public Component getDescription(@Nonnull ItemStack stack) {
+    @Override
+    public Component getName(@Nonnull ItemStack stack) {
         return this.getPlant(stack).getSeedName();
     }
 
