@@ -103,10 +103,6 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, IAgriPlant plant, IFocusGroup focuses) {
-        // Clear the focus as this sometimes causes display bugs
-        //layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
-        //layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
-
         // Set shapeless
         builder.setShapeless();
 

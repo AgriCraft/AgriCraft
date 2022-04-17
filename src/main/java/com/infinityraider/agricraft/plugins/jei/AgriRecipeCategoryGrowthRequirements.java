@@ -132,10 +132,6 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, Recipe recipe, IFocusGroup focuses) {
-        // Clear the focus as this sometimes causes display bugs
-        //layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
-        //layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
-
         // Set shapeless
         builder.setShapeless();
 
@@ -168,10 +164,6 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
                                 .distinct()
                                 .map(ItemStack::new)
                                 .collect(Collectors.toList()));
-
-        // Register Recipe Elements
-        //layout.getItemStacks().set(ingredients);
-        //layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
     }
 
     @Override

@@ -97,10 +97,6 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, IAgriMutation mutation, IFocusGroup focuses) {
-        // Clear the focus as this sometimes causes display bugs
-        //layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
-        //layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
-
         // Set shapeless
         builder.setShapeless();
 
@@ -130,10 +126,6 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
                 .setSlotName(OUTPUT_PLANT)
                 .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
                 .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(1));
-
-        // Register Recipe Elements
-        //layout.getItemStacks().set(ingredients);
-        //layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
 
     }
 }
