@@ -6,6 +6,9 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
@@ -60,19 +63,18 @@ public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRende
     @Override
     @SuppressWarnings("deprecation")
     public void draw(PoseStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a) {
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        MultiBufferSource.BufferSource buffer = this.getRenderTypeBuffer();
+        VertexConsumer builder = buffer.getBuffer(IconRenderType.INSTANCE);
         Matrix4f matrix = transforms.last().pose();
         float x1 = (this.scale_width*x)/this.getPageWidth();
         float y1 = (this.scale_height*y)/this.getPageHeight();
         float x2 = (this.scale_width*(x + w))/this.getPageWidth();
         float y2 = (this.scale_height*(y + h))/this.getPageHeight();
-        bufferbuilder.vertex(matrix, x1, y2, 0).uv(u1, v2).color(r, g, b, a).endVertex();
-        bufferbuilder.vertex(matrix, x2, y2, 0).uv(u2, v2).color(r, g, b, a).endVertex();
-        bufferbuilder.vertex(matrix, x2, y1, 0).uv(u2, v1).color(r, g, b, a).endVertex();
-        bufferbuilder.vertex(matrix, x1, y1, 0).uv(u1, v1).color(r, g, b, a).endVertex();
-        bufferbuilder.end();
-        BufferUploader.end(bufferbuilder);
+        builder.vertex(matrix, x1, y2, 0).color(r, g, b, a).uv(u1, v2).endVertex();
+        builder.vertex(matrix, x2, y2, 0).color(r, g, b, a).uv(u2, v2).endVertex();
+        builder.vertex(matrix, x2, y1, 0).color(r, g, b, a).uv(u2, v1).endVertex();
+        builder.vertex(matrix, x1, y1, 0).color(r, g, b, a).uv(u1, v1).endVertex();
+        buffer.endBatch(IconRenderType.INSTANCE);
     }
 
     @Override
@@ -112,6 +114,20 @@ public class JournalRenderContextInHand implements IJournalDataDrawer.IPageRende
     @Override
     public TextureAtlasSprite getSprite(ResourceLocation location) {
         return IRenderUtilities.super.getSprite(location);
+    }
+
+    private static class IconRenderType extends RenderType {
+        // Need to have a constructor...
+        public IconRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean crumbling, boolean sorted, Runnable runnablePre, Runnable runnablePost) {
+            super(name, format, mode, bufferSize, crumbling, sorted, runnablePre, runnablePost);
+        }
+
+        private static final RenderType INSTANCE = create("agri_journal_icons",
+                DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false,
+                RenderType.CompositeState.builder()
+                        .setShaderState(RenderStateShard.POSITION_COLOR_TEX_SHADER)
+                        .setLightmapState(RenderStateShard.NO_LIGHTMAP)
+                        .createCompositeState(false));
     }
 
     static {
