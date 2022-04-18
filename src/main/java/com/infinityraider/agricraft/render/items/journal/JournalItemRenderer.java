@@ -263,7 +263,6 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
 
             transforms.popPose();
         }
-
     }
 
     protected boolean renderFull3D(ItemTransforms.TransformType perspective) {
@@ -279,19 +278,19 @@ public class JournalItemRenderer implements InfItemRenderer, IRenderUtilities {
     }
 
     protected RenderType getRenderType() {
-        return PosColorRenderType.INSTANCE;
+        return JournalRenderType.INSTANCE;
     }
 
-    private static class PosColorRenderType extends RenderType {
+    private static class JournalRenderType extends RenderType {
         // Need to have a constructor...
-        public PosColorRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean crumbling, boolean sorted, Runnable runnablePre, Runnable runnablePost) {
+        public JournalRenderType(String name, VertexFormat format, VertexFormat.Mode mode, int bufferSize, boolean crumbling, boolean sorted, Runnable runnablePre, Runnable runnablePost) {
             super(name, format, mode, bufferSize, crumbling, sorted, runnablePre, runnablePost);
         }
 
-        private static final RenderType INSTANCE = create("colored_quads",
+        private static final RenderType INSTANCE = create("agri_journal_colored_quads",
                 DefaultVertexFormat.POSITION_COLOR_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, false,
                 RenderType.CompositeState.builder()
-                        .setShaderState(BLOCK_SHADER)
+                        .setShaderState(POSITION_COLOR_LIGHTMAP_SHADER)
                         .setLightmapState(LIGHTMAP)
                         .createCompositeState(false));
     }
