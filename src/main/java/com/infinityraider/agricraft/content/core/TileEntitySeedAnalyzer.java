@@ -206,7 +206,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyCo
 
     @Nonnull
     public ItemStack extractSeed() {
-        return this.removeItemNoUpdate(SLOT_SEED);
+        return this.getItem(SLOT_SEED);
     }
 
     public boolean hasJournal() {
@@ -233,7 +233,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyCo
 
     @Nonnull
     public ItemStack extractJournal() {
-        return this.removeItemNoUpdate(SLOT_JOURNAL);
+        return this.getItem(SLOT_JOURNAL);
     }
 
     @Override
