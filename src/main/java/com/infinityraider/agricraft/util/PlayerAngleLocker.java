@@ -4,34 +4,33 @@ import com.infinityraider.agricraft.AgriCraft;
 import net.minecraft.world.entity.player.Player;
 
 public class PlayerAngleLocker {
-
     /** Player orientation trackers */
     private static float yaw;
     private static float bob;
-    private static float bodyYawy;
+    private static float bodyYawY;
     private static float yawHead;
     private static float pitch;
 
     public static void storePlayerAngles() {
         Player player = AgriCraft.instance.getClientPlayer();
+        pitch = player.getXRot();
         yaw = player.getYRot();
         bob = player.bob;
-        bodyYawy = player.yBodyRot;
+        bodyYawY = player.yBodyRot;
         yawHead = player.yHeadRot;
-        pitch = player.getXRot();
     }
 
     public static void forcePlayerAngles() {
         Player player = AgriCraft.instance.getClientPlayer();
+        player.yRotO = player.getYRot();
         player.setYRot(yaw);
-        player.yRotO = yaw;
+        player.xRotO = player.getXRot();
+        player.setXRot(pitch);
+        player.oBob = player.bob;
         player.bob = bob;
-        player.oBob = bob;
-        player.yBodyRot = bodyYawy;
-        player.yBodyRotO = bodyYawy;
+        player.yBodyRotO = player.yBodyRot;
+        player.yBodyRot = bodyYawY;
+        player.yHeadRotO = player.yHeadRot;
         player.yHeadRot = yawHead;
-        player.yHeadRotO = yawHead;
-        player.setYRot(pitch);
-        player.yRotO = pitch;
     }
 }
