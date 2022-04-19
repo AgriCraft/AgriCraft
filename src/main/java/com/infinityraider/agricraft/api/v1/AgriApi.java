@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -24,7 +25,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.naming.OperationNotSupportedException;
 
 import net.minecraft.core.BlockPos;
@@ -32,7 +36,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -78,6 +85,25 @@ public final class AgriApi {
     @Nonnull
     public static IAgriContent getAgriContent() {
         return AgriApi.CONNECTOR.connectAgriContent();
+    }
+
+    /**
+     * Creates an registers a new crop stick variant.
+     *
+     * This variant is baked into a BlockState definition, and must therefore be called before blocks are being registered
+     *
+     * @param name the name of the variant
+     * @param material the material
+     * @param sound sound for the material
+     * @param itemSupplier item representation of the crop stick variant
+     * @param fluidPredicate predicate determining if this crop stick type can survive in certain fluids
+     * @return a new crop stick variant, or null
+     */
+    @Nullable
+    public static IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound,
+                                                                    Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
+                                                                    Predicate<Fluid> fluidPredicate) {
+        return AgriApi.CONNECTOR.createCropStickVariant(name, material, sound, itemSupplier, fluidPredicate);
     }
 
     /**

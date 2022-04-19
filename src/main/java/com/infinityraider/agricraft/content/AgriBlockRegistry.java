@@ -15,13 +15,8 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
         return INSTANCE;
     }
 
-    // crop plant
-    public final RegistryInitializer<BlockCropPlant> crop_plant;
-
-    // crop sticks
-    public final RegistryInitializer<BlockCropSticks> crop_sticks_wood;
-    public final RegistryInitializer<BlockCropSticks> crop_sticks_iron;
-    public final RegistryInitializer<BlockCropSticks> crop_sticks_obsidian;
+    // crop
+    public final RegistryInitializer<BlockCrop> crop;
 
     // analyzer
     public final RegistryInitializer<BlockSeedAnalyzer> seed_analyzer;
@@ -44,11 +39,7 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
     private AgriBlockRegistry() {
         super();
 
-        this.crop_plant = this.block(BlockCropPlant::new);
-
-        this.crop_sticks_wood = this.block(() -> new BlockCropSticks(CropStickVariant.WOOD));
-        this.crop_sticks_iron = this.block(() -> new BlockCropSticks(CropStickVariant.IRON));
-        this.crop_sticks_obsidian = this.block(() -> new BlockCropSticks(CropStickVariant.OBSIDIAN));
+        this.crop = this.block(BlockCrop::new);
 
         this.seed_analyzer = this.block(BlockSeedAnalyzer::new);
 
@@ -63,23 +54,8 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
     }
 
     @Override
-    public BlockCropPlant getCropPlantBlock() {
-        return this.crop_plant.get();
-    }
-
-    @Override
-    public BlockCropSticks getWoodCropSticksBlock() {
-        return this.crop_sticks_wood.get();
-    }
-
-    @Override
-    public BlockCropSticks getIronCropSticksBlock() {
-        return this.crop_sticks_iron.get();
-    }
-
-    @Override
-    public BlockCropSticks getObsidianCropSticksBlock() {
-        return this.crop_sticks_obsidian.get();
+    public BlockCrop getCropBlock() {
+        return this.crop.get();
     }
 
     @Override

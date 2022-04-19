@@ -4,6 +4,7 @@ public abstract class Names {
     private Names() {}
 
     public static final class Blocks {
+        public static final String CROP = "crop";
         public static final String CROP_PLANT = "crop_plant";
         public static final String CROP_STICKS = "crop_sticks";
         public static final String GRATE = "grate";

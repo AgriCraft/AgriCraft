@@ -21,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -70,20 +71,20 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
         ItemStack stack = context.getItemInHand();
         Player player = context.getPlayer();
         // If crop sticks were clicked, attempt to plant the seed
-        if (tile instanceof TileEntityCropSticks) {
-            return this.attemptSeedPlant((TileEntityCropSticks) tile, stack, player);
+        if (tile instanceof TileEntityCrop) {
+            return this.attemptSeedPlant((TileEntityCrop) tile, stack, player);
         }
         // If a soil was clicked, check the block on top of the soil and handle accordingly
         return AgriApi.getSoil(world, pos).map(soil -> {
             BlockPos up = pos.above();
             BlockEntity above = world.getBlockEntity(up);
             // There are currently crop sticks on the soil, attempt to plant on the crop sticks
-            if (above instanceof TileEntityCropSticks) {
-                return this.attemptSeedPlant((TileEntityCropSticks) above, stack, player);
+            if (above instanceof TileEntityCrop) {
+                return this.attemptSeedPlant((TileEntityCrop) above, stack, player);
             }
             // There are currently no crop sticks, check if the place is suitable and plant the plant directly
             if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-                BlockState newState = AgriBlockRegistry.getInstance().crop_plant.get().getStateForPlacement(world, up);
+                BlockState newState = AgriBlockRegistry.getInstance().crop.get().getStateForPlacement(new BlockPlaceContext(context));
                 if (newState != null && world.setBlock(up, newState, 11)) {
                     boolean success = AgriApi.getCrop(world, up).map(crop ->
                             this.getGenome(context.getItemInHand()).map(genome -> crop.plantGenome(genome, player)).map(result -> {

@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.core.BlockCropPlant;
+import com.infinityraider.agricraft.content.core.BlockCrop;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.ITooltip;
@@ -21,7 +21,7 @@ public class AgriWailaCropBlockInfoProvider extends AgriWailaBlockInfoProviderAb
     }
 
     public ItemStack getStack(BlockAccessor accessor) {
-        if(accessor.getBlock() instanceof BlockCropPlant) {
+        if(accessor.getBlock() instanceof BlockCrop) {
             BlockEntity tile = accessor.getBlockEntity();
             if(tile instanceof IAgriCrop) {
                 IAgriCrop crop = (IAgriCrop) tile;
@@ -42,7 +42,7 @@ public class AgriWailaCropBlockInfoProvider extends AgriWailaBlockInfoProviderAb
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         // Head
-        if(accessor.getBlock() instanceof BlockCropPlant) {
+        if(accessor.getBlock() instanceof BlockCrop) {
             tooltip.clear();
             tooltip.add(this.getStack(accessor).getDisplayName());
         }

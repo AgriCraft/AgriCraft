@@ -45,7 +45,7 @@ public class AgriClocheRecipe extends ClocheRecipe {
     private static final ClocheRenderFunction.ClocheRenderReference RENDER_REFERENCE =
             new ClocheRenderFunction.ClocheRenderReference(
                     AgriCraft.instance.getModId(),
-                    AgriApi.getAgriContent().getBlocks().getCropPlantBlock()
+                    AgriApi.getAgriContent().getBlocks().getCropBlock()
             );
 
     private final AgriPlantIngredient seed;

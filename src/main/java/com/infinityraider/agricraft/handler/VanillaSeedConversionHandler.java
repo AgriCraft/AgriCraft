@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.core.BlockCrop;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -144,7 +145,8 @@ public class VanillaSeedConversionHandler {
                     return consumed.getValue();
                 }
                 // no crop sticks, try planting as a plant
-                BlockState newState = AgriBlockRegistry.getInstance().crop_plant.get().getStateForPlacement(world, pos);
+                BlockCrop blockCrop = AgriBlockRegistry.getInstance().getCropBlock();
+                BlockState newState = blockCrop.adaptStateForPlacement(blockCrop.defaultBlockState(), world, pos);
                 if (newState != null && world.setBlock(pos, newState, 11)) {
                     boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed, player)).orElse(false);
                     if (planted) {

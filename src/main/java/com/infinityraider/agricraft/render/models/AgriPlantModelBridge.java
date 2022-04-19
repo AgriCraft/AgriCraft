@@ -6,7 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import com.infinityraider.agricraft.content.core.TileEntityCropBase;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.QuadCache;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -87,11 +87,11 @@ public class AgriPlantModelBridge implements BakedModel, IRenderUtilities, Funct
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData data) {
         // Fetch quads based on the plant and weed in the data
         ImmutableList.Builder<BakedQuad> quads = new ImmutableList.Builder<>();
-        if(data.hasProperty(TileEntityCropBase.PROPERTY_PLANT) && data.hasProperty(TileEntityCropBase.PROPERTY_PLANT_GROWTH)) {
-            quads.addAll(getOrBakeQuads(data.getData(TileEntityCropBase.PROPERTY_PLANT), data.getData(TileEntityCropBase.PROPERTY_PLANT_GROWTH), side));
+        if(data.hasProperty(TileEntityCrop.PROPERTY_PLANT) && data.hasProperty(TileEntityCrop.PROPERTY_PLANT_GROWTH)) {
+            quads.addAll(getOrBakeQuads(data.getData(TileEntityCrop.PROPERTY_PLANT), data.getData(TileEntityCrop.PROPERTY_PLANT_GROWTH), side));
         }
-        if(data.hasProperty(TileEntityCropBase.PROPERTY_WEED) && data.hasProperty(TileEntityCropBase.PROPERTY_WEED_GROWTH)) {
-            quads.addAll(getOrBakeQuads(data.getData(TileEntityCropBase.PROPERTY_WEED), data.getData(TileEntityCropBase.PROPERTY_WEED_GROWTH), side));
+        if(data.hasProperty(TileEntityCrop.PROPERTY_WEED) && data.hasProperty(TileEntityCrop.PROPERTY_WEED_GROWTH)) {
+            quads.addAll(getOrBakeQuads(data.getData(TileEntityCrop.PROPERTY_WEED), data.getData(TileEntityCrop.PROPERTY_WEED_GROWTH), side));
         }
         return quads.build();
     }
@@ -100,10 +100,10 @@ public class AgriPlantModelBridge implements BakedModel, IRenderUtilities, Funct
     public @Nonnull IModelData getModelData(@Nonnull BlockAndTintGetter world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData data) {
         // Fetch plant and weed data from the tile
         AgriApi.getCrop(world, pos).ifPresent(crop -> {
-            data.setData(TileEntityCropBase.PROPERTY_PLANT, crop.getPlant());
-            data.setData(TileEntityCropBase.PROPERTY_PLANT_GROWTH, crop.getGrowthStage());
-            data.setData(TileEntityCropBase.PROPERTY_WEED, crop.getWeeds());
-            data.setData(TileEntityCropBase.PROPERTY_WEED_GROWTH, crop.getWeedGrowthStage());
+            data.setData(TileEntityCrop.PROPERTY_PLANT, crop.getPlant());
+            data.setData(TileEntityCrop.PROPERTY_PLANT_GROWTH, crop.getGrowthStage());
+            data.setData(TileEntityCrop.PROPERTY_WEED, crop.getWeeds());
+            data.setData(TileEntityCrop.PROPERTY_WEED_GROWTH, crop.getWeedGrowthStage());
         });
         return data;
     }
@@ -137,16 +137,16 @@ public class AgriPlantModelBridge implements BakedModel, IRenderUtilities, Funct
     @Nonnull
     @Override
     public TextureAtlasSprite getParticleIcon(@Nonnull IModelData data) {
-        if(data.hasProperty(TileEntityCropBase.PROPERTY_PLANT) && data.hasProperty(TileEntityCropBase.PROPERTY_PLANT_GROWTH)) {
-            IAgriPlant plant = data.getData(TileEntityCropBase.PROPERTY_PLANT);
+        if(data.hasProperty(TileEntityCrop.PROPERTY_PLANT) && data.hasProperty(TileEntityCrop.PROPERTY_PLANT_GROWTH)) {
+            IAgriPlant plant = data.getData(TileEntityCrop.PROPERTY_PLANT);
             if(plant != null) {
-                return this.getSprite(plant.getTexturesFor(data.getData(TileEntityCropBase.PROPERTY_PLANT_GROWTH)).get(0));
+                return this.getSprite(plant.getTexturesFor(data.getData(TileEntityCrop.PROPERTY_PLANT_GROWTH)).get(0));
             }
         }
-        if(data.hasProperty(TileEntityCropBase.PROPERTY_WEED) && data.hasProperty(TileEntityCropBase.PROPERTY_WEED_GROWTH)) {
-            IAgriWeed weed = data.getData(TileEntityCropBase.PROPERTY_WEED);
+        if(data.hasProperty(TileEntityCrop.PROPERTY_WEED) && data.hasProperty(TileEntityCrop.PROPERTY_WEED_GROWTH)) {
+            IAgriWeed weed = data.getData(TileEntityCrop.PROPERTY_WEED);
             if(weed != null) {
-                return this.getSprite(weed.getTexturesFor(data.getData(TileEntityCropBase.PROPERTY_WEED_GROWTH)).get(0));
+                return this.getSprite(weed.getTexturesFor(data.getData(TileEntityCrop.PROPERTY_WEED_GROWTH)).get(0));
             }
 
         }

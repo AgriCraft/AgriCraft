@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.plugins.theoneprobe;
 
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.core.BlockCropPlant;
-import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
+import com.infinityraider.agricraft.content.core.BlockCrop;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
@@ -21,10 +21,10 @@ public class AgriProbeCropBlockDisplayOverride implements IBlockDisplayOverride 
     @Override
     public boolean overrideStandardInfo(ProbeMode mode, IProbeInfo info, Player playerEntity, Level world,
                                         BlockState state, IProbeHitData hitData) {
-        if(state.getBlock() instanceof BlockCropPlant) {
+        if(state.getBlock() instanceof BlockCrop) {
             BlockEntity tile = world.getBlockEntity(hitData.getPos());
-            if(tile instanceof TileEntityCropPlant) {
-                TileEntityCropPlant crop = (TileEntityCropPlant) tile;
+            if(tile instanceof TileEntityCrop) {
+                TileEntityCrop crop = (TileEntityCrop) tile;
                 IAgriPlant plant = crop.getPlant();
                 if(plant.isPlant()) {
                     this.addData(info, plant);

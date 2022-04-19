@@ -1,14 +1,13 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
 import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
@@ -20,8 +19,7 @@ public class AgriTileRegistry extends ModContentRegistry {
         return INSTANCE;
     }
 
-    public final RegistryInitializer<InfinityTileEntityType<TileEntityCropPlant>> crop_plant;
-    public final RegistryInitializer<InfinityTileEntityType<TileEntityCropSticks>> crop_sticks;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityCrop>> crop;
     public final RegistryInitializer<InfinityTileEntityType<TileEntitySeedAnalyzer>> seed_analyzer;
     public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationTank>> irrigation_tank;
     public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationChannel>> irrigation_channel;
@@ -31,18 +29,9 @@ public class AgriTileRegistry extends ModContentRegistry {
     private AgriTileRegistry() {
         super();
 
-        this.crop_plant = this.blockEntity(() ->
-                InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getCropPlantBlock())
-                        .build()
-        );
-
-        this.crop_sticks = this.blockEntity(() ->
-                InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
-                        .addBlocks(
-                                AgriApi.getAgriContent().getBlocks().getWoodCropSticksBlock(),
-                                AgriApi.getAgriContent().getBlocks().getIronCropSticksBlock(),
-                                AgriApi.getAgriContent().getBlocks().getObsidianCropSticksBlock())
+        this.crop = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CROP, TileEntityCrop::new)
+                        .addBlock(AgriApi.getAgriContent().getBlocks().getCropBlock())
                         .build()
         );
 

@@ -8,6 +8,7 @@ import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -24,6 +25,7 @@ import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
+import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.handler.MagnifyingGlassViewHandler;
@@ -48,15 +50,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriPlantRegistry plantRegistry;
@@ -95,6 +103,14 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public IAgriContent connectAgriContent() {
         return AgriContent.getInstance();
+    }
+
+    @Nullable
+    @Override
+    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound,
+                                                             Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
+                                                             Predicate<Fluid> fluidPredicate) {
+        return CropStickVariant.create(name, material, sound, itemSupplier, fluidPredicate);
     }
 
     @Nonnull

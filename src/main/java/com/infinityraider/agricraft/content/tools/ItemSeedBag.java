@@ -12,8 +12,9 @@ import com.infinityraider.agricraft.capability.CapabilitySeedBagContents;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriEnchantmentRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
+import com.infinityraider.agricraft.content.core.BlockCrop;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
@@ -139,18 +140,18 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
     protected boolean attemptPlantSeed(Level world, BlockPos pos, Contents contents, @Nullable  Player player) {
         if (contents.getCount() > 0) {
             BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TileEntityCropSticks) {
+            if (tile instanceof TileEntityCrop) {
                 // Attempt to plant on crop sticks
-                if(this.attemptPlantOnCrops((TileEntityCropSticks) tile, contents.extractFirstSeed(1, true), player)) {
+                if(this.attemptPlantOnCrops((TileEntityCrop) tile, contents.extractFirstSeed(1, true), player)) {
                     contents.extractFirstSeed(1, false);
                     return true;
                 }
             } else {
                 BlockPos up = pos.above();
                 tile = world.getBlockEntity(up);
-                if(tile instanceof TileEntityCropSticks) {
+                if(tile instanceof TileEntityCrop) {
                     // Attempt to plant above
-                    if(this.attemptPlantOnCrops((TileEntityCropSticks) tile, contents.extractFirstSeed(1, true), player)) {
+                    if(this.attemptPlantOnCrops((TileEntityCrop) tile, contents.extractFirstSeed(1, true), player)) {
                         contents.extractFirstSeed(1, false);
                         return true;
                     }
@@ -173,7 +174,8 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
     protected boolean attemptPlantOnSoil(Level world, BlockPos pos, ItemStack seedStack, @Nullable  Player player) {
         BlockPos up = pos.above();
         return AgriApi.getSoil(world, pos).map(soil -> {
-            BlockState newState = AgriBlockRegistry.getInstance().crop_plant.get().getStateForPlacement(world, up);
+            BlockCrop cropBlock = AgriBlockRegistry.getInstance().getCropBlock();
+            BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.defaultBlockState(), world, up);
             if (newState != null && world.setBlock(up, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, up).map(crop ->
                         this.attemptPlantOnCrops(crop, seedStack, player))

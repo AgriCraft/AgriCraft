@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.plugins.cyclic;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.content.core.BlockCropBase;
+import com.infinityraider.agricraft.content.core.BlockCrop;
 import com.lothrazar.cyclic.api.IHarvesterOverride;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public class AgriHarvesterOverride implements IHarvesterOverride {
     @Override
     public boolean appliesTo(BlockState blockState, Level world, BlockPos blockPos) {
-        return blockState.getBlock() instanceof BlockCropBase;
+        return blockState.getBlock() instanceof BlockCrop;
     }
 
     @Override

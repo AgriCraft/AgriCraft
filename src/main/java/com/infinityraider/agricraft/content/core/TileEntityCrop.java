@@ -1,15 +1,16 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -17,6 +18,7 @@ import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatProvider;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
@@ -37,9 +39,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -52,12 +54,14 @@ import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
-public abstract class TileEntityCropBase extends TileEntityBase implements IAgriCrop, IDebuggable {
+public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebuggable {
     // Model properties
     public static final ModelProperty<IAgriPlant> PROPERTY_PLANT = new ModelProperty<>();
     public static final ModelProperty<IAgriGrowthStage> PROPERTY_PLANT_GROWTH = new ModelProperty<>();
@@ -83,9 +87,13 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
     // Capabilities
     private final LazyOptional<IAgriCrop> cropCapability;
 
-    public TileEntityCropBase(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    // Cache for neighbouring crops
+    private final Map<Direction, Optional<IAgriCrop>> neighbours;
+    private boolean needsCaching;
+
+    public TileEntityCrop(BlockPos pos, BlockState state) {
         // Super constructor with appropriate TileEntity Type
-        super(type, pos, state);
+        super(AgriTileRegistry.getInstance().crop.get(), pos, state);
 
         // Initialize model data map
         this.data = new ModelDataMap.Builder()
@@ -120,9 +128,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
                 (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH),
                 CoreHandler::isInitialized,
                 NO_GROWTH).withCallBack((stage) -> {
-                    this.getModelData().setData(PROPERTY_PLANT_GROWTH, stage);
-                    this.requirement = RequirementCache.create(this);
-                }).withRenderUpdate().build();
+            this.getModelData().setData(PROPERTY_PLANT_GROWTH, stage);
+            this.requirement = RequirementCache.create(this);
+        }).withRenderUpdate().build();
 
         this.weed = this.getAutoSyncedFieldBuilder(NO_WEED,
                 (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
@@ -139,6 +147,11 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         // Initialize growth requirement cache
         this.requirement = RequirementCache.create(this);
         this.cropCapability = LazyOptional.of(() -> this);
+
+        // Initialize neighbour cache
+        this.neighbours = Maps.newEnumMap(Direction.class);
+        Direction.Plane.HORIZONTAL.stream().forEach(dir -> neighbours.put(dir, Optional.empty()));
+        this.needsCaching = true;
     }
 
     @Override
@@ -193,6 +206,46 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         return true;
     }
 
+    @Override
+    public boolean hasCropSticks() {
+        return BlockCrop.STATE.fetch(this.getBlockState()).hasSticks();
+    }
+
+    @Override
+    public boolean isCrossCrop() {
+        return BlockCrop.STATE.fetch(this.getBlockState()).isCross();
+    }
+
+    @Override
+    public boolean setCrossCrop(boolean status) {
+        Level world = this.getLevel();
+        if(world == null) {
+            return false;
+        }
+        if(status) {
+            if (this.hasPlant()) {
+                return false;
+            }
+            if (this.hasWeeds()) {
+                return false;
+            }
+            if (this.isCrossCrop() == status) {
+                return false;
+            }
+            world.setBlock(this.getPosition(), BlockCrop.STATE.apply(this.getBlockState(), BlockCrop.CropState.DOUBLE_STICKS), 3);
+            BlockCrop.VARIANT.fetch(this.getBlockState()).playCropStickSound(world, this.getPosition());
+            return true;
+        } else {
+            if(this.isCrossCrop()) {
+                return false;
+            } else {
+                world.setBlock(this.getPosition(), BlockCrop.STATE.apply(this.getBlockState(), BlockCrop.CropState.SINGLE_STICKS), 3);
+                BlockCrop.VARIANT.fetch(this.getBlockState()).playCropStickSound(world, this.getPosition());
+                return true;
+            }
+        }
+    }
+
     protected boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
         return CropHelper.checkGrowthSpace(this.getLevel(),this.getBlockPos(), plant, stage);
     }
@@ -238,6 +291,38 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             plant.onBroken(this, entity);
             weed.onBroken(this, entity);
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Break.Post(this, entity));
+        }
+    }
+
+    // Use neighbour cache instead to prevent having to read TileEntities from the world
+    @Nonnull
+    @Override
+    public Stream<IAgriCrop> streamNeighbours() {
+        if(this.needsCaching) {
+            this.readNeighbours();
+        }
+        return this.neighbours.values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(IAgriCrop::hasCropSticks);
+    }
+
+    // Initialize neighbours cache
+    protected void readNeighbours() {
+        if(this.getLevel() != null) {
+            Direction.Plane.HORIZONTAL.stream().forEach(dir -> neighbours.put(dir, AgriApi.getCrop(this.getLevel(), this.getBlockPos().relative(dir))));
+            this.needsCaching = false;
+        }
+    }
+
+    // Update neighbour cache
+    protected void onNeighbourChange(Direction direction, BlockPos pos, BlockState newState) {
+        if(newState.getBlock() instanceof BlockCrop) {
+            if(this.getLevel() != null) {
+                this.neighbours.put(direction, AgriApi.getCrop(this.getLevel(), pos));
+            }
+        } else {
+            this.neighbours.put(direction, Optional.empty());
         }
     }
 
@@ -359,7 +444,7 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
         int growth = this.getStats().getGrowth();
         double soilFactor = this.getSoil().map(IAgriSoil::getGrowthModifier).orElse(1.0D);
         return soilFactor * (this.getPlant().getGrowthChanceBase(this.getGrowthStage())
-            + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier());
+                + growth * this.getPlant().getGrowthChanceBonus(this.getGrowthStage()) * AgriCraft.instance.getConfig().growthMultiplier());
     }
 
     @Override
@@ -549,6 +634,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
             this.handlePlantUpdate();
+            if(this.getLevel() != null && !this.getLevel().isClientSide()) {
+                this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
+            }
             return true;
         }
         return false;
@@ -566,9 +654,9 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
 
     @Override
     protected void readTileNBT(@Nonnull CompoundTag tag) {
-        // No need to read anything since everything is covered by the AutoSyncedFields
+        // A cache update will be required though (either on the client, or on the server after being loaded)
+        this.needsCaching = true;
     }
-
 
     protected void handlePlantUpdate()  {
         if(this.getLevel() != null) {
@@ -576,13 +664,13 @@ public abstract class TileEntityCropBase extends TileEntityBase implements IAgri
             BlockState newState = oldState;
             // Update brightness
             int brightness = this.getPlant().getBrightness(this);
-            if (BlockCropBase.LIGHT.fetch(newState) != brightness) {
-                newState = BlockCropBase.LIGHT.apply(newState, brightness);
+            if (BlockCrop.LIGHT.fetch(newState) != brightness) {
+                newState = BlockCrop.LIGHT.apply(newState, brightness);
             }
             // Update plant state
             boolean plant = this.hasPlant() || this.hasWeeds();
-            if (BlockCropBase.PLANT.fetch(newState) != plant) {
-                newState = BlockCropBase.PLANT.apply(newState, plant);
+            if (BlockCrop.STATE.fetch(newState).hasPlant() != plant) {
+                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.PLANT);
             }
             // Set block state if necessary
             if(newState != oldState) {

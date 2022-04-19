@@ -94,17 +94,8 @@ public interface IAgriContent {
      */
     @SuppressWarnings("unused")
     interface Blocks {
-        /** @return the AgriCraft Crop Plant block */
-        Block getCropPlantBlock();
-
-        /** @return the AgriCraft Wooden Crop Sticks block */
-        Block getWoodCropSticksBlock();
-        
-        /** @return the AgriCraft Iron Crop Sticks block */
-        Block getIronCropSticksBlock();
-        
-        /** @return the AgriCraft Obsidian Crop Sticks block */
-        Block getObsidianCropSticksBlock();
+        /** @return the AgriCraft Crop block */
+        Block getCropBlock();
 
         /** @return the AgriCraft Seed Analyzer block */
         Block getSeedAnalyzerBlock();
@@ -155,13 +146,13 @@ public interface IAgriContent {
         Item getDebuggerItem();
 
         /** @return the AgriCraft Wooden Crop Sticks Item */
-        Item getWoodCropSticksItem();
+        IAgriCropStickItem getWoodCropSticksItem();
 
         /** @return the AgriCraft Iron Crop Sticks Item */
-        Item getIronCropSticksItem();
+        IAgriCropStickItem getIronCropSticksItem();
 
         /** @return the AgriCraft Obsidian Crop Sticks Item */
-        Item getObsidianCropSticksItem();
+        IAgriCropStickItem getObsidianCropSticksItem();
 
         /** @return the AgriCraft Seed Analyzer Item */
         Item getSeedAnalyzerItem();

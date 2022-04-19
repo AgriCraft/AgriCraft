@@ -11,7 +11,8 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
+import com.infinityraider.agricraft.content.core.BlockCrop;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriToolTips;
@@ -208,8 +209,8 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         if (this.hasPlant(stack)) {
             BlockPos up = pos.above();
             BlockEntity tile = world.getBlockEntity(up);
-            if (tile instanceof TileEntityCropSticks) {
-                return this.tryPlantOnCropSticks((TileEntityCropSticks) tile, stack, player);
+            if (tile instanceof TileEntityCrop) {
+                return this.tryPlantOnCropSticks((TileEntityCrop) tile, stack, player);
             }
             return this.tryNewPlant(world, up, stack, player);
         }
@@ -218,7 +219,8 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 
     protected InteractionResult tryNewPlant(Level world, BlockPos pos, ItemStack stack, @Nullable Player player) {
         if (AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-            BlockState newState = AgriBlockRegistry.getInstance().crop_plant.get().getStateForPlacement(world, pos);
+            BlockCrop cropBlock =  AgriBlockRegistry.getInstance().getCropBlock();
+            BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.defaultBlockState(), world, pos);
             if (newState != null && world.setBlock(pos, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, pos).map(crop -> {
                     if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
