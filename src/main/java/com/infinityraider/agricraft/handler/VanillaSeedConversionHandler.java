@@ -146,7 +146,7 @@ public class VanillaSeedConversionHandler {
                 }
                 // no crop sticks, try planting as a plant
                 BlockCrop blockCrop = AgriBlockRegistry.getInstance().getCropBlock();
-                BlockState newState = blockCrop.adaptStateForPlacement(blockCrop.defaultBlockState(), world, pos);
+                BlockState newState = blockCrop.adaptStateForPlacement(blockCrop.blockStatePlant(), world, pos);
                 if (newState != null && world.setBlock(pos, newState, 11)) {
                     boolean planted = AgriApi.getCrop(world, pos).map(crop -> crop.plantGenome(seed, player)).orElse(false);
                     if (planted) {

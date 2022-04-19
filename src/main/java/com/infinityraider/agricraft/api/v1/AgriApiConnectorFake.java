@@ -59,7 +59,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nullable
     @Override
-    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Supplier<Supplier<IAgriCropStickItem>> itemSupplier, Predicate<Fluid> fluidPredicate) {
+    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
         return null;
     }
 

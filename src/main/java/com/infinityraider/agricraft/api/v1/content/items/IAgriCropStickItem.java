@@ -12,7 +12,6 @@ import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Representation of crop sticks items
@@ -99,23 +98,21 @@ public interface IAgriCropStickItem {
         }
 
         /**
-         * Creates a new crop stick variant, must be called BEFORE blocks are initialized
+         * Creates an registers a new crop stick variant.
          *
+         * This variant is baked into a BlockState definition, and must therefore be called before blocks are being registered
          *
+         * A unique item for this variant will also be registered, this can be retrieved via the getItem() method on the crop sticks variant.
          *
          * @param name the name of the variant
          * @param material the material
          * @param sound sound for the material
-         * @param itemSupplier item representation of the crop stick variant
          * @param fluidPredicate predicate determining if this crop stick type can survive in certain fluids
          * @return a new crop stick variant, or null
          */
-
         @Nullable
-        static Variant create(String name, Material material, SoundType sound,
-                              Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                              Predicate<Fluid> fluidPredicate) {
-            return AgriApi.createCropStickVariant(name, material, sound, itemSupplier, fluidPredicate);
+        static Variant create(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+            return AgriApi.createCropStickVariant(name, material, sound, fluidPredicate);
         }
     }
 }

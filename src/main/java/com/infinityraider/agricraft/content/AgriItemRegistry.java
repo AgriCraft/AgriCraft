@@ -21,10 +21,6 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
 
     public final RegistryInitializer<ItemDebugger> debugger;
 
-    public final RegistryInitializer<ItemCropSticks> crop_sticks_wood;
-    public final RegistryInitializer<ItemCropSticks> crop_sticks_iron;
-    public final RegistryInitializer<ItemCropSticks> crop_sticks_obsidian;
-
     public final RegistryInitializer<ItemSeedAnalyzer> seed_analyzer;
     public final RegistryInitializer<ItemJournal> journal;
 
@@ -55,10 +51,6 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
 
         this.debugger = this.item(ItemDebugger::new);
 
-        this.crop_sticks_wood = this.item(() -> new ItemCropSticks(CropStickVariant.WOOD));
-        this.crop_sticks_iron = this.item(() -> new ItemCropSticks(CropStickVariant.IRON));
-        this.crop_sticks_obsidian = this.item(() -> new ItemCropSticks(CropStickVariant.OBSIDIAN));
-
         this.seed_analyzer = this.item(ItemSeedAnalyzer::new);
         this.journal = this.item(ItemJournal::new);
 
@@ -83,6 +75,8 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
         this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.QUARTZ)) : null;
 
         this.grate = this.item(ItemGrate::new);
+
+        CropStickVariant.initItems(this::item);
     }
 
     @Override
@@ -92,17 +86,17 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
 
     @Override
     public ItemCropSticks getWoodCropSticksItem() {
-        return crop_sticks_wood.get();
+        return CropStickVariant.WOOD.getItem();
     }
 
     @Override
     public ItemCropSticks getIronCropSticksItem() {
-        return crop_sticks_iron.get();
+        return CropStickVariant.IRON.getItem();
     }
 
     @Override
     public ItemCropSticks getObsidianCropSticksItem() {
-        return crop_sticks_obsidian.get();
+        return CropStickVariant.OBSIDIAN.getItem();
     }
 
     @Override

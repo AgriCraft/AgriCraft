@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.content.core;
 import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.item.ItemBase;
@@ -52,7 +53,7 @@ public class ItemCropSticks extends ItemBase implements IAgriCropStickItem {
         state = world.getBlockState(pos);
         if (state.isAir() || state.getFluidState().getType() == Fluids.WATER) {
             // Place on soil
-            return this.placeCropSticksOnSoil(world, pos, new BlockPlaceContext(context));
+            return this.placeCropSticksOnSoil(world, pos, context.getPlayer(), context.getHand());
         } else if(state.getBlock() == AgriApi.getAgriContent().getBlocks().getCropBlock()) {
             // Place on existing crop block
             return this.placeCropSticksOnExisting(world, pos, state, context.getPlayer(), context.getHand(), stack);
@@ -96,9 +97,10 @@ public class ItemCropSticks extends ItemBase implements IAgriCropStickItem {
         }
     }
 
-    protected InteractionResult placeCropSticksOnSoil(Level world, BlockPos pos, BlockPlaceContext context) {
+    protected InteractionResult placeCropSticksOnSoil(Level world, BlockPos pos, Player player, InteractionHand hand) {
         // Test if the placement is valid
-        BlockState newState = AgriApi.getAgriContent().getBlocks().getCropBlock().getStateForPlacement(context);
+        BlockCrop block = AgriBlockRegistry.getInstance().getCropBlock();
+        BlockState newState = block.adaptStateForPlacement(block.blockStateCropSticks(this.getVariant()), world, pos);
         if(newState == null) {
             return InteractionResult.FAIL;
         }
@@ -113,10 +115,10 @@ public class ItemCropSticks extends ItemBase implements IAgriCropStickItem {
         }
 
         // Remove the crop used from the stack.
-        this.consumeItem(context.getPlayer(), context.getHand());
+        this.consumeItem(player, hand);
 
         // Play placement sound.
-        CropHelper.playPlantingSound(world, pos, context.getPlayer());
+        CropHelper.playPlantingSound(world, pos, player);
 
         // Action was a success.
         return InteractionResult.SUCCESS;

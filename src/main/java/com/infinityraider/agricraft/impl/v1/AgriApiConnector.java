@@ -64,7 +64,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class AgriApiConnector implements IAgriApiConnector {
     private final IAgriPlantRegistry plantRegistry;
@@ -107,10 +106,8 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nullable
     @Override
-    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound,
-                                                             Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                                                             Predicate<Fluid> fluidPredicate) {
-        return CropStickVariant.create(name, material, sound, itemSupplier, fluidPredicate);
+    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+        return CropStickVariant.create(name, material, sound, fluidPredicate);
     }
 
     @Nonnull

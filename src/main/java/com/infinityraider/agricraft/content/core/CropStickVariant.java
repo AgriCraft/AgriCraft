@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.content.core;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.util.FluidPredicates;
 import net.minecraft.core.BlockPos;
@@ -15,43 +14,26 @@ import net.minecraftforge.common.IExtensibleEnum;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleEnum {
-    WOOD(
-            Material.PLANT,
-            SoundType.WOOD,
-            () -> () -> AgriItemRegistry.getInstance().crop_sticks_wood.get(),
-            FluidPredicates.NOT_LAVA
-    ),
-
-    IRON(
-            Material.PLANT,
-            SoundType.ANVIL,
-            () -> () -> AgriItemRegistry.getInstance().crop_sticks_iron.get(),
-            FluidPredicates.ANY_FLUID
-    ),
-
-    OBSIDIAN(Material.PLANT,
-            SoundType.BASALT,
-            () -> () -> AgriItemRegistry.getInstance().crop_sticks_obsidian.get(),
-            FluidPredicates.ANY_FLUID
-    );
+    WOOD(Material.PLANT, SoundType.WOOD, FluidPredicates.NOT_LAVA),
+    IRON(Material.PLANT, SoundType.ANVIL, FluidPredicates.ANY_FLUID),
+    OBSIDIAN(Material.PLANT, SoundType.BASALT, FluidPredicates.ANY_FLUID);
 
     private final String id;
     private final SoundType sound;
     private final Material material;
-    private final Supplier<Supplier<IAgriCropStickItem>> itemSupplier;
     private final Predicate<Fluid> fluidPredicate;
 
-    CropStickVariant(Material material, SoundType sound,
-                     Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                     Predicate<Fluid> fluidPredicate) {
+    private Supplier<ItemCropSticks> item;
+
+    CropStickVariant(Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
         this.id = Names.Blocks.CROP_STICKS + "_" + this.name().toLowerCase();
         this.sound = sound;
         this.material = material;
-        this.itemSupplier = itemSupplier;
         this.fluidPredicate = fluidPredicate;
     }
 
@@ -71,8 +53,8 @@ public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleE
     }
 
     @Override
-    public final IAgriCropStickItem getItem() {
-        return this.itemSupplier.get().get();
+    public final ItemCropSticks getItem() {
+        return this.item.get();
     }
 
     @Override
@@ -103,10 +85,16 @@ public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleE
                 .orElse(null);
     }
 
+    private void initItem(Function<Supplier<ItemCropSticks>, Supplier<ItemCropSticks>> registrar) {
+        this.item = registrar.apply(() -> new ItemCropSticks(this));
+    }
+
     @SuppressWarnings("unused")
-    public static CropStickVariant create(String name, Material material, SoundType sound,
-                                          Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                                          Predicate<Fluid> fluidPredicate) {
+    public static CropStickVariant create(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
         throw new IllegalStateException("Enum not extended");
+    }
+
+    public static void initItems(Function<Supplier<ItemCropSticks>, Supplier<ItemCropSticks>> registrar) {
+        Arrays.stream(values()).forEach(variant -> variant.initItem(registrar));
     }
 }

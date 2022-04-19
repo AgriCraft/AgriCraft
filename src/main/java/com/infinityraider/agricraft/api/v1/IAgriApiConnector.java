@@ -52,9 +52,7 @@ public interface IAgriApiConnector {
     IAgriContent connectAgriContent();
 
     @Nullable
-    IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound,
-                                                               Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                                                               Predicate<Fluid> fluidPredicate);
+    IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate);
 
     @Nonnull
     IAgriConfig connectAgriConfig();

@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.naming.OperationNotSupportedException;
@@ -92,18 +91,17 @@ public final class AgriApi {
      *
      * This variant is baked into a BlockState definition, and must therefore be called before blocks are being registered
      *
+     * A unique item for this variant will also be registered, this can be retrieved via the getItem() method on the crop sticks variant.
+     *
      * @param name the name of the variant
      * @param material the material
      * @param sound sound for the material
-     * @param itemSupplier item representation of the crop stick variant
      * @param fluidPredicate predicate determining if this crop stick type can survive in certain fluids
      * @return a new crop stick variant, or null
      */
     @Nullable
-    public static IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound,
-                                                                    Supplier<Supplier<IAgriCropStickItem>> itemSupplier,
-                                                                    Predicate<Fluid> fluidPredicate) {
-        return AgriApi.CONNECTOR.createCropStickVariant(name, material, sound, itemSupplier, fluidPredicate);
+    public static IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+        return AgriApi.CONNECTOR.createCropStickVariant(name, material, sound, fluidPredicate);
     }
 
     /**

@@ -5,10 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
-import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
-import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
-import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
+import com.infinityraider.agricraft.api.v1.content.items.*;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -102,6 +99,14 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
 
     public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         return AgriApi.getCrop(world, pos);
+    }
+
+    public BlockState blockStatePlant() {
+        return STATE.apply(this.defaultBlockState(), CropState.PLANT);
+    }
+
+    public BlockState blockStateCropSticks(CropStickVariant variant) {
+        return VARIANT.apply(STATE.apply(this.defaultBlockState(), CropState.SINGLE_STICKS), variant);
     }
 
     @Override
@@ -263,7 +268,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @Deprecated
     @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-        return VARIANT.fetch(state).getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.below()).isPresent();
+        return world.getBlockState(pos).getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.below()).isPresent();
     }
 
     @Override
@@ -272,10 +277,13 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         ItemStack stack = context.getItemInHand();
-        // define crop stick type
-        BlockState state = VARIANT.apply(this.defaultBlockState(), CropStickVariant.fromItem(stack));
-        // define plant type
-        if (stack.getItem() instanceof IAgriSeedItem) {
+        BlockState state = this.defaultBlockState();
+        if(stack.getItem() instanceof IAgriCropStickItem) {
+            // define crop stick type
+            state = STATE.apply(state, CropState.SINGLE_STICKS);
+            state = VARIANT.apply(state, CropStickVariant.fromItem(stack));
+        } else if (stack.getItem() instanceof IAgriSeedItem) {
+            // define plant type
             state = STATE.apply(state, CropState.PLANT);
         }
         return this.adaptStateForPlacement(state, world, pos);

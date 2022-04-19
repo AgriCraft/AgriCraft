@@ -175,7 +175,7 @@ public class ItemSeedBag extends ItemBase implements IAgriSeedBagItem {
         BlockPos up = pos.above();
         return AgriApi.getSoil(world, pos).map(soil -> {
             BlockCrop cropBlock = AgriBlockRegistry.getInstance().getCropBlock();
-            BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.defaultBlockState(), world, up);
+            BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.blockStatePlant(), world, up);
             if (newState != null && world.setBlock(up, newState, 11)) {
                 boolean success = AgriApi.getCrop(world, up).map(crop ->
                         this.attemptPlantOnCrops(crop, seedStack, player))
