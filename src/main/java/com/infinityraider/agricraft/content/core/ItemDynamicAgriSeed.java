@@ -21,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -84,7 +83,8 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
             }
             // There are currently no crop sticks, check if the place is suitable and plant the plant directly
             if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-                BlockState newState = AgriBlockRegistry.getInstance().crop.get().getStateForPlacement(new BlockPlaceContext(context));
+                BlockCrop blockCrop = AgriBlockRegistry.getInstance().getCropBlock();
+                BlockState newState = blockCrop.adaptStateForPlacement(blockCrop.blockStatePlant(), world, up);
                 if (newState != null && world.setBlock(up, newState, 11)) {
                     boolean success = AgriApi.getCrop(world, up).map(crop ->
                             this.getGenome(context.getItemInHand()).map(genome -> crop.plantGenome(genome, player)).map(result -> {

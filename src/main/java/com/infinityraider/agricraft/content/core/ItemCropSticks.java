@@ -86,6 +86,7 @@ public class ItemCropSticks extends ItemBase implements IAgriCropStickItem {
             }
         } else {
             // There are not yet crop sticks present, therefore, apply them
+            state = BlockCrop.STATE.apply(state, BlockCrop.CropState.STICKS_PLANT);
             state = BlockCrop.VARIANT.apply(state, CropStickVariant.fromItem(stack));
             world.setBlock(pos, state, 3);
             // Remove the crop stick used from the stack.

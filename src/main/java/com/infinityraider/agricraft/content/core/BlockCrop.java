@@ -409,7 +409,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                                 if (!player.isCreative()) {
                                     player.getItemInHand(hand).shrink(1);
                                 }
-                                BlockState newState = STATE.apply(prevState, CropState.PLANT);
+                                BlockState newState = STATE.apply(prevState, CropState.STICKS_PLANT);
                                 newState = LIGHT.apply(newState, crop.getPlant().getBrightness(crop));
                                 world.setBlock(pos, newState, 3);
                                 player.swing(hand);

@@ -634,9 +634,6 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
             this.getPlant().onRemoved(this);
             this.genome.set(Optional.empty());
             this.handlePlantUpdate();
-            if(this.getLevel() != null && !this.getLevel().isClientSide()) {
-                this.getLevel().setBlock(this.getBlockPos(), Blocks.AIR.defaultBlockState(), 3);
-            }
             return true;
         }
         return false;
@@ -667,23 +664,36 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
             if (BlockCrop.LIGHT.fetch(newState) != brightness) {
                 newState = BlockCrop.LIGHT.apply(newState, brightness);
             }
-            // Update plant state
+            // Update plant and sticks state
             boolean plant = this.hasPlant() || this.hasWeeds();
-            if (BlockCrop.STATE.fetch(newState).hasPlant() != plant) {
+            boolean sticks = this.hasCropSticks();
+            if (sticks && plant) {
+                // both plant and sticks
+                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.STICKS_PLANT);
+            } else if (sticks) {
+                // only sticks
+                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.SINGLE_STICKS);
+            } else if (plant) {
+                // only plant
                 newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.PLANT);
+            } else {
+                // neither plant nor sticks means the crop is gone
+                newState = Blocks.AIR.defaultBlockState();
             }
             // Set block state if necessary
             if(newState != oldState) {
                 this.getLevel().setBlock(this.getBlockPos(), newState, 3);
             }
-            // Update growth requirement
-            this.requirement.flush();
-            this.requirement = RequirementCache.create(this);
-            // Update model data
-            this.getModelData().setData(PROPERTY_PLANT, this.getPlant());
-            this.getModelData().setData(PROPERTY_PLANT_GROWTH, this.getGrowthStage());
-            this.getModelData().setData(PROPERTY_WEED, this.getWeeds());
-            this.getModelData().setData(PROPERTY_WEED_GROWTH, this.getWeedGrowthStage());
+            if(newState.getBlock() == oldState.getBlock()) {
+                // Update growth requirement
+                this.requirement.flush();
+                this.requirement = RequirementCache.create(this);
+                // Update model data
+                this.getModelData().setData(PROPERTY_PLANT, this.getPlant());
+                this.getModelData().setData(PROPERTY_PLANT_GROWTH, this.getGrowthStage());
+                this.getModelData().setData(PROPERTY_WEED, this.getWeeds());
+                this.getModelData().setData(PROPERTY_WEED_GROWTH, this.getWeedGrowthStage());
+            }
         }
     }
 
