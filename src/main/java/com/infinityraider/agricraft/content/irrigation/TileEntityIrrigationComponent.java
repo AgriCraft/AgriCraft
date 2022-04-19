@@ -18,6 +18,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +32,7 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTexture {
+public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTexture implements IFluidTank {
     /* drain 1% each tick, so it takes 100 ticks (5 seconds) to fully drain a componentt */
     public static final float NETHER_DRAIN_FRACTION = 0.01F;
 
@@ -171,6 +174,17 @@ public abstract class TileEntityIrrigationComponent extends TileEntityDynamicTex
 
     private void setLevelBuffer(float level) {
         this.levelBuffer = level;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack getFluid() {
+        return new FluidStack(Fluids.WATER, this.getContent());
+    }
+
+    @Override
+    public int getFluidAmount() {
+        return this.getContent();
     }
 
     public int getCapacity() {

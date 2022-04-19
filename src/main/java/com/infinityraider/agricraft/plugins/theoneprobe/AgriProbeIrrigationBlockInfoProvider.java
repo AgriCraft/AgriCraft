@@ -9,7 +9,6 @@ import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -48,12 +47,7 @@ final class AgriProbeIrrigationBlockInfoProvider implements IProbeInfoProvider {
                     }
                 }
             }
-            TileEntityIrrigationComponent component = (TileEntityIrrigationComponent) tile;
-            info.progress(component.getContent(), component.getCapacity(), new ProgressStyle()
-                    .filledColor(0xff327DCD)
-                    .alternateFilledColor(0xff3732CD)
-                    .suffix(" mB")
-            );
+            info.tank((TileEntityIrrigationComponent) tile);
         }
     }
 }

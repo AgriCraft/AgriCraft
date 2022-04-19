@@ -11,6 +11,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -97,6 +99,28 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     @Override
     protected String description() {
         return "channel";
+    }
+
+    @Override
+    public boolean isFluidValid(FluidStack stack) {
+        return false;
+    }
+
+    @Override
+    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
+        return FluidStack.EMPTY;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
+        return FluidStack.EMPTY;
     }
 
     public enum ValveState {

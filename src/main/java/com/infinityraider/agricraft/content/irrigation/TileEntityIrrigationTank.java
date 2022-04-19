@@ -3,8 +3,12 @@ package com.infinityraider.agricraft.content.irrigation;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriClipperItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTileRegistry;
+import com.infinityraider.agricraft.content.core.ItemDebugger;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationTankRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -35,6 +39,14 @@ import java.util.function.BiFunction;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TileEntityIrrigationTank extends TileEntityIrrigationComponent implements IFluidHandler {
+    // Excluded classes for Item usage logic
+    private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
+            IAgriRakeItem.class,
+            IAgriClipperItem.class,
+            IAgriTrowelItem.class,
+            ItemDebugger.class
+    };
+
     private static final BlockPos DEFAULT = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     private static final BiFunction<LevelAccessor, BlockPos, TileEntityIrrigationTank> TANK_GETTER = (world, pos) -> {
         BlockEntity tile = world.getBlockEntity(pos);
@@ -208,6 +220,11 @@ public class TileEntityIrrigationTank extends TileEntityIrrigationComponent impl
                 *(this.getMultiBlockMax().getX() - this.getMultiBlockMin().getX() + 1)
                 *(this.getMultiBlockMax().getY() - this.getMultiBlockMin().getY() + 1)
                 *(this.getMultiBlockMax().getZ() - this.getMultiBlockMin().getZ() + 1);
+    }
+
+    @Override
+    public boolean isFluidValid(FluidStack stack) {
+        return false;
     }
 
     @Override
