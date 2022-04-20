@@ -221,7 +221,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         if (AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
             BlockCrop cropBlock =  AgriBlockRegistry.getInstance().getCropBlock();
             BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.blockStatePlant(), world, pos);
-            if (newState != null && world.setBlock(pos, newState, 11)) {
+            if (newState != null && world.setBlock(pos, newState, 3)) {
                 boolean success = AgriApi.getCrop(world, pos).map(crop -> {
                     if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
                         return false;

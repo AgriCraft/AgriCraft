@@ -12,6 +12,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.IExtensibleEnum;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -73,16 +74,16 @@ public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleE
         return this.name().toLowerCase();
     }
 
-    @Nullable
+    @Nonnull
     public static CropStickVariant fromItem(ItemStack stack) {
         if (stack.isEmpty() || !(stack.getItem() instanceof IAgriCropStickItem)) {
-            return null;
+            throw new IllegalArgumentException("Can not fetch a crop stick variant from an empty stack");
         }
         IAgriCropStickItem sticks = (IAgriCropStickItem) stack.getItem();
         return Arrays.stream(values())
                 .filter(variant -> variant == sticks.getVariant())
                 .findAny()
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("Can not fetch a crop stick variant from an invalid item"));
     }
 
     private void initItem(Function<Supplier<ItemCropSticks>, Supplier<ItemCropSticks>> registrar) {

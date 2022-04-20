@@ -12,7 +12,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,6 +39,9 @@ public class ItemCropSticks extends ItemBase implements IAgriCropStickItem {
     public InteractionResult useOn(@Nonnull UseOnContext context) {
         // Fetch target world, pos, tile, and state
         Level world = context.getLevel();
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
         BlockPos pos = context.getClickedPos();
         ItemStack stack = context.getItemInHand();
         BlockState state = world.getBlockState(pos);

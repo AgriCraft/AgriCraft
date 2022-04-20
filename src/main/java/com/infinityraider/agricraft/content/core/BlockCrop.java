@@ -27,7 +27,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -58,15 +60,16 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLoggable, BonemealableBlock, IPlantable {
-    // Properties
-    public static final InfProperty<CropStickVariant> VARIANT = InfProperty.Creators.create("stick_type", CropStickVariant.class, CropStickVariant.WOOD);
-    public static final InfProperty<CropState> STATE = InfProperty.Creators.create("crop_state", CropState.class, CropState.SINGLE_STICKS);
-    public static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
+    /** Properties */
+    protected static final InfProperty<CropStickVariant> VARIANT = InfProperty.Creators.create("stick_type", CropStickVariant.class, CropStickVariant.WOOD);
+    protected static final InfProperty<CropState> STATE = InfProperty.Creators.create("crop_state", CropState.class, CropState.SINGLE_STICKS);
+    protected static final InfProperty<Integer> LIGHT = InfProperty.Creators.create("light", 0, 0, 16);
 
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder()
             .add(VARIANT)
@@ -75,7 +78,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             .fluidloggable()
             .build();
 
-    // Excluded classes for Item usage logic
+    /** Excluded classes for Item usage logic */
     private static final Class<?>[] ITEM_EXCLUDES = new Class[]{
             IAgriRakeItem.class,
             IAgriClipperItem.class,
@@ -85,9 +88,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             ItemDebugger.class
     };
 
-    // TileEntity factory
+    /** TileEntity factory */
     private static final BiFunction<BlockPos, BlockState, TileEntityCrop> TILE_FACTORY = TileEntityCrop::new;
 
+    /** Constructor */
     public BlockCrop() {
         super(Names.Blocks.CROP, Properties.of(Material.PLANT)
                 .randomTicks()
@@ -97,92 +101,128 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         );
     }
 
-    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
-        return AgriApi.getCrop(world, pos);
-    }
+    /**
+     * --------------------------------
+     * InfinityLib registration methods
+     * --------------------------------
+     */
 
-    public BlockState blockStatePlant() {
-        return STATE.apply(this.defaultBlockState(), CropState.PLANT);
-    }
-
-    public BlockState blockStateCropSticks(CropStickVariant variant) {
-        return VARIANT.apply(STATE.apply(this.defaultBlockState(), CropState.SINGLE_STICKS), variant);
-    }
-
+    /** For TileEntity creation */
     @Override
     public BiFunction<BlockPos, BlockState, TileEntityCrop> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 
+    /** For BlockState definition */
     @Override
     protected InfPropertyConfiguration getPropertyConfiguration() {
         return PROPERTIES;
     }
 
+    /** For render type registration */
     @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
-        return this.getShape(state, world, pos, CollisionContext.empty());
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.cutout();
     }
 
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
+    /**
+     * ------------------------------------------
+     * Block state and TileEntity utility methods
+     * ------------------------------------------
+     */
+
+    /** TileEntity fetch utility method */
+    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
+        return AgriApi.getCrop(world, pos);
     }
 
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
-        return this.getVisualShape(state, world, pos, CollisionContext.empty());
+    /** BlockState for a plant only */
+    public BlockState blockStatePlant() {
+        return STATE.apply(this.defaultBlockState(), CropState.PLANT);
     }
 
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        CropState cropState = STATE.fetch(state);
-        CropStickVariant stickType = VARIANT.fetch(state);
-        if(cropState.isCross()) {
-            return HitBoxes.CROSS_STICKS;
-        } else if(cropState.hasPlant()) {
-            int height = this.getCrop(world, pos)
-                    .map(crop -> Math.max(
-                            crop.getPlant().getPlantHeight(crop.getGrowthStage()),
-                            crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())))
-                    .map(Double::intValue)
-                    .orElse(0);
-            if (cropState.hasSticks()) {
-                return HitBoxes.getStickPlantShape(height);
-            } else {
-                return HitBoxes.getPlantShape(height);
-            }
+    /** BlockState for crop sticks only */
+    public BlockState blockStateCropSticks(CropStickVariant variant) {
+        return VARIANT.apply(STATE.apply(this.defaultBlockState(), CropState.SINGLE_STICKS), variant);
+    }
+
+    /** Method to apply crop sticks to an existing crop */
+    public InteractionResult applyCropSticks(Level world, BlockPos pos, BlockState state, CropStickVariant variant) {
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        BlockState newState = STATE.fetch(state).applyCropSticks(state, variant);
+        if(newState == state) {
+            return InteractionResult.FAIL;
         } else {
-            return HitBoxes.SINGLE_STICKS;
+            world.setBlock(pos, newState, 3);
+            return InteractionResult.SUCCESS;
         }
     }
 
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        if(AgriCraft.instance.getConfig().cropSticksCollide()) {
-            if(STATE.fetch(state).hasSticks()) {
-                return STATE.fetch(state).isCross() ? HitBoxes.CROSS_STICKS : HitBoxes.SINGLE_STICKS;
-            }
+    /** Method to remove crop sticks from an existing crop */
+    public InteractionResultHolder<IAgriCropStickItem.Variant> removeCropSticks(Level world, BlockPos pos, BlockState state) {
+        if(world.isClientSide()) {
+            return InteractionResultHolder.pass(VARIANT.fetch(state));
         }
-        return Shapes.empty();
+        BlockState newState = STATE.fetch(state).addPlant(state);
+        if(newState == state) {
+            return InteractionResultHolder.fail(VARIANT.fetch(state));
+        } else {
+            world.setBlock(pos, newState, 3);
+            return InteractionResultHolder.success(VARIANT.fetch(state));
+        }
     }
 
-    @Override
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return this.getShape(state, world, pos, context);
+    /** Method to apply a plant to an existing crop */
+    public InteractionResult applyPlant(Level world, BlockPos pos, BlockState state) {
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        BlockState newState = STATE.fetch(state).addPlant(state);
+        if(newState == state) {
+            return InteractionResult.FAIL;
+        } else {
+            world.setBlock(pos, newState, 3);
+            return InteractionResult.SUCCESS;
+        }
     }
+
+    /** Method to remove a plant from an existing crop */
+    public InteractionResult removePlant(Level world, BlockPos pos, BlockState state) {
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        BlockState newState = STATE.fetch(state).removePlant(state);
+        if(newState == state) {
+            return InteractionResult.FAIL;
+        } else {
+            world.setBlock(pos, newState, 3);
+            return InteractionResult.SUCCESS;
+        }
+    }
+
+    /** Method to set the light level of an existing crop */
+    public InteractionResult setLightLevel(Level world, BlockPos pos, BlockState state, int level) {
+        if(world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        BlockState newState = LIGHT.apply(state, level);
+        if(newState == state) {
+            return InteractionResult.FAIL;
+        } else {
+            world.setBlock(pos, newState, 3);
+            return InteractionResult.SUCCESS;
+        }
+    }
+
+
+    /**
+     * -----------------------
+     * Block Behaviour methods
+     * -----------------------
+     */
 
     @Override
     @Deprecated
@@ -280,11 +320,15 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         BlockState state = this.defaultBlockState();
         if(stack.getItem() instanceof IAgriCropStickItem) {
             // define crop stick type
-            state = STATE.apply(state, CropState.SINGLE_STICKS);
-            state = VARIANT.apply(state, CropStickVariant.fromItem(stack));
+            state = this.blockStateCropSticks(CropStickVariant.fromItem(stack));
         } else if (stack.getItem() instanceof IAgriSeedItem) {
-            // define plant type
-            state = STATE.apply(state, CropState.PLANT);
+            if(AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
+                // define plant type
+                state = this.blockStatePlant();
+            } else {
+                // Not allowed to plant outside crop sticks
+                return null;
+            }
         }
         return this.adaptStateForPlacement(state, world, pos);
     }
@@ -295,6 +339,25 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             return this.fluidlog(state, world, pos);
         }
         return null;
+    }
+
+    @Override
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+        super.setPlacedBy(world, pos, state, entity, stack);
+        if(stack.getItem() instanceof IAgriSeedItem) {
+            IAgriSeedItem seed = (IAgriSeedItem) stack.getItem();
+            this.getCrop(world, pos).ifPresent(crop -> {
+                seed.getGenome(stack).map(genome -> crop.plantGenome(genome, entity)).map(result -> {
+                    if (result) {
+                        // consume item
+                        if (entity == null || (entity instanceof Player && !((Player) entity).isCreative()) ) {
+                            stack.shrink(1);
+                        }
+                    }
+                    return result;
+                });
+            });
+        }
     }
 
     public void breakBlock(BlockState state, Level world, BlockPos pos, boolean doDrops) {
@@ -512,12 +575,6 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                 : 0;
     }
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public RenderType getRenderType() {
-        return RenderType.cutout();
-    }
-
     public void spawnItem(IAgriCrop crop, ItemStack stack) {
         Level world = crop.world();
         if(world != null) {
@@ -535,10 +592,81 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         });
     }
 
+
     /**
-     * -------------------------
+     * ---------------
+     * Hit box methods
+     * --------------
+     */
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getShape(state, world, pos, CollisionContext.empty());
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getVisualShape(state, world, pos, CollisionContext.empty());
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        CropState cropState = STATE.fetch(state);
+        if(cropState.isCross()) {
+            return HitBoxes.CROSS_STICKS;
+        } else if(cropState.hasPlant()) {
+            int height = this.getCrop(world, pos)
+                    .map(crop -> Math.max(
+                            crop.getPlant().getPlantHeight(crop.getGrowthStage()),
+                            crop.getWeeds().getPlantHeight(crop.getWeedGrowthStage())))
+                    .map(Double::intValue)
+                    .orElse(0);
+            if (cropState.hasSticks()) {
+                return HitBoxes.getStickPlantShape(height);
+            } else {
+                return HitBoxes.getPlantShape(height);
+            }
+        } else {
+            return HitBoxes.SINGLE_STICKS;
+        }
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        if(AgriCraft.instance.getConfig().cropSticksCollide()) {
+            if(STATE.fetch(state).hasSticks()) {
+                return STATE.fetch(state).isCross() ? HitBoxes.CROSS_STICKS : HitBoxes.SINGLE_STICKS;
+            }
+        }
+        return Shapes.empty();
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return this.getShape(state, world, pos, context);
+    }
+
+    /**
+     * ---------------------------------
      * Vanilla BonemealableBlock methods
-     * -------------------------
+     * ---------------------------------
      */
 
     @Override
@@ -581,19 +709,86 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         return state;
     }
 
+    /**
+     * -------------------------
+     * Utility enums and classes
+     * -------------------------
+     */
+
     /** enum representing crop stick and plant state */
-    public enum CropState implements StringRepresentable {
-        PLANT(true, false),
-        SINGLE_STICKS(false, true),
-        DOUBLE_STICKS(false, true),
-        STICKS_PLANT(true, true);
+    protected enum CropState implements StringRepresentable {
+        PLANT(true, false,
+                // add crop sticks function
+                (state, variant) -> {
+                    state = STATE.apply(state, sticksPlant());
+                    return VARIANT.apply(state, variant);
+                },
+                // remove crop sticks function
+                UnaryOperator.identity(),
+                // add plant function
+                UnaryOperator.identity(),
+                // remove plant function
+                state -> Blocks.AIR.defaultBlockState()
+        ),
+
+        SINGLE_STICKS(false, true,
+                // add crop sticks function
+                (state, variant) -> {
+                    if(VARIANT.fetch(state) == variant) {
+                        return STATE.apply(state, doubleSticks());
+                    } else {
+                        return state;
+                    }
+                },
+                // remove crop sticks function
+                state -> Blocks.AIR.defaultBlockState(),
+                // add plant function
+                state -> STATE.apply(state, sticksPlant()),
+                // remove plant function
+                UnaryOperator.identity()
+        ),
+
+        DOUBLE_STICKS(false, true,
+                // add crop sticks function
+                (state, variant) -> state,
+                // remove crop sticks function
+                state -> STATE.apply(state, SINGLE_STICKS),
+                // add plant function
+                UnaryOperator.identity(),
+                // remove plant function
+                UnaryOperator.identity()
+        ),
+
+        STICKS_PLANT(true, true,
+                // add crop sticks function
+                (state, variant) -> state,
+                // remove crop sticks function
+                state -> STATE.apply(state, PLANT),
+                // add plant function
+                UnaryOperator.identity(),
+                // remove plant function
+                state -> STATE.apply(state, SINGLE_STICKS)
+        );
 
         private final boolean plant;
         private final boolean sticks;
 
-        CropState(boolean plant, boolean sticks) {
+        private final BiFunction<BlockState, CropStickVariant, BlockState> addCropSticksFunction;
+        private final UnaryOperator<BlockState> removeCropSticksFunction;
+        private final UnaryOperator<BlockState> addPlantFunction;
+        private final UnaryOperator<BlockState> removePlantFunction;
+
+        CropState(boolean plant, boolean sticks,
+                  BiFunction<BlockState, CropStickVariant, BlockState> addCropSticksFunction,
+                  UnaryOperator<BlockState> removeCropSticksFunction,
+                  UnaryOperator<BlockState> addPlantFunction,
+                  UnaryOperator<BlockState> removePlantFunction) {
             this.plant = plant;
             this.sticks = sticks;
+            this.addCropSticksFunction = addCropSticksFunction;
+            this.removeCropSticksFunction = removeCropSticksFunction;
+            this.addPlantFunction = addPlantFunction;
+            this.removePlantFunction = removePlantFunction;
         }
 
         public boolean hasPlant() {
@@ -608,14 +803,40 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             return this == DOUBLE_STICKS;
         }
 
+        public BlockState applyCropSticks(BlockState state, CropStickVariant variant) {
+            return this.addCropSticksFunction.apply(state, variant);
+        }
+
+        public BlockState removeCropSticks(BlockState state) {
+            return this.removeCropSticksFunction.apply(state);
+        }
+
+        public BlockState addPlant(BlockState state) {
+            return this.addPlantFunction.apply(state);
+        }
+
+        public BlockState removePlant(BlockState state) {
+            return this.removePlantFunction.apply(state);
+        }
+
         @Override
         public String getSerializedName() {
             return this.name().toLowerCase();
         }
+
+        // helper method to prevent illegal forward references in the constructors
+        private static CropState sticksPlant() {
+            return STICKS_PLANT;
+        }
+
+        // helper method to prevent illegal forward references in the constructors
+        private static CropState doubleSticks() {
+            return DOUBLE_STICKS;
+        }
     }
 
     /** Inner class for voxel shapes */
-    public static class HitBoxes {
+    protected static class HitBoxes {
         public static final VoxelShape SINGLE_STICKS = Stream.of(
                 Block.box(2, -3, 2, 3, 14, 3),
                 Block.box(13, -3, 2, 14, 14, 3),

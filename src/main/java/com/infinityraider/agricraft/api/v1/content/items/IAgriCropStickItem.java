@@ -54,6 +54,21 @@ public interface IAgriCropStickItem {
         IAgriCropStickItem getItem();
 
         /**
+         * @return a new ItemStack containing one item of his variant
+         */
+        default ItemStack createItemStack() {
+            return this.createItemStack(1);
+        }
+
+        /**
+         * @param count the desired stack count
+         * @return a new ItemStack containing <count> items of his variant
+         */
+        default ItemStack createItemStack(int count) {
+            return new ItemStack(this.getItem().asItem(), count);
+        }
+
+        /**
          * Checks if this variant can survive in a given fluid
          * @param fluid the fluid
          * @return if this variant can survive in the fluid
