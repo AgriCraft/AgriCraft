@@ -7,11 +7,13 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.*;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.agricraft.util.CropHelper;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.IFluidLoggable;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -148,7 +150,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     }
 
     /** Method to apply crop sticks to an existing crop */
-    public InteractionResult applyCropSticks(Level world, BlockPos pos, BlockState state, CropStickVariant variant) {
+    public InteractionResult applyCropSticks(Level world, BlockPos pos, BlockState state, @Nullable CropStickVariant variant) {
+        if(variant == null) {
+            return InteractionResult.FAIL;
+        }
         if(world.isClientSide()) {
             return InteractionResult.PASS;
         }
@@ -157,6 +162,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             return InteractionResult.FAIL;
         } else {
             world.setBlock(pos, newState, 3);
+            if(STATE.fetch(state).hasSticks()) {
+                variant.playCropStickSound(world, pos);
+            } else {
+                CropHelper.playPlantingSound(world, pos);
+            }
             return InteractionResult.SUCCESS;
         }
     }
@@ -171,6 +181,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             return InteractionResultHolder.fail(VARIANT.fetch(state));
         } else {
             world.setBlock(pos, newState, 3);
+            if(STATE.fetch(state).isCross()) {
+                VARIANT.fetch(state).playCropStickSound(world, pos);
+            }
             return InteractionResultHolder.success(VARIANT.fetch(state));
         }
     }
@@ -344,9 +357,9 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
         super.setPlacedBy(world, pos, state, entity, stack);
-        if(stack.getItem() instanceof IAgriSeedItem) {
-            IAgriSeedItem seed = (IAgriSeedItem) stack.getItem();
-            this.getCrop(world, pos).ifPresent(crop -> {
+        if(stack.getItem() instanceof IAgriGeneCarrierItem) {
+            IAgriGeneCarrierItem seed = (IAgriGeneCarrierItem) stack.getItem();
+            this.getCrop(world, pos).ifPresent(crop ->
                 seed.getGenome(stack).map(genome -> crop.plantGenome(genome, entity)).map(result -> {
                     if (result) {
                         // consume item
@@ -355,8 +368,8 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                         }
                     }
                     return result;
-                });
-            });
+                })
+            );
         }
     }
 
@@ -409,15 +422,15 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         if(hand == InteractionHand.OFF_HAND) {
             return InteractionResult.PASS;
         }
-        // fetch useful information
         ItemStack heldItem = player.getItemInHand(hand);
-        CropState cropState = STATE.fetch(state);
-        CropStickVariant stickType = VARIANT.fetch(state);
         // harvesting (or de-cross-crop'ing)
         if (heldItem.isEmpty()) {
-            if(cropState.isCross()) {
-                if (crop.setCrossCrop(false) && !player.isCreative()) {
-                    this.spawnItem(crop, new ItemStack(stickType.getItem().asItem()));
+            if(crop.isCrossCrop()) {
+                InteractionResultHolder<IAgriCropStickItem.Variant> result = this.removeCropSticks(world, pos, state);
+                if (result.getResult() == InteractionResult.SUCCESS) {
+                    if(!player.isCreative()) {
+                        this.spawnItem(crop, result.getObject().createItemStack());
+                    }
                     return InteractionResult.CONSUME;
                 }
             } else {
@@ -443,28 +456,16 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             }).orElse(InteractionResult.PASS);
         }
         // Placement of crop sticks or creation of cross crop
-        if (cropState.hasSticks()) {
-            if (stickType.isSameType(heldItem)) {
-                if (crop.setCrossCrop(true)) {
+        InteractionResult result = this.applyCropSticks(world, pos, state, CropStickVariant.fromItem(heldItem));
+        if (result == InteractionResult.SUCCESS) {
                     if (!player.isCreative()) {
                         player.getItemInHand(hand).shrink(1);
                     }
-                    stickType.playCropStickSound(world, pos);
-                    return InteractionResult.SUCCESS;
-                }
-            }
-        } else {
-            CropStickVariant newType = CropStickVariant.fromItem(heldItem);
-            if(newType != null) {
-                state = VARIANT.apply(state, newType);
-                world.setBlock(pos, state, 3);
-                newType.playCropStickSound(world, pos);
-                return InteractionResult.SUCCESS;
-            }
+                    return result;
         }
         // Planting from seed
         final BlockState prevState = state;
-        if(!cropState.hasPlant()) {
+        if(!crop.hasPlant()) {
             if (AgriApi.getGenomeAdapterizer().hasAdapter(heldItem)) {
                 return AgriApi.getGenomeAdapterizer().valueOf(heldItem)
                         .map(seed -> {
@@ -472,6 +473,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                                 if (!player.isCreative()) {
                                     player.getItemInHand(hand).shrink(1);
                                 }
+                                // TODO: clean up
                                 BlockState newState = STATE.apply(prevState, CropState.STICKS_PLANT);
                                 newState = LIGHT.apply(newState, crop.getPlant().getBrightness(crop));
                                 world.setBlock(pos, newState, 3);

@@ -697,14 +697,6 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
         }
     }
 
-    public void mimicFrom(IAgriCrop other) {
-        other.getGenome().ifPresent(genome -> {
-            this.setGenomeImpl(genome.clone());
-            this.setGrowthStage(other.getGrowthStage());
-        });
-        this.setWeedImpl(other.getWeeds(), other.getWeedGrowthStage());
-    }
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {

@@ -127,6 +127,10 @@ public class CropHelper {
         });
     }
 
+    public static void playPlantingSound(Level world, BlockPos pos) {
+        playPlantingSound(world, pos, null);
+    }
+
     @SuppressWarnings("deprecation")
     public static void playPlantingSound(Level world, BlockPos pos, @Nullable Player player) {
         SoundType sound = Blocks.WHEAT.getSoundType(Blocks.WHEAT.defaultBlockState());

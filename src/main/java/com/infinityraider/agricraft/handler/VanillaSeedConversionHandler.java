@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.core.BlockCrop;
+import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -94,6 +95,10 @@ public class VanillaSeedConversionHandler {
         }
         // If the item is an exception, cancel
         if(this.isException(stack)) {
+            return true;
+        }
+        // If the stack is already an agricraft seed, the item and block implementation will handle the logic
+        if(stack.getItem() instanceof ItemDynamicAgriSeed) {
             return true;
         }
         // If clicking crop tile, the crop will handle the logic
