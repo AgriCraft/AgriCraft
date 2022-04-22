@@ -13,11 +13,10 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.IExtensibleEnum;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleEnum {
     WOOD(Material.PLANT, SoundType.WOOD, FluidPredicates.NOT_LAVA),
@@ -86,7 +85,7 @@ public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleE
                 .orElseThrow(() -> new IllegalArgumentException("Can not fetch a crop stick variant from an invalid item"));
     }
 
-    private void initItem(Function<Supplier<ItemCropSticks>, Supplier<ItemCropSticks>> registrar) {
+    private void initItem(UnaryOperator<Supplier<ItemCropSticks>> registrar) {
         this.item = registrar.apply(() -> new ItemCropSticks(this));
     }
 
@@ -95,7 +94,7 @@ public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleE
         throw new IllegalStateException("Enum not extended");
     }
 
-    public static void initItems(Function<Supplier<ItemCropSticks>, Supplier<ItemCropSticks>> registrar) {
+    public static void initItems(UnaryOperator<Supplier<ItemCropSticks>> registrar) {
         Arrays.stream(values()).forEach(variant -> variant.initItem(registrar));
     }
 }

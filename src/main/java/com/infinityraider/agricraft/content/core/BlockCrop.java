@@ -139,6 +139,35 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         return AgriApi.getCrop(world, pos);
     }
 
+    /** Checks if the block state has a plant or weeds */
+    public boolean hasPlantOrWeeds(BlockState state) {
+        return STATE.fetch(state).hasPlant();
+    }
+
+    /** Checks if the block state has crop sticks */
+    public boolean hasCropSticks(BlockState state) {
+        return STATE.fetch(state).hasSticks();
+    }
+
+    /** Checks if the block state has cross crop sticks */
+    public boolean hasCrossSticks(BlockState state) {
+        return STATE.fetch(state).isCross();
+    }
+
+    /** Gets the light level emitted by the block state */
+    public int getLightLevel(BlockState state) {
+        return LIGHT.fetch(state);
+    }
+
+    /** Fetches the crop stick variant if the state has crop sticks */
+    public Optional<IAgriCropStickItem.Variant> getCropStickVariant(BlockState state) {
+        if(this.hasCropSticks(state)) {
+            return Optional.of(VARIANT.fetch(state));
+        } else {
+            return Optional.empty();
+        }
+    }
+
     /** BlockState for a plant only */
     public BlockState blockStatePlant() {
         return STATE.apply(this.defaultBlockState(), CropState.PLANT);
@@ -149,8 +178,23 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         return VARIANT.apply(STATE.apply(this.defaultBlockState(), CropState.SINGLE_STICKS), variant);
     }
 
+    /** Applies a plant to the block state */
+    public BlockState applyPlant(BlockState state) {
+        return STATE.fetch(state).addPlant(state);
+    }
+
+    /** Removes a plant from the block state */
+    public BlockState removePlant(BlockState state) {
+        return STATE.fetch(state).removePlant(state);
+    }
+
+    /** Sets the light level emitted by the blockstate */
+    public BlockState setLightLevel(BlockState state, int level) {
+        return LIGHT.apply(state, level);
+    }
+
     /** Method to apply crop sticks to an existing crop */
-    public InteractionResult applyCropSticks(Level world, BlockPos pos, BlockState state, @Nullable CropStickVariant variant) {
+    public InteractionResult applyCropSticks(Level world, BlockPos pos, BlockState state, @Nullable IAgriCropStickItem.Variant variant) {
         if(variant == null) {
             return InteractionResult.FAIL;
         }
@@ -193,7 +237,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         if(world.isClientSide()) {
             return InteractionResult.PASS;
         }
-        BlockState newState = STATE.fetch(state).addPlant(state);
+        BlockState newState = this.applyPlant(state);
         if(newState == state) {
             return InteractionResult.FAIL;
         } else {
@@ -207,7 +251,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         if(world.isClientSide()) {
             return InteractionResult.PASS;
         }
-        BlockState newState = STATE.fetch(state).removePlant(state);
+        BlockState newState = this.removePlant(state);
         if(newState == state) {
             return InteractionResult.FAIL;
         } else {
@@ -756,7 +800,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                 // remove crop sticks function
                 state -> STATE.apply(state, SINGLE_STICKS),
                 // add plant function
-                UnaryOperator.identity(),
+                state -> STATE.apply(state, sticksPlant()),
                 // remove plant function
                 UnaryOperator.identity()
         ),
@@ -805,8 +849,13 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             return this == DOUBLE_STICKS;
         }
 
-        public BlockState applyCropSticks(BlockState state, CropStickVariant variant) {
-            return this.addCropSticksFunction.apply(state, variant);
+        public BlockState applyCropSticks(BlockState state, IAgriCropStickItem.Variant variant) {
+            if(variant instanceof CropStickVariant) {
+                return this.addCropSticksFunction.apply(state, (CropStickVariant) variant);
+            } else {
+                AgriCraft.instance.getLogger().error("Attempted to apply unregistered crop stick variant to crop sticks: " + variant.getId());
+                return state;
+            }
         }
 
         public BlockState removeCropSticks(BlockState state) {

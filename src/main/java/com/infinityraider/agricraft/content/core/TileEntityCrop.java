@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -154,6 +155,10 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
         this.needsCaching = true;
     }
 
+    public BlockCrop getBlock() {
+        return AgriCraft.instance.getModBlockRegistry().getCropBlock();
+    }
+
     @Override
     public void dropItem(ItemStack item) {
         if(this.getLevel() == null || this.getLevel().isClientSide()) {
@@ -208,42 +213,36 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
 
     @Override
     public boolean hasCropSticks() {
-        return BlockCrop.STATE.fetch(this.getBlockState()).hasSticks();
+        return this.getBlock().hasCropSticks(this.getBlockState());
     }
 
     @Override
     public boolean isCrossCrop() {
-        return BlockCrop.STATE.fetch(this.getBlockState()).isCross();
+        return this.getBlock().hasCrossSticks(this.getBlockState());
     }
 
     @Override
-    public boolean setCrossCrop(boolean status) {
+    public Optional<IAgriCropStickItem.Variant> getCropStickVariant() {
+        return this.getBlock().getCropStickVariant(this.getBlockState());
+    }
+
+    @Override
+    public boolean applyCropStick(IAgriCropStickItem.Variant variant) {
         Level world = this.getLevel();
         if(world == null) {
             return false;
         }
-        if(status) {
-            if (this.hasPlant()) {
-                return false;
-            }
-            if (this.hasWeeds()) {
-                return false;
-            }
-            if (this.isCrossCrop() == status) {
-                return false;
-            }
-            world.setBlock(this.getPosition(), BlockCrop.STATE.apply(this.getBlockState(), BlockCrop.CropState.DOUBLE_STICKS), 3);
-            BlockCrop.VARIANT.fetch(this.getBlockState()).playCropStickSound(world, this.getPosition());
-            return true;
-        } else {
-            if(this.isCrossCrop()) {
-                return false;
-            } else {
-                world.setBlock(this.getPosition(), BlockCrop.STATE.apply(this.getBlockState(), BlockCrop.CropState.SINGLE_STICKS), 3);
-                BlockCrop.VARIANT.fetch(this.getBlockState()).playCropStickSound(world, this.getPosition());
-                return true;
-            }
+        return this.getBlock().applyCropSticks(world, this.getBlockPos(), this.getBlockState(), variant) == InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public Optional<IAgriCropStickItem.Variant> removeCropStick() {
+        Level world = this.getLevel();
+        if(world == null) {
+            return Optional.empty();
         }
+        return Optional.of(this.getBlock().removeCropSticks(world, this.getBlockPos(), this.getBlockState()))
+                .flatMap(result -> result.getResult() == InteractionResult.SUCCESS ? Optional.of(result.getObject()) : Optional.empty());
     }
 
     protected boolean checkGrowthSpace(IAgriGrowable plant, IAgriGrowthStage stage) {
@@ -594,7 +593,7 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
 
     @Override
     public boolean spawnGenome(@Nonnull IAgriGenome genome) {
-        if(!this.hasPlant() && !this.isCrossCrop() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
+        if(!this.hasPlant() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Pre(this, genome))) {
             this.setGenomeImpl(genome);
             this.getPlant().onSpawned(this);
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Spawn.Plant.Post(this, genome));
@@ -660,30 +659,16 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
             BlockState oldState = this.getBlockState();
             BlockState newState = oldState;
             // Update brightness
-            int brightness = this.getPlant().getBrightness(this);
-            if (BlockCrop.LIGHT.fetch(newState) != brightness) {
-                newState = BlockCrop.LIGHT.apply(newState, brightness);
-            }
-            // Update plant and sticks state
-            boolean plant = this.hasPlant() || this.hasWeeds();
-            boolean sticks = this.hasCropSticks();
-            if (sticks && plant) {
-                // both plant and sticks
-                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.STICKS_PLANT);
-            } else if (sticks) {
-                // only sticks
-                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.SINGLE_STICKS);
-            } else if (plant) {
-                // only plant
-                newState = BlockCrop.STATE.apply(newState, BlockCrop.CropState.PLANT);
-            } else {
-                // neither plant nor sticks means the crop is gone
-                newState = Blocks.AIR.defaultBlockState();
-            }
+            newState = this.getBlock().setLightLevel(newState, this.getPlant().getBrightness(this));
+            // Update plant
+            newState = this.hasPlant() || this.hasWeeds()
+                    ? this.getBlock().applyPlant(newState)
+                    : this.getBlock().removePlant(newState);
             // Set block state if necessary
             if(newState != oldState) {
                 this.getLevel().setBlock(this.getBlockPos(), newState, 3);
             }
+            // If the new stat is still a crop block, update the requirements and model data
             if(newState.getBlock() == oldState.getBlock()) {
                 // Update growth requirement
                 this.requirement.flush();
@@ -711,8 +696,6 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
         this.requirement.flush();
         super.onChunkUnloaded();
     }
-
-
 
     @Override
     public void setRemoved() {

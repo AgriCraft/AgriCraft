@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.api.v1.crop;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.util.IAgriDisplayable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
@@ -103,13 +104,20 @@ public interface IAgriCrop extends IAgriPlantProvider, IAgriGenomeProvider, IAgr
     boolean isCrossCrop();
 
     /**
-     * Converts this crop to a cross crop or a regular crop
-     *
-     * @param status true for cross crop, false for regular crop
-     *
-     * @return if the cross crop was successfully set.
+     * @return the crop sticks variant if the crop has crop sticks
      */
-    boolean setCrossCrop(boolean status);
+    Optional<IAgriCropStickItem.Variant> getCropStickVariant();
+
+    /**
+     * Tries to apply crop sticks of a certain variant to the crop sticks
+     *
+     * @param variant the crop stick variant
+     *
+     * @return if the crop sticks were successfully applied.
+     */
+    boolean applyCropStick(IAgriCropStickItem.Variant variant);
+
+    Optional<IAgriCropStickItem.Variant> removeCropStick();
 
     /**
      * @return if this crop is fertile and thus can grow

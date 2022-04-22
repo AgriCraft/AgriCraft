@@ -108,7 +108,6 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     protected boolean spawnChild(IAgriCrop target, IAgriGenome genome) {
-        target.setCrossCrop(false);
         return target.spawnGenome(genome);
     }
 
