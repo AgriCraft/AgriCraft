@@ -119,7 +119,7 @@ public interface IAgriGrowthResponse {
                 double y = crop.getPosition().getY() + 0.5;
                 double z = crop.getPosition().getZ() + 0.5;
                 for(int i = 0; i < 3; i++) {
-                    ((ServerLevel) world).addParticle(ParticleTypes.LARGE_SMOKE,
+                    world.addParticle(ParticleTypes.LARGE_SMOKE,
                             x + 0.25*world.getRandom().nextDouble(), y, z + 0.25*world.getRandom().nextDouble(),
                             1, 0, 1);
                 }

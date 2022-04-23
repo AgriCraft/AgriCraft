@@ -47,9 +47,19 @@ public interface IDefaultGrowConditionFactory {
      */
 
     /**
+     * Wildcard condition for soils
+     */
+    IAgriGrowCondition anySoil();
+
+    /**
      * General soil growth condition
      */
     IAgriGrowCondition soil(BiFunction<Integer, IAgriSoil, IAgriGrowthResponse> response, List<Component> tooltips);
+
+    /**
+     * Wildcard condition for soil humidity
+     */
+    IAgriGrowCondition anySoilHumidity();
 
     /**
      * General soil humidity growth condition
@@ -57,9 +67,19 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition soilHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response, List<Component> tooltips);
 
     /**
+     * Wildcard condition for soil acidity
+     */
+    IAgriGrowCondition anySoilAcidity();
+
+    /**
      * General soil acidity growth condition
      */
     IAgriGrowCondition soilAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response, List<Component> tooltips);
+
+    /**
+     * Wildcard condition for nutrients
+     */
+    IAgriGrowCondition anySoilNutrients();
 
     /**
      * General soil nutrients growth condition
@@ -72,6 +92,11 @@ public interface IDefaultGrowConditionFactory {
      * light
      * -----
      */
+
+    /**
+     * Wildcard condition for light level
+     */
+    IAgriGrowCondition anyLight();
 
     /**
      * general light growth condition
@@ -106,6 +131,11 @@ public interface IDefaultGrowConditionFactory {
      * liquid
      * ------
      */
+
+    /**
+     * Wildcard condition for fluids
+     */
+    IAgriGrowCondition anyFluid();
 
     /**
      * general fluid growth condition
@@ -167,6 +197,11 @@ public interface IDefaultGrowConditionFactory {
      * biome
      * -----
      */
+
+    /**
+     * Wildcard condition for biomes
+     */
+    IAgriGrowCondition anyBiome();
 
     /**
      * general biome growth condition
@@ -247,6 +282,11 @@ public interface IDefaultGrowConditionFactory {
      * dimension
      * ---------
      */
+
+    /**
+     * Wildcard condition for dimensions
+     */
+    IAgriGrowCondition anyDimension();
 
     /**
      * general dimension growth condition (by registry key)
@@ -485,6 +525,11 @@ public interface IDefaultGrowConditionFactory {
      * seasons
      * -------
      */
+
+    /**
+     * Wildcard condition for seasons
+     */
+    IAgriGrowCondition anySeason();
 
     /**
      * General season growth condition

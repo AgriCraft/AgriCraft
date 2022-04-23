@@ -1,6 +1,8 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
-public enum RequirementType {
+import net.minecraftforge.common.IExtensibleEnum;
+
+public enum RequirementType implements IExtensibleEnum {
     /*
      * --------------------
      * VANILLA REQUIREMENTS
@@ -97,5 +99,15 @@ public enum RequirementType {
      */
 
     /** for any other requirements not covered by the defaults */
-    OTHER
+    OTHER;
+
+
+    /**
+     * Method to create custom requirement types, if it would be needed
+     * @param name the name
+     * @return the new RequirementType
+     */
+    public static RequirementType create(String name) {
+        throw new IllegalStateException("Enum not extended");
+    }
 }

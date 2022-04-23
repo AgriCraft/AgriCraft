@@ -39,12 +39,27 @@ import java.util.stream.Stream;
 public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     protected FactoryAbstract() {}
 
+    @Override
+    public GrowConditionAny<IAgriSoil> anySoil() {
+        return GrowConditionAny.get(RequirementType.SOIL);
+    }
+
     protected abstract <P extends IAgriSoil.SoilProperty> GrowConditionBase<P> soilProperty(
             BiFunction<Integer, P, IAgriGrowthResponse> response, Function<IAgriSoil, P> mapper, P invalid, List<Component> tooltips);
 
     @Override
+    public GrowConditionAny<IAgriSoil.Humidity> anySoilHumidity() {
+        return GrowConditionAny.get(RequirementType.SOIL);
+    }
+
+    @Override
     public GrowConditionBase<IAgriSoil.Humidity> soilHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.soilProperty(response, IAgriSoil::getHumidity, IAgriSoil.Humidity.INVALID, tooltips);
+    }
+
+    @Override
+    public GrowConditionAny<IAgriSoil.Acidity> anySoilAcidity() {
+        return GrowConditionAny.get(RequirementType.SOIL);
     }
 
     @Override
@@ -53,8 +68,18 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
+    public GrowConditionAny<IAgriSoil.Nutrients> anySoilNutrients() {
+        return GrowConditionAny.get(RequirementType.SOIL);
+    }
+
+    @Override
     public GrowConditionBase<IAgriSoil.Nutrients> soilNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response, List<Component> tooltips) {
         return this.soilProperty(response, IAgriSoil::getNutrients, IAgriSoil.Nutrients.INVALID, tooltips);
+    }
+
+    @Override
+    public GrowConditionAny<Integer> anyLight() {
+        return GrowConditionAny.get(RequirementType.LIGHT);
     }
 
     @Override
@@ -144,6 +169,11 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
+    public GrowConditionAny<Biome> anyBiome() {
+        return GrowConditionAny.get(RequirementType.BIOME);
+    }
+
+    @Override
     public IAgriGrowCondition biome(IntPredicate strength, Biome biome, Component biomeName) {
         BiFunction<Integer, Biome, IAgriGrowthResponse> response =
                 (str, aBiome) -> strength.test(str) || biome.equals(aBiome) ? Responses.FERTILE : Responses.INFERTILE;
@@ -212,6 +242,11 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
 
     private Biome.ClimateSettings getClimate(Biome biome) {
         return ObfuscationReflectionHelper.getPrivateValue(Biome.class, biome, "field_26393");
+    }
+
+    @Override
+    public GrowConditionAny<DimensionType> anyDimension() {
+        return GrowConditionAny.get(RequirementType.DIMENSION);
     }
 
     @Override

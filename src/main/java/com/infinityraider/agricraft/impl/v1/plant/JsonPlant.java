@@ -1,11 +1,8 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
-import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriSoilCondition;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -15,13 +12,12 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
-import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.infinityraider.agricraft.impl.v1.requirement.GrowthReqInitializer;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -38,9 +34,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -70,7 +63,7 @@ public class JsonPlant implements IAgriPlant {
         this.seedName = new TranslatableComponent(plant.getSeedLangKey());
         this.description = new TranslatableComponent(plant.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
-        this.growthRequirement = initGrowthRequirement(plant);
+        this.growthRequirement = GrowthReqInitializer.initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
         this.callbacks = this.initCallBacks(plant);
         this.seedTexture = new ResourceLocation(plant.getSeedTexture());
@@ -410,147 +403,6 @@ public class JsonPlant implements IAgriPlant {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst();
-    }
-
-    public static IAgriGrowthRequirement initGrowthRequirement(AgriPlant plant) {
-        // Run checks
-        if (plant == null) {
-            return AgriGrowthRequirement.getNone();
-        }
-
-        // Initialize utility objects
-        IAgriGrowthRequirement.Builder builder = AgriApi.getGrowthRequirementBuilder();
-
-        // Define requirement for humidity
-        String humidityString = plant.getRequirement().getHumiditySoilCondition().getCondition();
-        IAgriSoil.Humidity humidity = IAgriSoil.Humidity.fromString(humidityString).orElse(IAgriSoil.Humidity.INVALID);
-        handleSoilCriterion(
-                humidity,
-                builder::defineHumidity,
-                plant.getRequirement().getHumiditySoilCondition().getType(),
-                plant.getRequirement().getHumiditySoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid humidity criterion (\"{1}\")!", plant.getId(), humidityString));
-
-        // Define requirement for acidity
-        String acidityString = plant.getRequirement().getAciditySoilCondition().getCondition();
-        IAgriSoil.Acidity acidity = IAgriSoil.Acidity.fromString(acidityString).orElse(IAgriSoil.Acidity.INVALID);
-        handleSoilCriterion(
-                acidity,
-                builder::defineAcidity,
-                plant.getRequirement().getAciditySoilCondition().getType(),
-                plant.getRequirement().getAciditySoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid acidity criterion (\"{1}\")!", plant.getId(), acidityString));
-
-        // Define requirement for nutrients
-        String nutrientString = plant.getRequirement().getNutrientSoilCondition().getCondition();
-        IAgriSoil.Nutrients nutrients = IAgriSoil.Nutrients.fromString(nutrientString).orElse(IAgriSoil.Nutrients.INVALID);
-        handleSoilCriterion(
-                nutrients,
-                builder::defineNutrients,
-                plant.getRequirement().getNutrientSoilCondition().getType(),
-                plant.getRequirement().getNutrientSoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid nutrients criterion (\"{1}\")!", plant.getId(), nutrientString));
-
-        // Define requirement for light
-        final double f = plant.getRequirement().getLightToleranceFactor();
-        final int minLight = plant.getRequirement().getMinLight();
-        final int maxLight = plant.getRequirement().getMaxLight();
-        builder.defineLightLevel((strength, light) -> {
-            int lower = minLight - (int) (f * strength);
-            int upper = maxLight + (int) (f * strength);
-            return light >= lower && light <= upper ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
-        });
-
-        // Define requirement for nearby blocks
-        plant.getRequirement().getConditions().forEach(obj -> {
-            BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
-            BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.addCondition(builder.blockStatesNearby(obj.convertAll(BlockState.class), obj.getAmount(), min, max));
-        });
-
-        // Define requirement for seasons
-        List<AgriSeason> seasons = plant.getRequirement().getSeasons().stream()
-                .map(AgriSeason::fromString)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .distinct()
-                .collect(Collectors.toList());
-        if(seasons.size() > 0) {
-            builder.defineSeasonality((str, season) -> {
-                if(str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.stream().anyMatch(season::matches)) {
-                    return IAgriGrowthResponse.FERTILE;
-                } else {
-                    return IAgriGrowthResponse.INFERTILE;
-                }
-            });
-        }
-
-        // Define requirement for fluids
-        List<Fluid> fluids = plant.getRequirement().getFluid().convertAll(FluidState.class).stream()
-                .map(FluidState::getType)
-                .distinct()
-                .collect(Collectors.toList());
-        BiFunction<Integer, Fluid, IAgriGrowthResponse> response = (strength, fluid) -> {
-            if(fluids.size() > 0) {
-                if(fluids.contains(fluid)) {
-                    return IAgriGrowthResponse.FERTILE;
-                }
-                return fluid.equals(Fluids.LAVA) ? IAgriGrowthResponse.KILL_IT_WITH_FIRE : IAgriGrowthResponse.LETHAL;
-            } else {
-                if(fluid.equals(Fluids.LAVA)) {
-                    return IAgriGrowthResponse.KILL_IT_WITH_FIRE;
-                }
-               return fluid.equals(Fluids.EMPTY) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL;
-            }
-        };
-        builder.defineFluid(response);
-
-        // Build the growth requirement
-        IAgriGrowthRequirement req = builder.build();
-
-        // Log warning if no soils exist for this requirement combination
-        if (noSoilsMatch(req)) {
-            AgriCore.getLogger("agricraft").warn("Plant: \"{0}\" has no valid soils to plant on for any strength level!", plant.getId());
-        }
-
-        // Return the growth requirements
-        return req;
-    }
-
-    private static <T extends Enum<T> & IAgriSoil.SoilProperty> void handleSoilCriterion(
-            T criterion, Consumer<BiFunction<Integer, T, IAgriGrowthResponse>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
-        if(!criterion.isValid()) {
-            invalidCallback.run();
-        }
-        consumer.accept((strength, humidity) -> {
-            if(humidity.isValid() && criterion.isValid()) {
-                int lower = type.lowerLimit(criterion.ordinal() - (int) (f * strength));
-                int upper = type.upperLimit(criterion.ordinal() + (int) (f * strength));
-                if(humidity.ordinal() <= upper && humidity.ordinal() >= lower) {
-                    return IAgriGrowthResponse.FERTILE;
-                }
-            }
-            return IAgriGrowthResponse.INFERTILE;
-        });
-    }
-
-    private static boolean noSoilsMatch(IAgriGrowthRequirement requirement) {
-        return AgriApi.getSoilRegistry().stream().noneMatch(soil -> {
-            int min = AgriApi.getStatRegistry().strengthStat().getMin();
-            int max = AgriApi.getStatRegistry().strengthStat().getMax();
-            for(int strength = min; strength <= max; strength++) {
-                boolean humidity = requirement.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile();
-                boolean acidity = requirement.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile();
-                boolean nutrients = requirement.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile();
-                if(humidity && acidity && nutrients) {
-                    return true;
-                }
-            }
-            return false;
-        });
     }
 
     @Override

@@ -91,6 +91,11 @@ public class Factory extends FactoryAbstract {
     }
 
     @Override
+    public GrowConditionAny<Fluid> anyFluid() {
+        return GrowConditionAny.get(RequirementType.LIQUID);
+    }
+
+    @Override
     public GrowConditionBase<Fluid> fluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response,
                                           List<Component> tooltips) {
         return new GrowConditionBase<>(
@@ -235,6 +240,11 @@ public class Factory extends FactoryAbstract {
                 1,
                 IAgriGrowCondition.CacheType.NONE
         );
+    }
+
+    @Override
+    public GrowConditionAny<AgriSeason> anySeason() {
+        return GrowConditionAny.get(RequirementType.SEASON);
     }
 
     @Override
