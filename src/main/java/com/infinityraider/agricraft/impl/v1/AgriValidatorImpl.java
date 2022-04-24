@@ -18,19 +18,20 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class AgriValidatorImpl implements AgriValidator {
 
     @Override
-    public <T> boolean isValidObject(Class<T> token, String object, boolean useTag) {
+    public <T> boolean isValidObject(Class<T> token, String object, boolean useTag, List<String> stateDefinition) {
         if (TypeHelper.isType(ItemStack.class, token)) {
             return this.isValidItem(object, useTag);
         }
         if (TypeHelper.isType(BlockState.class, token)) {
-            return this.isValidBlock(object, useTag);
+            return TagUtil.fetchBlockStates(object, useTag, stateDefinition).size() > 0;
         }
         if (TypeHelper.isType(FluidState.class, token)) {
-            return this.isValidFluid(object, useTag);
+            return TagUtil.fetchFluidStates(object, useTag, stateDefinition).size() > 0;
         }
         return false;
     }
@@ -79,7 +80,7 @@ public class AgriValidatorImpl implements AgriValidator {
         }
     }
 
-    protected boolean isValidBlock(String block, boolean useTag) {
+    protected boolean isValidBlock(String block, boolean useTag, List<String> stateDefinition) {
         String[] parts = block.split(":");
         if (parts.length != 2) {
             return false;
@@ -96,7 +97,7 @@ public class AgriValidatorImpl implements AgriValidator {
         }
     }
 
-    protected boolean isValidFluid(String fluid, boolean useTag) {
+    protected boolean isValidFluid(String fluid, boolean useTag, List<String> stateDefinition) {
         String[] parts = fluid.split(":");
         if (parts.length != 2) {
             return false;

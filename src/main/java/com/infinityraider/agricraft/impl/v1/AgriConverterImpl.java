@@ -16,18 +16,18 @@ import java.util.List;
 public class AgriConverterImpl implements AgriConverter {
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Collection<T> convert(Class<T> token, String element, int amount, boolean useTags, String data, List<String> ignoreData) {
+    public <T> Collection<T> convert(Class<T> token, String element, int amount, boolean useTags, List<String> stateData, String nbt, List<String> ignoreNbt) {
         if (TypeHelper.isType(ItemStack.class, token)) {
-            return (Collection<T>) this.fetchItemStacks(element, amount, useTags, data, ignoreData);
+            return (Collection<T>) this.fetchItemStacks(element, amount, useTags, nbt, ignoreNbt);
         }
         if (TypeHelper.isType(FuzzyStack.class, token)) {
-            return (Collection<T>) this.fetFuzzyStacks(element, amount, useTags, data, ignoreData);
+            return (Collection<T>) this.fetFuzzyStacks(element, amount, useTags, nbt, ignoreNbt);
         }
         if (TypeHelper.isType(BlockState.class, token)) {
-            return (Collection<T>) this.fetchBlockStates(element, useTags, data, ignoreData);
+            return (Collection<T>) this.fetchBlockStates(element, useTags, stateData);
         }
         if (TypeHelper.isType(FluidState.class, token)) {
-            return (Collection<T>) this.fetchFluidStates(element, useTags, data, ignoreData);
+            return (Collection<T>) this.fetchFluidStates(element, useTags, stateData);
         }
         return Collections.emptyList();
     }
@@ -40,11 +40,11 @@ public class AgriConverterImpl implements AgriConverter {
         return TagUtil.parseStack(element, amount, useTags, data, ignoreData).map(ImmutableList::of).orElse(ImmutableList.of());
     }
 
-    protected Collection<BlockState> fetchBlockStates(String element, boolean useTags, String data, List<String> ignoreData) {
-        return TagUtil.fetchBlockStates(element, useTags, data, ignoreData);
+    protected Collection<BlockState> fetchBlockStates(String element, boolean useTags, List<String> stateData) {
+        return TagUtil.fetchBlockStates(element, useTags, stateData);
     }
 
-    protected Collection<FluidState> fetchFluidStates(String element, boolean useTags, String data, List<String> ignoreData) {
-        return TagUtil.fetchFluidStates(element, useTags, data, ignoreData);
+    protected Collection<FluidState> fetchFluidStates(String element, boolean useTags, List<String> stateData) {
+        return TagUtil.fetchFluidStates(element, useTags, stateData);
     }
 }
