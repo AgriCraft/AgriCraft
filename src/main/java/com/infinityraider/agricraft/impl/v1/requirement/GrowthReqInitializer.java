@@ -9,8 +9,10 @@ import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,6 +25,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class GrowthReqInitializer {
@@ -109,7 +112,14 @@ public abstract class GrowthReqInitializer {
         plant.getRequirement().getConditions().forEach(obj -> {
             BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
             BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.addCondition(builder.blockStatesNearby(obj.convertAll(BlockState.class), obj.getAmount(), min, max));
+            String nbt = obj.getNbt();
+            if(nbt == null || nbt.isEmpty()) {
+                // regular block state requirement
+                builder.addCondition(builder.blockStatesNearby(obj.convertAll(BlockState.class), obj.getAmount(), min, max));
+            } else {
+                // tile entity requirement
+                builder.addCondition(builder.blockStateTilesNearby(obj.convertAll(BlockState.class), tilePredicate(nbt, obj.getIgnoredNbt()), obj.getAmount(), min, max));
+            }
         });
     }
 
@@ -216,6 +226,33 @@ public abstract class GrowthReqInitializer {
                 }
             }
             return IAgriGrowthResponse.INFERTILE;
+        });
+    }
+
+    private static Predicate<CompoundTag> tilePredicate(String nbtString, List<String> ignoredNbt) {
+        try {
+            CompoundTag template = TagParser.parseTag(nbtString);
+            ignoredNbt.forEach(template::remove);
+            return (toTest) -> {
+                CompoundTag stripped = toTest.copy();
+                ignoredNbt.forEach(stripped::remove);
+                return testNbt(stripped, template);
+            };
+        } catch (CommandSyntaxException e) {
+            AgriCore.getLogger("AgriCraft").error("Failed parsing NBT tag: \"{0}\"", nbtString);
+            return (toTest) -> false;
+        }
+    }
+
+    private static boolean testNbt(CompoundTag toTest, CompoundTag template) {
+        return template.getAllKeys().stream().allMatch(key -> {
+            if(!toTest.contains(key)) {
+                return false;
+            }
+            if(toTest.getTagType(key) != template.getTagType(key)) {
+                return false;
+            }
+            return template.get(key).equals(toTest.get(key));
         });
     }
 

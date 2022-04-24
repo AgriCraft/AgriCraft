@@ -428,6 +428,16 @@ public abstract class FactoryAbstract implements IDefaultGrowConditionFactory {
     }
 
     @Override
+    public IAgriGrowCondition blockStateTilesNearby(Collection<BlockState> states, Predicate<CompoundTag> filter, int amount, BlockPos minOffset, BlockPos maxOffset) {
+        BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response = (str, stream) ->
+                stream.filter(tile -> states.contains(tile.getBlockState()))
+                        .map(BlockEntity::saveWithFullMetadata)
+                        .filter(filter)
+                        .count() >= amount ? Responses.FERTILE : Responses.INFERTILE;
+        return this.tileEntitiesNearby(response, minOffset, maxOffset, ImmutableList.of(Descriptions.equalTo(FactoryAbstract.Descriptions.BLOCK_NEARBY, amount)));
+    }
+
+    @Override
     public IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundTag>> filters, int amount, BlockPos minOffset, BlockPos maxOffset) {
         BiFunction<Integer, Stream<BlockEntity>, IAgriGrowthResponse> response = (str, stream) ->
                 stream.map(BlockEntity::saveWithFullMetadata).filter(nbt ->

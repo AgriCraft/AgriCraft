@@ -451,6 +451,11 @@ public interface IDefaultGrowConditionFactory {
     IAgriGrowCondition blockStatesNearby(Collection<BlockState> states, int amount, BlockPos minOffset, BlockPos maxOffset);
 
     /**
+     * fertile if there is at least a specified amount of certain block states with tile entities nearby
+     */
+    IAgriGrowCondition blockStateTilesNearby(Collection<BlockState> states, Predicate<CompoundTag> filter, int amount, BlockPos minOffset, BlockPos maxOffset);
+
+    /**
      * fertile if there is at least a specified amount of certain tile entities nearby
      */
     IAgriGrowCondition tileEntitiesNearby(Collection<Predicate<CompoundTag>> filters, int amount, BlockPos minOffset, BlockPos maxOffset);
