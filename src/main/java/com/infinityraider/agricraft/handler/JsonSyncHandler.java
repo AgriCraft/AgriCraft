@@ -6,7 +6,7 @@ import com.agricraft.agricore.plant.AgriMutation;
 import com.agricraft.agricore.plant.AgriPlant;
 import com.agricraft.agricore.plant.AgriSoil;
 import com.agricraft.agricore.plant.AgriWeed;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
+import com.agricraft.agricore.plant.AgriFertilizer;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.*;

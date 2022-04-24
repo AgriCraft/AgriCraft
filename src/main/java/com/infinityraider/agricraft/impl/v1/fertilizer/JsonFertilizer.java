@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.fertilizer;
 
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizerEffect;
+import com.agricraft.agricore.plant.AgriFertilizer;
+import com.agricraft.agricore.plant.AgriFertilizerEffect;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;

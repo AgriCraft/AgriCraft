@@ -54,7 +54,7 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         this.season = season;
         this.fluid = fluid;
         ImmutableSet.Builder<IAgriGrowCondition> builder = ImmutableSet.builder();
-        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season, this.fluid);
+        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.biome, this.dimension, this.season, this.fluid);
         builder.addAll(conditions);
         this.conditions = builder.build();
     }

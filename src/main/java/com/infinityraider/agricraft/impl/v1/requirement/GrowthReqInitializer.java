@@ -119,17 +119,17 @@ public abstract class GrowthReqInitializer {
 
             @Override
             public IAgriGrowthResponse apply(Integer str, Biome biome) {
-                if (plant.getRequirement().getBiomeIgnoreStrength() >= str) {
+                if (str >= plant.getRequirement().getBiomeCondition().ignoreFromStrength()) {
                     return IAgriGrowthResponse.FERTILE;
                 }
                 if (this.cache == null) {
-                    this.cache = plant.getRequirement().getBiomes().stream()
+                    this.cache = plant.getRequirement().getBiomeCondition().stream()
                             .map(ResourceLocation::new)
                             .map(ForgeRegistries.BIOMES::getValue)
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet());
                 }
-                return plant.getRequirement().isBiomeBlackList()
+                return plant.getRequirement().getBiomeCondition().isBlacklist()
                         ? cache.contains(biome) ? IAgriGrowthResponse.INFERTILE : IAgriGrowthResponse.FERTILE
                         : cache.contains(biome) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
             }
@@ -142,12 +142,12 @@ public abstract class GrowthReqInitializer {
 
             @Override
             public IAgriGrowthResponse apply(Integer str, DimensionType dimension) {
-                if (plant.getRequirement().getBiomeIgnoreStrength() >= str) {
+                if (str >= plant.getRequirement().getDimensionCondition().ignoreFromStrength()) {
                     return IAgriGrowthResponse.FERTILE;
                 }
                 if (this.cache == null) {
                     this.cache = AgriCraft.instance.proxy().getMinecraftServer().registryAccess().registry(Registry.DIMENSION_TYPE_REGISTRY)
-                            .map(registry -> plant.getRequirement().getDimensions().stream()
+                            .map(registry -> plant.getRequirement().getDimensionCondition().stream()
                                     .map(ResourceLocation::new)
                                     .map(registry::get)
                                     .collect(Collectors.toSet()))
@@ -156,7 +156,7 @@ public abstract class GrowthReqInitializer {
                                 return Collections.emptySet();
                             });
                 }
-                return plant.getRequirement().isDimensionBlackList()
+                return plant.getRequirement().getDimensionCondition().isBlacklist()
                         ? cache.contains(dimension) ? IAgriGrowthResponse.INFERTILE : IAgriGrowthResponse.FERTILE
                         : cache.contains(dimension) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
             }

@@ -2,6 +2,7 @@ Changelog
 ---------
 3.1.0
  - CHANGE: Ported to 1.18.2
+ - ADDED: It is now possible to define biome and dimension growth requirements in plant json files
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)

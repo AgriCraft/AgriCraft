@@ -2,7 +2,7 @@ package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
+import com.agricraft.agricore.plant.AgriFertilizer;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
