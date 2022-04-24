@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriSoilCondition;
+import com.agricraft.agricore.templates.AgriPlant;
+import com.agricraft.agricore.templates.AgriSoilCondition;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;

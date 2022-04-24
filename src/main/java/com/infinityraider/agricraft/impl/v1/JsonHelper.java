@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.impl.v1;
 
-import com.agricraft.agricore.plant.AgriMutation;
+import com.agricraft.agricore.templates.AgriMutation;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;

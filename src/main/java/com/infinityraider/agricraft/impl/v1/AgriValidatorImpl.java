@@ -4,9 +4,11 @@ package com.infinityraider.agricraft.impl.v1;
 import com.agricraft.agricore.util.AgriValidator;
 import com.agricraft.agricore.util.TypeHelper;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
+import com.infinityraider.agricraft.impl.v1.journal.JsonMutationTriggerManager;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
 import com.infinityraider.infinitylib.utility.TagUtil;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -128,8 +130,13 @@ public class AgriValidatorImpl implements AgriValidator {
     }
 
     @Override
-    public boolean isValidCallback(JsonElement callback) {
+    public boolean isValidPlantCallback(JsonElement callback) {
         return JsonPlantCallbackManager.get(callback).isPresent();
+    }
+
+    @Override
+    public boolean isValidMutationTrigger(String id, JsonObject args) {
+        return JsonMutationTriggerManager.get(id).isPresent();
     }
 
     @Override

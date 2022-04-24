@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
-import com.agricraft.agricore.plant.AgriWeed;
+import com.agricraft.agricore.templates.AgriWeed;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;

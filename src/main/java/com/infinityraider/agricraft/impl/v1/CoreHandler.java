@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
-import com.agricraft.agricore.plant.*;
-import com.agricraft.agricore.plant.AgriFertilizer;
+import com.agricraft.agricore.templates.*;
+import com.agricraft.agricore.templates.AgriFertilizer;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;

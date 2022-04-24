@@ -13,11 +13,8 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
@@ -36,6 +33,7 @@ import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
+import com.infinityraider.agricraft.impl.v1.journal.JsonMutationTriggerManager;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
@@ -282,6 +280,17 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Override
     public boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback) {
         return JsonPlantCallbackManager.register(callback);
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id) {
+        return JsonMutationTriggerManager.get(id);
+    }
+
+    @Override
+    public boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger) {
+        return false;
     }
 
     @Override

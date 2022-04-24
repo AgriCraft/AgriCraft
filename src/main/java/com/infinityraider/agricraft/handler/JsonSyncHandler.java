@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.handler;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.log.AgriLogger;
-import com.agricraft.agricore.plant.AgriMutation;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriSoil;
-import com.agricraft.agricore.plant.AgriWeed;
-import com.agricraft.agricore.plant.AgriFertilizer;
+import com.agricraft.agricore.templates.AgriMutation;
+import com.agricraft.agricore.templates.AgriPlant;
+import com.agricraft.agricore.templates.AgriSoil;
+import com.agricraft.agricore.templates.AgriWeed;
+import com.agricraft.agricore.templates.AgriFertilizer;
 import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.network.json.*;

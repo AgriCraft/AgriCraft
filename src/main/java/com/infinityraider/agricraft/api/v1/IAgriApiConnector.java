@@ -10,11 +10,8 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
@@ -39,7 +36,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public interface IAgriApiConnector {
 
@@ -135,6 +131,11 @@ public interface IAgriApiConnector {
     Optional<IJsonPlantCallback.Factory> getJsonPlantCallback(String id);
 
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback);
+
+    @Nonnull
+    Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id);
+
+    boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger);
 
     boolean isObservingWithMagnifyingGlass(Player player);
 

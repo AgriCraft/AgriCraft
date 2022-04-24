@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriSoil;
+import com.agricraft.agricore.templates.AgriSoil;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import net.minecraft.network.chat.Component;

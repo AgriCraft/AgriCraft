@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.handler;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriWeed;
+import com.agricraft.agricore.templates.AgriPlant;
+import com.agricraft.agricore.templates.AgriWeed;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRenderer;
