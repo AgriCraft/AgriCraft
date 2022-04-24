@@ -4,6 +4,7 @@ import com.agricraft.agricore.util.MathHelper;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -37,6 +38,13 @@ public class Mutation implements IAgriMutation {
     @Override
     public List<IAgriPlant> getParents() {
         return parents;
+    }
+
+    @Nonnull
+    @Override
+    public List<Trigger> getTriggers() {
+        // TODO
+        return Collections.emptyList();
     }
 
     @Override

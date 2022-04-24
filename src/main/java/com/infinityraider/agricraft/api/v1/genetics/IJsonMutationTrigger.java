@@ -8,7 +8,7 @@ import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public interface IJsonMutationTrigger {
+public interface IJsonMutationTrigger extends IAgriMutation.Trigger {
     /**
      * Finds a registered mutation trigger factory from their id
      *
