@@ -5,6 +5,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
@@ -52,7 +53,7 @@ public class ItemDynamicAgriSeed extends BlockItem implements IInfinityItem, IAg
     }
 
     public ItemDynamicAgriSeed() {
-        super(AgriApi.getAgriContent().getBlocks().getCropBlock(), new Properties()
+        super(AgriBlockRegistry.getInstance().getCropBlock(), new Properties()
                 .tab(AgriTabs.TAB_AGRICRAFT_SEED)
                 .stacksTo(64)
         );

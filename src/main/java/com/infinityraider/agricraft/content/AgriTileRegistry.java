@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.content;
 
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
@@ -31,20 +30,20 @@ public class AgriTileRegistry extends ModContentRegistry {
 
         this.crop = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.CROP, TileEntityCrop::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getCropBlock())
+                        .addBlock(AgriBlockRegistry.getInstance().getCropBlock())
                         .build()
         );
 
         this.seed_analyzer = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getSeedAnalyzerBlock())
+                        .addBlock(AgriBlockRegistry.getInstance().getSeedAnalyzerBlock())
                         .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
                         .build()
         );
 
         this.irrigation_tank = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getTankBlock())
+                        .addBlock(AgriBlockRegistry.getInstance().getTankBlock())
                         .setTicking()
                         .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
                         .build()
@@ -53,8 +52,8 @@ public class AgriTileRegistry extends ModContentRegistry {
         this.irrigation_channel = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
                         .addBlocks(
-                                AgriApi.getAgriContent().getBlocks().getChannelBlock(),
-                                AgriApi.getAgriContent().getBlocks().getHollowChannelBlock()
+                                AgriBlockRegistry.getInstance().getChannelBlock(),
+                                AgriBlockRegistry.getInstance().getHollowChannelBlock()
                         )
                         .setTicking()
                         .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
@@ -63,7 +62,7 @@ public class AgriTileRegistry extends ModContentRegistry {
 
         this.sprinkler = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getSprinklerBlock())
+                        .addBlock(AgriBlockRegistry.getInstance().getSprinklerBlock())
                         .setRenderFactory(TileEntitySprinkler.createRenderFactory())
                         .setTicking()
                         .build()
@@ -71,7 +70,7 @@ public class AgriTileRegistry extends ModContentRegistry {
 
         this.grate = this.blockEntity(() ->
                 InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
-                        .addBlock(AgriApi.getAgriContent().getBlocks().getGrateBlock())
+                        .addBlock(AgriBlockRegistry.getInstance().getGrateBlock())
                         .build()
         );
     }
