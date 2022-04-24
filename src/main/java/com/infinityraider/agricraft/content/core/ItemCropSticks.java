@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.infinitylib.item.IInfinityItem;
 import net.minecraft.core.BlockPos;
@@ -21,7 +21,7 @@ public class ItemCropSticks extends BlockItem implements IInfinityItem, IAgriCro
     private final CropStickVariant variant;
 
     public ItemCropSticks(CropStickVariant variant) {
-        super(AgriApi.getAgriContent().getBlocks().getCropBlock(), new Properties().tab(AgriTabs.TAB_AGRICRAFT));
+        super(AgriBlockRegistry.getInstance().getCropBlock(), new Properties().tab(AgriTabs.TAB_AGRICRAFT));
         this.variant = variant;
     }
 

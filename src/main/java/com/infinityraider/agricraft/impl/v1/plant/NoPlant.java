@@ -83,8 +83,8 @@ public final class NoPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedItems() {
-        return Collections.emptySet();
+    public boolean isSeedItem(ItemStack stack) {
+        return false;
     }
 
     @Nonnull

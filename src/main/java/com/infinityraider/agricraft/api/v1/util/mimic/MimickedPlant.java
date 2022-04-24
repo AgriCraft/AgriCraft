@@ -109,8 +109,8 @@ public class MimickedPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedItems() {
-        return this.getOriginal().getSeedItems();
+    public boolean isSeedItem(ItemStack stack) {
+        return this.getOriginal().isSeedItem(stack);
     }
 
     @Nonnull

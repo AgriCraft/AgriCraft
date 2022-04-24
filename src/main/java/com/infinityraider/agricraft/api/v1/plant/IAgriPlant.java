@@ -162,12 +162,12 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
     void addTooltip(Consumer<Component> consumer);
 
     /**
-     * Fetches a list of all the items that are considered seeds for this specific plant.
+     * Checks if an ItemStack is considered a seed item for this plant.
      *
-     * @return A list of all the seeds for this plant.
+     * @return if the stack represents a seed for this item.
      */
     @Nonnull
-    Collection<ItemStack> getSeedItems();
+    boolean isSeedItem(ItemStack stack);
 
     /**
      * Gets the growth requirements for this plant, this is used to check if the plant can be planted

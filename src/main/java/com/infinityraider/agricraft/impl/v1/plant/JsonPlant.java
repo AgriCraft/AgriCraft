@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import com.infinityraider.agricraft.impl.v1.requirement.GrowthReqInitializer;
 import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
+import com.infinityraider.infinitylib.utility.FuzzyStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -52,7 +53,7 @@ public class JsonPlant implements IAgriPlant {
     private final List<IAgriGrowthStage> growthStages;
     private final IAgriGrowthRequirement growthRequirement;
 
-    private final List<ItemStack> seedItems;
+    private final List<FuzzyStack> seedItems;
     private final List<IJsonPlantCallback> callbacks;
     private final ResourceLocation seedTexture;
     private final ResourceLocation seedModel;
@@ -70,16 +71,14 @@ public class JsonPlant implements IAgriPlant {
         this.seedModel = this.initSeedModel(plant.getSeedModel());
     }
 
-    private List<ItemStack> initSeedItems(AgriPlant plant) {
+    private List<FuzzyStack> initSeedItems(AgriPlant plant) {
         return plant.getSeeds().stream()
                 .flatMap(seed -> {
                     boolean override = seed.isOverridePlanting();
                     if(override) {
-                        return seed.convertAll(ItemStack.class).stream();
+                        return seed.convertAll(FuzzyStack.class).stream();
                     } else {
-                        return seed.convertAll(ItemStack.class).stream() .peek(stack ->
-                                VanillaSeedConversionHandler.getInstance().registerException(stack.getItem())
-                        );
+                        return seed.convertAll(FuzzyStack.class).stream().peek(stack -> stack.foreach(VanillaSeedConversionHandler.getInstance()::registerException));
                     }
                 })
                 .collect(Collectors.toList());
@@ -141,8 +140,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedItems() {
-        return this.seedItems;
+    public boolean isSeedItem(ItemStack stack) {
+        return this.seedItems.stream().anyMatch(i -> i.matches(stack));
     }
 
     @Nonnull

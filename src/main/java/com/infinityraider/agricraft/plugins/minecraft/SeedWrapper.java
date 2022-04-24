@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.plugins.minecraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -40,7 +39,7 @@ public class SeedWrapper implements IAgriAdapter<IAgriGenome> {
             return ((ItemDynamicAgriSeed) stack.getItem()).getGenome(stack);
         }
         return AgriApi.getPlantRegistry().stream()
-                .filter(plant -> this.isSeedItem(plant, stack))
+                .filter(plant -> plant.isSeedItem(stack))
                 .findFirst()
                 .map(plant -> {
                     IAgriGenome genome = AgriApi.getAgriGenomeBuilder(plant).build();
@@ -50,17 +49,5 @@ public class SeedWrapper implements IAgriAdapter<IAgriGenome> {
                     }
                     return genome;
                 });
-    }
-
-    private boolean isSeedItem(IAgriPlant plant, ItemStack seed) {
-        return plant.getSeedItems().stream().anyMatch(stack ->
-                ItemStack.matches(seed, stack) && doTagsMatch(seed, stack)
-        );
-    }
-
-
-    private boolean doTagsMatch(ItemStack seed, ItemStack test) {
-        // TODO
-        return true;
     }
 }
