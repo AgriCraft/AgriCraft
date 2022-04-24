@@ -22,6 +22,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -33,6 +34,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -587,6 +589,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     }
 
     @Override
+    public SoundType getSoundType(BlockState state, LevelReader level, BlockPos pos, @Nullable Entity entity) {
+        return VARIANT.fetch(state).getSound();
+    }
+
+    @Override
     @Deprecated
     @SuppressWarnings("deprecation")
     public boolean isSignalSource(BlockState state) {
@@ -636,6 +643,11 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
                 crop.getPlant().spawnParticles(crop, rand);
             }
         });
+    }
+
+    @Override
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+        // override to prevent filling of creative tab
     }
 
 

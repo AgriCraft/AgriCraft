@@ -76,6 +76,7 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
 
         this.grate = this.item(ItemGrate::new);
 
+
         CropStickVariant.initItems(this::item);
     }
 

@@ -2,9 +2,6 @@
   "itemGroup.agricraft": "AgriCraft",
   "itemGroup.agricraft_seeds": "AgriCraft Seeds",
 
-  "block.agricraft.crop_sticks_wood": "Crop Sticks",
-  "block.agricraft.crop_sticks_iron": "Iron Crop Sticks",
-  "block.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
   "block.agricraft.seed_analyzer": "Seed Analyzer",
   "block.agricraft.irrigation_tank": "Wooden Irrigation Tank",
   "block.agricraft.irrigation_channel": "Wooden Irrigation Channel",
@@ -15,6 +12,9 @@
 
   "item.agricraft.debugger": "Debugger",
 
+  "item.agricraft.crop_sticks_wood": "Crop Sticks",
+  "item.agricraft.crop_sticks_iron": "Iron Crop Sticks",
+  "item.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
   "item.agricraft.agri_clipper": "Plant Clipper",
   "item.agricraft.agri_journal": "Agricultural Journal",
   "item.agricraft.agri_magnifying_glass": "Magnifying Glass",

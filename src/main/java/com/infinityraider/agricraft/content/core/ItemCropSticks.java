@@ -4,11 +4,14 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.infinitylib.item.IInfinityItem;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -16,7 +19,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ItemCropSticks extends BlockItem implements IInfinityItem, IAgriCropStickItem {
     private final CropStickVariant variant;
 
@@ -70,7 +76,7 @@ public class ItemCropSticks extends BlockItem implements IInfinityItem, IAgriCro
         return super.useOn(context);
     }
 
-    protected InteractionResult applyToExisting(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand) {
+    protected InteractionResult applyToExisting(Level world, BlockPos pos, BlockState state, @Nullable Player player, InteractionHand hand) {
         InteractionResult result = ((BlockCrop) state.getBlock()).applyCropSticks(world, pos, state, this.getVariant());
         if(result == InteractionResult.SUCCESS) {
             this.consumeItem(player, hand);
@@ -85,6 +91,18 @@ public class ItemCropSticks extends BlockItem implements IInfinityItem, IAgriCro
                 stack.shrink(1);
             }
         }
+    }
 
+    // Override to prevent forwarding to the block
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
+    }
+
+    // Override to prevent forwarding to the block
+    @Override
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+        if (this.allowdedIn(tab)) {
+            items.add(new ItemStack(this));
+        }
     }
 }
