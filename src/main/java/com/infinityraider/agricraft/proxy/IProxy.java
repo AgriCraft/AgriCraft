@@ -79,8 +79,12 @@ public interface IProxy extends IProxyBase {
     @Override
     default void onServerStarting(FMLServerStartingEvent event) {
         // This is to be moved to infinity lib in a future version, I would expect.
-        AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
-        ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
+        if(AgriCommands.enableCommands) {
+            AgriCore.getLogger("agricraft").info("Registering AgriCraft Commands.");
+            ReflectionHelper.forEachValueIn(AgriCraft.instance.getModCommandRegistry(), ICommand.class, event::registerServerCommand);
+        } else {
+            AgriCore.getLogger("agricraft").info("AgriCraft Commands disabled, skipping registration.");
+        }
     }
     
 }

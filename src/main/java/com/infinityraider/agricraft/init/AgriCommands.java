@@ -5,6 +5,8 @@
  */
 package com.infinityraider.agricraft.init;
 
+import com.agricraft.agricore.config.AgriConfigCategory;
+import com.agricraft.agricore.config.AgriConfigurable;
 import com.infinityraider.agricraft.commands.CommandNbt;
 import com.infinityraider.agricraft.commands.CommandStat;
 import javax.annotation.Nonnull;
@@ -14,6 +16,13 @@ import javax.annotation.Nonnull;
  * @author Ryan
  */
 public class AgriCommands {
+
+    @AgriConfigurable(
+            category = AgriConfigCategory.CORE,
+            key = "Enable Commands",
+            comment = "Set to false to disable the AgriCraft commands."
+    )
+    public static boolean enableCommands = true;
     
     private static final AgriCommands INSTANCE = new AgriCommands();
 
