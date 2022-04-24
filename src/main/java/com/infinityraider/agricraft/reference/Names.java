@@ -57,6 +57,7 @@ public abstract class Names {
     }
 
     public static final class Nuggets {
+        public static final String COPPER = "copper";
         public static final String COAL = "coal";
         public static final String DIAMOND = "diamond";
         public static final String EMERALD = "emerald";

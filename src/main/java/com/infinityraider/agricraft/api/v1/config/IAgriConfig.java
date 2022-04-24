@@ -61,6 +61,11 @@ public interface IAgriConfig {
     /**
      * @return true if the coal nugget item is enabled
      */
+    boolean enableCopperNugget();
+
+    /**
+     * @return true if the coal nugget item is enabled
+     */
     boolean enableCoalNugget();
 
     /**

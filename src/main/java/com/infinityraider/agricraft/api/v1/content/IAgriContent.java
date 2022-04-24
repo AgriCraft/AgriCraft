@@ -199,6 +199,10 @@ public interface IAgriContent {
         /** @return the AgriCraft Grate Item */
         Item getGrateItem();
 
+        /** @return the AgriCraft Copper Nugget Item (can be null if disabled in the config) */
+        @Nullable
+        Item getCopperNuggetItem();
+
         /** @return the AgriCraft Coal Nugget Item (can be null if disabled in the config) */
         @Nullable
         Item getCoalNuggetItem();

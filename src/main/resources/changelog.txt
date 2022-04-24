@@ -5,6 +5,7 @@ Changelog
  - ADDED: It is now possible to define specific Block States and Fluid states for growth requirements and soils in the jsons
  - ADDED: It is now possible to define specific BlockEntity requirements using the nbt entries in the plant json files
  - ADDED: It is now possible to define biome and dimension growth requirements in plant json files
+ - ADDED: Copper nugget, as fruit for the Cuprosia resource crop
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)

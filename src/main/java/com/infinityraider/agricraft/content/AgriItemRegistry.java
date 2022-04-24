@@ -39,6 +39,7 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     public final RegistryInitializer<ItemTrowel> trowel;
     public final RegistryInitializer<ItemSeedBag> seed_bag;
 
+    public final RegistryInitializer<ItemAgriNugget> nugget_copper;
     public final RegistryInitializer<ItemAgriNugget> nugget_coal;
     public final RegistryInitializer<ItemAgriNugget> nugget_diamond ;
     public final RegistryInitializer<ItemAgriNugget> nugget_emerald ;
@@ -69,6 +70,7 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
         this.trowel = this.item(ItemTrowel::new);
         this.seed_bag = this.item(ItemSeedBag::new);
 
+        this.nugget_copper = AgriCraft.instance.getConfig().enableCopperNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.COPPER)) : null;
         this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget() ? this.item(() -> new ItemAgriNugget.Burnable(Names.Nuggets.COAL)) : null;
         this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.DIAMOND)) : null;
         this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.EMERALD)) : null;
@@ -173,6 +175,12 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     @Override
     public ItemGrate getGrateItem() {
         return grate.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getCopperNuggetItem() {
+        return nugget_copper == null ? null : this.nugget_copper.get();
     }
 
     @Nullable

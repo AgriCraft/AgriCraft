@@ -45,6 +45,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         // resource crops
         private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableCopperNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCoalNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableDiamondNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableEmeraldNugget;
@@ -165,6 +166,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("resource crops");
             this.generateResourceCropJsons = builder.comment("\nSet to false to disable the generation of resource crop jsons")
                     .define("Enable resource crop json generation", true);
+            this.enableCopperNugget = builder.comment("\nSet to false to disable the copper nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable copper nugget", true);
             this.enableCoalNugget = builder.comment("\nSet to false to disable the coal nugget (in case resource crops are disabled, or alternatives are available")
                     .define("Enable coal nugget", true);
             this.enableDiamondNugget = builder.comment("\nSet to false to disable the diamond nugget (in case resource crops are disabled, or alternatives are available")
@@ -534,6 +537,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean generateMissingDefaultJsons() {
             return this.generateMissingDefaults.get();
+        }
+
+        @Override
+        public boolean enableCopperNugget() {
+            return this.enableCopperNugget.get();
         }
 
         @Override
