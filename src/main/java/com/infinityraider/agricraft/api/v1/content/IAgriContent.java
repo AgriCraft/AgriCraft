@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.api.v1.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.*;
+import com.infinityraider.agricraft.content.core.ItemAgriNugget;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -218,6 +219,10 @@ public interface IAgriContent {
         /** @return the AgriCraft Quartz Nugget Item (can be null if disabled in the config) */
         @Nullable
         Item getQuartzNuggetItem();
+
+        /** @return the AgriCraft Netherite Sliver Item (can be null if disabled in the config) */
+        @Nullable
+        ItemAgriNugget getNetheriteSliverItem();
         
     }
 

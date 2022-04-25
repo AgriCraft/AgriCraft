@@ -30,6 +30,7 @@
   "item.agricraft.agri_nugget_diamond": "Diamond Shard",
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
   "item.agricraft.agri_nugget_quartz": "Quartz Shard",
+  "item.agricraft.netherite_sliver": "Netherite Sliver",
 
   "enchantment.agricraft.agri_seed_bag": "Seed Sorting",
 
@@ -306,6 +307,10 @@
   "agricraft.plant.melon.name": "Melon",
   "agricraft.plant.melon.seed": "Melon Seeds",
   "agricraft.plant.melon.desc": "Sweet \u0026 Juicy.",
+
+  "agricraft.plant.nethereed.name": "Nethereed",
+  "agricraft.plant.nethereed.seed": "Nethereed Seeds",
+  "agricraft.plant.nethereed.desc": "Regular reed's tougher cousin from the nether.",
 
   "agricraft.plant.nether_wart.name": "Nether Wart",
   "agricraft.plant.nether_wart.seed": "Nether Wart Spores",

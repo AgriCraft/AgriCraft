@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.ItemBase;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class ItemAgriNugget extends ItemBase {
     public ItemAgriNugget(String name) {
-        super(Names.Items.NUGGET + "_" + name, new Properties().tab(CreativeModeTab.TAB_MATERIALS));
+        super(name, new Properties().tab(CreativeModeTab.TAB_MATERIALS));
     }
 
     public static class Burnable extends ItemAgriNugget {

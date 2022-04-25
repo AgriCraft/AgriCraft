@@ -62,6 +62,7 @@ public abstract class Names {
         public static final String DIAMOND = "diamond";
         public static final String EMERALD = "emerald";
         public static final String QUARTZ = "quartz";
+        public static final String NETHERITE_SLIVER = "netherite_sliver";
     }
 
     public static final class Objects {

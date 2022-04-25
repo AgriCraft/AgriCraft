@@ -50,6 +50,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableDiamondNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableEmeraldNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableQuartzNugget;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableNetheriteSliver;
 
         // stats
         private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
@@ -176,6 +177,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable emerald nugget", true);
             this.enableQuartzNugget = builder.comment("\nSet to false to disable the quartz nugget (in case resource crops are disabled, or alternatives are available")
                     .define("Enable quartz nugget", true);
+            this.enableNetheriteSliver = builder.comment("\nSet to false to disable the netherite sliver (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable netherite sliver", true);
             builder.pop();
 
             builder.push("stats");
@@ -564,6 +567,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             return this.enableQuartzNugget.get();
         }
 
+        @Override
+        public boolean enableNetheriteSliver() {
+            return enableNetheriteSliver.get();
+        }
 
         @Override
         public boolean enableJsonWriteback() {

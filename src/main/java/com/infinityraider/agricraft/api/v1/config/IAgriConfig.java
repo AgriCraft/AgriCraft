@@ -84,6 +84,11 @@ public interface IAgriConfig {
     boolean enableQuartzNugget();
 
     /**
+     * @return true if the netherite sliver item is enabled
+     */
+    boolean enableNetheriteSliver();
+
+    /**
      * @return true if AgriCraft should generate resource crop jsons
      */
     boolean generateResourceCropJsons();

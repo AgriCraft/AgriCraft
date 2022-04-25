@@ -44,6 +44,7 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     public final RegistryInitializer<ItemAgriNugget> nugget_diamond ;
     public final RegistryInitializer<ItemAgriNugget> nugget_emerald ;
     public final RegistryInitializer<ItemAgriNugget> nugget_quartz;
+    public final RegistryInitializer<ItemAgriNugget> netherite_sliver;
 
     public final RegistryInitializer<ItemGrate> grate;
 
@@ -70,11 +71,12 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
         this.trowel = this.item(ItemTrowel::new);
         this.seed_bag = this.item(ItemSeedBag::new);
 
-        this.nugget_copper = AgriCraft.instance.getConfig().enableCopperNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.COPPER)) : null;
-        this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget() ? this.item(() -> new ItemAgriNugget.Burnable(Names.Nuggets.COAL)) : null;
-        this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.DIAMOND)) : null;
-        this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.EMERALD)) : null;
-        this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.QUARTZ)) : null;
+        this.nugget_copper = AgriCraft.instance.getConfig().enableCopperNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.COPPER)) : null;
+        this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget() ? this.item(() -> new ItemAgriNugget.Burnable(Names.Items.NUGGET + "_" + Names.Nuggets.COAL)) : null;
+        this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.DIAMOND)) : null;
+        this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.EMERALD)) : null;
+        this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.QUARTZ)) : null;
+        this.netherite_sliver = AgriCraft.instance.getConfig().enableNetheriteSliver() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.NETHERITE_SLIVER)) : null;
 
         this.grate = this.item(ItemGrate::new);
 
@@ -205,5 +207,11 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     @Override
     public ItemAgriNugget getQuartzNuggetItem() {
         return nugget_quartz == null ? null : this.nugget_quartz.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getNetheriteSliverItem() {
+        return netherite_sliver == null ? null : this.netherite_sliver.get();
     }
 }
