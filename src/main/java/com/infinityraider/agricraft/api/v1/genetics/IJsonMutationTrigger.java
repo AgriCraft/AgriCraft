@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.api.v1.genetics;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -45,7 +44,7 @@ public interface IJsonMutationTrigger extends IAgriMutation.Trigger {
          * @return a trigger
          * @throws JsonParseException in case an invalid json object was passed in
          */
-        IJsonPlantCallback makeTrigger(JsonObject json) throws JsonParseException;
+        IJsonMutationTrigger makeTrigger(JsonObject json) throws JsonParseException;
 
         /**
          * Utility method to register the factory

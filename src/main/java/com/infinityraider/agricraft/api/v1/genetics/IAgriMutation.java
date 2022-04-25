@@ -81,7 +81,7 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
      */
     interface Trigger {
         /**
-         * Checks if this trigger is guarante
+         * Checks the result of the trigger
          * @param crop the crop on which the mutation would happen
          * @param mutation the mutation which has been selected
          * @return the result for this trigger at the given crop
