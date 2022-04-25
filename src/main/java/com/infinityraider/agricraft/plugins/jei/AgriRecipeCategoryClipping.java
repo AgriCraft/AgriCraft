@@ -107,10 +107,10 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
         builder.setShapeless();
 
         // inputs
-        builder.addSlot(RecipeIngredientRole.INPUT, 16, 49)
+        builder.addSlot(RecipeIngredientRole.INPUT, 16, 9)
                 .setSlotName(INPUT_SEED)
                 .addIngredient(VanillaTypes.ITEM, plant.toItemStack());
-        builder.addSlot(RecipeIngredientRole.INPUT, 15, 8)
+        builder.addSlot(RecipeIngredientRole.INPUT, 16, 49)
                 .setSlotName(INPUT_PLANT)
                 .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
                 .addIngredient(AgriIngredientPlant.TYPE, plant);
@@ -119,11 +119,11 @@ public class AgriRecipeCategoryClipping implements IRecipeCategory<IAgriPlant> {
         List<ItemStack> products = Lists.newArrayList();
         plant.getAllPossibleClipProducts(products::add);
         int index = 0;
-        for (int y = 32; y < 82; y += 18) {
+        for (int y = 33; y < 83; y += 18) {
             if(index >= products.size()) {
                 break;
             }
-            for (int x = 74; x < 128; x += 18) {
+            for (int x = 75; x < 129; x += 18) {
                 if(index < products.size()) {
                     builder.addSlot(RecipeIngredientRole.OUTPUT, x, y)
                             .setSlotName(OUTPUT + "_" + index)

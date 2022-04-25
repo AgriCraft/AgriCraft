@@ -136,7 +136,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
         builder.setShapeless();
 
         // Seed
-        builder.addSlot(RecipeIngredientRole.INPUT, 55, 2)
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 3)
                 .setSlotName(INPUT_SEED)
                 .addIngredient(VanillaTypes.ITEM, recipe.getPlant().toItemStack());
 
@@ -147,7 +147,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
                 .addIngredient(AgriIngredientPlant.TYPE, recipe.getPlant());
 
         // Soils
-        builder.addSlot(RecipeIngredientRole.INPUT, 55, 62)
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 63)
                 .setSlotName(INPUT_SOIL)
                 .addIngredients(VanillaTypes.ITEM,
                         AgriApi.getSoilRegistry().stream()
@@ -300,6 +300,7 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
         }
 
         public boolean onClick(double mX, double mY) {
+
             return this.buttons.stream()
                     .filter(button -> button.isOver(mX, mY))
                     .findFirst()

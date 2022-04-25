@@ -101,7 +101,7 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
         builder.setShapeless();
 
         // First input
-        builder.addSlot(RecipeIngredientRole.INPUT, 15, 5)
+        builder.addSlot(RecipeIngredientRole.INPUT, 16, 6)
                 .setSlotName(INPUT_SEED_1)
                 .addIngredient(VanillaTypes.ITEM, mutation.getParents().get(0).toItemStack());
         builder.addSlot(RecipeIngredientRole.INPUT, 25, 40)
@@ -110,7 +110,7 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
                 .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(0));
 
         // Second input
-        builder.addSlot(RecipeIngredientRole.INPUT, 95, 5)
+        builder.addSlot(RecipeIngredientRole.INPUT, 96, 6)
                 .setSlotName(INPUT_SEED_2)
                 .addIngredient(VanillaTypes.ITEM, mutation.getParents().get(1).toItemStack());
         builder.addSlot(RecipeIngredientRole.INPUT, 87, 40)
@@ -119,13 +119,13 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
                 .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(1));
 
         // Output
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 55, 1)
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 2)
                 .setSlotName(OUTPUT_SEED)
-                .addIngredient(VanillaTypes.ITEM, mutation.getParents().get(1).toItemStack());
-        builder.addSlot(RecipeIngredientRole.INPUT, 55, 40)
+                .addIngredient(VanillaTypes.ITEM, mutation.getChild().toItemStack());
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 40)
                 .setSlotName(OUTPUT_PLANT)
                 .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
-                .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(1));
+                .addIngredient(AgriIngredientPlant.TYPE, mutation.getChild());
 
     }
 }
