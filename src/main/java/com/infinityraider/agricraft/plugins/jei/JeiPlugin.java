@@ -62,7 +62,6 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         jei = jeiRuntime;
-        JeiBridge.hideAndUnhideMutations(AgriCraft.instance.getClientPlayer());
     }
 
     @Override
