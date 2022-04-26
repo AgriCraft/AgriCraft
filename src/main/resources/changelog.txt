@@ -7,6 +7,7 @@ Changelog
  - ADDED: It is now possible to define biome and dimension growth requirements in plant json files
  - ADDED: Copper nugget, as fruit for the Cuprosia resource crop
  - ADDED: Nethereed, a resource crop for netherite
+ - ADDED: Amathyllis, a resource crop for amethyst
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)

@@ -31,6 +31,7 @@
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
   "item.agricraft.agri_nugget_quartz": "Quartz Shard",
   "item.agricraft.netherite_sliver": "Netherite Sliver",
+  "item.agricraft.amathyllis_petal": "Amathyllis Petal",
 
   "enchantment.agricraft.agri_seed_bag": "Seed Sorting",
 
@@ -308,10 +309,6 @@
   "agricraft.plant.melon.seed": "Melon Seeds",
   "agricraft.plant.melon.desc": "Sweet \u0026 Juicy.",
 
-  "agricraft.plant.nethereed.name": "Nethereed",
-  "agricraft.plant.nethereed.seed": "Nethereed Seeds",
-  "agricraft.plant.nethereed.desc": "Regular reed's tougher cousin from the nether.",
-
   "agricraft.plant.nether_wart.name": "Nether Wart",
   "agricraft.plant.nether_wart.seed": "Nether Wart Spores",
   "agricraft.plant.nether_wart.desc": "An oddity from the nether, said to have somewhat mystical properties. The fungus appears to have a strong aptitude for heat, yet oddly cannot withstand the burning of the sun. Its fruit makes a covetable prize for the aspiring young brewer.",
@@ -380,6 +377,10 @@
   "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
   "agricraft.plant.wither_rose.desc": "Nobody likes their roses withering, but this is on another level.",
 
+  "agricraft.plant.amathyllis.name": "Amathyllis",
+  "agricraft.plant.amathyllis.seed": "Amathyllis Seeds",
+  "agricraft.plant.amathyllis.desc": "Its petals seem oddly crystalline.",
+
   "agricraft.plant.aurigold.name": "Aurigold",
   "agricraft.plant.aurigold.seed": "Aurigold Seeds",
   "agricraft.plant.aurigold.desc": "A golden delight.",
@@ -411,6 +412,10 @@
   "agricraft.plant.lapender.name": "Lapender",
   "agricraft.plant.lapender.seed": "Lapender Seeds",
   "agricraft.plant.lapender.desc": "A regal plant.",
+
+  "agricraft.plant.nethereed.name": "Nethereed",
+  "agricraft.plant.nethereed.seed": "Nethereed Seeds",
+  "agricraft.plant.nethereed.desc": "Regular reed's tougher cousin from the nether.",
 
   "agricraft.plant.niccissus.name": "Niccissus",
   "agricraft.plant.niccissus.seed": "Niccissus Seeds",

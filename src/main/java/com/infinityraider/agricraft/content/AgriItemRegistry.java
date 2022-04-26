@@ -45,6 +45,7 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     public final RegistryInitializer<ItemAgriNugget> nugget_emerald ;
     public final RegistryInitializer<ItemAgriNugget> nugget_quartz;
     public final RegistryInitializer<ItemAgriNugget> netherite_sliver;
+    public final RegistryInitializer<ItemAgriNugget> amathyllis_petal;
 
     public final RegistryInitializer<ItemGrate> grate;
 
@@ -77,9 +78,9 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
         this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.EMERALD)) : null;
         this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.QUARTZ)) : null;
         this.netherite_sliver = AgriCraft.instance.getConfig().enableNetheriteSliver() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.NETHERITE_SLIVER)) : null;
+        this.amathyllis_petal = AgriCraft.instance.getConfig().enableAmathyllisPetal() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.AMATHYLLIS_PETAL)) : null;
 
         this.grate = this.item(ItemGrate::new);
-
 
         CropStickVariant.initItems(this::item);
     }
@@ -213,5 +214,11 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     @Override
     public ItemAgriNugget getNetheriteSliverItem() {
         return netherite_sliver == null ? null : this.netherite_sliver.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getAmathyllisPetalItem() {
+        return amathyllis_petal == null ? null : this.amathyllis_petal.get();
     }
 }

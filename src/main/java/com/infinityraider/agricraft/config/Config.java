@@ -51,6 +51,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         private final ForgeConfigSpec.ConfigValue<Boolean> enableEmeraldNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableQuartzNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableNetheriteSliver;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableAmathyllisPetal;
 
         // stats
         private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
@@ -179,6 +180,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable quartz nugget", true);
             this.enableNetheriteSliver = builder.comment("\nSet to false to disable the netherite sliver (in case resource crops are disabled, or alternatives are available")
                     .define("Enable netherite sliver", true);
+            this.enableAmathyllisPetal = builder.comment("\nSet to false to disable the amathyllis petal (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable amathyllis petal", true);
             builder.pop();
 
             builder.push("stats");
@@ -570,6 +573,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         @Override
         public boolean enableNetheriteSliver() {
             return enableNetheriteSliver.get();
+        }
+
+        @Override
+        public boolean enableAmathyllisPetal() {
+            return enableAmathyllisPetal.get();
         }
 
         @Override

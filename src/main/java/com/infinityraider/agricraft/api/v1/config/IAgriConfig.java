@@ -89,6 +89,11 @@ public interface IAgriConfig {
     boolean enableNetheriteSliver();
 
     /**
+     * @return true if the amathyllis petal item is enabled
+     */
+    boolean enableAmathyllisPetal();
+
+    /**
      * @return true if AgriCraft should generate resource crop jsons
      */
     boolean generateResourceCropJsons();
