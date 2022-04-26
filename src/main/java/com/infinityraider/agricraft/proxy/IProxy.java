@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.capability.*;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
 import com.infinityraider.agricraft.handler.*;
+import com.infinityraider.agricraft.impl.v1.JsonObjectFactory;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
@@ -80,6 +81,10 @@ public interface IProxy extends IProxyBase<Config> {
     @Override
     default void onServerStartingEvent(final ServerStartingEvent event) {
         CoreHandler.init();
+    }
+
+    default JsonObjectFactory jsonObjectFactory() {
+        return JsonObjectFactory.getInstance();
     }
 
     default boolean isValidRenderType(String renderType) {

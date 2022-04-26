@@ -5,9 +5,9 @@ import com.agricraft.agricore.json.AgriSaver;
 import com.agricraft.agricore.templates.AgriPlant;
 import com.agricraft.agricore.templates.AgriWeed;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
-import com.infinityraider.agricraft.impl.v1.plant.JsonWeed;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
 import net.minecraftforge.network.NetworkDirection;
@@ -49,7 +49,7 @@ public class MessageSyncWeedJson extends MessageBase {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
             AgriSaver.saveElements(worldDir, AgriCore.getWeeds().getAllElements());
             AgriCore.getWeeds().getAllElements().stream()
-                    .map(JsonWeed::new)
+                    .map(weed -> AgriCraft.instance.proxy().jsonObjectFactory().createWeed(weed))
                     .forEach(AgriApi.getWeedRegistry()::add);
         }
     }

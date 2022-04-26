@@ -1,7 +1,6 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.templates.AgriPlant;
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -18,12 +17,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.infinityraider.agricraft.impl.v1.requirement.GrowthReqInitializer;
-import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
 import com.infinityraider.infinitylib.utility.FuzzyStack;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.chat.Component;
@@ -35,16 +31,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class JsonPlant implements IAgriPlant {
-
-    private final AgriPlant plant;
+    protected final AgriPlant plant;
 
     private final TranslatableComponent plantName;
     private final TranslatableComponent seedName;
@@ -258,26 +251,6 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public boolean allowsCloning(IAgriGrowthStage stage) {
         return this.plant.allowsCloning();
-    }
-
-    @Nonnull
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
-        if(!stage.isGrowthStage()) {
-            return ImmutableList.of();
-        }
-        final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        if(this.plant.getTexture().useModels()) {
-            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantModel(index));
-            return AgriPlantQuadGenerator.getInstance().fetchQuads(rl);
-        } else {
-            List<ResourceLocation> textures = Arrays.stream(plant.getTexture().getPlantTextures(index))
-                    .map(ResourceLocation::new)
-                    .collect(Collectors.toList());
-            return AgriPlantQuadGenerator.getInstance().bakeQuads(this, stage, this.plant.getTexture().getRenderType(),
-                    face, textures);
-        }
     }
 
     @Nonnull

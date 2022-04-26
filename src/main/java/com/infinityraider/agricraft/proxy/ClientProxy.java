@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
+import com.infinityraider.agricraft.impl.v1.JsonObjectFactory;
+import com.infinityraider.agricraft.impl.v1.JsonObjectFactoryClient;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.render.blocks.BlockGreenHouseAirRenderer;
 import com.infinityraider.agricraft.render.items.magnfiyingglass.MagnifyingGlassGenomeInspector;
@@ -60,6 +62,11 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         IProxy.super.activateRequiredModules();
         ModuleDynamicCamera.getInstance().activate();
         ModuleKeyboard.getInstance().activate();
+    }
+
+    @Override
+    public JsonObjectFactory jsonObjectFactory() {
+        return JsonObjectFactoryClient.getInstance();
     }
 
     @Override

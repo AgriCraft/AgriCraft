@@ -6,15 +6,12 @@ import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -168,8 +165,7 @@ public class MimickedPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
+    public List<?> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         return this.getOriginal().bakeQuads(face, stage);
     }
 

@@ -3,7 +3,6 @@ package com.infinityraider.agricraft.api.v1.util.mimic;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -89,7 +88,7 @@ public class MimickedWeed implements IAgriWeed {
     @Nonnull
     @Override
     @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
+    public List<?> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
         return this.getOriginal().bakeQuads(face, stage);
     }
 

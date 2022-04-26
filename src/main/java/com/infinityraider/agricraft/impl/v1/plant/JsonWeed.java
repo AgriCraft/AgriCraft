@@ -1,22 +1,16 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
 import com.agricraft.agricore.templates.AgriWeed;
-import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
-import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +19,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class JsonWeed implements IAgriWeed {
-    private final AgriWeed weed;
+    protected final AgriWeed weed;
 
     private final Component name;
     private final Component description;
@@ -112,26 +106,6 @@ public class JsonWeed implements IAgriWeed {
     @Override
     public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(this.description);
-    }
-
-    @Nonnull
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
-        if(!stage.isGrowthStage()) {
-            return ImmutableList.of();
-        }
-        final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        if(this.weed.getTexture().useModels()) {
-            ResourceLocation rl = new ResourceLocation(this.weed.getTexture().getPlantModel(index));
-            return AgriPlantQuadGenerator.getInstance().fetchQuads(rl);
-        } else {
-            List<ResourceLocation> textures = Arrays.stream(weed.getTexture().getPlantTextures(index))
-                    .map(ResourceLocation::new)
-                    .collect(Collectors.toList());
-            return AgriPlantQuadGenerator.getInstance().bakeQuads(this, stage, this.weed.getTexture().getRenderType(),
-                    face, textures);
-        }
     }
 
     @Nonnull
