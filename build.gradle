@@ -226,7 +226,7 @@ dependencies {
     implementation project(":InfinityLib")
 
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
     runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
 
     //Botania

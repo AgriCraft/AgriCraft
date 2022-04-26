@@ -246,8 +246,8 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
             // initialize buttons
             ResourceLocation incTexture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/inc_button.png");
             ResourceLocation decTexture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/dec_button.png");
-            this.incStrButton = new Button(incTexture, this::incrementStrength);
-            this.decStrButton = new Button(decTexture, this::decrementStrength);
+            this.incStrButton = new Button(incTexture, this::incrementStrength, true);
+            this.decStrButton = new Button(decTexture, this::decrementStrength, true);
             this.incStageButton = new Button(incTexture, this::incrementStage);
             this.decStageButton = new Button(decTexture, this::decrementStage);
             this.buttons = ImmutableSet.of(this.incStrButton, this.decStrButton, this.incStageButton, this.decStageButton);
@@ -376,9 +376,16 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
         private int x;
         private int y;
 
+        private boolean forceUpdate;
+
         public Button(ResourceLocation texture, BooleanSupplier onPress) {
+            this(texture, onPress, false);
+        }
+
+        public Button(ResourceLocation texture, BooleanSupplier onPress, boolean forceUpdate) {
             this.texture = texture;
             this.onPress = onPress;
+            this.forceUpdate = forceUpdate;
         }
 
         public void updatePosition(int x, int y) {
@@ -405,7 +412,11 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<Agr
         }
 
         public boolean onPress() {
-            return this.onPress.getAsBoolean();
+            boolean result = this.onPress.getAsBoolean();
+            if(this.forceUpdate && result) {
+                JeiPlugin.forceRecipeGuiUpdate();
+            }
+            return result;
         }
     }
 

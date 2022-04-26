@@ -13,6 +13,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.gui.recipes.IRecipeLogicStateListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -60,6 +61,7 @@ public class JeiPlugin implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        jei = jeiRuntime;
         JeiBridge.hideAndUnhideMutations(AgriCraft.instance.getClientPlayer());
     }
 
@@ -126,4 +128,12 @@ public class JeiPlugin implements IModPlugin {
         };
     }
 
+    public static void forceRecipeGuiUpdate() {
+        try {
+            ((IRecipeLogicStateListener) jei.getRecipesGui()).onStateChange();
+        } catch(Exception e) {
+            AgriCraft.instance.getLogger().error("JEI Probably updated, notify the AgriCraft mod author");
+            AgriCraft.instance.getLogger().printStackTrace(e);
+        }
+    }
 }
