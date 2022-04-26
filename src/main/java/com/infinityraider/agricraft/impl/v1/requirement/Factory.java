@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -277,7 +278,7 @@ public class Factory extends FactoryAbstract {
         private static final BiFunction<Level, BlockPos, IAgriSoil> SOIL = (world, pos) ->
                 AgriApi.getCrop(world, pos).flatMap(IAgriCrop::getSoil).orElse(NoSoil.getInstance());
 
-        private static final BiFunction<Level, BlockPos, Integer> LIGHT = Level::getLightEmission;
+        private static final BiFunction<Level, BlockPos, Integer> LIGHT = LevelReader::getMaxLocalRawBrightness;
 
         private static final BiFunction<Level, BlockPos, Fluid> FLUID = (world, pos) -> world.getBlockState(pos).getFluidState().getType();
 
