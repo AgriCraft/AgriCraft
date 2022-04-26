@@ -502,12 +502,14 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
             }).orElse(InteractionResult.PASS);
         }
         // Placement of crop sticks or creation of cross crop
-        InteractionResult result = this.applyCropSticks(world, pos, state, CropStickVariant.fromItem(heldItem));
-        if (result == InteractionResult.SUCCESS) {
-                    if (!player.isCreative()) {
-                        player.getItemInHand(hand).shrink(1);
-                    }
-                    return result;
+        if(heldItem.getItem() instanceof IAgriCropStickItem) {
+            InteractionResult result = this.applyCropSticks(world, pos, state, CropStickVariant.fromItem(heldItem));
+            if (result == InteractionResult.SUCCESS) {
+                if (!player.isCreative()) {
+                    player.getItemInHand(hand).shrink(1);
+                }
+                return result;
+            }
         }
         // Planting from seed
         final BlockState prevState = state;
