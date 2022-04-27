@@ -35,7 +35,16 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
     public void drawLeftSheet(PlantPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         // Title
         context.draw(transforms, JournalDataDrawerBase.Textures.TITLE, 0, 2, 128, 20);
-        context.drawText(transforms, page.getPlant().getSeedName(), 30, 10);
+        int titleWidth = Minecraft.getInstance().font.width(page.getPlant().getSeedName());
+        if(titleWidth > 74) {
+            float scale = 0.8F;
+            while (Minecraft.getInstance().font.width(page.getPlant().getSeedName()) * scale > 74) {
+                scale = scale - 0.1F;
+            }
+            context.drawText(transforms, page.getPlant().getSeedName(), 30, 10, scale);
+        } else {
+            context.drawText(transforms, page.getPlant().getSeedName(), 30, 10);
+        }
         // Description
         float offset = context.drawText(transforms, page.getPlant().getInformation(), 10, 30, 0.70F);
         // Growth requirements
