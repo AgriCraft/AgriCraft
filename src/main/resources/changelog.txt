@@ -8,6 +8,7 @@ Changelog
  - ADDED: Copper nugget, as fruit for the Cuprosia resource crop
  - ADDED: Nethereed, a resource crop for netherite
  - ADDED: Amathyllis, a resource crop for amethyst
+ - ADDED: Json callback for Botania mana consumption for growth, by default active on the Botania flower crops
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)

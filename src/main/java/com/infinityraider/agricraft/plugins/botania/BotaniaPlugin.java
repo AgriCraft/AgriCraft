@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.api.v1.plugin.*;
 import com.infinityraider.agricraft.reference.Names;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import javax.annotation.Nonnull;
 
@@ -27,6 +28,12 @@ public class BotaniaPlugin implements IAgriPlugin {
     @Override
     public String getDescription() {
         return "Botania compatibility";
+    }
+
+    @Override
+    public void onCommonSetupEvent(FMLCommonSetupEvent event) {
+        // Register mana callback
+        JsonPlantCallBackManaConsumer.getFactory().register();
     }
 
     @Override
