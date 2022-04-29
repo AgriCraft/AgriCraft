@@ -162,6 +162,7 @@
   "agricraft.tooltip.growth_req.season": "This plant will only grow during certain seasons",
   "agricraft.tooltip.growth_req.structure_in": "This plant will only grow in or near a certain structure",
   "agricraft.tooltip.growth_req.structure_out": "This plant will not grow in or near a certain structure",
+  "agricraft.tooltip.growth_req.mana": "This plant has insufficient mana to grow",
 
   "agricraft.tooltip.growth_req.soil.humidity.general": "This plant can not grow on a soil with this humidity",
   "agricraft.tooltip.growth_req.soil.acidity.general": "This plant can not grow on a soil with this acidity",

@@ -5,20 +5,26 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
+import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaPool;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
 public class JsonPlantCallBackManaConsumer implements IJsonPlantCallback {
     public static final String ID = AgriCraft.instance.getModId() + ":" + "botania_mana";
@@ -44,69 +50,95 @@ public class JsonPlantCallBackManaConsumer implements IJsonPlantCallback {
     private static final int LIMIT = 16;
     private static final Map<BlockPos, PoolCache> POOL_CACHE = Maps.newHashMap();
 
-    private final int amount;
+    private final ManaGrowthCondition condition;
 
-    private JsonPlantCallBackManaConsumer(int amount) {
-        AgriCraft.instance.proxy().registerEventHandler(this);
-        this.amount = amount;
-    }
-
-    protected boolean tryConsumeMana(IAgriCrop crop) {
-        return POOL_CACHE.computeIfAbsent(crop.getPosition(), pos -> new PoolCache()).consumeMana(crop, this.amount);
+    private JsonPlantCallBackManaConsumer(int cost) {
+        this.condition = new ManaGrowthCondition(cost);
     }
 
     @Override
-    public void onPlanted(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
-        markCrop(crop);
+    public void onGrowth(@Nonnull IAgriCrop crop) {
+        // Consume mana
+        CompoundTag tag = crop.asTile().getTileData();
+        int mana = tag.contains(ID) ? tag.getInt(ID) : 0;
+        tag.putInt(ID, Math.max(0, mana - this.condition.getCost()));
+        // spawn a particle
+        BotaniaAPI.instance().sparkleFX(
+                crop.world(),
+                crop.getPosition().getX() + 0.5 + 0.5*Math.random(),
+                crop.getPosition().getY() + 0.5 + 0.5*Math.random(),
+                crop.getPosition().getZ() + 0.5 + 0.5*Math.random(),
+                67.0F/255.0F,
+                180.0F/255.0F,
+                1.0F,
+                (float) Math.random(),
+                5
+        );
     }
 
     @Override
-    public void onSpawned(@Nonnull IAgriCrop crop) {
-        markCrop(crop);
+    public void onGrowthReqInitialization(IAgriGrowthRequirement.Builder builder) {
+        builder.addCondition(this.condition);
     }
 
-    @Override
-    public void onBroken(@Nonnull IAgriCrop crop, @Nullable LivingEntity entity) {
-        unMarkCrop(crop);
-    }
+    private static class ManaGrowthCondition implements IAgriGrowCondition {
+        private static final Component TOOLTIP = new TranslatableComponent(AgriCraft.instance.getModId() + ".tooltip.growth_req.mana");
 
-    @Override
-    public void onRemoved(@Nonnull IAgriCrop crop) {
-        unMarkCrop(crop);
-    }
+        private final int cost;
 
-    @SuppressWarnings("unused")
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void preCropGrowth(AgriCropEvent.Grow.Plant.Pre event) {
-        // Fetch crop
-        IAgriCrop crop = event.getCrop();
-        // If the crop is not marked as a mana consumer, return
-        if(!isCropMarked(crop)) {
-            return;
+        private ManaGrowthCondition(int cost) {
+            this.cost = cost;
         }
-        // If the crop is marked as a mana consumer, but does not have a plant, unmark it and return
-        if(!crop.hasPlant()) {
-            unMarkCrop(crop);
-            return;
+
+        public int getCost() {
+            return this.cost;
         }
-        // Try to consume mana
-        if(!this.tryConsumeMana(crop)) {
-            event.setResult(Event.Result.DENY);
-            event.setCanceled(true);
+
+        @Override
+        public RequirementType getType() {
+            return RequirementType.MANA;
         }
-    }
 
-    protected static void markCrop(IAgriCrop crop) {
-        crop.asTile().getTileData().putBoolean(ID, true);
-    }
+        @Override
+        public IAgriGrowthResponse check(IAgriCrop crop, @Nonnull Level world, @Nonnull BlockPos pos, int strength) {
+            // Fetch custom tile data
+            BlockEntity tile = crop.asTile();
+            CompoundTag tag = tile.getTileData();
+            // Fetch mana stored on the crop
+            int mana = tag.contains(ID) ? tag.getInt(ID) : 0;
+            // If there is not enough, try to fetch more
+            if(mana < this.getCost()) {
+                mana = mana + this.tryCollectMana(crop, 5*this.getCost() - mana);
+                tag.putInt(ID, mana);
+            }
+            // If there is enough mana, the crop may grow
+            // Note that we do not consume mana here, as this is just a fertility check, mana is consumed after the growth tick
+            return mana >= this.getCost() ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
+        }
 
-    protected static void unMarkCrop(IAgriCrop crop) {
-        crop.asTile().getTileData().remove(ID);
-        POOL_CACHE.remove(crop.getPosition());
-    }
+        protected int tryCollectMana(IAgriCrop crop, int amount) {
+            return POOL_CACHE.computeIfAbsent(crop.getPosition(), pos -> new PoolCache()).tryCollectMana(crop, amount);
+        }
 
-    protected static boolean isCropMarked(IAgriCrop crop) {
-        return crop.asTile().getTileData().contains(ID) && crop.asTile().getTileData().getBoolean(ID);
+        @Override
+        public Set<BlockPos> offsetsToCheck() {
+            return Collections.emptySet();
+        }
+
+        @Override
+        public void notMetDescription(@Nonnull Consumer<Component> consumer) {
+            consumer.accept(TOOLTIP);
+        }
+
+        @Override
+        public int getComplexity() {
+            return 1;
+        }
+
+        @Override
+        public CacheType getCacheType() {
+            return CacheType.NONE;
+        }
     }
 
     private static class PoolCache {
@@ -114,26 +146,23 @@ public class JsonPlantCallBackManaConsumer implements IJsonPlantCallback {
 
         private PoolCache() {}
 
-        public boolean consumeMana(IAgriCrop crop, int amount) {
+        public int tryCollectMana(IAgriCrop crop, int amount) {
             // Fetch current cached pool
             IManaPool pool = this.pool == null ? null : this.pool.get();
             // Update cached pool if none is cached
             pool = pool == null ? this.findNewPool(crop) : pool;
-            // If there is no pool, no mana can be consumed
+            // If there is no pool, no mana can be collected
             if(pool == null) {
-                return false;
+                return 0;
             }
             // If the pool is not providing mana, no mana can be consumed
             if(!pool.isOutputtingPower()) {
-                return false;
+                return 0;
             }
-            // If the pool does not have sufficient mana, no mana can be consumed
-            if(pool.getCurrentMana() < amount) {
-                return false;
-            }
-            // drain the required mana and return true
-            pool.receiveMana(-amount);
-            return true;
+            // Fetch the amount of mana, or the amount remaining in the pool if it is less
+            int collected = Math.min(pool.getCurrentMana(), amount);
+            pool.receiveMana(-collected);
+            return collected;
         }
 
         protected IManaPool findNewPool(IAgriCrop crop) {
