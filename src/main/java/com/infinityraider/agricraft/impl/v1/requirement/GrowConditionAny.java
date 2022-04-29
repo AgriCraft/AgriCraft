@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
 import net.minecraft.core.BlockPos;
@@ -24,7 +25,7 @@ public class GrowConditionAny<T> extends GrowConditionBase<T> {
     }
 
     @Override
-    public IAgriGrowthResponse check(@Nonnull Level world, @Nonnull BlockPos pos, int strength) {
+    public IAgriGrowthResponse check(IAgriCrop crop, @Nonnull Level world, @Nonnull BlockPos pos, int strength) {
         return IAgriGrowthResponse.FERTILE;
     }
 }

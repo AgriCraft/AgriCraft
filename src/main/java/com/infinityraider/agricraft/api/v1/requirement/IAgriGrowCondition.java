@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
@@ -23,13 +24,15 @@ public interface IAgriGrowCondition {
     /**
      * Checks this condition at the given position in the given world.
      *
+     *
+     * @param crop : the crop for which to check this condition
      * @param world : the world object
      * @param pos : the position in the world
      * @param strength : the strength stat of the crop
      *
      * @return the response.
      */
-    IAgriGrowthResponse check(@Nonnull Level world, @Nonnull BlockPos pos, int strength);
+    IAgriGrowthResponse check(IAgriCrop crop, @Nonnull Level world, @Nonnull BlockPos pos, int strength);
 
     /**
      * @return a set of all block positions, relative to the crop which need to be checked for this condition, can be empty (e.g in case of dimension)
@@ -47,7 +50,7 @@ public interface IAgriGrowCondition {
      * Determines the computational complexity associated with the evaluation of this condition.
      * <p>
      * The higher the value, the higher the cost associated with invoking
-     * {@link #check(Level, BlockPos, int)}, and the later in the sequence that this condition will be
+     * {@link #check(IAgriCrop, Level, BlockPos, int)}, and the later in the sequence that this condition will be
      * evaluated
      * <p>
      * <em>It is best to think of this value as the number of blocks that have to be examined as to

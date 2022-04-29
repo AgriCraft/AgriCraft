@@ -77,12 +77,11 @@ public abstract class RequirementCache {
 
         private static class Condition {
             private static Condition create(IAgriCrop crop, IAgriGrowCondition condition, int strength) {
-                switch (condition.getCacheType()) {
-                    case NONE: return new Condition(crop, condition, strength);
-                    case BLOCK_UPDATE: return new BlockUpdateCache(crop, condition, strength);
-                    case FULL: return new FullCache(crop, condition, strength);
-                }
-                return new Condition(crop, condition, strength);
+                return switch (condition.getCacheType()) {
+                    case NONE -> new Condition(crop, condition, strength);
+                    case BLOCK_UPDATE -> new BlockUpdateCache(crop, condition, strength);
+                    case FULL -> new FullCache(crop, condition, strength);
+                };
             }
 
             private final IAgriCrop crop;
@@ -99,7 +98,7 @@ public abstract class RequirementCache {
                 if(this.getWorld() == null) {
                     return IAgriGrowthResponse.INFERTILE;
                 }
-                return this.getCondition().check(this.getWorld(), this.getPos(), this.getStrength());
+                return this.getCondition().check(this.crop, this.getWorld(), this.getPos(), this.getStrength());
             }
 
             public void addTooltip(Consumer<Component> consumer) {

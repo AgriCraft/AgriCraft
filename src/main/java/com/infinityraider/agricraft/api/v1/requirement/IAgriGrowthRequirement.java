@@ -121,19 +121,21 @@ public interface IAgriGrowthRequirement {
             return IAgriGrowthResponse.INFERTILE;
         }
         final BlockPos pos = crop.getPosition();
-        return this.check(world, pos, strength);
+        return this.check(crop, world, pos, strength);
     }
 
     /**
-     * Checks the growth requirement at a given position in the world for a certain strength level
+     * Checks the growth requirement for a crop at a given position in the world for a certain strength level
+     *
+     * @param crop the crop
      * @param world the world
      * @param pos the position
      * @param strength the strength
      * @return the growth response
      */
-    default IAgriGrowthResponse check(Level world, BlockPos pos, int strength) {
+    default IAgriGrowthResponse check(IAgriCrop crop, Level world, BlockPos pos, int strength) {
         return this.getGrowConditions().stream()
-                .map(condition -> condition.check(world, pos, strength))
+                .map(condition -> condition.check(crop, world, pos, strength))
                 // filter out the fertile ones to avoid additional checks in the collection
                 .filter(response -> !response.isFertile())
                 .collect(IAgriGrowthResponse.COLLECTOR);

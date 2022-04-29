@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.google.common.collect.ImmutableSet;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowCondition;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
 import com.infinityraider.agricraft.api.v1.requirement.RequirementType;
@@ -42,7 +43,7 @@ public class GrowConditionBase<T> implements IAgriGrowCondition, BiPredicate<Int
     }
 
     @Override
-    public IAgriGrowthResponse check(@Nonnull Level world, @Nonnull BlockPos pos, int strength) {
+    public IAgriGrowthResponse check(IAgriCrop crop, @Nonnull Level world, @Nonnull BlockPos pos, int strength) {
         return this.response.apply(strength, this.getter.apply(world, this.offsetter.apply(pos)));
     }
 
