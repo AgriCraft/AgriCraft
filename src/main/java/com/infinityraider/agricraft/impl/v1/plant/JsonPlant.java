@@ -57,9 +57,9 @@ public class JsonPlant implements IAgriPlant {
         this.seedName = new TranslatableComponent(plant.getSeedLangKey());
         this.description = new TranslatableComponent(plant.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
-        this.growthRequirement = GrowthReqInitializer.initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
         this.callbacks = this.initCallBacks(plant);
+        this.growthRequirement = GrowthReqInitializer.initGrowthRequirement(plant, this.callbacks);
         this.seedTexture = new ResourceLocation(plant.getSeedTexture());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
     }

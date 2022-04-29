@@ -5,6 +5,7 @@ import com.agricraft.agricore.templates.AgriPlant;
 import com.agricraft.agricore.templates.AgriSoilCondition;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
@@ -29,7 +30,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class GrowthReqInitializer {
-    public static IAgriGrowthRequirement initGrowthRequirement(AgriPlant plant) {
+    public static IAgriGrowthRequirement initGrowthRequirement(AgriPlant plant, List<IJsonPlantCallback> callbacks) {
         // Run null check
         if (plant == null) {
             return AgriGrowthRequirement.getNone();
@@ -48,6 +49,9 @@ public abstract class GrowthReqInitializer {
         defineDimensionReq(plant, builder);
         defineSeasonReq(plant, builder);
         defineFluidReq(plant, builder);
+
+        // Give the callbacks a chance to add growth conditions
+        callbacks.forEach(cb -> cb.onGrowthReqInitialization(builder));
 
         // Build the growth requirement
         IAgriGrowthRequirement req = builder.build();

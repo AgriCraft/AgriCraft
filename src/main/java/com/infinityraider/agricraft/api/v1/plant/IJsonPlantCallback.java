@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -150,6 +151,12 @@ public interface IJsonPlantCallback {
     default Optional<InteractionResult> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return Optional.empty();
     }
+
+    /**
+     * Called right before the growth requirement for a plant with this callback is initialized
+     * @param builder the growth requirement builder
+     */
+    default void onGrowthReqInitialization(IAgriGrowthRequirement.Builder builder) {}
 
     /**
      * Factory class to parse IJsonPlantCallback objects from json elements
