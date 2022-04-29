@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class JsonMutationTriggerManager {
+public final class JsonMutationConditionManager {
     private static final Map<String, IJsonMutationCondition.Factory> triggers = Maps.newConcurrentMap();
 
     public static Optional<IJsonMutationCondition.Factory> get(String id) {
@@ -26,5 +26,5 @@ public final class JsonMutationTriggerManager {
         return true;
     }
 
-    private JsonMutationTriggerManager() {}
+    private JsonMutationConditionManager() {}
 }

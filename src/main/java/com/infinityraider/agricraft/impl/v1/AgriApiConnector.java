@@ -33,7 +33,7 @@ import com.infinityraider.agricraft.impl.v1.genetics.AgriGenome;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationHandler;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriMutationRegistry;
 import com.infinityraider.agricraft.impl.v1.crop.AgriGrowthRegistry;
-import com.infinityraider.agricraft.impl.v1.journal.JsonMutationTriggerManager;
+import com.infinityraider.agricraft.impl.v1.journal.JsonMutationConditionManager;
 import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.JsonPlantCallbackManager;
@@ -285,7 +285,7 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id) {
-        return JsonMutationTriggerManager.get(id);
+        return JsonMutationConditionManager.get(id);
     }
 
     @Override
