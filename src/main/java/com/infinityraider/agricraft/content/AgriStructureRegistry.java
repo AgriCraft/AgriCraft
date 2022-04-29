@@ -3,14 +3,15 @@ package com.infinityraider.agricraft.content;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.world.StructureGreenHouse;
 import com.infinityraider.agricraft.content.world.StructureGreenHouseIrrigated;
+import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.resources.ResourceLocation;
 
 public final class AgriStructureRegistry {
     public static final StructureGreenHouse STANDARD_DESERT = new StructureGreenHouse(GreenHouses.Standard.DESERT, Pools.DESERT);
-    public static final StructureGreenHouse STANDARD_PLAINS = new StructureGreenHouse(GreenHouses.Standard.PLAINS, Pools.PLAINS);
+    public static final StructureGreenHouse STANDARD_PLAINS = new StructureGreenHouse(GreenHouses.Standard.PLAINS, Pools.PLAINS, ProcessorLists.MOSSIFY_10_PERCENT);
     public static final StructureGreenHouse STANDARD_SAVANNA = new StructureGreenHouse(GreenHouses.Standard.SAVANNA, Pools.SAVANNA);
     public static final StructureGreenHouse STANDARD_SNOWY = new StructureGreenHouse(GreenHouses.Standard.SNOWY, Pools.SNOWY);
-    public static final StructureGreenHouse STANDARD_TAIGA = new StructureGreenHouse(GreenHouses.Standard.TAIGA, Pools.TAIGA);
+    public static final StructureGreenHouse STANDARD_TAIGA = new StructureGreenHouse(GreenHouses.Standard.TAIGA, Pools.TAIGA, ProcessorLists.MOSSIFY_10_PERCENT);
 
     // TODO: design irrigated greenhouses
     public static final StructureGreenHouseIrrigated IRRIGATED_DESERT = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
