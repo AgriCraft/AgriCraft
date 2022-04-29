@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 
 /**
  * Central class which controls the mutation logic of AgriCraft, which is controlled by three sub-classes:
- * - The first is the IAgriMutationEngine, which handles the spreading / mutation logic between crops in the world
+ * - The first is the IAgriCrossBreedEngine, which handles the spreading / cross breeding logic between crops in the world
  * - The other two are IMutator objects for the plant species and stats respectively
  *
  * Any of these implementations can be obtained, replaced, overridden, etc... via the accessors provided in this class
@@ -21,21 +21,21 @@ public interface IAgriMutationHandler {
     }
 
     /**
-     * Sets the active IAgriMutationEngine object to be used by AgriCraft for cloning and mutating of plants;
-     * @param engine the IAgriMutationEngine object
+     * Sets the active IAgriCrossBreedEngine object to be used by AgriCraft for cloning and mutating of plants;
+     * @param engine the IAgriCrossBreedEngine object
      * @return this
      */
-    IAgriMutationHandler setActiveMutationEngine(IAgriMutationEngine engine);
+    IAgriMutationHandler setActiveCrossBreedEngine(IAgriCrossBreedEngine engine);
 
     /**
-     * @return the currently active IAgriMutationEngine object
+     * @return the currently active IAgriCrossBreedEngine object
      */
-    IAgriMutationEngine getActiveMutationEngine();
+    IAgriCrossBreedEngine getActiveCrossBreedEngine();
 
     /**
-     * @return AgriCraft's default IAgriMutationEngine object
+     * @return AgriCraft's default IAgriCrossBreedEngine object
      */
-    IAgriMutationEngine getDefaultMutationEngine();
+    IAgriCrossBreedEngine getDefaultCrossBreedEngine();
 
     /**
      * Sets the active IMutator<IAgriPlant> object to be used by AgriCraft for mutation of plant species genes;

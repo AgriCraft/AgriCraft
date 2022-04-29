@@ -254,7 +254,7 @@ public class GeneAnimalAttractant implements IAgriGene<Boolean> {
         private Mutator() {}
 
         @Override
-        public IAgriGenePair<Boolean> pickOrMutate(IAgriGene<Boolean> gene, IAllele<Boolean> first, IAllele<Boolean> second,
+        public IAgriGenePair<Boolean> pickOrMutate(IAgriCrop crop, IAgriGene<Boolean> gene, IAllele<Boolean> first, IAllele<Boolean> second,
                                                    Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
             return gene.generateGenePair(
                     this.mutateAllele(gene, first, parents.getA(), random),

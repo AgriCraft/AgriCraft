@@ -93,12 +93,12 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
      * enum representing the possible results of a trigger
      */
     enum TriggerResult {
-        /** the trigger is ignored and default mutation logic is followed */
-        IGNORE,
-        /** the trigger is forced and the mutation will happen */
-        FORCE,
         /** the trigger forbids the mutation, this overrules FORCE */
-        FORBID
+        FORBID,
+        /** the trigger forces the mutation to happen */
+        FORCE,
+        /** the trigger is ignored and default mutation logic is followed */
+        IGNORE
     }
 
 }

@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.*;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationEngine;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriCrossBreedEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
@@ -15,17 +15,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AgriMutationEngine implements IAgriMutationEngine {
+public class AgriCrossBreedEngine implements IAgriCrossBreedEngine {
     private IParentSelector selector;
     private ICloneLogic cloner;
     private ICombineLogic combiner;
 
-    public AgriMutationEngine() {
+    public AgriCrossBreedEngine() {
         this.selector = this::selectAndSortCandidates;
-        this.cloner = (parent, random) -> AgriApi.getAgriGenomeBuilder(parent.getTrait(GeneSpecies.getInstance()))
-                .populate(gene -> this.cloneGene(gene, parent, random)).build();
-        this.combiner = (parents, random) -> AgriApi.getAgriGenomeBuilder(parents.getA().getTrait(GeneSpecies.getInstance()))
-                .populate(gene -> this.mutateGene(gene, parents, random)).build();
+        this.cloner = (crop, parent, random) -> AgriApi.getAgriGenomeBuilder(parent.getTrait(GeneSpecies.getInstance()))
+                .populate(gene -> this.cloneGene(crop, gene, parent, random)).build();
+        this.combiner = (crop, parents, random) -> AgriApi.getAgriGenomeBuilder(parents.getA().getTrait(GeneSpecies.getInstance()))
+                .populate(gene -> this.mutateGene(crop, gene, parents, random)).build();
     }
 
     protected IParentSelector getSelector() {
@@ -41,7 +41,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     @Override
-    public boolean handleMutationTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random) {
+    public boolean handleCrossBreedTick(IAgriCrop crop, Stream<IAgriCrop> neighbours, Random random) {
         // select candidate parents from the neighbours
         List<IAgriCrop> candidates = this.getSelector().selectAndOrder(neighbours, random);
         // No candidates: do nothing
@@ -79,7 +79,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         if (plant.allowsCloning(parent.getGrowthStage())) {
             // roll for spread chance
             if(random.nextDouble() < parent.getPlant().getSpreadChance(parent.getGrowthStage())) {
-                return parent.getGenome().map(genome -> this.spawnChild(target, this.getCloner().clone(genome, random))).orElse(false);
+                return parent.getGenome().map(genome -> this.spawnChild(target, this.getCloner().clone(target, genome, random))).orElse(false);
             }
         }
         // spreading failed
@@ -90,7 +90,7 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         return a.getGenome().flatMap(genA ->
                 b.getGenome().map(genB -> {
                     // Determine the child's genome
-                    IAgriGenome genome = this.getCombiner().combine(new Tuple<>(genA, genB), random);
+                    IAgriGenome genome = this.getCombiner().combine(target, new Tuple<>(genA, genB), random);
                     // Spawn the child
                     return this.spawnChild(target, genome);
                 })
@@ -111,8 +111,9 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         return target.spawnGenome(genome);
     }
 
-    protected <T> IAgriGenePair<T> mutateGene(IAgriGene<T> gene, Tuple<IAgriGenome, IAgriGenome> parents, Random rand) {
+    protected <T> IAgriGenePair<T> mutateGene(IAgriCrop crop, IAgriGene<T> gene, Tuple<IAgriGenome, IAgriGenome> parents, Random rand) {
         return gene.mutator().pickOrMutate(
+                crop,
                 gene,
                 this.pickRandomAllele(parents.getA().getGenePair(gene), rand),
                 this.pickRandomAllele(parents.getB().getGenePair(gene), rand),
@@ -121,9 +122,10 @@ public class AgriMutationEngine implements IAgriMutationEngine {
         );
     }
 
-    protected <T> IAgriGenePair<T> cloneGene(IAgriGene<T> gene, IAgriGenome parent, Random rand) {
+    protected <T> IAgriGenePair<T> cloneGene(IAgriCrop crop, IAgriGene<T> gene, IAgriGenome parent, Random rand) {
         if(AgriCraft.instance.getConfig().allowCloneMutations()) {
             return gene.mutator().pickOrMutate(
+                    crop,
                     gene,
                     parent.getGenePair(gene).getDominant(),
                     parent.getGenePair(gene).getRecessive(),
@@ -140,19 +142,19 @@ public class AgriMutationEngine implements IAgriMutationEngine {
     }
 
     @Override
-    public IAgriMutationEngine setSelectionLogic(@Nonnull IParentSelector selector) {
+    public IAgriCrossBreedEngine setSelectionLogic(@Nonnull IParentSelector selector) {
         this.selector = Objects.requireNonNull(selector);
         return this;
     }
 
     @Override
-    public IAgriMutationEngine setCloneLogic(@Nonnull ICloneLogic cloneLogic) {
+    public IAgriCrossBreedEngine setCloneLogic(@Nonnull ICloneLogic cloneLogic) {
         this.cloner = Objects.requireNonNull(cloneLogic);
         return this;
     }
 
     @Override
-    public IAgriMutationEngine setCombineLogic(@Nonnull ICombineLogic combineLogic) {
+    public IAgriCrossBreedEngine setCombineLogic(@Nonnull ICombineLogic combineLogic) {
         this.combiner = Objects.requireNonNull(combineLogic);
         return this;
     }

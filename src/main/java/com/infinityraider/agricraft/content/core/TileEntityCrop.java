@@ -416,7 +416,7 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
     protected void executeCrossGrowthTick() {
         // Do not do mutation growth ticks if the plant has weeds
         if(!this.hasWeeds() && !MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Cross.Pre(this))) {
-            if(AgriApi.getAgriMutationHandler().getActiveMutationEngine().handleMutationTick(this, this.streamNeighbours(), this.getRandom())) {
+            if(AgriApi.getAgriMutationHandler().getActiveCrossBreedEngine().handleCrossBreedTick(this, this.streamNeighbours(), this.getRandom())) {
                 MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Grow.Cross.Post(this));
             }
         }

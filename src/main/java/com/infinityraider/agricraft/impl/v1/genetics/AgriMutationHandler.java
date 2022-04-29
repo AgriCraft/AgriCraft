@@ -1,7 +1,8 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.*;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationEngine;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriCrossBreedEngine;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.impl.v1.stats.AgriStatRegistry;
@@ -22,38 +23,38 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
     }
 
     // Encapsulates the logic
-    private final IAgriMutationEngine defaultEngine;
+    private final IAgriCrossBreedEngine defaultEngine;
 
     // Mutates individual genes
     private final IMutator<IAgriPlant> defaultPlantMutator;
     private final IMutator<Integer> defaultStatMutator;
 
-    private IAgriMutationEngine engine;
+    private IAgriCrossBreedEngine engine;
     private IMutator<IAgriPlant> plantMutator;
     private IMutator<Integer> statMutator;
 
     private AgriMutationHandler() {
-        this.defaultEngine = new AgriMutationEngine();
+        this.defaultEngine = new AgriCrossBreedEngine();
         this.defaultPlantMutator = new AgriPlantMutator();
         this.defaultStatMutator = new AgriStatMutator();
-        this.setActiveMutationEngine(this.getDefaultMutationEngine())
+        this.setActiveCrossBreedEngine(this.getDefaultCrossBreedEngine())
                 .setActivePlantMutator(this.getDefaultPlantMutator())
                 .setActiveStatMutator(this.getDefaultStatMutator());
     }
 
     @Override
-    public IAgriMutationHandler setActiveMutationEngine(IAgriMutationEngine engine) {
+    public IAgriMutationHandler setActiveCrossBreedEngine(IAgriCrossBreedEngine engine) {
         this.engine = engine;
         return this;
     }
 
     @Override
-    public IAgriMutationEngine getActiveMutationEngine() {
+    public IAgriCrossBreedEngine getActiveCrossBreedEngine() {
         return this.engine;
     }
 
     @Override
-    public IAgriMutationEngine getDefaultMutationEngine() {
+    public IAgriCrossBreedEngine getDefaultCrossBreedEngine() {
         return this.defaultEngine;
     }
 
@@ -94,21 +95,57 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         public AgriPlantMutator() {}
 
         @Override
-        public IAgriGenePair<IAgriPlant> pickOrMutate(IAgriGene<IAgriPlant> gene, IAllele<IAgriPlant> first, IAllele<IAgriPlant> second,
+        public IAgriGenePair<IAgriPlant> pickOrMutate(IAgriCrop crop, IAgriGene<IAgriPlant> gene, IAllele<IAgriPlant> first, IAllele<IAgriPlant> second,
                                                       Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
 
             // Search for matching mutations
+            // get trigger results
+            // filter out any forbidden results
+            // order them randomly
+            // fetch the first
             return AgriMutationRegistry.getInstance().getMutationsFromParents(first.trait(), second.trait())
-                    // order them randomly
-                    .sorted((m1, m2) -> m1 == m2 ? 0 : random.nextBoolean() ? -1 : 1)
-                    // fetch one
-                    .findAny()
+                    // get trigger results
+                    .map(m -> new Tuple<>(m, this.evaluateTriggers(crop, m)))
+                    // filter out any forbidden results
+                    .filter(m -> m.getB() != IAgriMutation.TriggerResult.FORBID)
+                    // Find the first result, sorted by trigger result, but shuffled by mutation
+                    .min((a, b) -> this.sortAndShuffle(a, b, random))
                     // map it to its child, or to nothing based on the mutation success rate
-                    .flatMap(mutation -> Optional.ofNullable(mutation.getChance() > random.nextDouble() ? mutation.getChild() : null))
+                    .flatMap(m -> this.evaluate(m, random))
                     // map the result to a new gene pair with either of its parents as second gene
                     .map(plant -> gene.generateGenePair(gene.getAllele(plant), random.nextBoolean() ? first : second))
                     // if no mutation was found or if the mutation was unsuccessful, return a gene pair of the parents
                     .orElse(gene.generateGenePair(first, second));
+        }
+
+        protected IAgriMutation.TriggerResult evaluateTriggers(IAgriCrop crop, IAgriMutation mutation) {
+            return mutation.getTriggers().stream()
+                    .map(trigger -> trigger.getResult(crop, mutation))
+                    .sorted()
+                    .findFirst()
+                    .orElse(IAgriMutation.TriggerResult.IGNORE);
+        }
+
+        protected int sortAndShuffle(Tuple<IAgriMutation, IAgriMutation.TriggerResult> a, Tuple<IAgriMutation, IAgriMutation.TriggerResult> b, Random random) {
+            if(a.getB() == b.getB()) {
+                // in case the trigger result is identical, shuffle randomly
+                return a.getA() == b.getA() ? 0 : random.nextBoolean() ? -1 : 1;
+            }
+            // otherwise trigger result defines priority
+            return a.getB().compareTo(b.getB());
+        }
+
+        protected Optional<IAgriPlant> evaluate(Tuple<IAgriMutation, IAgriMutation.TriggerResult> mutation, Random random) {
+            // If the mutation is forced, no need to evaluate a probability
+            if(mutation.getB() == IAgriMutation.TriggerResult.FORCE) {
+                return Optional.of(mutation.getA().getChild());
+            }
+            // Evaluate mutation probability
+            if(mutation.getA().getChance() > random.nextDouble()) {
+                return Optional.of(mutation.getA().getChild());
+            }
+            // mutation failed
+            return Optional.empty();
         }
     }
 
@@ -117,7 +154,7 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
         public AgriStatMutator() {}
 
         @Override
-        public IAgriGenePair<Integer> pickOrMutate(IAgriGene<Integer> gene, IAllele<Integer> first, IAllele<Integer> second,
+        public IAgriGenePair<Integer> pickOrMutate(IAgriCrop crop, IAgriGene<Integer> gene, IAllele<Integer> first, IAllele<Integer> second,
                                                    Tuple<IAgriGenome, IAgriGenome> parents, Random random) {
             // return new gene pair with or without mutations, based on mutativity stat
             IAgriStat mutativity = AgriStatRegistry.getInstance().mutativityStat();
