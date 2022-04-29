@@ -47,10 +47,10 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
     List<IAgriPlant> getParents();
 
     /**
-     * @return a list of all triggers needed/enabling this mutation
+     * @return a list of all conditions needed/enabling this mutation
      */
     @Nonnull
-    List<Trigger> getTriggers();
+    List<Condition> getConditions();
 
     default boolean hasChild(@Nullable IAgriPlant plant) {
         return this.getChild().equals(plant);
@@ -77,28 +77,28 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
     }
 
     /**
-     * An interface representing triggers for mutations
+     * An interface representing conditions for mutations
      */
-    interface Trigger {
+    interface Condition {
         /**
-         * Checks the result of the trigger
+         * Checks the result of the condition
          * @param crop the crop on which the mutation would happen
          * @param mutation the mutation which has been selected
-         * @return the result for this trigger at the given crop
+         * @return the result for this condition at the given crop
          */
-        TriggerResult getResult(IAgriCrop crop, IAgriMutation mutation);
+        ConditionResult getResult(IAgriCrop crop, IAgriMutation mutation);
     }
 
     /**
      * enum representing the possible results of a trigger
      */
-    enum TriggerResult {
-        /** the trigger forbids the mutation, this overrules FORCE */
+    enum ConditionResult {
+        /** the condition forbids the mutation, this overrules FORCE */
         FORBID,
-        /** the trigger forces the mutation to happen */
+        /** the condition forces the mutation to happen */
         FORCE,
-        /** the trigger is ignored and default mutation logic is followed */
-        IGNORE
+        /** the condition is ignored and default mutation logic is followed */
+        PASS
     }
 
 }

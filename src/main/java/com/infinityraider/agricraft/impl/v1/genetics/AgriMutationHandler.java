@@ -107,7 +107,7 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
                     // get trigger results
                     .map(m -> new Tuple<>(m, this.evaluateTriggers(crop, m)))
                     // filter out any forbidden results
-                    .filter(m -> m.getB() != IAgriMutation.TriggerResult.FORBID)
+                    .filter(m -> m.getB() != IAgriMutation.ConditionResult.FORBID)
                     // Find the first result, sorted by trigger result, but shuffled by mutation
                     .min((a, b) -> this.sortAndShuffle(a, b, random))
                     // map it to its child, or to nothing based on the mutation success rate
@@ -118,15 +118,15 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
                     .orElse(gene.generateGenePair(first, second));
         }
 
-        protected IAgriMutation.TriggerResult evaluateTriggers(IAgriCrop crop, IAgriMutation mutation) {
-            return mutation.getTriggers().stream()
+        protected IAgriMutation.ConditionResult evaluateTriggers(IAgriCrop crop, IAgriMutation mutation) {
+            return mutation.getConditions().stream()
                     .map(trigger -> trigger.getResult(crop, mutation))
                     .sorted()
                     .findFirst()
-                    .orElse(IAgriMutation.TriggerResult.IGNORE);
+                    .orElse(IAgriMutation.ConditionResult.PASS);
         }
 
-        protected int sortAndShuffle(Tuple<IAgriMutation, IAgriMutation.TriggerResult> a, Tuple<IAgriMutation, IAgriMutation.TriggerResult> b, Random random) {
+        protected int sortAndShuffle(Tuple<IAgriMutation, IAgriMutation.ConditionResult> a, Tuple<IAgriMutation, IAgriMutation.ConditionResult> b, Random random) {
             if(a.getB() == b.getB()) {
                 // in case the trigger result is identical, shuffle randomly
                 return a.getA() == b.getA() ? 0 : random.nextBoolean() ? -1 : 1;
@@ -135,9 +135,9 @@ public final class AgriMutationHandler implements IAgriMutationHandler {
             return a.getB().compareTo(b.getB());
         }
 
-        protected Optional<IAgriPlant> evaluate(Tuple<IAgriMutation, IAgriMutation.TriggerResult> mutation, Random random) {
+        protected Optional<IAgriPlant> evaluate(Tuple<IAgriMutation, IAgriMutation.ConditionResult> mutation, Random random) {
             // If the mutation is forced, no need to evaluate a probability
-            if(mutation.getB() == IAgriMutation.TriggerResult.FORCE) {
+            if(mutation.getB() == IAgriMutation.ConditionResult.FORCE) {
                 return Optional.of(mutation.getA().getChild());
             }
             // Evaluate mutation probability

@@ -227,12 +227,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id) {
+    public Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Override
-    public boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger) {
+    public boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

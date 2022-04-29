@@ -515,32 +515,32 @@ public final class AgriApi {
     }
 
     /**
-     * Finds a registered json mutation trigger factory from their id
+     * Finds a registered json mutation condition factory factory from their id
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
      *
      * @param id the id
-     * @return optional containing the trigger, or empty if no such trigger is registered
+     * @return optional containing the factory, or empty if no such condition is registered
      */
     @Nonnull
-    public static Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id) {
-        return AgriApi.CONNECTOR.getJsonMutationTrigger(id);
+    public static Optional<IJsonMutationCondition.Factory> getJsonMutationConditionFactory(String id) {
+        return AgriApi.CONNECTOR.getJsonMutationCondition(id);
     }
 
     /**
-     * Tries to register a json mutation trigger
+     * Tries to register a json mutation condition
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
      *
-     * @param trigger the trigger factory to register
-     * @return true if successful (will fail in case a trigger with the same id is already registered)
+     * @param condition the condition factory to register
+     * @return true if successful (will fail in case a condition with the same id is already registered)
      */
-    public static boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger) {
-        return AgriApi.CONNECTOR.registerJsonMutationTrigger(trigger);
+    public static boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory condition) {
+        return AgriApi.CONNECTOR.registerJsonMutationCondition(condition);
     }
 
     /**

@@ -133,9 +133,9 @@ public interface IAgriApiConnector {
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback);
 
     @Nonnull
-    Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id);
+    Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id);
 
-    boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger);
+    boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger);
 
     boolean isObservingWithMagnifyingGlass(Player player);
 

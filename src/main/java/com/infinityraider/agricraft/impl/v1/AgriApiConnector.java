@@ -284,12 +284,12 @@ public class AgriApiConnector implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IJsonMutationTrigger.Factory> getJsonMutationTrigger(String id) {
+    public Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id) {
         return JsonMutationTriggerManager.get(id);
     }
 
     @Override
-    public boolean registerJsonMutationTrigger(@Nonnull IJsonMutationTrigger.Factory trigger) {
+    public boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger) {
         return false;
     }
 
