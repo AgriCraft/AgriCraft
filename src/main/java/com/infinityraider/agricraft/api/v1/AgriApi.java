@@ -544,6 +544,18 @@ public final class AgriApi {
     }
 
     /**
+     * Converts a json mutation condition to a usable agricraft mutation condition based on additional parameters
+     *
+     * @param condition the condition
+     * @param isRequired if the condition must be met for the mutation to be allowed
+     * @param guaranteedProbability the probability that this condition will force the mutation if met
+     * @return the mutation condition
+     */
+    public static IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability) {
+        return AgriApi.CONNECTOR.convertJsonMutationCondition(condition, isRequired, guaranteedProbability);
+    }
+
+    /**
      * Checks if a player is looking through a magnifying glass
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding

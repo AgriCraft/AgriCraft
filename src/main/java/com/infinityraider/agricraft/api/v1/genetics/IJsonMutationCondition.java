@@ -45,6 +45,17 @@ public interface IJsonMutationCondition {
     boolean isFulfilled(IAgriCrop crop, IAgriMutation mutation);
 
     /**
+     * Converts this json mutation condition into a usable IAgriMutation condition based on additional parameters
+     *
+     * @param isRequired this defines if this condition must be met in order to allow the mutation
+     * @param guaranteedProbability this defines the probability ([0; 1]) that this condition will force the mutation to occur
+     * @return the condition
+     */
+    default IAgriMutation.Condition convert(boolean isRequired, double guaranteedProbability) {
+        return AgriApi.convertJsonMutationCondition(this, isRequired, guaranteedProbability);
+    }
+
+    /**
      * Factory class to parse IJsonMutationCondition objects from json
      */
     interface Factory {

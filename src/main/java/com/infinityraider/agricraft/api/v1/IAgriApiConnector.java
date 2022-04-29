@@ -137,6 +137,8 @@ public interface IAgriApiConnector {
 
     boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger);
 
+    IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability);
+
     boolean isObservingWithMagnifyingGlass(Player player);
 
     @OnlyIn(Dist.CLIENT)

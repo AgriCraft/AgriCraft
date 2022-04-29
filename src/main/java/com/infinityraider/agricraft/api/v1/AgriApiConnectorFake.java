@@ -237,6 +237,11 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     }
 
     @Override
+    public IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
     public boolean isObservingWithMagnifyingGlass(Player player) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }

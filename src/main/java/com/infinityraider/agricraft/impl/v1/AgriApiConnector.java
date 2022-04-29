@@ -289,8 +289,13 @@ public class AgriApiConnector implements IAgriApiConnector {
     }
 
     @Override
-    public boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger) {
-        return false;
+    public boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory condition) {
+        return JsonMutationConditionManager.register(condition);
+    }
+
+    @Override
+    public IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability) {
+        return JsonMutationConditionManager.convert(condition, isRequired, guaranteedProbability);
     }
 
     @Override

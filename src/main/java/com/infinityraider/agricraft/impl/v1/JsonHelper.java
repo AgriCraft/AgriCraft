@@ -4,7 +4,6 @@ import com.agricraft.agricore.templates.AgriMutation;
 import com.agricraft.agricore.templates.AgriMutationCondition;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.genetics.Mutation;
@@ -72,23 +71,7 @@ public final class JsonHelper {
                     }
                 })
                 // convert the underlying condition into a mutation condition based on the json parameters
-                .map(test -> (crop, mutation) -> {
-                    if (test.isFulfilled(crop, mutation)) {
-                        // condition is met, roll for guarantee
-                        if (Math.random() <= condition.getGuaranteedChance()) {
-                            return IAgriMutation.ConditionResult.FORCE;
-                        } else {
-                            return IAgriMutation.ConditionResult.PASS;
-                        }
-                    } else {
-                        // condition is not met, check if it is required
-                        if (condition.isRequired()) {
-                            return IAgriMutation.ConditionResult.FORBID;
-                        } else {
-                            return IAgriMutation.ConditionResult.PASS;
-                        }
-                    }
-                });
+                .map(test -> test.convert(condition.isRequired(), condition.getGuaranteedChance()));
     }
 
 }
