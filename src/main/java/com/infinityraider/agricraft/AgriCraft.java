@@ -18,11 +18,11 @@ import com.infinityraider.agricraft.render.models.AgriSeedModelLoader;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
-import com.infinityraider.infinitylib.utility.registration.ModStructureRegistry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 @Mod(Reference.MOD_ID)
@@ -44,63 +44,75 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
         PluginHandler.initPlugins();
     }
 
+    @Nonnull
     @Override
     protected IProxy createClientProxy() {
         return new ClientProxy();
     }
 
+    @Nonnull
     @Override
     protected IProxy createServerProxy() {
         return new ServerProxy();
     }
 
+    @Nonnull
     @Override
     public AgriBlockRegistry getModBlockRegistry() {
         return AgriBlockRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriItemRegistry getModItemRegistry() {
         return AgriItemRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriFluidRegistry getModFluidRegistry() {
         return AgriFluidRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriTileRegistry getModTileRegistry() {
         return AgriTileRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriEnchantmentRegistry getModEnchantmentRegistry() {
         return AgriEnchantmentRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriRecipeSerializerRegistry getModRecipeSerializerRegistry() {
         return AgriRecipeSerializerRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriLootModifierRegistry getModLootModifierSerializerRegistry() {
         return AgriLootModifierRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriSoundRegistry getModSoundRegistry() {
         return AgriSoundRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
     public AgriParticleRegistry getModParticleRegistry() {
         return AgriParticleRegistry.getInstance();
     }
 
+    @Nonnull
     @Override
-    public ModStructureRegistry getStructureRegistry() {
+    public AgriStructureRegistry getStructureRegistry() {
         return AgriStructureRegistry.getInstance();
     }
 

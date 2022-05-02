@@ -5,10 +5,11 @@ import com.infinityraider.agricraft.content.world.CropStickProcessor;
 import com.infinityraider.agricraft.content.world.Mossify10Processor;
 import com.infinityraider.infinitylib.utility.registration.ModStructureRegistry;
 import com.infinityraider.infinitylib.world.IInfStructure;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
 public final class AgriStructureRegistry extends ModStructureRegistry {
     private static final AgriStructureRegistry INSTANCE = new AgriStructureRegistry();
@@ -17,8 +18,10 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
         return INSTANCE;
     }
 
-    public final RegistryObject<StructureProcessorList> cropStickProcessor;
-    public final RegistryObject<StructureProcessorList> cropSticksAndMossify10PercentProcessor;
+    public final StructureProcessorType<CropStickProcessor> cropStickProcessor;
+
+    public final Holder<StructureProcessorList> cropStickProcessorList;
+    public final Holder<StructureProcessorList> cropSticksAndMossify10PercentProcessor;
 
     public final IInfStructure desertStandard;
     public final IInfStructure plainsStandard;
@@ -34,24 +37,22 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
     public final IInfStructure IRRIGATED_TAIGA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
 
     protected AgriStructureRegistry() {
-        // super constructor
-        super(AgriCraft.instance);
-
         // processors
-        this.cropStickProcessor = this.processor("crop_sticks", CropStickProcessor.getInstance());
-        this.cropSticksAndMossify10PercentProcessor = this.processor("crop_sticks_and_mossify", CropStickProcessor.getInstance(), Mossify10Processor.getInstance());
+        this.cropStickProcessor = this.processor(id("crop_sticks"), () -> CropStickProcessor.CODEC);
+        this.cropStickProcessorList = this.processorList(id("crop_sticks"), CropStickProcessor.getInstance());
+        this.cropSticksAndMossify10PercentProcessor = this.processorList(id("crop_sticks_and_mossify"), CropStickProcessor.getInstance(), Mossify10Processor.getInstance());
 
         // greenhouses
         this.desertStandard = this.structure(
-                GreenHouses.Standard.DESERT,
+                id(GreenHouses.Standard.DESERT),
                 Pools.DESERT,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessor,
+                cropStickProcessorList,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.plainsStandard = this.structure(
-                GreenHouses.Standard.PLAINS,
+                id(GreenHouses.Standard.PLAINS),
                 Pools.PLAINS,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
                 cropSticksAndMossify10PercentProcessor,
@@ -59,23 +60,23 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
         );
 
         this.savannaStandard = this.structure(
-                GreenHouses.Standard.SAVANNA,
+                id(GreenHouses.Standard.SAVANNA),
                 Pools.SAVANNA,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessor,
+                cropStickProcessorList,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.snowyStandard = this.structure(
-                GreenHouses.Standard.SNOWY,
+                id(GreenHouses.Standard.SNOWY),
                 Pools.SNOWY,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessor,
+                cropStickProcessorList,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.taigaStandard = this.structure(
-                GreenHouses.Standard.TAIGA,
+                id(GreenHouses.Standard.TAIGA),
                 Pools.TAIGA,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
                 cropSticksAndMossify10PercentProcessor,
@@ -115,5 +116,9 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
         public static final ResourceLocation TAIGA = new ResourceLocation("village/taiga/houses");
 
         private Pools() {}
+    }
+
+    private static ResourceLocation id(String name) {
+        return new ResourceLocation(AgriCraft.instance.getModId(), name);
     }
 }
