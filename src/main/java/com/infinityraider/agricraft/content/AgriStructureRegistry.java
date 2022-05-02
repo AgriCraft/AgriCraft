@@ -1,42 +1,105 @@
 package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.content.world.StructureGreenHouse;
-import com.infinityraider.agricraft.content.world.StructureGreenHouseIrrigated;
-import net.minecraft.data.worldgen.ProcessorLists;
+import com.infinityraider.agricraft.content.world.CropStickProcessor;
+import com.infinityraider.agricraft.content.world.Mossify10Processor;
+import com.infinityraider.infinitylib.utility.registration.ModStructureRegistry;
+import com.infinityraider.infinitylib.world.IInfStructure;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraftforge.registries.RegistryObject;
 
-public final class AgriStructureRegistry {
-    public static final StructureGreenHouse STANDARD_DESERT = new StructureGreenHouse(GreenHouses.Standard.DESERT, Pools.DESERT);
-    public static final StructureGreenHouse STANDARD_PLAINS = new StructureGreenHouse(GreenHouses.Standard.PLAINS, Pools.PLAINS, ProcessorLists.MOSSIFY_10_PERCENT);
-    public static final StructureGreenHouse STANDARD_SAVANNA = new StructureGreenHouse(GreenHouses.Standard.SAVANNA, Pools.SAVANNA);
-    public static final StructureGreenHouse STANDARD_SNOWY = new StructureGreenHouse(GreenHouses.Standard.SNOWY, Pools.SNOWY);
-    public static final StructureGreenHouse STANDARD_TAIGA = new StructureGreenHouse(GreenHouses.Standard.TAIGA, Pools.TAIGA, ProcessorLists.MOSSIFY_10_PERCENT);
+public final class AgriStructureRegistry extends ModStructureRegistry {
+    private static final AgriStructureRegistry INSTANCE = new AgriStructureRegistry();
+
+    public static AgriStructureRegistry getInstance() {
+        return INSTANCE;
+    }
+
+    public final RegistryObject<StructureProcessorList> cropStickProcessor;
+    public final RegistryObject<StructureProcessorList> cropSticksAndMossify10PercentProcessor;
+
+    public final IInfStructure desertStandard;
+    public final IInfStructure plainsStandard;
+    public final IInfStructure savannaStandard;
+    public final IInfStructure snowyStandard;
+    public final IInfStructure taigaStandard;
 
     // TODO: design irrigated greenhouses
-    public static final StructureGreenHouseIrrigated IRRIGATED_DESERT = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
-    public static final StructureGreenHouseIrrigated IRRIGATED_PLAINS = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.PLAINS, Pools.PLAINS);
-    public static final StructureGreenHouseIrrigated IRRIGATED_SAVANNA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SAVANNA, Pools.SAVANNA);
-    public static final StructureGreenHouseIrrigated IRRIGATED_SNOWY = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SNOWY, Pools.SNOWY);
-    public static final StructureGreenHouseIrrigated IRRIGATED_TAIGA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
+    public final IInfStructure IRRIGATED_DESERT = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
+    public final IInfStructure IRRIGATED_PLAINS = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.PLAINS, Pools.PLAINS);
+    public final IInfStructure IRRIGATED_SAVANNA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SAVANNA, Pools.SAVANNA);
+    public final IInfStructure IRRIGATED_SNOWY = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SNOWY, Pools.SNOWY);
+    public final IInfStructure IRRIGATED_TAIGA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
+
+    protected AgriStructureRegistry() {
+        // super constructor
+        super(AgriCraft.instance);
+
+        // processors
+        this.cropStickProcessor = this.processor("crop_sticks", CropStickProcessor.getInstance());
+        this.cropSticksAndMossify10PercentProcessor = this.processor("crop_sticks_and_mossify", CropStickProcessor.getInstance(), Mossify10Processor.getInstance());
+
+        // greenhouses
+        this.desertStandard = this.structure(
+                GreenHouses.Standard.DESERT,
+                Pools.DESERT,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                cropStickProcessor,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.plainsStandard = this.structure(
+                GreenHouses.Standard.PLAINS,
+                Pools.PLAINS,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                cropSticksAndMossify10PercentProcessor,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.savannaStandard = this.structure(
+                GreenHouses.Standard.SAVANNA,
+                Pools.SAVANNA,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                cropStickProcessor,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.snowyStandard = this.structure(
+                GreenHouses.Standard.SNOWY,
+                Pools.SNOWY,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                cropStickProcessor,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.taigaStandard = this.structure(
+                GreenHouses.Standard.TAIGA,
+                Pools.TAIGA,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                cropSticksAndMossify10PercentProcessor,
+                StructureTemplatePool.Projection.RIGID
+        );
+    }
 
     public static final class GreenHouses {
         public static final class Standard {
-            public static final ResourceLocation DESERT = new ResourceLocation(AgriCraft.instance.getModId(), "village/desert/greenhouse");
-            public static final ResourceLocation PLAINS = new ResourceLocation(AgriCraft.instance.getModId(), "village/plains/greenhouse");
-            public static final ResourceLocation SAVANNA = new ResourceLocation(AgriCraft.instance.getModId(), "village/savanna/greenhouse");
-            public static final ResourceLocation SNOWY = new ResourceLocation(AgriCraft.instance.getModId(), "village/snowy/greenhouse");
-            public static final ResourceLocation TAIGA = new ResourceLocation(AgriCraft.instance.getModId(), "village/taiga/greenhouse");
+            public static final String DESERT = "village/desert/greenhouse";
+            public static final String PLAINS = "village/plains/greenhouse";
+            public static final String SAVANNA = "village/savanna/greenhouse";
+            public static final String SNOWY = "village/snowy/greenhouse";
+            public static final String TAIGA = "village/taiga/greenhouse";
 
             private Standard() {}
         }
 
         public static final class Irrigated {
-            public static final ResourceLocation DESERT =new ResourceLocation(AgriCraft.instance.getModId(), "village/desert/greenhouse_irrigated");
-            public static final ResourceLocation PLAINS = new ResourceLocation(AgriCraft.instance.getModId(), "village/plains/greenhouse_irrigated");
-            public static final ResourceLocation SAVANNA = new ResourceLocation(AgriCraft.instance.getModId(), "village/savanna/greenhouse_irrigated");
-            public static final ResourceLocation SNOWY = new ResourceLocation(AgriCraft.instance.getModId(), "village/snowy/greenhouse_irrigated");
-            public static final ResourceLocation TAIGA = new ResourceLocation(AgriCraft.instance.getModId(), "village/taiga/greenhouse_irrigated");
+            public static final String DESERT = "village/desert/greenhouse_irrigated";
+            public static final String PLAINS =  "village/plains/greenhouse_irrigated";
+            public static final String SAVANNA =  "village/savanna/greenhouse_irrigated";
+            public static final String SNOWY =  "village/snowy/greenhouse_irrigated";
+            public static final String TAIGA =  "village/taiga/greenhouse_irrigated";
 
             private Irrigated() {}
         }

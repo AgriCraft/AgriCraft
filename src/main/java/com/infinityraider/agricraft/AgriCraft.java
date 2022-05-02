@@ -18,6 +18,7 @@ import com.infinityraider.agricraft.render.models.AgriSeedModelLoader;
 import com.infinityraider.infinitylib.InfinityMod;
 import com.infinityraider.infinitylib.network.INetworkWrapper;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
+import com.infinityraider.infinitylib.utility.registration.ModStructureRegistry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
@@ -99,8 +100,8 @@ public class AgriCraft extends InfinityMod<IProxy, Config> {
     }
 
     @Override
-    public Class<?> getStructureRegistry() {
-        return AgriStructureRegistry.class;
+    public ModStructureRegistry getStructureRegistry() {
+        return AgriStructureRegistry.getInstance();
     }
 
     @Override
