@@ -18,7 +18,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true// MixinGradle:
+        classpath 'org.spongepowered:mixingradle:0.7.+'
 		classpath 'org.parchmentmc:librarian:1.+'
     }
 }
@@ -39,6 +40,7 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
 
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -219,6 +221,9 @@ dependencies {
     // Minecraft
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.42'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 
+    // Apply Mixin AP
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     // AgriCore
     embed project(':AgriCore')
     
@@ -245,7 +250,7 @@ dependencies {
 
     //Immersive Engineering
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
-    //runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
+    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
     //Jade
     compileOnly fg.deobf("curse.maven:jade-324717:3681449")
