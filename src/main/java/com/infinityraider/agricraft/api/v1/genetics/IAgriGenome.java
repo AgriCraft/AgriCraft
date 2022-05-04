@@ -241,6 +241,22 @@ public interface IAgriGenome extends IAgriPlantProvider, IAgriStatProvider, IAgr
         }
 
         /**
+         * Populates the genome with random stats, based on allowed minimum and maximum values
+         *
+         * @param minFunc Function to limit the minimum value of the stats that can appear in the genome (inclusive)
+         * @param maxFunc Function to limit the maximum value of the stats that can appear in the genome (inclusive)
+         * @param random pseudo-random generator
+         * @return this
+         */
+        default Builder randomStats(ToIntFunction<IAgriStat> minFunc, ToIntFunction<IAgriStat> maxFunc, Random random) {
+            return this.randomStats(stat -> {
+                int mn = minFunc.applyAsInt(stat);
+                int mx = maxFunc.applyAsInt(stat);
+                return mn + random.nextInt(mx - mn + 1);
+            });
+        }
+
+        /**
          * Populates the genome with random stats, using a predefined function to randomly generate the stat values
          *
          * @param randomizer pre-defined function to randomly generate values for stats

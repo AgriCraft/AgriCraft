@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -82,6 +83,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IAgriSeasonLogic connectSeasonLogic();
+
+    @Nonnull
+    IWorldGenPlantManager connectWorldGenPlantManager();
 
     @Nonnull
     ItemStack plantToSeedStack(IAgriPlant plant, int amount);

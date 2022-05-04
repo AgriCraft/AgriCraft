@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.world.WorldGenPlantManager;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
 
@@ -62,6 +63,7 @@ public class JsonPlant implements IAgriPlant {
         this.growthRequirement = GrowthReqInitializer.initGrowthRequirement(plant, this.callbacks);
         this.seedTexture = new ResourceLocation(plant.getSeedTexture());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
+        WorldGenPlantManager.registerJsonRule(this, plant);
     }
 
     private List<FuzzyStack> initSeedItems(AgriPlant plant) {

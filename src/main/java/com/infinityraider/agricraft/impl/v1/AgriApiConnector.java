@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -24,6 +25,7 @@ import com.infinityraider.agricraft.capability.CapabilityCrop;
 import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
+import com.infinityraider.agricraft.content.world.WorldGenPlantManager;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.handler.MagnifyingGlassViewHandler;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
@@ -170,6 +172,12 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     public IAgriSeasonLogic connectSeasonLogic() {
         return this.seasonLogic;
+    }
+
+    @Nonnull
+    @Override
+    public IWorldGenPlantManager connectWorldGenPlantManager() {
+        return WorldGenPlantManager.getInstance();
     }
 
     @Nonnull

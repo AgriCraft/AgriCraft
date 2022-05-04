@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
@@ -256,6 +257,21 @@ public final class AgriApi {
     @Nonnull
     public static IAgriSeasonLogic getSeasonLogic() {
         return AgriApi.CONNECTOR.connectSeasonLogic();
+    }
+
+
+    /**
+     * Fetches the AgriCraft Plant World Gen manager
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the AgriCraft plant worldgen manager instance
+     */
+    @Nonnull
+    public static IWorldGenPlantManager getWorldGenPlantManager() {
+        return AgriApi.CONNECTOR.connectWorldGenPlantManager();
     }
 
     /**
