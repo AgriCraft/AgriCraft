@@ -20,8 +20,11 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
 
     public final StructureProcessorType<CropStickProcessor> cropStickProcessor;
 
-    public final Holder<StructureProcessorList> cropStickProcessorList;
-    public final Holder<StructureProcessorList> cropSticksAndMossify10PercentProcessor;
+    public final Holder<StructureProcessorList> pListDesertStandard;
+    public final Holder<StructureProcessorList> pListPlainsStandard;
+    public final Holder<StructureProcessorList> pListSavannaStandard;
+    public final Holder<StructureProcessorList> pListSnowyStandard;
+    public final Holder<StructureProcessorList> pListTaigaStandard;
 
     public final IInfStructure desertStandard;
     public final IInfStructure plainsStandard;
@@ -39,68 +42,77 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
     protected AgriStructureRegistry() {
         // processors
         this.cropStickProcessor = this.processor(id("crop_sticks"), () -> CropStickProcessor.CODEC);
-        this.cropStickProcessorList = this.processorList(id("crop_sticks"), CropStickProcessor.getInstance());
-        this.cropSticksAndMossify10PercentProcessor = this.processorList(id("crop_sticks_and_mossify"), CropStickProcessor.getInstance(), Mossify10Processor.getInstance());
+
+        // processor lists
+        this.pListDesertStandard = this.processorList(id("greenhouse_standard_desert"), new CropStickProcessor(GreenHouses.Standard.DESERT));
+        this.pListPlainsStandard = this.processorList(id("greenhouse_standard_plains"), new CropStickProcessor(GreenHouses.Standard.PLAINS), Mossify10Processor.getInstance());
+        this.pListSavannaStandard = this.processorList(id("greenhouse_standard_savanna"), new CropStickProcessor(GreenHouses.Standard.SAVANNA));
+        this.pListSnowyStandard = this.processorList(id("greenhouse_standard_snowy"), new CropStickProcessor(GreenHouses.Standard.SNOWY));
+        this.pListTaigaStandard = this.processorList(id("greenhouse_standard_taiga"), new CropStickProcessor(GreenHouses.Standard.TAIGA), Mossify10Processor.getInstance());
 
         // greenhouses
         this.desertStandard = this.structure(
-                id(GreenHouses.Standard.DESERT),
+                GreenHouses.Standard.DESERT,
                 Pools.DESERT,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessorList,
+                pListDesertStandard,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.plainsStandard = this.structure(
-                id(GreenHouses.Standard.PLAINS),
+                GreenHouses.Standard.PLAINS,
                 Pools.PLAINS,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropSticksAndMossify10PercentProcessor,
+                pListPlainsStandard,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.savannaStandard = this.structure(
-                id(GreenHouses.Standard.SAVANNA),
+                GreenHouses.Standard.SAVANNA,
                 Pools.SAVANNA,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessorList,
+                pListSavannaStandard,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.snowyStandard = this.structure(
-                id(GreenHouses.Standard.SNOWY),
+                GreenHouses.Standard.SNOWY,
                 Pools.SNOWY,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropStickProcessorList,
+                pListSnowyStandard,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.taigaStandard = this.structure(
-                id(GreenHouses.Standard.TAIGA),
+                GreenHouses.Standard.TAIGA,
                 Pools.TAIGA,
                 AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                cropSticksAndMossify10PercentProcessor,
+                pListTaigaStandard,
                 StructureTemplatePool.Projection.RIGID
         );
     }
 
+    private static ResourceLocation id(String name) {
+        return new ResourceLocation(AgriCraft.instance.getModId(), name);
+    }
+
     public static final class GreenHouses {
         public static final class Standard {
-            public static final String DESERT = "village/desert/greenhouse";
-            public static final String PLAINS = "village/plains/greenhouse";
-            public static final String SAVANNA = "village/savanna/greenhouse";
-            public static final String SNOWY = "village/snowy/greenhouse";
-            public static final String TAIGA = "village/taiga/greenhouse";
+            public static final ResourceLocation DESERT = id("village/desert/greenhouse");
+            public static final ResourceLocation PLAINS = id("village/plains/greenhouse");
+            public static final ResourceLocation SAVANNA = id("village/savanna/greenhouse");
+            public static final ResourceLocation SNOWY = id("village/snowy/greenhouse");
+            public static final ResourceLocation TAIGA = id("village/taiga/greenhouse");
 
             private Standard() {}
         }
 
         public static final class Irrigated {
-            public static final String DESERT = "village/desert/greenhouse_irrigated";
-            public static final String PLAINS =  "village/plains/greenhouse_irrigated";
-            public static final String SAVANNA =  "village/savanna/greenhouse_irrigated";
-            public static final String SNOWY =  "village/snowy/greenhouse_irrigated";
-            public static final String TAIGA =  "village/taiga/greenhouse_irrigated";
+            public static final ResourceLocation DESERT = id("village/desert/greenhouse_irrigated");
+            public static final ResourceLocation PLAINS =  id("village/plains/greenhouse_irrigated");
+            public static final ResourceLocation SAVANNA =  id("village/savanna/greenhouse_irrigated");
+            public static final ResourceLocation SNOWY =  id("village/snowy/greenhouse_irrigated");
+            public static final ResourceLocation TAIGA =  id("village/taiga/greenhouse_irrigated");
 
             private Irrigated() {}
         }
@@ -116,9 +128,5 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
         public static final ResourceLocation TAIGA = new ResourceLocation("village/taiga/houses");
 
         private Pools() {}
-    }
-
-    private static ResourceLocation id(String name) {
-        return new ResourceLocation(AgriCraft.instance.getModId(), name);
     }
 }

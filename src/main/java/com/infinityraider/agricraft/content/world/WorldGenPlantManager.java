@@ -6,6 +6,8 @@ import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
@@ -34,6 +36,12 @@ public class WorldGenPlantManager implements IWorldGenPlantManager {
     @Override
     public void registerGenerator(int weight, Function<Random, IAgriGenome> generator, ResourceLocation structure) {
         this.settings.computeIfAbsent(structure, StructureSettings::new).addRule(weight, generator);
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onServerClosed(ServerStoppedEvent event) {
+        this.settings.clear();
     }
 
     private static class StructureSettings {

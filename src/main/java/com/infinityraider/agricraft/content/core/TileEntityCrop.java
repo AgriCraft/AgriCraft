@@ -59,7 +59,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebuggable {
@@ -74,6 +76,28 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
     private static final IAgriGrowthStage NO_GROWTH = NoGrowth.getInstance();
     private static final IAgriWeed NO_WEED = NoWeed.getInstance();
     private static final IAgriStatsMap NO_STATS = NoStats.getInstance();
+
+    // NBT readers and writers
+    public static final BiConsumer<Optional<IAgriGenome>, CompoundTag> GENOME_WRITER = (optional, tag) -> optional.ifPresent(genome -> {
+        CompoundTag geneTag = new CompoundTag();
+        genome.writeToNBT(geneTag);
+        tag.put(AgriNBT.GENOME, geneTag);
+    });
+    public static final Function<CompoundTag, Optional<IAgriGenome>> GENOME_READER = (tag) -> {
+        if (tag.contains(AgriNBT.GENOME)) {
+            IAgriGenome genome = AgriApi.getAgriGenomeBuilder(NO_PLANT).build();
+            genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
+            return Optional.of(genome);
+        } else {
+            return Optional.empty();
+        }
+    };
+    public static final BiConsumer<IAgriGrowthStage, CompoundTag> GROWTH_WRITER = (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId());
+    public static final Function<CompoundTag, IAgriGrowthStage> GROWTH_READER = (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH);
+    public static final BiConsumer<IAgriWeed, CompoundTag> WEED_WRITER = (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId());
+    public static final Function<CompoundTag, IAgriWeed> WEED_READER = (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED);
+    public static final BiConsumer<IAgriGrowthStage, CompoundTag> WEED_GROWTH_WRITER = (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId());
+    public static final Function<CompoundTag, IAgriGrowthStage> WEED_GROWTH_READER = (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH);
 
     // Model data
     private final ModelDataMap data;
@@ -107,26 +131,14 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
         // Initialize automatically synced fields
         this.genome = this.createAutoSyncedField(
                 Optional.empty(),
-                (optional, tag) -> optional.ifPresent(genome -> {
-                    CompoundTag geneTag = new CompoundTag();
-                    genome.writeToNBT(geneTag);
-                    tag.put(AgriNBT.GENOME, geneTag);
-                }),
-                (tag) -> {
-                    if (tag.contains(AgriNBT.GENOME)) {
-                        IAgriGenome genome = AgriApi.getAgriGenomeBuilder(NO_PLANT).build();
-                        genome.readFromNBT(tag.getCompound(AgriNBT.GENOME));
-                        return Optional.of(genome);
-                    } else {
-                        return Optional.empty();
-                    }
-                },
+                GENOME_WRITER,
+                GENOME_READER,
                 CoreHandler::isInitialized,
                 Optional.empty());
 
         this.growth = this.getAutoSyncedFieldBuilder(NO_GROWTH,
-                (growth, tag) -> tag.putString(AgriNBT.GROWTH, growth.getId()),
-                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.GROWTH)).orElse(NO_GROWTH),
+                GROWTH_WRITER,
+                GROWTH_READER,
                 CoreHandler::isInitialized,
                 NO_GROWTH).withCallBack((stage) -> {
             this.getModelData().setData(PROPERTY_PLANT_GROWTH, stage);
@@ -134,14 +146,14 @@ public class TileEntityCrop  extends TileEntityBase implements IAgriCrop, IDebug
         }).withRenderUpdate().build();
 
         this.weed = this.getAutoSyncedFieldBuilder(NO_WEED,
-                (weed, tag) -> tag.putString(AgriNBT.WEED, weed.getId()),
-                (tag) -> AgriApi.getWeedRegistry().get(tag.getString(AgriNBT.WEED)).orElse(NO_WEED),
+                WEED_WRITER,
+                WEED_READER,
                 CoreHandler::isInitialized,
                 NO_WEED).withCallBack(weed -> this.getModelData().setData(PROPERTY_WEED, weed)).withRenderUpdate().build();
 
         this.weedGrowth = this.getAutoSyncedFieldBuilder(NO_GROWTH,
-                (growth, tag) -> tag.putString(AgriNBT.WEED_GROWTH, growth.getId()),
-                (tag) -> AgriApi.getGrowthStageRegistry().get(tag.getString(AgriNBT.WEED_GROWTH)).orElse(NO_GROWTH),
+                WEED_GROWTH_WRITER,
+                WEED_GROWTH_READER,
                 CoreHandler::isInitialized,
                 NO_GROWTH).withCallBack(stage -> this.getModelData().setData(PROPERTY_WEED_GROWTH, stage)).withRenderUpdate().build();
 

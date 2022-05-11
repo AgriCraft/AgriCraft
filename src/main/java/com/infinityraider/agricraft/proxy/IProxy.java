@@ -3,6 +3,7 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.capability.*;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.content.tools.ItemMagnifyingGlass;
+import com.infinityraider.agricraft.content.world.WorldGenPlantManager;
 import com.infinityraider.agricraft.handler.*;
 import com.infinityraider.agricraft.impl.v1.JsonObjectFactory;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
@@ -68,6 +69,7 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerEventHandler(SeedBagEnchantingHandler.getInstance());
         this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
         this.registerEventHandler(VanillaSeedConversionHandler.getInstance());
+        this.registerEventHandler(WorldGenPlantManager.getInstance());
     }
 
     @Override
