@@ -10,6 +10,7 @@ Changelog
  - ADDED: Amathyllis, a resource crop for amethyst
  - ADDED: Json callback for Botania mana consumption for growth, by default active on the Botania flower crops
  - ADDED: Conditions for mutations, which can be specified in the jsons as well as through the API
+ - ADDED: Greenhouses which will now generate in villages with randomly generated crops
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)
