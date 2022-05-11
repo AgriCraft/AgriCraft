@@ -62,10 +62,17 @@ public class CropStickProcessor extends StructureProcessor {
         }
         // set the nbt to load to the tile entity
         if (worldInfo.nbt.contains(FIELD_GENOME, Tag.TAG_COMPOUND) && worldInfo.nbt.contains(FIELD_GROWTH, Tag.TAG_COMPOUND)) {
-            AgriApi.getWorldGenPlantManager().generateGenomeFor(this.getStructure(), settings.getRandom(worldInfo.pos)).ifPresent(genome -> {
+            boolean planted = AgriApi.getWorldGenPlantManager().generateGenomeFor(this.getStructure(), settings.getRandom(worldInfo.pos)).map(genome -> {
                 TileEntityCrop.GENOME_WRITER.accept(Optional.of(genome), worldInfo.nbt.getCompound(FIELD_GENOME));
                 TileEntityCrop.GROWTH_WRITER.accept(genome.getPlant().getInitialGrowthStage(), worldInfo.nbt.getCompound(FIELD_GROWTH));
-            });
+                return true;
+            }).orElse(false);
+            // if a plant has been set, we must also set the block state to indicate that there is a plant
+            if(planted) {
+                return new StructureTemplate.StructureBlockInfo(worldInfo.pos, blockCrop.applyPlant(state), worldInfo.nbt.copy());
+            } else {
+                AgriCraft.instance.getLogger().debug("Skipped generation of random plant as none are registered for " + this.getStructure());
+            }
         }
         // return the world info
         return worldInfo;
