@@ -9,6 +9,7 @@ import com.infinityraider.agricraft.util.GreenHouseHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
@@ -149,7 +150,7 @@ public class GreenHouseHandler {
         }
 
         protected boolean isSolidBlock(BlockState state, BlockPos pos, Direction dir) {
-            return state.isFaceSturdy(this.getWorld(), pos, dir) || state.isFaceSturdy(this.getWorld(), pos, dir.getOpposite());
+            return state.getBlock() instanceof DoorBlock || state.isFaceSturdy(this.getWorld(), pos, dir) || state.isFaceSturdy(this.getWorld(), pos, dir.getOpposite());
         }
 
         protected boolean isGreenHouseGlass(BlockState state) {
