@@ -9,7 +9,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.gui.Font;
@@ -133,15 +132,12 @@ public class AgriGenomeRenderer implements IRenderUtilities {
         // Rotate according to the index
         transforms.mulPose(new Quaternion(Vector3f.YP, rotation, false));
 
-        // Fetch transformation matrix
-        Matrix4f matrix = transforms.last().pose();
-
         // First helix
-        this.drawHelix(genePairs, index, radius, angleOffset, heightStep, angleStep, points, buffer, matrix, true, alpha, color);
+        this.drawHelix(genePairs, index, radius, angleOffset, heightStep, angleStep, points, buffer, transforms.last(), true, alpha, color);
         // Second helix
-        this.drawHelix(genePairs, index, radius, PI + angleOffset, heightStep, angleStep, points, buffer, matrix, false, alpha, color);
+        this.drawHelix(genePairs, index, radius, PI + angleOffset, heightStep, angleStep, points, buffer, transforms.last(), false, alpha, color);
         // Spokes
-        this.drawSpokes(genePairs, index, radius, angleOffset, PI + angleOffset, heightStep, angleStep, buffer, matrix,alpha, color);
+        this.drawSpokes(genePairs, index, radius, angleOffset, PI + angleOffset, heightStep, angleStep, buffer, transforms.last(), alpha, color);
 
         // Pop transformation matrix from the stack
         transforms.popPose();
@@ -176,7 +172,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
     }
 
     protected void drawHelix(List<IAgriGenePair<?>> genePairs, int active, float radius, float phase, float dHeight, float dAngle,
-                             int points, MultiBufferSource buffer, Matrix4f matrix, boolean dominant, float alpha, boolean color) {
+                             int points, MultiBufferSource buffer, PoseStack.Pose matrix, boolean dominant, float alpha, boolean color) {
         Vector3f prev = new Vector3f(radius * Mth.cos(-phase), dHeight*points, radius * Mth.sin(-phase));
         Vector3f next;
         for(int i = 0; i < points; i++) {
@@ -224,7 +220,7 @@ public class AgriGenomeRenderer implements IRenderUtilities {
     }
 
     protected void drawSpokes(List<IAgriGenePair<?>> genePairs, int active, float radius, float phase1, float phase2,
-                              float dHeight, float dAngle, MultiBufferSource buffer, Matrix4f matrix, float alpha, boolean color) {
+                              float dHeight, float dAngle, MultiBufferSource buffer, PoseStack.Pose matrix, float alpha, boolean color) {
         for(int spoke = 0; spoke < genePairs.size(); spoke++) {
             // Find equivalent point index
             int i = spoke * POINTS_PER_GENE + POINTS_PER_GENE / 2;
@@ -272,19 +268,20 @@ public class AgriGenomeRenderer implements IRenderUtilities {
             }
         }
     }
-    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, Vector3f pos, Vector3f normal, Vector3f color, float a, float width) {
+
+    protected void addVertex(MultiBufferSource buffer, PoseStack.Pose matrix, Vector3f pos, Vector3f normal, Vector3f color, float a, float width) {
         this.addVertex(buffer, matrix, pos, normal, color.x(), color.y(), color.z(), a, width);
     }
 
-    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, Vector3f pos, Vector3f normal, float r, float g, float b, float a, float width) {
+    protected void addVertex(MultiBufferSource buffer, PoseStack.Pose matrix, Vector3f pos, Vector3f normal, float r, float g, float b, float a, float width) {
         this.addVertex(buffer, matrix, pos.x(), pos.y(), pos.z(), normal.x(), normal.y(), normal.z(), r, g, b, a, width);
     }
 
-    protected void addVertex(MultiBufferSource buffer, Matrix4f matrix, float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a, float width) {
+    protected void addVertex(MultiBufferSource buffer, PoseStack.Pose matrix, float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a, float width) {
         VertexConsumer builder = this.getVertexBuilder(buffer, this.getRenderType(width));
-        builder.vertex(matrix, x, y, z)
+        builder.vertex(matrix.pose(), x, y, z)
                 .color(r, g, b, a)
-                .normal(nx, ny, nz)
+                .normal(matrix.normal(), nx, ny, nz)
                 .endVertex();
     }
 
