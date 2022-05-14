@@ -1,0 +1,10 @@
+{
+  "homepage": "https://www.curseforge.com/minecraft/mc-mods/agricraft",
+  "promos": {
+    "1.18.2-latest": "1.18.2-3.1.0",
+    "1.18.2-recommended": "1.18.2-3.1.0"
+  },
+  "1.18.2": {
+    "1.18.2-3.1.0": "1.18.2 version of AgriCraft"
+  }
+}

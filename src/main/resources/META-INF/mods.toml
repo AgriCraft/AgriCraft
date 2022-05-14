@@ -8,6 +8,7 @@ modId="agricraft"
 version="1.18.2-3.1.0"
 displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
+updateJSONURL = "https://raw.githubusercontent.com/AgriCraft/AgriCraft/master/version.json"
 logoFile="logo.png"
 authors="InfinityRaider"
 description='''
