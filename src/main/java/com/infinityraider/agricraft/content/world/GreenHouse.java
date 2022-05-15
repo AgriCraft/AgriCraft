@@ -13,6 +13,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class GreenHouse {
         MutableInt ceilingGlassCounter = new MutableInt(0);
         this.parts = blocks.entrySet().stream().collect(Collectors.toMap(
                 entry -> new ChunkPos(entry.getKey()),
-                entry -> handleMapEntry(entry, !blocks.containsKey(entry.getKey().above()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
+                entry -> handleMapEntry(entry, isCeiling(entry.getKey(), blocks), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
                 GreenHouse::mergeMaps
         )).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -263,6 +264,16 @@ public class GreenHouse {
                 Math.max(entry.getKey().getZ(), max.getZ())
         );
         return map;
+    }
+
+    private static boolean isCeiling(BlockPos pos, Map<BlockPos, GreenHouse.BlockType> blocks) {
+        if(blocks.containsKey(pos.above())) {
+            return false;
+        }
+        BlockPos below = pos.below();
+        return Optional.ofNullable(blocks.get(below))
+                .map(BlockType::isInterior)
+                .orElse(false);
     }
 
     private static Map<BlockPos, GreenHouse.Block> mergeMaps(Map<BlockPos, GreenHouse.Block> a, Map<BlockPos, GreenHouse.Block> b) {

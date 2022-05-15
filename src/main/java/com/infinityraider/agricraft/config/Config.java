@@ -263,7 +263,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Greenhouse block size limit", 512, 512, Integer.MAX_VALUE);
             this.greenHouseCeilingGlassFraction = builder.comment("\nThe minimum fraction of glass-type blocks a greenhouse ceiling needs in order to work (0.0 = none, 1.0 = all)" +
                     "\nBe careful when modifying this value as it might break village greenhouses")
-                    .defineInRange("Greenhouse ceiling glass fraction", 0.65, 0.0, 1.0);
+                    .defineInRange("Greenhouse ceiling glass fraction", 0.40, 0.0, 1.0);
             this.greenHouseIgnoresSeasons = builder.comment("\nSet to false if greenhouses should not make crops ignore seasons")
                     .define("Greenhouses ignore seasons", true);
             this.greenHouseGrowthModifier = builder.comment("\nThe growth rate modifier applied to crops inside greenhouses;" +
