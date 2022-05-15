@@ -20,11 +20,11 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
 
     public final StructureProcessorType<CropStickProcessor> cropStickProcessor;
 
-    public final Holder<StructureProcessorList> pListDesertStandard;
-    public final Holder<StructureProcessorList> pListPlainsStandard;
-    public final Holder<StructureProcessorList> pListSavannaStandard;
-    public final Holder<StructureProcessorList> pListSnowyStandard;
-    public final Holder<StructureProcessorList> pListTaigaStandard;
+    public final Holder<StructureProcessorList> pListDesert;
+    public final Holder<StructureProcessorList> pListPlains;
+    public final Holder<StructureProcessorList> pListSavanna;
+    public final Holder<StructureProcessorList> pListSnowy;
+    public final Holder<StructureProcessorList> pListTaiga;
 
     public final IInfStructure desertStandard;
     public final IInfStructure plainsStandard;
@@ -32,64 +32,92 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
     public final IInfStructure snowyStandard;
     public final IInfStructure taigaStandard;
 
-    // TODO: design irrigated greenhouses
-    public final IInfStructure IRRIGATED_DESERT = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.DESERT, Pools.DESERT);
-    public final IInfStructure IRRIGATED_PLAINS = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.PLAINS, Pools.PLAINS);
-    public final IInfStructure IRRIGATED_SAVANNA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SAVANNA, Pools.SAVANNA);
-    public final IInfStructure IRRIGATED_SNOWY = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.SNOWY, Pools.SNOWY);
-    public final IInfStructure IRRIGATED_TAIGA = null;//new StructureGreenHouseIrrigated(GreenHouses.Irrigated.TAIGA, Pools.TAIGA);
+    public final IInfStructure desertIrrigated;
+    public final IInfStructure plainsIrrigated;
+    public final IInfStructure savannaIrrigated;
+    public final IInfStructure snowyIrrigated;
+    public final IInfStructure taigaIrrigated;
 
     protected AgriStructureRegistry() {
         // processors
         this.cropStickProcessor = this.processor(id("crop_sticks"), () -> CropStickProcessor.CODEC);
 
         // processor lists
-        this.pListDesertStandard = this.processorList(id("greenhouse_standard_desert"), new CropStickProcessor(GreenHouses.Standard.DESERT));
-        this.pListPlainsStandard = this.processorList(id("greenhouse_standard_plains"), new CropStickProcessor(GreenHouses.Standard.PLAINS), Mossify10Processor.getInstance());
-        this.pListSavannaStandard = this.processorList(id("greenhouse_standard_savanna"), new CropStickProcessor(GreenHouses.Standard.SAVANNA));
-        this.pListSnowyStandard = this.processorList(id("greenhouse_standard_snowy"), new CropStickProcessor(GreenHouses.Standard.SNOWY));
-        this.pListTaigaStandard = this.processorList(id("greenhouse_standard_taiga"), new CropStickProcessor(GreenHouses.Standard.TAIGA), Mossify10Processor.getInstance());
+        this.pListDesert = this.processorList(id("greenhouse_standard_desert"), new CropStickProcessor(GreenHouses.Standard.DESERT));
+        this.pListPlains = this.processorList(id("greenhouse_standard_plains"), new CropStickProcessor(GreenHouses.Standard.PLAINS), Mossify10Processor.getInstance());
+        this.pListSavanna = this.processorList(id("greenhouse_standard_savanna"), new CropStickProcessor(GreenHouses.Standard.SAVANNA));
+        this.pListSnowy = this.processorList(id("greenhouse_standard_snowy"), new CropStickProcessor(GreenHouses.Standard.SNOWY));
+        this.pListTaiga = this.processorList(id("greenhouse_standard_taiga"), new CropStickProcessor(GreenHouses.Standard.TAIGA), Mossify10Processor.getInstance());
 
         // greenhouses
         this.desertStandard = this.structure(
                 GreenHouses.Standard.DESERT,
                 Pools.DESERT,
-                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                pListDesertStandard,
+                AgriCraft.instance.getConfig().getGreenHouseSpawnWeight(),
+                pListDesert,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.plainsStandard = this.structure(
                 GreenHouses.Standard.PLAINS,
                 Pools.PLAINS,
-                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                pListPlainsStandard,
+                AgriCraft.instance.getConfig().getGreenHouseSpawnWeight(),
+                pListPlains,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.savannaStandard = this.structure(
                 GreenHouses.Standard.SAVANNA,
                 Pools.SAVANNA,
-                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                pListSavannaStandard,
+                AgriCraft.instance.getConfig().getGreenHouseSpawnWeight(),
+                pListSavanna,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.snowyStandard = this.structure(
                 GreenHouses.Standard.SNOWY,
                 Pools.SNOWY,
-                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                pListSnowyStandard,
+                AgriCraft.instance.getConfig().getGreenHouseSpawnWeight(),
+                pListSnowy,
                 StructureTemplatePool.Projection.RIGID
         );
 
         this.taigaStandard = this.structure(
                 GreenHouses.Standard.TAIGA,
                 Pools.TAIGA,
-                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
-                pListTaigaStandard,
+                AgriCraft.instance.getConfig().getGreenHouseSpawnWeight(),
+                pListTaiga,
                 StructureTemplatePool.Projection.RIGID
         );
+
+        this.desertIrrigated = this.structure(
+                GreenHouses.Irrigated.DESERT,
+                Pools.DESERT,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                pListDesert,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.plainsIrrigated = this.structure(
+                GreenHouses.Irrigated.PLAINS,
+                Pools.PLAINS,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                pListPlains,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        this.savannaIrrigated = this.structure(
+                GreenHouses.Irrigated.SAVANNA,
+                Pools.SAVANNA,
+                AgriCraft.instance.getConfig().getIrrigatedGreenHouseSpawnWeight(),
+                pListSavanna,
+                StructureTemplatePool.Projection.RIGID
+        );
+
+        //TODO: design greenhouses
+        this.snowyIrrigated = null;
+
+        this.taigaIrrigated = null;
     }
 
     private static ResourceLocation id(String name) {
