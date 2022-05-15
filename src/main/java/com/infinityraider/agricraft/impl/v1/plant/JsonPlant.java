@@ -224,7 +224,9 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void addTooltip(Consumer<ITextComponent> consumer) {
         consumer.accept(this.getPlantName());
-        consumer.accept(this.getInformation());
+        if (!this.getInformation().getKey().isEmpty()) {
+            consumer.accept(this.getInformation());
+        }
     }
 
     @Override
