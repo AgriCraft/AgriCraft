@@ -1,7 +1,8 @@
-package com.infinityraider.agricraft.content.world;
+package com.infinityraider.agricraft.content.world.greenhouse;
 
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBase;
+import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class BlockGreenHouseAir extends BlockBase {
-
+    public static InfProperty<GreenHouseState> STATE = InfProperty.Creators.create("greenhouse_state", GreenHouseState.class, GreenHouseState.INVALID);
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().build();
 
     public BlockGreenHouseAir() {
@@ -35,8 +36,6 @@ public class BlockGreenHouseAir extends BlockBase {
     protected InfPropertyConfiguration getPropertyConfiguration() {
         return PROPERTIES;
     }
-
-
 
     @Override
     @Deprecated

@@ -1,8 +1,11 @@
 package com.infinityraider.agricraft.render.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
-import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
+import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
+import com.infinityraider.agricraft.content.world.greenhouse.GreenHouse;
+import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseState;
 import com.infinityraider.agricraft.util.debug.DebugModeGreenHouse;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -65,7 +68,8 @@ public class BlockGreenHouseAirRenderer {
                 for(int z = -RANGE; z <= RANGE; z++) {
                     pos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                     if(world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir) {
-                        this.renderWireFrameCube(builder, matrix4f, pos);
+                        GreenHouseState state = CapabilityGreenHouse.getGreenHouse(world, pos).map(GreenHouse::getState).orElse(GreenHouseState.INVALID);
+                        this.renderWireFrameCube(builder, matrix4f, pos, state);
                     }
                 }
             }
@@ -75,34 +79,34 @@ public class BlockGreenHouseAirRenderer {
         buffer.endBatch(this.getRenderType());
     }
 
-    protected void renderWireFrameCube(VertexConsumer builder, Matrix4f transforms, BlockPos pos) {
+    protected void renderWireFrameCube(VertexConsumer builder, Matrix4f transforms, BlockPos pos, GreenHouseState state) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
         // Lines along X
-        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P2, y + P1, z + P1);
-        this.drawLine(builder, transforms, x + P1, y + P2, z + P1, x + P2, y + P2, z + P1);
-        this.drawLine(builder, transforms, x + P1, y + P1, z + P2, x + P2, y + P1, z + P2);
-        this.drawLine(builder, transforms, x + P1, y + P2, z + P2, x + P2, y + P2, z + P2);
+        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P2, y + P1, z + P1, state);
+        this.drawLine(builder, transforms, x + P1, y + P2, z + P1, x + P2, y + P2, z + P1, state);
+        this.drawLine(builder, transforms, x + P1, y + P1, z + P2, x + P2, y + P1, z + P2, state);
+        this.drawLine(builder, transforms, x + P1, y + P2, z + P2, x + P2, y + P2, z + P2, state);
         // Lines along y
-        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P1, y + P2, z + P1);
-        this.drawLine(builder, transforms, x + P2, y + P1, z + P1, x + P2, y + P2, z + P1);
-        this.drawLine(builder, transforms, x + P1, y + P1, z + P2, x + P1, y + P2, z + P2);
-        this.drawLine(builder, transforms, x + P2, y + P1, z + P2, x + P2, y + P2, z + P2);
+        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P1, y + P2, z + P1, state);
+        this.drawLine(builder, transforms, x + P2, y + P1, z + P1, x + P2, y + P2, z + P1, state);
+        this.drawLine(builder, transforms, x + P1, y + P1, z + P2, x + P1, y + P2, z + P2, state);
+        this.drawLine(builder, transforms, x + P2, y + P1, z + P2, x + P2, y + P2, z + P2, state);
         // Lines along z
-        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P1, y + P1, z + P2);
-        this.drawLine(builder, transforms, x + P1, y + P2, z + P1, x + P1, y + P2, z + P2);
-        this.drawLine(builder, transforms, x + P2, y + P1, z + P1, x + P2, y + P1, z + P2);
-        this.drawLine(builder, transforms, x + P2, y + P2, z + P1, x + P2, y + P2, z + P2);
+        this.drawLine(builder, transforms, x + P1, y + P1, z + P1, x + P1, y + P1, z + P2, state);
+        this.drawLine(builder, transforms, x + P1, y + P2, z + P1, x + P1, y + P2, z + P2, state);
+        this.drawLine(builder, transforms, x + P2, y + P1, z + P1, x + P2, y + P1, z + P2, state);
+        this.drawLine(builder, transforms, x + P2, y + P2, z + P1, x + P2, y + P2, z + P2, state);
     }
 
-    protected void drawLine(VertexConsumer builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2) {
+    protected void drawLine(VertexConsumer builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2, GreenHouseState state) {
         builder.vertex(transforms, x1, y1, z1)
-                .color(0.0F, 1.0F, 0.0F, 1.0F)
+                .color(state.getRed(), state.getGreen(), state.getBlue(), 1.0F)
                 .normal(x2 - x1, y2 - y1, z2 - z1)
                 .endVertex();
         builder.vertex(transforms, x2, y2, z2)
-                .color(0.0F, 1.0F, 0.0F, 1.0F)
+                .color(state.getRed(), state.getGreen(), state.getBlue(), 1.0F)
                 .normal(x2 - x1, y2 - y1, z2 - z1)
                 .endVertex();
     }

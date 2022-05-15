@@ -3,10 +3,12 @@ package com.infinityraider.agricraft.capability;
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouse.Impl;
-import com.infinityraider.agricraft.content.world.GreenHouse;
+import com.infinityraider.agricraft.content.world.greenhouse.GreenHouse;
+import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseConfiguration;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -22,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class CapabilityGreenHouse implements IInfSerializableCapabilityImplementation<Level, Impl> {
     private static final CapabilityGreenHouse INSTANCE = new CapabilityGreenHouse();
@@ -37,29 +38,16 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
 
     private CapabilityGreenHouse() {}
 
-    public static boolean addGreenHouse(Level world, GreenHouse greenHouse) {
-        return getInstance().getCapability(world).map(impl -> {
-            // Fetch all chunk capabilities to add the greenhouse to
-            List<CapabilityGreenHouseParts.Impl> chunks = greenHouse.getChunks().stream()
-                    .map(pos -> world.getChunk(pos.x, pos.z))
-                    .map(chunk -> CapabilityGreenHouseParts.getInstance().getCapability(chunk))
-                    .map(opt -> opt.map(o -> o))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList());
-            // If not all chunks are valid, we do not add the greenhouse
-            if(chunks.size() != greenHouse.getChunks().size()) {
-                return false;
-            }
-            // Let's add the greenhouse
-            impl.addGreenHouse(greenHouse);
-            chunks.forEach(chunk -> chunk.add(greenHouse));
-            return true;
-        }).orElse(false);
+    public static Optional<GreenHouse> getGreenHouse(Level world, BlockPos pos) {
+        return getInstance().getCapability(world).map(o -> o).flatMap(impl -> impl.getGreenHouse(world, pos));
+    }
+
+    public static Optional<GreenHouse> addGreenHouse(Level world, GreenHouseConfiguration configuration) {
+        return getInstance().getCapability(world).map(impl -> impl.addGreenHouse(world, configuration));
     }
 
     public static void onChunkLoad(Level world, ChunkPos pos) {
-        getInstance().getCapability(world).ifPresent(impl -> impl.onChunkLoad(world, pos));
+        getInstance().getCapability(world).ifPresent(impl -> impl.onChunkLoad(pos));
     }
 
     public static void onChunkUnload(Level world, ChunkPos pos) {
@@ -107,15 +95,31 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
             this.nextId = 0;
         }
 
-        protected void addGreenHouse(GreenHouse greenHouse) {
-            if(greenHouse.getId() < 0) {
-                this.removeGreenHouse(greenHouse.getId());
-            }
-            greenHouse.setId(this.getNextId());
-            this.greenHouses.put(greenHouse.getId(), greenHouse);
+        protected GreenHouse addGreenHouse(Level world, GreenHouseConfiguration config) {
+            int id = this.getNextId();
+            GreenHouse greenHouse = new GreenHouse(world, id, config);
+            this.greenHouses.put(id, greenHouse);
+            return greenHouse;
         }
-        protected void onChunkLoad(Level world, ChunkPos pos) {
-            this.greenHouses.values().forEach(greenHouse -> greenHouse.onChunkLoaded(world, pos));
+
+        protected Optional<GreenHouse> getGreenHouse(Level world, BlockPos pos) {
+            return this.greenHouses.values().stream()
+                    .filter(greenHouse -> greenHouse.isInside(world, pos))
+                    .findFirst();
+        }
+
+        protected void removeGreenHouse(int id) {
+            if(this.greenHouses.remove(id) != null) {
+                if(nextId == id + 1) {
+                    nextId = id;
+                } else {
+                    this.free.add(id);
+                }
+            }
+        }
+
+        protected void onChunkLoad(ChunkPos pos) {
+            this.greenHouses.values().forEach(greenHouse -> greenHouse.onChunkLoaded(pos));
         }
 
         protected void onChunkUnload(ChunkPos pos) {
@@ -129,16 +133,6 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
                 return next;
             } else {
                 return this.free.remove(this.free.size() - 1);
-            }
-        }
-
-        public void removeGreenHouse(int id) {
-            if(this.greenHouses.remove(id) != null) {
-                if(nextId == id + 1) {
-                    nextId = id;
-                } else {
-                    this.free.add(id);
-                }
             }
         }
 

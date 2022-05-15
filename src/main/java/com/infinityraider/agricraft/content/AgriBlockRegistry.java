@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
-import com.infinityraider.agricraft.content.world.*;
+import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
 import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
 import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 

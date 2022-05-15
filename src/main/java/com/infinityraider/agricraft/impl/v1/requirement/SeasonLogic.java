@@ -3,7 +3,7 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
+import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
