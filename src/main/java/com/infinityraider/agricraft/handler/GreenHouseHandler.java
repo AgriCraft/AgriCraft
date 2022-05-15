@@ -3,14 +3,18 @@ package com.infinityraider.agricraft.handler;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.capability.CapabilityGreenHouseData;
+import com.infinityraider.agricraft.api.v1.content.AgriTags;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.world.GreenHouse;
-import com.infinityraider.agricraft.util.GreenHouseHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
 
@@ -30,10 +34,43 @@ public class GreenHouseHandler {
         }
         new GreenHouseFormer(world, pos).getGreenHouse().ifPresent(greenHouse -> {
             if(greenHouse.isValid()) {
-                CapabilityGreenHouseData.getInstance().addGreenHouse(world, greenHouse);
-                greenHouse.convertAirBlocks(world);
+                if(CapabilityGreenHouse.addGreenHouse(world, greenHouse)) {
+                    greenHouse.convertAirBlocks(world);
+                }
             }
         });
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkLoad(ChunkEvent.Load event) {
+        if(event.getWorld() instanceof Level) {
+            CapabilityGreenHouse.onChunkLoad((Level) event.getWorld(), event.getChunk().getPos());
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkUnload(ChunkEvent.Unload event) {
+        if(event.getWorld() instanceof Level) {
+            CapabilityGreenHouse.onChunkUnload((Level) event.getWorld(), event.getChunk().getPos());
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkWrite(ChunkDataEvent.Save event) {
+        if(event.getWorld() instanceof Level) {
+
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onChunkRead(ChunkDataEvent.Load event) {
+        if(event.getWorld() instanceof Level) {
+
+        }
     }
 
     public static class GreenHouseFormer {
@@ -154,7 +191,7 @@ public class GreenHouseHandler {
         }
 
         protected boolean isGreenHouseGlass(BlockState state) {
-            return GreenHouseHelper.isGreenHouseGlass(state);
+            return state.is(Tags.Blocks.GLASS) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
         }
     }
 }

@@ -1,27 +1,43 @@
 package com.infinityraider.agricraft.content.world;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouseParts;
+import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GreenHouse {
-    private final Map<ChunkPos, Part> parts;
-    private final Properties properties;
+    private int id;
+
+    private final Map<ChunkPos, GreenHousePartHolder> parts;
+    private Properties properties;
+
+    public GreenHouse(CompoundTag tag) {
+        this.id = tag.getInt(AgriNBT.KEY);
+        this.parts = Maps.newHashMap();
+        tag.getList(AgriNBT.ENTRIES, Tag.TAG_COMPOUND).stream()
+                .filter(chunkTag -> chunkTag instanceof CompoundTag)
+                .map(chunkTag -> (CompoundTag) chunkTag)
+                .forEach(chunkTag -> {
+                    ChunkPos pos = new ChunkPos(chunkTag.getInt(AgriNBT.X1), chunkTag.getInt(AgriNBT.Z1));
+                    this.parts.put(pos, new GreenHousePartHolder(pos));
+                });
+    }
 
     public GreenHouse(Map<BlockPos, GreenHouse.BlockType> blocks) {
+        this.id = -1;
         BlockPos.MutableBlockPos min = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         BlockPos.MutableBlockPos max = new BlockPos.MutableBlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
         MutableInt interiorCounter = new MutableInt(0);
@@ -33,14 +49,39 @@ public class GreenHouse {
                 GreenHouse::mergeMaps
         )).entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
-                (entry) -> new Part(this, entry.getKey(), entry.getValue())
+                (entry) -> new GreenHousePartHolder(entry.getKey(), entry.getValue())
         ));
         this.properties = new Properties(min, max, interiorCounter.getValue(), ceilingCounter.getValue(), ceilingGlassCounter.getValue());
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public boolean isValid() {
-        return this.parts.values().stream().noneMatch(Part::hasGaps)
-                && this.getCeilingGlassFraction() >= AgriCraft.instance.getConfig().greenHouseCeilingGlassFraction();
+        return /*this.parts.values().stream().noneMatch(GreenHousePart::hasGaps)
+                && */this.getCeilingGlassFraction() >= AgriCraft.instance.getConfig().greenHouseCeilingGlassFraction();
+    }
+
+    public void onChunkLoaded(Level world, ChunkPos pos) {
+        // Put a reference to the greenhouse part in the map
+        LevelChunk chunk = world.getChunk(pos.x, pos.z);
+        if(chunk != null) {
+            CapabilityGreenHouseParts.getInstance().getCapability(chunk)
+                    .map(o -> o)
+                    .ifPresent(impl -> this.parts.put(pos, impl.getPartHolder(this.getId())));
+        }
+    }
+
+    public void onChunkUnloaded(ChunkPos pos) {
+        GreenHousePartHolder part = this.parts.get(pos);
+        if(part != null) {
+            part.unload();
+        }
     }
 
     protected Properties getProperties() {
@@ -63,11 +104,11 @@ public class GreenHouse {
         return this.parts.keySet();
     }
 
-    public Part getPart(BlockPos pos) {
+    public GreenHousePartHolder getPart(BlockPos pos) {
         return this.getPart(new ChunkPos(pos));
     }
 
-    public Part getPart(ChunkPos pos) {
+    public GreenHousePartHolder getPart(ChunkPos pos) {
         return this.parts.get(pos);
     }
 
@@ -92,78 +133,17 @@ public class GreenHouse {
                 && pos.getZ() >= this.getMin().getZ() && pos.getZ() <= this.getMax().getZ();
     }
 
-    public static class Part {
-        private final GreenHouse greenHouse;
-        private final ChunkPos chunk;
-        private final Map<BlockPos, Block> blocks;
-        private final Set<BlockPos> gaps;
-
-        protected Part(GreenHouse greenHouse, ChunkPos chunk, Map<BlockPos, GreenHouse.Block> blocks) {
-            this.blocks = blocks;
-            this.greenHouse = greenHouse;
-            this.chunk = chunk;
-            this.gaps = Sets.newHashSet();
-        }
-
-        public GreenHouse getGreenHouse() {
-            return this.greenHouse;
-        }
-
-        public ChunkPos getChunk() {
-            return this.chunk;
-        }
-
-        public BlockType getType(BlockPos pos) {
-            Block block = this.getBlock(pos);
-            return block == null ? BlockType.EXTERIOR : block.getType();
-        }
-
-        @Nullable
-        public Block getBlock(BlockPos pos) {
-            return this.blocks.getOrDefault(pos, null);
-        }
-
-        public boolean hasGaps() {
-            return this.gaps.size() > 0;
-        }
-
-        protected void replaceAirBlocks(Level world) {
-            BlockState air = AgriApi.getAgriContent().getBlocks().getGreenHouseAirBlock().defaultBlockState();
-            this.blocks.values().stream()
-                    .filter(block -> block.getType().isAir())
-                    .map(Block::getPos)
-                    .forEach(pos -> world.setBlock(pos,air, 3));
-        }
-
-        public CompoundTag writeToTag() {
-            CompoundTag tag = new CompoundTag();
-            //TODO
-            return tag;
-        }
-    }
-
-    protected static class Block {
-        private final BlockPos pos;
-        private final BlockType type;
-        private final boolean ceiling;
-
-        protected Block(BlockPos pos, BlockType type, boolean ceiling) {
-            this.pos = pos;
-            this.type = type;
-            this.ceiling = ceiling;
-        }
-
-        public BlockPos getPos() {
-            return this.pos;
-        }
-
-        public BlockType getType() {
-            return this.type;
-        }
-
-        public boolean isCeiling() {
-            return this.ceiling;
-        }
+    public CompoundTag writeToNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt(AgriNBT.KEY, this.id);
+        ListTag chunks = new ListTag();
+        this.parts.keySet().forEach(pos -> {
+            CompoundTag chunkTag = new CompoundTag();
+            chunkTag.putInt(AgriNBT.X1, pos.x);
+            chunkTag.putInt(AgriNBT.Z1, pos.z);
+        });
+        tag.put(AgriNBT.ENTRIES, chunks);
+        return tag;
     }
 
     protected static class Properties {
@@ -239,11 +219,21 @@ public class GreenHouse {
         }
     }
 
-    private static Map<BlockPos, GreenHouse.Block> handleMapEntry(
+    private static boolean isCeiling(BlockPos pos, Map<BlockPos, GreenHouse.BlockType> blocks) {
+        if(blocks.containsKey(pos.above())) {
+            return false;
+        }
+        BlockPos below = pos.below();
+        return Optional.ofNullable(blocks.get(below))
+                .map(BlockType::isInterior)
+                .orElse(false);
+    }
+
+    private static Map<BlockPos, GreenHousePartHolder.Block> handleMapEntry(
             Map.Entry<BlockPos, GreenHouse.BlockType> entry, boolean ceiling, BlockPos.MutableBlockPos min, BlockPos.MutableBlockPos max,
             MutableInt interiorCounter, MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
-        Map<BlockPos, GreenHouse.Block> map = Maps.newHashMap();
-        map.put(entry.getKey(), new Block(entry.getKey(), entry.getValue(), ceiling));
+        Map<BlockPos, GreenHousePartHolder.Block> map = Maps.newHashMap();
+        map.put(entry.getKey(), new GreenHousePartHolder.Block(entry.getKey(), entry.getValue(), ceiling));
         if(entry.getValue().isInterior()) {
             interiorCounter.increment();
         }
@@ -266,17 +256,7 @@ public class GreenHouse {
         return map;
     }
 
-    private static boolean isCeiling(BlockPos pos, Map<BlockPos, GreenHouse.BlockType> blocks) {
-        if(blocks.containsKey(pos.above())) {
-            return false;
-        }
-        BlockPos below = pos.below();
-        return Optional.ofNullable(blocks.get(below))
-                .map(BlockType::isInterior)
-                .orElse(false);
-    }
-
-    private static Map<BlockPos, GreenHouse.Block> mergeMaps(Map<BlockPos, GreenHouse.Block> a, Map<BlockPos, GreenHouse.Block> b) {
+    private static Map<BlockPos, GreenHousePartHolder.Block> mergeMaps(Map<BlockPos, GreenHousePartHolder.Block> a, Map<BlockPos, GreenHousePartHolder.Block> b) {
         a.putAll(b);
         return a;
     }

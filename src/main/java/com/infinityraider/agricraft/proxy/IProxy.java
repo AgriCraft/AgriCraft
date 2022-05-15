@@ -54,7 +54,8 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerCapability(CapabilityCrop.getInstance());
         this.registerCapability(CapabilityEatCropGoal.getInstance());
         this.registerCapability(CapabilityGeneInspector.getInstance());
-        this.registerCapability(CapabilityGreenHouseData.getInstance());
+        this.registerCapability(CapabilityGreenHouse.getInstance());
+        this.registerCapability(CapabilityGreenHouseParts.getInstance());
         this.registerCapability(CapabilityJournalData.getInstance());
         this.registerCapability(CapabilityResearchedPlants.getInstance());
         this.registerCapability(CapabilitySeedBagContents.getInstance());
@@ -65,6 +66,7 @@ public interface IProxy extends IProxyBase<Config> {
         this.registerEventHandler(AnvilHandler.getInstance());
         this.registerEventHandler(BlockUpdateHandler.getInstance());
         this.registerEventHandler(BonemealHandler.getInstance());
+        this.registerEventHandler(GreenHouseHandler.getInstance());
         this.registerEventHandler(JsonSyncHandler.getInstance());
         this.registerEventHandler(SeedBagEnchantingHandler.getInstance());
         this.registerEventHandler(PlayerConnectToServerHandler.getInstance());
