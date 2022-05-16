@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.world.greenhouse;
 
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -42,6 +43,22 @@ class GreenHouseProperties {
 
     public int getCeilingCount() {
         return this.ceilingCount;
+    }
+
+    protected void incrementCeilingGlassCount() {
+        this.ceilingGlassCount += 1;
+    }
+
+    protected void decrementCeilingGlassCount() {
+        this.ceilingGlassCount -= 1;
+    }
+
+    public boolean hasSufficientGlass() {
+        return this.getCeilingGlassFraction() >= AgriCraft.instance.getConfig().greenHouseCeilingGlassFraction();
+    }
+
+    public double getCeilingGlassFraction() {
+        return (this.getCeilingGlassCount() + 0.0) / this.getCeilingCount();
     }
 
     public int getCeilingGlassCount() {

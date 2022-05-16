@@ -31,7 +31,7 @@ public class GreenHouse {
                 t -> new PartCache(id, t.getA()).initialize(new GreenHousePart(id, world.getChunk(t.getA().x, t.getA().z), t.getB()))
         ));
         this.properties = configuration.getProperties();
-        this.state = configuration.checkGlassRatio() ? GreenHouseState.COMPLETE : GreenHouseState.INSUFFICIENT_GLASS;
+        this.state = this.getProperties().hasSufficientGlass() ? GreenHouseState.COMPLETE : GreenHouseState.INSUFFICIENT_GLASS;
     }
 
     public GreenHouse(CompoundTag tag) {
@@ -63,6 +63,10 @@ public class GreenHouse {
 
     public GreenHouseState getState() {
         return this.state;
+    }
+
+    public boolean hasGaps() {
+        return this.getState().hasGaps();
     }
 
     public boolean isRemoved() {
@@ -120,10 +124,6 @@ public class GreenHouse {
         return this.getProperties().getMax();
     }
 
-    public double getCeilingGlassFraction() {
-        return (this.getProperties().getCeilingGlassCount() + 0.0) / this.getProperties().getCeilingCount();
-    }
-
     public Set<ChunkPos> getChunks() {
         return this.parts.keySet();
     }
@@ -137,6 +137,7 @@ public class GreenHouse {
     }
 
     public GreenHouseBlockType getType(Level world, BlockPos pos) {
+        // check if the position is in range of the greenhouse first, as it is cheaper
         if(this.isInRange(pos)) {
             return this.getPart(world, pos).map(part -> part.getType(pos)).orElse(GreenHouseBlockType.EXTERIOR);
         }
@@ -145,6 +146,10 @@ public class GreenHouse {
 
     public boolean isInside(Level world, BlockPos pos) {
         return this.getType(world, pos).isInterior();
+    }
+
+    public boolean isPartOf(Level world, BlockPos pos) {
+        return !this.getType(world, pos).isExterior();
     }
 
     public void convertAirBlocks(Level world) {
@@ -156,10 +161,38 @@ public class GreenHouse {
         });
     }
 
+    protected void incrementCeilingGlassCount() {
+        this.getProperties().incrementCeilingGlassCount();
+        this.checkAndUpdateState();
+    }
+
+    protected void decrementCeilingGlassCount() {
+        this.getProperties().decrementCeilingGlassCount();
+        this.checkAndUpdateState();
+    }
+
+    protected void checkAndUpdateState() {
+        if(!this.isRemoved() && !this.hasGaps()) {
+            this.state = this.getProperties().hasSufficientGlass() ? GreenHouseState.COMPLETE : GreenHouseState.INSUFFICIENT_GLASS;
+        }
+    }
+
     protected boolean isInRange(BlockPos pos) {
         return pos.getX() >= this.getMin().getX() && pos.getX() <= this.getMax().getX()
                 && pos.getY() >= this.getMin().getY() && pos.getY() <= this.getMax().getY()
                 && pos.getZ() >= this.getMin().getZ() && pos.getZ() <= this.getMax().getZ();
+    }
+
+    public void onBlockAdded(Level world, BlockPos pos) {
+        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
+    }
+
+    public void onBlockChanged(Level world, BlockPos pos) {
+        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
+    }
+
+    public void onBlockRemoved(Level world, BlockPos pos) {
+        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
     }
 
     public CompoundTag writeToNBT() {

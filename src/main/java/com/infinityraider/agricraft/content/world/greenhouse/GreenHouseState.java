@@ -22,6 +22,10 @@ public enum GreenHouseState implements StringRepresentable {
         return this == COMPLETE;
     }
 
+    public boolean hasGaps() {
+        return this == GAPS;
+    }
+
     public boolean isRemoved() {
         return this == REMOVED;
     }

@@ -64,6 +64,18 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
         );
     }
 
+    public static void onBlockAdded(Level world, BlockPos pos) {
+        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockAdded(world, pos));
+    }
+
+    public static void onBlockChanged(Level world, BlockPos pos) {
+        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockChanged(world, pos));
+    }
+
+    public static void onBlockRemoved(Level world, BlockPos pos) {
+        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockRemoved(world, pos));
+    }
+
     public static void onChunkLoad(Level world, ChunkPos pos) {
         getInstance().getCapability(world).ifPresent(impl -> impl.onChunkLoad(world, pos));
     }
@@ -122,7 +134,7 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
 
         protected Optional<GreenHouse> getGreenHouse(Level world, BlockPos pos) {
             return this.greenHouses.values().stream()
-                    .filter(greenHouse -> greenHouse.isInside(world, pos))
+                    .filter(greenHouse -> greenHouse.isPartOf(world, pos))
                     .findFirst();
         }
 

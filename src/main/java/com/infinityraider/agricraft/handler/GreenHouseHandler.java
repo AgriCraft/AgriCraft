@@ -15,8 +15,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.VanillaGameEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -34,6 +35,9 @@ public class GreenHouseHandler {
     private GreenHouseHandler() {}
 
     public void checkAndFormGreenHouse(Level world, BlockPos pos) {
+        if(world.isClientSide()) {
+            return;
+        }
         BlockState state = world.getBlockState(pos);
         if (!state.isAir()) {
             return;
@@ -61,17 +65,18 @@ public class GreenHouseHandler {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void onChunkWrite(ChunkDataEvent.Save event) {
-        if(event.getWorld() instanceof Level) {
-
+    public void onGameEvent(VanillaGameEvent event) {
+        GameEvent type = event.getVanillaEvent();
+        Level world = event.getLevel();
+        if(world.isClientSide()) {
+            return;
         }
-    }
-
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void onChunkRead(ChunkDataEvent.Load event) {
-        if(event.getWorld() instanceof Level) {
-
+        if(type == GameEvent.BLOCK_PLACE) {
+            CapabilityGreenHouse.onBlockAdded(world, event.getEventPosition());
+        } else if(type == GameEvent.BLOCK_CHANGE) {
+            CapabilityGreenHouse.onBlockChanged(world, event.getEventPosition());
+        } else if(type == GameEvent.BLOCK_DESTROY) {
+            CapabilityGreenHouse.onBlockRemoved(world, event.getEventPosition());
         }
     }
 
@@ -151,7 +156,7 @@ public class GreenHouseHandler {
             MutableInt interiorCounter = new MutableInt(0);
             MutableInt ceilingCounter = new MutableInt(0);
             MutableInt ceilingGlassCounter = new MutableInt(0);
-            Set<Tuple<ChunkPos, Map<BlockPos, GreenHousePart.Block>>> parts = this.visited.entrySet().stream().collect(Collectors.toMap(
+            Set<Tuple<ChunkPos, Map<BlockPos, GreenHousePart.GreenHouseBlock>>> parts = this.visited.entrySet().stream().collect(Collectors.toMap(
                     entry -> new ChunkPos(entry.getKey()),
                     entry -> handleMapEntry(entry, this.isCeiling(entry.getKey()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
                     GreenHouseHandler.GreenHouseFormer::mergeMaps
@@ -176,7 +181,7 @@ public class GreenHouseHandler {
                     // If we already visited the position, check if it was a boundary, it might not be from another direction
                     GreenHouseBlockType type = this.visited.get(checkPos);
                     if (type.isBoundary()) {
-                        if(!this.isSolidBlock(state, checkPos, dir)) {
+                        if(!isSolidBlock(this.getWorld(), state, checkPos, dir)) {
                             // was a boundary when visited from another direction, but from the current direction it is not, update is needed
                             this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_OTHER);
                             this.toVisit.add(checkPos);
@@ -189,9 +194,9 @@ public class GreenHouseHandler {
                         this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_AIR);
                         this.toVisit.add(checkPos);
                         this.interiorCount++;
-                    } else if(this.isGreenHouseGlass(state)) {
+                    } else if(isGreenHouseGlass(state)) {
                         this.recordVisit(checkPos, GreenHouseBlockType.GLASS);
-                    } else if(this.isSolidBlock(state, checkPos, dir)) {
+                    } else if(isSolidBlock(this.getWorld(), state, checkPos, dir)) {
                         this.recordVisit(checkPos, GreenHouseBlockType.BOUNDARY);
                     } else {
                         this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_OTHER);
@@ -200,14 +205,6 @@ public class GreenHouseHandler {
                     }
                 }
             });
-        }
-
-        protected boolean isSolidBlock(BlockState state, BlockPos pos, Direction dir) {
-            return state.getBlock() instanceof DoorBlock || state.isFaceSturdy(this.getWorld(), pos, dir) || state.isFaceSturdy(this.getWorld(), pos, dir.getOpposite());
-        }
-
-        protected boolean isGreenHouseGlass(BlockState state) {
-            return state.is(Tags.Blocks.GLASS) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
         }
 
         protected boolean isCeiling(BlockPos pos) {
@@ -220,11 +217,11 @@ public class GreenHouseHandler {
                     .orElse(false);
         }
 
-        private static Map<BlockPos, GreenHousePart.Block> handleMapEntry(
+        private static Map<BlockPos, GreenHousePart.GreenHouseBlock> handleMapEntry(
                 Map.Entry<BlockPos, GreenHouseBlockType> entry, boolean ceiling, BlockPos.MutableBlockPos min, BlockPos.MutableBlockPos max,
                 MutableInt interiorCounter, MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
-            Map<BlockPos, GreenHousePart.Block> map = Maps.newHashMap();
-            map.put(entry.getKey(), new GreenHousePart.Block(entry.getKey(), entry.getValue(), ceiling));
+            Map<BlockPos, GreenHousePart.GreenHouseBlock> map = Maps.newHashMap();
+            map.put(entry.getKey(), new GreenHousePart.GreenHouseBlock(entry.getKey(), entry.getValue(), ceiling));
             if(entry.getValue().isInterior()) {
                 interiorCounter.increment();
             }
@@ -247,9 +244,17 @@ public class GreenHouseHandler {
             return map;
         }
 
-        private static Map<BlockPos, GreenHousePart.Block> mergeMaps(Map<BlockPos, GreenHousePart.Block> a, Map<BlockPos, GreenHousePart.Block> b) {
+        private static Map<BlockPos, GreenHousePart.GreenHouseBlock> mergeMaps(Map<BlockPos, GreenHousePart.GreenHouseBlock> a, Map<BlockPos, GreenHousePart.GreenHouseBlock> b) {
             a.putAll(b);
             return a;
         }
+    }
+
+    public static boolean isSolidBlock(Level world, BlockState state, BlockPos pos, Direction dir) {
+        return state.getBlock() instanceof DoorBlock || state.isFaceSturdy(world, pos, dir) || state.isFaceSturdy(world, pos, dir.getOpposite());
+    }
+
+    public static boolean isGreenHouseGlass(BlockState state) {
+        return state.is(Tags.Blocks.GLASS) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
     }
 }
