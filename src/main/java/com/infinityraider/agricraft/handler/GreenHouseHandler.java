@@ -68,15 +68,15 @@ public class GreenHouseHandler {
     public void onGameEvent(VanillaGameEvent event) {
         GameEvent type = event.getVanillaEvent();
         Level world = event.getLevel();
-        if(world.isClientSide()) {
+        if (world.isClientSide()) {
             return;
         }
-        if(type == GameEvent.BLOCK_PLACE) {
-            CapabilityGreenHouse.onBlockAdded(world, event.getEventPosition());
-        } else if(type == GameEvent.BLOCK_CHANGE) {
-            CapabilityGreenHouse.onBlockChanged(world, event.getEventPosition());
-        } else if(type == GameEvent.BLOCK_DESTROY) {
-            CapabilityGreenHouse.onBlockRemoved(world, event.getEventPosition());
+        if (type == GameEvent.BLOCK_PLACE
+                || type == GameEvent.BLOCK_CHANGE
+                || type == GameEvent.BLOCK_DESTROY
+                || type == GameEvent.BLOCK_ATTACH
+                || type == GameEvent.BLOCK_DETACH) {
+            CapabilityGreenHouse.onBlockUpdated(world, event.getEventPosition());
         }
     }
 

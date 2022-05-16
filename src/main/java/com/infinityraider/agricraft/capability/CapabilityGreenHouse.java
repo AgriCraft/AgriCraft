@@ -64,16 +64,8 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
         );
     }
 
-    public static void onBlockAdded(Level world, BlockPos pos) {
-        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockAdded(world, pos));
-    }
-
-    public static void onBlockChanged(Level world, BlockPos pos) {
-        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockChanged(world, pos));
-    }
-
-    public static void onBlockRemoved(Level world, BlockPos pos) {
-        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockRemoved(world, pos));
+    public static void onBlockUpdated(Level world, BlockPos pos) {
+        getGreenHouse(world, pos).ifPresent(greenHouse -> greenHouse.onBlockUpdated(world, pos));
     }
 
     public static void onChunkLoad(Level world, ChunkPos pos) {

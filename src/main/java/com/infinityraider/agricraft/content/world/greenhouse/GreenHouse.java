@@ -183,15 +183,7 @@ public class GreenHouse {
                 && pos.getZ() >= this.getMin().getZ() && pos.getZ() <= this.getMax().getZ();
     }
 
-    public void onBlockAdded(Level world, BlockPos pos) {
-        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
-    }
-
-    public void onBlockChanged(Level world, BlockPos pos) {
-        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
-    }
-
-    public void onBlockRemoved(Level world, BlockPos pos) {
+    public void onBlockUpdated(Level world, BlockPos pos) {
         this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
     }
 
