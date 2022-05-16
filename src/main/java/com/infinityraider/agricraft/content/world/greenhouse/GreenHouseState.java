@@ -6,7 +6,7 @@ public enum GreenHouseState implements StringRepresentable {
     COMPLETE(0.0F, 1.0F, 0.0F),
     INSUFFICIENT_GLASS(0.0F, 1.0F, 1.0F),
     GAPS(1.0F, 1.0F, 0.0F),
-    INVALID(1.0F, 0.0F, 0.0F);
+    REMOVED(1.0F, 0.0F, 0.0F);
 
     private final float red;
     private final float green;
@@ -20,6 +20,10 @@ public enum GreenHouseState implements StringRepresentable {
 
     public boolean isComplete() {
         return this == COMPLETE;
+    }
+
+    public boolean isRemoved() {
+        return this == REMOVED;
     }
 
     public float getRed() {

@@ -68,7 +68,7 @@ public class BlockGreenHouseAirRenderer {
                 for(int z = -RANGE; z <= RANGE; z++) {
                     pos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                     if(world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir) {
-                        GreenHouseState state = CapabilityGreenHouse.getGreenHouse(world, pos).map(GreenHouse::getState).orElse(GreenHouseState.INVALID);
+                        GreenHouseState state = CapabilityGreenHouse.getGreenHouse(world, pos).map(GreenHouse::getState).orElse(GreenHouseState.REMOVED);
                         this.renderWireFrameCube(builder, matrix4f, pos, state);
                     }
                 }

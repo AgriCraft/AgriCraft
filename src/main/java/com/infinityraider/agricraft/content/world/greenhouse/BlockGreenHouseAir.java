@@ -19,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class BlockGreenHouseAir extends BlockBase {
-    public static InfProperty<GreenHouseState> STATE = InfProperty.Creators.create("greenhouse_state", GreenHouseState.class, GreenHouseState.INVALID);
+    public static InfProperty<GreenHouseState> STATE = InfProperty.Creators.create("greenhouse_state", GreenHouseState.class, GreenHouseState.REMOVED);
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().build();
 
     public BlockGreenHouseAir() {

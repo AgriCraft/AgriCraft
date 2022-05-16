@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.world.greenhouse;
 
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouseParts;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
@@ -43,7 +44,8 @@ public class GreenHouse {
                 .map(chunkTag -> (CompoundTag) chunkTag)
                 .forEach(chunkTag -> {
                     ChunkPos pos = AgriNBT.readChunkPos1(chunkTag);
-                    this.parts.put(pos, new PartCache(this.id, pos));
+                    boolean removed = chunkTag.contains(AgriNBT.REMOVED) && chunkTag.getBoolean(AgriNBT.REMOVED);
+                    this.parts.put(pos, new PartCache(this.id, pos, removed));
                 });
         // read properties
         this.properties = new GreenHouseProperties(tag.getCompound(AgriNBT.CONTENTS));
@@ -63,10 +65,39 @@ public class GreenHouse {
         return this.state;
     }
 
-    public void onChunkLoaded(ChunkPos pos) {
+    public boolean isRemoved() {
+        return this.getState().isRemoved();
+    }
+
+    public boolean isEmpty() {
+        return this.parts.isEmpty();
+    }
+
+    public void remove(Level world) {
+        if(world.isClientSide()) {
+            return;
+        }
+        this.state = GreenHouseState.REMOVED;
+        this.parts.entrySet().removeIf(entry -> entry.getValue().remove(world));
+        if(this.isEmpty()) {
+            CapabilityGreenHouse.removeGreenHouse(world, this.getId());
+        }
+    }
+
+    public void onChunkLoaded(Level world, ChunkPos pos) {
+        if(world.isClientSide()) {
+            return;
+        }
         PartCache cache = this.parts.get(pos);
         if(cache != null) {
             cache.onLoad();
+            // clean up action in case this greenhouse had been removed
+            if(this.isRemoved() && cache.remove(world)) {
+                this.parts.remove(pos);
+                if(this.isEmpty()) {
+                    CapabilityGreenHouse.removeGreenHouse(world, this.getId());
+                }
+            }
         }
     }
 
@@ -137,9 +168,10 @@ public class GreenHouse {
         tag.putInt(AgriNBT.KEY, this.id);
         // write chunks
         ListTag chunks = new ListTag();
-        this.parts.keySet().forEach(pos -> {
+        this.parts.forEach((pos, cache) -> {
             CompoundTag chunkTag = new CompoundTag();
             AgriNBT.writeChunkPos1(chunkTag, pos);
+            chunkTag.putBoolean(AgriNBT.REMOVED, cache.isRemoved());
             chunks.add(chunkTag);
         });
         tag.put(AgriNBT.ENTRIES, chunks);
@@ -156,10 +188,28 @@ public class GreenHouse {
 
         private GreenHousePart cached;
         private boolean loaded;
+        private boolean removed;
 
         private PartCache(int id, ChunkPos pos) {
+            this(id, pos, false);
+        }
+
+        private PartCache(int id, ChunkPos pos, boolean removed) {
             this.id = id;
             this.pos = pos;
+            this.removed = removed;
+        }
+
+        public boolean remove(Level world) {
+            if(this.isRemoved()) {
+                return true;
+            }
+            if(this.isLoaded()) {
+                CapabilityGreenHouseParts.removePart(world.getChunk(this.pos.x, this.pos.z), this.id);
+                this.removed = true;
+                return true;
+            }
+            return false;
         }
 
         public GreenHousePart getPart(Level world) {
@@ -170,6 +220,10 @@ public class GreenHouse {
                 return this.cached;
             }
             return null;
+        }
+
+        public boolean isRemoved() {
+            return this.removed;
         }
 
         public boolean isLoaded() {

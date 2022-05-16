@@ -38,6 +38,10 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
 
     private CapabilityGreenHouse() {}
 
+    public static Optional<GreenHouse> getGreenHouse(Level world, int id) {
+        return getInstance().getCapability(world).map(o -> o).flatMap(impl -> impl.getGreenHouse(id));
+    }
+
     public static Optional<GreenHouse> getGreenHouse(Level world, BlockPos pos) {
         return getInstance().getCapability(world).map(o -> o).flatMap(impl -> impl.getGreenHouse(world, pos));
     }
@@ -46,8 +50,22 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
         return getInstance().getCapability(world).map(impl -> impl.addGreenHouse(world, configuration));
     }
 
+    public static void removeGreenHouse(Level world, int id) {
+        getInstance().getCapability(world).ifPresent(impl ->
+                impl.getGreenHouse(id).ifPresent(greenHouse -> {
+                    if (!greenHouse.isRemoved()) {
+                        // call the remove method on the greenhouse and return to avoid infinite loops
+                        greenHouse.remove(world);
+                    } else if (greenHouse.isEmpty()) {
+                        // if all parts have been cleaned up, we can now safely remove the greenhouse from the capability
+                        impl.removeGreenHouse(id);
+                    }
+                })
+        );
+    }
+
     public static void onChunkLoad(Level world, ChunkPos pos) {
-        getInstance().getCapability(world).ifPresent(impl -> impl.onChunkLoad(pos));
+        getInstance().getCapability(world).ifPresent(impl -> impl.onChunkLoad(world, pos));
     }
 
     public static void onChunkUnload(Level world, ChunkPos pos) {
@@ -108,6 +126,10 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
                     .findFirst();
         }
 
+        protected Optional<GreenHouse> getGreenHouse(int id) {
+            return Optional.ofNullable(this.greenHouses.get(id));
+        }
+
         protected void removeGreenHouse(int id) {
             if(this.greenHouses.remove(id) != null) {
                 if(nextId == id + 1) {
@@ -118,8 +140,8 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
             }
         }
 
-        protected void onChunkLoad(ChunkPos pos) {
-            this.greenHouses.values().forEach(greenHouse -> greenHouse.onChunkLoaded(pos));
+        protected void onChunkLoad(Level world, ChunkPos pos) {
+            this.greenHouses.values().forEach(greenHouse -> greenHouse.onChunkLoaded(world, pos));
         }
 
         protected void onChunkUnload(ChunkPos pos) {

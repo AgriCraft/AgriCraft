@@ -37,6 +37,10 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
         getInstance().getCapability(chunk).ifPresent(impl -> impl.add(part));
     }
 
+    public static void removePart(LevelChunk chunk, int id) {
+        getInstance().getCapability(chunk).ifPresent(impl -> impl.remove(id));
+    }
+
     public static Optional<GreenHousePart> getPart(Level world, ChunkPos pos, int id) {
         return getInstance().getCapability(world.getChunk(pos.x, pos.z))
                 .map(o -> o)

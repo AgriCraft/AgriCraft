@@ -28,6 +28,7 @@ public interface AgriNBT {
     String NETWORK = "agri_network";
     String PLANT = "agri_plant";
     String RECESSIVE = "agri_recessive";
+    String REMOVED = "agri_removed";
     String WEED = "agri_weed";
     String WEED_GROWTH = "agri_weed_growth";
 
