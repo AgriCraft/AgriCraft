@@ -1,7 +1,9 @@
 Changelog
 ---------
 3.0.8
- - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)
+ - ADDED: Option to use GUIs for the journal and seed analyzer (Ketheroth)
+ - ADDED: Default json support for Oh The Biomes You'll Go (Ketheroth)
+ - ADDED: Default json support for Croptopia (Ketheroth)
  - FIXED: Potential Crash when logging an invalid json plant
  - FIXED: AgriCraft crops ignoring the result of Forge CropGrowEvents
 
