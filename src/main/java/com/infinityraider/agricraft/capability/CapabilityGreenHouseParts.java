@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,8 +38,8 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
         getInstance().getCapability(chunk).ifPresent(impl -> impl.add(part));
     }
 
-    public static void removePart(LevelChunk chunk, int id) {
-        getInstance().getCapability(chunk).ifPresent(impl -> impl.remove(id));
+    public static Optional<GreenHousePart> removePart(LevelChunk chunk, int id) {
+        return getInstance().getCapability(chunk).map(o -> o).flatMap(impl -> Optional.ofNullable(impl.remove(id)));
     }
 
     public static Optional<GreenHousePart> getPart(Level world, ChunkPos pos, int id) {
@@ -98,8 +99,9 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
             this.greenhouses.put(part.getId(), part);
         }
 
-        protected void remove(int id) {
-            this.greenhouses.remove(id);
+        @Nullable
+        protected GreenHousePart remove(int id) {
+            return this.greenhouses.remove(id);
         }
 
         @Override

@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouseParts;
-import com.infinityraider.agricraft.handler.GreenHouseHandler;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,19 +22,16 @@ import java.util.Map;
 
 public class GreenHousePart {
     private final int id;
-    private final ChunkPos chunk;
     private final Map<BlockPos, GreenHouseBlock> blocks;
 
     protected GreenHousePart(int id, LevelChunk chunk, Map<BlockPos, GreenHouseBlock> blocks) {
         this.id = id;
-        this.chunk = chunk.getPos();
         this.blocks =blocks;
         CapabilityGreenHouseParts.addPart(chunk, this);
     }
 
     public GreenHousePart(ChunkPos chunk, CompoundTag tag) {
         this.id = tag.getInt(AgriNBT.KEY);
-        this.chunk = chunk;
         this.blocks = Maps.newHashMap();
         tag.getList(AgriNBT.ENTRIES, Tag.TAG_COMPOUND).stream()
                 .filter(blockTag -> blockTag instanceof CompoundTag)
@@ -52,90 +48,63 @@ public class GreenHousePart {
         return this.id;
     }
 
-    public ChunkPos getChunk() {
-        return this.chunk;
-    }
-
     public GreenHouseBlockType getType(BlockPos pos) {
         GreenHouseBlock block = this.getBlock(pos);
         return block == null ? GreenHouseBlockType.EXTERIOR : block.getType();
     }
 
     public void onBlockUpdated(Level world, BlockPos pos, GreenHouse greenHouse) {
-        // WARNING: spaghetti code
         if(world.isClientSide()) {
             return;
         }
-        GreenHouseBlock previous = this.getBlock(pos);
-        if(previous == null) {
+        GreenHouseBlock oldBlock = this.getBlock(pos);
+        if(oldBlock == null) {
             // shouldn't ever happen
             AgriCraft.instance.getLogger().error("Caught a block update for a greenhouse at a null position");
             return;
         }
+        // fetch new state and type
         BlockState newState = world.getBlockState(pos);
-        if(newState.isAir()) {
-            if(previous.isInterior()) {
-                // an interior block has been set to air
-                if(!previous.isAir()) {
-                    this.blocks.put(pos, new GreenHouseBlock(pos, GreenHouseBlockType.INTERIOR_AIR, false));
+        GreenHouseBlockType newType = oldBlock.getType().getNewTypeForState(world, pos, newState, this.blocks::get);
+        // no changes: return
+        if(newType == oldBlock.getType()) {
+            return;
+        }
+        // set the new block
+        this.blocks.put(pos, new GreenHouseBlock(pos, newType, oldBlock.isCeiling()));
+        // check if a new gap has been made
+        if(newType.isGap()) {
+            if(Arrays.stream(Direction.values()).map(dir -> this.getBlock(pos.relative(dir))).anyMatch(b -> b != null && b.isGap())) {
+                // if there is a gap next to the new gap, remove the greenhouse
+                greenHouse.remove(world);
+            } else {
+                // otherwise, notify the greenhouse of the new gap
+                greenHouse.newGap();
+                // also check for ceiling updates (do this after gap as gap state is prioritized over glass fraction
+                if(oldBlock.isCeiling() && oldBlock.isGlass()) {
+                    greenHouse.decrementCeilingGlassCount();
                 }
-            } else if(previous.isBoundary()) {
-                // boundary has been set to air
-                greenHouse.remove(world);   // TODO: handle gaps
             }
-        } else {
-            if(previous.isInterior()) {
-                // an interior block has been set to something which is not air
-                if(previous.isAir()) {
-                    this.blocks.put(pos, new GreenHouseBlock(pos, GreenHouseBlockType.INTERIOR_OTHER, false));
-                }
-            } else if(previous.isBoundary()) {
-                if(previous.isGlass()) {
-                    // glass block has been changed to non-glass
-                    if(!GreenHouseHandler.isGreenHouseGlass(newState)) {
-                        if(this.checkSolidness(world, pos, newState)) {
-                            // glass has been changed to non-glass, but solid
-                            this.blocks.put(pos, new GreenHouseBlock(pos, GreenHouseBlockType.BOUNDARY, previous.isCeiling()));
-                            if(previous.isCeiling()) {
-                                greenHouse.decrementCeilingGlassCount();
-                            }
-                        } else {
-                            // boundary has been changed to something non-solid
-                            greenHouse.remove(world);   // TODO: handle gaps
-                        }
-                    }
-                } else {
-                    if(GreenHouseHandler.isGreenHouseGlass(newState)) {
-                        // non glass block has been changed to glass
-                        this.blocks.put(pos, new GreenHouseBlock(pos, GreenHouseBlockType.GLASS, previous.isCeiling()));
-                        if(previous.isCeiling()) {
-                            greenHouse.incrementCeilingGlassCount();
-                        }
-                    } else {
-                        if(!this.checkSolidness(world, pos, newState)) {
-                            // non-glass has been changed to something else which is non-solid
-                            greenHouse.remove(world);   // TODO: handle gaps
-                        }
-                    }
-                }
+            return;
+        }
+        // check if an old gap has been closed
+        if(oldBlock.isGap()) {
+            if(newType.isGlass() && oldBlock.isCeiling()) {
+                // first update the ceiling glass count (do this before gap as gap state is prioritized over glass fraction)
+                greenHouse.incrementCeilingGlassCount();
+            }
+            // notify the greenhouse of a closed gap
+            greenHouse.removeGap();
+            return;
+        }
+        // no gap has been closed nor opened; check for ceiling updates
+        if(oldBlock.isCeiling()) {
+            if(newType.isGlass()) {
+                greenHouse.incrementCeilingGlassCount();
+            } else {
+                greenHouse.decrementCeilingGlassCount();
             }
         }
-    }
-
-    private boolean checkSolidness(Level world, BlockPos pos, BlockState state) {
-        return Arrays.stream(Direction.values()).allMatch(dir -> {
-            GreenHouseBlock block = this.getBlock(pos.relative(dir));
-            if(block == null) {
-                return true;
-            }
-            if(block.isBoundary() || block.isExterior()) {
-                return true;
-            }
-            if(block.isInterior()) {
-                return GreenHouseHandler.isSolidBlock(world, state, pos, dir);
-            }
-            return false;
-        });
     }
 
     @Nullable
@@ -143,14 +112,22 @@ public class GreenHousePart {
         return this.blocks.getOrDefault(pos, null);
     }
 
+    protected void onRemoved(Level world) {
+        this.replaceAirBlocks(world, Blocks.AIR.defaultBlockState());
+    }
+
     protected void replaceAirBlocks(Level world, GreenHouseState state) {
         BlockState air = state.isComplete()
                 ? AgriApi.getAgriContent().getBlocks().getGreenHouseAirBlock().defaultBlockState()
                 : Blocks.AIR.defaultBlockState();
+        this.replaceAirBlocks(world, air);
+    }
+
+    protected void replaceAirBlocks(Level world, BlockState state) {
         this.blocks.values().stream()
                 .filter(block -> block.getType().isAir())
                 .map(GreenHouseBlock::getPos)
-                .forEach(pos -> world.setBlock(pos,air, 3));
+                .forEach(pos -> world.setBlock(pos, state, 3));
     }
 
     public CompoundTag writeToTag() {
@@ -204,6 +181,10 @@ public class GreenHousePart {
 
         public boolean isAir() {
             return this.getType().isAir();
+        }
+
+        public boolean isGap() {
+            return this.getType().isGap();
         }
 
         public boolean isCeiling() {

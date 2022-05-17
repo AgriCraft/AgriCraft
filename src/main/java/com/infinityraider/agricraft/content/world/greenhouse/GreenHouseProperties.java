@@ -13,6 +13,8 @@ class GreenHouseProperties {
     private int ceilingCount;
     private int ceilingGlassCount;
 
+    private int gaps;
+
     public GreenHouseProperties(BlockPos min, BlockPos max, int interiorCount, int ceilingCount, int ceilingGlassCount) {
         this.min = min.immutable();
         this.max = max.immutable();
@@ -27,6 +29,18 @@ class GreenHouseProperties {
         this.interiorCount = tag.getInt(AgriNBT.ENTRIES);
         this.ceilingCount = tag.getInt(AgriNBT.CONTENTS);
         this.ceilingGlassCount = tag.getInt(AgriNBT.KEY);
+        this.gaps = tag.contains(AgriNBT.REMOVED) ? tag.getInt(AgriNBT.REMOVED) : 0;
+    }
+
+    public GreenHouseState getState() {
+        if(this.hasGaps()) {
+            return GreenHouseState.GAPS;
+        }
+        if(this.hasSufficientGlass()) {
+            return GreenHouseState.COMPLETE;
+        } else {
+            return GreenHouseState.INSUFFICIENT_GLASS;
+        }
     }
 
     public BlockPos getMin() {
@@ -45,12 +59,24 @@ class GreenHouseProperties {
         return this.ceilingCount;
     }
 
+    public boolean hasGaps() {
+        return this.gaps > 0;
+    }
+
     protected void incrementCeilingGlassCount() {
         this.ceilingGlassCount += 1;
     }
 
     protected void decrementCeilingGlassCount() {
         this.ceilingGlassCount -= 1;
+    }
+
+    protected void addGap() {
+        this.gaps += 1;
+    }
+
+    protected void removeGap() {
+        this.gaps = Math.max(this.gaps - 1, 0);
     }
 
     public boolean hasSufficientGlass() {
@@ -72,6 +98,7 @@ class GreenHouseProperties {
         tag.putInt(AgriNBT.ENTRIES, this.getInteriorCount());
         tag.putInt(AgriNBT.CONTENTS, this.getCeilingCount());
         tag.putInt(AgriNBT.KEY, this.getCeilingGlassCount());
+        tag.putInt(AgriNBT.REMOVED, this.gaps);
         return tag;
     }
 }

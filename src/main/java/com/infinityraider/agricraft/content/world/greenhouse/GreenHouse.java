@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GreenHouse {
@@ -65,8 +64,18 @@ public class GreenHouse {
         return this.state;
     }
 
+    protected void resetState() {
+        if(!this.isRemoved()) {
+            GreenHouseState state = this.getProperties().getState();
+            if (state != this.getState()) {
+                this.state = state;
+                // TODO: notify parts
+            }
+        }
+    }
+
     public boolean hasGaps() {
-        return this.getState().hasGaps();
+        return this.getProperties().hasGaps();
     }
 
     public boolean isRemoved() {
@@ -124,10 +133,6 @@ public class GreenHouse {
         return this.getProperties().getMax();
     }
 
-    public Set<ChunkPos> getChunks() {
-        return this.parts.keySet();
-    }
-
     public Optional<GreenHousePart> getPart(Level world, BlockPos pos) {
         return this.getPart(world, new ChunkPos(pos));
     }
@@ -169,6 +174,16 @@ public class GreenHouse {
     protected void decrementCeilingGlassCount() {
         this.getProperties().decrementCeilingGlassCount();
         this.checkAndUpdateState();
+    }
+
+    protected void newGap() {
+        this.getProperties().addGap();
+        this.resetState();
+    }
+
+    protected void removeGap() {
+        this.getProperties().removeGap();
+        this.resetState();
     }
 
     protected void checkAndUpdateState() {
@@ -230,8 +245,10 @@ public class GreenHouse {
                 return true;
             }
             if(this.isLoaded()) {
-                CapabilityGreenHouseParts.removePart(world.getChunk(this.pos.x, this.pos.z), this.id);
+                CapabilityGreenHouseParts.removePart(world.getChunk(this.pos.x, this.pos.z), this.id).ifPresent(part ->
+                        part.onRemoved(world));
                 this.removed = true;
+                this.cached = null;
                 return true;
             }
             return false;
