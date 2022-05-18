@@ -17,7 +17,7 @@
     },
     "S": {
       "type": "agricraft:seed",
-      "plant": "vanilla:wheat_plant"
+      "plant": "minecraft:wheat_plant"
     }
   },
   "result": {
