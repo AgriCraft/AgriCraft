@@ -5,11 +5,12 @@ import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.AgriTags;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
-import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseBlockType;
+import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseBlock;
 import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseConfiguration;
-import com.infinityraider.agricraft.content.world.greenhouse.GreenHousePart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.VanillaGameEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,7 +34,11 @@ public class GreenHouseHandler {
         return INSTANCE;
     }
 
-    private GreenHouseHandler() {}
+    private final Map<ResourceKey<Level>, Set<Runnable>> tasks;
+
+    private GreenHouseHandler() {
+        this.tasks = Maps.newConcurrentMap();
+    }
 
     public void checkAndFormGreenHouse(Level world, BlockPos pos) {
         if(world.isClientSide()) {
@@ -50,9 +56,37 @@ public class GreenHouseHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onChunkLoad(ChunkEvent.Load event) {
-        if(event.getWorld() instanceof Level) {
-            CapabilityGreenHouse.onChunkLoad((Level) event.getWorld(), event.getChunk().getPos());
+        if(event.getWorld() instanceof Level && !event.getWorld().isClientSide()) {
+            final Level world = (Level) event.getWorld();
+            final ChunkPos pos = event.getChunk().getPos();
+            // we must make certain the world is fully loaded, or else a deadlock is caused
+            this.tasks.computeIfAbsent(world.dimension(), key -> Sets.newConcurrentHashSet()).add(() -> CapabilityGreenHouse.onChunkLoad(world, pos));
         }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onServerTick(TickEvent.WorldTickEvent event) {
+        // if there are no tasks, return
+        if(this.tasks.isEmpty()) {
+            return;
+        }
+        // if the world is client side, return
+        if(event.world.isClientSide()) {
+            return;
+        }
+        // if the event is not the end of a tick, return
+        if(event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        // remove the tasks from the queue
+        Set<Runnable> tasks = this.tasks.remove(event.world.dimension());
+        // if there are no tasks for this world, return
+        if(tasks == null) {
+            return;
+        }
+        // run the tasks
+        tasks.forEach(Runnable::run);
     }
 
     @SubscribeEvent
@@ -67,8 +101,8 @@ public class GreenHouseHandler {
     @SuppressWarnings("unused")
     public void onGameEvent(VanillaGameEvent event) {
         GameEvent type = event.getVanillaEvent();
-        Level world = event.getLevel();
-        if (world.isClientSide()) {
+        final Level world = event.getLevel();
+        if (world.isClientSide() || !(world instanceof ServerLevel)) {
             return;
         }
         if (type == GameEvent.BLOCK_PLACE
@@ -76,7 +110,9 @@ public class GreenHouseHandler {
                 || type == GameEvent.BLOCK_DESTROY
                 || type == GameEvent.BLOCK_ATTACH
                 || type == GameEvent.BLOCK_DETACH) {
-            CapabilityGreenHouse.onBlockUpdated(world, event.getEventPosition());
+            // schedule task for the next tick such that the event has certainly passed and the block has been modified
+            final BlockPos pos = event.getEventPosition();
+            AgriCraft.instance.proxy().queueTask(() -> CapabilityGreenHouse.onBlockUpdated(world, pos));
         }
     }
 
@@ -84,7 +120,7 @@ public class GreenHouseHandler {
         private final Level world;
 
         private final Set<BlockPos> toVisit;
-        private final Map<BlockPos, GreenHouseBlockType> visited;
+        private final Map<BlockPos, GreenHouseBlock.Type> visited;
 
         private int interiorCount;
         private boolean valid;
@@ -125,7 +161,7 @@ public class GreenHouseHandler {
             return this.visited.containsKey(pos);
         }
 
-        public void recordVisit(BlockPos pos, GreenHouseBlockType type) {
+        public void recordVisit(BlockPos pos, GreenHouseBlock.Type type) {
             this.visited.put(pos, type);
         }
 
@@ -153,22 +189,21 @@ public class GreenHouseHandler {
         protected void defineConfiguration() {
             BlockPos.MutableBlockPos min = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
             BlockPos.MutableBlockPos max = new BlockPos.MutableBlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
-            MutableInt interiorCounter = new MutableInt(0);
             MutableInt ceilingCounter = new MutableInt(0);
             MutableInt ceilingGlassCounter = new MutableInt(0);
-            Set<Tuple<ChunkPos, Map<BlockPos, GreenHousePart.GreenHouseBlock>>> parts = this.visited.entrySet().stream().collect(Collectors.toMap(
+            Set<Tuple<ChunkPos, Map<BlockPos, GreenHouseBlock>>> parts = this.visited.entrySet().stream().collect(Collectors.toMap(
                     entry -> new ChunkPos(entry.getKey()),
-                    entry -> handleMapEntry(entry, this.isCeiling(entry.getKey()), min, max, interiorCounter, ceilingCounter, ceilingGlassCounter),
+                    entry -> handleMapEntry(entry, this.isCeiling(entry.getKey()), min, max, ceilingCounter, ceilingGlassCounter),
                     GreenHouseHandler.GreenHouseFormer::mergeMaps
             )).entrySet().stream().map(entry -> new Tuple<>(entry.getKey(), entry.getValue())).collect(Collectors.toSet());
-            this.greenHouse = new GreenHouseConfiguration(parts, min, max, interiorCounter.getValue(), ceilingCounter.getValue(), ceilingGlassCounter.getValue());
+            this.greenHouse = new GreenHouseConfiguration(parts, min, max, ceilingCounter.getValue(), ceilingGlassCounter.getValue());
         }
 
         protected void checkPosition(BlockPos pos) {
             if(!this.hasVisited(pos)) {
                 BlockState state = this.getWorld().getBlockState(pos);
                 if(state.isAir()) {
-                    this.recordVisit(pos, GreenHouseBlockType.INTERIOR_AIR);
+                    this.recordVisit(pos, GreenHouseBlock.Type.INTERIOR_AIR);
                 } else {
                     // initial block is not air
                     this.valid = false;
@@ -179,11 +214,11 @@ public class GreenHouseHandler {
                 BlockState state = this.getWorld().getBlockState(checkPos);
                 if(this.visited.containsKey(checkPos)) {
                     // If we already visited the position, check if it was a boundary, it might not be from another direction
-                    GreenHouseBlockType type = this.visited.get(checkPos);
+                    GreenHouseBlock.Type type = this.visited.get(checkPos);
                     if (type.isBoundary()) {
                         if(!isSolidBlock(this.getWorld(), state, checkPos, dir)) {
                             // was a boundary when visited from another direction, but from the current direction it is not, update is needed
-                            this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_OTHER);
+                            this.recordVisit(checkPos, GreenHouseBlock.Type.INTERIOR_OTHER);
                             this.toVisit.add(checkPos);
                             this.interiorCount++;
                         }
@@ -191,15 +226,15 @@ public class GreenHouseHandler {
                 } else {
                     // Block is not yet visited, categorize it
                     if(state.isAir()) {
-                        this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_AIR);
+                        this.recordVisit(checkPos, GreenHouseBlock.Type.INTERIOR_AIR);
                         this.toVisit.add(checkPos);
                         this.interiorCount++;
                     } else if(isGreenHouseGlass(state)) {
-                        this.recordVisit(checkPos, GreenHouseBlockType.GLASS);
+                        this.recordVisit(checkPos, GreenHouseBlock.Type.GLASS);
                     } else if(isSolidBlock(this.getWorld(), state, checkPos, dir)) {
-                        this.recordVisit(checkPos, GreenHouseBlockType.BOUNDARY);
+                        this.recordVisit(checkPos, GreenHouseBlock.Type.BOUNDARY);
                     } else {
-                        this.recordVisit(checkPos, GreenHouseBlockType.INTERIOR_OTHER);
+                        this.recordVisit(checkPos, GreenHouseBlock.Type.INTERIOR_OTHER);
                         this.toVisit.add(checkPos);
                         this.interiorCount++;
                     }
@@ -213,18 +248,15 @@ public class GreenHouseHandler {
             }
             BlockPos below = pos.below();
             return Optional.ofNullable(this.visited.get(below))
-                    .map(GreenHouseBlockType::isInterior)
+                    .map(GreenHouseBlock.Type::isInterior)
                     .orElse(false);
         }
 
-        private static Map<BlockPos, GreenHousePart.GreenHouseBlock> handleMapEntry(
-                Map.Entry<BlockPos, GreenHouseBlockType> entry, boolean ceiling, BlockPos.MutableBlockPos min, BlockPos.MutableBlockPos max,
-                MutableInt interiorCounter, MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
-            Map<BlockPos, GreenHousePart.GreenHouseBlock> map = Maps.newHashMap();
-            map.put(entry.getKey(), new GreenHousePart.GreenHouseBlock(entry.getKey(), entry.getValue(), ceiling));
-            if(entry.getValue().isInterior()) {
-                interiorCounter.increment();
-            }
+        private static Map<BlockPos, GreenHouseBlock> handleMapEntry(
+                Map.Entry<BlockPos, GreenHouseBlock.Type> entry, boolean ceiling, BlockPos.MutableBlockPos min, BlockPos.MutableBlockPos max,
+                MutableInt ceilingCounter, MutableInt ceilingGlassCounter) {
+            Map<BlockPos, GreenHouseBlock> map = Maps.newHashMap();
+            map.put(entry.getKey(), new GreenHouseBlock(entry.getKey(), entry.getValue(), ceiling));
             if(ceiling) {
                 ceilingCounter.increment();
                 if(entry.getValue().isGlass()) {
@@ -244,7 +276,7 @@ public class GreenHouseHandler {
             return map;
         }
 
-        private static Map<BlockPos, GreenHousePart.GreenHouseBlock> mergeMaps(Map<BlockPos, GreenHousePart.GreenHouseBlock> a, Map<BlockPos, GreenHousePart.GreenHouseBlock> b) {
+        private static Map<BlockPos, GreenHouseBlock> mergeMaps(Map<BlockPos, GreenHouseBlock> a, Map<BlockPos, GreenHouseBlock> b) {
             a.putAll(b);
             return a;
         }
