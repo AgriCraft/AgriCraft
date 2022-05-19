@@ -6,15 +6,15 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.block.Block;
-import net.minecraft.block.FungusBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FungusBlock;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -60,9 +60,9 @@ public class JsonPlantCallBackFungus implements IJsonPlantCallback {
     }
 
     @Override
-    public Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    public Optional<InteractionResult> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         // Fetch world
-        World world = crop.world();
+        Level world = crop.world();
         // Perform checks
         if(stack.isEmpty()) {
             return Optional.empty();
@@ -76,17 +76,17 @@ public class JsonPlantCallBackFungus implements IJsonPlantCallback {
         if(!crop.isMature()) {
             return Optional.empty();
         }
-        if(!this.fungus.canGrow(world, crop.getPosition(), crop.getBlockState(), world.isRemote())) {
+        if(!this.fungus.isValidBonemealTarget(world, crop.getPosition(), crop.getBlockState(), world.isClientSide())) {
             return Optional.empty();
         }
-        if(!this.fungus.canUseBonemeal(world, world.getRandom(), crop.getPosition(), crop.getBlockState())) {
+        if(!this.fungus.isBonemealSuccess(world, world.getRandom(), crop.getPosition(), crop.getBlockState())) {
             return Optional.empty();
         }
         // grow
-        if(world instanceof ServerWorld) {
-            fungus.grow((ServerWorld) world, world.getRandom(), crop.getPosition(), crop.getBlockState());
-            world.playEvent(2005, crop.getPosition(), 0);
+        if(world instanceof ServerLevel) {
+            fungus.performBonemeal((ServerLevel) world, world.getRandom(), crop.getPosition(), crop.getBlockState());
+            world.levelEvent(2005, crop.getPosition(), 0);
         }
-        return Optional.of(ActionResultType.SUCCESS);
+        return Optional.of(InteractionResult.SUCCESS);
     }
 }

@@ -1,21 +1,21 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.google.common.collect.Maps;
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.reference.Constants;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,41 +32,41 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
 
     public static VoxelShape getShape(BlockState state) {
         return SHAPES.computeIfAbsent(state, aState -> Stream.concat(
-                Stream.of(Shapes.BASE),
+                Stream.of(ChannelShapes.BASE),
                 Arrays.stream(Direction.values()).map(dir -> getConnection(dir).map(prop -> {
                     if(!prop.fetch(aState)) {
                         switch (dir) {
                             case NORTH:
-                                return Shapes.NONE_NORTH;
+                                return ChannelShapes.NONE_NORTH;
                             case SOUTH:
-                                return Shapes.NONE_SOUTH;
+                                return ChannelShapes.NONE_SOUTH;
                             case WEST:
-                                return Shapes.NONE_WEST;
+                                return ChannelShapes.NONE_WEST;
                             case EAST:
-                                return Shapes.NONE_EAST;
+                                return ChannelShapes.NONE_EAST;
                         }
                     }
-                    return VoxelShapes.empty();
+                    return Shapes.empty();
                 })).filter(Optional::isPresent).map(Optional::get)
-        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get());
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get());
     }
 
     public BlockIrrigationChannelHollow() {
-        super(Names.Blocks.CHANNEL_HOLLOW, false, Properties.create(Material.WOOD)
-                .notSolid()
+        super(Names.Blocks.CHANNEL_HOLLOW, false, Properties.of(Material.WOOD)
+                .noOcclusion()
         );
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
         BlockIrrigationChannelAbstract.Valve valve = BlockIrrigationChannelAbstract.VALVE.fetch(state);
         if(valve.hasValve()) {
-            boolean shouldBeClosed = Arrays.stream(Direction.values()).anyMatch(dir -> world.isSidePowered(pos.offset(dir), dir));
+            boolean shouldBeClosed = Arrays.stream(Direction.values()).anyMatch(dir -> world.hasSignal(pos.relative(dir), dir));
             boolean isClosed = !valve.canTransfer();
             if(shouldBeClosed != isClosed) {
-                world.setBlockState(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, valve.toggleValve()));
-                if(!world.isRemote()) {
+                world.setBlock(pos, BlockIrrigationChannelAbstract.VALVE.apply(state, valve.toggleValve()), 3);
+                if(!world.isClientSide()) {
                     this.playValveSound(world, pos);
                 }
             }
@@ -76,70 +76,70 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
     @Nonnull
     @Override
     public ItemIrrigationChannelHollow asItem() {
-        return AgriCraft.instance.getModItemRegistry().channel_hollow;
+        return AgriItemRegistry.getInstance().channel_hollow.get();
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getVisualShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getShape(state);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     // VoxelShapes
-    public static final class Shapes {
+    public static final class ChannelShapes {
         public static final VoxelShape BASE = Stream.of(
-                Block.makeCuboidShape(0, 0, 0, 16, 6, 16),
-                Block.makeCuboidShape(0, 10, 0, 16, 16, 16),
-                Block.makeCuboidShape(0, 6, 0, 6, 10, 6),
-                Block.makeCuboidShape(0, 6, 10, 6, 10, 16),
-                Block.makeCuboidShape(10, 6, 0, 16, 10, 6),
-                Block.makeCuboidShape(10, 6, 10, 16, 10, 16)
-        ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+                Block.box(0, 0, 0, 16, 6, 16),
+                Block.box(0, 10, 0, 16, 16, 16),
+                Block.box(0, 6, 0, 6, 10, 6),
+                Block.box(0, 6, 10, 6, 10, 16),
+                Block.box(10, 6, 0, 16, 10, 6),
+                Block.box(10, 6, 10, 16, 10, 16)
+        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-        public static final VoxelShape NONE_NORTH = Block.makeCuboidShape(6, 6, 0, 10, 10, 6);
+        public static final VoxelShape NONE_NORTH = Block.box(6, 6, 0, 10, 10, 6);
 
-        public static final VoxelShape NONE_SOUTH = NONE_NORTH.withOffset(0, 0, 10*Constants.UNIT);
+        public static final VoxelShape NONE_SOUTH = NONE_NORTH.move(0, 0, 10*Constants.UNIT);
 
-        public static final VoxelShape NONE_WEST = Block.makeCuboidShape(0, 6, 6, 6, 10, 10);
+        public static final VoxelShape NONE_WEST = Block.box(0, 6, 6, 6, 10, 10);
 
-        public static final VoxelShape NONE_EAST = NONE_WEST.withOffset(10*Constants.UNIT, 0, 0);
+        public static final VoxelShape NONE_EAST = NONE_WEST.move(10*Constants.UNIT, 0, 0);
 
-        private Shapes() {}
+        private ChannelShapes() {}
     }
 }

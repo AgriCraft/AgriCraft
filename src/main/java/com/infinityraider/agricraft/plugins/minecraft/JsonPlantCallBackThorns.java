@@ -5,8 +5,9 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 
 import javax.annotation.Nonnull;
 
@@ -34,7 +35,10 @@ public class JsonPlantCallBackThorns implements IJsonPlantCallback {
     private JsonPlantCallBackThorns() {}
 
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
+        if(entity instanceof ItemEntity && ((ItemEntity) entity).getAge() < 100) {
+            return;
+        }
         double damage = crop.getGrowthStage().growthPercentage() * crop.getStats().getAverage();
-        entity.attackEntityFrom(DamageSource.CACTUS, (float) damage);
+        entity.hurt(DamageSource.CACTUS, (float) damage);
     }
 }

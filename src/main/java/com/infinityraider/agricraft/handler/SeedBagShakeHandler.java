@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -32,8 +32,8 @@ public class SeedBagShakeHandler {
 
     private SeedBagShakeHandler() {}
 
-    public void shake(Hand hand) {
-        if(hand == Hand.MAIN_HAND) {
+    public void shake(InteractionHand hand) {
+        if(hand == InteractionHand.MAIN_HAND) {
             this.counterMain = DURATION;
             this.prevCounterMain = DURATION;
         } else {
@@ -42,7 +42,7 @@ public class SeedBagShakeHandler {
         }
     }
 
-    protected PlayerEntity getPlayer() {
+    protected Player getPlayer() {
         return AgriCraft.instance.proxy().getClientPlayer();
     }
 
@@ -62,17 +62,17 @@ public class SeedBagShakeHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderHand(RenderHandEvent event) {
-        if(!(this.getPlayer().getHeldItem(event.getHand()).getItem() instanceof ItemSeedBag)) {
+        if(!(this.getPlayer().getItemInHand(event.getHand()).getItem() instanceof ItemSeedBag)) {
             return;
         }
-        if(event.getHand() == Hand.MAIN_HAND) {
-            float fraction = AMPLITUDE - MathHelper.lerp(event.getPartialTicks(), this.prevCounterMain, this.counterMain);
-            float angle = AMPLITUDE*MathHelper.sin((float) (fraction*2*Math.PI/PERIOD));
-            event.getMatrixStack().rotate(Vector3f.ZP.rotationDegrees(angle));
+        if(event.getHand() == InteractionHand.MAIN_HAND) {
+            float fraction = AMPLITUDE - Mth.lerp(event.getPartialTicks(), this.prevCounterMain, this.counterMain);
+            float angle = AMPLITUDE*Mth.sin((float) (fraction*2*Math.PI/PERIOD));
+            event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(angle));
         } else {
-            float fraction = AMPLITUDE - MathHelper.lerp(event.getPartialTicks(), this.prevCounterOff, this.counterOff);
-            float angle = AMPLITUDE*MathHelper.sin((float) (fraction*2*Math.PI/PERIOD));
-            event.getMatrixStack().rotate(Vector3f.ZP.rotationDegrees(angle));
+            float fraction = AMPLITUDE - Mth.lerp(event.getPartialTicks(), this.prevCounterOff, this.counterOff);
+            float angle = AMPLITUDE*Mth.sin((float) (fraction*2*Math.PI/PERIOD));
+            event.getPoseStack().mulPose(Vector3f.ZP.rotationDegrees(angle));
         }
     }
 }

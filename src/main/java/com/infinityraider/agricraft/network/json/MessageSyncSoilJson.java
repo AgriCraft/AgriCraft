@@ -2,17 +2,18 @@ package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
-import com.agricraft.agricore.plant.AgriSoil;
+import com.agricraft.agricore.templates.AgriSoil;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
-import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+
 import java.nio.file.Path;
 import java.util.List;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MessageSyncSoilJson extends MessageBase {
     private AgriSoil soil;
@@ -47,7 +48,7 @@ public class MessageSyncSoilJson extends MessageBase {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
             AgriSaver.saveElements(worldDir, AgriCore.getSoils().getAll());
             AgriCore.getSoils().getAll().stream()
-                    .map(JsonSoil::new)
+                    .map(soil -> AgriCraft.instance.proxy().jsonObjectFactory().createSoil(soil))
                     .forEach(AgriApi.getSoilRegistry()::add);
         }
     }

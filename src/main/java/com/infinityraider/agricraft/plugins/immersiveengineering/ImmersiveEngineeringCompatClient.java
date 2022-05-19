@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.plugins.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.ClocheRenderFunction;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,10 +16,10 @@ public class ImmersiveEngineeringCompatClient {
         ClocheRenderFunction.RENDER_FUNCTION_FACTORIES.put(
                 AgriCraft.instance.getModId(),
                 (block) -> {
-                    if (block == AgriCraft.instance.getModBlockRegistry().crop_plant) {
+                    if (block == AgriApi.getAgriContent().getBlocks().getCropBlock()) {
                         return AgriRenderFunction.INSTANCE;
                     } else {
-                        throw new IllegalArgumentException("Block " + block.getTranslationKey() + " is not an agricraft crop");
+                        throw new IllegalArgumentException("Block " + block.getDescriptionId() + " is not an agricraft crop");
                     }
                 });
     }

@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
 import java.util.Optional;

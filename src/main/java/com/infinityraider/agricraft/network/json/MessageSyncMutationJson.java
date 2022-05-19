@@ -2,18 +2,19 @@ package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
-import com.agricraft.agricore.plant.AgriMutation;
+import com.agricraft.agricore.templates.AgriMutation;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
 import com.infinityraider.agricraft.impl.v1.JsonHelper;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MessageSyncMutationJson extends MessageBase {
     private AgriMutation plant;

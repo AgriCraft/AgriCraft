@@ -9,33 +9,33 @@ import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 final class AgriProbeIrrigationBlockInfoProvider implements IProbeInfoProvider {
-    private final String id;
+    private final ResourceLocation id;
 
     protected AgriProbeIrrigationBlockInfoProvider() {
-        this.id = AgriCraft.instance.getModId() + ":" + Names.Mods.THE_ONE_PROBE + "_irrigation";
+        this.id = new ResourceLocation(AgriCraft.instance.getModId(), Names.Mods.THE_ONE_PROBE + "_irrigation");
     }
 
     @Override
-    public String getID() {
+    public ResourceLocation getID() {
         return this.id;
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player,
-                             World world, BlockState state, IProbeHitData hitData) {
+    public void addProbeInfo(ProbeMode mode, IProbeInfo info, Player player,
+                             Level world, BlockState state, IProbeHitData hitData) {
         this.addIrrigationProbeInfo(info, world, hitData.getPos());
     }
 
-    protected void addIrrigationProbeInfo(IProbeInfo info, World world, BlockPos pos) {
-        TileEntity tile = world.getTileEntity(pos);
+    protected void addIrrigationProbeInfo(IProbeInfo info, Level world, BlockPos pos) {
+        BlockEntity tile = world.getBlockEntity(pos);
         if(tile instanceof TileEntityIrrigationComponent) {
             if(tile instanceof TileEntityIrrigationChannel) {
                 TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) tile;
@@ -47,12 +47,7 @@ final class AgriProbeIrrigationBlockInfoProvider implements IProbeInfoProvider {
                     }
                 }
             }
-            TileEntityIrrigationComponent component = (TileEntityIrrigationComponent) tile;
-            info.progress(component.getContent(), component.getCapacity(), new ProgressStyle()
-                    .filledColor(0xff327DCD)
-                    .alternateFilledColor(0xff3732CD)
-                    .suffix(" mB")
-            );
+            info.tank((TileEntityIrrigationComponent) tile);
         }
     }
 }

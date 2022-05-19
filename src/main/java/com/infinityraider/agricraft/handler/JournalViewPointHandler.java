@@ -8,25 +8,24 @@ import com.infinityraider.agricraft.render.items.journal.*;
 import com.infinityraider.agricraft.util.PlayerAngleLocker;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
-import com.infinityraider.infinitylib.modules.playeranimations.IAnimatablePlayerModel;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.IngameMenuScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.InputUpdateEvent;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -60,9 +59,9 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     private boolean observed;
 
     /** Observer data */
-    private Vector3d observerStart;
-    private Vector3d cameraPosition;
-    private Vector2f cameraOrientation;
+    private Vec3 observerStart;
+    private Vec3 cameraPosition;
+    private Vec2 cameraOrientation;
     private float yawOffset;
 
     /** Journal data */
@@ -74,7 +73,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     private JournalViewPointHandler() {}
 
-    public boolean toggle(PlayerEntity player, Hand hand) {
+    public boolean toggle(Player player, InteractionHand hand) {
         if(this.isActive(hand)) {
             this.setActive(hand, false);
             if(AgriCraft.instance.proxy().toggleDynamicCamera(this, false)) {
@@ -85,7 +84,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 this.journal = new JournalClientData(player, hand);
             }
         } else {
-            Hand other = hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND;
+            InteractionHand other = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
             if(!this.isActive(other)) {
                 this.setActive(hand, true);
                 if(AgriCraft.instance.proxy().toggleDynamicCamera(this, true)) {
@@ -100,8 +99,8 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return false;
     }
 
-    public void setActive(Hand hand, boolean status) {
-        if(hand == Hand.MAIN_HAND) {
+    public void setActive(InteractionHand hand, boolean status) {
+        if(hand == InteractionHand.MAIN_HAND) {
             this.setMainHandActive(status);
         } else {
             this.setOffHandActive(status);
@@ -127,12 +126,12 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.isMainHandActive() || this.isOffHandActive();
     }
 
-    public boolean isActive(Hand hand) {
-        return hand == Hand.MAIN_HAND ? this.isMainHandActive() : this.isOffHandActive();
+    public boolean isActive(InteractionHand hand) {
+        return hand == InteractionHand.MAIN_HAND ? this.isMainHandActive() : this.isOffHandActive();
     }
 
-    public boolean isActive(HandSide hand) {
-        HandSide main = Minecraft.getInstance().gameSettings.mainHand;
+    public boolean isActive(HumanoidArm hand) {
+        HumanoidArm main = Minecraft.getInstance().options.mainHand;
         if(main == hand) {
             return this.isMainHandActive();
         } else {
@@ -152,7 +151,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
         return this.observed;
     }
 
-    protected PlayerEntity getObserver() {
+    protected Player getObserver() {
         return AgriCraft.instance.getClientPlayer();
     }
 
@@ -167,35 +166,35 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     }
 
     public float getOpeningProgress(float partialTicks) {
-        return MathHelper.lerp(partialTicks, this.openingCounterPrev, this.openingCounter) / OPENING_DURATION;
+        return Mth.lerp(partialTicks, this.openingCounterPrev, this.openingCounter) / OPENING_DURATION;
     }
 
     public float getFlippingProgress(float partialTicks) {
         return this.getJournalData() == null ? 0 : this.getJournalData().getFlippingProgress(partialTicks);
     }
 
-    public void renderViewedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void renderViewedPageLeft(JournalRenderContextInHand context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
             getPageDrawer(page).drawLeftSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderViewedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void renderViewedPageRight(JournalRenderContextInHand context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getCurrentPage();
             getPageDrawer(page).drawRightSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageLeft(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void renderFlippedPageLeft(JournalRenderContextInHand context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
             getPageDrawer(page).drawLeftSheet(page, context, transforms, stack, journal);
         }
     }
 
-    public void renderFlippedPageRight(JournalRenderContextInHand context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void renderFlippedPageRight(JournalRenderContextInHand context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         if(this.getJournalData() != null) {
             IAgriJournalItem.IPage page = this.getJournalData().getFlippedPage();
             getPageDrawer(page).drawRightSheet(page, context, transforms, stack, journal);
@@ -209,7 +208,7 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public void onCameraActivated() {
-        this.observerStart = this.getObserver().getPositionVec();
+        this.observerStart = this.getObserver().position();
     }
 
     @Override
@@ -234,58 +233,58 @@ public class JournalViewPointHandler implements IDynamicCameraController {
 
     @Override
     public boolean shouldContinueObserving() {
-        return this.observerStart != null && this.observerStart.equals(this.getObserver().getPositionVec());
+        return this.observerStart != null && this.observerStart.equals(this.getObserver().position());
     }
 
     @Override
-    public Vector3d getObserverPosition() {
-        if(this.cameraPosition == null || this.yawOffset != this.getObserver().renderYawOffset) {
+    public Vec3 getObserverPosition() {
+        if(this.cameraPosition == null || this.yawOffset != this.getObserver().yBodyRot) {
             this.cameraPosition = this.calculateObserverPosition(AgriCraft.instance.proxy().getFieldOfView());
         }
         return this.cameraPosition;
     }
 
-    protected Vector3d calculateObserverPosition(double fov) {
+    protected Vec3 calculateObserverPosition(double fov) {
         // calculate offset based on fov
         double d = ((0.35/2)/Math.tan(0.5*Math.PI * fov / 360));
         // Determine x, y and z offsets
         double dx, dz;
-        double dy = DY + d*MathHelper.sin((float) Math.PI * PITCH / 180);
-        double dHor = d*MathHelper.cos((float) Math.PI * PITCH / 180);
+        double dy = DY + d*Mth.sin((float) Math.PI * PITCH / 180);
+        double dHor = d*Mth.cos((float) Math.PI * PITCH / 180);
         float yaw = this.getObserverOrientation().y;
-        double cosYaw = MathHelper.cos((float) Math.PI * yaw / 180);
-        double sinYaw = MathHelper.sin((float) Math.PI * yaw / 180);
-        if (this.isActive(HandSide.RIGHT)) {
+        double cosYaw = Mth.cos((float) Math.PI * yaw / 180);
+        double sinYaw = Mth.sin((float) Math.PI * yaw / 180);
+        if (this.isActive(HumanoidArm.RIGHT)) {
             dx = (dHor * cosYaw) - (DX * cosYaw) - (DZ * sinYaw);
             dz = (dHor * sinYaw) - (DX * sinYaw) + (DZ * cosYaw);
         } else {
             dx = (dHor * cosYaw) + (DX * cosYaw) - (DZ * sinYaw);
             dz = (dHor * sinYaw) + (DX * sinYaw) + (DZ * cosYaw);
         }
-        return this.getObserver().getPositionVec().add(dx, dy + this.getObserver().getEyeHeight(), dz);
+        return this.getObserver().position().add(dx, dy + this.getObserver().getEyeHeight(), dz);
     }
 
     @Override
-    public Vector2f getObserverOrientation() {
-        if(this.cameraOrientation == null || this.yawOffset != this.getObserver().renderYawOffset) {
+    public Vec2 getObserverOrientation() {
+        if(this.cameraOrientation == null || this.yawOffset != this.getObserver().yBodyRot) {
             this.cameraOrientation = this.calculateObserverOrientation();
         }
         return this.cameraOrientation;
     }
 
-    protected Vector2f calculateObserverOrientation() {
-        this.yawOffset = this.getObserver().renderYawOffset;
+    protected Vec2 calculateObserverOrientation() {
+        this.yawOffset = this.getObserver().yBodyRot;
         float yaw = this.yawOffset;
-        if (this.isActive(HandSide.RIGHT)) {
+        if (this.isActive(HumanoidArm.RIGHT)) {
             yaw += YAW;
-        } else if (this.isActive(HandSide.LEFT)) {
+        } else if (this.isActive(HumanoidArm.LEFT)) {
             yaw -= YAW;
         }
-        return new Vector2f(PITCH, yaw);
+        return new Vec2(PITCH, yaw);
     }
 
     @Override
-    public void onFieldOfViewChanged(float fov) {
+    public void onFieldOfViewChanged(double fov) {
         this.cameraPosition = this.calculateObserverPosition(fov);
     }
 
@@ -293,21 +292,21 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         // This must only run on the client thread
-        if(!event.player.getEntityWorld().isRemote()) {
+        if(!event.player.getLevel().isClientSide()) {
             return;
         }
         // Check if the handler is active
         if (this.isActive()) {
             // Check if a journal is still being held
             if(this.isOffHandActive()) {
-                if(!(this.getObserver().getHeldItem(Hand.OFF_HAND).getItem() instanceof IAgriJournalItem)) {
+                if(!(this.getObserver().getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof IAgriJournalItem)) {
                     AgriCraft.instance.proxy().toggleDynamicCamera(this, false);
                     this.setOffHandActive(false);
                     this.journal = null;
                     return;
                 }
             } else if(this.isMainHandActive()) {
-                if(!(this.getObserver().getHeldItem(Hand.MAIN_HAND).getItem() instanceof IAgriJournalItem)) {
+                if(!(this.getObserver().getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof IAgriJournalItem)) {
                     AgriCraft.instance.proxy().toggleDynamicCamera(this, false);
                     this.setMainHandActive(false);
                     this.journal = null;
@@ -315,10 +314,10 @@ public class JournalViewPointHandler implements IDynamicCameraController {
                 }
             }
             // Check for movement inputs
-            boolean up = Minecraft.getInstance().gameSettings.keyBindForward.isKeyDown();
-            boolean down = Minecraft.getInstance().gameSettings.keyBindBack.isKeyDown();
-            boolean left = Minecraft.getInstance().gameSettings.keyBindLeft.isKeyDown();
-            boolean right = Minecraft.getInstance().gameSettings.keyBindRight.isKeyDown();
+            boolean up = Minecraft.getInstance().options.keyUp.isDown();
+            boolean down = Minecraft.getInstance().options.keyDown.isDown();
+            boolean left = Minecraft.getInstance().options.keyLeft.isDown();
+            boolean right = Minecraft.getInstance().options.keyRight.isDown();
             if (up || down || left || right) {
                 // Stop observing
                 ModuleDynamicCamera.getInstance().stopObserving();
@@ -376,37 +375,34 @@ public class JournalViewPointHandler implements IDynamicCameraController {
     @SubscribeEvent
     public void onPlayerRender(RenderPlayerEvent.Pre event) {
         if(event.getPlayer() == AgriCraft.instance.getClientPlayer()) {
-            if (event.getRenderer().getEntityModel() instanceof IAnimatablePlayerModel) {
-                IAnimatablePlayerModel model = (IAnimatablePlayerModel) event.getRenderer().getEntityModel();
-                model.setDoArmWobble(!this.isActive());
-            }
+            // TODO: arm wobble
         }
     }
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onMovement(InputUpdateEvent event) {
+    public void onMovement(MovementInputUpdateEvent event) {
         // Check if the handler is active
         if(this.isActive()) {
             // If this is active, we do not want any jumping or sneaking
-            event.getMovementInput().sneaking = false;
-            event.getMovementInput().jump = false;
+            event.getInput().shiftKeyDown = false;
+            event.getInput().jumping = false;
         }
     }
 
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public void onGuiOpened(GuiOpenEvent event) {
+    public void onGuiOpened(ScreenOpenEvent event) {
         // Check if the handler is active
-        if(this.isActive() && event.getGui() != null) {
+        if(this.isActive() && event.getScreen() != null) {
             // Allow chatting
-            if(event.getGui() instanceof ChatScreen) {
+            if(event.getScreen() instanceof ChatScreen) {
                 return;
             }
             // Stop observing
             ModuleDynamicCamera.getInstance().stopObserving();
             // Cancel the event in case of pause
-            if(event.getGui() instanceof IngameMenuScreen) {
+            if(event.getScreen() instanceof PauseScreen) {
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);
             }

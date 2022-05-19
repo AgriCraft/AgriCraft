@@ -1,6 +1,6 @@
 package com.infinityraider.agricraft.content.irrigation;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriParticleRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.render.particles.SprinklerParticle;
 import com.infinityraider.infinitylib.particle.ParticleTypeBase;
@@ -9,13 +9,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -56,7 +56,7 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
     }
 
     @Override
-    public Data readData(@Nonnull PacketBuffer buffer) {
+    public Data readData(@Nonnull FriendlyByteBuf buffer) {
         return new Data(
                 ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation()),
                 buffer.readFloat(),
@@ -72,11 +72,11 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
 
     @Nonnull
     @Override
-    public Codec<Data> func_230522_e_() {
+    public Codec<Data> codec() {
         return CODEC;
     }
 
-    public static class Data implements IParticleData {
+    public static class Data implements ParticleOptions {
         private final Fluid fluid;
         private final float scale;
         private final float gravity;
@@ -102,11 +102,11 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
         @Nonnull
         @Override
         public ParticleType<?> getType() {
-            return AgriCraft.instance.getModParticleRegistry().sprinkler;
+            return AgriParticleRegistry.getInstance().sprinkler.get();
         }
 
         @Override
-        public void write(@Nonnull PacketBuffer buffer) {
+        public void writeToNetwork(@Nonnull FriendlyByteBuf buffer) {
             buffer.writeResourceLocation(Objects.requireNonNull(this.getFluid().getRegistryName()));
             buffer.writeFloat(this.getScale());
             buffer.writeFloat(this.getGravity());
@@ -114,7 +114,7 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
 
         @Nonnull
         @Override
-        public String getParameters() {
+        public String writeToString() {
             return String.format(Locale.ROOT, "%s %f %f",
                     Objects.requireNonNull(this.getFluid().getRegistryName()).toString(),
                     this.getScale(),
@@ -126,9 +126,9 @@ public class SprinklerParticleType extends ParticleTypeBase<SprinklerParticleTyp
     private static final class FactorySupplier implements ParticleFactorySupplier<Data> {
         @Override
         @OnlyIn(Dist.CLIENT)
-        public IParticleFactory<Data> supplyFactory() {
+        public ParticleProvider<Data> supplyFactory() {
             return (data, world, x, y, z, vX, vY, vZ) -> new SprinklerParticle(
-                    world, data.getFluid(), x, y, z, data.getScale(), data.getGravity(), new Vector3d(vX, vY, vZ));
+                    world, data.getFluid(), x, y, z, data.getScale(), data.getGravity(), new Vec3(vX, vY, vZ));
         }
     }
 }

@@ -2,9 +2,6 @@
   "itemGroup.agricraft": "AgriCraft",
   "itemGroup.agricraft_seeds": "AgriCraft Seeds",
 
-  "block.agricraft.crop_sticks_wood": "Crop Sticks",
-  "block.agricraft.crop_sticks_iron": "Iron Crop Sticks",
-  "block.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
   "block.agricraft.seed_analyzer": "Seed Analyzer",
   "block.agricraft.irrigation_tank": "Wooden Irrigation Tank",
   "block.agricraft.irrigation_channel": "Wooden Irrigation Channel",
@@ -15,6 +12,9 @@
 
   "item.agricraft.debugger": "Debugger",
 
+  "item.agricraft.crop_sticks_wood": "Crop Sticks",
+  "item.agricraft.crop_sticks_iron": "Iron Crop Sticks",
+  "item.agricraft.crop_sticks_obsidian": "Obsidian Crop Sticks",
   "item.agricraft.agri_clipper": "Plant Clipper",
   "item.agricraft.agri_journal": "Agricultural Journal",
   "item.agricraft.agri_magnifying_glass": "Magnifying Glass",
@@ -25,10 +25,13 @@
   "item.agricraft.agri_trowel": "Gardening Trowel",
   "item.agricraft.agri_channel_valve": "Irrigation Channel Valve",
 
+  "item.agricraft.agri_nugget_copper": "Copper Nugget",
   "item.agricraft.agri_nugget_coal": "Coal Pebble",
   "item.agricraft.agri_nugget_diamond": "Diamond Shard",
   "item.agricraft.agri_nugget_emerald": "Emerald Shard",
   "item.agricraft.agri_nugget_quartz": "Quartz Shard",
+  "item.agricraft.netherite_sliver": "Netherite Sliver",
+  "item.agricraft.amathyllis_petal": "Amathyllis Petal",
 
   "enchantment.agricraft.agri_seed_bag": "Seed Sorting",
 
@@ -159,11 +162,14 @@
   "agricraft.tooltip.growth_req.season": "This plant will only grow during certain seasons",
   "agricraft.tooltip.growth_req.structure_in": "This plant will only grow in or near a certain structure",
   "agricraft.tooltip.growth_req.structure_out": "This plant will not grow in or near a certain structure",
+  "agricraft.tooltip.growth_req.mana": "This plant has insufficient mana to grow",
 
   "agricraft.tooltip.growth_req.soil.humidity.general": "This plant can not grow on a soil with this humidity",
   "agricraft.tooltip.growth_req.soil.acidity.general": "This plant can not grow on a soil with this acidity",
   "agricraft.tooltip.growth_req.soil.nutrients.general": "This plant can not grow on a soil with these nutrients",
   "agricraft.tooltip.growth_req.light.general": "This plant can not grow at the current light level",
+  "agricraft.tooltip.growth_req.biome.general": "This plant can not grow in this biome",
+  "agricraft.tooltip.growth_req.dimension.general": "This plant can not grow in this dimension",
   "agricraft.tooltip.growth_req.fluid.general": "This plant can not grow in the current fluid",
   "agricraft.tooltip.growth_req.season.general": "This plant can not grow during the current season",
   
@@ -372,6 +378,10 @@
   "agricraft.plant.wither_rose.seed": "Wither Rose Seeds",
   "agricraft.plant.wither_rose.desc": "Nobody likes their roses withering, but this is on another level.",
 
+  "agricraft.plant.amathyllis.name": "Amathyllis",
+  "agricraft.plant.amathyllis.seed": "Amathyllis Seeds",
+  "agricraft.plant.amathyllis.desc": "Its petals seem oddly crystalline.",
+
   "agricraft.plant.aurigold.name": "Aurigold",
   "agricraft.plant.aurigold.seed": "Aurigold Seeds",
   "agricraft.plant.aurigold.desc": "A golden delight.",
@@ -403,6 +413,10 @@
   "agricraft.plant.lapender.name": "Lapender",
   "agricraft.plant.lapender.seed": "Lapender Seeds",
   "agricraft.plant.lapender.desc": "A regal plant.",
+
+  "agricraft.plant.nethereed.name": "Nethereed",
+  "agricraft.plant.nethereed.seed": "Nethereed Seeds",
+  "agricraft.plant.nethereed.desc": "Regular reed's tougher cousin from the nether.",
 
   "agricraft.plant.niccissus.name": "Niccissus",
   "agricraft.plant.niccissus.seed": "Niccissus Seeds",

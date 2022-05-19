@@ -2,10 +2,10 @@ package com.infinityraider.agricraft.render.items.journal;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.network.MessageFlipJournalPage;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,17 +15,17 @@ import java.util.List;
 public class JournalClientData {
     private static final int FLIPPING_DURATION = 20;
 
-    private final PlayerEntity player;
+    private final Player player;
     private final IAgriJournalItem journal;
     private final List<IAgriJournalItem.IPage> pages;
-    private final Hand hand;
+    private final InteractionHand hand;
 
     private int target;
 
     private int animationCounter;
     private int prevAnimationCounter;
 
-    public JournalClientData(PlayerEntity player, Hand hand) {
+    public JournalClientData(Player player, InteractionHand hand) {
         this.player = player;
         this.hand = hand;
         this.journal = (IAgriJournalItem) this.getJournalStack().getItem();
@@ -33,7 +33,7 @@ public class JournalClientData {
         this.target = this.getJournal().getCurrentPageIndex(this.getJournalStack());
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 
@@ -42,10 +42,10 @@ public class JournalClientData {
     }
 
     public ItemStack getJournalStack() {
-        return this.getPlayer().getHeldItem(this.getHand());
+        return this.getPlayer().getItemInHand(this.getHand());
     }
 
-    public Hand getHand() {
+    public InteractionHand getHand() {
         return this.hand;
     }
 
@@ -108,6 +108,6 @@ public class JournalClientData {
     }
 
     public float getFlippingProgress(float partialTicks) {
-        return MathHelper.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/ FLIPPING_DURATION;
+        return Mth.lerp(partialTicks, this.prevAnimationCounter, this.animationCounter)/ FLIPPING_DURATION;
     }
 }

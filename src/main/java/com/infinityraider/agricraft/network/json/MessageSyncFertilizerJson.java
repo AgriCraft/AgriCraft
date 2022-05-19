@@ -2,15 +2,15 @@ package com.infinityraider.agricraft.network.json;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriSaver;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
+import com.agricraft.agricore.templates.AgriFertilizer;
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.impl.v1.CoreHandler;
-import com.infinityraider.agricraft.impl.v1.fertilizer.JsonFertilizer;
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.infinitylib.network.serialization.IMessageSerializer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -48,7 +48,7 @@ public class MessageSyncFertilizerJson extends MessageBase {
             final Path worldDir = CoreHandler.getJsonDir().resolve(this.getServerId());
             AgriSaver.saveElements(worldDir, AgriCore.getFertilizers().getAll());
             AgriCore.getFertilizers().getAll().stream()
-                    .map(JsonFertilizer::new)
+                    .map(fertilizer -> AgriCraft.instance.proxy().jsonObjectFactory().createFertilizer(fertilizer))
                     .forEach(AgriApi.getFertilizerAdapterizer()::registerAdapter);
         }
     }

@@ -7,12 +7,12 @@ public interface Reference {
     String AUTHOR = /*^${mod.author}^*/ "InfinityRaider";
 
     String VER_MAJOR = /*^${mod.version_major}^*/ "3";
-    String VER_MINOR = /*^${mod.version_minor}^*/ "0";
-    String VER_PATCH = /*^${mod.version_patch}^*/ "8";
+    String VER_MINOR = /*^${mod.version_minor}^*/ "1";
+    String VER_PATCH = /*^${mod.version_patch}^*/ "0";
     String MOD_VERSION = /*^${mod.version}^*/ VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH;;
-    String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "1.16.5-" + MOD_VERSION;
+    String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "1.18.2-" + MOD_VERSION;
 
-    String VERSION_INFLIB = /*^${mod.version_inflib}^*/ "1.16.5-2.0.6";
+    String VERSION_INFLIB = /*^${mod.version_inflib}^*/ "1.18.2-2.1.0";
     String VERSION_FORGE = /*^${mod.version_forge}^*/ "0.0-0.0.0";
 
 }

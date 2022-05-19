@@ -5,9 +5,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.requirement.*;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -29,6 +31,8 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     private final GrowConditionBase<IAgriSoil.Acidity> acidity;
     private final GrowConditionBase<IAgriSoil.Nutrients> nutrients;
     private final GrowConditionBase<Integer> lightLevel;
+    private final GrowConditionBase<Biome> biome;
+    private final GrowConditionBase<DimensionType> dimension;
     private final GrowConditionBase<AgriSeason> season;
     private final GrowConditionBase<Fluid> fluid;
 
@@ -37,16 +41,20 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
                                   GrowConditionBase<IAgriSoil.Acidity> acidity,
                                   GrowConditionBase<IAgriSoil.Nutrients> nutrients,
                                   GrowConditionBase<Integer> lightLevel,
+                                  GrowConditionBase<Biome> biome,
+                                  GrowConditionBase<DimensionType> dimension,
                                   GrowConditionBase<AgriSeason> season,
                                   GrowConditionBase<Fluid> fluid) {
         this.humidity = humidity;
         this.acidity = acidity;
         this.nutrients = nutrients;
         this.lightLevel = lightLevel;
+        this.biome = biome;
+        this.dimension = dimension;
         this.season = season;
         this.fluid = fluid;
         ImmutableSet.Builder<IAgriGrowCondition> builder = ImmutableSet.builder();
-        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season, this.fluid);
+        builder.add(this.humidity, this.acidity, this.nutrients, this.lightLevel, this.biome, this.dimension, this.season, this.fluid);
         builder.addAll(conditions);
         this.conditions = builder.build();
     }
@@ -78,6 +86,16 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     }
 
     @Override
+    public IAgriGrowthResponse getBiomeResponse(Biome biome, int strength) {
+        return this.biome.apply(strength, biome);
+    }
+
+    @Override
+    public IAgriGrowthResponse getDimensionResponse(DimensionType dimension, int strength) {
+        return this.dimension.apply(strength, dimension);
+    }
+
+    @Override
     public IAgriGrowthResponse getSeasonResponse(AgriSeason season, int strength) {
         return this.season.apply(strength, season);
     }
@@ -91,12 +109,14 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         private final Set<IAgriGrowCondition> conditions;
 
-        private GrowConditionBase<IAgriSoil.Humidity> humidity;
-        private GrowConditionBase<IAgriSoil.Acidity> acidity;
-        private GrowConditionBase<IAgriSoil.Nutrients> nutrients;
-        private GrowConditionBase<Integer> lightLevel;
-        private GrowConditionBase<AgriSeason> season;
-        private GrowConditionBase<Fluid> fluid;
+        private GrowConditionBase<IAgriSoil.Humidity> humidity = this.anySoilHumidity();
+        private GrowConditionBase<IAgriSoil.Acidity> acidity = this.anySoilAcidity();
+        private GrowConditionBase<IAgriSoil.Nutrients> nutrients = this.anySoilNutrients();
+        private GrowConditionBase<Integer> lightLevel = this.anyLight();
+        private GrowConditionBase<Biome> biome = this.anyBiome();
+        private GrowConditionBase<DimensionType> dimension = this.anyDimension();
+        private GrowConditionBase<AgriSeason> season = this.anySeason();
+        private GrowConditionBase<Fluid> fluid = this.anyFluid();
 
         private Builder() {
             this.conditions = Sets.newIdentityHashSet();
@@ -104,26 +124,8 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         @Override
         public IAgriGrowthRequirement build() {
-            if(this.humidity == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the humidity rule");
-            }
-            if(this.acidity == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the acidity rule");
-            }
-            if(this.nutrients == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the nutrients rule");
-            }
-            if(this.lightLevel == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the light level rule");
-            }
-            if(this.season == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the seasonality rule");
-            }
-            if(this.fluid == null) {
-                throw new IllegalStateException("Can not build an IAgriGrowthRequirement without initializing the fluid rule");
-            }
             return new AgriGrowthRequirement(
-                    this.conditions, this.humidity, this.acidity, this.nutrients, this.lightLevel, this.season, this.fluid
+                    this.conditions, this.humidity, this.acidity, this.nutrients, this.lightLevel, this.biome, this.dimension, this.season, this.fluid
             );
         }
 
@@ -158,6 +160,18 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
         }
 
         @Override
+        public IAgriGrowthRequirement.Builder defineBiome(BiFunction<Integer, Biome, IAgriGrowthResponse> response) {
+            this.biome = this.biome(response, Tooltips.BIOME_DESCRIPTION);
+            return this;
+        }
+
+        @Override
+        public IAgriGrowthRequirement.Builder defineDimension(BiFunction<Integer, DimensionType, IAgriGrowthResponse> response) {
+            this.dimension = this.dimensionFromType(response, Tooltips.DIMENSION_DESCRIPTION);
+            return null;
+        }
+
+        @Override
         public IAgriGrowthRequirement.Builder defineSeasonality(BiFunction<Integer, AgriSeason, IAgriGrowthResponse> response) {
             this.season = this.season(response, Tooltips.SEASON_DESCRIPTION);
             return this;
@@ -171,17 +185,21 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
     }
 
     public static final class Tooltips {
-        public static final List<ITextComponent> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> HUMIDITY_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.humidity.general"));
-        public static final List<ITextComponent> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> ACIDITY_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.acidity.general"));
-        public static final List<ITextComponent> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> NUTRIENT_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.soil.nutrients.general"));
-        public static final List<ITextComponent> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> LIGHT_LEVEL_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.light.general"));
-        public static final List<ITextComponent> FLUID_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> BIOME_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.biome.general"));
+        public static final List<Component> DIMENSION_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
+                AgriCraft.instance.getModId() + ".tooltip.growth_req.dimension.general"));
+        public static final List<Component> FLUID_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.fluid.general"));
-        public static final List<ITextComponent> SEASON_DESCRIPTION = ImmutableList.of(new TranslationTextComponent(
+        public static final List<Component> SEASON_DESCRIPTION = ImmutableList.of(new TranslatableComponent(
                 AgriCraft.instance.getModId() + ".tooltip.growth_req.season.general"));
 
         private Tooltips() {}
@@ -211,6 +229,16 @@ public class AgriGrowthRequirement implements IAgriGrowthRequirement {
 
         @Override
         public IAgriGrowthResponse getLightLevelResponse(int light, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getBiomeResponse(Biome biome, int strength) {
+            return IAgriGrowthResponse.INFERTILE;
+        }
+
+        @Override
+        public IAgriGrowthResponse getDimensionResponse(DimensionType dimension, int strength) {
             return IAgriGrowthResponse.INFERTILE;
         }
 

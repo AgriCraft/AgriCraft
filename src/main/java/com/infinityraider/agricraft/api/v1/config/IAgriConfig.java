@@ -61,6 +61,11 @@ public interface IAgriConfig {
     /**
      * @return true if the coal nugget item is enabled
      */
+    boolean enableCopperNugget();
+
+    /**
+     * @return true if the coal nugget item is enabled
+     */
     boolean enableCoalNugget();
 
     /**
@@ -77,6 +82,16 @@ public interface IAgriConfig {
      * @return true if the quartz nugget item is enabled
      */
     boolean enableQuartzNugget();
+
+    /**
+     * @return true if the netherite sliver item is enabled
+     */
+    boolean enableNetheriteSliver();
+
+    /**
+     * @return true if the amathyllis petal item is enabled
+     */
+    boolean enableAmathyllisPetal();
 
     /**
      * @return true if AgriCraft should generate resource crop jsons

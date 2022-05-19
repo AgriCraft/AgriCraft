@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.handler;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.capability.CapabilityGeneInspector;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -20,9 +20,9 @@ public class AnvilHandler {
     @SuppressWarnings("unused")
     public void onAnvilUpdate(AnvilUpdateEvent event) {
         ItemStack armor = ItemStack.EMPTY;
-        if(event.getLeft().getItem() == AgriCraft.instance.getModItemRegistry().magnifying_glass) {
+        if(event.getLeft().getItem() == AgriApi.getAgriContent().getItems().getMagnifyingGlassItem()) {
             armor = event.getRight();
-        } else if(event.getRight().getItem() == AgriCraft.instance.getModItemRegistry().magnifying_glass) {
+        } else if(event.getRight().getItem() == AgriApi.getAgriContent().getItems().getMagnifyingGlassItem()) {
             armor = event.getLeft();
         }
         if(CapabilityGeneInspector.getInstance().shouldApplyCapability(armor)) {
@@ -34,9 +34,9 @@ public class AnvilHandler {
                 // Set the name
                 String inputName = event.getName();
                 if(inputName == null || inputName.isEmpty()) {
-                    output.clearCustomName();
+                    output.resetHoverName();
                 } else {
-                    output.setDisplayName(new StringTextComponent(inputName));
+                    output.setHoverName(new TextComponent(inputName));
                 }
                 // set output and cost
                 event.setOutput(output);

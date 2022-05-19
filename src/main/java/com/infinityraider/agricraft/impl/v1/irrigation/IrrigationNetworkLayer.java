@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.impl.v1.irrigation;
 
 import com.infinityraider.agricraft.reference.AgriNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 
 import java.util.function.Consumer;
 
@@ -11,7 +11,7 @@ public class IrrigationNetworkLayer {
     private final double max;
     private final int volume;
 
-    public IrrigationNetworkLayer(CompoundNBT tag) {
+    public IrrigationNetworkLayer(CompoundTag tag) {
         this.min = tag.contains(AgriNBT.Y1) ? tag.getDouble(AgriNBT.Y1) : 0;
         this.max = tag.contains(AgriNBT.Y2) ? tag.getDouble(AgriNBT.Y2) : 0;
         this.volume = tag.contains(AgriNBT.LEVEL) ? tag.getInt(AgriNBT.LEVEL) : 0;
@@ -53,11 +53,11 @@ public class IrrigationNetworkLayer {
             return this.getMax();
         }
         double f = (content + 0.0D)/this.getVolume();
-        return MathHelper.lerp(f, this.getMin(), this.getMax());
+        return Mth.lerp(f, this.getMin(), this.getMax());
     }
 
-    public CompoundNBT writeToTag() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundTag writeToTag() {
+        CompoundTag tag = new CompoundTag();
         tag.putDouble(AgriNBT.Y1, this.getMin());
         tag.putDouble(AgriNBT.Y2, this.getMax());
         tag.putInt(AgriNBT.LEVEL, this.getVolume());

@@ -4,8 +4,8 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -13,9 +13,9 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class JournalDataDrawerBase<P extends IAgriJournalItem.IPage> implements IJournalDataDrawer<P> {
-    protected void drawMutation(IPageRenderContext context, MatrixStack transforms, int posX, int posY, List<IAgriPlant> plants) {
+    protected void drawMutation(IPageRenderContext context, PoseStack transforms, int posX, int posY, List<IAgriPlant> plants) {
         context.draw(transforms, Textures.MUTATION, posX, posY, 86, 18);
-        transforms.push();
+        transforms.pushPose();
         transforms.translate(0, 0, -0.001F);
         plants.get(0).getGuiRenderer().drawGrowthStage( plants.get(0), plants.get(0).getFinalStage(), context,
                 transforms, posX + 1, posY + 1, 16, 16);
@@ -23,7 +23,7 @@ public abstract class JournalDataDrawerBase<P extends IAgriJournalItem.IPage> im
                 transforms, posX + 35, posY + 1, 16, 16);
         plants.get(2).getGuiRenderer().drawGrowthStage( plants.get(2), plants.get(2).getFinalStage(), context,
                 transforms, posX + 69, posY + 1, 16, 16);
-        transforms.pop();
+        transforms.popPose();
     }
 
     public static final class Textures {

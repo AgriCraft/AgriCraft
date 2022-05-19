@@ -4,14 +4,14 @@ import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.Set;
 
-public class CapabilityCrop implements IInfCapabilityImplementation<TileEntity, IAgriCrop> {
+public class CapabilityCrop implements IInfCapabilityImplementation<BlockEntity, IAgriCrop> {
     private static final CapabilityCrop INSTANCE = new CapabilityCrop();
     private static final CropSerializer SERIALIZER = new CropSerializer();
 
@@ -25,7 +25,7 @@ public class CapabilityCrop implements IInfCapabilityImplementation<TileEntity, 
         this.instances = Sets.newConcurrentHashSet();
     }
 
-    public <T extends TileEntity, C extends IAgriCrop> void registerInstance(CropCapability.Instance<T, C> instance) {
+    public <T extends BlockEntity, C extends IAgriCrop> void registerInstance(CropCapability.Instance<T, C> instance) {
         this.instances.add(instance);
     }
 
@@ -50,12 +50,12 @@ public class CapabilityCrop implements IInfCapabilityImplementation<TileEntity, 
     }
 
     @Override
-    public boolean shouldApplyCapability(TileEntity carrier) {
+    public boolean shouldApplyCapability(BlockEntity carrier) {
         return this.instances.stream().anyMatch(instance -> instance.getCarrierClass().equals(carrier.getClass()));
     }
 
     @Override
-    public IAgriCrop createNewValue(TileEntity carrier) {
+    public IAgriCrop createNewValue(BlockEntity carrier) {
         return this.instances.stream()
                 .filter(instance -> instance.getCarrierClass().equals(carrier.getClass()))
                 .findAny()
@@ -64,7 +64,7 @@ public class CapabilityCrop implements IInfCapabilityImplementation<TileEntity, 
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends TileEntity, C extends IAgriCrop> C createInstance(TileEntity carrier, CropCapability.Instance<T, C> instance) {
+    private <T extends BlockEntity, C extends IAgriCrop> C createInstance(BlockEntity carrier, CropCapability.Instance<T, C> instance) {
         return instance.createCropFor((T) carrier);
     }
 
@@ -74,27 +74,27 @@ public class CapabilityCrop implements IInfCapabilityImplementation<TileEntity, 
     }
 
     @Override
-    public Class<TileEntity> getCarrierClass() {
-        return TileEntity.class;
+    public Class<BlockEntity> getCarrierClass() {
+        return BlockEntity.class;
     }
 
     private static class CropSerializer implements Serializer<IAgriCrop> {
         private CropSerializer() {}
 
         @Override
-        public CompoundNBT writeToNBT(IAgriCrop crop) {
-            CompoundNBT tag = new CompoundNBT();
+        public CompoundTag writeToNBT(IAgriCrop crop) {
+            CompoundTag tag = new CompoundTag();
             this.fetchInstance(crop).writeToNBT(tag, crop);
             return tag;
         }
 
         @Override
-        public void readFromNBT(IAgriCrop crop, CompoundNBT tag) {
+        public void readFromNBT(IAgriCrop crop, CompoundTag tag) {
             this.fetchInstance(crop).readFromNBT(tag, crop);
         }
 
         @SuppressWarnings("unchecked")
-        private <T extends TileEntity, C extends IAgriCrop> CropCapability.Instance<T,C> fetchInstance(IAgriCrop crop) {
+        private <T extends BlockEntity, C extends IAgriCrop> CropCapability.Instance<T,C> fetchInstance(IAgriCrop crop) {
             return (CropCapability.Instance<T,C>) CapabilityCrop.getInstance().instances.stream()
                     .filter(instance -> instance.getCropClass().isAssignableFrom(crop.getClass()))
                     .findFirst()

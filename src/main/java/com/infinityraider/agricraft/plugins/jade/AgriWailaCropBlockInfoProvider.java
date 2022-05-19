@@ -2,60 +2,55 @@ package com.infinityraider.agricraft.plugins.jade;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.crop.CropCapability;
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.content.core.BlockCropPlant;
-import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
+import com.infinityraider.agricraft.content.core.BlockCrop;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IDataAccessor;
-import mcp.mobius.waila.api.IPluginConfig;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
+import mcp.mobius.waila.api.BlockAccessor;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
+import mcp.mobius.waila.api.ui.IElementHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-import java.util.List;
-
-public class AgriWailaCropBlockInfoProvider implements IComponentProvider {
-    private static final AgriWailaCropBlockInfoProvider INSTANCE = new AgriWailaCropBlockInfoProvider();
-
-    public static AgriWailaCropBlockInfoProvider getInstance() {
-        return INSTANCE;
+public class AgriWailaCropBlockInfoProvider extends AgriWailaBlockInfoProviderAbstract {
+    protected AgriWailaCropBlockInfoProvider(IElementHelper helper) {
+        super(helper);
     }
 
-    private AgriWailaCropBlockInfoProvider() {}
-
-    @Override
-    public ItemStack getStack(IDataAccessor accessor, IPluginConfig config) {
-        if(accessor.getBlock() instanceof BlockCropPlant) {
-            TileEntity tile = accessor.getTileEntity();
-            if(tile instanceof TileEntityCropPlant) {
-                TileEntityCropPlant crop = (TileEntityCropPlant) tile;
+    public ItemStack getStack(BlockAccessor accessor) {
+        if(accessor.getBlock() instanceof BlockCrop) {
+            BlockEntity tile = accessor.getBlockEntity();
+            if(tile instanceof IAgriCrop) {
+                IAgriCrop crop = (IAgriCrop) tile;
                 IAgriPlant plant = crop.getPlant();
                 if(plant.isPlant()) {
                     return plant.toItemStack();
                 }
+            } else {
+                return tile.getCapability(CropCapability.getCapability())
+                        .map(crop -> crop.getPlant())
+                        .map(plant -> plant.isPlant() ? plant.toItemStack() : ItemStack.EMPTY)
+                        .orElse(ItemStack.EMPTY);
             }
         }
         return ItemStack.EMPTY;
     }
 
-
-
     @Override
-    public void appendHead(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
-        if(accessor.getBlock() instanceof BlockCropPlant) {
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        // Head
+        if(accessor.getBlock() instanceof BlockCrop) {
             tooltip.clear();
-            tooltip.add(this.getStack(accessor, config).getDisplayName());
+            tooltip.add(this.getStack(accessor).getDisplayName());
         }
-    }
-
-    @Override
-    public void appendBody(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
-        AgriApi.getCrop(accessor.getWorld(), accessor.getPosition()).ifPresent(crop -> {
-            PlayerEntity player = accessor.getPlayer();
+        // Body
+        AgriApi.getCrop(accessor.getLevel(), accessor.getPosition()).ifPresent(crop -> {
+            Player player = accessor.getPlayer();
             // Add data including full genome if in creative mode
-            if(player.getHeldItemMainhand().getItem() == AgriCraft.instance.getModItemRegistry().debugger) {
+            if(player.getMainHandItem().getItem() == AgriApi.getAgriContent().getItems().getDebuggerItem()) {
                 crop.addDisplayInfo(tooltip::add);
                 tooltip.add(AgriToolTips.GENOME);
                 crop.getGenome().map(genome -> {
@@ -72,11 +67,11 @@ public class AgriWailaCropBlockInfoProvider implements IComponentProvider {
                 }
             }
         });
-        AgriApi.getSoil(accessor.getWorld(), accessor.getPosition()).ifPresent(soil ->
+        AgriApi.getSoil(accessor.getLevel(), accessor.getPosition()).ifPresent(soil ->
                 soil.addDisplayInfo(tooltip::add));
     }
 
-    protected boolean shouldAddInfo(PlayerEntity player) {
+    protected boolean shouldAddInfo(Player player) {
         if (AgriCraft.instance.getConfig().doesMagnifyingGlassControlTOP()) {
             return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
         }

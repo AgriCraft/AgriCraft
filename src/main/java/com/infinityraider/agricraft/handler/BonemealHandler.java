@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.handler;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -24,10 +24,10 @@ public class BonemealHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void denyBonemeal(PlayerInteractEvent.RightClickBlock event) {
-        if (!event.getEntityLiving().isSneaking()) {
+        if (!event.getEntityLiving().isDiscrete()) {
             return;
         }
-        ItemStack heldItem = event.getEntityLiving().getActiveItemStack();
+        ItemStack heldItem = event.getEntityLiving().getUseItem();
         if (!heldItem.isEmpty() && heldItem.getItem() == Items.BONE_MEAL) {
             AgriApi.getCrop(event.getWorld(), event.getPos()).ifPresent(crop -> event.setUseItem(Event.Result.DENY));
         }

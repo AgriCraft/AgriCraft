@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.impl.v1;
 
 import com.agricraft.agricore.core.AgriCore;
 import com.agricraft.agricore.json.AgriLoader;
-import com.agricraft.agricore.plant.*;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
+import com.agricraft.agricore.templates.*;
+import com.agricraft.agricore.templates.AgriFertilizer;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
@@ -12,10 +12,6 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.config.Config;
-import com.infinityraider.agricraft.impl.v1.fertilizer.JsonFertilizer;
-import com.infinityraider.agricraft.impl.v1.plant.JsonPlant;
-import com.infinityraider.agricraft.impl.v1.plant.JsonWeed;
-import com.infinityraider.agricraft.impl.v1.requirement.JsonSoil;
 import com.infinityraider.agricraft.reference.Reference;
 
 import java.nio.file.Path;
@@ -25,8 +21,8 @@ import java.util.regex.Pattern;
 
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.loading.moddiscovery.ModFile;
-import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
+import net.minecraftforge.forgespi.language.IModFileInfo;
+import net.minecraftforge.forgespi.locating.IModFile;
 
 public final class CoreHandler {
     public static final Pattern JSON_FILE_PATTERN = Pattern.compile(".*\\.json", Pattern.CASE_INSENSITIVE);
@@ -84,8 +80,8 @@ public final class CoreHandler {
         // Transfer Defaults
         if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {
             ResourceHelper.copyResources(
-                    ModList.get().getModFiles().stream().map(ModFileInfo::getFile).map(ModFile::getFilePath),
-                    JSON_FILE_PATTERN.asPredicate(),
+                    ModList.get().getModFiles().stream().map(IModFileInfo::getFile).map(IModFile::getFilePath),
+                    JSON_FILE_PATTERN,
                     AGRI_FOLDER_PATTERN.asPredicate().and(MOD_FILTER),
                     configDir::resolve,
                     false);
@@ -135,7 +131,7 @@ public final class CoreHandler {
         // Transfer
         AgriCore.getSoils().getAll().stream()
                 .filter(AgriSoil::isEnabled)
-                .map(JsonSoil::new)
+                .map(soil -> AgriCraft.instance.proxy().jsonObjectFactory().createSoil(soil))
                 .forEach(AgriApi.getSoilRegistry()::add);
 
         // Display Soils
@@ -158,7 +154,7 @@ public final class CoreHandler {
         AgriCore.getPlants().validate();
         AgriCore.getPlants().getAllElements().stream()
                 .filter(AgriPlant::isEnabled)
-                .map(JsonPlant::new)
+                .map(plant -> AgriCraft.instance.proxy().jsonObjectFactory().createPlant(plant))
                 .forEach(AgriApi.getPlantRegistry()::add);
 
         // Display Plants
@@ -181,7 +177,7 @@ public final class CoreHandler {
         AgriCore.getWeeds().validate();
         AgriCore.getWeeds().getAllElements().stream()
                 .filter(AgriWeed::isEnabled)
-                .map(JsonWeed::new)
+                .map(weed -> AgriCraft.instance.proxy().jsonObjectFactory().createWeed(weed))
                 .forEach(AgriApi.getWeedRegistry()::add);
 
         // Display Plants
@@ -229,7 +225,7 @@ public final class CoreHandler {
         AgriCore.getLogger("agricraft").info("Registered Fertilizers ({0}/{1}):", count, raw);
         AgriCore.getFertilizers().getAll().stream()
                 .filter(AgriFertilizer::isEnabled)
-                .map(JsonFertilizer::new)
+                .map(fertilizer -> AgriCraft.instance.proxy().jsonObjectFactory().createFertilizer(fertilizer))
                 .forEach(fertilizer -> {
                     AgriApi.getFertilizerAdapterizer().registerAdapter(fertilizer);
                     AgriCore.getLogger("agricraft").info(" - {0}", fertilizer.getId());

@@ -9,14 +9,14 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.render.plant.AgriGenomeRenderer;
 import com.infinityraider.agricraft.util.AnimatedScrollPosition;
 import com.infinityraider.infinitylib.reference.Constants;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -51,12 +51,12 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
-    public boolean canInspect(World world, BlockPos pos, PlayerEntity player) {
+    public boolean canInspect(Level world, BlockPos pos, Player player) {
         return AgriApi.getCrop(world, pos).isPresent();
     }
 
     @Override
-    public boolean canInspect(World world, Entity entity, PlayerEntity player) {
+    public boolean canInspect(Level world, Entity entity, Player player) {
         if(entity.isAlive() && entity instanceof ItemEntity) {
             ItemEntity item = (ItemEntity) entity;
             return item.getItem().getItem() instanceof IAgriGeneCarrierItem;
@@ -65,39 +65,39 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
-    public void onInspectionStart(World world, BlockPos pos, PlayerEntity player) {
+    public void onInspectionStart(Level world, BlockPos pos, Player player) {
         this.genomeCache = AgriApi.getCrop(world, pos)
                 .map(crop -> crop.getGenome().map(IAgriGenome::getGeneList).orElse(ImmutableList.of()))
                 .orElse(ImmutableList.of());
     }
 
     @Override
-    public void onInspectionStart(World world, Entity entity, PlayerEntity player) {
+    public void onInspectionStart(Level world, Entity entity, Player player) {
         ItemEntity item = (ItemEntity) entity;
         IAgriGeneCarrierItem seed = (IAgriGeneCarrierItem) item.getItem().getItem();
         this.genomeCache = seed.getGenome(item.getItem()).map(IAgriGenome::getGeneList).orElse(ImmutableList.of());
     }
 
     @Override
-    public boolean onInspectionTick(World world, BlockPos pos, PlayerEntity player) {
+    public boolean onInspectionTick(Level world, BlockPos pos, Player player) {
         this.scrollPosition.tick();
         return this.genomeCache != null && (!this.genomeCache.isEmpty()) && this.canInspect(world, pos, player);
     }
 
     @Override
-    public boolean onInspectionTick(World world, Entity entity, PlayerEntity player) {
+    public boolean onInspectionTick(Level world, Entity entity, Player player) {
         this.scrollPosition.tick();
         return this.genomeCache != null && (!this.genomeCache.isEmpty()) && this.canInspect(world, entity, player);
     }
 
     @Override
-    public void onInspectionEnd(World world, BlockPos pos, PlayerEntity player) {
+    public void onInspectionEnd(Level world, BlockPos pos, Player player) {
         this.scrollPosition.reset();
         this.genomeCache = null;
     }
 
     @Override
-    public void onInspectionEnd(World world, @Nullable Entity entity, PlayerEntity player) {
+    public void onInspectionEnd(Level world, @Nullable Entity entity, Player player) {
         this.scrollPosition.reset();
         this.genomeCache = null;
     }
@@ -108,7 +108,7 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
     @Override
-    public void doInspectionRender(MatrixStack transforms, float partialTick, @Nullable Entity entity) {
+    public void doInspectionRender(PoseStack transforms, float partialTick, @Nullable Entity entity) {
         // Check if the genome can be rendered
         List<IAgriGenePair<?>> genome = this.genomeCache;
         if(genome == null || genome.size() <= 0) {
@@ -121,9 +121,9 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
     }
 
 
-    protected void renderDoubleHelix(List<IAgriGenePair<?>> genome, MatrixStack transforms, float partialTicks) {
+    protected void renderDoubleHelix(List<IAgriGenePair<?>> genome, PoseStack transforms, float partialTicks) {
         // Push matrix for helix render
-        transforms.push();
+        transforms.pushPose();
 
         // helix dimensions
         float h = Constants.HALF;
@@ -140,18 +140,18 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
                 genome, transforms, this.getScrollIndex(), this.getScrollProgress(partialTicks), r, h, 1.0F, false);
 
         // Pop matrix after helix render
-        transforms.pop();
+        transforms.popPose();
     }
 
-    protected void renderTextOverlay(List<IAgriGenePair<?>> genome, MatrixStack transforms) {
+    protected void renderTextOverlay(List<IAgriGenePair<?>> genome, PoseStack transforms) {
         // Push matrix for overlay render
-        transforms.push();
+        transforms.pushPose();
 
         // Translate down
         transforms.translate(0, TEXT_OFFSET, 0);
 
         // Flip text
-        transforms.rotate(TEXT_FLIPPER);
+        transforms.mulPose(TEXT_FLIPPER);
 
         // Scale down
         float width = AgriGenomeRenderer.getInstance().getScaledWindowWidth();
@@ -164,6 +164,6 @@ public class MagnifyingGlassGenomeInspector implements IMagnifyingGlassInspector
         AgriGenomeRenderer.getInstance().renderTextOverlay(transforms, genome.get(index));
 
         // Pop matrix for overlay render
-        transforms.pop();
+        transforms.popPose();
     }
 }

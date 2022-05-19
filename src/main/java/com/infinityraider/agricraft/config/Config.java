@@ -45,10 +45,13 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
 
         // resource crops
         private final ForgeConfigSpec.ConfigValue<Boolean> generateResourceCropJsons;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableCopperNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableCoalNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableDiamondNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableEmeraldNugget;
         private final ForgeConfigSpec.ConfigValue<Boolean> enableQuartzNugget;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableNetheriteSliver;
+        private final ForgeConfigSpec.ConfigValue<Boolean> enableAmathyllisPetal;
 
         // stats
         private final ForgeConfigSpec.ConfigValue<String> statTraitLogic;
@@ -165,6 +168,8 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             builder.push("resource crops");
             this.generateResourceCropJsons = builder.comment("\nSet to false to disable the generation of resource crop jsons")
                     .define("Enable resource crop json generation", true);
+            this.enableCopperNugget = builder.comment("\nSet to false to disable the copper nugget (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable copper nugget", true);
             this.enableCoalNugget = builder.comment("\nSet to false to disable the coal nugget (in case resource crops are disabled, or alternatives are available")
                     .define("Enable coal nugget", true);
             this.enableDiamondNugget = builder.comment("\nSet to false to disable the diamond nugget (in case resource crops are disabled, or alternatives are available")
@@ -173,6 +178,10 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .define("Enable emerald nugget", true);
             this.enableQuartzNugget = builder.comment("\nSet to false to disable the quartz nugget (in case resource crops are disabled, or alternatives are available")
                     .define("Enable quartz nugget", true);
+            this.enableNetheriteSliver = builder.comment("\nSet to false to disable the netherite sliver (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable netherite sliver", true);
+            this.enableAmathyllisPetal = builder.comment("\nSet to false to disable the amathyllis petal (in case resource crops are disabled, or alternatives are available")
+                    .define("Enable amathyllis petal", true);
             builder.pop();
 
             builder.push("stats");
@@ -254,7 +263,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
                     .defineInRange("Greenhouse block size limit", 512, 512, Integer.MAX_VALUE);
             this.greenHouseCeilingGlassFraction = builder.comment("\nThe minimum fraction of glass-type blocks a greenhouse ceiling needs in order to work (0.0 = none, 1.0 = all)" +
                     "\nBe careful when modifying this value as it might break village greenhouses")
-                    .defineInRange("Greenhouse ceiling glass fraction", 0.65, 0.0, 1.0);
+                    .defineInRange("Greenhouse ceiling glass fraction", 0.40, 0.0, 1.0);
             this.greenHouseIgnoresSeasons = builder.comment("\nSet to false if greenhouses should not make crops ignore seasons")
                     .define("Greenhouses ignore seasons", true);
             this.greenHouseGrowthModifier = builder.comment("\nThe growth rate modifier applied to crops inside greenhouses;" +
@@ -537,6 +546,11 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
         }
 
         @Override
+        public boolean enableCopperNugget() {
+            return this.enableCopperNugget.get();
+        }
+
+        @Override
         public boolean enableCoalNugget() {
             return this.enableCoalNugget.get();
         }
@@ -556,6 +570,15 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             return this.enableQuartzNugget.get();
         }
 
+        @Override
+        public boolean enableNetheriteSliver() {
+            return enableNetheriteSliver.get();
+        }
+
+        @Override
+        public boolean enableAmathyllisPetal() {
+            return enableAmathyllisPetal.get();
+        }
 
         @Override
         public boolean enableJsonWriteback() {

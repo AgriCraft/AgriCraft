@@ -2,12 +2,12 @@ package com.infinityraider.agricraft.util.debug;
 
 import com.infinityraider.agricraft.handler.GreenHouseHandler;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class DebugModeGreenHouse extends DebugMode {
     @Override
@@ -16,19 +16,19 @@ public class DebugModeGreenHouse extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+    public void debugActionBlockClicked(ItemStack stack, UseOnContext context) {
 
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
-        if(!world.isRemote()) {
-            GreenHouseHandler.getInstance().checkAndFormGreenHouse(world, player.getPosition().up());
+    public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
+        if(!world.isClientSide()) {
+            GreenHouseHandler.getInstance().checkAndFormGreenHouse(world, player.getOnPos().above());
         }
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+    public void debugActionEntityClicked(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
 
     }
 }

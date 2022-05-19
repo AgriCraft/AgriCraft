@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.api.v1.client;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,7 +50,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
      * @param stack the ItemStack representing the journal which is being read
      * @param journal the IAgriJournalItem representing the journal which is being read
      */
-    void drawLeftSheet(P page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal);
+    void drawLeftSheet(P page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal);
 
     /**
      * Called to draw the content on the right sheet of the page
@@ -60,7 +60,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
      * @param stack the ItemStack representing the journal which is being read
      * @param journal the IAgriJournalItem representing the journal which is being read
      */
-    void drawRightSheet(P page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal);
+    void drawRightSheet(P page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal);
 
     /**
      * Called to draw the tooltips of the left sheet of the page according to the position of the mouse
@@ -70,7 +70,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
      * @param x the x position of the mouse in the page
      * @param y the y position of the mouse in the page
      */
-    default void drawTooltipLeft(P page, IPageRenderContext context, MatrixStack transforms, int x, int y) { }
+    default void drawTooltipLeft(P page, IPageRenderContext context, PoseStack transforms, int x, int y) { }
 
 
     /**
@@ -81,7 +81,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
      * @param x the x position of the mouse in the page
      * @param y the y position of the mouse in the page
      */
-    default void drawTooltipRight(P page, IPageRenderContext context, MatrixStack transforms, int x, int y) { }
+    default void drawTooltipRight(P page, IPageRenderContext context, PoseStack transforms, int x, int y) { }
 
     /**
      * Render context passed to the IJournalDataDrawer to render page contents.
@@ -104,7 +104,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param transforms the transformation matrix
          * @param texture the texture to draw
          */
-        default void drawFullPageTexture(MatrixStack transforms, ResourceLocation texture) {
+        default void drawFullPageTexture(PoseStack transforms, ResourceLocation texture) {
             this.draw(transforms, texture, 0, 0, this.getPageWidth(), this.getPageHeight());
         }
 
@@ -117,7 +117,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param w the width of the texture
          * @param h the height of the texture
          */
-        default void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
+        default void draw(PoseStack transforms, ResourceLocation texture, float x, float y, float w, float h) {
             this.draw(transforms, texture, x, y, w, h, 0, 0, 1, 1);
         }
 
@@ -134,7 +134,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param u2 texture u to draw to
          * @param v2 texture v to draw to
          */
-        void draw(MatrixStack transforms, ResourceLocation texture, float x, float y, float w, float h, float u1, float v1, float u2, float v2) ;
+        void draw(PoseStack transforms, ResourceLocation texture, float x, float y, float w, float h, float u1, float v1, float u2, float v2) ;
 
         /**
          * Draws a TextureAtlasSprite
@@ -145,7 +145,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param w the width of the sprite
          * @param h the height of the sprite
          */
-        default void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h) {
+        default void draw(PoseStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h) {
             this.draw(transforms, texture, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F);
         }
 
@@ -165,7 +165,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param b the color blue value
          * @param a the color alpha value
          */
-        void draw(MatrixStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a);
+        void draw(PoseStack transforms, float x, float y, float w, float h, float u1, float v1, float u2, float v2, float r, float g, float b, float a);
 
         /**
          * Draws text at the default scale
@@ -175,7 +175,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param y the text y position
          * @return the height of the drawn text
          */
-        default float drawText(MatrixStack transforms, ITextComponent text, float x, float y) {
+        default float drawText(PoseStack transforms, Component text, float x, float y) {
             return this.drawText(transforms, text, x, y, 1.0F);
         }
 
@@ -188,7 +188,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param scale the height of the drawn text
          * @return the height of the drawn text
          */
-        float drawText(MatrixStack transforms, ITextComponent text, float x, float y, float scale);
+        float drawText(PoseStack transforms, Component text, float x, float y, float scale);
 
         /**
          * Draws an item
@@ -197,7 +197,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param x the x position to draw the item at
          * @param y the y position to draw the item at
          */
-        void drawItem(MatrixStack transforms, ItemStack item, float x, float y);
+        void drawItem(PoseStack transforms, ItemStack item, float x, float y);
 
         /**
          * Draws a tooltip
@@ -206,7 +206,7 @@ public interface IJournalDataDrawer<P extends IAgriJournalItem.IPage> {
          * @param x the x position to draw the item at
          * @param y the y position to draw the item at
          */
-        default void drawTooltip(MatrixStack transforms, List<ITextComponent> textLines, float x, float y) {}
+        default void drawTooltip(PoseStack transforms, List<Component> textLines, float x, float y) {}
 
     }
 }

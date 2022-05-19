@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "crop_state=plant": [{"model": "agricraft:block/crop/plant"}],
+
+    "crop_state=single_sticks,stick_type=wood": [{"model": "agricraft:block/crop/wood"}],
+    "crop_state=single_sticks,stick_type=iron": [{"model": "agricraft:block/crop/iron"}],
+    "crop_state=single_sticks,stick_type=obsidian": [{"model": "agricraft:block/crop/obsidian"}],
+
+    "crop_state=double_sticks,stick_type=wood": [{"model": "agricraft:block/crop/wood_cross"}],
+    "crop_state=double_sticks,stick_type=iron": [{"model": "agricraft:block/crop/iron_cross"}],
+    "crop_state=double_sticks,stick_type=obsidian": [{"model": "agricraft:block/crop/obsidian_cross"}],
+
+    "crop_state=sticks_plant,stick_type=wood": [{"model": "agricraft:block/crop/wood_plant"}],
+    "crop_state=sticks_plant,stick_type=iron": [{"model": "agricraft:block/crop/iron_plant"}],
+    "crop_state=sticks_plant,stick_type=obsidian": [{"model": "agricraft:block/crop/obsidian_plant"}]
+  }
+}

@@ -3,55 +3,55 @@ package com.infinityraider.agricraft.plugins.agrigui.analyzer;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.impl.v1.genetics.GeneSpecies;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
+public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerContainer> {
 
 	private final ResourceLocation GUI = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/seed_analyzer_gui.png");
-	private final ITextComponent TEXT_SEPARATOR = new StringTextComponent("-");
+	private final Component TEXT_SEPARATOR = new TextComponent("-");
 
 	private int geneIndex;
 
-	public SeedAnalyzerScreen(SeedAnalyzerContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-		super(screenContainer, inv, titleIn);
-		this.xSize = 186;
-		this.ySize = 186;
-		this.playerInventoryTitleY = this.ySize - 94;
+	public SeedAnalyzerScreen(SeedAnalyzerContainer screenContainer, Inventory inv, Component title) {
+		super(screenContainer, inv, title);
+		this.imageWidth = 186;
+		this.imageHeight = 186;
+		this.titleLabelY = this.imageHeight - 94;
 		this.geneIndex = 0;
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(GUI);
-		int relX = (this.width - this.xSize) / 2;
-		int relY = (this.height - this.ySize) / 2;
+	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, GUI);
+		int relX = (this.width - this.imageWidth) / 2;
+		int relY = (this.height - this.imageHeight) / 2;
 		// background
-		this.blit(matrixStack, relX, relY, 0, 0, this.xSize, this.ySize);
+		this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 		//journal slot
 		this.blit(matrixStack, relX + 25, relY + 70, 186, 73, 18, 18);
 		// magnifying glass
 		this.blit(matrixStack, relX + 13, relY + 25, 0, 186, 56, 56);
 
-		List<IAgriGenePair<?>> genes = container.getGeneToRender();
+		List<IAgriGenePair<?>> genes = menu.getGeneToRender();
 		int geneSize = genes.size();
 
 		// up/down buttons
@@ -69,14 +69,14 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 			for (int i = 0; i < geneSize; i++) {
 				if (genes.get(i).getGene() instanceof GeneSpecies) {
 					IAgriGenePair<?> pair = genes.remove(i);
-					ITextComponent domText = pair.getDominant().getTooltip();
-					ITextComponent recText = pair.getRecessive().getTooltip();
-					int domw = this.font.getStringWidth(domText.getString());
-					int middle = relX + this.xSize / 2;
-					int sepLength = this.font.getStringWidth(TEXT_SEPARATOR.getString());
-					this.font.drawText(matrixStack, TEXT_SEPARATOR, middle - sepLength / 2F, relY + 16, 0);
-					this.font.drawText(matrixStack, domText, middle - domw - sepLength / 2F - 1, relY + 16, 0);
-					this.font.drawText(matrixStack, recText, middle + sepLength / 2F + 1, relY + 16, 0);
+					Component domText = pair.getDominant().getTooltip();
+					Component recText = pair.getRecessive().getTooltip();
+					int domw = this.font.width(domText.getString());
+					int middle = relX + this.imageWidth / 2;
+					int sepLength = this.font.width(TEXT_SEPARATOR.getString());
+					this.font.draw(matrixStack, TEXT_SEPARATOR, middle - sepLength / 2F, relY + 16, 0);
+					this.font.draw(matrixStack, domText, middle - domw - sepLength / 2F - 1, relY + 16, 0);
+					this.font.draw(matrixStack, recText, middle + sepLength / 2F + 1, relY + 16, 0);
 					break;
 				}
 			}
@@ -89,42 +89,42 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 				Vector3f[] colors = {pair.getGene().getDominantColor(), pair.getGene().getRecessiveColor()};
 				for (int j = 0; j < 2; j++) {
 					int argb = ((0xFF) << 24) |
-							((((int) (colors[j].getX() * 255)) & 0xFF) << 16) |
-							((((int) (colors[j].getY() * 255)) & 0xFF) << 8) |
-							((((int) (colors[j].getZ() * 255)) & 0xFF));
+							((((int) (colors[j].x() * 255)) & 0xFF) << 16) |
+							((((int) (colors[j].y() * 255)) & 0xFF) << 8) |
+							((((int) (colors[j].z() * 255)) & 0xFF));
 					for (int k = 0; k < lineAmount[lineIndex]; k++) {
 						hLine(matrixStack, DNA_X + 9 * j, DNA_X + 9 + 8 * j, relY + 26 + lineStart[lineIndex] + k * 5, argb);
 					}
 				}
 				// text of the gene
-				ITextComponent geneText = pair.getGene().getGeneDescription();
-				ITextComponent domText = pair.getDominant().getTooltip();
-				ITextComponent recText = pair.getRecessive().getTooltip();
-				int domw = this.font.getStringWidth(domText.getString());
-				this.font.drawText(matrixStack, geneText, DNA_X + 36, yy, 0);
-				this.font.drawText(matrixStack, domText, DNA_X - domw - 1, yy, 0);
-				this.font.drawText(matrixStack, recText, DNA_X + 21, yy, 0);
-				yy += this.font.FONT_HEIGHT + 4;
+				Component geneText = pair.getGene().getGeneDescription();
+				Component domText = pair.getDominant().getTooltip();
+				Component recText = pair.getRecessive().getTooltip();
+				int domw = this.font.width(domText.getString());
+				this.font.draw(matrixStack, geneText, DNA_X + 36, yy, 0);
+				this.font.draw(matrixStack, domText, DNA_X - domw - 1, yy, 0);
+				this.font.draw(matrixStack, recText, DNA_X + 21, yy, 0);
+				yy += this.font.lineHeight + 4;
 			}
 			// shape of the dna
-			this.minecraft.getTextureManager().bindTexture(GUI);
+			RenderSystem.setShaderTexture(0, GUI);
 			this.blit(matrixStack, DNA_X, relY + 26, 186, 0, 19, 73);
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-		this.font.drawText(matrixStack, this.title, (float) this.titleX + 5, (float) this.titleY, 4210752);
-		this.font.drawText(matrixStack, this.playerInventory.getDisplayName(), (float) this.playerInventoryTitleX + 5, (float) this.playerInventoryTitleY, 4210752);
+	protected void renderLabels(PoseStack matrixStack, int x, int y) {
+		this.font.draw(matrixStack, this.title, (float) this.titleLabelX + 5, (float) this.titleLabelY, 4210752);
+		this.font.draw(matrixStack, this.playerInventoryTitle, (float) this.titleLabelX + 5, (float) this.titleLabelY, 4210752);
 	}
 
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		List<IAgriGenePair<?>> genes = container.getGeneToRender();
+		List<IAgriGenePair<?>> genes = menu.getGeneToRender();
 		int maxIndex = genes.size() - 1;
 		if (maxIndex > 6) {
-			int startX = (this.width - this.xSize) / 2;
-			int startY = (this.height - this.ySize) / 2;
+			int startX = (this.width - this.imageWidth) / 2;
+			int startY = (this.height - this.imageHeight) / 2;
 			if (hoverUpButton(startX, startY, (int) mouseX, (int) mouseY)) {
 				if (geneIndex > 0) {
 					geneIndex--;
@@ -141,7 +141,7 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-		List<IAgriGenePair<?>> genes = container.getGeneToRender();
+		List<IAgriGenePair<?>> genes = menu.getGeneToRender();
 		int maxIndex = genes.size() - 1;
 		if (maxIndex > 6) {
 			if (delta < 0) {

@@ -12,10 +12,11 @@ import com.infinityraider.agricraft.impl.v1.plant.AgriWeedRegistry;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
@@ -53,7 +54,7 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {}
+    public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {}
 
     @Override
     @Nonnull
@@ -65,16 +66,16 @@ public class AgriPlantModelLoader implements InfModelLoader<AgriPlantModelLoader
         private Geometry() {}
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-                return new AgriPlantModelBridge(owner, overrides, spriteGetter);
+        public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter,
+                               ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+            return new AgriPlantModelBridge(owner, overrides, spriteGetter);
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-            ImmutableList.Builder<RenderMaterial> builder = new ImmutableList.Builder<>();
-            this.processRegistryTextures(AgriPlantRegistry.getInstance(), rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
-            this.processRegistryTextures(AgriWeedRegistry.getInstance(), rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
+        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+            ImmutableList.Builder<Material> builder = new ImmutableList.Builder<>();
+            this.processRegistryTextures(AgriPlantRegistry.getInstance(), rl -> builder.add(new Material(this.getTextureAtlasLocation(), rl)));
+            this.processRegistryTextures(AgriWeedRegistry.getInstance(), rl -> builder.add(new Material(this.getTextureAtlasLocation(), rl)));
             return builder.build();
         }
 

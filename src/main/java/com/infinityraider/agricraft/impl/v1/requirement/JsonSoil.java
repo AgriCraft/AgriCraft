@@ -1,12 +1,12 @@
 package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriSoil;
+import com.agricraft.agricore.templates.AgriSoil;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
  */
 public class JsonSoil implements IAgriSoil {
     private final String id;
-    private final ITextComponent name;
+    private final Component name;
     private final Collection<BlockState> variants;
 
     private final Humidity humidity;
@@ -28,7 +28,7 @@ public class JsonSoil implements IAgriSoil {
 
     public JsonSoil(@Nonnull AgriSoil soil) {
         this.id = Preconditions.checkNotNull(soil).getId();
-        this.name = new TranslationTextComponent(soil.getLangKey());
+        this.name = new TranslatableComponent(soil.getLangKey());
         this.variants = Collections.unmodifiableCollection(Preconditions.checkNotNull(soil.getVariants(BlockState.class)));
         this.humidity = IAgriSoil.Humidity.fromString(soil.getHumidity()).orElseGet(() -> {
             AgriCore.getLogger("agricraft").warn(
@@ -56,7 +56,7 @@ public class JsonSoil implements IAgriSoil {
 
     @Override
     @Nonnull
-    public ITextComponent getName() {
+    public Component getName() {
         return this.name;
     }
 

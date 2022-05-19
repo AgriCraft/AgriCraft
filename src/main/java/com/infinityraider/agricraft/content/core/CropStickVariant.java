@@ -1,89 +1,100 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.util.FluidPredicates;
-import com.infinityraider.infinitylib.block.BlockBase;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.IExtensibleEnum;
 
+import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
-public enum CropStickVariant {
-    WOOD(
-            Material.PLANTS,
-            3,
-            SoundType.WOOD,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_wood,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
-            FluidPredicates.NOT_LAVA
-    ),
-
-    IRON(
-            Material.PLANTS,
-            7,
-            SoundType.ANVIL,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_iron,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
-            FluidPredicates.ANY_FLUID
-    ),
-
-    OBSIDIAN(Material.PLANTS,
-            7,
-            SoundType.BASALT,
-            () -> () -> AgriCraft.instance.getModItemRegistry().crop_sticks_obsidian,
-            () -> () -> AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian,
-            FluidPredicates.ANY_FLUID
-    );
+public enum CropStickVariant implements IAgriCropStickItem.Variant, IExtensibleEnum {
+    WOOD(Material.PLANT, SoundType.WOOD, FluidPredicates.NOT_LAVA),
+    IRON(Material.PLANT, SoundType.ANVIL, FluidPredicates.ANY_FLUID),
+    OBSIDIAN(Material.PLANT, SoundType.BASALT, FluidPredicates.ANY_FLUID);
 
     private final String id;
-    private final int strength;
     private final SoundType sound;
     private final Material material;
-    private final Supplier<Supplier<ItemCropSticks>> itemSupplier;
-    private final Supplier<Supplier<BlockBase>> blockSupplier;
     private final Predicate<Fluid> fluidPredicate;
 
-    CropStickVariant(Material material, int strength, SoundType sound,
-                     Supplier<Supplier<ItemCropSticks>> itemSupplier,
-                     Supplier<Supplier<BlockBase>> blockSupplier,
-                     Predicate<Fluid> fluidPredicate) {
+    private Supplier<ItemCropSticks> item;
+
+    CropStickVariant(Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
         this.id = Names.Blocks.CROP_STICKS + "_" + this.name().toLowerCase();
-        this.strength = strength;
         this.sound = sound;
         this.material = material;
-        this.itemSupplier = itemSupplier;
-        this.blockSupplier = blockSupplier;
         this.fluidPredicate = fluidPredicate;
     }
 
+    @Override
     public final String getId() {
         return this.id;
     }
 
-    public final int getStrength() {
-        return this.strength;
-    }
-
+    @Override
     public final SoundType getSound() {
         return this.sound;
     }
 
+    @Override
     public final Material getMaterial() {
         return this.material;
     }
 
+    @Override
     public final ItemCropSticks getItem() {
-        return this.itemSupplier.get().get();
+        return this.item.get();
     }
 
-    public final BlockBase getBlock() {
-        return this.blockSupplier.get().get();
-    }
-
+    @Override
     public final boolean canExistInFluid(Fluid fluid) {
         return this.fluidPredicate.test(fluid);
+    }
+
+    @Override
+    public final void playCropStickSound(Level world, BlockPos pos) {
+        world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.getSound().getPlaceSound(),
+                SoundSource.BLOCKS, (this.getSound().getVolume() + 1.0F) / 4.0F, this.getSound().getPitch() * 0.8F);
+    }
+
+    @Override
+    public String getSerializedName() {
+        return this.name().toLowerCase();
+    }
+
+    @Nonnull
+    public static CropStickVariant fromItem(ItemStack stack) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof IAgriCropStickItem)) {
+            throw new IllegalArgumentException("Can not fetch a crop stick variant from an empty stack");
+        }
+        IAgriCropStickItem sticks = (IAgriCropStickItem) stack.getItem();
+        return Arrays.stream(values())
+                .filter(variant -> variant == sticks.getVariant())
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Can not fetch a crop stick variant from an invalid item"));
+    }
+
+    private void initItem(UnaryOperator<Supplier<ItemCropSticks>> registrar) {
+        this.item = registrar.apply(() -> new ItemCropSticks(this));
+    }
+
+    @SuppressWarnings("unused")
+    public static CropStickVariant create(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+        throw new IllegalStateException("Enum not extended");
+    }
+
+    public static void initItems(UnaryOperator<Supplier<ItemCropSticks>> registrar) {
+        Arrays.stream(values()).forEach(variant -> variant.initItem(registrar));
     }
 }

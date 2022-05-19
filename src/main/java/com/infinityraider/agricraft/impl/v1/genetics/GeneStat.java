@@ -12,11 +12,11 @@ import com.infinityraider.agricraft.api.v1.genetics.IMutator;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.math.Vector3f;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -79,7 +79,7 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Nonnull
     @Override
-    public Allele readAlleleFromNBT(@Nonnull CompoundNBT tag) {
+    public Allele readAlleleFromNBT(@Nonnull CompoundTag tag) {
         return this.getAllele(tag.getInt(this.getStat().getId()));
     }
 
@@ -106,7 +106,7 @@ public class GeneStat implements IAgriGene<Integer> {
 
     @Nonnull
     @Override
-    public IFormattableTextComponent getGeneDescription() {
+    public MutableComponent getGeneDescription() {
         return this.getStat().getDescription();
     }
 
@@ -142,21 +142,21 @@ public class GeneStat implements IAgriGene<Integer> {
 
     protected static Vector3f getRecessiveVector(Vector3f dominant) {
         return new Vector3f(
-                COLOR_FACTOR * dominant.getX(),
-                COLOR_FACTOR * dominant.getY(),
-                COLOR_FACTOR * dominant.getZ()
+                COLOR_FACTOR * dominant.x(),
+                COLOR_FACTOR * dominant.y(),
+                COLOR_FACTOR * dominant.z()
         );
     }
 
     private static final class Allele implements IAllele<Integer> {
         private final GeneStat gene;
         private final int value;
-        private final StringTextComponent tooltip;
+        private final TextComponent tooltip;
 
         private Allele(GeneStat gene, int value) {
             this.gene = gene;
             this.value = value;
-            this.tooltip = new StringTextComponent("" + this.trait());
+            this.tooltip = new TextComponent("" + this.trait());
         }
 
         @Override
@@ -175,7 +175,7 @@ public class GeneStat implements IAgriGene<Integer> {
         }
 
         @Override
-        public StringTextComponent getTooltip() {
+        public TextComponent getTooltip() {
             // TODO: format tooltip according to config
             return this.tooltip;
         }
@@ -186,8 +186,8 @@ public class GeneStat implements IAgriGene<Integer> {
         }
 
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
+        public CompoundTag writeToNBT() {
+            CompoundTag tag = new CompoundTag();
             tag.putInt(this.gene().getStat().getId(), this.trait());
             return tag;
         }
@@ -235,7 +235,7 @@ public class GeneStat implements IAgriGene<Integer> {
         }
 
         @Override
-        public void addTooltipDescription(Consumer<ITextComponent> consumer) {
+        public void addTooltipDescription(Consumer<Component> consumer) {
             if(!this.getGene().isHidden()) {
                 consumer.accept(AgriToolTips.getGeneTooltip(this));
             }

@@ -1,14 +1,14 @@
 package com.infinityraider.agricraft.api.v1.content;
 
-import net.minecraft.block.Block;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 
 public class AgriTags {
     public static final class Blocks extends AgriTags {
-        public static final ITag.INamedTag<Block> GREENHOUSE_GLASS
-                = BlockTags.makeWrapperTag(new ResourceLocation("agricraft", "greenhouse_glass").toString());
+        public static final TagKey<Block> GREENHOUSE_GLASS
+                = BlockTags.create(new ResourceLocation("agricraft", "greenhouse_glass"));
     }
 
     private AgriTags() {

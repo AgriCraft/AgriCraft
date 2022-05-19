@@ -1,7 +1,7 @@
 package com.infinityraider.agricraft.handler;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 public class DataHandler {
     private static final DataHandler INSTANCE = new DataHandler();

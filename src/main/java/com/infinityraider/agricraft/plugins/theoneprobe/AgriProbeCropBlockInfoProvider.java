@@ -8,31 +8,32 @@ import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 final class AgriProbeCropBlockInfoProvider implements IProbeInfoProvider {
-    private final String id;
+    private final ResourceLocation id;
 
     protected AgriProbeCropBlockInfoProvider() {
-        this.id = AgriCraft.instance.getModId() + ":" + Names.Mods.THE_ONE_PROBE + "_crop";
+        this.id = new ResourceLocation(AgriCraft.instance.getModId(), Names.Mods.THE_ONE_PROBE + "_crop");
     }
 
     @Override
-    public String getID() {
+    public ResourceLocation getID() {
         return this.id;
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player,
-                             World world, BlockState state, IProbeHitData hitData) {
+    public void addProbeInfo(ProbeMode mode, IProbeInfo info, Player player,
+                             Level world, BlockState state, IProbeHitData hitData) {
         this.addCropProbeInfo(info, player, world, hitData.getPos(), mode);
         this.addSoilProbeInfo(info, world, hitData.getPos());
     }
 
-    protected void addCropProbeInfo(IProbeInfo info, PlayerEntity player, World world, BlockPos pos, ProbeMode mode) {
+    protected void addCropProbeInfo(IProbeInfo info, Player player, Level world, BlockPos pos, ProbeMode mode) {
         AgriApi.getCrop(world, pos).ifPresent(crop -> {
             // Add data including full genome if in creative mode
             if(mode == ProbeMode.DEBUG) {
@@ -54,14 +55,14 @@ final class AgriProbeCropBlockInfoProvider implements IProbeInfoProvider {
         });
     }
 
-    protected boolean shouldAddInfo(PlayerEntity player) {
+    protected boolean shouldAddInfo(Player player) {
         if (AgriCraft.instance.getConfig().doesMagnifyingGlassControlTOP()) {
             return AgriCraft.instance.proxy().isMagnifyingGlassObserving(player);
         }
         return true;
     }
 
-    protected void addSoilProbeInfo(IProbeInfo info, World world, BlockPos pos) {
+    protected void addSoilProbeInfo(IProbeInfo info, Level world, BlockPos pos) {
         AgriApi.getSoil(world, pos).ifPresent(soil ->
                 soil.addDisplayInfo(info::text));
     }

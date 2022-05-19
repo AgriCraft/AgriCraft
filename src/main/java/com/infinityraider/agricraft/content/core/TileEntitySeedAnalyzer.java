@@ -4,22 +4,24 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntitySeedAnalyzerSeedRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityBase;
 import com.infinityraider.infinitylib.modules.dynamiccamera.IDynamicCameraController;
 import com.infinityraider.infinitylib.utility.debug.IDebuggable;
-import com.infinityraider.infinitylib.utility.inventory.IInventoryItemHandler;
-import com.infinityraider.infinitylib.utility.inventory.ISidedInventoryWrapped;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
+import com.infinityraider.infinitylib.utility.inventory.IContainerItemHandler;
+import com.infinityraider.infinitylib.utility.inventory.IWorldlyContainerWrapped;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -36,7 +38,7 @@ import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInventoryWrapped, IInventoryItemHandler, IDynamicCameraController, IDebuggable {
+public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyContainerWrapped, IContainerItemHandler, IDynamicCameraController, IDebuggable {
     public static final int SLOT_SEED = 0;
     public static final int SLOT_JOURNAL = 1;
     private static final int[] SLOTS = new int[]{SLOT_SEED, SLOT_JOURNAL};
@@ -45,23 +47,23 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     private final AutoSyncedField<ItemStack> journal;
     private final LazyOptional<TileEntitySeedAnalyzer> capability;
 
-    private PlayerEntity observer;
-    private Vector3d observerStart;
+    private Player observer;
+    private Vec3 observerStart;
 
-    private Vector3d observerPosition;
-    private Vector2f observerOrientation;
+    private Vec3 observerPosition;
+    private Vec2 observerOrientation;
 
     private List<IAgriGenePair<?>> genesToRender;
 
-    public TileEntitySeedAnalyzer() {
-        super(AgriCraft.instance.getModTileRegistry().seed_analyzer);
+    public TileEntitySeedAnalyzer(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.getInstance().seed_analyzer.get(), pos, state);
         this.seed = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
                 .withCallBack(seed -> addSeedToJournal(seed, this.getJournal()).ifPresent(this::setJournal))
                 .build();
         this.journal = getAutoSyncedFieldBuilder(ItemStack.EMPTY)
                 .withCallBack(journal -> {
-                    if (this.getWorld() != null) {
-                        this.getWorld().setBlockState(this.getPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()));
+                    if (this.getLevel() != null) {
+                        this.getLevel().setBlock(this.getBlockPos(), BlockSeedAnalyzer.JOURNAL.apply(this.getBlockState(), !journal.isEmpty()), 3);
                     }})
                 .withRenderUpdate()
                 .build();
@@ -75,7 +77,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     public float getHorizontalAngle() {
         Direction dir = this.getOrientation();
         // For some reason Z axis directions have to be inverted
-        return dir.getAxis() == Direction.Axis.Z ? dir.getOpposite().getHorizontalAngle() : dir.getHorizontalAngle();
+        return (dir.getAxis() == Direction.Axis.Z ? dir.getOpposite() : dir).toYRot();
     }
 
     public boolean isObserved() {
@@ -97,7 +99,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     public boolean setObserving(boolean value) {
-        if (this.getWorld() != null && this.getWorld().isRemote()) {
+        if (this.getLevel() != null && this.getLevel().isClientSide()) {
             return AgriCraft.instance.proxy().toggleDynamicCamera(this, value);
         }
         return false;
@@ -106,7 +108,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     @Override
     public void onCameraActivated() {
         this.observer = AgriCraft.instance.getClientPlayer();
-        this.observerStart = this.observer == null ? null : this.observer.getPositionVec();
+        this.observerStart = this.observer == null ? null : this.observer.position();
         AgriCraft.instance.proxy().toggleSeedAnalyzerActive(true);
     }
 
@@ -137,46 +139,46 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public boolean shouldContinueObserving() {
-        return this.observer != null && this.observerStart != null && this.observerStart.equals(this.observer.getPositionVec());
+        return this.observer != null && this.observerStart != null && this.observerStart.equals(this.observer.position());
     }
 
     @Override
-    public Vector3d getObserverPosition() {
+    public Vec3 getObserverPosition() {
         if(this.observerPosition == null) {
             this.observerPosition = this.calculateObserverPosition(AgriCraft.instance.proxy().getFieldOfView());
         }
         return this.observerPosition;
     }
 
-    protected Vector3d calculateObserverPosition(double fov) {
+    protected Vec3 calculateObserverPosition(double fov) {
         // calculate offset from the center of the looking glass based on fov
         double d = 0.75 * (0.5/Math.tan(Math.PI * fov / 360));
-        double dy = d*MathHelper.sin((float) Math.PI * 67.5F / 180);
-        double dx = d*MathHelper.cos((float) Math.PI * 67.5F / 180);
+        double dy = d* Mth.sin((float) Math.PI * 67.5F / 180);
+        double dx = d*Mth.cos((float) Math.PI * 67.5F / 180);
         // fetch orientation, to determine the center of the looking glass
         BlockState state = this.getBlockState();
         Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
         // apply observer position (center of looking glass + fov offset)
-        return this.observerPosition = new Vector3d(
-                this.getPos().getX() + 0.5 + (dx + 0.3125) * dir.getXOffset(),
-                this.getPos().getY() + 0.6875 + dy,
-                this.getPos().getZ() + 0.5 + (dx + 0.3125) * dir.getZOffset()
+        return this.observerPosition = new Vec3(
+                this.getBlockPos().getX() + 0.5 + (dx + 0.3125) * dir.getStepX(),
+                this.getBlockPos().getY() + 0.6875 + dy,
+                this.getBlockPos().getZ() + 0.5 + (dx + 0.3125) * dir.getStepZ()
         );
     }
 
     @Override
-    public Vector2f getObserverOrientation() {
+    public Vec2 getObserverOrientation() {
         if(this.observerOrientation == null) {
             BlockState state = this.getBlockState();
             Direction dir = BlockSeedAnalyzer.ORIENTATION.fetch(state);
             // The analyzer looking glass is tilted 22.5 degrees, therefore we have to pitch down 67.5 degrees
-            this.observerOrientation = new Vector2f(67.5F, dir.getOpposite().getHorizontalAngle());
+            this.observerOrientation = new Vec2(67.5F, dir.getOpposite().toYRot());
         }
         return this.observerOrientation;
     }
 
     @Override
-    public void onFieldOfViewChanged(float fov) {
+    public void onFieldOfViewChanged(double fov) {
         this.observerPosition = this.calculateObserverPosition(fov);
     }
 
@@ -194,7 +196,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     public boolean canInsertSeed(ItemStack seed) {
-        return this.isItemValidForSlot(SLOT_SEED, seed);
+        return this.canPlaceItem(SLOT_SEED, seed);
     }
 
     @Nonnull
@@ -204,7 +206,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Nonnull
     public ItemStack extractSeed() {
-        return this.removeStackFromSlot(SLOT_SEED);
+        return this.getItem(SLOT_SEED);
     }
 
     public boolean hasJournal() {
@@ -221,7 +223,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     public boolean canInsertJournal(ItemStack journal) {
-        return this.isItemValidForSlot(SLOT_JOURNAL, journal);
+        return this.canPlaceItem(SLOT_JOURNAL, journal);
     }
 
     @Nonnull
@@ -231,16 +233,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Nonnull
     public ItemStack extractJournal() {
-        return this.removeStackFromSlot(SLOT_JOURNAL);
+        return this.getItem(SLOT_JOURNAL);
     }
 
     @Override
-    protected void writeTileNBT(@Nonnull CompoundNBT tag) {
+    protected void writeTileNBT(@Nonnull CompoundTag tag) {
         // NOOP (everything is handled by auto synced fields)
     }
 
     @Override
-    protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    protected void readTileNBT(@Nonnull CompoundTag tag) {
         // NOOP (everything is handled by auto synced fields)
     }
 
@@ -250,13 +252,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack stack, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
         switch (index) {
             case SLOT_SEED:
                 if(this.getSeed().isEmpty()) {
                     return stack.isEmpty() || stack.getItem() instanceof IAgriGeneCarrierItem;
                 } else {
-                    if(ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed())) {
+                    if(ItemStack.matches(stack, this.getSeed()) && ItemStack.tagMatches(stack, this.getSeed())) {
                         return this.getSeed().getCount() + stack.getCount() <= stack.getMaxStackSize();
                     } else {
                         return false;
@@ -273,7 +275,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
         if(stack.isEmpty()) {
             // Doesn't make sense extracting empty stacks
             return false;
@@ -283,7 +285,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                 if(this.getSeed().isEmpty() || this.getSeed().getCount() < stack.getCount()) {
                     return false;
                 }
-                return ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed());
+                return ItemStack.matches(stack, this.getSeed()) && ItemStack.tagMatches(stack, this.getSeed());
             case SLOT_JOURNAL:
                 // Do not allow automated extraction of the journal
             default: return false;
@@ -291,7 +293,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return SLOTS.length;
     }
 
@@ -315,7 +317,7 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         ItemStack stack = ItemStack.EMPTY;
         if(count <= 0) {
             return stack;
@@ -342,7 +344,16 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
+        ItemStack stack = this.getItem(index);
+        if(stack.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        return this.removeItem(index, stack.getCount());
+    }
+
+    @Override
+    public ItemStack getItem(int index) {
         ItemStack stack = ItemStack.EMPTY;
         switch (index) {
             case SLOT_SEED:
@@ -359,8 +370,8 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        if(this.isItemValidForSlot(index, stack)) {
+    public void setItem(int index, ItemStack stack) {
+        if(this.canPlaceItem(index, stack)) {
             switch (index) {
                 case SLOT_SEED:
                     this.setSeed(stack);
@@ -373,24 +384,24 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return this.canInsertItem(index, stack, null);
+    public boolean canPlaceItem(int index, ItemStack stack) {
+        return this.canPlaceItemThroughFace(index, stack, null);
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         this.setSeed(ItemStack.EMPTY);
         this.setJournal(ItemStack.EMPTY);
     }
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.isRemoved() && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return this.capability.cast();
         }
         return super.getCapability(capability, facing);

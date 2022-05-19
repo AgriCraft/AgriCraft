@@ -2,20 +2,20 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageFlipJournalPage extends MessageBase {
     private int page;
-    private Hand hand;
+    private InteractionHand hand;
 
     public MessageFlipJournalPage() {
         super();
     }
 
-    public MessageFlipJournalPage(int page, Hand hand) {
+    public MessageFlipJournalPage(int page, InteractionHand hand) {
         this();
         this.page = page;
         this.hand = hand;
@@ -25,7 +25,7 @@ public class MessageFlipJournalPage extends MessageBase {
         return this.page;
     }
 
-    public Hand getHand() {
+    public InteractionHand getHand() {
         return this.hand;
     }
 
@@ -39,7 +39,7 @@ public class MessageFlipJournalPage extends MessageBase {
         if(ctx.getSender() == null) {
             return;
         }
-        ItemStack journalStack = ctx.getSender().getHeldItem(this.getHand());
+        ItemStack journalStack = ctx.getSender().getItemInHand(this.getHand());
         if(journalStack.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journalItem = (IAgriJournalItem) journalStack.getItem();
             int currentPage = journalItem.getCurrentPageIndex(journalStack);

@@ -5,33 +5,37 @@ import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * A fake API connector, for when the API was not found.
@@ -48,6 +52,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Override
     public IAgriContent connectAgriContent() {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nullable
+    @Override
+    public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+        return null;
     }
 
     @Nonnull
@@ -118,6 +128,12 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
+    public IWorldGenPlantManager connectWorldGenPlantManager() {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
     public ItemStack plantToSeedStack(IAgriPlant plant, int amount) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
@@ -136,13 +152,13 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 
     @Nonnull
     @Override
-    public Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
     @Nonnull
     @Override
-    public Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+    public Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
@@ -164,7 +180,7 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     }
 
     @Override
-    public <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+    public <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
@@ -216,8 +232,24 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 
+    @Nonnull
     @Override
-    public boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+    public Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Override
+    public boolean isObservingWithMagnifyingGlass(Player player) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

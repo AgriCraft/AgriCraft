@@ -2,9 +2,11 @@ package com.infinityraider.agricraft.api.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -65,6 +67,24 @@ public interface IAgriGrowthRequirement {
     IAgriGrowthResponse getLightLevelResponse(int light, int strength);
 
     /**
+     * Specific check for biomes
+     *
+     * @param biome the biome
+     * @param strength the strength stat of the plant
+     * @return if the plant can grow in the given biome
+     */
+    IAgriGrowthResponse getBiomeResponse(Biome biome, int strength);
+
+    /**
+     * Specific check for dimensions
+     *
+     * @param dimension the dimension
+     * @param strength the strength stat of the plant
+     * @return if the plant can grow in the given dimension
+     */
+    IAgriGrowthResponse getDimensionResponse(DimensionType dimension, int strength);
+
+    /**
      * Specific check for seasons
      * @param season the season
      * @param strength the strength stat of the plant
@@ -96,24 +116,26 @@ public interface IAgriGrowthRequirement {
      * @return the growth response
      */
     default IAgriGrowthResponse check(IAgriCrop crop, final int strength) {
-        final World world = crop.world();
+        final Level world = crop.world();
         if(world == null) {
             return IAgriGrowthResponse.INFERTILE;
         }
         final BlockPos pos = crop.getPosition();
-        return this.check(world, pos, strength);
+        return this.check(crop, world, pos, strength);
     }
 
     /**
-     * Checks the growth requirement at a given position in the world for a certain strength level
+     * Checks the growth requirement for a crop at a given position in the world for a certain strength level
+     *
+     * @param crop the crop
      * @param world the world
      * @param pos the position
      * @param strength the strength
      * @return the growth response
      */
-    default IAgriGrowthResponse check(World world, BlockPos pos, int strength) {
+    default IAgriGrowthResponse check(IAgriCrop crop, Level world, BlockPos pos, int strength) {
         return this.getGrowConditions().stream()
-                .map(condition -> condition.check(world, pos, strength))
+                .map(condition -> condition.check(crop, world, pos, strength))
                 // filter out the fertile ones to avoid additional checks in the collection
                 .filter(response -> !response.isFertile())
                 .collect(IAgriGrowthResponse.COLLECTOR);
@@ -135,15 +157,12 @@ public interface IAgriGrowthRequirement {
         /**
          * Builds the growth requirement
          *
-         * Rules for humidity, acidity, nutrients and light level must be defined before calling build,
-         * if not, an IllegalStateException will be thrown.
-         *
          * @return a new IAgriGrowthRequirement
          */
         IAgriGrowthRequirement build();
 
         /**
-         * Defines the humidity rule, must be defined before calling build()
+         * Defines the humidity rule, if not called before calling build(), any humidity will be allowed
          * The first argument of the function is the humidity, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
@@ -154,7 +173,7 @@ public interface IAgriGrowthRequirement {
         Builder defineHumidity(BiFunction<Integer, IAgriSoil.Humidity, IAgriGrowthResponse> response);
 
         /**
-         * Defines the acidity rule, must be defined before calling build()
+         * Defines the acidity rule, if not called before calling build(), any acidity will be allowed
          * The first argument of the function is the acidity, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
@@ -165,7 +184,7 @@ public interface IAgriGrowthRequirement {
         Builder defineAcidity(BiFunction<Integer, IAgriSoil.Acidity, IAgriGrowthResponse> response);
 
         /**
-         * Defines the nutrients rule, must be defined before calling build()
+         * Defines the nutrients rule, if not called before calling build(), any nutrients will be allowed
          * The first argument of the function is the nutrients, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
@@ -176,7 +195,7 @@ public interface IAgriGrowthRequirement {
         Builder defineNutrients(BiFunction<Integer, IAgriSoil.Nutrients, IAgriGrowthResponse> response);
 
         /**
-         * Defines the light level rule, must be defined before calling build()
+         * Defines the light level rule, if not called before calling build(), any light level will be allowed
          * The first argument of the function is the light level, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
@@ -186,9 +205,8 @@ public interface IAgriGrowthRequirement {
          */
         Builder defineLightLevel(BiFunction<Integer, Integer, IAgriGrowthResponse> response);
 
-
         /**
-         * Defines the fluid rule, must be defined before calling build()
+         * Defines the fluid rule, if not called before calling build(), any fluid will be allowed
          * The first argument of the function is the light level, the second the strength of the plant
          *
          * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
@@ -197,6 +215,28 @@ public interface IAgriGrowthRequirement {
          * @return the builder (this)
          */
         Builder defineFluid(BiFunction<Integer, Fluid, IAgriGrowthResponse> response);
+
+        /**
+         * Defines the biome rule, if not called before calling build(), any biome will be allowed
+         * The first argument of the function is the biome, the second the strength of the plant
+         *
+         * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
+         *
+         * @param response test for light level
+         * @return the builder (this)
+         */
+        Builder defineBiome(BiFunction<Integer, Biome, IAgriGrowthResponse> response);
+
+        /**
+         * Defines the dimension rule, if not called before calling build(), any dimension will be allowed
+         * The first argument of the function is the dimension, the second the strength of the plant
+         *
+         * This method will implicitly add the IAgriGrowCondition for the predicate to the Builder as well
+         *
+         * @param response test for light level
+         * @return the builder (this)
+         */
+        Builder defineDimension(BiFunction<Integer, DimensionType, IAgriGrowthResponse> response);
 
         /**
          * Defines the seasonality rule, must be defined before calling build()

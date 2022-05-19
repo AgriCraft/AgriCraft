@@ -1,44 +1,47 @@
 package com.infinityraider.agricraft.plugins.jei;
 
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 
-import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation> {
 
     public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/mutation");
+    public static final RecipeType<IAgriMutation> TYPE = new RecipeType<>(ID, IAgriMutation.class);
+
+    private static final TranslatableComponent TITLE = new TranslatableComponent("agricraft.gui.mutation");
 
     public final IAgriDrawable icon;
     public final IAgriDrawable background;
 
     public static void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(AgriApi.getMutationRegistry().all(), ID);
+        registration.addRecipes(TYPE, ImmutableList.copyOf(AgriApi.getMutationRegistry().all()));
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriRecipeCategoryMutation.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriRecipeCategoryMutation.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriRecipeCategoryMutation.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getWoodCropSticksItem().asItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getIronCropSticksItem().asItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getObsidianCropSticksItem().asItem()), TYPE);
     }
 
     public AgriRecipeCategoryMutation() {
@@ -46,22 +49,31 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
         this.background = JeiPlugin.createAgriDrawable(new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/crop_mutation.png"), 0, 0, 128, 128, 128, 128);
     }
 
+    @Override
+    public RecipeType<IAgriMutation> getRecipeType() {
+        return TYPE;
+    }
+
     @Nonnull
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public ResourceLocation getUid() {
         return ID;
     }
 
     @Nonnull
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public Class<IAgriMutation> getRecipeClass() {
         return IAgriMutation.class;
     }
 
     @Nonnull
     @Override
-    public String getTitle() {
-        return I18n.format("agricraft.gui.mutation");
+    public TranslatableComponent getTitle() {
+        return TITLE;
     }
 
     @Nonnull
@@ -76,53 +88,44 @@ public class AgriRecipeCategoryMutation implements IRecipeCategory<IAgriMutation
         return this.icon;
     }
 
-    @Override
-    public void setIngredients(IAgriMutation mutation, IIngredients ingredients) {
-        // Parents as plants
-        ingredients.setInputLists(AgriIngredientPlant.TYPE, mutation.getParents().stream()
-                .map(plant -> this.isPlantResearched(plant) ? plant : NoPlant.getInstance())
-                .map(ImmutableList::of).collect(Collectors.toList()));
-        // Parents as seeds
-        ingredients.setInputLists(VanillaTypes.ITEM, mutation.getParents().stream()
-                .map(plant -> this.isPlantResearched(plant) ? plant : NoPlant.getInstance())
-                .map(IAgriPlant::toItemStack).map(ImmutableList::of).collect(Collectors.toList()));
-        // Child as plant
-        ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(
-                this.isPlantResearched(mutation.getChild()) ? mutation.getChild() : NoPlant.getInstance())));
-        // Child as seed
-        ingredients.setOutputLists(VanillaTypes.ITEM, ImmutableList.of(ImmutableList.of(
-                (this.isPlantResearched(mutation.getChild()) ? mutation.getChild() : NoPlant.getInstance()).toItemStack())));
-    }
-
-    public boolean isPlantResearched(IAgriPlant plant) {
-        if(AgriCraft.instance.getConfig().progressiveJEI()) {
-            return CapabilityResearchedPlants.getInstance().isPlantResearched(AgriCraft.instance.getClientPlayer(), plant);
-        }
-        return true;
-    }
+    private static final String INPUT_SEED_1 = "input_seed_1";
+    private static final String INPUT_SEED_2 = "input_seed_2";
+    private static final String INPUT_PLANT_1 = "input_plant_1";
+    private static final String INPUT_PLANT_2 = "input_plant_1";
+    private static final String OUTPUT_SEED = "output_seed";
+    private static final String OUTPUT_PLANT = "output_plant";
 
     @Override
-    public void setRecipe(IRecipeLayout layout, @Nonnull IAgriMutation mutation, @Nonnull IIngredients ingredients) {
-        // Clear the focus as this sometimes causes display bugs
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
+    public void setRecipe(IRecipeLayoutBuilder builder, IAgriMutation mutation, IFocusGroup focuses) {
+        // Set shapeless
+        builder.setShapeless();
 
-        // Denote that this is a shapeless recipe.
-        layout.setShapeless();
+        // First input
+        builder.addSlot(RecipeIngredientRole.INPUT, 16, 6)
+                .setSlotName(INPUT_SEED_1)
+                .addIngredient(VanillaTypes.ITEM, mutation.getParents().get(0).toItemStack());
+        builder.addSlot(RecipeIngredientRole.INPUT, 25, 40)
+                .setSlotName(INPUT_PLANT_1)
+                .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
+                .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(0));
 
-        // Setup Recipe Parents
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(0, true, 25, 40);
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(1, true, 87, 40);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).init(0, true, 15, 5);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).init(1, true, 95, 5);
+        // Second input
+        builder.addSlot(RecipeIngredientRole.INPUT, 96, 6)
+                .setSlotName(INPUT_SEED_2)
+                .addIngredient(VanillaTypes.ITEM, mutation.getParents().get(1).toItemStack());
+        builder.addSlot(RecipeIngredientRole.INPUT, 87, 40)
+                .setSlotName(INPUT_PLANT_2)
+                .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
+                .addIngredient(AgriIngredientPlant.TYPE, mutation.getParents().get(1));
 
-        // Setup Recipe Child
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(2, false, 56, 40);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).init(2, false, 55, 1);
+        // Output
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 2)
+                .setSlotName(OUTPUT_SEED)
+                .addIngredient(VanillaTypes.ITEM, mutation.getChild().toItemStack());
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 40)
+                .setSlotName(OUTPUT_PLANT)
+                .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
+                .addIngredient(AgriIngredientPlant.TYPE, mutation.getChild());
 
-        // Register Recipe Elements
-        layout.getItemStacks().set(ingredients);
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
     }
-
 }

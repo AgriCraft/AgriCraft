@@ -2,19 +2,19 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.eventbus.api.Event;
 
 public class PostJeiRenderStageEvent extends Event {
 
-    private final MatrixStack matrixStack;
+    private final PoseStack matrixStack;
     private final IAgriPlant plant;
     private final IAgriGrowthStage stage;
     private final AgriIngredientPlant.Renderer renderer;
     private final int x;
     private final int y;
 
-    public PostJeiRenderStageEvent(MatrixStack matrixStack, int x, int y, IAgriPlant plant, IAgriGrowthStage stage, AgriIngredientPlant.Renderer renderer) {
+    public PostJeiRenderStageEvent(PoseStack matrixStack, int x, int y, IAgriPlant plant, IAgriGrowthStage stage, AgriIngredientPlant.Renderer renderer) {
         this.matrixStack = matrixStack;
         this.x = x;
         this.y = y;
@@ -23,7 +23,7 @@ public class PostJeiRenderStageEvent extends Event {
         this.renderer = renderer;
     }
 
-    public MatrixStack getMatrixStack() {
+    public PoseStack getMatrixStack() {
         return matrixStack;
     }
 

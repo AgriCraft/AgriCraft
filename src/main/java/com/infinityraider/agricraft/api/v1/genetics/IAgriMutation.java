@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
+import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import java.util.Arrays;
@@ -45,6 +46,12 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
     @Nonnull
     List<IAgriPlant> getParents();
 
+    /**
+     * @return a list of all conditions needed/enabling this mutation
+     */
+    @Nonnull
+    List<Condition> getConditions();
+
     default boolean hasChild(@Nullable IAgriPlant plant) {
         return this.getChild().equals(plant);
     }
@@ -67,6 +74,31 @@ public interface IAgriMutation extends IAgriRegisterable<IAgriMutation> {
 
     default boolean areParentsIn(@Nullable Collection<IAgriPlant> plants) {
         return (plants != null) && (plants.containsAll(this.getParents()));
+    }
+
+    /**
+     * An interface representing conditions for mutations
+     */
+    interface Condition {
+        /**
+         * Checks the result of the condition
+         * @param crop the crop on which the mutation would happen
+         * @param mutation the mutation which has been selected
+         * @return the result for this condition at the given crop
+         */
+        ConditionResult getResult(IAgriCrop crop, IAgriMutation mutation);
+    }
+
+    /**
+     * enum representing the possible results of a trigger
+     */
+    enum ConditionResult {
+        /** the condition forbids the mutation, this overrules FORCE */
+        FORBID,
+        /** the condition forces the mutation to happen */
+        FORCE,
+        /** the condition is ignored and default mutation logic is followed */
+        PASS
     }
 
 }

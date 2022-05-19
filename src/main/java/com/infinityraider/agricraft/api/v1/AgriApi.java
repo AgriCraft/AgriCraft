@@ -5,15 +5,14 @@ import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
@@ -24,15 +23,20 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.naming.OperationNotSupportedException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -78,6 +82,24 @@ public final class AgriApi {
     @Nonnull
     public static IAgriContent getAgriContent() {
         return AgriApi.CONNECTOR.connectAgriContent();
+    }
+
+    /**
+     * Creates an registers a new crop stick variant.
+     *
+     * This variant is baked into a BlockState definition, and must therefore be called before blocks are being registered
+     *
+     * A unique item for this variant will also be registered, this can be retrieved via the getItem() method on the crop sticks variant.
+     *
+     * @param name the name of the variant
+     * @param material the material
+     * @param sound sound for the material
+     * @param fluidPredicate predicate determining if this crop stick type can survive in certain fluids
+     * @return a new crop stick variant, or null
+     */
+    @Nullable
+    public static IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+        return AgriApi.CONNECTOR.createCropStickVariant(name, material, sound, fluidPredicate);
     }
 
     /**
@@ -237,6 +259,21 @@ public final class AgriApi {
         return AgriApi.CONNECTOR.connectSeasonLogic();
     }
 
+
+    /**
+     * Fetches the AgriCraft Plant World Gen manager
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @return the AgriCraft plant worldgen manager instance
+     */
+    @Nonnull
+    public static IWorldGenPlantManager getWorldGenPlantManager() {
+        return AgriApi.CONNECTOR.connectWorldGenPlantManager();
+    }
+
     /**
      * Converts an IAgriPlant instance to an ItemStack
      * <p>
@@ -293,7 +330,7 @@ public final class AgriApi {
      * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
      */
     @Nonnull
-    public static Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos) {
+    public static Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos) {
         return AgriApi.CONNECTOR.getCrop(world, pos);
     }
 
@@ -309,7 +346,7 @@ public final class AgriApi {
      * @return Optional containing an IAgriSoil object, or empty if the coordinates do not correspond with a soil
      */
     @Nonnull
-    public static Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos) {
+    public static Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos) {
         return AgriApi.CONNECTOR.getSoil(world, pos);
     }
 
@@ -371,7 +408,7 @@ public final class AgriApi {
      * @param <T> the exact type of the TileEntity to attach to
      * @param <C> the parent type of the IAgriCrop being attached
      */
-    public static <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
+    public static <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance) {
         AgriApi.CONNECTOR.registerCapabilityCropInstance(instance);
     }
 
@@ -494,6 +531,47 @@ public final class AgriApi {
     }
 
     /**
+     * Finds a registered json mutation condition factory factory from their id
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param id the id
+     * @return optional containing the factory, or empty if no such condition is registered
+     */
+    @Nonnull
+    public static Optional<IJsonMutationCondition.Factory> getJsonMutationConditionFactory(String id) {
+        return AgriApi.CONNECTOR.getJsonMutationCondition(id);
+    }
+
+    /**
+     * Tries to register a json mutation condition
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *
+     * @param condition the condition factory to register
+     * @return true if successful (will fail in case a condition with the same id is already registered)
+     */
+    public static boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory condition) {
+        return AgriApi.CONNECTOR.registerJsonMutationCondition(condition);
+    }
+
+    /**
+     * Converts a json mutation condition to a usable agricraft mutation condition based on additional parameters
+     *
+     * @param condition the condition
+     * @param isRequired if the condition must be met for the mutation to be allowed
+     * @param guaranteedProbability the probability that this condition will force the mutation if met
+     * @return the mutation condition
+     */
+    public static IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability) {
+        return AgriApi.CONNECTOR.convertJsonMutationCondition(condition, isRequired, guaranteedProbability);
+    }
+
+    /**
      * Checks if a player is looking through a magnifying glass
      * <p>
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
@@ -503,7 +581,7 @@ public final class AgriApi {
      * @param player the player
      * @return true if the player is currently looking through the magnifying glass
      */
-    public static boolean isObservingWithMagnifyingGlass(PlayerEntity player) {
+    public static boolean isObservingWithMagnifyingGlass(Player player) {
         return AgriApi.CONNECTOR.isObservingWithMagnifyingGlass(player);
     }
 

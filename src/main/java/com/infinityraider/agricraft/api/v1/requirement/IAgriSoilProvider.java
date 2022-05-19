@@ -1,8 +1,8 @@
 package com.infinityraider.agricraft.api.v1.requirement;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -14,5 +14,5 @@ import java.util.Optional;
 @FunctionalInterface
 public interface IAgriSoilProvider {
     @Nonnull
-    Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos, BlockState state);
+    Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos, BlockState state);
 }

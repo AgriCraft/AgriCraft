@@ -10,8 +10,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 @OnlyIn(Dist.DEDICATED_SERVER)
 @SuppressWarnings("unused")
 public class ServerProxy implements IServerProxyBase<Config>, IProxy {
-
-
     @Override
     public void onDedicatedServerSetupEvent(final FMLDedicatedServerSetupEvent event) {
         PluginHandler.onServerSetup(event);

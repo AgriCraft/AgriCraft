@@ -5,7 +5,7 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.util.mimic.MimickedPlant;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,7 +42,7 @@ public class MysticalAgriculturePlantOverride extends MimickedPlant implements I
     }
 
     @Override
-    public void drawGrowthStage(IAgriGrowable plant, IAgriGrowthStage stage, RenderContext context, MatrixStack transforms,
+    public void drawGrowthStage(IAgriGrowable plant, IAgriGrowthStage stage, RenderContext context, PoseStack transforms,
                                 float x, float y, float w, float h) {
         IAgriGrowableGuiRenderer.WithSeed.super.drawGrowthStage(plant, stage, context, transforms, x, y, w, h);
         if(stage.isFinal()) {
@@ -56,7 +56,7 @@ public class MysticalAgriculturePlantOverride extends MimickedPlant implements I
     }
 
     @Override
-    public void drawSeed(IAgriGrowable.WithSeed plant, RenderContext context, MatrixStack transforms, float x, float y, float w, float h) {
+    public void drawSeed(IAgriGrowable.WithSeed plant, RenderContext context, PoseStack transforms, float x, float y, float w, float h) {
         if (this.getSeedColor() < 0) {
             IAgriGrowableGuiRenderer.WithSeed.super.drawSeed(plant, context, transforms, x, y, w, h);
         } else {

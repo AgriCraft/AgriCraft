@@ -1,13 +1,18 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.render.blocks.TileEntityIrrigationChannelRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.reference.Constants;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,8 +27,8 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
     private ValveState state = ValveState.NONE;
     private int counter = 0;
 
-    public TileEntityIrrigationChannel() {
-        super(AgriCraft.instance.getModTileRegistry().irrigation_channel, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
+    public TileEntityIrrigationChannel(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.getInstance().irrigation_channel.get(), pos, state, AgriCraft.instance.getConfig().channelCapacity(), MIN_Y, MAX_Y);
     }
 
     public static RenderFactory createRenderFactory() {
@@ -61,7 +66,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
 
     @Override
     protected void tickComponent() {
-        if(this.getWorld() != null && this.getWorld().isRemote()) {
+        if(this.getLevel() != null && this.getLevel().isClientSide()) {
             if (this.counter > 0) {
                 this.counter -= 1;
                 if (this.counter <= 0) {
@@ -96,6 +101,28 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
         return "channel";
     }
 
+    @Override
+    public boolean isFluidValid(FluidStack stack) {
+        return false;
+    }
+
+    @Override
+    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
+        return 0;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
+        return FluidStack.EMPTY;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
+        return FluidStack.EMPTY;
+    }
+
     public enum ValveState {
         NONE(0),
         OPEN(1),
@@ -125,7 +152,7 @@ public class TileEntityIrrigationChannel extends TileEntityIrrigationComponent {
         public float getAnimationProgress(int counter, float partialTick) {
             if(this.hasAnimation()) {
                 // to and from are inverted as the counter is counting down
-                return MathHelper.lerp(Math.min(1.0F, (counter + partialTick)/this.getDuration()), this.to.target, this.from.target);
+                return Mth.lerp(Math.min(1.0F, (counter + partialTick)/this.getDuration()), this.to.target, this.from.target);
             }
             return this.target;
         }

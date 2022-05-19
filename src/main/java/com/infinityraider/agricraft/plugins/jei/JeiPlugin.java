@@ -4,10 +4,8 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
-import com.infinityraider.agricraft.capability.CapabilityResearchedPlants;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
-import com.mojang.blaze3d.matrix.MatrixStack;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -15,12 +13,13 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import mezz.jei.gui.recipes.IRecipeLogicStateListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
@@ -42,15 +41,15 @@ public class JeiPlugin implements IModPlugin {
         return jei;
     }
 
-    public static void hideMutation(IAgriMutation mutation) {
+    public static void hideMutations(Collection<IAgriMutation> mutations) {
         if(jei != null) {
-            jei.getRecipeManager().hideRecipe(mutation, AgriRecipeCategoryMutation.ID);
+            jei.getRecipeManager().hideRecipes(AgriRecipeCategoryMutation.TYPE, mutations);
         }
     }
 
-    public static void unHideMutation(IAgriMutation mutation) {
+    public static void unHideMutations(Collection<IAgriMutation> mutations) {
         if(jei != null) {
-            jei.getRecipeManager().unhideRecipe(mutation, AgriRecipeCategoryMutation.ID);
+            jei.getRecipeManager().unhideRecipes(AgriRecipeCategoryMutation.TYPE, mutations);
         }
     }
 
@@ -63,19 +62,6 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         jei = jeiRuntime;
-        if (AgriCraft.instance.getConfig().progressiveJEI()) {
-            PlayerEntity player = AgriCraft.instance.getClientPlayer();
-            AgriApi.getMutationRegistry()
-                    .stream()
-                    .forEach(mutation -> {
-                        if (CapabilityResearchedPlants.getInstance().isMutationResearched(player, mutation)) {
-                            unHideMutation(mutation);
-
-                        } else {
-                            hideMutation(mutation);
-                        }
-                    });
-        }
     }
 
     @Override
@@ -111,7 +97,7 @@ public class JeiPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         // Register All The Seeds.
-        registration.registerSubtypeInterpreter(AgriItemRegistry.getInstance().seed, (stack, context) -> {
+        registration.registerSubtypeInterpreter(AgriApi.getAgriContent().getItems().getSeedItem().toItem(), (stack, context) -> {
             Optional<IAgriGenome> genome = AgriApi.getGenomeAdapterizer().valueOf(stack);
             return genome.map(s -> s.getPlant().getId()).orElse("generic");
         });
@@ -134,11 +120,19 @@ public class JeiPlugin implements IModPlugin {
             }
     
             @Override
-            public void draw(MatrixStack transform, int x, int y) {
+            public void draw(PoseStack transform, int x, int y) {
                 this.bindTexture(location);
                 Screen.blit(transform, x, y, getWidth(), getHeight(), u, v, uMax, vMax, textureWidth, textureHeight);
             }
         };
     }
 
+    public static void forceRecipeGuiUpdate() {
+        try {
+            ((IRecipeLogicStateListener) jei.getRecipesGui()).onStateChange();
+        } catch(Exception e) {
+            AgriCraft.instance.getLogger().error("JEI Probably updated, notify the AgriCraft mod author");
+            AgriCraft.instance.getLogger().printStackTrace(e);
+        }
+    }
 }

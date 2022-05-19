@@ -4,12 +4,12 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.network.MessageSyncSeedBagSortMode;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.Util;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -27,26 +27,26 @@ public class SeedBagScrollHandler {
 
     private SeedBagScrollHandler() {}
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return AgriCraft.instance.getClientPlayer();
     }
 
-    public boolean tryCycleSortMode(Hand hand, int delta) {
-        ItemStack stack = this.getPlayer().getHeldItem(hand);
+    public boolean tryCycleSortMode(InteractionHand hand, int delta) {
+        ItemStack stack = this.getPlayer().getItemInHand(hand);
         if(stack.getItem() instanceof ItemSeedBag) {
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
             if(bag.incrementSorter(stack, delta)) {
                 new MessageSyncSeedBagSortMode(hand, bag.getContents(stack).getSorterIndex()).sendToServer();
                 SeedBagShakeHandler.getInstance().shake(hand);
                 ItemSeedBag.Contents contents = bag.getContents(stack);
-                IFormattableTextComponent message = new StringTextComponent("")
-                        .appendSibling(contents.getSorter().describe())
-                        .appendSibling(new StringTextComponent(", "))
-                        .appendSibling(AgriToolTips.MSG_SEED_BAG_SHAKE);
+                MutableComponent message = new TextComponent("")
+                        .append(contents.getSorter().describe())
+                        .append(new TextComponent(", "))
+                        .append(AgriToolTips.MSG_SEED_BAG_SHAKE);
                 if(contents.getCount() <= 0) {
-                    message.appendSibling(new StringTextComponent(" ")).appendSibling(AgriToolTips.MSG_SEED_BAG_EMPTY);
+                    message.append(new TextComponent(" ")).append(AgriToolTips.MSG_SEED_BAG_EMPTY);
                 }
-                AgriCraft.instance.getClientPlayer().sendMessage(message, Util.DUMMY_UUID);
+                AgriCraft.instance.getClientPlayer().sendMessage(message, Util.NIL_UUID);
                 return true;
             }
         }
@@ -56,10 +56,10 @@ public class SeedBagScrollHandler {
     @SuppressWarnings("unused")
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onMouseScroll(InputEvent.MouseScrollEvent event) {
-        if(this.getPlayer().isSneaking()) {
+        if(this.getPlayer().isDiscrete()) {
             int delta = (int) -event.getScrollDelta();
-            boolean main = this.tryCycleSortMode(Hand.MAIN_HAND, delta);
-            boolean off = this.tryCycleSortMode(Hand.OFF_HAND, delta);
+            boolean main = this.tryCycleSortMode(InteractionHand.MAIN_HAND, delta);
+            boolean off = this.tryCycleSortMode(InteractionHand.OFF_HAND, delta);
             if(main || off) {
                 event.setResult(Event.Result.DENY);
                 event.setCanceled(true);

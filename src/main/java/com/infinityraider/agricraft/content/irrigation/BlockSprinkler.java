@@ -5,23 +5,23 @@ import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,16 +39,16 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
             .add(ACTIVE).build();
 
     // TileEntity factory
-    private static final BiFunction<BlockState, IBlockReader, TileEntitySprinkler> TILE_FACTORY = (s, w) -> new TileEntitySprinkler();
+    private static final BiFunction<BlockPos, BlockState, TileEntitySprinkler> TILE_FACTORY = TileEntitySprinkler::new;
 
     // Shape
     private static final VoxelShape SHAPE = Stream.of(
-            Block.makeCuboidShape(5, 15, 5, 11, 21, 11),
-            Block.makeCuboidShape(8 - 0.74*Math.sqrt(2), 4, 8 - 0.74*Math.sqrt(2), 8 + 0.74*Math.sqrt(2), 15, 8 + 0.74*Math.sqrt(2))
-    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
+            Block.box(5, 15, 5, 11, 21, 11),
+            Block.box(8 - 0.74*Math.sqrt(2), 4, 8 - 0.74*Math.sqrt(2), 8 + 0.74*Math.sqrt(2), 15, 8 + 0.74*Math.sqrt(2))
+    ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public BlockSprinkler() {
-        super(Names.Blocks.SPRINKLER, Properties.create(Material.WOOD));
+        super(Names.Blocks.SPRINKLER, Properties.of(Material.WOOD).noOcclusion());
     }
 
     @Override
@@ -57,29 +57,29 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     }
 
     @Override
-    public BiFunction<BlockState, IBlockReader, TileEntitySprinkler> getTileEntityFactory() {
+    public BiFunction<BlockPos, BlockState, TileEntitySprinkler> getTileEntityFactory() {
         return TILE_FACTORY;
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos().up();
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos().above();
         BlockState state = world.getBlockState(pos);
         if(state.getBlock() instanceof BlockIrrigationChannelAbstract) {
-            return this.getDefaultState();
+            return this.defaultBlockState();
         }
         return null;
     }
 
     @Override
-    public final void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        TileEntity tile = world.getTileEntity(pos);
-        if((!world.isRemote())) {
+    public final void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        BlockEntity tile = world.getBlockEntity(pos);
+        if((!world.isClientSide())) {
             if(tile instanceof TileEntitySprinkler) {
                 TileEntitySprinkler sprinkler = (TileEntitySprinkler) tile;
-                TileEntity above = world.getTileEntity(pos.up());
+                BlockEntity above = world.getBlockEntity(pos.above());
                 if(above instanceof TileEntityIrrigationChannel) {
                     // mimic channel wood
                     TileEntityIrrigationChannel channel = (TileEntityIrrigationChannel) above;
@@ -96,63 +96,63 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        if(fromPos.down().equals(pos)) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        if(fromPos.below().equals(pos)) {
             this.detachSprinkler(state, world, pos);
         }
     }
 
-    protected void detachSprinkler(BlockState state, World world, BlockPos pos) {
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
-        spawnDrops(state, world, pos, world.getTileEntity(pos));
+    protected void detachSprinkler(BlockState state, Level world, BlockPos pos) {
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        dropResources(state, world, pos, world.getBlockEntity(pos));
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getCollisionShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getCollisionShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader world, BlockPos pos) {
-        return this.getRayTraceShape(state, world, pos, ISelectionContext.dummy());
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
+        return this.getVisualShape(state, world, pos, CollisionContext.empty());
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return this.getShape(state, world, pos, context);
     }
 
     @Nonnull
     @Override
     @Deprecated
-    @SuppressWarnings({"deprecation", "unchecked"})
+    @SuppressWarnings("deprecation")
     public final List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
         return ImmutableList.of(new ItemStack(this));
     }

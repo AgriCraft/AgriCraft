@@ -7,13 +7,13 @@ import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
 import com.infinityraider.agricraft.impl.v1.crop.NoGrowth;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,7 +50,7 @@ public final class NoWeed implements IAgriWeed {
 
     @Nonnull
     @Override
-    public ITextComponent getWeedName() {
+    public Component getWeedName() {
         return AgriToolTips.UNKNOWN;
     }
 
@@ -97,10 +97,10 @@ public final class NoWeed implements IAgriWeed {
     }
 
     private final String info = "Damnations! This is not a weed";
-    private final ITextComponent tooltip = new StringTextComponent(this.info);
+    private final Component tooltip = new TextComponent(this.info);
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(tooltip);
     }
 

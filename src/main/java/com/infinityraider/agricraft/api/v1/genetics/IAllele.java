@@ -1,8 +1,7 @@
 package com.infinityraider.agricraft.api.v1.genetics;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.MutableComponent;
 
 import javax.annotation.Nonnull;
 
@@ -33,7 +32,7 @@ public interface IAllele<A> {
     /**
      * @return A text component representing this allele in a tooltip
      */
-    IFormattableTextComponent getTooltip();
+    MutableComponent getTooltip();
 
     /**
      * @return value representing this allele relative to other alleles in the same gene, used in comparators
@@ -45,7 +44,7 @@ public interface IAllele<A> {
      * @return a CompoundNBT tag to which this allel has been serialized
      */
     @Nonnull
-    CompoundNBT writeToNBT();
+    CompoundTag writeToNBT();
 
     /**
      * Alleles should be defined unique per gene, therefore two alleles can only be equal if they are identical

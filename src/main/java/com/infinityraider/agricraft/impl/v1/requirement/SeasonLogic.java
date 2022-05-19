@@ -3,9 +3,11 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
-import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
+import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -18,7 +20,7 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     private IAgriPlugin owner;
-    private BiFunction<World, BlockPos, AgriSeason> getter;
+    private BiFunction<Level, BlockPos, AgriSeason> getter;
 
     private SeasonLogic() {
         this.owner = null;
@@ -31,15 +33,15 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     @Override
-    public AgriSeason getSeason(World world, BlockPos pos) {
+    public AgriSeason getSeason(Level world, BlockPos pos) {
         if(this.isGreenHouse(world, pos)) {
             return AgriSeason.ANY;
         }
         return this.getter.apply(world, pos);
     }
 
-    protected boolean isGreenHouse(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir;
+    protected boolean isGreenHouse(Level world, BlockPos pos) {
+        return CapabilityGreenHouse.isInGreenHouse(world, pos);
     }
 
     @Nullable
@@ -49,7 +51,7 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     @Override
-    public void claim(IAgriPlugin plugin, BiFunction<World, BlockPos, AgriSeason> getter) {
+    public void claim(IAgriPlugin plugin, BiFunction<Level, BlockPos, AgriSeason> getter) {
         this.owner = plugin;
         this.getter = getter;
     }

@@ -4,21 +4,19 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.render.items.journal.JournalClientData;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -38,13 +36,15 @@ public class JournalScreen extends Screen {
 
 	private final JournalClientData journalData;
 	private final ItemStack journal;
-	private static final JournalScreenContext CONTEXT_RIGHT = new JournalScreenContext(145, 0);
-	private static final JournalScreenContext CONTEXT_LEFT = new JournalScreenContext(8, 7);
+	private final JournalScreenContext context_left;
+	private final JournalScreenContext context_right;
 
-	public JournalScreen(ITextComponent name, PlayerEntity player, Hand hand) {
+	public JournalScreen(Component name, Player player, InteractionHand hand) {
 		super(name);
-		this.journal = player.getHeldItem(hand);
+		this.journal = player.getItemInHand(hand);
 		this.journalData = new JournalClientData(player, hand);
+		this.context_left = new JournalScreenContext(this,8, 7);
+		this.context_right = new JournalScreenContext(this,145, 0);
 	}
 
 	@Override
@@ -52,27 +52,27 @@ public class JournalScreen extends Screen {
 		super.init();
 		int renderX = (this.width - PAGE_WIDTH) / 2;
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
-		this.buttonNextPage = this.addButton(new PageButton(renderX + ARROW_RIGHT_X, renderY + ARROW_RIGHT_Y, false, button -> this.nextPage()));
-		this.buttonPreviousPage = this.addButton(new PageButton(renderX + ARROW_LEFT_X, renderY + ARROW_LEFT_Y, true, button -> this.previousPage()));
+		this.buttonNextPage = this.addWidget(new PageButton(renderX + ARROW_RIGHT_X, renderY + ARROW_RIGHT_Y, false, button -> this.nextPage()));
+		this.buttonPreviousPage = this.addWidget(new PageButton(renderX + ARROW_LEFT_X, renderY + ARROW_LEFT_Y, true, button -> this.previousPage()));
 		this.updateButtons();
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Minecraft.getInstance().getTextureManager().bindTexture(PAGE_BACKGROUND);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, PAGE_BACKGROUND);
 		int renderX = (this.width - PAGE_WIDTH) / 2;
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
-		AbstractGui.blit(matrixStack, renderX, renderY, this.getBlitOffset(), 0, 0, PAGE_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, PAGE_WIDTH);
+		Screen.blit(matrixStack, renderX, renderY, this.getBlitOffset(), 0, 0, PAGE_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, PAGE_WIDTH);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		IAgriJournalItem.IPage page = this.journalData.getCurrentPage();
-		CONTEXT_RIGHT.setRenderXY(renderX, renderY);
-		CONTEXT_LEFT.setRenderXY(renderX, renderY);
-		JournalViewPointHandler.getPageDrawer(page).drawLeftSheet(page, CONTEXT_LEFT, matrixStack, journal, (IAgriJournalItem) journal.getItem());
-		JournalViewPointHandler.getPageDrawer(page).drawRightSheet(page, CONTEXT_RIGHT, matrixStack, journal, (IAgriJournalItem) journal.getItem());
-		JournalViewPointHandler.getPageDrawer(page).drawTooltipLeft(page, CONTEXT_LEFT, matrixStack, mouseX-renderX-8, mouseY-renderY-7);
-		JournalViewPointHandler.getPageDrawer(page).drawTooltipRight(page, CONTEXT_RIGHT, matrixStack, mouseX-renderX-145, mouseY-renderY);
+		context_right.setRenderXY(renderX, renderY);
+		context_left.setRenderXY(renderX, renderY);
+		JournalViewPointHandler.getPageDrawer(page).drawLeftSheet(page, context_left, matrixStack, journal, (IAgriJournalItem) journal.getItem());
+		JournalViewPointHandler.getPageDrawer(page).drawRightSheet(page, context_right, matrixStack, journal, (IAgriJournalItem) journal.getItem());
+		JournalViewPointHandler.getPageDrawer(page).drawTooltipLeft(page, context_left, matrixStack, mouseX-renderX-8, mouseY-renderY-7);
+		JournalViewPointHandler.getPageDrawer(page).drawTooltipRight(page, context_right, matrixStack, mouseX-renderX-145, mouseY-renderY);
 	}
 
 	@Override
@@ -111,17 +111,17 @@ public class JournalScreen extends Screen {
 
 		private final boolean isPrevious;
 
-		public PageButton(int x, int y, boolean isPrevious, IPressable onPress) {
-			super(x, y, ARROW_WIDTH, ARROW_HEIGHT, StringTextComponent.EMPTY, onPress);
+		public PageButton(int x, int y, boolean isPrevious, OnPress onPress) {
+			super(x, y, ARROW_WIDTH, ARROW_HEIGHT, TextComponent.EMPTY, onPress);
 			this.isPrevious = isPrevious;
 		}
 
 		@Override
-		public void renderWidget(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			Minecraft.getInstance().getTextureManager().bindTexture(PAGE_BACKGROUND);
+		public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderTexture(0, PAGE_BACKGROUND);
 			int xOffset = 0;
-			if (this.isHovered()) {
+			if (this.isHoveredOrFocused()) {
 				xOffset += 18;
 			}
 			int yOffset = 252;
@@ -132,8 +132,8 @@ public class JournalScreen extends Screen {
 		}
 
 		@Override
-		public void playDownSound(SoundHandler handler) {
-			handler.play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
+		public void playDownSound(SoundManager handler) {
+			handler.play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F));
 		}
 
 	}

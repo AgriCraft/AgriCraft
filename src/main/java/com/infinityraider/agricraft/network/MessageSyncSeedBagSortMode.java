@@ -2,20 +2,20 @@ package com.infinityraider.agricraft.network;
 
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageSyncSeedBagSortMode extends MessageBase {
-    private Hand hand;
+    private InteractionHand hand;
     private int index;
 
     public MessageSyncSeedBagSortMode() {
         super();
     }
 
-    public MessageSyncSeedBagSortMode(Hand hand, int index) {
+    public MessageSyncSeedBagSortMode(InteractionHand hand, int index) {
         this();
         this.hand = hand;
         this.index = index;
@@ -28,8 +28,8 @@ public class MessageSyncSeedBagSortMode extends MessageBase {
 
     @Override
     protected void processMessage(NetworkEvent.Context ctx) {
-        if(this.hand != null) {
-            ItemStack stack = ctx.getSender().getHeldItem(this.hand);
+        if(this.hand != null && ctx.getSender() != null) {
+            ItemStack stack = ctx.getSender().getItemInHand(this.hand);
             if(stack.getItem() instanceof ItemSeedBag) {
                 ((ItemSeedBag) stack.getItem()).getContents(stack).setSorterIndex(this.index);
             }

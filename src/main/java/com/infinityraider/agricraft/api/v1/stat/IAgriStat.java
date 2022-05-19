@@ -5,10 +5,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.math.Vector3f;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 /**
  * Interface for representing stats. Stats are immutable objects, to aid in overall safety.
@@ -33,22 +33,22 @@ public interface IAgriStat extends IAgriRegisterable<IAgriStat> {
      */
     boolean isHidden();
 
-    void writeValueToNBT(CompoundNBT tag, byte value);
+    void writeValueToNBT(CompoundTag tag, byte value);
 
-    int readValueFromNBT(CompoundNBT tag);
+    int readValueFromNBT(CompoundTag tag);
 
     /**
      * Writes the stat for display.
      *
      * @param consumer The sink to add the lines to.
      */
-    void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value);
+    void addTooltip(@Nonnull Consumer<Component> consumer, int value);
 
     /**
      * @return an ITextComponent to describe this stat on the client
      */
     @Nonnull
-    IFormattableTextComponent getDescription();
+    MutableComponent getDescription();
 
     /**
      * @return a color indicative of this stat

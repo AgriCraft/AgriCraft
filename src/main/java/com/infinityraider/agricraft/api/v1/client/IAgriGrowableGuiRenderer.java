@@ -2,9 +2,9 @@ package com.infinityraider.agricraft.api.v1.client;
 
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.IAgriGrowable;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public interface IAgriGrowableGuiRenderer {
      * @param w the width to render
      * @param h the height to render
      */
-    default void drawGrowthStage(IAgriGrowable plant, IAgriGrowthStage stage, RenderContext context, MatrixStack transforms,
+    default void drawGrowthStage(IAgriGrowable plant, IAgriGrowthStage stage, RenderContext context, PoseStack transforms,
                                  float x, float y, float w, float h) {
         plant.getTexturesFor(stage).stream().findFirst().map(context::getSprite).ifPresent(sprite ->
                 context.draw(transforms, sprite, x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F));
@@ -50,7 +50,7 @@ public interface IAgriGrowableGuiRenderer {
          * @param w the width
          * @param h the height
          */
-        default void drawSeed(IAgriGrowable.WithSeed plant, RenderContext context, MatrixStack transforms,
+        default void drawSeed(IAgriGrowable.WithSeed plant, RenderContext context, PoseStack transforms,
                               float x, float y, float w, float h) {
             context.draw(transforms, context.getSprite(plant.getSeedTexture()), x, y, w, h, 1.0F, 1.0F, 1.0F, 1.0F);
         }
@@ -73,7 +73,7 @@ public interface IAgriGrowableGuiRenderer {
          * @param b the color blue value
          * @param a the color alpha value
          */
-        void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a);
+        void draw(PoseStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a);
 
         /**
          * Draws a TextureAtlasSprite with modified color
@@ -88,7 +88,7 @@ public interface IAgriGrowableGuiRenderer {
          * @param b the color blue value
          * @param a the color alpha value
          */
-        default void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, int r, int g, int b, int a) {
+        default void draw(PoseStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, int r, int g, int b, int a) {
             this.draw(transforms, texture, x, y, w, h, r/255.0F, g/255.0F, b/255.0F, a/255.0F);
         }
 

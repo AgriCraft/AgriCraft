@@ -6,13 +6,13 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.journal.PlantPage;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,10 +21,10 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
-    private static final ITextComponent GROWTH_STAGES = new TranslationTextComponent("agricraft.tooltip.growth_stages");
-    private static final ITextComponent GROWTH_REQUIREMENTS = new TranslationTextComponent("agricraft.tooltip.growth_requirements");
-    private static final ITextComponent PRODUCTS = new TranslationTextComponent("agricraft.tooltip.products");
-    private static final ITextComponent MUTATIONS = new TranslationTextComponent("agricraft.tooltip.mutations");
+    private static final Component GROWTH_STAGES = new TranslatableComponent("agricraft.tooltip.growth_stages");
+    private static final Component GROWTH_REQUIREMENTS = new TranslatableComponent("agricraft.tooltip.growth_requirements");
+    private static final Component PRODUCTS = new TranslatableComponent("agricraft.tooltip.products");
+    private static final Component MUTATIONS = new TranslatableComponent("agricraft.tooltip.mutations");
 
     @Override
     public ResourceLocation getId() {
@@ -32,10 +32,19 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
     }
 
     @Override
-    public void drawLeftSheet(PlantPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawLeftSheet(PlantPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         // Title
         context.draw(transforms, JournalDataDrawerBase.Textures.TITLE, 0, 2, 128, 20);
-        context.drawText(transforms, page.getPlant().getSeedName(), 30, 10);
+        int titleWidth = Minecraft.getInstance().font.width(page.getPlant().getSeedName());
+        if(titleWidth > 74) {
+            float scale = 0.8F;
+            while (Minecraft.getInstance().font.width(page.getPlant().getSeedName()) * scale > 74) {
+                scale = scale - 0.1F;
+            }
+            context.drawText(transforms, page.getPlant().getSeedName(), 30, 10, scale);
+        } else {
+            context.drawText(transforms, page.getPlant().getSeedName(), 30, 10);
+        }
         // Description
         float offset = context.drawText(transforms, page.getPlant().getInformation(), 10, 30, 0.70F);
         // Growth requirements
@@ -47,19 +56,19 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
     }
 
     @Override
-    public void drawRightSheet(PlantPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawRightSheet(PlantPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         // Products
         this.drawProducts(page, context, transforms);
         // Mutations
         this.drawMutations(page, context, transforms);
     }
 
-    protected void drawGrowthRequirements(PlantPage page, IPageRenderContext context, MatrixStack transforms, float offset) {
+    protected void drawGrowthRequirements(PlantPage page, IPageRenderContext context, PoseStack transforms, float offset) {
         float dy = Math.max(offset, 60);
         dy += context.drawText(transforms, GROWTH_REQUIREMENTS, 10, dy, 0.80F) + 1;
         // Light level
         context.draw(transforms, JournalDataDrawerBase.Textures.BRIGHTNESS_BAR, 6, dy, 66, 8);
-        transforms.push();
+        transforms.pushPose();
         transforms.translate(0, 0, -0.001F);
         for (int i = 0; i < page.brightnessMask().length; i++) {
             boolean current = page.brightnessMask()[i];
@@ -79,7 +88,7 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
             }
         }
         dy += 9;
-        transforms.pop();
+        transforms.popPose();
         // Seasons
         if(AgriApi.getSeasonLogic().isActive()) {
             for(int i = 0; i < page.seasonMask().length; i++) {
@@ -137,7 +146,7 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
         }
     }
 
-    protected void drawGrowthStages(PlantPage page, IPageRenderContext context, MatrixStack transforms) {
+    protected void drawGrowthStages(PlantPage page, IPageRenderContext context, PoseStack transforms) {
         // Position data
         int y0 = 170;
         int delta = 20;
@@ -152,16 +161,16 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
                 row += 1;
             }
             context.draw(transforms, JournalDataDrawerBase.Textures.GROWTH_STAGE, dx*(column + 1) + 16*column - 1, y0 - delta*(rows - row - 1) - 1, 18, 18);
-            transforms.push();
+            transforms.pushPose();
             transforms.translate(0,0, -0.001F);
             page.getPlant().getGuiRenderer().drawGrowthStage(page.getPlant(), page.getStages().get(i), context, transforms, dx*(column + 1) + 16*column, y0 - delta*(rows - row - 1), 16, 16);
-            transforms.pop();
+            transforms.popPose();
         }
         // draw text
         context.drawText(transforms, GROWTH_STAGES, 10, y0 - delta*rows + 4, 0.90F);
     }
 
-    protected void drawProducts(PlantPage page, IPageRenderContext context, MatrixStack transforms) {
+    protected void drawProducts(PlantPage page, IPageRenderContext context, PoseStack transforms) {
         context.drawText(transforms, PRODUCTS, 10, 10, 0.80F);
         for(int i = 0; i < page.getDrops().size(); i++) {
             context.draw(transforms, JournalDataDrawerBase.Textures.MUTATION, 10 + i*20, 19, 18, 18, 0, 0, 18.0F/86.0F, 1);
@@ -169,7 +178,7 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
         }
     }
 
-    protected void drawMutations(PlantPage page, IPageRenderContext context, MatrixStack transforms) {
+    protected void drawMutations(PlantPage page, IPageRenderContext context, PoseStack transforms) {
         context.drawText(transforms, MUTATIONS, 10, 45, 0.80F);
         int posX = 10;
         int posY = 54;
@@ -181,7 +190,7 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
     }
 
     @Override
-    public void drawTooltipLeft(PlantPage page, IPageRenderContext context, MatrixStack transforms, int mouseX, int mouseY) {
+    public void drawTooltipLeft(PlantPage page, IPageRenderContext context, PoseStack transforms, int mouseX, int mouseY) {
         // seed item
         if (4 <= mouseX && mouseX <= 20 && 5 <= mouseY && mouseY <= 21) {
             context.drawTooltip(transforms, Collections.singletonList(page.getPlant().getTooltip()), mouseX, mouseY);
@@ -195,7 +204,7 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
         // Light level
         for (int i = 0; i < page.brightnessMask().length; i++) {
             if (6 + 4 * i <= mouseX && mouseX <= 6 + 4 * i + 4 && dy + 1 <= mouseY && mouseY <= dy + 9) {
-                context.drawTooltip(transforms, Collections.singletonList(new TranslationTextComponent("agricraft.tooltip.light").appendString(" " + i)), mouseX, mouseY);
+                context.drawTooltip(transforms, Collections.singletonList(new TranslatableComponent("agricraft.tooltip.light").append(" " + i)), mouseX, mouseY);
                 return;
             }
         }
@@ -246,11 +255,11 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
     }
 
     @Override
-    public void drawTooltipRight(PlantPage page, IPageRenderContext context, MatrixStack transforms, int x, int y) {
+    public void drawTooltipRight(PlantPage page, IPageRenderContext context, PoseStack transforms, int x, int y) {
         // products tooltips
         for (int i = 0; i < page.getDrops().size(); i++) {
             if (11 + i * 20 <= x && x <= 11 + i * 20 + 16 && 20 <= y && y <= 20 + 16) {
-                context.drawTooltip(transforms, page.getDrops().get(i).getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL), x, y);
+                context.drawTooltip(transforms, page.getDrops().get(i).getTooltipLines(Minecraft.getInstance().player, Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL), x, y);
             }
         }
         // mutation tooltips

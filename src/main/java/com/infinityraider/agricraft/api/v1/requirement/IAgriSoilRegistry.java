@@ -6,10 +6,10 @@ import javax.annotation.Nullable;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.adapter.IAgriAdapter;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
@@ -40,7 +40,7 @@ public interface IAgriSoilRegistry extends IAgriRegistry<IAgriSoil>, IAgriAdapte
             return this.valueOf(((BlockItem) obj).getBlock());
         }
         if(obj instanceof Block) {
-            return this.valueOf(((Block) obj).getDefaultState());
+            return this.valueOf(((Block) obj).defaultBlockState());
         }
         if(obj instanceof BlockState) {
             return this.stream().filter(soil -> soil.isVariant((BlockState) obj)).findFirst();

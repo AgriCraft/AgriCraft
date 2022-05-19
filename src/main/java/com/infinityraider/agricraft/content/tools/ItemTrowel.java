@@ -9,27 +9,30 @@ import com.infinityraider.agricraft.api.v1.event.AgriCropEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.AgriTabs;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
+import com.infinityraider.agricraft.content.core.BlockCrop;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.InfinityItemProperty;
 import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.infinityraider.infinitylib.render.item.IClientItemProperties;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,14 +41,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
 
     public ItemTrowel() {
         super(Names.Items.TROWEL, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT)
-                .maxStackSize(1)
+                .tab(AgriTabs.TAB_AGRICRAFT)
+                .stacksTo(1)
         );
     }
 
@@ -59,15 +63,15 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
         if(this.hasPlant(stack)) {
             return false;
         }
-        CompoundNBT tag = null;
+        CompoundTag tag = null;
         if(stack.hasTag()) {
             tag = stack.getTag();
         }
         if(tag == null) {
-            tag = new CompoundNBT();
+            tag = new CompoundTag();
             stack.setTag(tag);
         }
-        CompoundNBT genomeTag = new CompoundNBT();
+        CompoundTag genomeTag = new CompoundTag();
         if(!genome.writeToNBT(genomeTag)) {
             return false;
         }
@@ -88,7 +92,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     @Nonnull
     @Override
     public Optional<IAgriGenome> getGenome(ItemStack stack) {
-        CompoundNBT tag = this.checkNBT(stack);
+        CompoundTag tag = this.checkNBT(stack);
         if(tag == null) {
             return Optional.empty();
         }
@@ -101,7 +105,7 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 
     @Override
     public Optional<IAgriGrowthStage> getGrowthStage(ItemStack stack) {
-        CompoundNBT tag = this.checkNBT(stack);
+        CompoundTag tag = this.checkNBT(stack);
         if(tag == null) {
             return Optional.empty();
         }
@@ -109,11 +113,11 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
     }
 
     @Nullable
-    protected CompoundNBT checkNBT(ItemStack stack) {
+    protected CompoundTag checkNBT(ItemStack stack) {
         if(!stack.hasTag()) {
             return null;
         }
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if(tag == null || (!tag.contains(AgriNBT.GENOME)) || (!tag.contains(AgriNBT.GROWTH))) {
             return null;
         }
@@ -122,24 +126,24 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        ItemStack stack = context.getItem();
-        PlayerEntity player = context.getPlayer();
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        ItemStack stack = context.getItemInHand();
+        Player player = context.getPlayer();
         return AgriApi.getCrop(world, pos)
                 .map(crop -> this.tryUseOnCrop(crop, stack, player))
                 .orElseGet(() -> this.tryPlantOnSoil(world, pos, stack, player));
     }
 
-    protected ActionResultType tryUseOnCrop(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
+    protected InteractionResult tryUseOnCrop(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
         if (crop.hasWeeds()) {
             // send message
             if (player != null) {
-                player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUniqueID());
+                player.sendMessage(AgriToolTips.MSG_TROWEL_WEED, player.getUUID());
             }
         } else if(crop.isCrossCrop()) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         } else {
             if (!MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
                 if (crop.hasPlant()) {
@@ -151,35 +155,35 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                 }
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    protected ActionResultType tryPickUpPlant(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-        if(crop.world() == null || crop.world().isRemote()) {
-            return ActionResultType.PASS;
+    protected InteractionResult tryPickUpPlant(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
+        if(crop.world() == null || crop.world().isClientSide()) {
+            return InteractionResult.PASS;
         }
         if (this.hasPlant(stack)) {
             if (player != null) {
                 // send message
-                player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, player.getUniqueID());
+                player.sendMessage(AgriToolTips.MSG_TROWEL_PLANT, player.getUUID());
             }
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         } else {
             crop.getGenome().ifPresent(genome -> {
                 this.setPlant(stack, genome, crop.getGrowthStage());
                 crop.removeGenome();
             });
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
     }
 
-    protected ActionResultType tryPlantOnCropSticks(IAgriCrop crop, ItemStack stack, @Nullable PlayerEntity player) {
-        if(crop.world() == null || crop.world().isRemote()) {
-            return ActionResultType.PASS;
+    protected InteractionResult tryPlantOnCropSticks(IAgriCrop crop, ItemStack stack, @Nullable Player player) {
+        if(crop.world() == null || crop.world().isClientSide()) {
+            return InteractionResult.PASS;
         }
         if(crop.isCrossCrop()) {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
         if (this.hasPlant(stack)) {
             if (crop.hasCropSticks()) {
@@ -191,32 +195,33 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                         }));
             }
             MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Post(crop, stack, player));
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
             if (player != null) {
                 // send message
-                player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, player.getUniqueID());
+                player.sendMessage(AgriToolTips.MSG_TROWEL_NO_PLANT, player.getUUID());
             }
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
     }
 
-    protected ActionResultType tryPlantOnSoil(World world, BlockPos pos, ItemStack stack, @Nullable PlayerEntity player) {
+    protected InteractionResult tryPlantOnSoil(Level world, BlockPos pos, ItemStack stack, @Nullable Player player) {
         if (this.hasPlant(stack)) {
-            BlockPos up = pos.up();
-            TileEntity tile = world.getTileEntity(up);
-            if (tile instanceof TileEntityCropSticks) {
-                return this.tryPlantOnCropSticks((TileEntityCropSticks) tile, stack, player);
+            BlockPos up = pos.above();
+            BlockEntity tile = world.getBlockEntity(up);
+            if (tile instanceof TileEntityCrop) {
+                return this.tryPlantOnCropSticks((TileEntityCrop) tile, stack, player);
             }
             return this.tryNewPlant(world, up, stack, player);
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
-    protected ActionResultType tryNewPlant(World world, BlockPos pos, ItemStack stack, @Nullable PlayerEntity player) {
+    protected InteractionResult tryNewPlant(Level world, BlockPos pos, ItemStack stack, @Nullable Player player) {
         if (AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-            BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, pos);
-            if (newState != null && world.setBlockState(pos, newState, 11)) {
+            BlockCrop cropBlock =  AgriBlockRegistry.getInstance().getCropBlock();
+            BlockState newState = cropBlock.adaptStateForPlacement(cropBlock.blockStatePlant(), world, pos);
+            if (newState != null && world.setBlock(pos, newState, 3)) {
                 boolean success = AgriApi.getCrop(world, pos).map(crop -> {
                     if (MinecraftForge.EVENT_BUS.post(new AgriCropEvent.Trowel.Pre(crop, stack, player))) {
                         return false;
@@ -233,13 +238,13 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
                             .orElse(false);
                 }).orElse(false);
                 if (success) {
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 } else {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                    world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
                 }
             }
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     protected boolean setGrowthStage(IAgriCrop crop, IAgriGrowthStage stage) {
@@ -252,17 +257,23 @@ public class ItemTrowel extends ItemBase implements IAgriTrowelItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public Set<InfinityItemProperty> getModelProperties() {
-        return ImmutableSet.of(new InfinityItemProperty(new ResourceLocation(AgriCraft.instance.getModId(), Names.Objects.PLANT)) {
+    public Supplier<IClientItemProperties> getClientItemProperties() {
+        return () -> new IClientItemProperties() {
+            @Nonnull
             @Override
-            public float getValue(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-                return (!stack.isEmpty()
-                        && stack.getItem() instanceof IAgriTrowelItem
-                        && ((IAgriTrowelItem) stack.getItem()).hasPlant(stack))
-                        ? 1
-                        : 0;
+            public Set<InfinityItemProperty> getModelProperties() {
+                return ImmutableSet.of(new InfinityItemProperty(new ResourceLocation(AgriCraft.instance.getModId(), Names.Objects.PLANT)) {
+                    @Override
+                    public float getValue(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
+                        return (!stack.isEmpty()
+                                && stack.getItem() instanceof IAgriTrowelItem
+                                && ((IAgriTrowelItem) stack.getItem()).hasPlant(stack))
+                                ? 1
+                                : 0;
+                    }
+                });
             }
-        });
+        };
     }
 
 }

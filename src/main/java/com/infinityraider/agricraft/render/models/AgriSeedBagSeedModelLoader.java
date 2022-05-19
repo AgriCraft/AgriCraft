@@ -14,15 +14,18 @@ import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
@@ -59,7 +62,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {}
+    public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {}
 
     @Override
     @Nonnull
@@ -72,32 +75,32 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         }
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            return new BakedModel(owner, overrides);
+        public BakedBagModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter,
+                               ModelState transforms, ItemOverrides overrides, ResourceLocation modelLocation) {
+            return new BakedBagModel(owner, overrides);
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-            ImmutableList.Builder<RenderMaterial> builder = new ImmutableList.Builder<>();
+        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+            ImmutableList.Builder<Material> builder = new ImmutableList.Builder<>();
             AgriPlantRegistry.getInstance().all().stream()
                     .map(IAgriPlant::getSeedTexture)
-                    .forEach(rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
+                    .forEach(rl -> builder.add(new Material(this.getTextureAtlasLocation(), rl)));
             return builder.build();
         }
     }
 
-    public static class BakedModel implements IBakedModel, IRenderUtilities {
-        private final Map<IAgriPlant, IBakedModel> seedQuads;
+    public static class BakedBagModel implements BakedModel, IRenderUtilities {
+        private final Map<IAgriPlant, BakedModel> seedQuads;
         private final Map<Direction, List<BakedQuad>> emptyMap;
         private final IModelConfiguration owner;
-        private final ItemOverrideList overrides;
+        private final ItemOverrides overrides;
 
-        private IBakedModel baseModelEmpty;
-        private IBakedModel baseModelPartial;
-        private IBakedModel baseModelFull;
+        private BakedModel baseModelEmpty;
+        private BakedModel baseModelPartial;
+        private BakedModel baseModelFull;
 
-        private BakedModel(IModelConfiguration owner, ItemOverrideList overrides) {
+        private BakedBagModel(IModelConfiguration owner, ItemOverrides overrides) {
             this.seedQuads = Maps.newIdentityHashMap();
             this.emptyMap = this.generateEmptyQuadMap();
             this.owner = owner;
@@ -111,7 +114,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         }
 
         @Override
-        public boolean isAmbientOcclusion() {
+        public boolean useAmbientOcclusion() {
             return false;
         }
 
@@ -121,18 +124,18 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         }
 
         @Override
-        public boolean isSideLit() {
+        public boolean usesBlockLight() {
             return false;
         }
 
         @Override
-        public boolean isBuiltInRenderer() {
+        public boolean isCustomRenderer() {
             return false;
         }
 
         @Nonnull
         @Override
-        public TextureAtlasSprite getParticleTexture() {
+        public TextureAtlasSprite getParticleIcon() {
             return this.getMissingSprite();
         }
 
@@ -140,13 +143,13 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         @Override
         @Deprecated
         @SuppressWarnings("deprecation")
-        public ItemCameraTransforms getItemCameraTransforms() {
+        public ItemTransforms getTransforms() {
             return this.owner.getCameraTransforms();
         }
 
         @Nonnull
         @Override
-        public ItemOverrideList getOverrides() {
+        public ItemOverrides getOverrides() {
             return this.overrides;
         }
 
@@ -156,7 +159,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
         }
 
         @Override
-        public List<Pair<IBakedModel, RenderType>> getLayerModels(ItemStack stack, boolean fabulous) {
+        public List<Pair<BakedModel, RenderType>> getLayerModels(ItemStack stack, boolean fabulous) {
             // Check if the stack is a bag
             if(!(stack.getItem() instanceof ItemSeedBag)) {
                 return Collections.emptyList();
@@ -164,22 +167,22 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             // Check if the bag is activated
             ItemSeedBag bag = (ItemSeedBag) stack.getItem();
             if(!bag.isActivated(stack)) {
-                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), ItemBlockRenderTypes.getRenderType(stack, fabulous)));
             }
             // Check if the bag contains seeds
             ItemSeedBag.Contents contents = bag.getContents(stack);
             if(!contents.getPlant().isPlant()) {
-                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), RenderTypeLookup.func_239219_a_(stack, fabulous)));
+                return Collections.singletonList(Pair.of(this.getEmptyBagModel(), ItemBlockRenderTypes.getRenderType(stack, fabulous)));
             }
             // Fetch the quads
-            RenderType type = RenderTypeLookup.func_239219_a_(stack, fabulous);
+            RenderType type = ItemBlockRenderTypes.getRenderType(stack, fabulous);
             return Lists.newArrayList(
                     Pair.of(contents.isFull() ? this.getFullBagModel() : this.getPartialBagModel(), type),
                     Pair.of(this.getOrBakeSeedModel(contents.getPlant()), type)
             );
         }
 
-        protected IBakedModel getEmptyBagModel() {
+        protected BakedModel getEmptyBagModel() {
             if(this.baseModelEmpty == null) {
                 this.baseModelEmpty = this.getModelManager().getModel(
                         new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_empty"));
@@ -187,7 +190,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             return this.baseModelEmpty;
         }
 
-        protected IBakedModel getPartialBagModel() {
+        protected BakedModel getPartialBagModel() {
             if(this.baseModelPartial == null) {
                 this.baseModelPartial = this.getModelManager().getModel(
                         new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_partial"));
@@ -195,7 +198,7 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             return this.baseModelPartial;
         }
 
-        protected IBakedModel getFullBagModel() {
+        protected BakedModel getFullBagModel() {
             if(this.baseModelFull == null) {
                 this.baseModelFull = this.getModelManager().getModel(
                         new ResourceLocation(AgriCraft.instance.getModId(), "item/agri_seed_bag_full"));
@@ -203,17 +206,17 @@ public class AgriSeedBagSeedModelLoader implements InfModelLoader<AgriSeedBagSee
             return this.baseModelFull;
         }
 
-        protected IBakedModel getOrBakeSeedModel(IAgriPlant plant) {
+        protected BakedModel getOrBakeSeedModel(IAgriPlant plant) {
             return this.seedQuads.computeIfAbsent(plant, this::bakeSeedModel);
         }
 
-        protected IBakedModel bakeSeedModel(IAgriPlant plant) {
+        protected BakedModel bakeSeedModel(IAgriPlant plant) {
             ResourceLocation texture = plant.getSeedTexture();
             TextureAtlasSprite sprite = this.getSprite(texture);
             return new SimpleBakedModel(
                     this.bakeQuads(sprite), this.emptyMap,
                     false, true, false, sprite,
-                    ItemCameraTransforms.DEFAULT, ItemOverrideList.EMPTY);
+                    ItemTransforms.NO_TRANSFORMS, ItemOverrides.EMPTY);
         }
 
         protected List<BakedQuad> bakeQuads(TextureAtlasSprite sprite) {

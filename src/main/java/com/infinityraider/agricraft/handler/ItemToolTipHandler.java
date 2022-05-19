@@ -8,27 +8,24 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriRakeItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriTrowelItem;
 
 import java.text.MessageFormat;
-import java.util.Collection;
 
 import com.infinityraider.agricraft.capability.CapabilityGeneInspector;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.AgriToolTips;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemToolTipHandler {
@@ -42,15 +39,15 @@ public class ItemToolTipHandler {
     private ItemToolTipHandler() {}
 
     private static void addFormatted(ItemTooltipEvent event, String format, Object... objects) {
-        event.getToolTip().add(new StringTextComponent(MessageFormat.format(format, objects)).mergeStyle(TextFormatting.DARK_AQUA));
+        event.getToolTip().add(new TextComponent(MessageFormat.format(format, objects)).withStyle(ChatFormatting.DARK_AQUA));
     }
 
     private static void addCategory(ItemTooltipEvent event, String category) {
-        event.getToolTip().add(new StringTextComponent(category + ":").mergeStyle(TextFormatting.DARK_AQUA));
+        event.getToolTip().add(new TextComponent(category + ":").withStyle(ChatFormatting.DARK_AQUA));
     }
 
     private static void addParameter(ItemTooltipEvent event, String key, Object value) {
-        event.getToolTip().add(new StringTextComponent(" - " + key + ": " + value).mergeStyle(TextFormatting.DARK_AQUA));
+        event.getToolTip().add(new TextComponent(" - " + key + ": " + value).withStyle(ChatFormatting.DARK_AQUA));
     }
 
     @SubscribeEvent
@@ -69,8 +66,8 @@ public class ItemToolTipHandler {
         if (AgriCraft.instance.getConfig().nbtTooltips()) {
             addCategory(event, "NBT");
             if (event.getItemStack().hasTag()) {
-                final CompoundNBT tag = event.getItemStack().getTag();
-                for (String key : tag.keySet()) {
+                final CompoundTag tag = event.getItemStack().getTag();
+                for (String key : tag.getAllKeys()) {
                     addParameter(event, key, tag.get(key));
                 }
             } else {
@@ -84,19 +81,20 @@ public class ItemToolTipHandler {
     public void addTagInfo(ItemTooltipEvent event) {
         if (AgriCraft.instance.getConfig().tagTooltips()) {
             addCategory(event, "Item Tags");
-            Collection<ResourceLocation> itemTags = ItemTags.getCollection().getOwningTags(event.getItemStack().getItem());
-            if(itemTags.size() > 0) {
-                itemTags.forEach(tag -> addFormatted(event, " - " + tag.toString()));
-            } else {
+            boolean flag = ForgeRegistries.ITEMS.tags().getTagNames()
+                    .filter(tag -> event.getItemStack().is(tag))
+                    .peek(tag -> addFormatted(event, " - " + tag.toString()))
+                    .findAny().isEmpty();
+            if(flag) {
                 addFormatted(event, " - No Item Tags");
             }
             if(event.getItemStack().getItem() instanceof BlockItem) {
                 addCategory(event, "Block Tags");
-                Collection<ResourceLocation> blockTags =
-                        BlockTags.getCollection().getOwningTags(((BlockItem) event.getItemStack().getItem()).getBlock());
-                if(blockTags.size() > 0) {
-                    blockTags.forEach(tag -> addFormatted(event, " - " + tag.toString()));
-                } else {
+                flag = ForgeRegistries.BLOCKS.tags().getTagNames()
+                        .filter(tag -> ((BlockItem) event.getItemStack().getItem()).getBlock().defaultBlockState().is(tag))
+                        .peek(tag -> addFormatted(event, " - " + tag.toString()))
+                        .findAny().isEmpty();
+                if(flag) {
                     addFormatted(event, " - No Block Tags");
                 }
             }
@@ -122,7 +120,7 @@ public class ItemToolTipHandler {
         if (!stack.isEmpty() && stack.getItem() instanceof IAgriJournalItem) {
             IAgriJournalItem journal = (IAgriJournalItem) stack.getItem();
             int count = journal.getDiscoveredSeeds(stack).size();
-            event.getToolTip().add(new StringTextComponent("" + count + " ").appendSibling(AgriToolTips.JOURNAL_SEEDS));
+            event.getToolTip().add(new TextComponent("" + count + " ").append(AgriToolTips.JOURNAL_SEEDS));
             event.getToolTip().add(AgriToolTips.JOURNAL_USE_1);
             event.getToolTip().add(AgriToolTips.JOURNAL_USE_2);
         }
@@ -183,7 +181,7 @@ public class ItemToolTipHandler {
             if(bag.isActivated(stack)) {
                 // Remove previous tooltip
                 if(event.getToolTip().size() > 0) {
-                    ITextComponent name = event.getToolTip().get(0);
+                    Component name = event.getToolTip().get(0);
                     event.getToolTip().clear();
                     event.getToolTip().add(name);
                 }
@@ -192,30 +190,30 @@ public class ItemToolTipHandler {
                 event.getToolTip().add(AgriToolTips.EMPTY_LINE);
                 // Contents
                 if(contents.getPlant().isPlant()) {
-                    event.getToolTip().add(new StringTextComponent("")
-                            .appendSibling(AgriToolTips.SEED_BAG_CONTENTS)
-                            .appendSibling(new StringTextComponent(" " + contents.getCount() + " "))
-                            .appendSibling(contents.getPlant().getSeedName()));
+                    event.getToolTip().add(new TextComponent("")
+                            .append(AgriToolTips.SEED_BAG_CONTENTS)
+                            .append(new TextComponent(" " + contents.getCount() + " "))
+                            .append(contents.getPlant().getSeedName()));
                 } else {
                     event.getToolTip().add(AgriToolTips.SEED_BAG_EMPTY);
                 }
                 // Sorter
-                event.getToolTip().add(new StringTextComponent("")
-                        .appendSibling(AgriToolTips.SEED_BAG_SORTER)
-                        .appendSibling(new StringTextComponent(" "))
-                        .appendSibling(contents.getSorter().getName()));
+                event.getToolTip().add(new TextComponent("")
+                        .append(AgriToolTips.SEED_BAG_SORTER)
+                        .append(new TextComponent(" "))
+                        .append(contents.getSorter().getName()));
                 event.getToolTip().add(AgriToolTips.EMPTY_LINE);
                 // Usage
-                if(ModuleKeyboard.getInstance().isKeyPressed(Minecraft.getInstance().gameSettings.keyBindSneak)) {
-                    event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_MAIN_HAND));
-                    event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_OFF_HAND));
-                    event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SEED_BAG_SCROLLING));
+                if(ModuleKeyboard.getInstance().isKeyPressed(Minecraft.getInstance().options.keyShift)) {
+                    event.getToolTip().add(new TextComponent("")
+                            .withStyle(ChatFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_MAIN_HAND));
+                    event.getToolTip().add(new TextComponent("")
+                            .withStyle(ChatFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_OFF_HAND));
+                    event.getToolTip().add(new TextComponent("")
+                            .withStyle(ChatFormatting.DARK_GRAY).append(AgriToolTips.SEED_BAG_SCROLLING));
                 } else {
-                    event.getToolTip().add(new StringTextComponent("")
-                            .mergeStyle(TextFormatting.DARK_GRAY).appendSibling(AgriToolTips.SNEAK_INFO));
+                    event.getToolTip().add(new TextComponent("")
+                            .withStyle(ChatFormatting.DARK_GRAY).append(AgriToolTips.SNEAK_INFO));
                 }
             } else {
                 event.getToolTip().add(AgriToolTips.SEED_BAG_INACTIVE_1);

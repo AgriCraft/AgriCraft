@@ -3,12 +3,12 @@ package com.infinityraider.agricraft.network;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationComponent;
 import com.infinityraider.infinitylib.network.MessageBase;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageIrrigationNeighbourUpdate extends MessageBase {
     private BlockPos pos;
@@ -31,9 +31,9 @@ public class MessageIrrigationNeighbourUpdate extends MessageBase {
 
     @Override
     protected void processMessage(NetworkEvent.Context ctx) {
-        World world = AgriCraft.instance.getClientWorld();
+        Level world = AgriCraft.instance.getClientWorld();
         if(world != null && this.pos != null && this.dir != null) {
-            TileEntity tile = world.getTileEntity(this.pos);
+            BlockEntity tile = world.getBlockEntity(this.pos);
             if(tile instanceof TileEntityIrrigationComponent) {
                 ((TileEntityIrrigationComponent) tile).onNeighbourUpdate(this.dir);
             }

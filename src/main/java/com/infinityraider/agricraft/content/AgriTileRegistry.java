@@ -1,69 +1,77 @@
 package com.infinityraider.agricraft.content;
 
-import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.content.core.TileEntityCropPlant;
+import com.infinityraider.agricraft.content.core.TileEntityCrop;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.infinityraider.agricraft.content.decoration.TileEntityGrate;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationChannel;
 import com.infinityraider.agricraft.content.irrigation.TileEntityIrrigationTank;
 import com.infinityraider.agricraft.content.irrigation.TileEntitySprinkler;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.agricraft.content.core.TileEntityCropSticks;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
-import net.minecraft.tileentity.TileEntityType;
+import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
+import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
-public class AgriTileRegistry {
+public class AgriTileRegistry extends ModContentRegistry {
     private static final AgriTileRegistry INSTANCE = new AgriTileRegistry();
 
     public static AgriTileRegistry getInstance() {
         return INSTANCE;
     }
 
-    public final TileEntityType<TileEntityCropPlant> crop_plant;
-    public final TileEntityType<TileEntityCropSticks> crop_sticks;
-    public final TileEntityType<TileEntitySeedAnalyzer> seed_analyzer;
-    public final TileEntityType<TileEntityIrrigationTank> irrigation_tank;
-    public final TileEntityType<TileEntityIrrigationChannel> irrigation_channel;
-    public final TileEntityType<TileEntitySprinkler> sprinkler;
-    public final TileEntityType<TileEntityGrate> grate;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityCrop>> crop;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntitySeedAnalyzer>> seed_analyzer;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationTank>> irrigation_tank;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityIrrigationChannel>> irrigation_channel;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntitySprinkler>> sprinkler;
+    public final RegistryInitializer<InfinityTileEntityType<TileEntityGrate>> grate;
 
     private AgriTileRegistry() {
-        this.crop_plant = InfinityTileEntityType.builder(Names.Blocks.CROP_PLANT, TileEntityCropPlant::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().crop_plant)
-                .build();
+        super();
 
-        this.crop_sticks = InfinityTileEntityType.builder(Names.Blocks.CROP_STICKS, TileEntityCropSticks::new)
-                .addBlocks(
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_wood,
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_iron,
-                        AgriCraft.instance.getModBlockRegistry().crop_sticks_obsidian)
-                .build();
+        this.crop = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CROP, TileEntityCrop::new)
+                        .addBlock(AgriBlockRegistry.getInstance().getCropBlock())
+                        .build()
+        );
 
-        this.seed_analyzer = InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().seed_analyzer)
-                .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
-                .build();
+        this.seed_analyzer = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.SEED_ANALYZER, TileEntitySeedAnalyzer::new)
+                        .addBlock(AgriBlockRegistry.getInstance().getSeedAnalyzerBlock())
+                        .setRenderFactory(TileEntitySeedAnalyzer.createRenderFactory())
+                        .build()
+        );
 
-        this.irrigation_tank = InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().tank)
-                .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
-                .build();
+        this.irrigation_tank = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.TANK, TileEntityIrrigationTank::new)
+                        .addBlock(AgriBlockRegistry.getInstance().getTankBlock())
+                        .setTicking()
+                        .setRenderFactory(TileEntityIrrigationTank.createRenderFactory())
+                        .build()
+        );
 
-        this.irrigation_channel = InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
-                .addBlocks(
-                        AgriCraft.instance.getModBlockRegistry().channel,
-                        AgriCraft.instance.getModBlockRegistry().channel_hollow
-                )
-                .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
-                .build();
+        this.irrigation_channel = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.CHANNEL, TileEntityIrrigationChannel::new)
+                        .addBlocks(
+                                AgriBlockRegistry.getInstance().getChannelBlock(),
+                                AgriBlockRegistry.getInstance().getHollowChannelBlock()
+                        )
+                        .setTicking()
+                        .setRenderFactory(TileEntityIrrigationChannel.createRenderFactory())
+                        .build()
+        );
 
-        this.sprinkler = InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().sprinkler)
-                .setRenderFactory(TileEntitySprinkler.createRenderFactory())
-                .build();
+        this.sprinkler = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.SPRINKLER, TileEntitySprinkler::new)
+                        .addBlock(AgriBlockRegistry.getInstance().getSprinklerBlock())
+                        .setRenderFactory(TileEntitySprinkler.createRenderFactory())
+                        .setTicking()
+                        .build()
+        );
 
-        this.grate = InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
-                .addBlock(AgriCraft.instance.getModBlockRegistry().grate)
-                .build();
+        this.grate = this.blockEntity(() ->
+                InfinityTileEntityType.builder(Names.Blocks.GRATE, TileEntityGrate::new)
+                        .addBlock(AgriBlockRegistry.getInstance().getGrateBlock())
+                        .build()
+        );
     }
 }

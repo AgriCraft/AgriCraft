@@ -5,7 +5,7 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 import javax.annotation.Nonnull;
 
@@ -34,6 +34,6 @@ public class JsonPlantCallBackBurn implements IJsonPlantCallback {
 
     @Override
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
-        entity.setFire((int) crop.getStats().getAverage());
+        entity.setSecondsOnFire((int) crop.getStats().getAverage());
     }
 }

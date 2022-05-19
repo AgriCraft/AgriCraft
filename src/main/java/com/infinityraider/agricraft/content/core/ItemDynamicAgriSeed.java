@@ -1,30 +1,30 @@
 package com.infinityraider.agricraft.content.core;
 
-import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.Names;
-import com.infinityraider.infinitylib.item.ItemBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import com.infinityraider.infinitylib.item.IInfinityItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
+public class ItemDynamicAgriSeed extends BlockItem implements IInfinityItem, IAgriSeedItem {
     private static final IAgriPlant NO_PLANT = NoPlant.getInstance();
 
     public static ItemStack toStack(IAgriPlant plant, int amount) {
@@ -42,9 +42,9 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
 
     public static ItemStack toStack(IAgriGenome genome, int amount) {
         // Create the stack.
-        ItemStack stack = new ItemStack(AgriCraft.instance.getModItemRegistry().seed, amount);
+        ItemStack stack = new ItemStack(AgriItemRegistry.getInstance().seed.get(), amount);
         // Create the tag.
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         genome.writeToNBT(tag);
         // Put the tag on stack
         stack.setTag(tag);
@@ -53,81 +53,75 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     }
 
     public ItemDynamicAgriSeed() {
-        super(Names.Items.SEED, new Properties()
-                .group(AgriTabs.TAB_AGRICRAFT_SEED)
-                .maxStackSize(64)
+        super(AgriBlockRegistry.getInstance().getCropBlock(), new Properties()
+                .tab(AgriTabs.TAB_AGRICRAFT_SEED)
+                .stacksTo(64)
         );
     }
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        TileEntity tile = world.getTileEntity(pos);
-        ItemStack stack = context.getItem();
-        PlayerEntity player = context.getPlayer();
+    public String getInternalName() {
+        return Names.Items.SEED;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
+        Level world = context.getLevel();
+        if (world.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+        BlockPos pos = context.getClickedPos();
+        BlockEntity tile = world.getBlockEntity(pos);
+        ItemStack stack = context.getItemInHand();
+        Player player = context.getPlayer();
         // If crop sticks were clicked, attempt to plant the seed
-        if (tile instanceof TileEntityCropSticks) {
-            return this.attemptSeedPlant((TileEntityCropSticks) tile, stack, player);
+        if (tile instanceof TileEntityCrop) {
+            return this.attemptSeedPlant((TileEntityCrop) tile, stack, player);
         }
         // If a soil was clicked, check the block on top of the soil and handle accordingly
         return AgriApi.getSoil(world, pos).map(soil -> {
-            BlockPos up = pos.up();
-            TileEntity above = world.getTileEntity(up);
+            BlockPos up = pos.above();
+            BlockEntity above = world.getBlockEntity(up);
             // There are currently crop sticks on the soil, attempt to plant on the crop sticks
-            if (above instanceof TileEntityCropSticks) {
-                return this.attemptSeedPlant((TileEntityCropSticks) above, stack, player);
+            if (above instanceof TileEntityCrop) {
+                return this.attemptSeedPlant((TileEntityCrop) above, stack, player);
             }
-            // There are currently no crop sticks, check if the place is suitable and plant the plant directly
-            if (above == null && AgriCraft.instance.getConfig().allowPlantingOutsideCropSticks()) {
-                BlockState newState = AgriCraft.instance.getModBlockRegistry().crop_plant.getStateForPlacement(world, up);
-                if (newState != null && world.setBlockState(up, newState, 11)) {
-                    boolean success = AgriApi.getCrop(world, up).map(crop ->
-                            this.getGenome(context.getItem()).map(genome -> crop.plantGenome(genome, player)).map(result -> {
-                                if (result) {
-                                    // consume item
-                                    if (player == null || !player.isCreative()) {
-                                        stack.shrink(1);
-                                    }
-                                }
-                                return result;
-                            }).orElse(false)).orElse(false);
-                    if (success) {
-                        return ActionResultType.SUCCESS;
-                    } else {
-                        world.setBlockState(up, Blocks.AIR.getDefaultState());
-                    }
-                }
-            }
-            // Neither alternative option was successful, delegate the call to the super method
-            return super.onItemUse(context);
-        }).orElse(super.onItemUse(context));
+            // There are currently no crop sticks, return null to redirect to super method
+            return null;
+        }).orElse(super.useOn(context));
     }
 
-    protected ActionResultType attemptSeedPlant(IAgriCrop crop, ItemStack stack, PlayerEntity player) {
+    protected InteractionResult attemptSeedPlant(IAgriCrop crop, ItemStack stack, Player player) {
         return AgriApi.getGenomeAdapterizer().valueOf(stack)
                 .map(seed -> {
                     if (crop.plantGenome(seed, player)) {
                         if (player != null && !player.isCreative()) {
                             stack.shrink(1);
                         }
-                        return ActionResultType.CONSUME;
+                        return InteractionResult.CONSUME;
                     } else {
-                        return ActionResultType.PASS;
+                        return InteractionResult.PASS;
                     }
                 })
-                .orElse(ActionResultType.PASS);
+                .orElse(InteractionResult.PASS);
     }
 
     @Nonnull
-    public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    @Override
+    public Component getName(@Nonnull ItemStack stack) {
         return this.getPlant(stack).getSeedName();
     }
 
     @Override
-    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items) {
-        if(this.isInGroup(group)) {
+    public void fillItemCategory(@Nonnull CreativeModeTab group, @Nonnull NonNullList<ItemStack> items) {
+        if(this.allowdedIn(group)) {
             AgriApi.getPlantRegistry()
                     .stream()
                     .map(IAgriPlant::toItemStack)
@@ -137,14 +131,14 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag advanced) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag advanced) {
         this.getStats(stack).ifPresent(stats -> stats.addTooltips(tooltip::add));
     }
 
     @Nonnull
     @Override
     public Optional<IAgriGenome> getGenome(ItemStack stack) {
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         if(tag == null) {
             return Optional.empty();
         }
@@ -158,7 +152,7 @@ public class ItemDynamicAgriSeed extends ItemBase implements IAgriSeedItem {
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) {
         return true;
     }
 }

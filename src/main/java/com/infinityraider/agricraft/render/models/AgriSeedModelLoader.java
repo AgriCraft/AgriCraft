@@ -10,15 +10,18 @@ import com.infinityraider.agricraft.impl.v1.plant.AgriPlantRegistry;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.infinityraider.infinitylib.render.model.InfModelLoader;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
@@ -56,7 +59,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
     }
 
     @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {}
+    public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {}
 
     @Override
     @Nonnull
@@ -68,41 +71,41 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         private Geometry() {}
 
         @Override
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-                                IModelTransform transforms, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            return new BakedModel(owner);
+        public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter,
+                               ModelState transforms, ItemOverrides overrides, ResourceLocation modelLocation) {
+            return new BakedSeedModel(owner);
         }
 
         @Override
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-            ImmutableList.Builder<RenderMaterial> builder = new ImmutableList.Builder<>();
+        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+            ImmutableList.Builder<Material> builder = new ImmutableList.Builder<>();
             AgriPlantRegistry.getInstance().all().stream()
                     .map(IAgriPlant::getSeedTexture)
-                    .forEach(rl -> builder.add(new RenderMaterial(this.getTextureAtlasLocation(), rl)));
+                    .forEach(rl -> builder.add(new Material(this.getTextureAtlasLocation(), rl)));
             return builder.build();
         }
     }
 
-    public static class ModelOverride extends ItemOverrideList implements IRenderUtilities{
+    public static class ModelOverride extends ItemOverrides implements IRenderUtilities{
         protected ModelOverride() {
             super();
         }
 
         @Nullable
         @Override
-        public IBakedModel getOverrideModel(@Nonnull IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+        public BakedModel resolve(@Nonnull BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
             if(stack.getItem() instanceof ItemDynamicAgriSeed) {
-                IBakedModel seedModel =  this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel());
-                return seedModel.getOverrides().getOverrideModel(seedModel, stack, world, entity);
+                BakedModel seedModel =  this.getModelManager().getModel(((ItemDynamicAgriSeed) stack.getItem()).getPlant(stack).getSeedModel());
+                return seedModel.getOverrides().resolve(seedModel, stack, world, entity, seed);
             }
             return this.getModelManager().getMissingModel();
         }
     }
 
-    public static class BakedModel implements IBakedModel {
+    public static class BakedSeedModel implements BakedModel {
         private final IModelConfiguration owner;
 
-        private BakedModel(IModelConfiguration owner) {
+        private BakedSeedModel(IModelConfiguration owner) {
             this.owner = owner;
         }
 
@@ -113,7 +116,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         }
 
         @Override
-        public boolean isAmbientOcclusion() {
+        public boolean useAmbientOcclusion() {
             return false;
         }
 
@@ -123,18 +126,18 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         }
 
         @Override
-        public boolean isSideLit() {
+        public boolean usesBlockLight() {
             return false;
         }
 
         @Override
-        public boolean isBuiltInRenderer() {
+        public boolean isCustomRenderer() {
             return false;
         }
 
         @Nonnull
         @Override
-        public TextureAtlasSprite getParticleTexture() {
+        public TextureAtlasSprite getParticleIcon() {
             return this.getOverrides().getMissingSprite();
         }
 
@@ -142,7 +145,7 @@ public class AgriSeedModelLoader implements InfModelLoader<AgriSeedModelLoader.G
         @Override
         @Deprecated
         @SuppressWarnings("deprecation")
-        public ItemCameraTransforms getItemCameraTransforms() {
+        public ItemTransforms getTransforms() {
             return this.owner.getCameraTransforms();
         }
 

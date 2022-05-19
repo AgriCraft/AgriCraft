@@ -2,11 +2,11 @@ package com.infinityraider.agricraft.handler;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -22,15 +22,15 @@ public class BlockUpdateHandler {
         return INSTANCE;
     }
 
-    private final Map<RegistryKey<World>, Map< ChunkPos, Map<BlockPos, Set<IListener>>>> listeners;
+    private final Map<ResourceKey<Level>, Map<ChunkPos, Map<BlockPos, Set<IListener>>>> listeners;
 
     private BlockUpdateHandler() {
         this.listeners = Maps.newHashMap();
     }
 
-    public void addListener(World world, BlockPos pos, IListener listener) {
-        if(world instanceof ServerWorld) {
-            RegistryKey<World> dimension = world.getDimensionKey();
+    public void addListener(Level world, BlockPos pos, IListener listener) {
+        if(world instanceof ServerLevel) {
+            ResourceKey<Level> dimension = world.dimension();
             this.listeners.computeIfAbsent(dimension, key -> Maps.newHashMap())
                     .computeIfAbsent(new ChunkPos(pos), chunkPos -> Maps.newHashMap())
                     .computeIfAbsent(pos, aPos -> Sets.newIdentityHashSet())
@@ -38,9 +38,9 @@ public class BlockUpdateHandler {
         }
     }
 
-    public void removeListener(World world, BlockPos pos, IListener listener) {
-        if(world instanceof ServerWorld) {
-            RegistryKey<World> dimension = world.getDimensionKey();
+    public void removeListener(Level world, BlockPos pos, IListener listener) {
+        if(world instanceof ServerLevel) {
+            ResourceKey<Level> dimension = world.dimension();
             this.listeners.computeIfPresent(dimension, (dim, chunkMap) -> {
                 chunkMap.computeIfPresent(new ChunkPos(pos), (chunkPos, posMap) -> {
                     posMap.computeIfPresent(pos, (aPos, set) -> {
@@ -57,9 +57,9 @@ public class BlockUpdateHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onChunkUnloaded(ChunkEvent.Unload event) {
-        if(event.getWorld() instanceof ServerWorld) {
-            ServerWorld world = (ServerWorld) event.getWorld();
-            RegistryKey<World> dimension = world.getDimensionKey();
+        if(event.getWorld() instanceof ServerLevel) {
+            ServerLevel world = (ServerLevel) event.getWorld();
+            ResourceKey<Level> dimension = world.dimension();
             if(listeners.containsKey(dimension)) {
                 listeners.computeIfPresent(dimension, (dim, chunkMap) -> {
                     if(chunkMap.containsKey(event.getChunk().getPos())) {
@@ -76,10 +76,10 @@ public class BlockUpdateHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onWorldUnloaded(WorldEvent.Unload event) {
-        if(event.getWorld() instanceof ServerWorld) {
-            ServerWorld world = (ServerWorld) event.getWorld();
-            if(this.listeners.containsKey(world.getDimensionKey())) {
-                this.listeners.remove(world.getDimensionKey()).values()
+        if(event.getWorld() instanceof ServerLevel) {
+            ServerLevel world = (ServerLevel) event.getWorld();
+            if(this.listeners.containsKey(world.dimension())) {
+                this.listeners.remove(world.dimension()).values()
                         .stream()
                         .flatMap(map -> map.entrySet().stream())
                         .forEach(entry -> entry.getValue().forEach(listener -> listener.onWorldUnloaded(world, entry.getKey())));
@@ -90,9 +90,9 @@ public class BlockUpdateHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onBlockUpdate(BlockEvent.NeighborNotifyEvent event) {
-        if(event.getWorld() instanceof ServerWorld) {
-            ServerWorld world = (ServerWorld) event.getWorld();
-            RegistryKey<World> dimension = world.getDimensionKey();
+        if(event.getWorld() instanceof ServerLevel) {
+            ServerLevel world = (ServerLevel) event.getWorld();
+            ResourceKey<Level> dimension = world.dimension();
             this.listeners.computeIfPresent(dimension, (dim, chunkMap) -> {
                 chunkMap.computeIfPresent(new ChunkPos(event.getPos()), (chunkPos, posMap) -> {
                     posMap.computeIfPresent(event.getPos(), (pos, set) -> {
@@ -107,10 +107,10 @@ public class BlockUpdateHandler {
     }
 
     public interface IListener {
-        void onBlockUpdate(ServerWorld world, BlockPos pos);
+        void onBlockUpdate(ServerLevel world, BlockPos pos);
 
-        void onChunkUnloaded(ServerWorld world, BlockPos pos);
+        void onChunkUnloaded(ServerLevel world, BlockPos pos);
 
-        void onWorldUnloaded(ServerWorld world, BlockPos pos);
+        void onWorldUnloaded(ServerLevel world, BlockPos pos);
     }
 }

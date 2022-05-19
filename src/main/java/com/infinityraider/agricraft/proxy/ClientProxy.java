@@ -3,6 +3,8 @@ package com.infinityraider.agricraft.proxy;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.config.Config;
 import com.infinityraider.agricraft.handler.*;
+import com.infinityraider.agricraft.impl.v1.JsonObjectFactory;
+import com.infinityraider.agricraft.impl.v1.JsonObjectFactoryClient;
 import com.infinityraider.agricraft.impl.v1.PluginHandler;
 import com.infinityraider.agricraft.render.blocks.BlockGreenHouseAirRenderer;
 import com.infinityraider.agricraft.render.items.magnfiyingglass.MagnifyingGlassGenomeInspector;
@@ -11,8 +13,8 @@ import com.infinityraider.infinitylib.modules.dynamiccamera.ModuleDynamicCamera;
 import com.infinityraider.infinitylib.modules.keyboard.ModuleKeyboard;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -49,8 +51,8 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public void registerFMLEventHandlers(IEventBus bus) {
-        IProxy.super.registerFMLEventHandlers(bus);
+    public void registerModBusEventHandlers(IEventBus bus) {
+        IProxy.super.registerModBusEventHandlers(bus);
         bus.addListener(ModelAndTextureHandler.getInstance()::onModelLoadEvent);
         bus.addListener(ModelAndTextureHandler.getInstance()::onTextureStitchEvent);
     }
@@ -60,6 +62,11 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
         IProxy.super.activateRequiredModules();
         ModuleDynamicCamera.getInstance().activate();
         ModuleKeyboard.getInstance().activate();
+    }
+
+    @Override
+    public JsonObjectFactory jsonObjectFactory() {
+        return JsonObjectFactoryClient.getInstance();
     }
 
     @Override
@@ -78,17 +85,17 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
     }
 
     @Override
-    public boolean toggleJournalObserving(PlayerEntity player, Hand hand) {
+    public boolean toggleJournalObserving(Player player, InteractionHand hand) {
         return JournalViewPointHandler.getInstance().toggle(player, hand);
     }
 
     @Override
-    public void toggleMagnifyingGlassObserving(Hand hand) {
+    public void toggleMagnifyingGlassObserving(InteractionHand hand) {
         MagnifyingGlassViewHandler.getInstance().toggle(hand);
     }
 
     @Override
-    public boolean isMagnifyingGlassObserving(PlayerEntity player) {
+    public boolean isMagnifyingGlassObserving(Player player) {
         if(player == this.getClientPlayer()) {
             return MagnifyingGlassViewHandler.getInstance().isActive() && MagnifyingGlassViewHandler.getInstance().isAnimationComplete();
         } else {
@@ -98,6 +105,6 @@ public class ClientProxy implements IClientProxyBase<Config>, IProxy {
 
     @Override
     public int getParticleSetting() {
-        return Minecraft.getInstance().gameSettings.particles.getId();
+        return Minecraft.getInstance().options.particles.getId();
     }
 }

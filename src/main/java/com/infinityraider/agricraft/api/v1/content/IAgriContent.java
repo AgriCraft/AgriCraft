@@ -2,12 +2,12 @@ package com.infinityraider.agricraft.api.v1.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.*;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nullable;
 
@@ -94,17 +94,8 @@ public interface IAgriContent {
      */
     @SuppressWarnings("unused")
     interface Blocks {
-        /** @return the AgriCraft Crop Plant block */
-        Block getCropPlantBlock();
-
-        /** @return the AgriCraft Wooden Crop Sticks block */
-        Block getWoodCropSticksBlock();
-        
-        /** @return the AgriCraft Iron Crop Sticks block */
-        Block getIronCropSticksBlock();
-        
-        /** @return the AgriCraft Obsidian Crop Sticks block */
-        Block getObsidianCropSticksBlock();
+        /** @return the AgriCraft Crop block */
+        Block getCropBlock();
 
         /** @return the AgriCraft Seed Analyzer block */
         Block getSeedAnalyzerBlock();
@@ -155,13 +146,13 @@ public interface IAgriContent {
         Item getDebuggerItem();
 
         /** @return the AgriCraft Wooden Crop Sticks Item */
-        Item getWoodCropSticksItem();
+        IAgriCropStickItem getWoodCropSticksItem();
 
         /** @return the AgriCraft Iron Crop Sticks Item */
-        Item getIronCropSticksItem();
+        IAgriCropStickItem getIronCropSticksItem();
 
         /** @return the AgriCraft Obsidian Crop Sticks Item */
-        Item getObsidianCropSticksItem();
+        IAgriCropStickItem getObsidianCropSticksItem();
 
         /** @return the AgriCraft Seed Analyzer Item */
         Item getSeedAnalyzerItem();
@@ -208,6 +199,10 @@ public interface IAgriContent {
         /** @return the AgriCraft Grate Item */
         Item getGrateItem();
 
+        /** @return the AgriCraft Copper Nugget Item (can be null if disabled in the config) */
+        @Nullable
+        Item getCopperNuggetItem();
+
         /** @return the AgriCraft Coal Nugget Item (can be null if disabled in the config) */
         @Nullable
         Item getCoalNuggetItem();
@@ -223,6 +218,14 @@ public interface IAgriContent {
         /** @return the AgriCraft Quartz Nugget Item (can be null if disabled in the config) */
         @Nullable
         Item getQuartzNuggetItem();
+
+        /** @return the AgriCraft Netherite Sliver Item (can be null if disabled in the config) */
+        @Nullable
+        Item getNetheriteSliverItem();
+
+        /** @return the AgriCraft Amathyllis Petal Item (can be null if disabled in the config) */
+        @Nullable
+        Item getAmathyllisPetalItem();
         
     }
 
@@ -241,10 +244,10 @@ public interface IAgriContent {
     @SuppressWarnings("unused")
     interface Tabs {
         /** @return the AgriCraft main item group */
-        ItemGroup getAgriCraftTab();
+        CreativeModeTab getAgriCraftTab();
 
         /** @return the AgriCraft seeds item group */
-        ItemGroup getSeedsTab();
+        CreativeModeTab getSeedsTab();
     }
     
 }

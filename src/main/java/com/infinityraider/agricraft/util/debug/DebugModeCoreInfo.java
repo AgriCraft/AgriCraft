@@ -4,12 +4,12 @@ import com.agricraft.agricore.core.AgriCore;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class DebugModeCoreInfo extends DebugMode {
 
@@ -19,7 +19,7 @@ public class DebugModeCoreInfo extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+    public void debugActionBlockClicked(ItemStack stack, UseOnContext context) {
         MessageUtil.messagePlayer(context.getPlayer(), "{0} Info:", AgriCraft.instance.proxy().getLogicalSide());
         MessageUtil.messagePlayer(context.getPlayer(), "========================================");
         MessageUtil.messagePlayer(context.getPlayer(), "AgriPlants Hash: {0}", AgriCore.getPlants().hashCode());
@@ -33,12 +33,12 @@ public class DebugModeCoreInfo extends DebugMode {
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+    public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
         // NOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+    public void debugActionEntityClicked(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         // NOP
     }
 }

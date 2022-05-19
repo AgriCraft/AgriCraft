@@ -6,9 +6,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.infinityraider.agricraft.api.v1.util.IAgriItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * This interface is implemented in AgriCraft's agricultural item class for the journal. Can be used
@@ -97,7 +97,7 @@ public interface IAgriJournalItem extends IAgriItem {
          * @param stack the stack holding the journal
          * @param journal the journal
          */
-        void onPageOpened(PlayerEntity player, ItemStack stack, IAgriJournalItem journal);
+        void onPageOpened(Player player, ItemStack stack, IAgriJournalItem journal);
 
         /**
          * Enum describing types of pages, helps to identify different pages

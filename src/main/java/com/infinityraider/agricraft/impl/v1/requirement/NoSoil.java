@@ -2,8 +2,8 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -30,7 +30,7 @@ public final class NoSoil implements IAgriSoil {
 
     @Nonnull
     @Override
-    public ITextComponent getName() {
+    public Component getName() {
         return AgriToolTips.UNKNOWN;
     }
 

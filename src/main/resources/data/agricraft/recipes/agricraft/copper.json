@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "nnn",
+    "nnn",
+    "nnn"
+  ],
+  "key": {
+    "n": {
+      "item": "agricraft:agri_nugget_copper"
+    }
+  },
+  "result": {
+    "item": "minecraft:copper_ingot",
+    "count": 1
+  }
+}

@@ -7,206 +7,218 @@ import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.tools.*;
 import com.infinityraider.agricraft.reference.Names;
+import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
+import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
 import javax.annotation.Nullable;
 
-public class AgriItemRegistry implements IAgriContent.Items {
-
+public final class AgriItemRegistry extends ModContentRegistry implements IAgriContent.Items {
     private static final AgriItemRegistry INSTANCE = new AgriItemRegistry();
 
     public static AgriItemRegistry getInstance() {
         return INSTANCE;
     }
 
-    public final ItemDebugger debugger;
+    public final RegistryInitializer<ItemDebugger> debugger;
 
-    public final ItemCropSticks crop_sticks_wood;
-    public final ItemCropSticks crop_sticks_iron;
-    public final ItemCropSticks crop_sticks_obsidian;
+    public final RegistryInitializer<ItemSeedAnalyzer> seed_analyzer;
+    public final RegistryInitializer<ItemJournal> journal;
 
-    public final ItemSeedAnalyzer seed_analyzer;
-    public final ItemJournal journal;
+    public final RegistryInitializer<ItemDynamicAgriSeed> seed;
 
-    public final ItemDynamicAgriSeed seed;
+    public final RegistryInitializer<ItemIrrigationTank> tank;
+    public final RegistryInitializer<ItemIrrigationChannel> channel;
+    public final RegistryInitializer<ItemIrrigationChannelHollow> channel_hollow;
+    public final RegistryInitializer<ItemSprinkler> sprinkler;
+    public final RegistryInitializer<ItemChannelValve> valve;
 
-    public final ItemIrrigationTank tank;
-    public final ItemIrrigationChannel channel;
-    public final ItemIrrigationChannelHollow channel_hollow;
-    public final ItemSprinkler sprinkler;
-    public final ItemChannelValve valve;
+    public final RegistryInitializer<ItemClipper> clipper;
+    public final RegistryInitializer<ItemMagnifyingGlass> magnifying_glass;
+    public final RegistryInitializer<ItemRake> rake_wood;
+    public final RegistryInitializer<ItemRake> rake_iron;
+    public final RegistryInitializer<ItemTrowel> trowel;
+    public final RegistryInitializer<ItemSeedBag> seed_bag;
 
-    public final ItemClipper clipper;
-    public final ItemMagnifyingGlass magnifying_glass;
-    public final ItemRake rake_wood;
-    public final ItemRake rake_iron;
-    public final ItemTrowel trowel;
-    public final ItemSeedBag seed_bag;
+    public final RegistryInitializer<ItemAgriNugget> nugget_copper;
+    public final RegistryInitializer<ItemAgriNugget> nugget_coal;
+    public final RegistryInitializer<ItemAgriNugget> nugget_diamond ;
+    public final RegistryInitializer<ItemAgriNugget> nugget_emerald ;
+    public final RegistryInitializer<ItemAgriNugget> nugget_quartz;
+    public final RegistryInitializer<ItemAgriNugget> netherite_sliver;
+    public final RegistryInitializer<ItemAgriNugget> amathyllis_petal;
 
-    public final ItemAgriNugget nugget_coal;
-    public final ItemAgriNugget nugget_diamond;
-    public final ItemAgriNugget nugget_emerald;
-    public final ItemAgriNugget nugget_quartz;
+    public final RegistryInitializer<ItemGrate> grate;
 
-    public final ItemGrate grate;
-
-    @SuppressWarnings("deprecation")
     private AgriItemRegistry() {
-        this.debugger = new ItemDebugger();
+        super();
 
-        this.crop_sticks_wood = new ItemCropSticks(CropStickVariant.WOOD);
-        this.crop_sticks_iron = new ItemCropSticks(CropStickVariant.IRON);
-        this.crop_sticks_obsidian = new ItemCropSticks(CropStickVariant.OBSIDIAN);
+        this.debugger = this.item(ItemDebugger::new);
 
-        this.seed_analyzer = new ItemSeedAnalyzer();
-        this.journal = new ItemJournal();
+        this.seed_analyzer = this.item(ItemSeedAnalyzer::new);
+        this.journal = this.item(ItemJournal::new);
 
-        this.seed = new ItemDynamicAgriSeed();
+        this.seed = this.item(ItemDynamicAgriSeed::new);
 
-        this.tank = new ItemIrrigationTank();
-        this.channel = new ItemIrrigationChannel();
-        this.channel_hollow = new ItemIrrigationChannelHollow();
-        this.sprinkler = new ItemSprinkler();
-        this.valve = new ItemChannelValve();
+        this.tank = this.item(ItemIrrigationTank::new);
+        this.channel = this.item(ItemIrrigationChannel::new);
+        this.channel_hollow = this.item(ItemIrrigationChannelHollow::new);
+        this.sprinkler = this.item(ItemSprinkler::new);
+        this.valve = this.item(ItemChannelValve::new);
 
-        this.clipper = new ItemClipper();
-        this.magnifying_glass = new ItemMagnifyingGlass();
-        this.rake_wood = new ItemRake(ItemRake.WOOD_LOGIC);
-        this.rake_iron = new ItemRake(ItemRake.IRON_LOGIC);
-        this.trowel = new ItemTrowel();
-        this.seed_bag = new ItemSeedBag();
+        this.clipper = this.item(ItemClipper::new);
+        this.magnifying_glass = this.item(ItemMagnifyingGlass::new);
+        this.rake_wood = this.item(() -> new ItemRake(ItemRake.WOOD_LOGIC));
+        this.rake_iron = this.item(() -> new ItemRake(ItemRake.IRON_LOGIC));
+        this.trowel = this.item(ItemTrowel::new);
+        this.seed_bag = this.item(ItemSeedBag::new);
 
-        this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget()
-                ? new ItemAgriNugget.Burnable(Names.Nuggets.COAL)
-                : null;
-        this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget()
-                ? new ItemAgriNugget(Names.Nuggets.DIAMOND)
-                : null;
-        this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget()
-                ? new ItemAgriNugget(Names.Nuggets.EMERALD)
-                : null;
-        this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget()
-                ? new ItemAgriNugget(Names.Nuggets.QUARTZ)
-                : null;
+        this.nugget_copper = AgriCraft.instance.getConfig().enableCopperNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.COPPER)) : null;
+        this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget() ? this.item(() -> new ItemAgriNugget.Burnable(Names.Items.NUGGET + "_" + Names.Nuggets.COAL)) : null;
+        this.nugget_diamond = AgriCraft.instance.getConfig().enableDiamondNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.DIAMOND)) : null;
+        this.nugget_emerald = AgriCraft.instance.getConfig().enableEmeraldNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.EMERALD)) : null;
+        this.nugget_quartz = AgriCraft.instance.getConfig().enableQuartzNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.QUARTZ)) : null;
+        this.netherite_sliver = AgriCraft.instance.getConfig().enableNetheriteSliver() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.NETHERITE_SLIVER)) : null;
+        this.amathyllis_petal = AgriCraft.instance.getConfig().enableAmathyllisPetal() ? this.item(() -> new ItemAgriNugget(Names.Nuggets.AMATHYLLIS_PETAL)) : null;
 
-        this.grate = new ItemGrate();
+        this.grate = this.item(ItemGrate::new);
+
+        CropStickVariant.initItems(this::item);
     }
 
     @Override
     public ItemDebugger getDebuggerItem() {
-        return this.debugger;
+        return debugger.get();
     }
 
     @Override
     public ItemCropSticks getWoodCropSticksItem() {
-        return this.crop_sticks_wood;
+        return CropStickVariant.WOOD.getItem();
     }
 
     @Override
     public ItemCropSticks getIronCropSticksItem() {
-        return this.crop_sticks_iron;
+        return CropStickVariant.IRON.getItem();
     }
 
     @Override
     public ItemCropSticks getObsidianCropSticksItem() {
-        return this.crop_sticks_obsidian;
+        return CropStickVariant.OBSIDIAN.getItem();
     }
 
     @Override
     public ItemSeedAnalyzer getSeedAnalyzerItem() {
-        return this.seed_analyzer;
+        return seed_analyzer.get();
     }
 
     @Override
     public ItemJournal getJournalItem() {
-        return this.journal;
+        return journal.get();
     }
 
     @Override
     public ItemDynamicAgriSeed getSeedItem() {
-        return this.seed;
+        return seed.get();
     }
 
     @Override
     public ItemIrrigationTank getIrrigationTankItem() {
-        return this.tank;
+        return tank.get();
     }
 
     @Override
     public ItemIrrigationChannel getIrrigationChannelItem() {
-        return this.channel;
+        return channel.get();
     }
 
     @Override
     public ItemIrrigationChannelHollow getHollowIrrigationChannelItem() {
-        return this.channel_hollow;
+        return channel_hollow.get();
     }
 
     @Override
     public ItemSprinkler getSprinklerItem() {
-        return this.sprinkler;
+        return sprinkler.get();
     }
 
     @Override
     public ItemChannelValve getValveItem() {
-        return this.valve;
+        return valve.get();
     }
 
     @Override
     public ItemClipper getClipperItem() {
-        return this.clipper;
+        return clipper.get();
     }
 
     @Override
     public ItemMagnifyingGlass getMagnifyingGlassItem() {
-        return this.magnifying_glass;
+        return magnifying_glass.get();
     }
 
     @Override
     public ItemRake getWoodenRakeItem() {
-        return this.rake_wood;
+        return rake_wood.get();
     }
 
     @Override
     public ItemRake getIronRakeItem() {
-        return this.rake_iron;
+        return rake_iron.get();
     }
 
     @Override
     public ItemTrowel getTrowelItem() {
-        return this.trowel;
+        return trowel.get();
     }
 
     @Override
     public ItemSeedBag getSeedBagItem() {
-        return this.seed_bag;
+        return seed_bag.get();
     }
 
     @Override
     public ItemGrate getGrateItem() {
-        return this.grate;
+        return grate.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getCopperNuggetItem() {
+        return nugget_copper == null ? null : this.nugget_copper.get();
     }
 
     @Nullable
     @Override
     public ItemAgriNugget getCoalNuggetItem() {
-        return this.nugget_coal;
+        return nugget_coal == null ? null : this.nugget_coal.get();
     }
 
     @Nullable
     @Override
     public ItemAgriNugget getDiamondNuggetItem() {
-        return this.nugget_diamond;
+        return nugget_diamond == null ? null : this.nugget_diamond.get();
     }
 
     @Nullable
     @Override
     public ItemAgriNugget getEmeraldNuggetItem() {
-        return this.nugget_emerald;
+        return nugget_emerald == null ? null : this.nugget_emerald.get();
     }
 
     @Nullable
     @Override
     public ItemAgriNugget getQuartzNuggetItem() {
-        return this.nugget_quartz;
+        return nugget_quartz == null ? null : this.nugget_quartz.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getNetheriteSliverItem() {
+        return netherite_sliver == null ? null : this.netherite_sliver.get();
+    }
+
+    @Nullable
+    @Override
+    public ItemAgriNugget getAmathyllisPetalItem() {
+        return amathyllis_petal == null ? null : this.amathyllis_petal.get();
     }
 }

@@ -2,24 +2,25 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.tools.*;
+import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
+import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
-public class AgriEnchantmentRegistry implements IAgriContent.Enchantments {
-
+public final class AgriEnchantmentRegistry extends ModContentRegistry implements IAgriContent.Enchantments {
     private static final AgriEnchantmentRegistry INSTANCE = new AgriEnchantmentRegistry();
 
     public static AgriEnchantmentRegistry getInstance() {
         return INSTANCE;
     }
 
-    public final EnchantmentSeedBag seed_bag;
+    public final RegistryInitializer<EnchantmentSeedBag> seed_bag;
 
-    @SuppressWarnings("deprecation")
     private AgriEnchantmentRegistry() {
-        this.seed_bag = new EnchantmentSeedBag();
+        super();
+        this.seed_bag = this.enchantment(EnchantmentSeedBag::new);
     }
 
     @Override
     public EnchantmentSeedBag getSeedBagEnchantment() {
-        return this.seed_bag;
+        return this.seed_bag.get();
     }
 }

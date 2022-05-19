@@ -1,11 +1,11 @@
 package com.infinityraider.agricraft.api.v1.client;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,7 +26,7 @@ public interface IMagnifyingGlassInspector {
      * @param player the player
      * @return true if this inspector can inspect the block at the given position
      */
-    boolean canInspect(World world, BlockPos pos, PlayerEntity player);
+    boolean canInspect(Level world, BlockPos pos, Player player);
 
     /**
      * Checks if this instance is used to handle inspection of the given Entity
@@ -37,7 +37,7 @@ public interface IMagnifyingGlassInspector {
      * @param player the player
      * @return true if this inspector can inspect the block at the given position
      */
-    boolean canInspect(World world, Entity entity, PlayerEntity player);
+    boolean canInspect(Level world, Entity entity, Player player);
 
     /**
      * Callback for when the player starts inspecting with this inspector.
@@ -48,7 +48,7 @@ public interface IMagnifyingGlassInspector {
      * @param pos the position
      * @param player the player
      */
-    void onInspectionStart(World world, BlockPos pos, PlayerEntity player);
+    void onInspectionStart(Level world, BlockPos pos, Player player);
 
     /**
      * Callback for when the player starts inspecting with this inspector.
@@ -59,7 +59,7 @@ public interface IMagnifyingGlassInspector {
      * @param entity the entity
      * @param player the player
      */
-    void onInspectionStart(World world, Entity entity, PlayerEntity player);
+    void onInspectionStart(Level world, Entity entity, Player player);
 
     /**
      * Callback for ticks when the player is inspecting with this inspector
@@ -70,7 +70,7 @@ public interface IMagnifyingGlassInspector {
      * @param player the player
      * @return true to allow continue inspecting, false to force stop inspecting
      */
-    boolean onInspectionTick(World world, BlockPos pos, PlayerEntity player);
+    boolean onInspectionTick(Level world, BlockPos pos, Player player);
 
     /**
      * Callback for ticks when the player is inspecting with this inspector
@@ -81,7 +81,7 @@ public interface IMagnifyingGlassInspector {
      * @param player the player
      * @return true to allow continue inspecting, false to force stop inspecting
      */
-    boolean onInspectionTick(World world, Entity entity, PlayerEntity player);
+    boolean onInspectionTick(Level world, Entity entity, Player player);
 
     /**
      * Callback for when the player stops inspecting with this inspector.
@@ -92,7 +92,7 @@ public interface IMagnifyingGlassInspector {
      * @param pos the position
      * @param player the player
      */
-    void onInspectionEnd(World world, BlockPos pos, PlayerEntity player);
+    void onInspectionEnd(Level world, BlockPos pos, Player player);
 
     /**
      * Callback for when the player stops inspecting with this inspector.
@@ -103,7 +103,7 @@ public interface IMagnifyingGlassInspector {
      * @param entity the entity, can be null if the inspection ended due to the entity de-spawning
      * @param player the player
      */
-    void onInspectionEnd(World world, @Nullable Entity entity, PlayerEntity player);
+    void onInspectionEnd(Level world, @Nullable Entity entity, Player player);
 
     /**
      * Callback for when the player scrolls the mouse
@@ -119,7 +119,7 @@ public interface IMagnifyingGlassInspector {
      * @param partialTick the partial render tick
      * @param entity the entity being inspected, can be null if the player is inspecting a block
      */
-    void doInspectionRender(MatrixStack transforms, float partialTick, @Nullable Entity entity);
+    void doInspectionRender(PoseStack transforms, float partialTick, @Nullable Entity entity);
 
     /**
      * Registers an inspector instance

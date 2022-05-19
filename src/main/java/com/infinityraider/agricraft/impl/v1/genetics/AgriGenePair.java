@@ -4,7 +4,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGene;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
 import com.infinityraider.agricraft.api.v1.genetics.IAllele;
 import com.infinityraider.agricraft.reference.AgriToolTips;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Consumer;
 
@@ -45,7 +45,7 @@ public class AgriGenePair<A> implements IAgriGenePair<A> {
     }
 
     @Override
-    public void addTooltipDescription(Consumer<ITextComponent> consumer) {
+    public void addTooltipDescription(Consumer<Component> consumer) {
         consumer.accept(AgriToolTips.getGeneTooltip(this));
     }
 }

@@ -3,9 +3,9 @@ package com.infinityraider.agricraft.api.v1.plant;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.util.IAgriRegisterable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,7 +17,7 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable {
      * @return a text component representing the name of this weed for use in tooltips, etc.
      */
     @Nonnull
-    ITextComponent getWeedName();
+    Component getWeedName();
 
     /**
      * Defines the chance of spawning on a specific crop
@@ -81,7 +81,7 @@ public interface IAgriWeed extends IAgriRegisterable<IAgriWeed>, IAgriGrowable {
      */
     void onRake(@Nonnull IAgriGrowthStage stage, @Nonnull Consumer<ItemStack> consumer, @Nonnull Random rand, @Nullable LivingEntity entity);
 
-    void addTooltip(Consumer<ITextComponent> consumer);
+    void addTooltip(Consumer<Component> consumer);
 
     /**
      * Do not override, internally overridden on the no weed implementation

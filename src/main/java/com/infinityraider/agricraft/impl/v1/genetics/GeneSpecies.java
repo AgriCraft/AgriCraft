@@ -9,9 +9,9 @@ import com.infinityraider.agricraft.api.v1.genetics.IMutator;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.reference.AgriNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.math.Vector3f;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -32,11 +32,11 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
     }
 
     private final String id;
-    private final TranslationTextComponent descr;
+    private final TranslatableComponent descr;
 
     private GeneSpecies() {
         this.id = "agri_species";
-        this.descr = new TranslationTextComponent(AgriCraft.instance.getModId() + ".gene." + this.id);
+        this.descr = new TranslatableComponent(AgriCraft.instance.getModId() + ".gene." + this.id);
     }
 
     @Nonnull
@@ -53,7 +53,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Nonnull
     @Override
-    public IAgriPlant readAlleleFromNBT(@Nonnull CompoundNBT tag) {
+    public IAgriPlant readAlleleFromNBT(@Nonnull CompoundTag tag) {
         return AgriApi.getPlantRegistry().get(tag.getString(AgriNBT.PLANT)).orElse(NoPlant.getInstance());
     }
 
@@ -77,7 +77,7 @@ public class GeneSpecies implements IAgriGene<IAgriPlant> {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getGeneDescription() {
+    public TranslatableComponent getGeneDescription() {
         return this.descr;
     }
 

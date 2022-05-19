@@ -1,11 +1,7 @@
 package com.infinityraider.agricraft.impl.v1.plant;
 
-import com.agricraft.agricore.core.AgriCore;
-import com.agricraft.agricore.plant.AgriPlant;
-import com.agricraft.agricore.plant.AgriSoilCondition;
-import com.google.common.collect.ImmutableList;
+import com.agricraft.agricore.templates.AgriPlant;
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -13,80 +9,71 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatsMap;
+import com.infinityraider.agricraft.content.world.WorldGenPlantManager;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
 import com.infinityraider.agricraft.impl.v1.crop.IncrementalGrowthLogic;
-import com.infinityraider.agricraft.impl.v1.requirement.AgriGrowthRequirement;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import com.infinityraider.agricraft.render.plant.AgriPlantQuadGenerator;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import com.infinityraider.agricraft.impl.v1.requirement.GrowthReqInitializer;
+import com.infinityraider.infinitylib.utility.FuzzyStack;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class JsonPlant implements IAgriPlant {
+    protected final AgriPlant plant;
 
-    private final AgriPlant plant;
-
-    private final TranslationTextComponent plantName;
-    private final TranslationTextComponent seedName;
-    private final TranslationTextComponent description;
+    private final TranslatableComponent plantName;
+    private final TranslatableComponent seedName;
+    private final TranslatableComponent description;
 
     private final List<IAgriGrowthStage> growthStages;
     private final IAgriGrowthRequirement growthRequirement;
 
-    private final List<ItemStack> seedItems;
+    private final List<FuzzyStack> seedItems;
     private final List<IJsonPlantCallback> callbacks;
     private final ResourceLocation seedTexture;
     private final ResourceLocation seedModel;
 
     public JsonPlant(AgriPlant plant) {
         this.plant = Objects.requireNonNull(plant, "A JSONPlant may not consist of a null AgriPlant! Why would you even try that!?");
-        this.plantName = new TranslationTextComponent(plant.getPlantLangKey());
-        this.seedName = new TranslationTextComponent(plant.getSeedLangKey());
-        this.description = new TranslationTextComponent(plant.getDescLangKey());
+        this.plantName = new TranslatableComponent(plant.getPlantLangKey());
+        this.seedName = new TranslatableComponent(plant.getSeedLangKey());
+        this.description = new TranslatableComponent(plant.getDescLangKey());
         this.growthStages = IncrementalGrowthLogic.getOrGenerateStages(this.plant.getGrowthStages());
-        this.growthRequirement = initGrowthRequirement(plant);
         this.seedItems = initSeedItems(plant);
         this.callbacks = this.initCallBacks(plant);
+        this.growthRequirement = GrowthReqInitializer.initGrowthRequirement(plant, this.callbacks);
         this.seedTexture = new ResourceLocation(plant.getSeedTexture());
         this.seedModel = this.initSeedModel(plant.getSeedModel());
+        WorldGenPlantManager.registerJsonRule(this, plant);
     }
 
-    private List<ItemStack> initSeedItems(AgriPlant plant) {
+    private List<FuzzyStack> initSeedItems(AgriPlant plant) {
         return plant.getSeeds().stream()
                 .flatMap(seed -> {
                     boolean override = seed.isOverridePlanting();
                     if(override) {
-                        return seed.convertAll(ItemStack.class).stream();
+                        return seed.convertAll(FuzzyStack.class).stream();
                     } else {
-                        return seed.convertAll(ItemStack.class).stream() .peek(stack ->
-                                VanillaSeedConversionHandler.getInstance().registerException(stack.getItem())
-                        );
+                        return seed.convertAll(FuzzyStack.class).stream().peek(stack -> stack.foreach(VanillaSeedConversionHandler.getInstance()::registerException));
                     }
                 })
                 .collect(Collectors.toList());
@@ -126,13 +113,13 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getPlantName() {
+    public TranslatableComponent getPlantName() {
         return this.plantName;
     }
 
     @Nonnull
     @Override
-    public TranslationTextComponent getSeedName() {
+    public TranslatableComponent getSeedName() {
         return this.seedName;
     }
 
@@ -148,8 +135,8 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public Collection<ItemStack> getSeedItems() {
-        return this.seedItems;
+    public boolean isSeedItem(ItemStack stack) {
+        return this.seedItems.stream().anyMatch(i -> i.matches(stack));
     }
 
     @Nonnull
@@ -217,12 +204,12 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    public TranslationTextComponent getInformation() {
+    public TranslatableComponent getInformation() {
         return this.description;
     }
 
     @Override
-    public void addTooltip(Consumer<ITextComponent> consumer) {
+    public void addTooltip(Consumer<Component> consumer) {
         consumer.accept(this.getPlantName());
         consumer.accept(this.getInformation());
     }
@@ -270,26 +257,6 @@ public class JsonPlant implements IAgriPlant {
 
     @Nonnull
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
-        if(!stage.isGrowthStage()) {
-            return ImmutableList.of();
-        }
-        final int index = IncrementalGrowthLogic.getGrowthIndex(stage);
-        if(this.plant.getTexture().useModels()) {
-            ResourceLocation rl = new ResourceLocation(this.plant.getTexture().getPlantModel(index));
-            return AgriPlantQuadGenerator.getInstance().fetchQuads(rl);
-        } else {
-            List<ResourceLocation> textures = Arrays.stream(plant.getTexture().getPlantTextures(index))
-                    .map(ResourceLocation::new)
-                    .collect(Collectors.toList());
-            return AgriPlantQuadGenerator.getInstance().bakeQuads(this, stage, this.plant.getTexture().getRenderType(),
-                    face, textures);
-        }
-    }
-
-    @Nonnull
-    @Override
     public List<ResourceLocation> getTexturesFor(IAgriGrowthStage stage) {
         return Arrays.stream(this.plant.getTexture().getPlantTextures(IncrementalGrowthLogic.getGrowthIndex(stage)))
                 .map(ResourceLocation::new)
@@ -311,7 +278,7 @@ public class JsonPlant implements IAgriPlant {
     @Override
     public void spawnParticles(@Nonnull IAgriCrop crop, Random rand) {
         final int index = IncrementalGrowthLogic.getGrowthIndex(crop.getGrowthStage());
-        final World world = crop.world();
+        final Level world = crop.world();
         if (index == -1 || world == null) {
             return;
         }
@@ -319,7 +286,7 @@ public class JsonPlant implements IAgriPlant {
                 .filter(effect -> effect.allowParticles(index))
                 .forEach(effect -> {
                     ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
-                    if (!(particle instanceof IParticleData)) {
+                    if (!(particle instanceof ParticleOptions)) {
                         return;
                     }
                     for (int amount = 0; amount < 3; ++amount) {
@@ -328,7 +295,7 @@ public class JsonPlant implements IAgriPlant {
                             double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
                             double y = pos.getY() + 0.5D + effect.getDeltaY() * rand.nextDouble();
                             double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();
-                            world.addParticle((IParticleData) particle, x, y, z, 0.0D, 0.0D, 0.0D);
+                            world.addParticle((ParticleOptions) particle, x, y, z, 0.0D, 0.0D, 0.0D);
                         }
                     }
                 });
@@ -395,7 +362,7 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    public Optional<InteractionResult> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return this.callbacks.stream()
                 .map(callback -> callback.onRightClickPre(crop, stack, entity))
                 .filter(Optional::isPresent)
@@ -404,153 +371,12 @@ public class JsonPlant implements IAgriPlant {
     }
 
     @Override
-    public Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    public Optional<InteractionResult> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return this.callbacks.stream()
                 .map(callback -> callback.onRightClickPost(crop, stack, entity))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst();
-    }
-
-    public static IAgriGrowthRequirement initGrowthRequirement(AgriPlant plant) {
-        // Run checks
-        if (plant == null) {
-            return AgriGrowthRequirement.getNone();
-        }
-
-        // Initialize utility objects
-        IAgriGrowthRequirement.Builder builder = AgriApi.getGrowthRequirementBuilder();
-
-        // Define requirement for humidity
-        String humidityString = plant.getRequirement().getHumiditySoilCondition().getCondition();
-        IAgriSoil.Humidity humidity = IAgriSoil.Humidity.fromString(humidityString).orElse(IAgriSoil.Humidity.INVALID);
-        handleSoilCriterion(
-                humidity,
-                builder::defineHumidity,
-                plant.getRequirement().getHumiditySoilCondition().getType(),
-                plant.getRequirement().getHumiditySoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid humidity criterion (\"{1}\")!", plant.getId(), humidityString));
-
-        // Define requirement for acidity
-        String acidityString = plant.getRequirement().getAciditySoilCondition().getCondition();
-        IAgriSoil.Acidity acidity = IAgriSoil.Acidity.fromString(acidityString).orElse(IAgriSoil.Acidity.INVALID);
-        handleSoilCriterion(
-                acidity,
-                builder::defineAcidity,
-                plant.getRequirement().getAciditySoilCondition().getType(),
-                plant.getRequirement().getAciditySoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid acidity criterion (\"{1}\")!", plant.getId(), acidityString));
-
-        // Define requirement for nutrients
-        String nutrientString = plant.getRequirement().getNutrientSoilCondition().getCondition();
-        IAgriSoil.Nutrients nutrients = IAgriSoil.Nutrients.fromString(nutrientString).orElse(IAgriSoil.Nutrients.INVALID);
-        handleSoilCriterion(
-                nutrients,
-                builder::defineNutrients,
-                plant.getRequirement().getNutrientSoilCondition().getType(),
-                plant.getRequirement().getNutrientSoilCondition().getToleranceFactor(),
-                () -> AgriCore.getLogger("agricraft")
-                        .warn("Plant: \"{0}\" has an invalid nutrients criterion (\"{1}\")!", plant.getId(), nutrientString));
-
-        // Define requirement for light
-        final double f = plant.getRequirement().getLightToleranceFactor();
-        final int minLight = plant.getRequirement().getMinLight();
-        final int maxLight = plant.getRequirement().getMaxLight();
-        builder.defineLightLevel((strength, light) -> {
-            int lower = minLight - (int) (f * strength);
-            int upper = maxLight + (int) (f * strength);
-            return light >= lower && light <= upper ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.INFERTILE;
-        });
-
-        // Define requirement for nearby blocks
-        plant.getRequirement().getConditions().forEach(obj -> {
-            BlockPos min = new BlockPos(obj.getMinX(), obj.getMinY(), obj.getMinZ());
-            BlockPos max = new BlockPos(obj.getMaxX(), obj.getMaxY(), obj.getMaxZ());
-            builder.addCondition(builder.blockStatesNearby(obj.convertAll(BlockState.class), obj.getAmount(), min, max));
-        });
-
-        // Define requirement for seasons
-        List<AgriSeason> seasons = plant.getRequirement().getSeasons().stream()
-                .map(AgriSeason::fromString)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .distinct()
-                .collect(Collectors.toList());
-        if(seasons.size() > 0) {
-            builder.defineSeasonality((str, season) -> {
-                if(str >= AgriApi.getStatRegistry().strengthStat().getMax() || seasons.stream().anyMatch(season::matches)) {
-                    return IAgriGrowthResponse.FERTILE;
-                } else {
-                    return IAgriGrowthResponse.INFERTILE;
-                }
-            });
-        }
-
-        // Define requirement for fluids
-        List<Fluid> fluids = plant.getRequirement().getFluid().convertAll(FluidState.class).stream()
-                .map(FluidState::getFluid)
-                .distinct()
-                .collect(Collectors.toList());
-        BiFunction<Integer, Fluid, IAgriGrowthResponse> response = (strength, fluid) -> {
-            if(fluids.size() > 0) {
-                if(fluids.contains(fluid)) {
-                    return IAgriGrowthResponse.FERTILE;
-                }
-                return fluid.equals(Fluids.LAVA) ? IAgriGrowthResponse.KILL_IT_WITH_FIRE : IAgriGrowthResponse.LETHAL;
-            } else {
-                if(fluid.equals(Fluids.LAVA)) {
-                    return IAgriGrowthResponse.KILL_IT_WITH_FIRE;
-                }
-               return fluid.equals(Fluids.EMPTY) ? IAgriGrowthResponse.FERTILE : IAgriGrowthResponse.LETHAL;
-            }
-        };
-        builder.defineFluid(response);
-
-        // Build the growth requirement
-        IAgriGrowthRequirement req = builder.build();
-
-        // Log warning if no soils exist for this requirement combination
-        if (noSoilsMatch(req)) {
-            AgriCore.getLogger("agricraft").warn("Plant: \"{0}\" has no valid soils to plant on for any strength level!", plant.getId());
-        }
-
-        // Return the growth requirements
-        return req;
-    }
-
-    private static <T extends Enum<T> & IAgriSoil.SoilProperty> void handleSoilCriterion(
-            T criterion, Consumer<BiFunction<Integer, T, IAgriGrowthResponse>> consumer, AgriSoilCondition.Type type, double f, Runnable invalidCallback) {
-        if(!criterion.isValid()) {
-            invalidCallback.run();
-        }
-        consumer.accept((strength, humidity) -> {
-            if(humidity.isValid() && criterion.isValid()) {
-                int lower = type.lowerLimit(criterion.ordinal() - (int) (f * strength));
-                int upper = type.upperLimit(criterion.ordinal() + (int) (f * strength));
-                if(humidity.ordinal() <= upper && humidity.ordinal() >= lower) {
-                    return IAgriGrowthResponse.FERTILE;
-                }
-            }
-            return IAgriGrowthResponse.INFERTILE;
-        });
-    }
-
-    private static boolean noSoilsMatch(IAgriGrowthRequirement requirement) {
-        return AgriApi.getSoilRegistry().stream().noneMatch(soil -> {
-            int min = AgriApi.getStatRegistry().strengthStat().getMin();
-            int max = AgriApi.getStatRegistry().strengthStat().getMax();
-            for(int strength = min; strength <= max; strength++) {
-                boolean humidity = requirement.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile();
-                boolean acidity = requirement.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile();
-                boolean nutrients = requirement.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile();
-                if(humidity && acidity && nutrients) {
-                    return true;
-                }
-            }
-            return false;
-        });
     }
 
     @Override

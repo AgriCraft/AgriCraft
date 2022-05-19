@@ -5,34 +5,38 @@ import com.infinityraider.agricraft.api.v1.client.IJournalDataDrawer;
 import com.infinityraider.agricraft.api.v1.client.IMagnifyingGlassInspector;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneRegistry;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationHandler;
+import com.infinityraider.agricraft.api.v1.genetics.*;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
-import com.infinityraider.agricraft.api.v1.genetics.IAgriMutationRegistry;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.plant.*;
 import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoilRegistry;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface IAgriApiConnector {
 
@@ -43,6 +47,9 @@ public interface IAgriApiConnector {
 
     @Nonnull
     IAgriContent connectAgriContent();
+
+    @Nullable
+    IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate);
 
     @Nonnull
     IAgriConfig connectAgriConfig();
@@ -78,6 +85,9 @@ public interface IAgriApiConnector {
     IAgriSeasonLogic connectSeasonLogic();
 
     @Nonnull
+    IWorldGenPlantManager connectWorldGenPlantManager();
+
+    @Nonnull
     ItemStack plantToSeedStack(IAgriPlant plant, int amount);
 
     @Nonnull
@@ -87,10 +97,10 @@ public interface IAgriApiConnector {
     IIngredientSerializer<AnySoilIngredient> connectAnySoilIngredientSerializer();
 
     @Nonnull
-    Optional<IAgriCrop> getCrop(IBlockReader world, BlockPos pos);
+    Optional<IAgriCrop> getCrop(BlockGetter world, BlockPos pos);
 
     @Nonnull
-    Optional<IAgriSoil> getSoil(IBlockReader world, BlockPos pos);
+    Optional<IAgriSoil> getSoil(BlockGetter world, BlockPos pos);
 
     @Nonnull
     Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack);
@@ -100,7 +110,7 @@ public interface IAgriApiConnector {
 
     void registerVanillaPlantingOverrideException(Item seed);
 
-    <T extends TileEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);
+    <T extends BlockEntity, C extends IAgriCrop> void registerCapabilityCropInstance(CropCapability.Instance<T, C> instance);
 
     @Nonnull
     IAgriGrowthRequirement.Builder getGrowthRequirementBuilder();
@@ -126,7 +136,14 @@ public interface IAgriApiConnector {
 
     boolean registerJsonPlantCallback(@Nonnull IJsonPlantCallback.Factory callback);
 
-    boolean isObservingWithMagnifyingGlass(PlayerEntity player);
+    @Nonnull
+    Optional<IJsonMutationCondition.Factory> getJsonMutationCondition(String id);
+
+    boolean registerJsonMutationCondition(@Nonnull IJsonMutationCondition.Factory trigger);
+
+    IAgriMutation.Condition convertJsonMutationCondition(IJsonMutationCondition condition, boolean isRequired, double guaranteedProbability);
+
+    boolean isObservingWithMagnifyingGlass(Player player);
 
     @OnlyIn(Dist.CLIENT)
     void registerMagnifyingGlassInspector(IMagnifyingGlassInspector inspector);

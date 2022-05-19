@@ -15,14 +15,14 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * This interface is used both for you to read the AgriCraft CropPlants as well as coding your own.
@@ -59,13 +59,13 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return a text component representing the name of this plant for use in tooltips, agricultural journal, genome, etc.
      */
     @Nonnull
-    IFormattableTextComponent getPlantName();
+    MutableComponent getPlantName();
 
     /**
      * @return a text component representing the name of the seed of this plant for use in tooltips, agricultural journal, etc.
      */
     @Nonnull
-    IFormattableTextComponent getSeedName();
+    Component getSeedName();
 
     /**
      * @return the tier of the plant, the higher the number, the higher the tier
@@ -151,7 +151,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return Information about the plant to be displayed in the Seed Journal.
      */
     @Nonnull
-    IFormattableTextComponent getInformation();
+    MutableComponent getInformation();
 
     /**
      * Fetches the user-friendly plant description for use in tooltips. Notice, any
@@ -159,15 +159,15 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      *
      * @param consumer consumer accepting information about the plant to be displayed in tooltips.
      */
-    void addTooltip(Consumer<ITextComponent> consumer);
+    void addTooltip(Consumer<Component> consumer);
 
     /**
-     * Fetches a list of all the items that are considered seeds for this specific plant.
+     * Checks if an ItemStack is considered a seed item for this plant.
      *
-     * @return A list of all the seeds for this plant.
+     * @return if the stack represents a seed for this item.
      */
     @Nonnull
-    Collection<ItemStack> getSeedItems();
+    boolean isSeedItem(ItemStack stack);
 
     /**
      * Gets the growth requirements for this plant, this is used to check if the plant can be planted
@@ -368,7 +368,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @return an empty optional to allow continuation of default right click behaviour,
      * an optional containing an action result to pass to the right click chain, prevents default behaviour
      */
-    default Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    default Optional<InteractionResult> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return Optional.empty();
     }
 
@@ -382,7 +382,7 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
      * @param entity the entity which used the item, can be null if usage happens through automation
      * @return an optional containing an action result to pass to the right click chain, or empty to continue the default chain
      */
-    default Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    default Optional<InteractionResult> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return Optional.empty();
     }
 
@@ -445,14 +445,14 @@ public interface IAgriPlant extends IAgriRegisterable<IAgriPlant>, IAgriGrowable
 
     @Nonnull
     @Override
-    default CompoundNBT writeToNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    default CompoundTag writeToNBT() {
+        CompoundTag tag = new CompoundTag();
         tag.putString("agri_plant", this.getId());
         return tag;
     }
 
     @Override
-    default IFormattableTextComponent getTooltip() {
+    default MutableComponent getTooltip() {
         return this.getPlantName();
     }
 }

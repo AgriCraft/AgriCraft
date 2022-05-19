@@ -1,25 +1,25 @@
 package com.infinityraider.agricraft.impl.v1.fertilizer;
 
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizer;
-import com.agricraft.agricore.plant.fertilizer.AgriFertilizerEffect;
+import com.agricraft.agricore.templates.AgriFertilizer;
+import com.agricraft.agricore.templates.AgriFertilizerEffect;
 import com.google.common.base.Preconditions;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizable;
 import com.infinityraider.agricraft.api.v1.fertilizer.IAgriFertilizer;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlantProvider;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class JsonFertilizer implements IAgriFertilizer {
 
     private final String id;
-    private final ITextComponent name;
+    private final Component name;
     private final Collection<Item> variants;
 
     private final boolean trigger_mutation;
@@ -43,7 +43,7 @@ public class JsonFertilizer implements IAgriFertilizer {
 
     public JsonFertilizer(@Nonnull AgriFertilizer fertilizer) {
         this.id = Preconditions.checkNotNull(fertilizer).getId();
-        this.name = new TranslationTextComponent(fertilizer.getLangKey());
+        this.name = new TranslatableComponent(fertilizer.getLangKey());
         this.variants = Collections.unmodifiableCollection(stacksToItems(fertilizer.getVariants(ItemStack.class)));
         this.trigger_mutation = fertilizer.canTriggerMutation();
         this.trigger_weeds = fertilizer.canTriggerWeeds();
@@ -61,7 +61,7 @@ public class JsonFertilizer implements IAgriFertilizer {
         return this.id;
     }
 
-    public ITextComponent getName() {
+    public Component getName() {
         return this.name;
     }
 
@@ -76,7 +76,7 @@ public class JsonFertilizer implements IAgriFertilizer {
     }
 
     @Override
-    public ActionResultType applyFertilizer(World world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity) {
+    public InteractionResult applyFertilizer(Level world, BlockPos pos, IAgriFertilizable target, ItemStack stack, Random random, @Nullable LivingEntity entity) {
         if (target instanceof IAgriPlantProvider) {
             IAgriCrop crop = ((IAgriCrop) target);
             String type = "neutral";
@@ -108,12 +108,12 @@ public class JsonFertilizer implements IAgriFertilizer {
                 }
             }
             this.spawnParticles(world, pos, type, random);
-            if ((entity instanceof PlayerEntity) && !(((PlayerEntity) entity).isCreative())) {
+            if ((entity instanceof Player) && !(((Player) entity).isCreative())) {
                 stack.shrink(1);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
     }
 
     @Override
@@ -124,18 +124,18 @@ public class JsonFertilizer implements IAgriFertilizer {
         return ((IAgriCrop) target).hasPlant() && this.fertilizerEffect.canFertilize(((IAgriCrop) target).getPlant().getId());
     }
 
-    protected void spawnParticles(World world, BlockPos pos, String type, Random rand) {
+    protected void spawnParticles(Level world, BlockPos pos, String type, Random rand) {
         this.fertilizerEffect.getParticles(type)
                 .forEach(effect -> {
                     ParticleType<?> particle = ForgeRegistries.PARTICLE_TYPES.getValue(new ResourceLocation(effect.getParticle()));
-                    if (!(particle instanceof IParticleData)) {
+                    if (!(particle instanceof ParticleOptions)) {
                         return;
                     }
                     for (int amount = 0; amount < effect.getAmount(); ++amount) {
                         double x = pos.getX() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaX() * rand.nextDouble();
                         double y = pos.getY() + 0.5D + effect.getDeltaY() * rand.nextDouble();
                         double z = pos.getZ() + 0.5D + (rand.nextBoolean() ? 1 : -1) * effect.getDeltaZ() * rand.nextDouble();
-                        world.addParticle((IParticleData) particle, x, y, z, 0.0D, 0.0D, 0.0D);
+                        world.addParticle((ParticleOptions) particle, x, y, z, 0.0D, 0.0D, 0.0D);
                     }
                 });
     }

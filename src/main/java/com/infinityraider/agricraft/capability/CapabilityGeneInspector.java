@@ -1,21 +1,22 @@
 package com.infinityraider.agricraft.capability;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.capability.CapabilityGeneInspector.Impl;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import com.infinityraider.infinitylib.utility.ISerializable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
-public class CapabilityGeneInspector implements IInfSerializableCapabilityImplementation<ItemStack, CapabilityGeneInspector.Impl> {
+public class CapabilityGeneInspector implements IInfSerializableCapabilityImplementation<ItemStack, Impl> {
     private static final CapabilityGeneInspector INSTANCE = new CapabilityGeneInspector();
 
     public static CapabilityGeneInspector getInstance() {
@@ -24,13 +25,12 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
 
     public static ResourceLocation KEY = new ResourceLocation(AgriCraft.instance.getModId().toLowerCase(), Names.Objects.GENE_INSPECTOR);
 
-    @CapabilityInject(CapabilityGeneInspector.Impl.class)
-    public static final Capability<CapabilityGeneInspector.Impl> CAPABILITY = null;
+    public static final Capability<Impl> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private CapabilityGeneInspector() {}
 
-    public boolean canInspect(PlayerEntity player) {
-        return this.hasInspectionCapability(player.getItemStackFromSlot(EquipmentSlotType.HEAD));
+    public boolean canInspect(Player player) {
+        return this.hasInspectionCapability(player.getItemBySlot(EquipmentSlot.HEAD));
     }
 
     public boolean hasInspectionCapability(ItemStack stack) {
@@ -62,11 +62,8 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
 
     @Override
     public boolean shouldApplyCapability(ItemStack carrier) {
-        return this.shouldApplyCapability(carrier.getItem());
-    }
-
-    public boolean shouldApplyCapability(Item item) {
-        return item instanceof ArmorItem && ((ArmorItem) item).getEquipmentSlot() == EquipmentSlotType.HEAD;
+        Item item = carrier.getItem();
+        return item instanceof ArmorItem && item.getEquipmentSlot(carrier) == EquipmentSlot.HEAD;
     }
 
     @Override
@@ -84,7 +81,7 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
         return ItemStack.class;
     }
 
-    public static class Impl implements ISerializable {
+    public static class Impl implements Serializable<Impl> {
         private boolean flag;
 
         private Impl() {
@@ -100,15 +97,20 @@ public class CapabilityGeneInspector implements IInfSerializableCapabilityImplem
         }
 
         @Override
-        public void readFromNBT(CompoundNBT tag) {
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = new CompoundTag();
+            tag.putBoolean(AgriNBT.FLAG, this.isActive());
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
             this.setActive(tag.contains(AgriNBT.FLAG) && tag.getBoolean(AgriNBT.FLAG));
         }
 
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
-            tag.putBoolean(AgriNBT.FLAG, this.isActive());
-            return tag;
+        public void copyDataFrom(Impl from) {
+            this.setActive(from.isActive());
         }
     }
 }

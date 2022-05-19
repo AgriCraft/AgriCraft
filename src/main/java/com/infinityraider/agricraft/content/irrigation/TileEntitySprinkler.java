@@ -1,27 +1,28 @@
 package com.infinityraider.agricraft.content.irrigation;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.content.AgriParticleRegistry;
+import com.infinityraider.agricraft.content.AgriTileRegistry;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import com.infinityraider.agricraft.render.blocks.TileEntitySprinklerRenderer;
 import com.infinityraider.infinitylib.block.tile.InfinityTileEntityType;
 import com.infinityraider.infinitylib.block.tile.TileEntityDynamicTexture;
 import com.infinityraider.infinitylib.reference.Constants;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
@@ -32,7 +33,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITickableTileEntity {
+public class TileEntitySprinkler extends TileEntityDynamicTexture {
     private static final int WORK_HEIGHT = 5;
     private static final int WORK_RADIUS = 3;
     private static final int WORK_DIAMETER = 1 + 2*WORK_RADIUS;
@@ -54,8 +55,8 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     private int prevAngle;
     private int particleCounter;
 
-    public TileEntitySprinkler() {
-        super(AgriCraft.instance.getModTileRegistry().sprinkler);
+    public TileEntitySprinkler(BlockPos pos, BlockState state) {
+        super(AgriTileRegistry.getInstance().sprinkler.get(), pos, state);
         this.active = this.getAutoSyncedFieldBuilder(false).build();
     }
 
@@ -65,17 +66,17 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
 
     @Override
     public void tick() {
-        if (this.getWorld() == null) {
+        if (this.getLevel() == null) {
             return;
         }
-        if(!this.getWorld().isRemote()) {
+        if(!this.getLevel().isClientSide()) {
             this.pullWater();
             this.runSprinklerLogic();
         }
         this.prevAngle = angle;
         if (this.isActive()) {
             this.angle = (this.angle + ROTATION_SPEED) % 360;
-            if (this.getWorld().isRemote()) {
+            if (this.getLevel().isClientSide()) {
                 this.spawnSprinklerParticles();
             }
         }
@@ -86,16 +87,16 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     }
 
     public float getAngle(float partialTick) {
-        return MathHelper.lerp(partialTick, this.prevAngle, this.getAngle());
+        return Mth.lerp(partialTick, this.prevAngle, this.getAngle());
     }
 
     @Nullable
     public TileEntityIrrigationChannel getChannel() {
         if(this.channel == null) {
-            if(this.getWorld() == null) {
+            if(this.getLevel() == null) {
                 return null;
             }
-            TileEntity tile = this.getWorld().getTileEntity(this.getPos().up());
+            BlockEntity tile = this.getLevel().getBlockEntity(this.getBlockPos().above());
             if(tile instanceof TileEntityIrrigationChannel) {
                 this.channel = (TileEntityIrrigationChannel) tile;
             }
@@ -161,10 +162,10 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
      * irrigateColumn() cleaner.
      */
     protected void irrigateCurrentColumn() {
-        final int targetX = this.pos.getX() - WORK_RADIUS + (this.columnCounter % WORK_DIAMETER);
-        final int targetZ = this.pos.getZ() - WORK_RADIUS + (this.columnCounter / WORK_DIAMETER);
-        final int startY = this.pos.getY() - 1;
-        final int stopY = Math.max(this.pos.getY() - WORK_HEIGHT, 0); // Avoid the void.
+        final int targetX = this.getBlockPos().getX() - WORK_RADIUS + (this.columnCounter % WORK_DIAMETER);
+        final int targetZ = this.getBlockPos().getZ() - WORK_RADIUS + (this.columnCounter / WORK_DIAMETER);
+        final int startY = this.getBlockPos().getY() - 1;
+        final int stopY = Math.max(this.getBlockPos().getY() - WORK_HEIGHT, 0); // Avoid the void.
         irrigateColumn(targetX, targetZ, startY, stopY);
     }
 
@@ -178,31 +179,31 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
      */
     @SuppressWarnings("deprecation")
     protected void irrigateColumn(final int targetX, final int targetZ, final int highestY, final int lowestY) {
-        if(this.getWorld() == null || !(this.getWorld() instanceof ServerWorld)) {
+        if(this.getLevel() == null || !(this.getLevel() instanceof ServerLevel)) {
             return;
         }
         for (int targetY = highestY; targetY >= lowestY; targetY -= 1) {
             BlockPos target = new BlockPos(targetX, targetY, targetZ);
-            BlockState state = this.getWorld().getBlockState(target);
-            Block block = state.getBlock();
+            BlockState state = this.getLevel().getBlockState(target);
 
             // Option A: Skip empty/air blocks.
-            if (block.isAir(state, this.getWorld(), target)) {
+            if (state.isAir()) {
                 continue;
             }
 
             // Option B: Give plants a chance to grow, and then continue onward to irrigate the farmland too.
-            if ((block instanceof IPlantable || block instanceof IGrowable) && targetY != lowestY) {
+            Block block = state.getBlock();
+            if ((block instanceof IPlantable || block instanceof BonemealableBlock) && targetY != lowestY) {
                 if (this.getRandom().nextDouble() < AgriCraft.instance.getConfig().sprinkleGrowthChance()) {
-                    block.randomTick(state, (ServerWorld) this.getWorld(), target, this.getRandom());
+                    block.randomTick(state, (ServerLevel) this.getLevel(), target, this.getRandom());
                 }
                 continue;
             }
 
             // Option C: Dry farmland gets set as moist.
-            if (block instanceof FarmlandBlock) {
-                if (state.get(FarmlandBlock.MOISTURE) < 7) {
-                    this.getWorld().setBlockState(target, state.with(FarmlandBlock.MOISTURE, 7), 2);
+            if (block instanceof FarmBlock) {
+                if (state.getValue(FarmBlock.MOISTURE) < 7) {
+                    this.getLevel().setBlock(target, state.setValue(FarmBlock.MOISTURE, 7), 2);
                 }
                 break; // Explicitly expresses the intent to stop.
             }
@@ -217,46 +218,46 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     }
 
     protected void spawnSprinklerParticles() {
-        if (this.getWorld() == null) {
+        if (this.getLevel() == null) {
             return;
         }
-        boolean vapour = this.getWorld().getDimensionType().isUltrawarm();
+        boolean vapour = this.getLevel().dimensionType().ultraWarm();
         int particleSetting = AgriCraft.instance.proxy().getParticleSetting(); //0 = all, 1 = decreased; 2 = minimal;
         particleSetting += vapour ? 6 : 2;
         this.particleCounter = (this.particleCounter + 1) % particleSetting;
         if (this.particleCounter == 0) {
-            double x = this.getPos().getX() + 0.5;
-            double y = this.getPos().getY() + 0.35;
-            double z = this.getPos().getZ() + 0.5;
+            double x = this.getBlockPos().getX() + 0.5;
+            double y = this.getBlockPos().getY() + 0.35;
+            double z = this.getBlockPos().getZ() + 0.5;
             for (int i = 0; i < 4; i++) {
                 float alpha = -(angle + 90 * i) * ((float) Math.PI) / 180;
-                float cosA = MathHelper.cos(alpha);
-                float sinA = MathHelper.sin(alpha);
+                float cosA = Mth.cos(alpha);
+                float sinA = Mth.sin(alpha);
                 double xOffset = (4 * Constants.UNIT) * cosA;
                 double zOffset = (4 * Constants.UNIT) * sinA;
                 float radius = 0.35F;
                 if (vapour) {
-                    IParticleData particle = ParticleTypes.CLOUD;
-                    this.getWorld().addParticle(particle, x + xOffset, y, z + zOffset, 0.15*cosA, 0.25, 0.15*sinA);
+                    ParticleOptions particle = ParticleTypes.CLOUD;
+                    this.getLevel().addParticle(particle, x + xOffset, y, z + zOffset, 0.15*cosA, 0.25, 0.15*sinA);
                 } else {
-                    IParticleData particle = AgriCraft.instance.getModParticleRegistry().sprinkler.createParticleData(Fluids.WATER, 0.2F, 0.7F);
+                    ParticleOptions particle = AgriParticleRegistry.getInstance().sprinkler.get().createParticleData(Fluids.WATER, 0.2F, 0.7F);
                     for (int j = 0; j <= 4; j++) {
                         float beta = -j * ((float) Math.PI) / (8.0F);
-                        this.getWorld().addParticle(particle,
+                        this.getLevel().addParticle(particle,
                                 x + xOffset * (4 - j) / 4, y, z + zOffset * (4 - j) / 4,
                                 radius * cosA, radius * Math.sin(beta), radius * sinA);
                     }
                 }
             }
             if(vapour) {
-                this.getWorld().playSound(AgriCraft.instance.getClientPlayer(), this.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
-                        0.5F, 2.6F + (this.getWorld().getRandom().nextFloat() - this.getWorld().getRandom().nextFloat()) * 0.8F);
+                this.getLevel().playSound(AgriCraft.instance.getClientPlayer(), this.getBlockPos(), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
+                        0.5F, 2.6F + (this.getLevel().getRandom().nextFloat() - this.getLevel().getRandom().nextFloat()) * 0.8F);
             }
         }
     }
 
     @Override
-    protected void writeTileNBT(@Nonnull CompoundNBT tag) {
+    protected void writeTileNBT(@Nonnull CompoundTag tag) {
         tag.putInt(AgriNBT.CONTENTS, this.buffer);
         tag.putInt(AgriNBT.KEY, this.columnCounter);
         tag.putInt(AgriNBT.LEVEL, this.remainingWater);
@@ -264,7 +265,7 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture implements ITi
     }
 
     @Override
-    protected void readTileNBT(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
+    protected void readTileNBT(@Nonnull CompoundTag tag) {
         this.buffer = tag.getInt(AgriNBT.CONTENTS);
         this.columnCounter = tag.getInt(AgriNBT.KEY);
         this.remainingWater = tag.getInt(AgriNBT.LEVEL);

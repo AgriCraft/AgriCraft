@@ -2,15 +2,16 @@ package com.infinityraider.agricraft.api.v1.plant;
 
 import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,8 +75,9 @@ public interface IAgriGrowable {
      * @return a list of quads for rendering the plant
      */
     @Nonnull
-    @OnlyIn(Dist.CLIENT)
-    List<BakedQuad> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage);
+    default List<?> bakeQuads(@Nullable Direction face, IAgriGrowthStage stage) {
+        return Collections.emptyList();
+    }
 
     /**
      * Method which fetches all required texture to render a plant or weed for a certain growth stage,

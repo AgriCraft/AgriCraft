@@ -4,6 +4,7 @@ public abstract class Names {
     private Names() {}
 
     public static final class Blocks {
+        public static final String CROP = "crop";
         public static final String CROP_PLANT = "crop_plant";
         public static final String CROP_STICKS = "crop_sticks";
         public static final String GRATE = "grate";
@@ -56,16 +57,20 @@ public abstract class Names {
     }
 
     public static final class Nuggets {
+        public static final String COPPER = "copper";
         public static final String COAL = "coal";
         public static final String DIAMOND = "diamond";
         public static final String EMERALD = "emerald";
         public static final String QUARTZ = "quartz";
+        public static final String NETHERITE_SLIVER = "netherite_sliver";
+        public static final String AMATHYLLIS_PETAL = "amathyllis_petal";
     }
 
     public static final class Objects {
         public static final String PLANT = "plant";
         public static final String GENE_INSPECTOR = "gene_inspector";
         public static final String GREENHOUSE = "greenhouse";
+        public static final String GREENHOUSE_DATA = "greenhouse_data";
         public static final String RESEARCH = "research";
         public static final String SEED_BAG_CONTENTS = "seed_bag_contents";
         public static final String IRRIGATION_NETWORK_COMPONENT = "irrigation_network_component";

@@ -2,7 +2,6 @@ package com.infinityraider.agricraft.plugins.jei;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
@@ -10,101 +9,109 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
-import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.AgriToolTips;
+import com.infinityraider.agricraft.render.plant.gui.LightLevelRenderer;
+import com.infinityraider.agricraft.render.plant.gui.SeasonRenderer;
+import com.infinityraider.agricraft.render.plant.gui.SoilPropertyIconRenderer;
+import com.infinityraider.infinitylib.utility.TooltipRegion;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
-public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAgriPlant> {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<AgriRecipeCategoryGrowthRequirements.Recipe> {
 
     public static final ResourceLocation ID = new ResourceLocation(AgriCraft.instance.getModId(), "jei/growth_req");
+    public static final RecipeType<Recipe> TYPE = new RecipeType<>(ID, Recipe.class);
+
+    private static final TranslatableComponent TITLE = new TranslatableComponent("agricraft.gui.growth_req");
 
     private final IDrawable icon;
     private final IAgriDrawable background;
     private final IAgriDrawable background_seasons;
-    private final Set<TooltipRegion> tooltips;
-
-    // Cache to update valid soils when strength level changes; weak hashmap to prevent memory leaks
-    private static final Map<IAgriPlant, IRecipeLayout> cache = new WeakHashMap<>();
 
     public static void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(
-                AgriApi.getPlantRegistry().stream().filter(IAgriPlant::isPlant).collect(Collectors.toList()),
-                ID);
+                TYPE,
+                AgriApi.getPlantRegistry().stream()
+                        .filter(IAgriPlant::isPlant)
+                        .map(Recipe::new)
+                        .collect(Collectors.toList()));
     }
 
     public static void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_wood), AgriRecipeCategoryGrowthRequirements.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_iron), AgriRecipeCategoryGrowthRequirements.ID);
-        registration.addRecipeCatalyst(new ItemStack(AgriItemRegistry.getInstance().crop_sticks_obsidian), AgriRecipeCategoryGrowthRequirements.ID);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getWoodCropSticksItem().asItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getIronCropSticksItem().asItem()), TYPE);
+        registration.addRecipeCatalyst(new ItemStack(AgriApi.getAgriContent().getItems().getObsidianCropSticksItem().asItem()), TYPE);
     }
 
     public AgriRecipeCategoryGrowthRequirements(IGuiHelper helper) {
-        this.icon = helper.createDrawableIngredient(new ItemStack(Blocks.FARMLAND));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(Blocks.FARMLAND));
         this.background = JeiPlugin.createAgriDrawable(
                 new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req.png"),
                 0, 0, 128, 128, 128, 128);
         this.background_seasons = JeiPlugin.createAgriDrawable(
                 new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/growth_req_seasons.png"),
                 0, 0, 128, 128, 128, 128);
-        this.tooltips = ImmutableSet.of(
-                new TooltipRegion((state) -> ImmutableList.of(
-                        AgriToolTips.getGrowthTooltip(state.getStage())), 102, 20, 111, 70),
-                new TooltipRegion((state) -> ImmutableList.of(
-                        new StringTextComponent("")
-                                .appendSibling(AgriApi.getStatRegistry().strengthStat().getDescription())
-                                .appendSibling(new StringTextComponent(": " + state.getStrength()))), 114, 20, 123, 70),
-                new TooltipRegion(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 36, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 49, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 29, 62, AgriApi.getSeasonLogic()::isActive),
-                new TooltipRegion(AgriSeason.WINTER.getDisplayName(), 17, 63, 29, 74, AgriApi.getSeasonLogic()::isActive)
-        );
+    }
+
+    @Override
+    public RecipeType<Recipe> getRecipeType() {
+        return TYPE;
     }
 
     @Nonnull
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public ResourceLocation getUid() {
         return ID;
     }
 
     @Nonnull
     @Override
-    public Class<IAgriPlant> getRecipeClass() {
-        return IAgriPlant.class;
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public Class<Recipe> getRecipeClass() {
+        return Recipe.class;
     }
 
     @Nonnull
     @Override
-    public String getTitle() {
-        return I18n.format("agricraft.gui.growth_req");
+    public TranslatableComponent getTitle() {
+        return TITLE;
     }
 
     @Nonnull
@@ -119,69 +126,54 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         return this.icon;
     }
 
-    public PlantRenderState getState(IAgriPlant plant) {
-        return PlantRenderState.getState(plant);
+    private static final String INPUT_SEED = "input_seed";
+    private static final String INPUT_SOIL = "input_soil";
+    private static final String OUTPUT_PLANT = "output_plant";
+
+    @Override
+    public void setRecipe(IRecipeLayoutBuilder builder, Recipe recipe, IFocusGroup focuses) {
+        // Set shapeless
+        builder.setShapeless();
+
+        // Seed
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 3)
+                .setSlotName(INPUT_SEED)
+                .addIngredient(VanillaTypes.ITEM, recipe.getPlant().toItemStack());
+
+        // Plant
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 56, 43)
+                .setSlotName(OUTPUT_PLANT)
+                .setCustomRenderer(AgriIngredientPlant.TYPE, AgriIngredientPlant.RENDERER)
+                .addIngredient(AgriIngredientPlant.TYPE, recipe.getPlant());
+
+        // Soils
+        builder.addSlot(RecipeIngredientRole.INPUT, 56, 63)
+                .setSlotName(INPUT_SOIL)
+                .addIngredients(VanillaTypes.ITEM,
+                        AgriApi.getSoilRegistry().stream()
+                                .filter(soil -> {
+                                    IAgriGrowthRequirement req = recipe.getPlant().getGrowthRequirement(recipe.getCurrentStage());
+                                    boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), recipe.getCurrentStrength()).isFertile();
+                                    boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), recipe.getCurrentStrength()).isFertile();
+                                    boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), recipe.getCurrentStrength()).isFertile();
+                                    return humidity && acidity && nutrients;
+                                })
+                                .map(IAgriSoil::getVariants)
+                                .flatMap(Collection::stream)
+                                .map(BlockBehaviour.BlockStateBase::getBlock)
+                                .distinct()
+                                .map(ItemStack::new)
+                                .collect(Collectors.toList()));
     }
 
     @Override
-    public void setIngredients(@Nonnull IAgriPlant plant, IIngredients ingredients) {
-        // Get current strength and stage
-        PlantRenderState state = this.getState(plant);
-        int strength = state.getStrength();
-        IAgriGrowthStage stage = state.getStage();
-        // Determine inputs
-        List<ItemStack> seeds = new ImmutableList.Builder<ItemStack>().add(plant.toItemStack()).addAll(plant.getSeedItems()).build();
-        List<ItemStack> soils = AgriApi.getSoilRegistry().stream()
-                .filter(soil -> {
-                    IAgriGrowthRequirement req = plant.getGrowthRequirement(stage);
-                    boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), strength).isFertile();
-                    boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), strength).isFertile();
-                    boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), strength).isFertile();
-                    return humidity && acidity && nutrients;})
-                .map(IAgriSoil::getVariants)
-                .flatMap(Collection::stream)
-                .map(AbstractBlock.AbstractBlockState::getBlock)
-                .distinct()
-                .map(ItemStack::new)
-                .collect(Collectors.toList());
-        ingredients.setInputLists(VanillaTypes.ITEM, ImmutableList.of(seeds, soils));
-        // Determine output
-        ingredients.setOutputLists(AgriIngredientPlant.TYPE, ImmutableList.of(ImmutableList.of(plant)));
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout layout, @Nonnull IAgriPlant plant, @Nonnull IIngredients ingredients) {
-        // Clear the focus as this sometimes causes display bugs
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).setOverrideDisplayFocus(null);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).setOverrideDisplayFocus(null);
-
-        // Denote that this is a shapeless recipe.
-        layout.setShapeless();
-
-        // Setup inputs (seed and soil)
-        layout.getIngredientsGroup(VanillaTypes.ITEM).init(0, true, 55, 2);
-        layout.getIngredientsGroup(VanillaTypes.ITEM).init(1, true, 55, 62);
-
-        // Setup output (plant)
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).init(0, false, 56, 43);
-
-        // Register Recipe Elements
-        layout.getItemStacks().set(ingredients);
-        layout.getIngredientsGroup(AgriIngredientPlant.TYPE).set(ingredients);
-
-        // Cache the Recipe layout
-        cache.put(plant, layout);
-    }
-
-    @Override
-    public void draw(@Nonnull IAgriPlant plant, @Nonnull MatrixStack transforms, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack transforms, double mouseX, double mouseY) {
         // Fetch strength and stage
-        PlantRenderState state = this.getState(plant);
-        int strength = state.getStrength();
-        IAgriGrowthStage stage = state.getStage();
-        IAgriGrowthRequirement req = plant.getGrowthRequirement(stage);
+        int strength = recipe.getCurrentStrength();
+        IAgriGrowthStage stage = recipe.getCurrentStage();
+        IAgriGrowthRequirement req = recipe.getGrowthRequirement();
         // Tell the renderer to render with a custom growth stage
-        AgriIngredientPlant.RENDERER.useGrowthStageForNextRenderCall(plant, stage);
+        AgriIngredientPlant.RENDERER.useGrowthStageForNextRenderCall(recipe.getPlant(), stage);
         // Draw increments
         IncrementRenderer.getInstance().renderStrengthIncrements(transforms, strength);
         IncrementRenderer.getInstance().renderGrowthStageIncrements(transforms, stage);
@@ -200,39 +192,37 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         // Draw seasons
         SeasonRenderer.getInstance().renderSeasons(transforms, 17, 24, season -> req.getSeasonResponse(season, strength).isFertile());
         // Draw buttons
-        state.updateStageButtons(102, 10);
-        state.updateStrengthButtons(114, 10 );
-        state.drawGrowthStageButtons(transforms, mouseX, mouseY);
-        state.drawStrengthButtons(transforms, mouseX, mouseY);
-        // Draw tooltips
-        this.tooltips.forEach(tooltip -> tooltip.drawTooltip(transforms, mouseX, mouseY, state));
+        recipe.updateStageButtons(102, 10);
+        recipe.updateStrengthButtons(114, 10 );
+        recipe.drawGrowthStageButtons(transforms, mouseX, mouseY);
+        recipe.drawStrengthButtons(transforms, mouseX, mouseY);
     }
 
     @Override
-    public boolean handleClick(@Nonnull IAgriPlant plant, double mouseX, double mouseY, int mouseButton) {
-        // Fetch strength and stage
-        if(mouseButton == 0) {
-            PlantRenderState state = this.getState(plant);
-            state.updateStageButtons(102, 10);
-            state.updateStrengthButtons(114, 10 );
-            return state.onClick(mouseX, mouseY);
-        } else {
-            return IRecipeCategory.super.handleClick(plant, mouseX, mouseY, mouseButton);
-        }
+    public List<Component> getTooltipStrings(Recipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        return recipe.getTooltips(mouseX, mouseY);
     }
 
-    public static class PlantRenderState {
-        private static final Map<IAgriPlant, PlantRenderState> instances = Maps.newIdentityHashMap();
-
-        public static PlantRenderState getState(IAgriPlant plant) {
-            return instances.computeIfAbsent(plant, PlantRenderState::new);
+    @Override
+    public boolean handleInput(@Nonnull Recipe recipe, double mouseX, double mouseY, InputConstants.Key input) {
+        if (input.getType() == InputConstants.Type.MOUSE) {
+            int mouseButton = input.getValue();
+            // Fetch strength and stage
+            if (mouseButton == 0) {
+                recipe.updateStageButtons(102, 10);
+                recipe.updateStrengthButtons(114, 10);
+                return recipe.onClick(mouseX, mouseY);
+            }
         }
+        return IRecipeCategory.super.handleInput(recipe, mouseX, mouseY, input);
+    }
 
+    public static class Recipe {
         private final IAgriPlant plant;
         private final List<IAgriGrowthStage> stages;
 
-        private int stage;
-        private int strength;
+        private int currentStage;
+        private int currentStrength;
 
         private final Button incStrButton;
         private final Button decStrButton;
@@ -241,43 +231,54 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         private final Button decStageButton;
 
         private final Set<Button> buttons;
+        private final Set<TooltipRegion<Recipe>> tooltips;
 
-        private PlantRenderState(IAgriPlant plant) {
+        private Recipe(IAgriPlant plant) {
+            // set the plant
             this.plant = plant;
+            // cache growth stages
             this.stages = plant.getGrowthStages().stream()
                     .sorted((s1, s2) -> (int) (100 * (s1.growthPercentage() - s2.growthPercentage())))
                     .collect(Collectors.toList());
-            this.stage = 0;
-            this.strength = this.getMinStrength();
+            // initialize default current values
+            this.currentStrength = this.getMinStrength();
+            this.currentStage = 0;
+            // initialize buttons
             ResourceLocation incTexture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/inc_button.png");
             ResourceLocation decTexture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/dec_button.png");
-            this.incStrButton = new Button(incTexture, this::incrementStrength);
-            this.decStrButton = new Button(decTexture, this::decrementStrength);
+            this.incStrButton = new Button(incTexture, this::incrementStrength, true);
+            this.decStrButton = new Button(decTexture, this::decrementStrength, true);
             this.incStageButton = new Button(incTexture, this::incrementStage);
             this.decStageButton = new Button(decTexture, this::decrementStage);
             this.buttons = ImmutableSet.of(this.incStrButton, this.decStrButton, this.incStageButton, this.decStageButton);
+            // initialize tooltips
+            this.tooltips = this.initTooltips();
         }
 
         public IAgriPlant getPlant() {
             return this.plant;
         }
 
-        public IAgriGrowthStage getStage() {
-            return this.stages.get(this.stage);
+        public IAgriGrowthRequirement getGrowthRequirement() {
+            return this.getPlant().getGrowthRequirement(this.getCurrentStage());
+        }
+
+        public IAgriGrowthStage getCurrentStage() {
+            return this.stages.get(this.currentStage);
+        }
+
+        public int getCurrentStrength() {
+            return this.currentStrength;
         }
 
         public boolean incrementStage() {
-            this.stage = Math.min(this.stages.size() - 1, this.stage + 1);
+            this.currentStage = Math.min(this.stages.size() - 1, this.currentStage + 1);
             return true;
         }
 
         public boolean decrementStage() {
-            this.stage = Math.max(0, this.stage - 1);
+            this.currentStage = Math.max(0, this.currentStage - 1);
             return true;
-        }
-
-        public int getStrength() {
-            return this.strength;
         }
 
         public int getMinStrength() {
@@ -289,15 +290,22 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         }
 
         public boolean incrementStrength() {
-            this.strength = Math.min(this.getMaxStrength(), this.getStrength() + 1);
-            this.updateGuiState();
+            this.currentStrength = Math.min(this.getMaxStrength(), this.getCurrentStrength() + 1);
             return true;
         }
 
         public boolean decrementStrength() {
-            this.strength = Math.max(this.getMinStrength(), this.getStrength() - 1);
-            this.updateGuiState();
+            this.currentStrength = Math.max(this.getMinStrength(), this.getCurrentStrength() - 1);
             return true;
+        }
+
+        public boolean onClick(double mX, double mY) {
+
+            return this.buttons.stream()
+                    .filter(button -> button.isOver(mX, mY))
+                    .findFirst()
+                    .map(Button::onPress)
+                    .orElse(false);
         }
 
         public void updateStrengthButtons(int x, int y) {
@@ -310,41 +318,54 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
             this.decStageButton.updatePosition(x, y + 61);
         }
 
-        public void drawStrengthButtons(MatrixStack transforms, double mX, double mY) {
+        public void drawStrengthButtons(PoseStack transforms, double mX, double mY) {
             this.incStrButton.draw(transforms, mX, mY);
             this.decStrButton.draw(transforms, mX, mY);
         }
 
-        public void drawGrowthStageButtons(MatrixStack transforms, double mX, double mY) {
+        public void drawGrowthStageButtons(PoseStack transforms, double mX, double mY) {
             this.incStageButton.draw(transforms, mX, mY);
             this.decStageButton.draw(transforms, mX, mY);
         }
 
-        public boolean onClick(double mX, double mY) {
-            return this.buttons.stream()
-                    .filter(button -> button.isOver(mX, mY))
+        public List<Component> getTooltips(double mx, double my) {
+            return this.tooltips.stream()
+                    .filter(tooltip -> tooltip.isActive(mx, my))
                     .findFirst()
-                    .map(Button::onPress)
-                    .orElse(false);
+                    .map(tooltip -> tooltip.getTooltips(this))
+                    .orElse(Collections.emptyList());
         }
 
-        protected void updateGuiState() {
-            if (cache.containsKey(this.getPlant())) {
-                cache.get(this.getPlant()).getItemStacks().set(1, AgriApi.getSoilRegistry().stream()
-                        .filter(soil -> {
-                            IAgriGrowthRequirement req = this.getPlant().getGrowthRequirement(this.getStage());
-                            boolean humidity = req.getSoilHumidityResponse(soil.getHumidity(), this.getStrength()).isFertile();
-                            boolean acidity = req.getSoilAcidityResponse(soil.getAcidity(), this.getStrength()).isFertile();
-                            boolean nutrients = req.getSoilNutrientsResponse(soil.getNutrients(), this.getStrength()).isFertile();
-                            return humidity && acidity && nutrients;
-                        })
-                        .map(IAgriSoil::getVariants)
-                        .flatMap(Collection::stream)
-                        .map(AbstractBlock.AbstractBlockState::getBlock)
-                        .distinct()
-                        .map(ItemStack::new)
-                        .collect(Collectors.toList()));
-            }
+        private Set<TooltipRegion<Recipe>> initTooltips() {
+            // initialize builder
+            ImmutableSet.Builder<TooltipRegion<Recipe>> builder = ImmutableSet.builder();
+            // growth tooltip
+            Function<Recipe, List<Component>> growth = (state) -> ImmutableList.of(AgriToolTips.getGrowthTooltip(this.getCurrentStage()));
+            builder.add(new TooltipRegion<>(growth, 102, 20, 111, 70));
+            // strength tooltip
+            Function<Recipe, List<Component>> strength = (state) -> ImmutableList.of(new TextComponent("")
+                    .append(AgriApi.getStatRegistry().strengthStat().getDescription())
+                    .append(new TextComponent(": " + this.getCurrentStrength())));
+            builder.add(new TooltipRegion<>(strength, 114, 20, 123, 70));
+            // soil property tooltips
+            SoilPropertyIconRenderer.getInstance().defineHumidityTooltips(tooltip -> addToBuilder(builder, tooltip), 37, 83);
+            SoilPropertyIconRenderer.getInstance().defineAcidityTooltips(tooltip -> addToBuilder(builder, tooltip), 37, 96);
+            SoilPropertyIconRenderer.getInstance().defineNutrientsTooltips(tooltip -> addToBuilder(builder, tooltip), 37, 109);
+            // season tooltips
+            builder.add(new TooltipRegion<>(AgriSeason.SPRING.getDisplayName(), 17, 24, 29, 36, AgriApi.getSeasonLogic()::isActive));
+            builder.add(new TooltipRegion<>(AgriSeason.SUMMER.getDisplayName(), 17, 37, 29, 49, AgriApi.getSeasonLogic()::isActive));
+            builder.add(new TooltipRegion<>(AgriSeason.AUTUMN.getDisplayName(), 17, 50, 29, 62, AgriApi.getSeasonLogic()::isActive));
+            builder.add(new TooltipRegion<>(AgriSeason.WINTER.getDisplayName(), 17, 63, 29, 74, AgriApi.getSeasonLogic()::isActive));
+            // light level tooltips
+            LightLevelRenderer.getInstance().defineTooltips(tooltip -> addToBuilder(builder, tooltip), 32, 26);
+            // return tooltips
+            return builder.build();
+        }
+
+        // Generics are the nail in my coffin...
+        @SuppressWarnings("unchecked")
+        private void addToBuilder(ImmutableSet.Builder<TooltipRegion<Recipe>> builder, TooltipRegion<?> tooltip) {
+            builder.add((TooltipRegion<Recipe>) tooltip);
         }
     }
 
@@ -355,9 +376,16 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
         private int x;
         private int y;
 
+        private boolean forceUpdate;
+
         public Button(ResourceLocation texture, BooleanSupplier onPress) {
+            this(texture, onPress, false);
+        }
+
+        public Button(ResourceLocation texture, BooleanSupplier onPress, boolean forceUpdate) {
             this.texture = texture;
             this.onPress = onPress;
+            this.forceUpdate = forceUpdate;
         }
 
         public void updatePosition(int x, int y) {
@@ -369,101 +397,26 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
             return x >= this.x && x <= this.x + 9 && y >= this.y && y <= this.y + 9;
         }
 
-        public void draw(MatrixStack transforms, double mX, double mY) {
+        public void draw(PoseStack transforms, double mX, double mY) {
             int u = 0;
             int v = 0;
             if(this.isOver(mX, mY)) {
-                if(Minecraft.getInstance().mouseHelper.isLeftDown()) {
+                if(Minecraft.getInstance().mouseHandler.isLeftPressed()) {
                     u = 9;
                 } else {
                     u = 18;
                 }
             }
             this.bindTexture(this.texture);
-            AbstractGui.blit(transforms, this.x, this.y, 9, 9, u, v, 9, 9, 27, 9);
+            Screen.blit(transforms, this.x, this.y, 9, 9, u, v, 9, 9, 27, 9);
         }
 
         public boolean onPress() {
-            return this.onPress.getAsBoolean();
-        }
-    }
-
-    private static final class TooltipRegion implements IRenderUtilities {
-        private final Function<PlantRenderState, List<ITextComponent>> tooltip;
-        private final int x1;
-        private final int y1;
-        private final int x2;
-        private final int y2;
-        private final BooleanSupplier isActive;
-
-        public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2) {
-            this(ImmutableList.of(tooltip), x1, y1, x2, y2);
-        }
-
-        public TooltipRegion(Function<PlantRenderState, List<ITextComponent>> tooltip, int x1, int y1, int x2, int y2) {
-            this(tooltip, x1, y1, x2, y2, () -> true);
-        }
-
-        public TooltipRegion(ITextComponent tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
-            this(ImmutableList.of(tooltip), x1, y1, x2, y2, isActive);
-        }
-
-        public TooltipRegion(List<ITextComponent> tooltip, int x1, int y1, int x2, int y2) {
-            this(tooltip, x1, y1, x2, y2, () -> true);
-        }
-
-        public TooltipRegion(List<ITextComponent> tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
-            this((state) -> tooltip, x1, y1, x2, y2, isActive);
-        }
-
-        public TooltipRegion(Function<PlantRenderState, List<ITextComponent>> tooltip, int x1, int y1, int x2, int y2, BooleanSupplier isActive) {
-            this.tooltip = tooltip;
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.isActive = isActive;
-        }
-
-        public void drawTooltip(MatrixStack transforms, double mX, double mY, PlantRenderState state) {
-            if(this.isActive.getAsBoolean()) {
-                if (mX >= this.x1 && mX <= this.x2 && mY >= this.y1 && mY <= this.y2) {
-                    int w = this.getScaledWindowWidth();
-                    int h = this.getScaledWindowHeight();
-                    GuiUtils.drawHoveringText(transforms, this.tooltip.apply(state), (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
-                }
+            boolean result = this.onPress.getAsBoolean();
+            if(this.forceUpdate && result) {
+                JeiPlugin.forceRecipeGuiUpdate();
             }
-        }
-    }
-
-    private static final class LightLevelRenderer implements IRenderUtilities {
-        private static final LightLevelRenderer INSTANCE = new LightLevelRenderer();
-
-        public static LightLevelRenderer getInstance() {
-            return INSTANCE;
-        }
-
-        private final ResourceLocation texture = new ResourceLocation(AgriCraft.instance.getModId(), "textures/gui/jei/light_levels.png");
-
-        private LightLevelRenderer() {}
-
-        public void renderLightLevels(MatrixStack transforms, int x, int y, double mX, double mY, Predicate<Integer> predicate) {
-            this.bindTexture(this.texture);
-            for(int i = 15; i >= 0; i--) {
-                int y_i = y + 3 * (15 - i);
-                if(predicate.test(i)) {
-                    AbstractGui.blit(transforms, x, y_i, 3, 3, 0, 3 * (15 - i), 3, 3, 3, 48);
-                }
-                if(mX >= x && mX <= (x + 3) && mY >= y_i && mY < (y_i + 3)) {
-                    int w = this.getScaledWindowWidth();
-                    int h = this.getScaledWindowHeight();
-                    List<ITextComponent> tooltip = ImmutableList.of(new StringTextComponent("")
-                            .appendSibling(AgriToolTips.LIGHT)
-                            .appendSibling(new StringTextComponent(": " + i))
-                    );
-                    GuiUtils.drawHoveringText(transforms, tooltip, (int) mX, (int) mY, w, h, -1, this.getFontRenderer());
-                }
-            }
+            return result;
         }
     }
 
@@ -478,20 +431,20 @@ public class AgriRecipeCategoryGrowthRequirements implements IRecipeCategory<IAg
 
         private IncrementRenderer() {}
 
-        public void renderStrengthIncrements(MatrixStack transforms, int strength) {
+        public void renderStrengthIncrements(PoseStack transforms, int strength) {
             this.bindTexture(this.texture);
             for(int i = 0; i < strength; i++) {
-                AbstractGui.blit(transforms, 115, 66 - i*5, 7, 3, 0, 0, 7, 3, 7, 4);
+                Screen.blit(transforms, 115, 66 - i*5, 7, 3, 0, 0, 7, 3, 7, 4);
             }
         }
 
-        public void renderGrowthStageIncrements(MatrixStack transforms, IAgriGrowthStage stage) {
+        public void renderGrowthStageIncrements(PoseStack transforms, IAgriGrowthStage stage) {
             this.bindTexture(this.texture);
             double f = stage.growthPercentage();
             int l = 48;
             int h = (int) (l*f);
             int y = 21 + l - h;
-            AbstractGui.blit(transforms, 103, y, 7, h, 0, 3, 7, 1, 7, 4);
+            Screen.blit(transforms, 103, y, 7, h, 0, 3, 7, 1, 7, 4);
         }
     }
 }

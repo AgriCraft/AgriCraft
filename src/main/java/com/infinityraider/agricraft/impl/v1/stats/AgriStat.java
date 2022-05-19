@@ -2,9 +2,12 @@ package com.infinityraider.agricraft.impl.v1.stats;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.*;
+import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nonnull;
 import java.util.function.BooleanSupplier;
@@ -17,7 +20,7 @@ public class AgriStat implements IAgriStat {
     private final IntSupplier max;
     private final BooleanSupplier hidden;
     private final String key;
-    private final TranslationTextComponent tooltip;
+    private final TranslatableComponent tooltip;
     private final Vector3f color;
 
     protected AgriStat(String name, IntSupplier min, IntSupplier max, BooleanSupplier hidden, Vector3f color) {
@@ -26,7 +29,7 @@ public class AgriStat implements IAgriStat {
         this.max = max;
         this.hidden = hidden;
         this.key = "stat." + this.name;
-        this.tooltip = new TranslationTextComponent(AgriCraft.instance.getModId() + "." + this.key);
+        this.tooltip = new TranslatableComponent(AgriCraft.instance.getModId() + "." + this.key);
         this.color = color;
     }
 
@@ -46,28 +49,28 @@ public class AgriStat implements IAgriStat {
     }
 
     @Override
-    public void writeValueToNBT(CompoundNBT tag, byte value) {
+    public void writeValueToNBT(CompoundTag tag, byte value) {
         tag.putInt(this.key, value);
     }
 
     @Override
-    public int readValueFromNBT(CompoundNBT tag) {
+    public int readValueFromNBT(CompoundTag tag) {
         return tag.getInt(this.key);
     }
 
     @Override
-    public void addTooltip(@Nonnull Consumer<ITextComponent> consumer, int value) {
+    public void addTooltip(@Nonnull Consumer<Component> consumer, int value) {
         if(!this.isHidden()) {
-            consumer.accept(new StringTextComponent("")
-                    .appendSibling(this.getDescription())
-                    .appendSibling(new StringTextComponent(": " + value))
-                    .mergeStyle(TextFormatting.DARK_GRAY));
+            consumer.accept(new TextComponent("")
+                    .append(this.getDescription())
+                    .append(new TextComponent(": " + value))
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
     @Nonnull
     @Override
-    public TranslationTextComponent getDescription() {
+    public TranslatableComponent getDescription() {
         return this.tooltip;
     }
 

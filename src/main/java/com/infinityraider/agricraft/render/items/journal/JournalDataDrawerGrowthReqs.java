@@ -5,35 +5,35 @@ import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.impl.v1.journal.GrowthReqsPage;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class JournalDataDrawerGrowthReqs extends JournalDataDrawerBase<GrowthReqsPage> {
-    private final ITextComponent GROWTH_REQS = new TranslationTextComponent("agricraft.journal.growth_reqs");
-    private final ITextComponent PARAGRAPH_L_1 = new TranslationTextComponent("agricraft.journal.growth_reqs.paragraph_1");
-    private final ITextComponent BRIGHTNESS = new TranslationTextComponent("agricraft.journal.growth_reqs.brightness");
-    private final ITextComponent PARAGRAPH_BRIGHTNESS = new TranslationTextComponent("agricraft.journal.growth_reqs.brightness.desc");
-    private final ITextComponent HUMIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.humidity");
-    private final ITextComponent PARAGRAPH_HUMIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.humidity.desc");
-    private final ITextComponent ACIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.acidity");
-    private final ITextComponent PARAGRAPH_ACIDITY = new TranslationTextComponent("agricraft.journal.growth_reqs.acidity.desc");
-    private final ITextComponent NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients");
-    private final ITextComponent PARAGRAPH_NUTRIENTS = new TranslationTextComponent("agricraft.journal.growth_reqs.nutrients.desc");
-    private final ITextComponent SEASONS = new TranslationTextComponent("agricraft.journal.growth_reqs.seasons");
-    private final ITextComponent PARAGRAPH_SEASONS = new TranslationTextComponent("agricraft.journal.growth_reqs.seasons.desc");
+    private final Component GROWTH_REQS = new TranslatableComponent("agricraft.journal.growth_reqs");
+    private final Component PARAGRAPH_L_1 = new TranslatableComponent("agricraft.journal.growth_reqs.paragraph_1");
+    private final Component BRIGHTNESS = new TranslatableComponent("agricraft.journal.growth_reqs.brightness");
+    private final Component PARAGRAPH_BRIGHTNESS = new TranslatableComponent("agricraft.journal.growth_reqs.brightness.desc");
+    private final Component HUMIDITY = new TranslatableComponent("agricraft.journal.growth_reqs.humidity");
+    private final Component PARAGRAPH_HUMIDITY = new TranslatableComponent("agricraft.journal.growth_reqs.humidity.desc");
+    private final Component ACIDITY = new TranslatableComponent("agricraft.journal.growth_reqs.acidity");
+    private final Component PARAGRAPH_ACIDITY = new TranslatableComponent("agricraft.journal.growth_reqs.acidity.desc");
+    private final Component NUTRIENTS = new TranslatableComponent("agricraft.journal.growth_reqs.nutrients");
+    private final Component PARAGRAPH_NUTRIENTS = new TranslatableComponent("agricraft.journal.growth_reqs.nutrients.desc");
+    private final Component SEASONS = new TranslatableComponent("agricraft.journal.growth_reqs.seasons");
+    private final Component PARAGRAPH_SEASONS = new TranslatableComponent("agricraft.journal.growth_reqs.seasons.desc");
     @Override
     public ResourceLocation getId() {
         return GrowthReqsPage.INSTANCE.getDataDrawerId();
     }
 
     @Override
-    public void drawLeftSheet(GrowthReqsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawLeftSheet(GrowthReqsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         float dy = 10;
         float dx = 6;
         float spacing = 4;
@@ -60,7 +60,7 @@ public class JournalDataDrawerGrowthReqs extends JournalDataDrawerBase<GrowthReq
     }
 
     @Override
-    public void drawRightSheet(GrowthReqsPage page, IPageRenderContext context, MatrixStack transforms, ItemStack stack, IAgriJournalItem journal) {
+    public void drawRightSheet(GrowthReqsPage page, IPageRenderContext context, PoseStack transforms, ItemStack stack, IAgriJournalItem journal) {
         float dy = 10;
         float dx = 6;
         float spacing = 4;
@@ -95,7 +95,7 @@ public class JournalDataDrawerGrowthReqs extends JournalDataDrawerBase<GrowthReq
         }
     }
 
-    protected float drawSoilProperties(IPageRenderContext context, MatrixStack transforms, float dx, float dy, float spacing,
+    protected float drawSoilProperties(IPageRenderContext context, PoseStack transforms, float dx, float dy, float spacing,
                                        IAgriSoil.SoilProperty[] property, int[] offsets, ResourceLocation texture) {
         float scale = 0.5F;
         dy += spacing*scale;

@@ -5,10 +5,10 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 
@@ -36,11 +36,11 @@ public class JsonPlantCallBackPoisoning implements IJsonPlantCallback {
     private JsonPlantCallBackPoisoning() {}
 
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
-        if (entity instanceof LivingEntity && !entity.isSneaking() && !entity.getEntityWorld().isRemote) {
+        if (entity instanceof LivingEntity && !entity.isDiscrete() && !entity.getLevel().isClientSide()) {
             LivingEntity livingEntity = ((LivingEntity) entity);
-            if (!livingEntity.isPotionActive(Effects.POISON)) {
-                EffectInstance poison = new EffectInstance(Effects.POISON, (int) (20 * crop.getStats().getAverage()));
-                ((LivingEntity) entity).addPotionEffect(poison);
+            if (!livingEntity.hasEffect(MobEffects.POISON)) {
+                MobEffectInstance poison = new MobEffectInstance(MobEffects.POISON, (int) (20 * crop.getStats().getAverage()));
+                ((LivingEntity) entity).addEffect(poison);
             }
         }
     }

@@ -4,10 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthRequirement;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -133,7 +134,7 @@ public interface IJsonPlantCallback {
      * @return an empty optional to allow continuation of default right click behaviour,
      * an optional containing an action result to pass to the right click chain, prevents default behaviour
      */
-    default Optional<ActionResultType> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    default Optional<InteractionResult> onRightClickPre(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return Optional.empty();
     }
 
@@ -147,9 +148,15 @@ public interface IJsonPlantCallback {
      * @param entity the entity which used the item, can be null if usage happens through automation
      * @return an optional containing an action result to pass to the right click chain, or empty to continue the default chain
      */
-    default Optional<ActionResultType> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
+    default Optional<InteractionResult> onRightClickPost(@Nonnull IAgriCrop crop, @Nonnull ItemStack stack, @Nullable Entity entity) {
         return Optional.empty();
     }
+
+    /**
+     * Called right before the growth requirement for a plant with this callback is initialized
+     * @param builder the growth requirement builder
+     */
+    default void onGrowthReqInitialization(IAgriGrowthRequirement.Builder builder) {}
 
     /**
      * Factory class to parse IJsonPlantCallback objects from json elements

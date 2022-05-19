@@ -1,7 +1,6 @@
 // ====================================================================================================================
 // AgriCraft Buildscript
-// --------------------------------------------------------------------------------------------------------------------
-// Now without QuikMod.
+
 // ====================================================================================================================
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -10,27 +9,39 @@
 
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
+		maven { url = 'https://maven.parchmentmc.org' }
         jcenter()
         mavenCentral()
+        flatDir{
+            dirs 'lib'
+        }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true// MixinGradle:
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+		classpath 'org.parchmentmc:librarian:1.+'
     }
 }
+
+
+// --------------------------------------------------------------------------------------------------------------------
+// Buildscript Plugins
+// --------------------------------------------------------------------------------------------------------------------
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+	id 'jacoco'
+}
+
 
 // --------------------------------------------------------------------------------------------------------------------
 // ForgeGradle Plugin
 // --------------------------------------------------------------------------------------------------------------------
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
 
-// --------------------------------------------------------------------------------------------------------------------
-// Buildscript Plugins
-// --------------------------------------------------------------------------------------------------------------------
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'jacoco'
-apply plugin: 'maven-publish'
 
 // --------------------------------------------------------------------------------------------------------------------
 // Mod Properties
@@ -45,9 +56,8 @@ version = "${config.version_minecraft}-${config.version_major}.${config.version_
 group = "${config.package}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "${config.id}"
 
-// Set the source and target compatibility levels.
-// Required for eclipse task generates correctly.
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "${config.version_java}"
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 // Mod Properties Loader
 def parseConfig(File config) {
@@ -61,24 +71,33 @@ def parseConfig(File config) {
 // --------------------------------------------------------------------------------------------------------------------
 // Minecraft Task
 // --------------------------------------------------------------------------------------------------------------------
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
- mappings channel: "${config.mapping_channel}", version: "${config.mapping_version}"
+    mappings channel: "${config.mapping_channel}", version: "${config.mapping_version}"
+
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
     runs {
         client {
             workingDirectory project.file('run')
+
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
+
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            // Make mixins work on dependencies
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'agricraft'
+
             mods {
                 agricraft {
                     source sourceSets.main
                 }
                 infinitylib {
-                    //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
+                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
                     source project("InfinityLib").sourceSets.main
                 }
             }
@@ -86,19 +105,44 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
+
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-            // Make mixins work on dependencies
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'agricraft'
+
             mods {
                 agricraft {
                     source sourceSets.main
                 }
                 infinitylib {
-                    //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
+                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
+                    source project("InfinityLib").sourceSets.main
+                }
+            }
+        }
+
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'agricraft'
+
+            mods {
+                agricraft {
+                    source sourceSets.main
+                }
+                infinitylib {
+                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
                     source project("InfinityLib").sourceSets.main
                 }
             }
@@ -114,18 +158,14 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'agricraft', '--all',
-                '--input', file('lib/AgriPlants'),
-                '--existing', file('src/main/resources/'),
-                '--existing', project("InfinityLib").file('src/main/resources/'),
-                '--output', file('src/generated/resources/')
+            args '--mod', 'agricraft', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 agricraft {
                     source sourceSets.main
                 }
                 infinitylib {
-                    //This still grabs the sourceSets from the main project, therefore one must manually correct it in runServer afterwards
+                    //This still grabs the sourceSets from Agricraft, therefore one must manually correct it in runClient afterwards
                     source project("InfinityLib").sourceSets.main
                 }
             }
@@ -148,28 +188,13 @@ repositories {
     }
 
     maven {
-        // for TOP
-        name 'tterrag maven'
-        url "https://maven.tterrag.com/"
-    }
-
-    maven {
-        // for Botania and Botany pots
+        // for Botania and Immersive Engineering
         url 'https://maven.blamejared.com'
     }
 
     maven {
-        // for Immersive Engineering
-        url "https://modmaven.dev/"
-        content {
-            includeGroup 'blusunrize.immersiveengineering'
-            includeGroup 'malte0811'
-        }
-    }
-
-    maven {
-        // for Simply Seasons
-        url 'https://maven.joshiejack.uk/'
+        // for Mystical Agriculture
+        url 'https://maven.blakesmods.com'
     }
 
     // For AgriCore dependencies
@@ -180,89 +205,69 @@ repositories {
 // Add "embedded" configuration
 configurations {
     embed
-    compile.extendsFrom(embed)
+    implementation.extendsFrom(embed)
+}
+
+// To make sure Forge does not ignore the embedded projects
+// See: https://gist.github.com/SizableShrimp/66b22f1b24c255e1491c8d98d3f11f83
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.embed.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
 }
 
 // List Deps.
 dependencies {
     // Minecraft
-    minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.42'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+
+    // Apply Mixin AP
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // AgriCore
-    embed project('AgriCore');
+    embed project(':AgriCore')
     
     // InfinityLib
-    compile project('InfinityLib')
+    implementation project(":InfinityLib")
 
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.0.106")
-
-    //TOP
-    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
-    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-3.1.4-22")
-
-    //Better Weather
-    compileOnly fg.deobf("curse.maven:better_weather-400714:3248339")
-    //runtimeOnly fg.deobf("curse.maven:better_weather-400714:3248339")
-
-    //Blood Magic
-    compileOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
-    //runtimeOnly fg.deobf("curse.maven:blood_magic-224791:3184485")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
 
     //Botania
-    compileOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT:api")
-    //runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-417-SNAPSHOT")
+    compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
+    //runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
-    //Botany pots
-    compileOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
-    compileOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
-    //runtimeOnly fg.deobf("net.darkhax.botanybots:BotanyPots-1.16.5:7.1.20")
-    //runtimeOnly fg.deobf("net.darkhax.bookshelf:Bookshelf-1.16.5:10.1.12")   //Botany Pots runtime dependency
+    //Create
+    compileOnly fg.deobf("curse.maven:create-328085:3737418")
+    compileOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency v1.16.5-0.1.1
+    //runtimeOnly fg.deobf("curse.maven:create-328085:3737418")
+    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
 
-    //Create v1.16.5-0.3.2b
-    //do not use higher because it won't work in-dev (create/flywheel use official mappings and it cause some problems when remapped to mcp)
-    compileOnly fg.deobf("curse.maven:create-328085:3386319")
-//    runtimeOnly fg.deobf("curse.maven:create-328085:3386319")
-    compileOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency v1.16.5-0.1.1
-//    runtimeOnly fg.deobf("curse.maven:flywheel-486392:3389159") // create dependency
-
-
-    //Cyclic 1.16.5-1.5.1 // 1.2.1
-    compileOnly fg.deobf("curse.maven:cyclic-239286:3482950")
-//    runtimeOnly fg.deobf("curse.maven:cyclic-239286:3482950")
+    //Cyclic
+    compileOnly fg.deobf("curse.maven:cyclic-239286:3708026")
+    //runtimeOnly fg.deobf("curse.maven:cyclic-239286:3708026")
 
     //Immersive Engineering
-    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.5-140")
-//    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.5-5.0.5-140")
-
-    //Industrial Foregoing 1.16.5-3.2.14.5 // 3.2.11
-    compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3425275")
-//    runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3425275")
-//    runtimeOnly fg.deobf("curse.maven:titanium-287342:3346366") // Industrial Foregoing runtime dependency 1.16.5-3.2.8.4
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
+    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
     //Jade
-    compileOnly fg.deobf("curse.maven:jade-324717:3302544")
-    //runtimeOnly fg.deobf("curse.maven:jade-324717:3302544")
+    compileOnly fg.deobf("curse.maven:jade-324717:3681449")
+    //runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
 
     //Mystical Agriculture
-    compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
-//    runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
-//    runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
+    compileOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
+	//runtimeOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
+	//runtimeOnly fg.deobf("com.blakebr0.cucumber:Cucumber:1.18.2-5.1.0")   //Mystical Agriculture runtime dependency
 
     //Serene Seasons
-    compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-    runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+    compileOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
+    //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
 
-    //Simply Seasons
-    compileOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
-    compileOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
-    //runtimeOnly fg.deobf("uk.joshiejack.penguinlib:Penguin-Lib:1.16.5-0.3.0-12")   //Simply Seasons runtime dependency
-    //runtimeOnly fg.deobf("uk.joshiejack.simplyseasons:Simply-Seasons:1.16.5-1.0.0-8")
-
-    //Straw Golems
-    compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
-    //runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3057272")
+    //The One Probe
+    compileOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
+    runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
 }
 
 // Delete Old Plants
@@ -277,19 +282,6 @@ processResources {
         into 'json/defaults'
     }
     outputs.upToDateWhen{ false }
-	
-	// make sure to include mods.toml from the main mod
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version': project.version
-    }
-
-    // from the main mod, copy everything else, that's not the mods.toml
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml', '**/psd/**'
-    }
 }
 
 jar {

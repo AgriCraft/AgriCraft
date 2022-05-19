@@ -4,9 +4,10 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStat;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
+import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.impl.v1.genetics.AgriGeneRegistry;
 import com.infinityraider.agricraft.impl.v1.AgriRegistryAbstract;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
 
 import javax.annotation.Nullable;
 
@@ -61,7 +62,7 @@ public class AgriStatRegistry extends AgriRegistryAbstract<IAgriStat> implements
             // Also add a gene for this stat
             AgriGeneRegistry.getInstance().addGeneForStat(element);
             // Add a seed bag sorter for this stat
-            AgriCraft.instance.getModItemRegistry().seed_bag.addSorter(element);
+            AgriItemRegistry.getInstance().seed_bag.get().addSorter(element);
         }
         return result;
     }

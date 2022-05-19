@@ -5,10 +5,10 @@ import com.google.gson.JsonParseException;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
 import com.infinityraider.agricraft.api.v1.plant.IJsonPlantCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 
@@ -37,8 +37,8 @@ public class JsonPlantCallBackWithering implements IJsonPlantCallback {
 
     public void onEntityCollision(@Nonnull IAgriCrop crop, Entity entity) {
         if(entity instanceof LivingEntity) {
-            EffectInstance wither = new EffectInstance(Effects.WITHER, (int) (10*crop.getStats().getAverage()));
-            ((LivingEntity) entity).addPotionEffect(wither);
+            MobEffectInstance wither = new MobEffectInstance(MobEffects.WITHER, (int) (10*crop.getStats().getAverage()));
+            ((LivingEntity) entity).addEffect(wither);
         }
     }
 }

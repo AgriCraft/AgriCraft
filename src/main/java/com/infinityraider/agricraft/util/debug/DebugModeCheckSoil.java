@@ -5,12 +5,12 @@ import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.infinitylib.utility.MessageUtil;
 import com.infinityraider.infinitylib.utility.debug.DebugMode;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class DebugModeCheckSoil extends DebugMode {
 
@@ -20,9 +20,9 @@ public class DebugModeCheckSoil extends DebugMode {
     }
 
     @Override
-    public void debugActionBlockClicked(ItemStack stack, ItemUseContext context) {
+    public void debugActionBlockClicked(ItemStack stack, UseOnContext context) {
         IAgriSoil soil = AgriApi.getSoilRegistry().stream()
-                .filter(s -> s.isVariant(context.getWorld().getBlockState(context.getPos())))
+                .filter(s -> s.isVariant(context.getLevel().getBlockState(context.getClickedPos())))
                 .findFirst()
                 .orElse(null);
         MessageUtil.messagePlayer(context.getPlayer(), "{0} Soil Info:", AgriCraft.instance.proxy().getLogicalSide());
@@ -37,12 +37,12 @@ public class DebugModeCheckSoil extends DebugMode {
     }
 
     @Override
-    public void debugActionClicked(ItemStack stack, World world, PlayerEntity player, Hand hand) {
+    public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
         // NOP
     }
 
     @Override
-    public void debugActionEntityClicked(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
+    public void debugActionEntityClicked(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         // NOP
     }
 }
