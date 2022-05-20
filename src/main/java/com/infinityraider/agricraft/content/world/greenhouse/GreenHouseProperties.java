@@ -87,7 +87,7 @@ class GreenHouseProperties {
     public CompoundTag writeToNBT() {
         CompoundTag tag = new CompoundTag();
         AgriNBT.writeBlockPos1(tag, this.getMin());
-        AgriNBT.writeBlockPos1(tag, this.getMax());
+        AgriNBT.writeBlockPos2(tag, this.getMax());
         tag.putInt(AgriNBT.CONTENTS, this.getCeilingCount());
         tag.putInt(AgriNBT.KEY, this.getCeilingGlassCount());
         tag.putInt(AgriNBT.REMOVED, this.gaps);

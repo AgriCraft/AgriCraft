@@ -218,12 +218,11 @@ public class GreenHouse {
     }
 
     public void onBlockUpdated(Level world, BlockPos pos) {
-        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
-    }
-
-    public void onBlockDestroyed(Level world, BlockPos pos) {
-        this.getPart(world, pos).ifPresent(part -> part.onBlockUpdated(world, pos, this));
-
+        this.getPart(world, pos).ifPresent(part -> {
+            if (part.onBlockUpdated(world, pos, this)) {
+                world.getChunk(pos).setUnsaved(true);
+            }
+        });
     }
 
     public CompoundTag writeToNBT() {

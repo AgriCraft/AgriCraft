@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,10 +32,7 @@ public class GreenHousePart {
     public GreenHousePart(CompoundTag tag) {
         this.id = tag.getInt(AgriNBT.KEY);
         this.blocks = Maps.newHashMap();
-        tag.getList(AgriNBT.ENTRIES, Tag.TAG_COMPOUND).stream()
-                .filter(blockTag -> blockTag instanceof CompoundTag)
-                .map(blockTag -> (CompoundTag) blockTag)
-                .forEach(blockTag -> {
+        AgriNBT.stream(tag, AgriNBT.ENTRIES).forEach(blockTag -> {
                     BlockPos pos = AgriNBT.readBlockPos1(blockTag);
                     GreenHouseBlock.Type type = GreenHouseBlock.Type.values()[blockTag.getInt(AgriNBT.INDEX)];
                     boolean ceiling = blockTag.getBoolean(AgriNBT.FLAG);
@@ -65,22 +61,22 @@ public class GreenHousePart {
         return block == null ? GreenHouseBlock.Type.EXTERIOR : block.getType();
     }
 
-    public void onBlockUpdated(Level world, BlockPos pos, GreenHouse greenHouse) {
+    public boolean onBlockUpdated(Level world, BlockPos pos, GreenHouse greenHouse) {
         if(world.isClientSide()) {
-            return;
+            return false;
         }
         GreenHouseBlock oldBlock = this.getBlock(pos);
         if(oldBlock == null) {
             // shouldn't ever happen
             AgriCraft.instance.getLogger().error("Caught a block update for a greenhouse at a null position");
-            return;
+            return false;
         }
         // fetch new state and type
         BlockState newState = world.getBlockState(pos);
         GreenHouseBlock.Type newType = oldBlock.getType().getNewTypeForState(world, pos, newState, this.blocks::get);
         // no changes: return
         if(newType == oldBlock.getType()) {
-            return;
+            return false;
         }
         // set the new block
         this.blocks.put(pos, new GreenHouseBlock(pos, newType, oldBlock.isCeiling()));
@@ -97,7 +93,7 @@ public class GreenHousePart {
                     greenHouse.decrementCeilingGlassCount(world);
                 }
             }
-            return;
+            return true;
         }
         // check if an old gap has been closed
         if(oldBlock.isGap()) {
@@ -107,7 +103,7 @@ public class GreenHousePart {
             }
             // notify the greenhouse of a closed gap
             greenHouse.removeGap(world);
-            return;
+            return true;
         }
         // no gap has been closed nor opened; check for ceiling updates
         if(oldBlock.isCeiling()) {
@@ -116,12 +112,13 @@ public class GreenHousePart {
             } else {
                 greenHouse.decrementCeilingGlassCount(world);
             }
-            return;
+            return true;
         }
         // check if an air block has been placed
         if(newType.isAir()) {
             world.setBlock(pos, this.getAirState(), 3);
         }
+        return true;
     }
 
     @Nullable
@@ -160,6 +157,7 @@ public class GreenHousePart {
             AgriNBT.writeBlockPos1(blockTag, pos);
             blockTag.putInt(AgriNBT.INDEX, block.getType().ordinal());
             blockTag.putBoolean(AgriNBT.FLAG, block.isCeiling());
+            blocks.add(blockTag);
         });
         tag.put(AgriNBT.ENTRIES, blocks);
         return tag;

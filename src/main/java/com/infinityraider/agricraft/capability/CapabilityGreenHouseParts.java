@@ -35,7 +35,10 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
     private CapabilityGreenHouseParts() {}
 
     public static void addPart(LevelChunk chunk, GreenHousePart part) {
-        getInstance().getCapability(chunk).ifPresent(impl -> impl.add(part));
+        getInstance().getCapability(chunk).ifPresent(impl -> {
+            impl.add(part);
+            chunk.setUnsaved(true);
+        });
     }
 
     public static Optional<GreenHousePart> removePart(LevelChunk chunk, int id) {
@@ -65,7 +68,7 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
 
     @Override
     public Impl createNewValue(LevelChunk carrier) {
-        return new Impl(carrier);
+        return new Impl();
     }
 
     @Override
@@ -81,7 +84,7 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
     public static class Impl implements Serializable<Impl> {
         private final Map<Integer, GreenHousePart> greenhouses;
 
-        protected Impl(LevelChunk chunk) {
+        protected Impl() {
             this.greenhouses = Maps.newHashMap();
         }
 

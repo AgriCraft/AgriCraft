@@ -73,7 +73,7 @@ public interface AgriNBT {
     }
 
     static Stream<CompoundTag> stream(CompoundTag tag, String key) {
-        if(tag.contains(key, Tag.TAG_COMPOUND)) {
+        if(tag.contains(key, Tag.TAG_LIST)) {
             return stream(tag.getList(key, Tag.TAG_COMPOUND));
         }
         return Stream.empty();
