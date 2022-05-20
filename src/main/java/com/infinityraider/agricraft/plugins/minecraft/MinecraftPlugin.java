@@ -26,6 +26,7 @@ public class MinecraftPlugin implements IAgriPlugin {
     public final IJsonPlantCallback.Factory bushy;
     public final IJsonPlantCallback.Factory experience;
     public final IJsonPlantCallback.Factory fungus;
+    public final IJsonPlantCallback.Factory tree;
     public final IJsonPlantCallback.Factory poisoning;
     public final IJsonPlantCallback.Factory redstone;
     public final IJsonPlantCallback.Factory thorns;
@@ -37,6 +38,7 @@ public class MinecraftPlugin implements IAgriPlugin {
         this.bushy = JsonPlantCallBackBushy.getFactory();
         this.experience = JsonPlantCallBackExperience.getFactory();
         this.fungus = JsonPlantCallBackFungus.getFactory();
+        this.tree = JsonPlantCallBackTree.getFactory();
         this.poisoning = JsonPlantCallBackPoisoning.getFactory();
         this.redstone = JsonPlantCallBackRedstone.getFactory();
         this.thorns = JsonPlantCallBackThorns.getFactory();

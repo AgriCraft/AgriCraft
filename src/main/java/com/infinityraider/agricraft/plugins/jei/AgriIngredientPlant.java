@@ -69,10 +69,7 @@ public class AgriIngredientPlant {
 
         @Override
         public  ResourceLocation getResourceLocation(IAgriPlant plant) {
-            return IDS.computeIfAbsent(plant, p -> {
-                String[] path = p.getId().split(":");
-                return new ResourceLocation(p.getSeedModel().getNamespace(), path[path.length - 1]);
-            });
+            return IDS.computeIfAbsent(plant, p -> new ResourceLocation(p.getId().toLowerCase()));
         }
 
         @Nonnull

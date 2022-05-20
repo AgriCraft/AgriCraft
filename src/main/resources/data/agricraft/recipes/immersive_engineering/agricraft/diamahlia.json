@@ -1,0 +1,12 @@
+{
+  "type": "agricraft:agri_cloche_recipe",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+  "plant": "agricraft:diamahlia_plant",
+  "growthTicks": 2142,
+  "growthStatFactor": 0.07142857142857144
+}

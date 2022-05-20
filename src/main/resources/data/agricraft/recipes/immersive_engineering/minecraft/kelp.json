@@ -1,0 +1,12 @@
+{
+  "type": "agricraft:agri_cloche_recipe",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+  "plant": "minecraft:kelp_plant",
+  "growthTicks": 1153,
+  "growthStatFactor": 0.038461538461538464
+}
