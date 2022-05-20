@@ -29,6 +29,8 @@
   "item.agricraft.agri_nugget_diamond": "Fragmento de Diamante",
   "item.agricraft.agri_nugget_emerald": "Fragmento de Esmeralda",
   "item.agricraft.agri_nugget_quartz": "Fragmento de Quartzo",
+  "item.agricraft.netherite_sliver": "Lasca de Netherita",
+  "item.agricraft.amathyllis_petal": "Pétala de Amathyllis",
 
   "enchantment.agricraft.agri_seed_bag": "Escolhendo sementes",
 
@@ -157,6 +159,7 @@
   "agricraft.tooltip.growth_req.season": "Esta planta só crescerá durante certas estações",
   "agricraft.tooltip.growth_req.structure_in": "Esta planta só crescerá em ou perto de uma determinada estrutura",
   "agricraft.tooltip.growth_req.structure_out": "Esta planta não crescerá em ou perto de uma determinada estrutura",
+  "agricraft.tooltip.growth_req.mana": "Esta planta não possui mana suficiente para crescer",
 
   "agricraft.tooltip.growth_req.soil.humidity.general": "Esta planta não pode crescer em um solo com esta umidade",
   "agricraft.tooltip.growth_req.soil.acidity.general": "Esta planta não pode crescer em um solo com esta acidez",
@@ -370,6 +373,10 @@
   "agricraft.plant.wither_rose.seed": "Sementes de Rosa do Wither",
   "agricraft.plant.wither_rose.desc": "Ninguém gosta de suas rosas murchando, mas isso está em outro nível.",
 
+  "agricraft.plant.amathyllis.name": "Amathyllis",
+  "agricraft.plant.amathyllis.seed": "Sementes de Amathyllis",
+  "agricraft.plant.amathyllis.desc": "Suas pétalas parecem estranhamente cristalinas.",
+
   "agricraft.plant.aurigold.name": "Aurigold",
   "agricraft.plant.aurigold.seed": "Sementes de Aurigold",
   "agricraft.plant.aurigold.desc": "Uma delícia de ouro.",
@@ -401,6 +408,10 @@
   "agricraft.plant.lapender.name": "Lapender",
   "agricraft.plant.lapender.seed": "Sementes de Lapender",
   "agricraft.plant.lapender.desc": "Uma planta real.",
+
+  "agricraft.plant.nethereed.name": "Nethereed",
+  "agricraft.plant.nethereed.seed": "Sementes de Nethereed",
+  "agricraft.plant.nethereed.desc": "O primo mais durão do junco regular do Nether.",
 
   "agricraft.plant.niccissus.name": "Niccissus",
   "agricraft.plant.niccissus.seed": "Sementes de Niccissus",
