@@ -30,10 +30,10 @@ public final class CoreHandler {
     public static final Predicate<String> MOD_FILTER = (path) -> {
         String id = path.substring(path.indexOf("json/defaults/") + 14);
         id = id.substring(0, id.indexOf("/"));
-        if(id.equalsIgnoreCase("vanilla")) {
+        if(id.equalsIgnoreCase("minecraft")) {
             return true;
         }
-        if(id.equalsIgnoreCase("resource")) {
+        if(id.equalsIgnoreCase("mod_agricraft")) {
             return AgriCraft.instance.getConfig().generateResourceCropJsons();
         }
         id = id.replace("mod_", "");
@@ -76,6 +76,10 @@ public final class CoreHandler {
 
         // Initialize AgriCore
         AgriCore.init(new AgriLoggerImpl(), new AgriValidatorImpl(), new AgriConverterImpl(), AgriCraft.instance.getConfig());
+
+        // rename 1.16 directory vanilla->minecraft & resource->mod_agricraft
+        ResourceHelper.renameDirectory(defaultDir, "vanilla", "minecraft", false);
+        ResourceHelper.renameDirectory(defaultDir, "resource", "mod_agricraft", false);
 
         // Transfer Defaults
         if(AgriCraft.instance.getConfig().generateMissingDefaultJsons()) {

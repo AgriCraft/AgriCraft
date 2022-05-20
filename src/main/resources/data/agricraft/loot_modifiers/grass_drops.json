@@ -18,17 +18,17 @@
   "chance": 0.2,
   "seeds": [
     {
-      "plant": "vanilla:carrot_plant",
+      "plant": "minecraft:carrot_plant",
       "stats": [1, 1],
       "weight": 10
     },
     {
-      "plant": "vanilla:potato_plant",
+      "plant": "minecraft:potato_plant",
       "stats": [1, 1],
       "weight": 10
     },
     {
-      "plant": "vanilla:wheat_plant",
+      "plant": "minecraft:wheat_plant",
       "stats": [1, 1],
       "weight": 10
     }

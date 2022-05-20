@@ -46,7 +46,10 @@ public class JournalDataDrawerPlant extends JournalDataDrawerBase<PlantPage> {
             context.drawText(transforms, page.getPlant().getSeedName(), 30, 10);
         }
         // Description
-        float offset = context.drawText(transforms, page.getPlant().getInformation(), 10, 30, 0.70F);
+        float offset = 0.0F;
+        if(!page.getPlant().getInformation().getString().isEmpty()) {
+            offset = context.drawText(transforms, page.getPlant().getInformation(), 10, 30, 0.70F);
+        }
         // Growth requirements
         this.drawGrowthRequirements(page, context, transforms,35 + offset);
         // Seed
