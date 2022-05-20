@@ -38,6 +38,10 @@ public class CapabilityGreenHouse implements IInfSerializableCapabilityImplement
 
     private CapabilityGreenHouse() {}
 
+    public static boolean isInGreenHouse(Level world, BlockPos pos) {
+        return getGreenHouse(world, pos).map(greenHouse -> greenHouse.isInside(world, pos)).orElse(false);
+    }
+
     public static Optional<GreenHouse> getGreenHouse(Level world, int id) {
         return getInstance().getCapability(world).map(o -> o).flatMap(impl -> impl.getGreenHouse(id));
     }

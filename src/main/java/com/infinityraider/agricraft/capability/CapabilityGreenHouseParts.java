@@ -79,20 +79,14 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
     }
 
     public static class Impl implements Serializable<Impl> {
-        private final ChunkPos chunk;
         private final Map<Integer, GreenHousePart> greenhouses;
 
         protected Impl(LevelChunk chunk) {
-            this.chunk = chunk.getPos();
             this.greenhouses = Maps.newHashMap();
         }
 
         public Optional<GreenHousePart> getPartHolder(int id) {
             return Optional.ofNullable(this.greenhouses.get(id));
-        }
-
-        public ChunkPos getChunkPos() {
-            return this.chunk;
         }
 
         protected void add(GreenHousePart part) {
@@ -123,7 +117,7 @@ public class CapabilityGreenHouseParts implements IInfSerializableCapabilityImpl
         public void deserializeNBT(CompoundTag tag) {
             this.greenhouses.clear();
             AgriNBT.stream(tag, AgriNBT.ENTRIES).forEach(entry -> {
-                GreenHousePart part = new GreenHousePart(this.getChunkPos(), entry);
+                GreenHousePart part = new GreenHousePart(entry);
                 this.greenhouses.put(part.getId(), part);
             });
         }

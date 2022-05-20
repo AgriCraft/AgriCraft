@@ -1,10 +1,8 @@
 package com.infinityraider.agricraft.render.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
-import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
-import com.infinityraider.agricraft.content.world.greenhouse.GreenHouse;
 import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseState;
 import com.infinityraider.agricraft.util.debug.DebugModeGreenHouse;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -18,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,8 +66,9 @@ public class BlockGreenHouseAirRenderer {
             for(int y = -RANGE; y <= RANGE; y++) {
                 for(int z = -RANGE; z <= RANGE; z++) {
                     pos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
-                    if(world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir) {
-                        GreenHouseState state = CapabilityGreenHouse.getGreenHouse(world, pos).map(GreenHouse::getState).orElse(GreenHouseState.REMOVED);
+                    BlockState air = world.getBlockState(pos);
+                    if(air.getBlock() instanceof BlockGreenHouseAir) {
+                        GreenHouseState state = BlockGreenHouseAir.getState(air);
                         this.renderWireFrameCube(builder, matrix4f, pos, state);
                     }
                 }

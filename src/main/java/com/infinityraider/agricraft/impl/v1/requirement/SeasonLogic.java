@@ -3,9 +3,11 @@ package com.infinityraider.agricraft.impl.v1.requirement;
 import com.infinityraider.agricraft.api.v1.plugin.IAgriPlugin;
 import com.infinityraider.agricraft.api.v1.requirement.AgriSeason;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriSeasonLogic;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.function.BiFunction;
@@ -39,7 +41,7 @@ public class SeasonLogic implements IAgriSeasonLogic {
     }
 
     protected boolean isGreenHouse(Level world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof BlockGreenHouseAir;
+        return CapabilityGreenHouse.isInGreenHouse(world, pos);
     }
 
     @Nullable

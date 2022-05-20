@@ -1,5 +1,6 @@
 package com.infinityraider.agricraft.content.world.greenhouse;
 
+import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -20,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class BlockGreenHouseAir extends BlockBase {
     public static InfProperty<GreenHouseState> STATE = InfProperty.Creators.create("greenhouse_state", GreenHouseState.class, GreenHouseState.REMOVED);
-    private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().build();
+    private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().add(STATE).build();
 
     public BlockGreenHouseAir() {
         super(Names.Blocks.GREENHOUSE_AIR,  Properties.of(Material.AIR)
@@ -29,6 +30,21 @@ public class BlockGreenHouseAir extends BlockBase {
                 .air()
                 .noDrops()
         );
+    }
+
+    public static BlockState withState(GreenHouseState state) {
+        return withState(AgriApi.getAgriContent().getBlocks().getGreenHouseAirBlock().defaultBlockState(), state);
+    }
+
+    public static BlockState withState(BlockState air, GreenHouseState state) {
+        if(air.hasProperty(STATE.getProperty())) {
+            return STATE.apply(air, state);
+        }
+        return air;
+    }
+
+    public static GreenHouseState getState(BlockState state) {
+        return state.hasProperty(STATE.getProperty()) ? STATE.fetch(state) : GreenHouseState.REMOVED;
     }
 
     @Nonnull
