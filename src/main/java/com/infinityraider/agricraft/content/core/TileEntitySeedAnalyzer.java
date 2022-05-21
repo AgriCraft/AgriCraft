@@ -253,10 +253,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyCo
 
     @Override
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @Nullable Direction direction) {
+        if(stack.isEmpty()) {
+            return true;
+        }
         switch (index) {
             case SLOT_SEED:
                 if(this.getSeed().isEmpty()) {
-                    return stack.isEmpty() || stack.getItem() instanceof IAgriGeneCarrierItem;
+                    return stack.getItem() instanceof IAgriGeneCarrierItem;
                 } else {
                     if(ItemStack.matches(stack, this.getSeed()) && ItemStack.tagMatches(stack, this.getSeed())) {
                         return this.getSeed().getCount() + stack.getCount() <= stack.getMaxStackSize();
@@ -266,9 +269,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements IWorldlyCo
                 }
             case SLOT_JOURNAL:
                 if(this.getJournal().isEmpty()) {
-                    return stack.isEmpty() || stack.getItem() instanceof IAgriJournalItem;
+                    return stack.getItem() instanceof IAgriJournalItem;
                 } else {
-                    return stack.isEmpty();
+                    return false;
                 }
             default: return false;
         }
