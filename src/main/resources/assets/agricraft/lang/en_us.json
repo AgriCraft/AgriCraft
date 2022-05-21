@@ -92,8 +92,8 @@
   "agricraft.tooltip.seed_bag_main_hand": "Use from main hand to plant seeds directly from the bag",
   "agricraft.tooltip.seed_bag_off_hand": "Use from off hand to insert or extract seeds to your main hand",
   "agricraft.tooltip.seed_bag_scrolling": "Shift + Scroll to change sorting modes",
-  "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, you will lose track of my seeds.",
-  "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps you should try enchanting it first.",
+  "agricraft.tooltip.seed_bag_inactive_1": "Better not use it like this, I will lose track of my seeds.",
+  "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps I should try enchanting it first.",
 
   "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
   "agricraft.tooltip.analyzer.l2": "Right click to observe, shift right click to insert / extract",

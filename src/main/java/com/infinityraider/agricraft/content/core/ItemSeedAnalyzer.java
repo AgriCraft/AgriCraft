@@ -27,5 +27,6 @@ public class ItemSeedAnalyzer extends BlockItemBase {
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level world, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag advanced) {
         tooltip.add(AgriToolTips.SEED_ANALYZER_L1);
         tooltip.add(AgriToolTips.SEED_ANALYZER_L2);
+        tooltip.add(AgriToolTips.SEED_ANALYZER_L3);
     }
 }
