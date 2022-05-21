@@ -251,10 +251,13 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
 
     @Override
     public boolean canInsertItem(int index, ItemStack stack, @Nullable Direction direction) {
+        if(stack.isEmpty()) {
+            return true;
+        }
         switch (index) {
             case SLOT_SEED:
                 if(this.getSeed().isEmpty()) {
-                    return stack.isEmpty() || stack.getItem() instanceof IAgriGeneCarrierItem;
+                    return stack.getItem() instanceof IAgriGeneCarrierItem;
                 } else {
                     if(ItemStack.areItemsEqual(stack, this.getSeed()) && ItemStack.areItemStackTagsEqual(stack, this.getSeed())) {
                         return this.getSeed().getCount() + stack.getCount() <= stack.getMaxStackSize();
@@ -264,9 +267,9 @@ public class TileEntitySeedAnalyzer extends TileEntityBase implements ISidedInve
                 }
             case SLOT_JOURNAL:
                 if(this.getJournal().isEmpty()) {
-                    return stack.isEmpty() || stack.getItem() instanceof IAgriJournalItem;
+                    return stack.getItem() instanceof IAgriJournalItem;
                 } else {
-                    return stack.isEmpty();
+                    return false;
                 }
             default: return false;
         }
