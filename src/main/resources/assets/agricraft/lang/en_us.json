@@ -96,7 +96,8 @@
   "agricraft.tooltip.seed_bag_inactive_2": "Mayhaps you should try enchanting it first.",
 
   "agricraft.tooltip.analyzer.l1": "Can be used to inspect genomes of seeds",
-  "agricraft.tooltip.analyzer.l2": "While observing, scroll to cycle through the genes",
+  "agricraft.tooltip.analyzer.l2": "Right click to observe, shift right click to insert / extract",
+  "agricraft.tooltip.analyzer.l3": "While observing, scroll to cycle through the genes",
   "agricraft.tooltip.tank.l1": "Try not to fall in... or at least not before attaching a ladder",
   "agricraft.tooltip.sprinkler.l1": "Attaches to the bottom of Irrigation Channels",
   "agricraft.tooltip.valve.l1": "Attach to Irrigation Channels to control their flow",

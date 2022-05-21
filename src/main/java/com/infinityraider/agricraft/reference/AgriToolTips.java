@@ -83,6 +83,8 @@ public class AgriToolTips {
             = new TranslatableComponent("agricraft.tooltip.analyzer.l1").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent SEED_ANALYZER_L2
             = new TranslatableComponent("agricraft.tooltip.analyzer.l2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent SEED_ANALYZER_L3
+            = new TranslatableComponent("agricraft.tooltip.analyzer.l3").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GRATE_L1
             = new TranslatableComponent("agricraft.tooltip.grate.l1").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GRATE_L2
