@@ -14,6 +14,7 @@ public abstract class Names {
         public static final String CHANNEL = "irrigation_channel";
         public static final String CHANNEL_HOLLOW = "irrigation_channel_hollow";
         public static final String GREENHOUSE_AIR = "greenhouse_air";
+        public static final String GREENHOUSE_MONITOR = "greenhouse_monitor";
     }
 
     public static final class Items {

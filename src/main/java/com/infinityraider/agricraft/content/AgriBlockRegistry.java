@@ -4,7 +4,8 @@ import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
-import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
+import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
+import com.infinityraider.agricraft.content.world.BlockGreenHouseMonitor;
 import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
 import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
 
@@ -35,6 +36,7 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
 
     // World
     public final RegistryInitializer<BlockGreenHouseAir> greenhouse_air;
+    public final RegistryInitializer<BlockGreenHouseMonitor> greenhouse_monitor;
 
     private AgriBlockRegistry() {
         super();
@@ -51,6 +53,7 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
         this.grate = this.block(BlockGrate::new);
 
         this.greenhouse_air = this.block(BlockGreenHouseAir::new);
+        this.greenhouse_monitor = this.block(BlockGreenHouseMonitor::new);
     }
 
     @Override
@@ -91,5 +94,10 @@ public final class AgriBlockRegistry extends ModContentRegistry implements IAgri
     @Override
     public BlockGreenHouseAir getGreenHouseAirBlock() {
         return this.greenhouse_air.get();
+    }
+
+    @Override
+    public BlockGreenHouseMonitor getGreenHouseMonitorBlock() {
+        return this.greenhouse_monitor.get();
     }
 }

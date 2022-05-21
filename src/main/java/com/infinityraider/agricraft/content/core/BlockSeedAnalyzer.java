@@ -128,7 +128,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
     @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
-        return current.getMaterial().isReplaceable();
+        return current.equals(state) || current.getMaterial().isReplaceable();
     }
 
     @Override

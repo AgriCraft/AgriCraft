@@ -6,6 +6,7 @@ import com.infinityraider.agricraft.content.core.*;
 import com.infinityraider.agricraft.content.decoration.*;
 import com.infinityraider.agricraft.content.irrigation.*;
 import com.infinityraider.agricraft.content.tools.*;
+import com.infinityraider.agricraft.content.world.ItemGreenHouseMonitor;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.utility.registration.ModContentRegistry;
 import com.infinityraider.infinitylib.utility.registration.RegistryInitializer;
@@ -39,6 +40,8 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     public final RegistryInitializer<ItemTrowel> trowel;
     public final RegistryInitializer<ItemSeedBag> seed_bag;
 
+    public final RegistryInitializer<ItemGreenHouseMonitor> greenhouse_monitor;
+
     public final RegistryInitializer<ItemAgriNugget> nugget_copper;
     public final RegistryInitializer<ItemAgriNugget> nugget_coal;
     public final RegistryInitializer<ItemAgriNugget> nugget_diamond ;
@@ -71,6 +74,8 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
         this.rake_iron = this.item(() -> new ItemRake(ItemRake.IRON_LOGIC));
         this.trowel = this.item(ItemTrowel::new);
         this.seed_bag = this.item(ItemSeedBag::new);
+
+        this.greenhouse_monitor = this.item(ItemGreenHouseMonitor::new);
 
         this.nugget_copper = AgriCraft.instance.getConfig().enableCopperNugget() ? this.item(() -> new ItemAgriNugget(Names.Items.NUGGET + "_" + Names.Nuggets.COPPER)) : null;
         this.nugget_coal = AgriCraft.instance.getConfig().enableCoalNugget() ? this.item(() -> new ItemAgriNugget.Burnable(Names.Items.NUGGET + "_" + Names.Nuggets.COAL)) : null;
@@ -178,6 +183,11 @@ public final class AgriItemRegistry extends ModContentRegistry implements IAgriC
     @Override
     public ItemGrate getGrateItem() {
         return grate.get();
+    }
+
+    @Override
+    public ItemGreenHouseMonitor getGreenHouseMonitorItem() {
+        return greenhouse_monitor.get();
     }
 
     @Nullable

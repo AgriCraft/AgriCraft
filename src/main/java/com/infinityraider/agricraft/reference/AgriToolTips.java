@@ -99,6 +99,12 @@ public class AgriToolTips {
             = new TranslatableComponent("agricraft.tooltip.valve.l2").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent VALVE_L3
             = new TranslatableComponent("agricraft.tooltip.valve.l3").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L1
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l1").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L2
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l2").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L3
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
 
     public static final MutableComponent SNEAK_INFO
             = new TranslatableComponent("agricraft.tooltip.sneak_info").withStyle(ChatFormatting.DARK_GRAY);

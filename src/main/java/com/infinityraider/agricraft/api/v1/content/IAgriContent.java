@@ -2,6 +2,8 @@ package com.infinityraider.agricraft.api.v1.content;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.items.*;
+import com.infinityraider.agricraft.content.world.BlockGreenHouseMonitor;
+import com.infinityraider.agricraft.content.world.ItemGreenHouseMonitor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -117,6 +119,9 @@ public interface IAgriContent {
 
         /** @return the AgriCraft Greenhouse Air block */
         Block getGreenHouseAirBlock();
+
+        /** @return the AgriCraft Greenhouse Monitor block */
+        BlockGreenHouseMonitor getGreenHouseMonitorBlock();
     }
 
     /**
@@ -198,6 +203,9 @@ public interface IAgriContent {
 
         /** @return the AgriCraft Grate Item */
         Item getGrateItem();
+
+        /** @return the AgriCraft Greenhouse Monitor Item Item */
+        ItemGreenHouseMonitor getGreenHouseMonitorItem();
 
         /** @return the AgriCraft Copper Nugget Item (can be null if disabled in the config) */
         @Nullable
