@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -165,6 +167,18 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos) {
+        throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos) {
         throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
     }
 

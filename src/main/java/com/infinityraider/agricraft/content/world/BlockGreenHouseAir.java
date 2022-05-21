@@ -1,6 +1,7 @@
-package com.infinityraider.agricraft.content.world.greenhouse;
+package com.infinityraider.agricraft.content.world;
 
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -20,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class BlockGreenHouseAir extends BlockBase {
-    public static InfProperty<GreenHouseState> STATE = InfProperty.Creators.create("greenhouse_state", GreenHouseState.class, GreenHouseState.REMOVED);
+    public static InfProperty<IAgriGreenHouse.State> STATE = InfProperty.Creators.create("greenhouse_state", IAgriGreenHouse.State.class, IAgriGreenHouse.State.REMOVED);
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().add(STATE).build();
 
     public BlockGreenHouseAir() {
@@ -32,19 +33,19 @@ public class BlockGreenHouseAir extends BlockBase {
         );
     }
 
-    public static BlockState withState(GreenHouseState state) {
+    public static BlockState withState(IAgriGreenHouse.State state) {
         return withState(AgriApi.getAgriContent().getBlocks().getGreenHouseAirBlock().defaultBlockState(), state);
     }
 
-    public static BlockState withState(BlockState air, GreenHouseState state) {
+    public static BlockState withState(BlockState air, IAgriGreenHouse.State state) {
         if(air.hasProperty(STATE.getProperty())) {
             return STATE.apply(air, state);
         }
         return air;
     }
 
-    public static GreenHouseState getState(BlockState state) {
-        return state.hasProperty(STATE.getProperty()) ? STATE.fetch(state) : GreenHouseState.REMOVED;
+    public static IAgriGreenHouse.State getState(BlockState state) {
+        return state.hasProperty(STATE.getProperty()) ? STATE.fetch(state) : IAgriGreenHouse.State.REMOVED;
     }
 
     @Nonnull

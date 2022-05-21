@@ -10,6 +10,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -22,10 +23,12 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
+import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
 import com.infinityraider.agricraft.content.world.WorldGenPlantManager;
+import com.infinityraider.agricraft.handler.GreenHouseHandler;
 import com.infinityraider.agricraft.handler.JournalViewPointHandler;
 import com.infinityraider.agricraft.handler.MagnifyingGlassViewHandler;
 import com.infinityraider.agricraft.handler.VanillaSeedConversionHandler;
@@ -50,6 +53,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -224,6 +228,18 @@ public class AgriApiConnector implements IAgriApiConnector {
             return fertilizerAdapterizer.valueOf(itemStack);
         }
         return Optional.empty();
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos) {
+        return CapabilityGreenHouse.getGreenHouse(world, pos).map(gh -> gh);
+    }
+
+    @Nonnull
+    @Override
+    public Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos) {
+        return GreenHouseHandler.getInstance().checkAndFormGreenHouse(world, pos);
     }
 
     @Nonnull

@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -325,6 +327,7 @@ public final class AgriApi {
      * version of AgriCraft is not currently installed.
      * </p>
      *
+     *
      * @param world the World object
      * @param pos the BlockPos holding the coordinates
      * @return Optional containing an IAgriCrop object, or empty if the coordinates do not correspond with a crop
@@ -340,6 +343,7 @@ public final class AgriApi {
      * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
      * version of AgriCraft is not currently installed.
      * </p>
+     *
      *
      * @param world the World object
      * @param pos the BlockPos holding the coordinates
@@ -363,6 +367,38 @@ public final class AgriApi {
     @Nonnull
     public static Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack) {
         return AgriApi.CONNECTOR.getFertilizer(itemStack);
+    }
+
+    /**
+     * Attempts to fetch an existing greenhouse from the world
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *     *
+     * @param world the world
+     * @param pos the position
+     * @return optional containing a greenhouse, or empty if there was none
+     */
+    @Nonnull
+    public static Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos) {
+        return AgriApi.CONNECTOR.getGreenHouse(world, pos);
+    }
+
+    /**
+     * Attempts to create a new greenhouse in the world
+     * <p>
+     * Notice: This method will throw an {@link OperationNotSupportedException} if the corresponding
+     * version of AgriCraft is not currently installed.
+     * </p>
+     *     *
+     * @param world the world
+     * @param pos the position
+     * @return optional containing a greenhouse, or empty if there was none
+     */
+    @Nonnull
+    public static Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos) {
+        return AgriApi.CONNECTOR.createGreenHouse(world, pos);
     }
 
     /**
@@ -633,7 +669,7 @@ public final class AgriApi {
         try {
             clazz = Class.forName("com.infinityraider.agricraft.impl.v1.AgriApiConnector").asSubclass(IAgriApiConnector.class);
         } catch (ClassNotFoundException exception) {
-            logger.log(Level.INFO, marker, "The AgriCraft APIv1 was unable find AgriCraft! Is AgriCraft missing from your modpack?");
+            logger.log(org.apache.logging.log4j.Level.INFO, marker, "The AgriCraft APIv1 was unable find AgriCraft! Is AgriCraft missing from your modpack?");
             return IAgriApiConnector.FAKE;
         } catch (ClassCastException exception) {
             throw new RuntimeException("The AgriCraft APIv1 attempted to connect to AgriCraft, but instead found an invalid class! This is a serious error that should never happen! Report this error immediately!", exception);
@@ -662,7 +698,7 @@ public final class AgriApi {
         }
 
         // Step V. Celebrate Connection Success
-        logger.log(Level.INFO, marker, "The AgriCraft APIv1 successfully connected to AgriCraft! Thank you for including AgriCraft in your modpack!");
+        logger.log(org.apache.logging.log4j.Level.INFO, marker, "The AgriCraft APIv1 successfully connected to AgriCraft! Thank you for including AgriCraft in your modpack!");
 
         // Step VI. Return The Connector
         return instance;

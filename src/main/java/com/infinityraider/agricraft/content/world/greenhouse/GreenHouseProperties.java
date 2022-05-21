@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.content.world.greenhouse;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -29,14 +30,14 @@ class GreenHouseProperties {
         this.gaps = tag.contains(AgriNBT.REMOVED) ? tag.getInt(AgriNBT.REMOVED) : 0;
     }
 
-    public GreenHouseState getState() {
+    public IAgriGreenHouse.State getState() {
         if(this.hasGaps()) {
-            return GreenHouseState.GAPS;
+            return IAgriGreenHouse.State.GAPS;
         }
         if(this.hasSufficientGlass()) {
-            return GreenHouseState.COMPLETE;
+            return IAgriGreenHouse.State.COMPLETE;
         } else {
-            return GreenHouseState.INSUFFICIENT_GLASS;
+            return IAgriGreenHouse.State.INSUFFICIENT_GLASS;
         }
     }
 

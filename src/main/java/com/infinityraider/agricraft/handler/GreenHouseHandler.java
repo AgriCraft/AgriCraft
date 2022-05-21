@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.content.AgriTags;
+import com.infinityraider.agricraft.api.v1.content.world.GreenHouseEvent;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseBlock;
 import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseConfiguration;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.VanillaGameEvent;
@@ -40,17 +43,21 @@ public class GreenHouseHandler {
         this.tasks = Maps.newConcurrentMap();
     }
 
-    public void checkAndFormGreenHouse(Level world, BlockPos pos) {
+    public Optional<IAgriGreenHouse> checkAndFormGreenHouse(Level world, BlockPos pos) {
         if(world.isClientSide()) {
-            return;
+            return Optional.empty();
         }
         BlockState state = world.getBlockState(pos);
         if (!state.isAir()) {
-            return;
+            return Optional.empty();
         }
-        new GreenHouseFormer(world, pos).getGreenHouseConfig()
+        return new GreenHouseFormer(world, pos).getGreenHouseConfig()
                 .flatMap(config -> CapabilityGreenHouse.addGreenHouse(world, config))
-                .ifPresent(greenHouse -> greenHouse.convertAirBlocks(world));
+                .map(greenHouse -> {
+                    greenHouse.convertAirBlocks(world);
+                    MinecraftForge.EVENT_BUS.post(new GreenHouseEvent.Created(greenHouse));
+                    return greenHouse;
+                });
     }
 
     @SubscribeEvent

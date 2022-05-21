@@ -7,6 +7,7 @@ import com.infinityraider.agricraft.api.v1.config.IAgriConfig;
 import com.infinityraider.agricraft.api.v1.content.IAgriContent;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriCropStickItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.api.v1.content.world.IWorldGenPlantManager;
 import com.infinityraider.agricraft.api.v1.crop.CropCapability;
 import com.infinityraider.agricraft.api.v1.crop.IAgriCrop;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
@@ -104,6 +106,12 @@ public interface IAgriApiConnector {
 
     @Nonnull
     Optional<IAgriFertilizer> getFertilizer(ItemStack itemStack);
+
+    @Nonnull
+    Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos);
+
+    @Nonnull
+    Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos);
 
     @Nonnull
     ItemStack attemptConversionToAgriSeed(ItemStack original);

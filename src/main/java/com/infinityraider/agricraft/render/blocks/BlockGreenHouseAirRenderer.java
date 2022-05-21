@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.render.blocks;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
-import com.infinityraider.agricraft.content.world.greenhouse.BlockGreenHouseAir;
-import com.infinityraider.agricraft.content.world.greenhouse.GreenHouseState;
+import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
 import com.infinityraider.agricraft.util.debug.DebugModeGreenHouse;
 import com.infinityraider.infinitylib.reference.Constants;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -68,7 +68,7 @@ public class BlockGreenHouseAirRenderer {
                     pos.set(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                     BlockState air = world.getBlockState(pos);
                     if(air.getBlock() instanceof BlockGreenHouseAir) {
-                        GreenHouseState state = BlockGreenHouseAir.getState(air);
+                        IAgriGreenHouse.State state = BlockGreenHouseAir.getState(air);
                         this.renderWireFrameCube(builder, matrix4f, pos, state);
                     }
                 }
@@ -79,7 +79,7 @@ public class BlockGreenHouseAirRenderer {
         buffer.endBatch(this.getRenderType());
     }
 
-    protected void renderWireFrameCube(VertexConsumer builder, Matrix4f transforms, BlockPos pos, GreenHouseState state) {
+    protected void renderWireFrameCube(VertexConsumer builder, Matrix4f transforms, BlockPos pos, IAgriGreenHouse.State state) {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -100,7 +100,7 @@ public class BlockGreenHouseAirRenderer {
         this.drawLine(builder, transforms, x + P2, y + P2, z + P1, x + P2, y + P2, z + P2, state);
     }
 
-    protected void drawLine(VertexConsumer builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2, GreenHouseState state) {
+    protected void drawLine(VertexConsumer builder, Matrix4f transforms, float x1, float y1, float z1, float x2, float y2, float z2, IAgriGreenHouse.State state) {
         builder.vertex(transforms, x1, y1, z1)
                 .color(state.getRed(), state.getGreen(), state.getBlue(), 1.0F)
                 .normal(x2 - x1, y2 - y1, z2 - z1)

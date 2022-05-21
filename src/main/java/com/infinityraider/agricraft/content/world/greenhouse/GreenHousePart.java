@@ -2,7 +2,9 @@ package com.infinityraider.agricraft.content.world.greenhouse;
 
 import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouseParts;
+import com.infinityraider.agricraft.content.world.BlockGreenHouseAir;
 import com.infinityraider.agricraft.reference.AgriNBT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,9 +22,9 @@ import java.util.Map;
 public class GreenHousePart {
     private final int id;
     private final Map<BlockPos, GreenHouseBlock> blocks;
-    private GreenHouseState state;
+    private IAgriGreenHouse.State state;
 
-    protected GreenHousePart(int id, LevelChunk chunk, Map<BlockPos, GreenHouseBlock> blocks, GreenHouseState state) {
+    protected GreenHousePart(int id, LevelChunk chunk, Map<BlockPos, GreenHouseBlock> blocks, IAgriGreenHouse.State state) {
         this.id = id;
         this.blocks =blocks;
         CapabilityGreenHouseParts.addPart(chunk, this);
@@ -38,18 +40,18 @@ public class GreenHousePart {
                     boolean ceiling = blockTag.getBoolean(AgriNBT.FLAG);
                     this.blocks.put(pos, new GreenHouseBlock(pos, type, ceiling));
                 });
-        this.state = tag.contains(AgriNBT.STATE) ? GreenHouseState.values()[tag.getInt(AgriNBT.STATE)] : GreenHouseState.COMPLETE;
+        this.state = tag.contains(AgriNBT.STATE) ? IAgriGreenHouse.State.values()[tag.getInt(AgriNBT.STATE)] : IAgriGreenHouse.State.COMPLETE;
     }
 
     public int getId() {
         return this.id;
     }
 
-    public GreenHouseState getState() {
+    public IAgriGreenHouse.State getState() {
         return this.state;
     }
 
-    protected void updateState(Level world, GreenHouseState state) {
+    protected void updateState(Level world, IAgriGreenHouse.State state) {
         if(state != this.getState()) {
             this.state = state;
             this.replaceAirBlocks(world);

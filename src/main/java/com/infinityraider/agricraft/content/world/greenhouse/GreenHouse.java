@@ -1,6 +1,8 @@
 package com.infinityraider.agricraft.content.world.greenhouse;
 
 import com.google.common.collect.Maps;
+import com.infinityraider.agricraft.api.v1.content.world.GreenHouseEvent;
+import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.capability.CapabilityGreenHouseParts;
 import com.infinityraider.agricraft.reference.AgriNBT;
@@ -11,23 +13,24 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class GreenHouse {
+public class GreenHouse implements IAgriGreenHouse {
     private int id;
 
-    private GreenHouseState state;
+    private IAgriGreenHouse.State state;
     private final GreenHouseProperties properties;
     private final Map<ChunkPos, PartCache> parts;
 
     public GreenHouse( Level world, int id, GreenHouseConfiguration configuration) {
         this.id = id;
         this.properties = configuration.getProperties();
-        this.state = this.getProperties().hasSufficientGlass() ? GreenHouseState.COMPLETE : GreenHouseState.INSUFFICIENT_GLASS;
+        this.state = this.getProperties().hasSufficientGlass() ? IAgriGreenHouse.State.COMPLETE : IAgriGreenHouse.State.INSUFFICIENT_GLASS;
         this.parts = configuration.parts().collect(Collectors.toMap(
                 Tuple::getA,
                 t -> new PartCache(id, t.getA()).initialize(new GreenHousePart(id, world.getChunk(t.getA().x, t.getA().z), t.getB(), this.getState()))
@@ -50,7 +53,7 @@ public class GreenHouse {
         // read properties
         this.properties = new GreenHouseProperties(tag.getCompound(AgriNBT.CONTENTS));
         // read state
-        this.state = GreenHouseState.values()[tag.getInt(AgriNBT.FLAG)];
+        this.state = IAgriGreenHouse.State.values()[tag.getInt(AgriNBT.FLAG)];
     }
 
     public int getId() {
@@ -61,13 +64,13 @@ public class GreenHouse {
         this.id = id;
     }
 
-    public GreenHouseState getState() {
+    public IAgriGreenHouse.State getState() {
         return this.state;
     }
 
     protected void resetState(Level world) {
         if(!this.isRemoved()) {
-            GreenHouseState state = this.getProperties().getState();
+            IAgriGreenHouse.State state = this.getProperties().getState();
             if (state != this.getState()) {
                 this.state = state;
                 this.parts.values().forEach(cache -> {
@@ -76,16 +79,13 @@ public class GreenHouse {
                         part.updateState(world, this.getState());
                     }
                 });
+                MinecraftForge.EVENT_BUS.post(new GreenHouseEvent.Updated(this));
             }
         }
     }
 
-    public boolean hasGaps() {
-        return this.getProperties().hasGaps();
-    }
-
-    public boolean isRemoved() {
-        return this.getState().isRemoved();
+    protected GreenHouseProperties getProperties() {
+        return this.properties;
     }
 
     public boolean isEmpty() {
@@ -96,11 +96,38 @@ public class GreenHouse {
         if(world.isClientSide()) {
             return;
         }
-        this.state = GreenHouseState.REMOVED;
+        if(this.state != State.REMOVED) {
+            this.state = IAgriGreenHouse.State.REMOVED;
+            MinecraftForge.EVENT_BUS.post(new GreenHouseEvent.Removed(this));
+        }
         this.parts.entrySet().removeIf(entry -> entry.getValue().remove(world));
         if(this.isEmpty()) {
             CapabilityGreenHouse.removeGreenHouse(world, this.getId());
         }
+    }
+
+    public BlockPos getMin() {
+        return this.getProperties().getMin();
+    }
+
+    public BlockPos getMax() {
+        return this.getProperties().getMax();
+    }
+
+    public boolean isInside(Level world, BlockPos pos) {
+        return this.isComplete() && this.getType(world, pos).isInterior();
+    }
+
+    public boolean isPartOf(Level world, BlockPos pos) {
+        return !this.isRemoved() && !this.getType(world, pos).isExterior();
+    }
+
+    public GreenHouseBlock.Type getType(Level world, BlockPos pos) {
+        // check if the position is in range of the greenhouse first, as it is cheaper
+        if(this.isInRange(pos)) {
+            return this.getPart(world, pos).map(part -> part.getType(pos)).orElse(GreenHouseBlock.Type.EXTERIOR);
+        }
+        return GreenHouseBlock.Type.EXTERIOR;
     }
 
     public void onChunkLoaded(Level world, ChunkPos pos) {
@@ -135,44 +162,12 @@ public class GreenHouse {
         }
     }
 
-    protected GreenHouseProperties getProperties() {
-        return this.properties;
-    }
-
-    public BlockPos getMin() {
-        return this.getProperties().getMin();
-    }
-
-    public BlockPos getMax() {
-        return this.getProperties().getMax();
-    }
-
-    public boolean isComplete() {
-        return this.getState().isComplete();
-    }
-
     public Optional<GreenHousePart> getPart(Level world, BlockPos pos) {
         return this.getPart(world, new ChunkPos(pos));
     }
 
     public Optional<GreenHousePart> getPart(Level world, ChunkPos pos) {
         return Optional.ofNullable(this.parts.getOrDefault(pos, null)).map(cache -> cache.getPart(world));
-    }
-
-    public GreenHouseBlock.Type getType(Level world, BlockPos pos) {
-        // check if the position is in range of the greenhouse first, as it is cheaper
-        if(this.isInRange(pos)) {
-            return this.getPart(world, pos).map(part -> part.getType(pos)).orElse(GreenHouseBlock.Type.EXTERIOR);
-        }
-        return GreenHouseBlock.Type.EXTERIOR;
-    }
-
-    public boolean isInside(Level world, BlockPos pos) {
-        return this.isComplete() && this.getType(world, pos).isInterior();
-    }
-
-    public boolean isPartOf(Level world, BlockPos pos) {
-        return !this.getType(world, pos).isExterior();
     }
 
     public void convertAirBlocks(Level world) {
@@ -206,7 +201,7 @@ public class GreenHouse {
 
     protected void checkAndUpdateState(Level world) {
         if(!this.isRemoved() && !this.hasGaps()) {
-            this.state = this.getProperties().hasSufficientGlass() ? GreenHouseState.COMPLETE : GreenHouseState.INSUFFICIENT_GLASS;
+            this.state = this.getProperties().hasSufficientGlass() ? IAgriGreenHouse.State.COMPLETE : IAgriGreenHouse.State.INSUFFICIENT_GLASS;
             this.resetState(world);
         }
     }
