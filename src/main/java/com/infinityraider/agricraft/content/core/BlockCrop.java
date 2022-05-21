@@ -367,7 +367,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @Deprecated
     @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial().isReplaceable() && AgriApi.getSoil(world, pos.below()).isPresent();
+        return AgriApi.getSoil(world, pos.below()).isPresent();
     }
 
     @Override
