@@ -260,7 +260,7 @@ public abstract class Config implements IAgriConfig, ConfigurationHandler.SidedM
             this.irrigatedGreenHouseSpawnWeight = builder.comment("\nThe weight for spawning irrigated greenhouses in villages (set to 0 to disable spawning of irrigated greenhouses)")
                     .defineInRange("Greenhouse spawn weight", 10, 0, 1000);
             this.greenHouseBlockLimit = builder.comment("\nThe maximum internal size of greenhouses, the larger this is, the longer greenhouse scans will take")
-                    .defineInRange("Greenhouse block size limit", 512, 512, Integer.MAX_VALUE);
+                    .defineInRange("Greenhouse block size limit", 1024, 512, Integer.MAX_VALUE);
             this.greenHouseCeilingGlassFraction = builder.comment("\nThe minimum fraction of glass-type blocks a greenhouse ceiling needs in order to work (0.0 = none, 1.0 = all)" +
                     "\nBe careful when modifying this value as it might break village greenhouses")
                     .defineInRange("Greenhouse ceiling glass fraction", 0.40, 0.0, 1.0);
