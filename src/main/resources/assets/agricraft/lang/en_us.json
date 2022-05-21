@@ -9,6 +9,7 @@
   "block.agricraft.sprinkler": "Sprinkler",
   "block.agricraft.grate": "Wooden Grate",
   "block.agricraft.greenhouse_air": "Air",
+  "block.agricraft.greenhouse_monitor": "Greenhouse Weather Monitor",
 
   "item.agricraft.debugger": "Debugger",
 
@@ -109,6 +110,13 @@
 
   "agricraft.tooltip.grate.l1": "A decorative block which can also be climbed",
   "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
+
+  "agricraft.tooltip.greenhouse_monitor.l1": "Shows the status of a greenhouse, can be placed in the world as well",
+  "agricraft.tooltip.greenhouse_monitor.l2": " - Wildly oscillating temperature and humidity indicates lack of a greenhouse",
+  "agricraft.tooltip.greenhouse_monitor.l3": " - Slowly oscillating temperature and humidity indicates the presence of gaps",
+  "agricraft.tooltip.greenhouse_monitor.l4": " - Low, stable temperature indicates insufficient glass",
+  "agricraft.tooltip.greenhouse_monitor.l5": " - High, stable temperature indicates the greenhouse is operational",
+  "agricraft.tooltip.greenhouse_monitor.l6": " (Might require a right click to properly detect a greenhouse)",
 
   "agricraft.tooltip.sneak_info": "(Hold <Sneak> for more info)",
 

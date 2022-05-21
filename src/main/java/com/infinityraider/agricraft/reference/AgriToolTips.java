@@ -105,6 +105,12 @@ public class AgriToolTips {
             = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l2").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GREENHOUSE_MONITOR_L3
             = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L4
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L5
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+    public static final MutableComponent GREENHOUSE_MONITOR_L6
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
 
     public static final MutableComponent SNEAK_INFO
             = new TranslatableComponent("agricraft.tooltip.sneak_info").withStyle(ChatFormatting.DARK_GRAY);

@@ -8,14 +8,18 @@ import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.stream.IntStream;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -67,10 +71,16 @@ public class BlockGreenHouseMonitor extends BlockBase {
             // apply orientation
             state = ORIENTATION.apply(
                     this.fluidlog(state, context.getLevel(), context.getClickedPos()),
-                    context.getHorizontalDirection().getOpposite());
+                    context.getHorizontalDirection());
             // return the state
             return state;
         }
         return null;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public RenderType getRenderType() {
+        return RenderType.cutout();
     }
 }

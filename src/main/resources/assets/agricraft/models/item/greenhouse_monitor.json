@@ -1,0 +1,28 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "agricraft:greenhouse": 0
+      },
+      "model": "agricraft:item/greenhouse_monitor_complete"
+    },
+    {
+      "predicate": {
+        "agricraft:greenhouse": 1
+      },
+      "model": "agricraft:item/greenhouse_monitor_insufficient_glass"
+    },
+    {
+      "predicate": {
+        "agricraft:greenhouse": 2
+      },
+      "model": "agricraft:item/greenhouse_monitor_gaps"
+    },
+    {
+      "predicate": {
+        "agricraft:greenhouse": 3
+      },
+      "model": "agricraft:item/greenhouse_monitor_removed"
+    }
+  ]
+}
