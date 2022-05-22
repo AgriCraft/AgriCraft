@@ -43,9 +43,20 @@ public class GreenHouseHandler {
         this.tasks = Maps.newConcurrentMap();
     }
 
-    public Optional<IAgriGreenHouse> checkAndFormGreenHouse(Level world, BlockPos pos) {
+    public Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos) {
         if(world.isClientSide()) {
             return Optional.empty();
+        }
+        return CapabilityGreenHouse.getGreenHouse(world, pos).map(gh -> gh);
+    }
+
+    public Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos) {
+        if(world.isClientSide()) {
+            return Optional.empty();
+        }
+        Optional<IAgriGreenHouse> current = getGreenHouse(world, pos);
+        if(current.isPresent()) {
+            return current;
         }
         BlockState state = world.getBlockState(pos);
         if (!state.isAir()) {

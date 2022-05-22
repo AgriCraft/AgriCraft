@@ -112,11 +112,11 @@
   "agricraft.tooltip.grate.l2": "Vines can be attached, and removed with clippers",
 
   "agricraft.tooltip.greenhouse_monitor.l1": "Shows the status of a greenhouse, can be placed in the world as well",
-  "agricraft.tooltip.greenhouse_monitor.l2": " - Wildly oscillating temperature and humidity indicates lack of a greenhouse",
-  "agricraft.tooltip.greenhouse_monitor.l3": " - Slowly oscillating temperature and humidity indicates the presence of gaps",
-  "agricraft.tooltip.greenhouse_monitor.l4": " - Low, stable temperature indicates insufficient glass",
-  "agricraft.tooltip.greenhouse_monitor.l5": " - High, stable temperature indicates the greenhouse is operational",
-  "agricraft.tooltip.greenhouse_monitor.l6": " (Might require a right click to properly detect a greenhouse)",
+  "agricraft.tooltip.greenhouse_monitor.l2": "A greenhouse can be any arbitrary structure, however",
+  "agricraft.tooltip.greenhouse_monitor.l3": "it must meet a certain set of criteria:",
+  "agricraft.tooltip.greenhouse_monitor.l4": "The greenhouse must have a fully enclosed volume,",
+  "agricraft.tooltip.greenhouse_monitor.l5": "and have sufficient glass in the ceiling.",
+  "agricraft.tooltip.greenhouse_monitor.l6": "If no greenhouse is detected, try sneak + right clicking the monitor.",
 
   "agricraft.tooltip.sneak_info": "(Hold <Sneak> for more info)",
 
@@ -204,6 +204,10 @@
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
   "agricraft.message.trowel_plant": "There already is a plant here.",
   "agricraft.message.trowel_no_plant": "There is nothing here to grab.",
+  "agricraft.message.greenhouse_complete": "Temperature and humidity stable, greenhouse is operational",
+  "agricraft.message.greenhouse_insufficient_glass": "Temperature too low, greenhouse has insufficient glass",
+  "agricraft.message.greenhouse_gaps": "Temperature and humidity slightly unstable, there are gaps",
+  "agricraft.message.greenhouse_removed": "Temperature and humidity wildly unstable, no greenhouse here",
 
   "agricraft.structure.village": "Village",
   "agricraft.structure.pillager_outpost": "Pillager Outpost",

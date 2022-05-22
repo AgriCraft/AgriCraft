@@ -23,7 +23,7 @@ public class DebugModeGreenHouse extends DebugMode {
     @Override
     public void debugActionClicked(ItemStack stack, Level world, Player player, InteractionHand hand) {
         if(!world.isClientSide()) {
-            GreenHouseHandler.getInstance().checkAndFormGreenHouse(world, player.getOnPos().above());
+            GreenHouseHandler.getInstance().createGreenHouse(world, player.getOnPos().above());
         }
     }
 

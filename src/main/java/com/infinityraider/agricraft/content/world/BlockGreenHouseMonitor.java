@@ -1,8 +1,12 @@
 package com.infinityraider.agricraft.content.world;
 
+import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
 import com.infinityraider.agricraft.api.v1.content.world.IAgriGreenHouse;
+import com.infinityraider.agricraft.content.AgriBlockRegistry;
 import com.infinityraider.agricraft.content.core.BlockSeedAnalyzer;
+import com.infinityraider.agricraft.handler.GreenHouseHandler;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.property.InfProperty;
@@ -11,12 +15,21 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -25,6 +38,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.stream.Stream;
 
 @MethodsReturnNonnullByDefault
@@ -43,11 +57,8 @@ public class BlockGreenHouseMonitor extends BlockBase {
         );
     }
 
-    public static BlockState withState(BlockState monitor, IAgriGreenHouse.State state) {
-        if(monitor.hasProperty(STATE.getProperty())) {
-            return STATE.apply(monitor, state);
-        }
-        return monitor;
+    public IAgriGreenHouse.State getState(BlockState state) {
+        return STATE.fetch(state);
     }
 
     @Override
@@ -56,8 +67,16 @@ public class BlockGreenHouseMonitor extends BlockBase {
     }
 
     @Override
-    public Item asItem() {
-        return AgriApi.getAgriContent().getItems().getGreenHouseMonitorItem();
+    public ItemGreenHouseMonitor asItem() {
+        return AgriCraft.instance.getModItemRegistry().getGreenHouseMonitorItem();
+    }
+
+    public MutableComponent getFeedbackMessage(BlockState state) {
+        return this.getFeedbackMessage(this.getState(state));
+    }
+
+    public MutableComponent getFeedbackMessage(IAgriGreenHouse.State state) {
+        return this.asItem().getFeedbackMessage(state);
     }
 
     @Override
@@ -67,19 +86,100 @@ public class BlockGreenHouseMonitor extends BlockBase {
             // can not place vertically
             return null;
         }
-        // fetch default state
-        BlockState state = this.defaultBlockState();
+        // apply orientation
+        BlockState state = ORIENTATION.apply(this.defaultBlockState(), context.getHorizontalDirection());
+        // apply greenhouse state
         if(state.canSurvive(context.getLevel(), context.getClickedPos())) {
-            // apply greenhouse state
             state = STATE.apply(state, AgriApi.getGreenHouse(context.getLevel(), context.getClickedPos())
                     .map(IAgriGreenHouse::getState)
                     .orElse(IAgriGreenHouse.State.REMOVED));
-            // apply orientation
-            state = ORIENTATION.apply(state, context.getHorizontalDirection());
             // return the state
             return state;
         }
         return null;
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        Direction dir = ORIENTATION.fetch(state);
+        BlockState solid = world.getBlockState(pos.relative(dir));
+        BlockState air = world.getBlockState(pos.relative(dir.getOpposite()));
+        return air.isAir() && solid.isFaceSturdy(world, pos.relative(dir), dir.getOpposite());
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean moving) {
+        super.neighborChanged(state, world, pos, block, fromPos, moving);
+        Direction orientation = ORIENTATION.fetch(state);
+        if(pos.relative(orientation).equals(fromPos)) {
+            // solid block changed
+            BlockState solid = world.getBlockState(fromPos);
+            if(!solid.isFaceSturdy(world, fromPos, orientation.getOpposite())) {
+                // if there no longer is a solid block behind the monitor, drop it
+                if(!world.isClientSide()) {
+                    Block.dropResources(state, world, pos);
+                }
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            }
+        } else if(pos.relative(orientation.getOpposite()).equals(fromPos)) {
+            // air block changed
+            BlockState air = world.getBlockState(fromPos);
+            if(!air.isAir()) {
+                // if there no longer is air in front of the monitor, drop it
+                if(!world.isClientSide()) {
+                    Block.dropResources(state, world, pos);
+                }
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            } else {
+                // the air block has changed
+                if(air.getBlock() == AgriBlockRegistry.getInstance().getGreenHouseAirBlock()) {
+                    // greenhouse state change: update the state
+                    world.setBlock(pos, STATE.apply(state, STATE.fetch(air)), 3);
+                } else {
+                    // check if a greenhouse still exists
+                    boolean removed = GreenHouseHandler.getInstance().getGreenHouse(world, pos).map(gh -> {
+                        // greenhouse is present but has been removed
+                        if(gh.isRemoved()) {
+                            // leave the block as air
+                            return true;
+                        }
+                        // greenhouse is present and has not been removed; set the block back to greenhouse air
+                        world.setBlock(fromPos, STATE.apply(AgriBlockRegistry.getInstance().getGreenHouseAirBlock().defaultBlockState(), gh.getState()), 3);
+                        return false;
+                    }).orElse(true);
+                    // if the greenhouse has been removed, update the state
+                    if(removed) {
+                        world.setBlock(pos, STATE.apply(state, IAgriGreenHouse.State.REMOVED), 3);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!world.isClientSide()) {
+            if (hand == InteractionHand.MAIN_HAND) {
+                if (player.isDiscrete()) {
+                    GreenHouseHandler.getInstance().createGreenHouse(world, pos.relative(ORIENTATION.fetch(state).getOpposite()));
+                }
+                player.sendMessage(this.getFeedbackMessage(state), player.getUUID());
+            }
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    public List<ItemStack> getDrops(BlockState pState, LootContext.Builder builder) {
+        return ImmutableList.of(new ItemStack(this));
     }
 
     @Override

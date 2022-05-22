@@ -23,7 +23,6 @@ import com.infinityraider.agricraft.api.v1.requirement.*;
 import com.infinityraider.agricraft.api.v1.plant.AgriPlantIngredient;
 import com.infinityraider.agricraft.api.v1.stat.IAgriStatRegistry;
 import com.infinityraider.agricraft.capability.CapabilityCrop;
-import com.infinityraider.agricraft.capability.CapabilityGreenHouse;
 import com.infinityraider.agricraft.content.AgriRecipeSerializerRegistry;
 import com.infinityraider.agricraft.content.core.CropStickVariant;
 import com.infinityraider.agricraft.content.core.ItemDynamicAgriSeed;
@@ -233,13 +232,13 @@ public class AgriApiConnector implements IAgriApiConnector {
     @Nonnull
     @Override
     public Optional<IAgriGreenHouse> getGreenHouse(Level world, BlockPos pos) {
-        return CapabilityGreenHouse.getGreenHouse(world, pos).map(gh -> gh);
+        return GreenHouseHandler.getInstance().getGreenHouse(world, pos);
     }
 
     @Nonnull
     @Override
     public Optional<IAgriGreenHouse> createGreenHouse(Level world, BlockPos pos) {
-        return GreenHouseHandler.getInstance().checkAndFormGreenHouse(world, pos);
+        return GreenHouseHandler.getInstance().createGreenHouse(world, pos);
     }
 
     @Nonnull

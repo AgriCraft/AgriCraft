@@ -5,7 +5,7 @@ Changelog
  - ADDED: It is now possible to define specific Block States and Fluid states for growth requirements and soils in the jsons
  - ADDED: It is now possible to define specific BlockEntity requirements using the nbt entries in the plant json files
  - ADDED: It is now possible to define biome and dimension growth requirements in plant json files
- - ADDED: Copper nugget, as fruit for the Cuprosia resource crop
+ - ADDED: Copper nugget, as fruit for the Cuprosia resource crop (which is now available in vanilla)
  - ADDED: Nethereed, a resource crop for netherite
  - ADDED: Amathyllis, a resource crop for amethyst
  - ADDED: Json callback for Botania mana consumption for growth, by default active on the Botania flower crops

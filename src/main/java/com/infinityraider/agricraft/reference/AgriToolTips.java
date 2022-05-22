@@ -106,11 +106,11 @@ public class AgriToolTips {
     public static final MutableComponent GREENHOUSE_MONITOR_L3
             = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GREENHOUSE_MONITOR_L4
-            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l4").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GREENHOUSE_MONITOR_L5
-            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l5").withStyle(ChatFormatting.DARK_GRAY);
     public static final MutableComponent GREENHOUSE_MONITOR_L6
-            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l3").withStyle(ChatFormatting.DARK_GRAY);
+            = new TranslatableComponent("agricraft.tooltip.greenhouse_monitor.l6").withStyle(ChatFormatting.DARK_GRAY);
 
     public static final MutableComponent SNEAK_INFO
             = new TranslatableComponent("agricraft.tooltip.sneak_info").withStyle(ChatFormatting.DARK_GRAY);
@@ -125,6 +125,11 @@ public class AgriToolTips {
     public static final MutableComponent MSG_TROWEL_WEED = new TranslatableComponent("agricraft.message.trowel_weed");
     public static final MutableComponent MSG_TROWEL_PLANT = new TranslatableComponent("agricraft.message.trowel_plant");
     public static final MutableComponent MSG_TROWEL_NO_PLANT = new TranslatableComponent("agricraft.message.trowel_no_plant");
+
+    public static MutableComponent MSG_GREENHOUSE_COMPLETE = new TranslatableComponent("agricraft.message.greenhouse_complete");
+    public static MutableComponent MSG_GREENHOUSE_INSUFFICIENT_GLASS = new TranslatableComponent("agricraft.message.greenhouse_insufficient_glass");
+    public static MutableComponent MSG_GREENHOUSE_GAPS = new TranslatableComponent("agricraft.message.greenhouse_gaps");
+    public static MutableComponent MSG_GREENHOUSE_REMOVED = new TranslatableComponent("agricraft.message.greenhouse_removed");
 
     public static MutableComponent getPlantTooltip(IAgriPlant plant) {
         return new TextComponent("")
