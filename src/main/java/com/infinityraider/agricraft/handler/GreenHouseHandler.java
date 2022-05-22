@@ -305,6 +305,6 @@ public class GreenHouseHandler {
     }
 
     public static boolean isGreenHouseGlass(BlockState state) {
-        return state.is(Tags.Blocks.GLASS) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
+        return state.is(Tags.Blocks.GLASS) || state.is(Tags.Blocks.GLASS_PANES) || state.is(AgriTags.Blocks.GREENHOUSE_GLASS);
     }
 }
