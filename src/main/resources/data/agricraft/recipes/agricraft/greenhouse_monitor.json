@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rl",
+    "bb"
+  ],
+  "key": {
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "l": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "b": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "result": {
+    "item": "agricraft:greenhouse_monitor",
+    "count": 1
+  }
+}
