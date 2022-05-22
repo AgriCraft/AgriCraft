@@ -1,6 +1,5 @@
 package com.infinityraider.agricraft.content.irrigation;
 
-import com.google.common.collect.Maps;
 import com.infinityraider.agricraft.content.AgriItemRegistry;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.reference.Constants;
@@ -20,37 +19,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract {
-
-    private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
-
-    public static VoxelShape getShape(BlockState state) {
-        return SHAPES.computeIfAbsent(state, aState -> Stream.concat(
-                Stream.of(ChannelShapes.BASE),
-                Arrays.stream(Direction.values()).map(dir -> getConnection(dir).map(prop -> {
-                    if(!prop.fetch(aState)) {
-                        switch (dir) {
-                            case NORTH:
-                                return ChannelShapes.NONE_NORTH;
-                            case SOUTH:
-                                return ChannelShapes.NONE_SOUTH;
-                            case WEST:
-                                return ChannelShapes.NONE_WEST;
-                            case EAST:
-                                return ChannelShapes.NONE_EAST;
-                        }
-                    }
-                    return Shapes.empty();
-                })).filter(Optional::isPresent).map(Optional::get)
-        ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get());
-    }
-
     public BlockIrrigationChannelHollow() {
         super(Names.Blocks.CHANNEL_HOLLOW, false, Properties.of(Material.WOOD)
                 .noOcclusion()
@@ -104,7 +77,7 @@ public class BlockIrrigationChannelHollow extends BlockIrrigationChannelAbstract
     @Deprecated
     @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return getShape(state);
+        return Shapes.block();
     }
 
     @Override
