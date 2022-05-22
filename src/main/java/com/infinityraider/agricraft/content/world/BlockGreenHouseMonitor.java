@@ -69,9 +69,7 @@ public class BlockGreenHouseMonitor extends BlockBase {
                     .map(IAgriGreenHouse::getState)
                     .orElse(IAgriGreenHouse.State.REMOVED));
             // apply orientation
-            state = ORIENTATION.apply(
-                    this.fluidlog(state, context.getLevel(), context.getClickedPos()),
-                    context.getHorizontalDirection());
+            state = ORIENTATION.apply(state, context.getHorizontalDirection());
             // return the state
             return state;
         }

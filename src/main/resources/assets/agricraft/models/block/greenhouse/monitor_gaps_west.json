@@ -1,0 +1,14 @@
+{
+  "loader": "infinitylib:composite",
+  "parts": {
+    "monitor": {
+      "parent": "agricraft:item/greenhouse_monitor_gaps"
+    }
+  },
+  "transformations": {
+    "monitor": {
+      "translation": [-7.5, 0, 0]
+    }
+  },
+  "particle": "monitor"
+}

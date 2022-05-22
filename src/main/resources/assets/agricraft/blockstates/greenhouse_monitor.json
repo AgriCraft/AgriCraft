@@ -2,63 +2,63 @@
   "forge_marker": 1,
   "variants": {
     "greenhouse_state=complete,orientation=north": [{
-      "model": "agricraft:block/greenhouse/monitor_complete"
+      "model": "agricraft:block/greenhouse/monitor_complete_north"
     }],
     "greenhouse_state=complete,orientation=east": [{
-      "model": "agricraft:block/greenhouse/monitor_complete",
+      "model": "agricraft:block/greenhouse/monitor_complete_east",
       "y": 90
     }],
     "greenhouse_state=complete,orientation=south": [{
-      "model": "agricraft:block/greenhouse/monitor_complete",
+      "model": "agricraft:block/greenhouse/monitor_complete_south",
       "y": 180
     }],
     "greenhouse_state=complete,orientation=west": [{
-      "model": "agricraft:block/greenhouse/monitor_complete",
+      "model": "agricraft:block/greenhouse/monitor_complete_west",
       "y": 270
     }],
     "greenhouse_state=insufficient_glass,orientation=north": [{
-      "model": "agricraft:block/greenhouse/monitor_insufficient_glass"
+      "model": "agricraft:block/greenhouse/monitor_insufficient_glass_north"
     }],
     "greenhouse_state=insufficient_glass,orientation=east": [{
-      "model": "agricraft:block/greenhouse/monitor_insufficient_glass",
+      "model": "agricraft:block/greenhouse/monitor_insufficient_glass_east",
       "y": 90
     }],
     "greenhouse_state=insufficient_glass,orientation=south": [{
-      "model": "agricraft:block/greenhouse/monitor_insufficient_glass",
+      "model": "agricraft:block/greenhouse/monitor_insufficient_glass_south",
       "y": 180
     }],
     "greenhouse_state=insufficient_glass,orientation=west": [{
-      "model": "agricraft:block/greenhouse/monitor_insufficient_glass",
+      "model": "agricraft:block/greenhouse/monitor_insufficient_glass_west",
       "y": 270
     }],
     "greenhouse_state=gaps,orientation=north": [{
-      "model": "agricraft:block/greenhouse/monitor_gaps"
+      "model": "agricraft:block/greenhouse/monitor_gaps_north"
     }],
     "greenhouse_state=gaps,orientation=east": [{
-      "model": "agricraft:block/greenhouse/monitor_gaps",
+      "model": "agricraft:block/greenhouse/monitor_gaps_east",
       "y": 90
     }],
     "greenhouse_state=gaps,orientation=south": [{
-      "model": "agricraft:block/greenhouse/monitor_gaps",
+      "model": "agricraft:block/greenhouse/monitor_gaps_south",
       "y": 180
     }],
     "greenhouse_state=gaps,orientation=west": [{
-      "model": "agricraft:block/greenhouse/monitor_gaps",
+      "model": "agricraft:block/greenhouse/monitor_gaps_west",
       "y": 270
     }],
     "greenhouse_state=removed,orientation=north": [{
-      "model": "agricraft:block/greenhouse/monitor_removed"
+      "model": "agricraft:block/greenhouse/monitor_removed_north"
     }],
     "greenhouse_state=removed,orientation=east": [{
-      "model": "agricraft:block/greenhouse/monitor_removed",
+      "model": "agricraft:block/greenhouse/monitor_removed_east",
       "y": 90
     }],
     "greenhouse_state=removed,orientation=south": [{
-      "model": "agricraft:block/greenhouse/monitor_removed",
+      "model": "agricraft:block/greenhouse/monitor_removed_south",
       "y": 180
     }],
     "greenhouse_state=removed,orientation=west": [{
-      "model": "agricraft:block/greenhouse/monitor_removed",
+      "model": "agricraft:block/greenhouse/monitor_removed_west",
       "y": 270
     }]
   }
