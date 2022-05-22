@@ -2,9 +2,6 @@
   "itemGroup.agricraft": "AgriCraft",
   "itemGroup.agricraft_seeds": "Sementes do AgriCraft",
 
-  "block.agricraft.crop_sticks_wood": "Gravetos de Colheita",
-  "block.agricraft.crop_sticks_iron": "Gravetos de Colheita de Ferro",
-  "block.agricraft.crop_sticks_obsidian": "Gravetos de Colheita de Obsidiana",
   "block.agricraft.seed_analyzer": "Analisador de Semente",
   "block.agricraft.irrigation_tank": "Tanque de Irrigação de Madeira",
   "block.agricraft.irrigation_channel": "Canal de Irrigação de Madeira",
@@ -12,9 +9,13 @@
   "block.agricraft.sprinkler": "Aspersor",
   "block.agricraft.grate": "Grade de Madeira",
   "block.agricraft.greenhouse_air": "Ar",
+  "block.agricraft.greenhouse_monitor": "Monitor Climático de Estufa",
 
   "item.agricraft.debugger": "Debugger",
 
+  "block.agricraft.crop_sticks_wood": "Gravetos de Colheita",
+  "block.agricraft.crop_sticks_iron": "Gravetos de Colheita de Ferro",
+  "block.agricraft.crop_sticks_obsidian": "Gravetos de Colheita de Obsidiana",
   "item.agricraft.agri_clipper": "Aparador de Planta",
   "item.agricraft.agri_journal": "Jornal Agrícola",
   "item.agricraft.agri_magnifying_glass": "Lupa",
@@ -25,6 +26,7 @@
   "item.agricraft.agri_trowel": "Espátula de Jardinagem",
   "item.agricraft.agri_channel_valve": "Válvula do Canal de Irrigação",
 
+  "item.agricraft.agri_nugget_copper": "Pepita de Cobre",
   "item.agricraft.agri_nugget_coal": "Pedaço de Carvão",
   "item.agricraft.agri_nugget_diamond": "Fragmento de Diamante",
   "item.agricraft.agri_nugget_emerald": "Fragmento de Esmeralda",
@@ -33,6 +35,8 @@
   "item.agricraft.amathyllis_petal": "Pétala de Amathyllis",
 
   "enchantment.agricraft.agri_seed_bag": "Escolhendo sementes",
+
+  "screen.agricraft.seed_analyzer" : "Analisador de Semente",
 
   "agricraft.stat.gain": "Ganho",
   "agricraft.stat.growth": "Crescimento",
@@ -76,7 +80,7 @@
   "agricraft.tooltip.magnifying_glass": "Uma ferramenta para inspecionar o genoma de colheitas e outras coisas",
   "agricraft.tooltip.clipper": "Uma ferramenta para cortar flores ou folhas de plantas",
   "agricraft.tooltip.journal_use_1": "Sneak + clique direito para colocar em um Analisador de Semente",
-  "agricraft.tooltip.journal_use_2": "Clique com o botão direito para ler, role para virar as páginas",
+  "agricraft.tooltip.journal_use_2": "Clique direito para ler, role para virar as páginas",
   "agricraft.tooltip.journal_seeds": "Sementes Descobertas",
   "agricraft.tooltip.rake": "Uma ferramenta para remover ervas daninhas das colheitas",
   "agricraft.tooltip.trowel": "Uma ferramenta para mover colheitas ao redor",
@@ -93,7 +97,8 @@
   "agricraft.tooltip.seed_bag_inactive_2": "Talvez você deva tentar encantá-lo primeiro.",
 
   "agricraft.tooltip.analyzer.l1": "Pode ser usado para inspecionar genomas de sementes",
-  "agricraft.tooltip.analyzer.l2": "Enquanto observa, role para percorrer os genes",
+  "agricraft.tooltip.analyzer.l2": "Clique direito para observar, shift + clique direito para inserir/extrair",
+  "agricraft.tooltip.analyzer.l3": "Enquanto observa, role para percorrer os genes",
   "agricraft.tooltip.tank.l1": "Tente não cair... ou pelo menos não antes de colocar uma escada",
   "agricraft.tooltip.sprinkler.l1": "Anexa à parte inferior dos Canais de Irrigação",
   "agricraft.tooltip.valve.l1": "Anexar aos Canais de Irrigação para controlar seu fluxo",
@@ -105,6 +110,13 @@
 
   "agricraft.tooltip.grate.l1": "Um bloco decorativo que também pode ser escalado",
   "agricraft.tooltip.grate.l2": "As trepadeiras podem ser anexadas e removidas com Aparador de Planta",
+
+  "agricraft.tooltip.greenhouse_monitor.l1": "Mostra o status de uma estufa, pode ser colocado no mundo também",
+  "agricraft.tooltip.greenhouse_monitor.l2": "Uma estufa pode ser qualquer estrutura arbitrária, no entanto",
+  "agricraft.tooltip.greenhouse_monitor.l3": "deve atender a um determinado conjunto de critérios:",
+  "agricraft.tooltip.greenhouse_monitor.l4": "A estufa deve ter um volume totalmente fechado,",
+  "agricraft.tooltip.greenhouse_monitor.l5": "e ter vidro suficiente no teto.",
+  "agricraft.tooltip.greenhouse_monitor.l6": "Se nenhuma estufa for detectada, tente sneak + clique direito no monitor.",
 
   "agricraft.tooltip.sneak_info": "(Segure <Sneak> para mais informações)",
 
@@ -165,6 +177,8 @@
   "agricraft.tooltip.growth_req.soil.acidity.general": "Esta planta não pode crescer em um solo com esta acidez",
   "agricraft.tooltip.growth_req.soil.nutrients.general": "Esta planta não pode crescer em um solo com esses nutrientes",
   "agricraft.tooltip.growth_req.light.general": "Esta planta não pode crescer no nível de luz atual",
+  "agricraft.tooltip.growth_req.biome.general": "Esta planta não pode crescer neste bioma",
+  "agricraft.tooltip.growth_req.dimension.general": "Esta planta não pode crescer nesta dimensão",
   "agricraft.tooltip.growth_req.fluid.general": "Esta planta não pode crescer no fluido atual",
   "agricraft.tooltip.growth_req.season.general": "Esta planta não pode crescer durante a temporada atual",
   
@@ -190,7 +204,11 @@
   "agricraft.message.trowel_weed": "Não consigo alcançar bem, devo remover as ervas daninhas primeiro.",
   "agricraft.message.trowel_plant": "Já existe uma planta aqui.",
   "agricraft.message.trowel_no_plant": "Não há nada aqui para pegar.",
-
+  "agricraft.message.greenhouse_complete": "Temperatura e umidade estáveis, a estufa está operacional",
+  "agricraft.message.greenhouse_insufficient_glass": "Temperatura muito baixa, a estufa não tem vidro suficiente",
+  "agricraft.message.greenhouse_gaps": "Temperatura e umidade ligeiramente instáveis, existem lacunas",
+  "agricraft.message.greenhouse_removed": "Temperatura e umidade muito instáveis, sem estufa aqui",
+  
   "agricraft.structure.village": "Vila",
   "agricraft.structure.pillager_outpost": "Posto Avançado do Saqueador",
   "agricraft.structure.mineshaft": "Mina",
