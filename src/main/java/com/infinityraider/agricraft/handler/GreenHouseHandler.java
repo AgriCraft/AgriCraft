@@ -71,6 +71,10 @@ public class GreenHouseHandler {
                 });
     }
 
+    public void onGreenHouseGenerated(BlockPos pos) {
+        //TODO
+    }
+
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onChunkLoad(ChunkEvent.Load event) {

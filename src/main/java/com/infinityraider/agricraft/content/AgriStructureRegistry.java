@@ -2,6 +2,7 @@ package com.infinityraider.agricraft.content;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.content.world.CropSpawnProcessor;
+import com.infinityraider.agricraft.content.world.GreenHouseProcessor;
 import com.infinityraider.agricraft.content.world.Mossify10Processor;
 import com.infinityraider.infinitylib.utility.registration.ModStructureRegistry;
 import com.infinityraider.infinitylib.world.IInfStructure;
@@ -19,6 +20,7 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
     }
 
     public final StructureProcessorType<CropSpawnProcessor> cropSpawnProcessor;
+    public final StructureProcessorType<GreenHouseProcessor> greenHouseProcessor;
 
     public final Holder<StructureProcessorList> pListDesert;
     public final Holder<StructureProcessorList> pListPlains;
@@ -41,13 +43,14 @@ public final class AgriStructureRegistry extends ModStructureRegistry {
     protected AgriStructureRegistry() {
         // processors
         this.cropSpawnProcessor = this.processor(id("crop_spawn"), () -> CropSpawnProcessor.CODEC);
+        this.greenHouseProcessor = this.processor(id("greenhouse"), () -> GreenHouseProcessor.CODEC);
 
         // processor lists
-        this.pListDesert = this.processorList(id("greenhouse_standard_desert"), new CropSpawnProcessor(GreenHouses.Standard.DESERT));
-        this.pListPlains = this.processorList(id("greenhouse_standard_plains"), new CropSpawnProcessor(GreenHouses.Standard.PLAINS), Mossify10Processor.getInstance());
-        this.pListSavanna = this.processorList(id("greenhouse_standard_savanna"), new CropSpawnProcessor(GreenHouses.Standard.SAVANNA));
-        this.pListSnowy = this.processorList(id("greenhouse_standard_snowy"), new CropSpawnProcessor(GreenHouses.Standard.SNOWY));
-        this.pListTaiga = this.processorList(id("greenhouse_standard_taiga"), new CropSpawnProcessor(GreenHouses.Standard.TAIGA), Mossify10Processor.getInstance());
+        this.pListDesert = this.processorList(id("greenhouse_standard_desert"), new CropSpawnProcessor(GreenHouses.Standard.DESERT), GreenHouseProcessor.getInstance());
+        this.pListPlains = this.processorList(id("greenhouse_standard_plains"), new CropSpawnProcessor(GreenHouses.Standard.PLAINS), GreenHouseProcessor.getInstance(), Mossify10Processor.getInstance());
+        this.pListSavanna = this.processorList(id("greenhouse_standard_savanna"), new CropSpawnProcessor(GreenHouses.Standard.SAVANNA), GreenHouseProcessor.getInstance());
+        this.pListSnowy = this.processorList(id("greenhouse_standard_snowy"), new CropSpawnProcessor(GreenHouses.Standard.SNOWY), GreenHouseProcessor.getInstance());
+        this.pListTaiga = this.processorList(id("greenhouse_standard_taiga"), new CropSpawnProcessor(GreenHouses.Standard.TAIGA), GreenHouseProcessor.getInstance(), Mossify10Processor.getInstance());
 
         // greenhouses
         this.desertStandard = this.structure(
