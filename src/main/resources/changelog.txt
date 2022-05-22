@@ -10,7 +10,12 @@ Changelog
  - ADDED: Amathyllis, a resource crop for amethyst
  - ADDED: Json callback for Botania mana consumption for growth, by default active on the Botania flower crops
  - ADDED: Conditions for mutations, which can be specified in the jsons as well as through the API
+ - ADDED: Greenhouse Monitor, a block and item which allows the creation and monitoring of greenhouses,
+          greenhouses speed up crop growth, and provide bonuses with regards to growth requirements.
  - ADDED: Greenhouses which will now generate in villages with randomly generated crops
+ - FIXED: Seed duplication bug with the seed analyzer and a hopper
+ - FIXED: Camera focusing on the main hand while trying to read the journal from the off hand
+ - FIXED: Crop Sticks getting destroyed when updating the soil below them
 
 3.0.8
  - ADDED: Option to use GUIs for the journal and seed analyzer (thanks to Ketheroth)
