@@ -142,7 +142,7 @@ public class MysticalAgricultureCompatClient {
         if(split.length > 1) {
             String path = split[1];
             // We assume the plant id is "<modid>:<resource>_plant"
-            ResourceLocation location = new ResourceLocation(path.substring(0, path.length() - 6)); // remove the "_plant" suffix
+            ResourceLocation location = new ResourceLocation(split[0], path.substring(0, path.length() - 6)); // remove the "_plant" suffix
             return MysticalAgricultureAPI.getCropRegistry().getCropById(location);
         } else {
             AgriCraft.instance.getLogger().error("Invalid plant id: " + plantId);
