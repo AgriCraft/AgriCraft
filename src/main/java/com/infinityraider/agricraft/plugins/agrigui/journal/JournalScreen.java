@@ -52,8 +52,8 @@ public class JournalScreen extends Screen {
 		super.init();
 		int renderX = (this.width - PAGE_WIDTH) / 2;
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
-		this.buttonNextPage = this.addWidget(new PageButton(renderX + ARROW_RIGHT_X, renderY + ARROW_RIGHT_Y, false, button -> this.nextPage()));
-		this.buttonPreviousPage = this.addWidget(new PageButton(renderX + ARROW_LEFT_X, renderY + ARROW_LEFT_Y, true, button -> this.previousPage()));
+		this.buttonNextPage = this.addRenderableWidget(new PageButton(renderX + ARROW_RIGHT_X, renderY + ARROW_RIGHT_Y, false, button -> this.nextPage()));
+		this.buttonPreviousPage = this.addRenderableWidget(new PageButton(renderX + ARROW_LEFT_X, renderY + ARROW_LEFT_Y, true, button -> this.previousPage()));
 		this.updateButtons();
 	}
 

@@ -27,7 +27,7 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerCont
 		super(screenContainer, inv, title);
 		this.imageWidth = 186;
 		this.imageHeight = 186;
-		this.titleLabelY = this.imageHeight - 94;
+		this.inventoryLabelY = this.imageHeight - 94;
 		this.geneIndex = 0;
 	}
 
@@ -115,7 +115,7 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerCont
 	@Override
 	protected void renderLabels(PoseStack matrixStack, int x, int y) {
 		this.font.draw(matrixStack, this.title, (float) this.titleLabelX + 5, (float) this.titleLabelY, 4210752);
-		this.font.draw(matrixStack, this.playerInventoryTitle, (float) this.titleLabelX + 5, (float) this.titleLabelY, 4210752);
+		this.font.draw(matrixStack, this.playerInventoryTitle, (float) this.inventoryLabelX + 5, (float) this.inventoryLabelY, 4210752);
 	}
 
 	@Override
