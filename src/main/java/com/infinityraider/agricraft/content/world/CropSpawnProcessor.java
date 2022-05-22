@@ -23,18 +23,18 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CropStickProcessor extends StructureProcessor {
+public class CropSpawnProcessor extends StructureProcessor {
     private static final String FIELD_GENOME = "IL_FIELD_0";
     private static final String FIELD_GROWTH = "IL_FIELD_1";
 
-    public static final Codec<CropStickProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.optionalFieldOf("structure", new ResourceLocation("empty")).forGetter(CropStickProcessor::getStructure))
-            .apply(instance, instance.stable(CropStickProcessor::new))
+    public static final Codec<CropSpawnProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ResourceLocation.CODEC.optionalFieldOf("structure", new ResourceLocation("empty")).forGetter(CropSpawnProcessor::getStructure))
+            .apply(instance, instance.stable(CropSpawnProcessor::new))
     );
 
     private final ResourceLocation structure;
 
-    public CropStickProcessor(ResourceLocation structure) {
+    public CropSpawnProcessor(ResourceLocation structure) {
         this.structure = structure;
     }
 
@@ -44,7 +44,7 @@ public class CropStickProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        return AgriCraft.instance.getStructureRegistry().cropStickProcessor;
+        return AgriCraft.instance.getStructureRegistry().cropSpawnProcessor;
     }
 
     @Nullable
