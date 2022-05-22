@@ -106,6 +106,13 @@
   "agricraft.tooltip.grate.l1": "Um bloco decorativo que também pode ser escalado",
   "agricraft.tooltip.grate.l2": "As trepadeiras podem ser anexadas e removidas com Aparador de Planta",
 
+  "agricraft.tooltip.greenhouse_monitor.l1": "Mostra o status de uma estufa, pode ser colocado no mundo também",
+  "agricraft.tooltip.greenhouse_monitor.l2": "Uma estufa pode ser qualquer estrutura arbitrária, no entanto",
+  "agricraft.tooltip.greenhouse_monitor.l3": "deve atender a um determinado conjunto de critérios:",
+  "agricraft.tooltip.greenhouse_monitor.l4": "A estufa deve ter um volume totalmente fechado,",
+  "agricraft.tooltip.greenhouse_monitor.l5": "e ter vidro suficiente no teto.",
+  "agricraft.tooltip.greenhouse_monitor.l6": "Se nenhuma estufa for detectada, tente sneak + clique direito no monitor.",
+
   "agricraft.tooltip.sneak_info": "(Segure <Sneak> para mais informações)",
 
   "agricraft.tooltip.humidity": "Umidade",
@@ -190,7 +197,11 @@
   "agricraft.message.trowel_weed": "Não consigo alcançar bem, devo remover as ervas daninhas primeiro.",
   "agricraft.message.trowel_plant": "Já existe uma planta aqui.",
   "agricraft.message.trowel_no_plant": "Não há nada aqui para pegar.",
-
+  "agricraft.message.greenhouse_complete": "Temperatura e umidade estáveis, a estufa está operacional",
+  "agricraft.message.greenhouse_insufficient_glass": "Temperatura muito baixa, a estufa não tem vidro suficiente",
+  "agricraft.message.greenhouse_gaps": "Temperatura e umidade ligeiramente instáveis, existem lacunas",
+  "agricraft.message.greenhouse_removed": "Temperatura e umidade muito instáveis, sem estufa aqui",
+  
   "agricraft.structure.village": "Vila",
   "agricraft.structure.pillager_outpost": "Posto Avançado do Saqueador",
   "agricraft.structure.mineshaft": "Mina",
