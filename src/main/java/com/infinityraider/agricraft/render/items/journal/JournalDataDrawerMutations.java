@@ -69,9 +69,9 @@ public class JournalDataDrawerMutations extends JournalDataDrawerBase<MutationsP
     private List<Component> getTextLines(int x, int y, int posX, int posY, List<IAgriPlant> plants) {
         if (posX + 1 <= x && x <= posX + 17 && posY + 1 <= y && y <= posY + 17) {
             return Collections.singletonList(plants.get(0).getTooltip());
-        } else if (posX + 35 <= x && x <= posX + 51 && posY + 35 <= y && y <= posY + 51) {
+        } else if (posX + 35 <= x && x <= posX + 51 && posY + 1 <= y && y <= posY + 17) {
             return Collections.singletonList(plants.get(1).getTooltip());
-        } else if (posX + 69 <= x && x <= posX + 85 && posY + 69 <= y && y <= posY + 85) {
+        } else if (posX + 69 <= x && x <= posX + 85 && posY + 1 <= y && y <= posY + 17) {
             return Collections.singletonList(plants.get(2).getTooltip());
         }
         return Collections.emptyList();
