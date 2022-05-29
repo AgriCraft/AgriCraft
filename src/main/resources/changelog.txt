@@ -6,6 +6,9 @@ Changelog
  - ADDED: Default json support for Croptopia (Ketheroth)
  - FIXED: Potential Crash when logging an invalid json plant
  - FIXED: AgriCraft crops ignoring the result of Forge CropGrowEvents
+ - FIXED: Seed duplication bug with the seed analyzer and a hopper
+ - FIXED: Camera focusing on the main hand while trying to read the journal from the off hand
+ - FIXED: Crop Sticks getting destroyed when updating the soil below them
 
 3.0.7
  - CHANGE: Reworked the json callback system, it can now take arguments depending on the callback
