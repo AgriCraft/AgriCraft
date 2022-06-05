@@ -2,7 +2,7 @@ Changelog
 ---------
 3.1.1
  - FIXED: Server crash due to wrong import
- 
+
 3.1.0
  - CHANGE: Ported to 1.18.2
  - ADDED: It is now possible to define specific Block States and Fluid states for growth requirements and soils in the jsons
