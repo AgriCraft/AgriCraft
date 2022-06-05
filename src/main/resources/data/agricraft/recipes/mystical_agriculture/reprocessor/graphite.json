@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:graphite_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:graphite_plant"
   },
   "result": {
     "item": "mysticalagriculture:graphite_essence",

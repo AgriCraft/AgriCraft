@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:lumium_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:lumium_plant"
   },
   "result": {
     "item": "mysticalagriculture:lumium_essence",

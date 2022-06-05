@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:spider_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:spider_plant"
   },
   "result": {
     "item": "mysticalagriculture:spider_essence",

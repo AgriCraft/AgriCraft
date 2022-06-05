@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:deepslate_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:deepslate_plant"
   },
   "result": {
     "item": "mysticalagriculture:deepslate_essence",

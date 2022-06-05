@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:emerald_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:emerald_plant"
   },
   "result": {
     "item": "mysticalagriculture:emerald_essence",

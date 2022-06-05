@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:rock_crystal_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:rock_crystal_plant"
   },
   "result": {
     "item": "mysticalagriculture:rock_crystal_essence",

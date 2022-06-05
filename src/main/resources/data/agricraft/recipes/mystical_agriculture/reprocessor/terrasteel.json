@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:terrasteel_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:terrasteel_plant"
   },
   "result": {
     "item": "mysticalagriculture:terrasteel_essence",

@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:prismarine_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:prismarine_plant"
   },
   "result": {
     "item": "mysticalagriculture:prismarine_essence",

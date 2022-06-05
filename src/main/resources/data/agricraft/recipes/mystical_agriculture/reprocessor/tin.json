@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:tin_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:tin_plant"
   },
   "result": {
     "item": "mysticalagriculture:tin_essence",

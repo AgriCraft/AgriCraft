@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:zombie_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:zombie_plant"
   },
   "result": {
     "item": "mysticalagriculture:zombie_essence",

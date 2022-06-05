@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:certus_quartz_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:certus_quartz_plant"
   },
   "result": {
     "item": "mysticalagriculture:certus_quartz_essence",

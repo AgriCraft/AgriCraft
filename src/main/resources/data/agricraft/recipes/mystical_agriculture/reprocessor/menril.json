@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:menril_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:menril_plant"
   },
   "result": {
     "item": "mysticalagriculture:menril_essence",

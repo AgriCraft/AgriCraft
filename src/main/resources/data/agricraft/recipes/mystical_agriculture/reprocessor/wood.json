@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:wood_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:wood_plant"
   },
   "result": {
     "item": "mysticalagriculture:wood_essence",

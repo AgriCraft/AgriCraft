@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:nether_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:nether_plant"
   },
   "result": {
     "item": "mysticalagriculture:nether_essence",

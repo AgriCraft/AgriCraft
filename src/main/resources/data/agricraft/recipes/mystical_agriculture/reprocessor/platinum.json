@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:platinum_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:platinum_plant"
   },
   "result": {
     "item": "mysticalagriculture:platinum_essence",

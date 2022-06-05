@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:iron_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:iron_plant"
   },
   "result": {
     "item": "mysticalagriculture:iron_essence",

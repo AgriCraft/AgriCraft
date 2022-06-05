@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:nickel_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:nickel_plant"
   },
   "result": {
     "item": "mysticalagriculture:nickel_essence",

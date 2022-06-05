@@ -10,8 +10,8 @@
       "crop": "mysticalagriculture:saltpeter"
     }
   ],
-  "input": {
-    "item": "mysticalagriculture:saltpeter_seeds"
+  "type": "agricraft:seed",
+  "plant": "mysticalagriculture:saltpeter_plant"
   },
   "result": {
     "item": "mysticalagriculture:saltpeter_essence",

@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:mystical_flower_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:mystical_flower_plant"
   },
   "result": {
     "item": "mysticalagriculture:mystical_flower_essence",

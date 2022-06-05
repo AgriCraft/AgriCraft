@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:signalum_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:signalum_plant"
   },
   "result": {
     "item": "mysticalagriculture:signalum_essence",

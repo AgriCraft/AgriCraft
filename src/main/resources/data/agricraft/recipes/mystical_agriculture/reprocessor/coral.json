@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:coral_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:coral_plant"
   },
   "result": {
     "item": "mysticalagriculture:coral_essence",

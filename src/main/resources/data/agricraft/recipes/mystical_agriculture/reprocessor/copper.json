@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:copper_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:copper_plant"
   },
   "result": {
     "item": "mysticalagriculture:copper_essence",

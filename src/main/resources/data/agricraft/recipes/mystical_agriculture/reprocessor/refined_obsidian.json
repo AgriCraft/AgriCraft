@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:refined_obsidian_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:refined_obsidian_plant"
   },
   "result": {
     "item": "mysticalagriculture:refined_obsidian_essence",

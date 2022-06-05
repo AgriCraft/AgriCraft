@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:nether_quartz_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:nether_quartz_plant"
   },
   "result": {
     "item": "mysticalagriculture:nether_quartz_essence",

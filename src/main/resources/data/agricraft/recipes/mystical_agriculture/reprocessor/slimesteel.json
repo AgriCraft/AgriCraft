@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:slimesteel_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:slimesteel_plant"
   },
   "result": {
     "item": "mysticalagriculture:slimesteel_essence",

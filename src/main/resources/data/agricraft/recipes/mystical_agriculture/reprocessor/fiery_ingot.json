@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:fiery_ingot_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:fiery_ingot_plant"
   },
   "result": {
     "item": "mysticalagriculture:fiery_ingot_essence",

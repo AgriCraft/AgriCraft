@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:skeleton_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:skeleton_plant"
   },
   "result": {
     "item": "mysticalagriculture:skeleton_essence",

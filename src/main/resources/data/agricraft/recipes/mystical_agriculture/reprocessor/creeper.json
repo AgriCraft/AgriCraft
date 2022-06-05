@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:creeper_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:creeper_plant"
   },
   "result": {
     "item": "mysticalagriculture:creeper_essence",

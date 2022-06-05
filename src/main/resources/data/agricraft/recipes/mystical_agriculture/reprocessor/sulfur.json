@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:sulfur_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:sulfur_plant"
   },
   "result": {
     "item": "mysticalagriculture:sulfur_essence",

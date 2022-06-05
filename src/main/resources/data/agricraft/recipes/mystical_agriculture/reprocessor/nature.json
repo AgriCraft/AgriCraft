@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:nature_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:nature_plant"
   },
   "result": {
     "item": "mysticalagriculture:nature_essence",

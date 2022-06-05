@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:steeleaf_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:steeleaf_plant"
   },
   "result": {
     "item": "mysticalagriculture:steeleaf_essence",

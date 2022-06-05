@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:fire_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:fire_plant"
   },
   "result": {
     "item": "mysticalagriculture:fire_essence",

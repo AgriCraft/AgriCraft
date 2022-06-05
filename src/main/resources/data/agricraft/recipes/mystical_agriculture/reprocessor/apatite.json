@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:apatite_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:apatite_plant"
   },
   "result": {
     "item": "mysticalagriculture:apatite_essence",

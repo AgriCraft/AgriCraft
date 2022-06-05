@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:turtle_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:turtle_plant"
   },
   "result": {
     "item": "mysticalagriculture:turtle_essence",

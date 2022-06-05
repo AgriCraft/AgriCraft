@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:cow_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:cow_plant"
   },
   "result": {
     "item": "mysticalagriculture:cow_essence",

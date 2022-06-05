@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:aquamarine_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:aquamarine_plant"
   },
   "result": {
     "item": "mysticalagriculture:aquamarine_essence",

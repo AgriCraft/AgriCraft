@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:yellorium_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:yellorium_plant"
   },
   "result": {
     "item": "mysticalagriculture:yellorium_essence",

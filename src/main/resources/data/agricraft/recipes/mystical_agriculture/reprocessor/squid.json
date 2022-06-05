@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:squid_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:squid_plant"
   },
   "result": {
     "item": "mysticalagriculture:squid_essence",

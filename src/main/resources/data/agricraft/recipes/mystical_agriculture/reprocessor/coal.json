@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:coal_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:coal_plant"
   },
   "result": {
     "item": "mysticalagriculture:coal_essence",

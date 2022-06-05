@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:chrome_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:chrome_plant"
   },
   "result": {
     "item": "mysticalagriculture:chrome_essence",

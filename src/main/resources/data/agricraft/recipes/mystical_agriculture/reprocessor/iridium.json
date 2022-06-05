@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:iridium_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:iridium_plant"
   },
   "result": {
     "item": "mysticalagriculture:iridium_essence",

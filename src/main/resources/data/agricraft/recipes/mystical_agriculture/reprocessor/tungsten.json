@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:tungsten_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:tungsten_plant"
   },
   "result": {
     "item": "mysticalagriculture:tungsten_essence",

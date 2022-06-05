@@ -11,7 +11,8 @@
     }
   ],
   "input": {
-    "item": "mysticalagriculture:cobalt_seeds"
+    "type": "agricraft:seed",
+    "plant": "mysticalagriculture:cobalt_plant"
   },
   "result": {
     "item": "mysticalagriculture:cobalt_essence",
