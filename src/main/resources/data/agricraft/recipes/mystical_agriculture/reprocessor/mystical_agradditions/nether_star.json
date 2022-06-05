@@ -1,0 +1,21 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagradditions"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagradditions:nether_star"
+    }
+  ],
+  "input": {
+    "type": "agricraft:seed",
+    "plant": "mysticalagradditions:nether_star_plant"
+  },
+  "result": {
+    "item": "mysticalagriculture:nether_star_essence",
+    "count": 2
+  }
+}

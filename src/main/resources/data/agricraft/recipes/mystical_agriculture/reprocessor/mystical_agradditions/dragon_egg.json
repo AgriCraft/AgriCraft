@@ -1,0 +1,21 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagradditions"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagradditions:dragon_egg"
+    }
+  ],
+  "input": {
+    "type": "agricraft:seed",
+    "plant": "mysticalagradditions:dragon_egg_plant"
+  },
+  "result": {
+    "item": "mysticalagriculture:dragon_egg_essence",
+    "count": 2
+  }
+}
