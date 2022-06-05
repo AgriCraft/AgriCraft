@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:spirited_crystal"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:spirited_crystal_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:spirited_crystal_essence",
+    "count": 2
+  }
+}

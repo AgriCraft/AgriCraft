@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:fire"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:fire_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:fire_essence",
+    "count": 2
+  }
+}

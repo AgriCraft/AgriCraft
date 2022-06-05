@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:invar"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:invar_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:invar_essence",
+    "count": 2
+  }
+}

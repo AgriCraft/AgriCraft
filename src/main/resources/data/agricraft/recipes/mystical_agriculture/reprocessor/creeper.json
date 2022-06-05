@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:creeper"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:creeper_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:creeper_essence",
+    "count": 2
+  }
+}

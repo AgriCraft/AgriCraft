@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:osmium"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:osmium_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:osmium_essence",
+    "count": 2
+  }
+}

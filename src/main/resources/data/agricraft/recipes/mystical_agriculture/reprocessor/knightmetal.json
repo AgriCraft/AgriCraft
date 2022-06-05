@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:knightmetal"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:knightmetal_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:knightmetal_essence",
+    "count": 2
+  }
+}

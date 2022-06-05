@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:starmetal"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:starmetal_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:starmetal_essence",
+    "count": 2
+  }
+}

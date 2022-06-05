@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:silver"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:silver_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:silver_essence",
+    "count": 2
+  }
+}

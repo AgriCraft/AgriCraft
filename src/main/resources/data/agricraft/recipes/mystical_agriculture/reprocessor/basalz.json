@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:basalz"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:basalz_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:basalz_essence",
+    "count": 2
+  }
+}

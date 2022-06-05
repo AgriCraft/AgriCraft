@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:spider"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:spider_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:spider_essence",
+    "count": 2
+  }
+}

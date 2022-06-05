@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:skeleton"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:skeleton_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:skeleton_essence",
+    "count": 2
+  }
+}

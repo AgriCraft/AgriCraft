@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:iron"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:iron_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:iron_essence",
+    "count": 2
+  }
+}

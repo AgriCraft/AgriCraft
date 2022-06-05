@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:mithril"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:mithril_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:mithril_essence",
+    "count": 2
+  }
+}

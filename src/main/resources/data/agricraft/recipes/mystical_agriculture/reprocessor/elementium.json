@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:elementium"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:elementium_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:elementium_essence",
+    "count": 2
+  }
+}

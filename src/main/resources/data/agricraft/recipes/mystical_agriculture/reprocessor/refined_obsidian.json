@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:refined_obsidian"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:refined_obsidian_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:refined_obsidian_essence",
+    "count": 2
+  }
+}

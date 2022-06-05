@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:tungsten"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:tungsten_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:tungsten_essence",
+    "count": 2
+  }
+}

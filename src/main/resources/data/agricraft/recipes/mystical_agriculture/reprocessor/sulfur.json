@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:sulfur"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:sulfur_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:sulfur_essence",
+    "count": 2
+  }
+}

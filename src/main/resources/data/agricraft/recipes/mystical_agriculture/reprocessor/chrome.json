@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:chrome"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:chrome_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:chrome_essence",
+    "count": 2
+  }
+}

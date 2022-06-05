@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:redstone"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:redstone_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:redstone_essence",
+    "count": 2
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:apatite"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:apatite_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:apatite_essence",
+    "count": 2
+  }
+}

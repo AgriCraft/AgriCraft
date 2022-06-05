@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:platinum"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:platinum_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:platinum_essence",
+    "count": 2
+  }
+}

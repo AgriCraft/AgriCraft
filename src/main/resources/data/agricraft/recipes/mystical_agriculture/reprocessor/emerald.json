@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:emerald"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:emerald_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:emerald_essence",
+    "count": 2
+  }
+}

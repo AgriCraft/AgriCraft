@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:nether"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:nether_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:nether_essence",
+    "count": 2
+  }
+}

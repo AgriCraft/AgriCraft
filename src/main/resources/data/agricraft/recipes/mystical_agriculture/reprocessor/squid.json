@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:squid"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:squid_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:squid_essence",
+    "count": 2
+  }
+}

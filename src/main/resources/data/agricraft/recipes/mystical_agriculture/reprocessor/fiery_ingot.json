@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:fiery_ingot"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:fiery_ingot_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:fiery_ingot_essence",
+    "count": 2
+  }
+}

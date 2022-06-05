@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:graphite"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:graphite_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:graphite_essence",
+    "count": 2
+  }
+}

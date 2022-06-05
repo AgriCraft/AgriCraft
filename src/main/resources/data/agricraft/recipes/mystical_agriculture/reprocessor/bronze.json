@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:bronze"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:bronze_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:bronze_essence",
+    "count": 2
+  }
+}

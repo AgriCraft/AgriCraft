@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:compressed_iron"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:compressed_iron_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:compressed_iron_essence",
+    "count": 2
+  }
+}

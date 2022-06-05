@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:certus_quartz"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:certus_quartz_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:certus_quartz_essence",
+    "count": 2
+  }
+}

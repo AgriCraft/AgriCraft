@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:terrasteel"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:terrasteel_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:terrasteel_essence",
+    "count": 2
+  }
+}

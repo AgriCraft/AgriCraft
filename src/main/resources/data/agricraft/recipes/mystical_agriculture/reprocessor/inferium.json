@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:inferium"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:inferium_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:inferium_essence",
+    "count": 2
+  }
+}

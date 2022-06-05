@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:amethyst"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:amethyst_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:amethyst_essence",
+    "count": 2
+  }
+}

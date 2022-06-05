@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:cow"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:cow_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:cow_essence",
+    "count": 2
+  }
+}

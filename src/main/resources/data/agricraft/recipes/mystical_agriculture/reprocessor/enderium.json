@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:enderium"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:enderium_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:enderium_essence",
+    "count": 2
+  }
+}

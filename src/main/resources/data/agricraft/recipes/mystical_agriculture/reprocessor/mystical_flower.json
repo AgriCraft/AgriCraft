@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:mystical_flower"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:mystical_flower_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:mystical_flower_essence",
+    "count": 2
+  }
+}

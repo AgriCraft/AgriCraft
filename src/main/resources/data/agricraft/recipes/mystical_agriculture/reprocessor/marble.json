@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:marble"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:marble_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:marble_essence",
+    "count": 2
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:diamond"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:diamond_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:diamond_essence",
+    "count": 2
+  }
+}

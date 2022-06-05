@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:sky_stone"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:sky_stone_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:sky_stone_essence",
+    "count": 2
+  }
+}

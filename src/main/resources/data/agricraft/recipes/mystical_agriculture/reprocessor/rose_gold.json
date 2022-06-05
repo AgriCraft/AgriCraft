@@ -1,0 +1,20 @@
+{
+  "type": "mysticalagriculture:reprocessor",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mysticalagriculture"
+    },
+    {
+      "type": "mysticalagriculture:crop_enabled",
+      "crop": "mysticalagriculture:rose_gold"
+    }
+  ],
+  "input": {
+    "item": "mysticalagriculture:rose_gold_seeds"
+  },
+  "result": {
+    "item": "mysticalagriculture:rose_gold_essence",
+    "count": 2
+  }
+}
