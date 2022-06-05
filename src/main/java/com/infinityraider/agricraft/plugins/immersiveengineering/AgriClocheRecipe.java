@@ -48,13 +48,32 @@ public class AgriClocheRecipe extends ClocheRecipe {
                     AgriApi.getAgriContent().getBlocks().getCropBlock()
             );
 
+    private static List<Lazy<ItemStack>> getRealOutputs(AgriPlantIngredient seed) {
+        List<Lazy<ItemStack>> products = Lists.newArrayList();
+        seed.getPlant().getAllPossibleProducts(stack -> products.add(Lazy.of(() -> stack)));
+        return products;
+    }
+
+    private static List<Lazy<ItemStack>> getTempOutputs(AgriPlantIngredient seed) {
+        return Lists.newArrayList(Lazy.of(() -> {
+            List<ItemStack> stacks = Lists.newArrayList();
+            seed.getPlant().getAllPossibleProducts(stacks::add);
+            return stacks.stream().findFirst().orElse(ItemStack.EMPTY);
+        }));
+    }
+
     private final AgriPlantIngredient seed;
     private final float growthStatFactor;
 
     public AgriClocheRecipe(ResourceLocation id, AgriPlantIngredient seed, int time, float growthStatFactor) {
-        super(id, Lazy.of(() -> new ItemStack(AgriApi.getAgriContent().getItems().getSeedItem().toItem())), seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
+        super(id, getTempOutputs(seed), seed, AnySoilIngredient.getInstance(), time, RENDER_REFERENCE);
         this.seed = seed;
         this.growthStatFactor = growthStatFactor;
+    }
+
+    void updateOutputs() {
+        this.outputs.clear();
+        this.outputs.addAll(getRealOutputs(this.getSeed()));
     }
 
     public AgriPlantIngredient getSeed() {

@@ -5,6 +5,7 @@ Changelog
  - ADDED: Industrial Foregoing harvester compatibility
  - FIXED: Server crash due to wrong import
  - FIXED: Crops without crop sticks dropping crop sticks when broken
+ - FIXED: IE Cloche recipes not properly showing in JEI for AgriCraft seeds
 
 3.1.0
  - CHANGE: Ported to 1.18.2
