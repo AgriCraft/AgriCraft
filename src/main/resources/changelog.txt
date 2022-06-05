@@ -2,6 +2,7 @@ Changelog
 ---------
 3.1.1
  - ADDED: Support for the Mystical Agriculture Seed Reprocessor
+ - ADDED: Industrial Foregoing harvester compatibility
  - FIXED: Server crash due to wrong import
  - FIXED: Crops without crop sticks dropping crop sticks when broken
 

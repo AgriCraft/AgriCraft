@@ -252,6 +252,11 @@ dependencies {
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
     runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
+    //Industrial Foregoing
+    compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3817385")
+    //runtimeOnly fg.deobf("curse.maven:industrial_foregoing-266515:3817385")
+    //runtimeOnly fg.deobf("curse.maven:titanium-287342:3817355") // Industrial Foregoing runtime dependency 1.18.2-3.5.5-37
+
     //Jade
     compileOnly fg.deobf("curse.maven:jade-324717:3681449")
     //runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
