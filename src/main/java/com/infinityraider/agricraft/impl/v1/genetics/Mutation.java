@@ -1,9 +1,9 @@
 package com.infinityraider.agricraft.impl.v1.genetics;
 
 import com.agricraft.agricore.util.MathHelper;
+import com.google.common.collect.Lists;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.Arrays;
 import java.util.List;
