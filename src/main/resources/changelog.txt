@@ -3,6 +3,7 @@ Changelog
 3.1.1
  - ADDED: Support for the Mystical Agriculture Seed Reprocessor
  - FIXED: Server crash due to wrong import
+ - FIXED: Crops without crop sticks dropping crop sticks when broken
 
 3.1.0
  - CHANGE: Ported to 1.18.2

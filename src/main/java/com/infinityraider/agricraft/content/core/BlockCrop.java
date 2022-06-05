@@ -555,7 +555,7 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         CropStickVariant stickType = VARIANT.fetch(state);
         // add crop sticks
         boolean doStickDrops = (!AgriCraft.instance.getConfig().weedsDestroyCropSticks()) || (tile instanceof IAgriCrop) && (!((IAgriCrop) tile).hasWeeds());
-        if(doStickDrops) {
+        if(doStickDrops && cropState.hasSticks()) {
             drops.add(new ItemStack(stickType.getItem().asItem(), cropState.isCross() ? 2 : 1));
         }
         // add seed and drops
