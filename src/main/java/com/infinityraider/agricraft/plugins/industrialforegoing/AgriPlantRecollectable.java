@@ -14,6 +14,7 @@ import java.util.List;
 public class AgriPlantRecollectable extends PlantRecollectable {
     protected AgriPlantRecollectable() {
         super(AgriCraft.instance.getModId());
+        this.setRegistryName(AgriCraft.instance.getModId(), "plant_recollectable");
     }
 
     @Override
