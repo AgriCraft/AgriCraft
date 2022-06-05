@@ -82,7 +82,7 @@ public abstract class AgriRegistryAbstract<T extends IAgriRegisterable<T>> imple
     }
 
     private T fireEvent(T element) {
-        AgriRegistryEvent<T> event = this.createEvent(element);
+        AgriRegistryEvent.Register<T> event = this.createEvent(element);
         if(event == null) {
             return element;
         }
@@ -91,7 +91,7 @@ public abstract class AgriRegistryAbstract<T extends IAgriRegisterable<T>> imple
     }
 
     @Nullable
-    protected AgriRegistryEvent<T> createEvent(T element) {
+    protected AgriRegistryEvent.Register<T> createEvent(T element) {
         return null;
     }
 }

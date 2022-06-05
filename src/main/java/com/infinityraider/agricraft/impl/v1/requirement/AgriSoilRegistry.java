@@ -49,8 +49,8 @@ public class AgriSoilRegistry extends AgriRegistryAbstract<IAgriSoil> implements
 
     @Nullable
     @Override
-    protected AgriRegistryEvent<IAgriSoil> createEvent(IAgriSoil element) {
-        return new AgriRegistryEvent.Soil(this, element);
+    protected AgriRegistryEvent.Register<IAgriSoil> createEvent(IAgriSoil element) {
+        return new AgriRegistryEvent.Register.Soil(this, element);
     }
 
     @Override

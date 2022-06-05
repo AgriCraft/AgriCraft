@@ -50,8 +50,8 @@ public class AgriWeedRegistry extends AgriRegistryAbstract<IAgriWeed> implements
 
     @Nullable
     @Override
-    protected AgriRegistryEvent<IAgriWeed> createEvent(IAgriWeed element) {
-        return new AgriRegistryEvent.Weed(this, element);
+    protected AgriRegistryEvent.Register<IAgriWeed> createEvent(IAgriWeed element) {
+        return new AgriRegistryEvent.Register.Weed(this, element);
     }
 
     @Override

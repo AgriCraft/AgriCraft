@@ -7,6 +7,7 @@ import com.agricraft.agricore.templates.AgriFertilizer;
 import com.agricraft.agricore.util.ResourceHelper;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.event.AgriRegistryEvent;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.plant.IAgriWeed;
@@ -19,6 +20,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.forgespi.language.IModFileInfo;
@@ -116,6 +119,12 @@ public final class CoreHandler {
     }
 
     public static void onSyncComplete() {
+        // fire events
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Soil(LogicalSide.CLIENT));
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Plant(LogicalSide.CLIENT));
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Weed(LogicalSide.CLIENT));
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Mutation(LogicalSide.CLIENT));
+        // set flag
         initialized = true;
     }
 
@@ -137,6 +146,9 @@ public final class CoreHandler {
                 .filter(AgriSoil::isEnabled)
                 .map(soil -> AgriCraft.instance.proxy().jsonObjectFactory().createSoil(soil))
                 .forEach(AgriApi.getSoilRegistry()::add);
+
+        // Fire initiation completion
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Soil(LogicalSide.SERVER));
 
         // Display Soils
         AgriCore.getLogger("agricraft").info("Registered Soils ({0}/{1}):", count, raw);
@@ -161,6 +173,9 @@ public final class CoreHandler {
                 .map(plant -> AgriCraft.instance.proxy().jsonObjectFactory().createPlant(plant))
                 .forEach(AgriApi.getPlantRegistry()::add);
 
+        // Fire initiation completion
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Plant(LogicalSide.SERVER));
+
         // Display Plants
         AgriCore.getLogger("agricraft").info("Registered Plants ({0}/{1}):", count, raw);
         for (IAgriPlant plant : AgriApi.getPlantRegistry().all()) {
@@ -183,6 +198,9 @@ public final class CoreHandler {
                 .filter(AgriWeed::isEnabled)
                 .map(weed -> AgriCraft.instance.proxy().jsonObjectFactory().createWeed(weed))
                 .forEach(AgriApi.getWeedRegistry()::add);
+
+        // Fire initiation completion
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Weed(LogicalSide.SERVER));
 
         // Display Plants
         AgriCore.getLogger("agricraft").info("Registered Weeds ({0}/{1}):", count, raw);
@@ -208,6 +226,9 @@ public final class CoreHandler {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(AgriApi.getMutationRegistry()::add);
+
+        // Fire initiation completion
+        MinecraftForge.EVENT_BUS.post(new AgriRegistryEvent.Initialized.Mutation(LogicalSide.SERVER));
 
         // Display Mutations
         AgriCore.getLogger("agricraft").info("Registered Mutations ({0}/{1}):", count, raw);

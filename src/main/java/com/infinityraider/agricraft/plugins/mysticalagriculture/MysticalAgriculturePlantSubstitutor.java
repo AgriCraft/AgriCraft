@@ -18,7 +18,7 @@ public class MysticalAgriculturePlantSubstitutor {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void onPlantRegistered(AgriRegistryEvent.Plant event) {
+    public void onPlantRegistered(AgriRegistryEvent.Register.Plant event) {
         IAgriPlant current = event.getSubstitute();
         if(MysticalAgricultureCompatClient.getCropFromPlantId(current.getId()) != null) {
             event.setSubstitute(new MysticalAgriculturePlantOverride(current));

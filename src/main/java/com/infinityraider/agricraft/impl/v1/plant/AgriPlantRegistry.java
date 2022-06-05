@@ -53,8 +53,8 @@ public class AgriPlantRegistry extends AgriRegistryAbstract<IAgriPlant> implemen
 
     @Nullable
     @Override
-    protected AgriRegistryEvent<IAgriPlant> createEvent(IAgriPlant element) {
-        return new AgriRegistryEvent.Plant(this, element);
+    protected AgriRegistryEvent.Register<IAgriPlant> createEvent(IAgriPlant element) {
+        return new AgriRegistryEvent.Register.Plant(this, element);
     }
 
     @Override

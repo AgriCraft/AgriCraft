@@ -190,7 +190,7 @@ public class AgriMutationRegistry extends AgriRegistryAbstract<IAgriMutation> im
     }
     @Nullable
     @Override
-    protected AgriRegistryEvent<IAgriMutation> createEvent(IAgriMutation element) {
-        return new AgriRegistryEvent.Mutation(this, element);
+    protected AgriRegistryEvent.Register<IAgriMutation> createEvent(IAgriMutation element) {
+        return new AgriRegistryEvent.Register.Mutation(this, element);
     }
 }

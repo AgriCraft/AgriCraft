@@ -94,7 +94,7 @@ public class AgriGeneRegistry extends AgriRegistryAbstract<IAgriGene<?>> impleme
 
     @Nullable
     @Override
-    protected AgriRegistryEvent<IAgriGene<?>> createEvent(IAgriGene<?> element) {
-        return new AgriRegistryEvent.Gene(this, element);
+    protected AgriRegistryEvent.Register<IAgriGene<?>> createEvent(IAgriGene<?> element) {
+        return new AgriRegistryEvent.Register.Gene(this, element);
     }
 }
