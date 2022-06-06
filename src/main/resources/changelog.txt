@@ -1,5 +1,8 @@
 Changelog
 ---------
+3.1.2
+ - FIXED: Properly define mining speed, tools and hardness for all blocks
+ 
 3.1.1
  - ADDED: Support for the Mystical Agriculture Seed Reprocessor
  - ADDED: Industrial Foregoing harvester compatibility
@@ -7,7 +10,6 @@ Changelog
  - FIXED: Crops without crop sticks dropping crop sticks when broken
  - FIXED: IE Cloche recipes not properly showing in JEI for AgriCraft seeds
  - FIXED: Broken textures for Mystical Agriculture crops
- - FIXED: Properly
 
 3.1.0
  - CHANGE: Ported to 1.18.2
