@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "agricraft:seed_analyzer",
+    "agricraft:irrigation_tank",
+    "agricraft:irrigation_channel",
+    "agricraft:irrigation_channel_hollow",
+    "agricraft:sprinkler",
+    "agricraft:grate"
+  ]
+}

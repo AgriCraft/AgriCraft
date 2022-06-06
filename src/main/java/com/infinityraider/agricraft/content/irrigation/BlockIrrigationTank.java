@@ -109,7 +109,7 @@ public class BlockIrrigationTank extends BlockDynamicTexture<TileEntityIrrigatio
     }
 
     public BlockIrrigationTank() {
-        super(Names.Blocks.TANK, Properties.of(Material.WOOD));
+        super(Names.Blocks.TANK, Properties.of(Material.WOOD).strength(2, 3));
     }
 
     @Override

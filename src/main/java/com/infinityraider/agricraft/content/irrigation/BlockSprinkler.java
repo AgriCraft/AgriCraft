@@ -48,7 +48,7 @@ public class BlockSprinkler extends BlockBaseTile<TileEntitySprinkler> {
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public BlockSprinkler() {
-        super(Names.Blocks.SPRINKLER, Properties.of(Material.WOOD).noOcclusion());
+        super(Names.Blocks.SPRINKLER, Properties.of(Material.WOOD).noOcclusion().strength(2, 3));
     }
 
     @Override

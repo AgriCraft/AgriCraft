@@ -61,7 +61,7 @@ public abstract class BlockIrrigationChannelAbstract extends BlockDynamicTexture
     private final boolean handWheel;
 
     public BlockIrrigationChannelAbstract(String name, boolean handWheel, Properties properties) {
-        super(name, properties);
+        super(name, properties.strength(2, 3));
         this.handWheel = handWheel;
     }
 

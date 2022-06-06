@@ -129,6 +129,7 @@ public class BlockGrate extends BlockDynamicTexture<TileEntityGrate> {
 
     public BlockGrate() {
         super(Names.Blocks.GRATE, Properties.of(Material.WOOD)
+                .strength(2, 3)
                 .noOcclusion()
         );
     }

@@ -62,6 +62,7 @@ public class BlockSeedAnalyzer extends BlockBaseTile<TileEntitySeedAnalyzer> imp
 
     public BlockSeedAnalyzer() {
         super(Names.Blocks.SEED_ANALYZER, Properties.of(Material.WOOD)
+                .strength(2, 3)
                 .noOcclusion()
         );
     }
