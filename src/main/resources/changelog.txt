@@ -3,6 +3,7 @@ Changelog
 3.1.2
  - ADDED: Compat with Straw Golem Reborn
  - FIXED: Properly define mining speed, tools and hardness for all blocks
+ - FIXED: Client crash when trying to render a plant with insufficient textures defined
 
 3.1.1
  - ADDED: Support for the Mystical Agriculture Seed Reprocessor

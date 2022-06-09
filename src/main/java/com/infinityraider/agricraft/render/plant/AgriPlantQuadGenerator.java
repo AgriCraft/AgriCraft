@@ -1,6 +1,7 @@
 package com.infinityraider.agricraft.render.plant;
 
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.AgriPlantRenderType;
 import com.infinityraider.agricraft.api.v1.client.IAgriPlantQuadGenerator;
 import com.infinityraider.agricraft.api.v1.client.PlantQuadBakeEvent;
@@ -47,7 +48,15 @@ public class AgriPlantQuadGenerator implements IAgriPlantQuadGenerator, IRenderU
     public List<BakedQuad> bakeQuads(IAgriGrowable plant, IAgriGrowthStage stage, String type,
                                      @Nullable Direction direction, List<ResourceLocation> textures) {
         return AgriPlantRenderType.fetchFromIdentifier(type).map(renderType -> {
-            IntFunction<TextureAtlasSprite> spriteFunction = (i) -> this.getSprite(textures.get(i));
+            IntFunction<TextureAtlasSprite> spriteFunction = (i) -> {
+                if (i >= textures.size()) {
+                    AgriCraft.instance.getLogger().error("Not Enough textures defined for a plant: " + (i + 1) + " requested, " + textures.size() + " provided.");
+                    AgriCraft.instance.getLogger().error("Plant: " + plant);
+                    return this.getMissingSprite();
+                } else {
+                    return this.getSprite(textures.get(i));
+                }
+            };
             List<BakedQuad> quads = renderType.bakedQuads(plant, stage, direction, spriteFunction);
             PlantQuadBakeEvent event = new PlantQuadBakeEvent(this, plant, stage, direction, textures, spriteFunction, renderType, quads);
             MinecraftForge.EVENT_BUS.post(event);
