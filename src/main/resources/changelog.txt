@@ -1,8 +1,9 @@
 Changelog
 ---------
 3.1.2
+ - ADDED: Compat with Straw Golem Reborn
  - FIXED: Properly define mining speed, tools and hardness for all blocks
- 
+
 3.1.1
  - ADDED: Support for the Mystical Agriculture Seed Reprocessor
  - ADDED: Industrial Foregoing harvester compatibility

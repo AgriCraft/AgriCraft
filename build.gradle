@@ -271,8 +271,8 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")
 
     //Straw Golem Reborn
-    compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3790160")
-    //runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3790160")
+    compileOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3824741")
+    //runtimeOnly fg.deobf("curse.maven:straw_golem_reborn-387580:3824741")
 
     //The One Probe
     compileOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
