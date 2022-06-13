@@ -219,7 +219,7 @@ minecraft.runs.all {
 // List Deps.
 dependencies {
     // Minecraft
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.42'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.51'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
