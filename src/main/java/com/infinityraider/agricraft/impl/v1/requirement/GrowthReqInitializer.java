@@ -160,7 +160,7 @@ public abstract class GrowthReqInitializer {
                     return IAgriGrowthResponse.FERTILE;
                 }
                 if (this.cache == null) {
-                    this.cache = AgriCraft.instance.proxy().getMinecraftServer().registryAccess().registry(Registry.DIMENSION_TYPE_REGISTRY)
+                    this.cache = AgriCraft.instance.getRegistryAccess().registry(Registry.DIMENSION_TYPE_REGISTRY)
                             .map(registry -> plant.getRequirement().getDimensionCondition().stream()
                                     .map(ResourceLocation::new)
                                     .map(registry::get)
