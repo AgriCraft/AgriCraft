@@ -18,6 +18,7 @@ import com.infinityraider.infinitylib.block.BlockBaseTile;
 import com.infinityraider.infinitylib.block.IFluidLoggable;
 import com.infinityraider.infinitylib.block.property.InfProperty;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
+import com.infinityraider.infinitylib.reference.Constants;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -52,6 +53,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -543,6 +545,34 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @SuppressWarnings("deprecation")
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
         this.getCrop(world, pos).ifPresent(IAgriCrop::applyGrowthTick);
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+        double x = target.getLocation().x() - pos.getX();
+        double z = target.getLocation().z() - pos.getZ();
+        if(x >= 3*Constants.UNIT && x <= 13*Constants.UNIT && z >= 3*Constants.UNIT && z <= 13*Constants.UNIT) {
+            // prioritize the plant
+            ItemStack stack = this.getSeedStack(world, pos);
+            return stack.isEmpty() ? this.getCropStickStack(state) : stack;
+        } else {
+            // prioritize the crop sticks
+            ItemStack stack = this.getCropStickStack(state);
+            return stack.isEmpty() ? this.getSeedStack(world, pos) : stack;
+        }
+    }
+
+    public ItemStack getCropStickStack(BlockState state) {
+        return this.getCropStickVariant(state)
+                .map(IAgriCropStickItem.Variant::createItemStack)
+                .orElse(ItemStack.EMPTY);
+    }
+
+    public ItemStack getSeedStack(BlockGetter world, BlockPos pos) {
+        return AgriApi.getCrop(world, pos)
+                .flatMap(IAgriCrop::getGenome)
+                .map(IAgriGenome::toSeedStack)
+                .orElse(ItemStack.EMPTY);
     }
 
     @Override
