@@ -54,7 +54,7 @@ public class MessageSyncFertilizerJson extends MessageBase {
     }
 
     @Override
-    protected List<IMessageSerializer> getNecessarySerializers() {
+    protected List<IMessageSerializer<?>> getNecessarySerializers() {
         return ImmutableList.of(new JsonSerializer<AgriFertilizer>());
     }
 }
