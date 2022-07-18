@@ -268,7 +268,9 @@ dependencies {
 
     //Quark
     compileOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
-    //runtimeOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
+    compileOnly fg.deobf("vazkii.autoreglib:AutoRegLib:1.7-53.111")
+    runtimeOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
+    runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:1.7-53.111")
 
 
     //Serene Seasons
@@ -281,7 +283,7 @@ dependencies {
 
     //The One Probe
     compileOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
-    runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
+    //runtimeOnly fg.deobf("curse.maven:theoneprobe-245211:3671753")
 }
 
 // Delete Old Plants

@@ -11,6 +11,7 @@ import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.agricraft.api.v1.requirement.IAgriGrowthResponse;
+import com.infinityraider.agricraft.api.v1.requirement.IAgriSoil;
 import com.infinityraider.agricraft.content.tools.ItemSeedBag;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.agricraft.util.CropHelper;
@@ -369,7 +370,12 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @Deprecated
     @SuppressWarnings("deprecation")
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
-        return AgriApi.getSoil(world, pos.below()).isPresent();
+        return this.canSurvive(world, pos);
+    }
+
+    protected boolean canSurvive(LevelReader world, BlockPos pos) {
+        Optional<IAgriSoil> soil = AgriApi.getSoil(world, pos.below());
+        return AgriApi.getSoil(world, pos.below()).map(IAgriSoil::isSoil).orElse(false);
     }
 
     @Override
@@ -379,6 +385,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
         BlockPos pos = context.getClickedPos();
         ItemStack stack = context.getItemInHand();
         BlockState state = this.defaultBlockState();
+        // add a safety check
+        if(!this.canSurvive(world, pos)) {
+            return null;
+        }
         if(stack.getItem() instanceof IAgriCropStickItem) {
             // define crop stick type
             state = this.blockStateCropSticks(CropStickVariant.fromItem(stack));
