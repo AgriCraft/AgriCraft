@@ -33,8 +33,7 @@ public class JadePlugin implements IAgriPlugin, IWailaPlugin {
     public void register(IRegistrar registrar) {
         AgriWailaCropBlockInfoProvider cropProvider = new AgriWailaCropBlockInfoProvider(registrar.getElementHelper());
         registrar.registerIconProvider(cropProvider, BlockCrop.class);
-        registrar.registerComponentProvider(cropProvider, TooltipPosition.HEAD, BlockCrop.class);
-        registrar.registerComponentProvider(cropProvider, TooltipPosition.BODY, Block.class);
+        registrar.registerComponentProvider(cropProvider, TooltipPosition.BODY, BlockCrop.class);
         registrar.registerComponentProvider(AgriWailaIrrigationBlockInfoProvider.getInstance(), TooltipPosition.BODY, Block.class);
     }
 }
