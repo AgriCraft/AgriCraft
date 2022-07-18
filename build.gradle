@@ -239,10 +239,10 @@ dependencies {
     //runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
     //Create
-    compileOnly fg.deobf("curse.maven:create-328085:3737418")
-    compileOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency v1.16.5-0.1.1
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3737418")
-    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3737402") // create dependency
+    compileOnly fg.deobf("curse.maven:create-328085:3872145")
+    compileOnly fg.deobf("curse.maven:flywheel-486392:3871082") // create dependency v1.16.5-0.1.1
+    //runtimeOnly fg.deobf("curse.maven:create-328085:3872145")
+    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3871082") // create dependency
 
     //Cyclic
     compileOnly fg.deobf("curse.maven:cyclic-239286:3708026")
@@ -258,13 +258,18 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:titanium-287342:3817355") // Industrial Foregoing runtime dependency 1.18.2-3.5.5-37
 
     //Jade
-    compileOnly fg.deobf("curse.maven:jade-324717:3681449")
-    //runtimeOnly fg.deobf("curse.maven:jade-324717:3681449")
+    compileOnly fg.deobf("curse.maven:jade-324717:3865918")
+    //runtimeOnly fg.deobf("curse.maven:jade-324717:3865918")
 
     //Mystical Agriculture
     compileOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
 	//runtimeOnly fg.deobf("com.blakebr0.mysticalagriculture:MysticalAgriculture:1.18.2-5.1.0")
 	//runtimeOnly fg.deobf("com.blakebr0.cucumber:Cucumber:1.18.2-5.1.0")   //Mystical Agriculture runtime dependency
+
+    //Quark
+    compileOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
+    //runtimeOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
+
 
     //Serene Seasons
     compileOnly fg.deobf("curse.maven:serene_seasons-291874:3693807")

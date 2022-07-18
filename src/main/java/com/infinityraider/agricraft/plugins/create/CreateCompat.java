@@ -12,6 +12,6 @@ public class CreateCompat {
      * Until Create exposes harvesting logic in an API or via IMC, we must do it this way, unfortunately.
      */
     static void injectAgriHarvesterMovementBehaviour() {
-        AllMovementBehaviours.addMovementBehaviour(AllBlocks.MECHANICAL_HARVESTER.getId(), new AgriHarvesterMovementBehaviour());
+        AllMovementBehaviours.registerBehaviour(AllBlocks.MECHANICAL_HARVESTER.get().delegate, new AgriHarvesterMovementBehaviour());
     }
 }
