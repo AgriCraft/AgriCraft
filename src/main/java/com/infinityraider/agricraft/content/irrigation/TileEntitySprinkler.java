@@ -221,6 +221,9 @@ public class TileEntitySprinkler extends TileEntityDynamicTexture {
         if (this.getLevel() == null) {
             return;
         }
+        if (AgriCraft.instance.getConfig().disableParticles()) {
+            return;
+        }
         boolean vapour = this.getLevel().dimensionType().ultraWarm();
         int particleSetting = AgriCraft.instance.proxy().getParticleSetting(); //0 = all, 1 = decreased; 2 = minimal;
         particleSetting += vapour ? 6 : 2;
