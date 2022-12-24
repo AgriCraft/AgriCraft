@@ -27,7 +27,7 @@ public final class JsonHelper {
         final double chance = mutation.getChance();
 
         // Step III. Determine ID.
-        final String mutationId = mutation.getChild().getId().replace("_plant", "_mutation");
+        final String mutationId = mutation.getPath();
 
         // Step IV. Determine Child.
         final Optional<IAgriPlant> child = AgriApi.getPlantRegistry().get(mutation.getChild().getId());
