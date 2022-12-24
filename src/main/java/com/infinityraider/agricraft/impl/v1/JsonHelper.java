@@ -27,7 +27,7 @@ public final class JsonHelper {
         final double chance = mutation.getChance();
 
         // Step III. Determine ID.
-        final String mutationId = mutation.getPath();
+        final String mutationId = getIdFromPath(mutation.getPath());
 
         // Step IV. Determine Child.
         final Optional<IAgriPlant> child = AgriApi.getPlantRegistry().get(mutation.getChild().getId());
@@ -72,6 +72,10 @@ public final class JsonHelper {
                 })
                 // convert the underlying condition into a mutation condition based on the json parameters
                 .map(test -> test.convert(condition.isRequired(), condition.getGuaranteedChance()));
+    }
+
+    private static String getIdFromPath(String path) {
+        return path.replace("/mutations/", ":").replace(".json", "");
     }
 
 }
