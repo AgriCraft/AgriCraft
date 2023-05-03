@@ -67,7 +67,7 @@ org.gradle.jvmargs=-Xmx3G
 [bug-link]:https://agricraft.github.io/issues
 [bug]:https://agricraft.github.io/images/bug.svg "AgriCraft Issues"
 
-[wiki-link]:https://agricraft.github.io/wiki
+[wiki-link]:https://agridocs.readthedocs.io/en/master/
 [wiki]:https://agricraft.github.io/images/wiki.svg "AgriCraft GitHub Wiki"
 
 [1.7.10]:https://agricraft.github.io/versions/1.7.10/status.svg
