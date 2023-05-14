@@ -31,7 +31,8 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
-	id 'jacoco'
+    id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 
@@ -208,29 +209,22 @@ repositories {
 
 // Add "embedded" configuration
 configurations {
-    embed
-    implementation.extendsFrom(embed)
-}
-
-// To make sure Forge does not ignore the embedded projects
-// See: https://gist.github.com/SizableShrimp/66b22f1b24c255e1491c8d98d3f11f83
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.embed.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
+    shade
+    implementation.extendsFrom shade
 }
 
 // List Deps.
 dependencies {
     // Minecraft
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.76'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.2'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // AgriCore
-    embed project(':AgriCore')
-    
+    minecraftLibrary project(':AgriCore')
+    shade project(':AgriCore')
+
     // InfinityLib
     implementation project(":InfinityLib")
 
@@ -306,6 +300,7 @@ processResources {
 }
 
 jar {
+    archiveClassifier = 'slim'
     // Manifest
     manifest {
         attributes([
@@ -318,13 +313,17 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    // Fix Shading
-    configurations.embed.each { dep ->
-        from(project.zipTree(dep)){
-            include 'com/agricraft', 'com/agricraft/**'
-            include 'org/reflections/**'
-        }
-    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    finalizedBy 'reobfShadowJar'
+}
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
 }
 
 // Example configuration to allow publishing using the maven-publish task
