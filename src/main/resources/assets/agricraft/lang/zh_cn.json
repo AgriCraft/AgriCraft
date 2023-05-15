@@ -30,9 +30,9 @@
   "item.agricraft.agri_nugget_coal": "煤炭颗粒",
   "item.agricraft.agri_nugget_diamond": "钻石粒",
   "item.agricraft.agri_nugget_emerald": "绿宝石粒",
-  "item.agricraft.agri_nugget_quartz": "石英薄片",
-  "item.agricraft.netherite_sliver": "下界合金薄片",
-  "item.agricraft.amathyllis_petal": "紫水晶薄片",
+  "item.agricraft.agri_nugget_quartz": "石英残片",
+  "item.agricraft.netherite_sliver": "下界合金残片",
+  "item.agricraft.amathyllis_petal": "紫水晶残片",
 
   "enchantment.agricraft.agri_seed_bag": "选种",
 
