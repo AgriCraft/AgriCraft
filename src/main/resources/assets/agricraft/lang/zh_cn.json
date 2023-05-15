@@ -125,10 +125,10 @@
   "agricraft.tooltip.nutrients": "肥力",
 
   "agricraft.tooltip.humidity.arid": "不毛",
-  "agricraft.tooltip.humidity.dry": "干燥",
-  "agricraft.tooltip.humidity.damp": "少雨",
+  "agricraft.tooltip.humidity.dry": "干涸",
+  "agricraft.tooltip.humidity.damp": "少水",
   "agricraft.tooltip.humidity.wet": "潮湿",
-  "agricraft.tooltip.humidity.watery": "多雨",
+  "agricraft.tooltip.humidity.watery": "湿漉",
   "agricraft.tooltip.humidity.flooded": "水淹",
   "agricraft.tooltip.humidity.invalid": "无效的",
 
@@ -236,7 +236,7 @@
 
   "agricraft.journal.introduction": "前言",
   "agricraft.journal.introduction.paragraph_1": "这是独属于你的农学研究随笔，在这里你可以记录你发现的所有种子。只需将日志放在种子分析仪上，然后开始分析种子就可以了！",
-  "agricraft.journal.introduction.paragraph_2": "在分析种子的基因组时，你会了解到它的少量知识，比如它喜欢什么样的环境，它将如何生长，它可能结出什么果实，以及它可能变异到哪些其他物种。",
+  "agricraft.journal.introduction.paragraph_2": "在分析种子的基因组时，你会了解到它的一些知识，比如它喜欢什么样的环境，它将如何生长，它可能结出什么果实，以及它可能变异到哪些其他物种。",
   "agricraft.journal.introduction.paragraph_3": "你能发现所有的作物吗？",
   "agricraft.journal.introduction.discovered": "已经发现的种子",
 
