@@ -391,17 +391,17 @@
   "agricraft.plant.wither_rose.seed": "凋零玫瑰种子",
   "agricraft.plant.wither_rose.desc": "没有人喜欢看到玫瑰凋零，但可不仅仅是“不喜欢”。",
 
-  "agricraft.plant.amathyllis.name": "紫水晶薄片",
-  "agricraft.plant.amathyllis.seed": "紫水晶薄片种子",
+  "agricraft.plant.amathyllis.name": "紫晶花",
+  "agricraft.plant.amathyllis.seed": "紫晶花种子",
   "agricraft.plant.amathyllis.desc": "它的花瓣看起来异常晶莹。",
 
   "agricraft.plant.aurigold.name": "金光花",
   "agricraft.plant.aurigold.seed": "金光花种子",
   "agricraft.plant.aurigold.desc": "洋溢着金色的喜悦。",
 
-  "agricraft.plant.carbonation.name": "Carbonation",
-  "agricraft.plant.carbonation.seed": "Carbonation Seeds",
-  "agricraft.plant.carbonation.desc": "A rare flower which has driven itself to the edge of extinction due its high flammability.",
+  "agricraft.plant.carbonation.name": "墨莲",
+  "agricraft.plant.carbonation.seed": "墨莲种子",
+  "agricraft.plant.carbonation.desc": "一种罕见的花朵，由于其高易燃性已经濒临灭绝边缘。",
 
   "agricraft.plant.cuprosia.name": "红铜",
   "agricraft.plant.cuprosia.seed": "红铜种子",
@@ -419,53 +419,53 @@
   "agricraft.plant.ferranium.seed": "铁叶草种子",
   "agricraft.plant.ferranium.desc": "一种强大的植物。",
 
-  "agricraft.plant.jaslumine.name": "Jaslumine",
-  "agricraft.plant.jaslumine.seed": "Jaslumine Seeds",
-  "agricraft.plant.jaslumine.desc": "Jaslumine to some, Jaluminium to me. Shines like silver, but not all that valuable of a plant.",
+  "agricraft.plant.jaslumine.name": "铝芽籽",
+  "agricraft.plant.jaslumine.seed": "铝芽籽种子",
+  "agricraft.plant.jaslumine.desc": "闪耀如银，但并不是那么有价值的植物。",
 
   "agricraft.plant.lapender.name": "蓝熏衣",
   "agricraft.plant.lapender.seed": "蓝熏衣种子",
   "agricraft.plant.lapender.desc": "一种威严的植物。",
 
-  "agricraft.plant.nethereed.name": "Nethereed",
-  "agricraft.plant.nethereed.seed": "Nethereed Seeds",
-  "agricraft.plant.nethereed.desc": "Regular reed's tougher cousin from the nether.",
+  "agricraft.plant.nethereed.name": "炼狱芦苇",
+  "agricraft.plant.nethereed.seed": "炼狱芦苇种子",
+  "agricraft.plant.nethereed.desc": "芦苇族表亲，来自于下界。",
 
-  "agricraft.plant.niccissus.name": "Niccissus",
-  "agricraft.plant.niccissus.seed": "Niccissus Seeds",
-  "agricraft.plant.niccissus.desc": "While there is much debate over which is the best plant, we can all agree that the Niccissus plant is by far the most self-absorbed.",
+  "agricraft.plant.niccissus.name": "镍粉藤",
+  "agricraft.plant.niccissus.seed": "镍粉藤种子",
+  "agricraft.plant.niccissus.desc": "虽然对于哪种植物是最好的存在很多争议，但我们都可以一致认同，这种形似水仙的植物是迄今为止最自恋的。",
 
-  "agricraft.plant.nitorwart.name": "Nitor Wart",
-  "agricraft.plant.nitorwart.seed": "Nitor Wart Spores",
-  "agricraft.plant.nitorwart.desc": "It sure seems to like to glow.",
+  "agricraft.plant.nitorwart.name": "闪耀疣",
+  "agricraft.plant.nitorwart.seed": "闪耀疣孢子",
+  "agricraft.plant.nitorwart.desc": "它似乎喜欢发光。",
 
-  "agricraft.plant.osmonium.name": "Osmonium",
-  "agricraft.plant.osmonium.seed": "Osmonium Seeds",
-  "agricraft.plant.osmonium.desc": "An unusually rare plant, thought to originate from outer space.",
+  "agricraft.plant.osmonium.name": "锇蓝草",
+  "agricraft.plant.osmonium.seed": "锇蓝草种子",
+  "agricraft.plant.osmonium.desc": "一种异常罕见的植物，被认为来自外太空。",
 
-  "agricraft.plant.petinia.name": "Petinia",
-  "agricraft.plant.petinia.seed": "Petinia Seeds",
-  "agricraft.plant.petinia.desc": "A distant cousin of the familiar petunia flower, this plant produces a substance frequently used to plate metal cans.",
+  "agricraft.plant.petinia.name": "锡蔷薇",
+  "agricraft.plant.petinia.seed": "锡蔷薇种子",
+  "agricraft.plant.petinia.desc": "这种植物是熟悉的矮牵牛花的远房亲戚，它产生一种常用于镀金属罐的物质。",
 
-  "agricraft.plant.platiolus.name": "Platiolus",
-  "agricraft.plant.platiolus.seed": "Platiolus Seeds",
-  "agricraft.plant.platiolus.desc": "The unquestioned king among the metal-bearing plants, this plant has a gleam to it that puts even the aurigold flower to shame.",
+  "agricraft.plant.platiolus.name": "铂金草",
+  "agricraft.plant.platiolus.seed": "铂金草种子",
+  "agricraft.plant.platiolus.desc": "这种植物是与金属相关的植物中无可争议的王者，它的光彩甚至使得金光花都黯然失色。",
 
-  "agricraft.plant.plombean.name": "Plombean",
-  "agricraft.plant.plombean.seed": "Plombean Seeds",
-  "agricraft.plant.plombean.desc": "In ancient times this plant was thought to bear a lifegiving fruit. Nowadays we know better.",
+  "agricraft.plant.plombean.name": "铅藤",
+  "agricraft.plant.plombean.seed": "铅藤种子",
+  "agricraft.plant.plombean.desc": "在古代，人们认为这种植物能结出延年益寿的果实。而现在，我们对它有了更清楚的认识。",
 
-  "agricraft.plant.quartzanthemum.name": "Quartzanthemum",
-  "agricraft.plant.quartzanthemum.seed": "Quartzanthemum Seeds",
-  "agricraft.plant.quartzanthemum.desc": "A surprisingly crystalline plant.",
+  "agricraft.plant.quartzanthemum.name": "石英菊",
+  "agricraft.plant.quartzanthemum.seed": "石英菊种子",
+  "agricraft.plant.quartzanthemum.desc": "一个令人惊讶的晶莹植物。",
 
-  "agricraft.plant.redstodendron.name": "Redstodendron",
-  "agricraft.plant.redstodendron.seed": "Redstodendron Seeds",
-  "agricraft.plant.redstodendron.desc": "Much more complex than the average red algae.",
+  "agricraft.plant.redstodendron.name": "红灌木",
+  "agricraft.plant.redstodendron.seed": "红灌木种子",
+  "agricraft.plant.redstodendron.desc": "它的生理机制比一般的红藻更为复杂。",
 
 
-  "agricraft.weed.weed.name": "Weeds",
-  "agricraft.weed.weed.desc": "A nuisance to deal with.",
+  "agricraft.weed.weed.name": "杂草",
+  "agricraft.weed.weed.desc": "令人讨厌的麻烦家伙。",
 
 
   "agricraft.soil.clay.name": "Clay Soil",
