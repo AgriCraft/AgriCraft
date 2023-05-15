@@ -468,16 +468,16 @@
   "agricraft.weed.weed.desc": "令人讨厌的麻烦家伙。",
 
 
-  "agricraft.soil.clay.name": "Clay Soil",
-  "agricraft.soil.crimson_nylium.name": "Crimson Nylium Soil",
-  "agricraft.soil.farmland.name": "Farmland Soil",
-  "agricraft.soil.mycelium.name": "Mycelium Soil",
-  "agricraft.soil.podzol.name": "Podzol Soil",
-  "agricraft.soil.sand.name": "Sand Soil",
-  "agricraft.soil.soul_sand.name": "Soul Sand Soil",
-  "agricraft.soil.soul_soil.name": "Soul Soil Soil",
-  "agricraft.soil.gravel.name": "Gravel Soil",
-  "agricraft.soil.warped_nylium.name": "Warped Nylium Soil",
+  "agricraft.soil.clay.name": "黏土块",
+  "agricraft.soil.crimson_nylium.name": "绯红菌岩",
+  "agricraft.soil.farmland.name": "耕地",
+  "agricraft.soil.mycelium.name": "菌丝",
+  "agricraft.soil.podzol.name": "灰化土",
+  "agricraft.soil.sand.name": "沙子",
+  "agricraft.soil.soul_sand.name": "灵魂沙",
+  "agricraft.soil.soul_soil.name": "灵魂土",
+  "agricraft.soil.gravel.name": "砂砾",
+  "agricraft.soil.warped_nylium.name": "诡异菌岩",
 
 
   "agricraft.plant.abundance_amaranthus.seed": "Amaranthus Seeds",
