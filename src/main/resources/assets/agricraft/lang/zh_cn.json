@@ -317,7 +317,7 @@
 
   "agricraft.plant.lily.name": "铃兰",
   "agricraft.plant.lily.seed": "铃兰种子",
-  "agricraft.plant.lily.desc": "不仅仅出现在山谷中，还在不经意间出现。",
+  "agricraft.plant.lily.desc": "不仅在山谷中，还在不经意间出现。",
 
   "agricraft.plant.melon.name": "西瓜",
   "agricraft.plant.melon.seed": "西瓜种子",
@@ -345,7 +345,7 @@
 
   "agricraft.plant.potato.name": "马铃薯",
   "agricraft.plant.potato.seed": "马铃薯种子",
-  "agricraft.plant.potato.desc": "Po-ta-toes! Boil them, mash them, stick them in a stew.",
+  "agricraft.plant.potato.desc": "马-铃-薯！煮熟它，捣碎它，丢进炖菜里。",
 
   "agricraft.plant.pumpkin.name": "南瓜",
   "agricraft.plant.pumpkin.seed": "南瓜种子",
@@ -403,8 +403,8 @@
   "agricraft.plant.carbonation.seed": "墨莲种子",
   "agricraft.plant.carbonation.desc": "一种罕见的花朵，由于其高易燃性已经濒临灭绝边缘。",
 
-  "agricraft.plant.cuprosia.name": "红铜",
-  "agricraft.plant.cuprosia.seed": "红铜种子",
+  "agricraft.plant.cuprosia.name": "铜茜草",
+  "agricraft.plant.cuprosia.seed": "铜茜草种子",
   "agricraft.plant.cuprosia.desc": "被称为工程师的喜悦，这种植物产生一种极其实用的物质。",
 
   "agricraft.plant.diamahlia.name": "金刚大丽",
@@ -419,8 +419,8 @@
   "agricraft.plant.ferranium.seed": "铁叶草种子",
   "agricraft.plant.ferranium.desc": "一种强大的植物。",
 
-  "agricraft.plant.jaslumine.name": "铝芽籽",
-  "agricraft.plant.jaslumine.seed": "铝芽籽种子",
+  "agricraft.plant.jaslumine.name": "铝茉莉",
+  "agricraft.plant.jaslumine.seed": "铝茉莉种子",
   "agricraft.plant.jaslumine.desc": "闪耀如银，但并不是那么有价值的植物。",
 
   "agricraft.plant.lapender.name": "蓝熏衣",
@@ -443,16 +443,16 @@
   "agricraft.plant.osmonium.seed": "锇蓝草种子",
   "agricraft.plant.osmonium.desc": "一种异常罕见的植物，被认为来自外太空。",
 
-  "agricraft.plant.petinia.name": "锡蔷薇",
-  "agricraft.plant.petinia.seed": "锡蔷薇种子",
+  "agricraft.plant.petinia.name": "锡牵牛",
+  "agricraft.plant.petinia.seed": "锡牵牛种子",
   "agricraft.plant.petinia.desc": "这种植物是熟悉的矮牵牛花的远房亲戚，它产生一种常用于镀金属罐的物质。",
 
   "agricraft.plant.platiolus.name": "铂金草",
   "agricraft.plant.platiolus.seed": "铂金草种子",
   "agricraft.plant.platiolus.desc": "这种植物是与金属相关的植物中无可争议的王者，它的光彩甚至使得金光花都黯然失色。",
 
-  "agricraft.plant.plombean.name": "铅藤",
-  "agricraft.plant.plombean.seed": "铅藤种子",
+  "agricraft.plant.plombean.name": "铅斑豆",
+  "agricraft.plant.plombean.seed": "铅斑豆种子",
   "agricraft.plant.plombean.desc": "在古代，人们认为这种植物能结出延年益寿的果实。而现在，我们对它有了更清楚的认识。",
 
   "agricraft.plant.quartzanthemum.name": "石英菊",
@@ -480,93 +480,93 @@
   "agricraft.soil.warped_nylium.name": "诡异菌岩",
 
 
-  "agricraft.plant.abundance_amaranthus.seed": "Amaranthus Seeds",
-  "agricraft.plant.abundance_amaranthus.desc": "Catkin-like cymes of densely packed flowers.",
+  "agricraft.plant.abundance_amaranthus.seed": "苋菜种子",
+  "agricraft.plant.abundance_amaranthus.desc": "密集的花朵排列成了柔荑花序。",
 
-  "agricraft.plant.abundance_chicory.seed": "Chicory Seeds",
-  "agricraft.plant.abundance_chicory.desc": "Use it alongside your coffee.",
+  "agricraft.plant.abundance_chicory.seed": "菊苣种子",
+  "agricraft.plant.abundance_chicory.desc": "将它放在咖啡杯的边上。",
 
-  "agricraft.plant.abundance_lavender.desc": "A stem filled with fragrant, honey-scented purple buds.",
+  "agricraft.plant.abundance_lavender.desc": "一根长着紫色叶芽、散发着甜香的茎。",
 
-  "agricraft.plant.abundance_purple_african_daisy.seed": "Purple African Daisy Seeds",
-  "agricraft.plant.abundance_purple_african_daisy.desc": "Like a Daisy, but from Africa.",
+  "agricraft.plant.abundance_purple_african_daisy.seed": "紫色非洲菊种子",
+  "agricraft.plant.abundance_purple_african_daisy.desc": "看起来像雏菊，不过原产地是非洲。",
 
-  "agricraft.plant.abundance_shady_marigold.seed": "Shady Marigold Seeds",
-  "agricraft.plant.abundance_shady_marigold.desc": "Flowered Moon.",
+  "agricraft.plant.abundance_shady_marigold.seed": "阴生金盏花",
+  "agricraft.plant.abundance_shady_marigold.desc": "装点着月亮。",
 
-  "agricraft.plant.abundance_sunny_marigold.seed": "Sunny Marigold Seeds",
-  "agricraft.plant.abundance_sunny_marigold.desc": "Flowered Sun.",
+  "agricraft.plant.abundance_sunny_marigold.seed": "阳生金盏花",
+  "agricraft.plant.abundance_sunny_marigold.desc": "装点着太阳。",
 
-  "agricraft.plant.abundance_yellow_african_daisy.seed": "Yellow African Daisy Seeds",
-  "agricraft.plant.abundance_yellow_african_daisy.desc": "Brings a cheerful splash of color.",
+  "agricraft.plant.abundance_yellow_african_daisy.seed": "黄色非洲菊",
+  "agricraft.plant.abundance_yellow_african_daisy.desc": "带来欢快的色彩。",
   
-  "agricraft.plant.aum.desc": "A strange flower that grows in temperate regions. Wizards prize them for their healing properties.",
-  "agricraft.plant.cerublossom.desc": "A curious flower that grows in temperate regions. They seem to radiate mana weakly.",
-  "agricraft.plant.desert_nova.desc": "A blazing flower found in deserts. Vital for any mages looking to delve into fire magic.",
-  "agricraft.plant.tarma_root.desc": "An odd root that grows in swampy areas. They have a natural affinity to earth magic.",
-  "agricraft.plant.wakebloom.desc": "A strange flower that blooms on the surface of rivers. It is said to have a connection to dreams.",
+  "agricraft.plant.aum.desc": "一种在温带地区生长的奇异花朵。巫师们很重视它们的治愈能力。",
+  "agricraft.plant.cerublossom.desc": "一种在温带地区生长的奇异花朵。它们似乎散发着微弱的魔力。",
+  "agricraft.plant.desert_nova.desc": "一种在沙漠中发现的炽烈的花朵。对于任何想深入研究火魔法的法师来说都至关重要。",
+  "agricraft.plant.tarma_root.desc": "一种在沼泽生长的奇怪的根茎。它们与土系魔法有着天然的亲和力。",
+  "agricraft.plant.wakebloom.desc": "一种开在河流表面的奇怪的花。据说它与梦境有着某种联系。",
 
-  "agricraft.plant.atmospheric_aloe_vera.desc": "A succulent plant.",
+  "agricraft.plant.atmospheric_aloe_vera.desc": "一种多肉植物。",
 
-  "agricraft.plant.atmospheric_gilia.seeds": "Gilia Seeds",
-  "agricraft.plant.atmospheric_gilia.desc": "Queen Anne's thimble.",
+  "agricraft.plant.atmospheric_gilia.seeds": "吉莉草种子",
+  "agricraft.plant.atmospheric_gilia.desc": "安妮女王的顶针。",
 
-  "agricraft.plant.atmospheric_hot_monkey_brush.seeds": "Hot Monkey Brush Seeds",
-  "agricraft.plant.atmospheric_hot_monkey_brush.desc": "With slow burst buds.",
+  "agricraft.plant.atmospheric_hot_monkey_brush.seeds": "炽热猴毛风车子种子",
+  "agricraft.plant.atmospheric_hot_monkey_brush.desc": "花蕊半开。",
 
-  "agricraft.plant.atmospheric_scalding_monkey_brush.seeds": "Scalding Monkey Brush Seeds",
-  "agricraft.plant.atmospheric_scalding_monkey_brush.desc": "Probably not good for your hair.",
+  "agricraft.plant.atmospheric_scalding_monkey_brush.seeds": "滚烫猴毛风车子种子",
+  "agricraft.plant.atmospheric_scalding_monkey_brush.desc": "可能对你的头发不是很友好。",
 
-  "agricraft.plant.atmospheric_warm_monkey_brush.seeds": "Warm Monkey Brush Seeds",
-  "agricraft.plant.atmospheric_warm_monkey_brush.desc": "Not warm enough.",
+  "agricraft.plant.atmospheric_warm_monkey_brush.seeds": "暖和猴毛风车子种子",
+  "agricraft.plant.atmospheric_warm_monkey_brush.desc": "还不够热。",
 
-  "agricraft.plant.atmospheric_water_hyacinth.seeds": "Water Hyacinth Seeds",
-  "agricraft.plant.atmospheric_water_hyacinth.desc": "It's too invasive to be left alive.",
+  "agricraft.plant.atmospheric_water_hyacinth.seeds": "凤眼莲种子",
+  "agricraft.plant.atmospheric_water_hyacinth.desc": "它太具侵略性，不能让其存活。",
 
-  "agricraft.plant.atmospheric_yucca_flower.seeds": "Yucca Flower Seeds",
-  "agricraft.plant.atmospheric_yucca_flower.desc": "You can use the leaves as a sword.",
+  "agricraft.plant.atmospheric_yucca_flower.seeds": "丝兰花种子",
+  "agricraft.plant.atmospheric_yucca_flower.desc": "你可以将其叶子用作剑。",
 
-  "agricraft.plant.autumnity_autumn_crocus.seed": "Autumn Crocus Seeds",
-  "agricraft.plant.autumnity_autumn_crocus.desc": "Fake saffron.",
+  "agricraft.plant.autumnity_autumn_crocus.seed": "秋番红花种子",
+  "agricraft.plant.autumnity_autumn_crocus.desc": "很像藏红花，但其实不是。",
 
-  "agricraft.plant.autumnity_foul_berry.seed": "Foul Berry Seeds",
-  "agricraft.plant.autumnity_foul_berry.desc": "Not so sweet.",
+  "agricraft.plant.autumnity_foul_berry.seed": "秽莓种子",
+  "agricraft.plant.autumnity_foul_berry.desc": "这并不好吃。",
 
-  "agricraft.plant.biomesoplenty_burning_blossom.seed": "Burning Blossom Seeds",
-  "agricraft.plant.biomesoplenty_burning_blossom.desc": "Watch out for burns.",
+  "agricraft.plant.biomesoplenty_burning_blossom.seed": "火焰花种子",
+  "agricraft.plant.biomesoplenty_burning_blossom.desc": "小心烧伤。",
 
-  "agricraft.plant.biomesoplenty_glowflower.seed": "Glowflower Seeds",
-  "agricraft.plant.biomesoplenty_glowflower.desc": "A flower glowing in the dark.",
+  "agricraft.plant.biomesoplenty_glowflower.seed": "夜光花种子",
+  "agricraft.plant.biomesoplenty_glowflower.desc": "一朵在黑暗中发光的花。",
 
-  "agricraft.plant.biomesoplenty_glowshroom.seed": "Glowshroom Seeds",
-  "agricraft.plant.biomesoplenty_glowshroom.desc": "A mushroom glowing in the dark.",
+  "agricraft.plant.biomesoplenty_glowshroom.seed": "夜光菇种子",
+  "agricraft.plant.biomesoplenty_glowshroom.desc": "一种在黑暗中发光的蘑菇。",
 
-  "agricraft.plant.biomesoplenty_lavender.seed": "Lavender Seeds",
-  "agricraft.plant.biomesoplenty_lavender.desc": "A flower with multiple purple blossoms and a refreshing scent.",
+  "agricraft.plant.biomesoplenty_lavender.seed": "熏衣草种子",
+  "agricraft.plant.biomesoplenty_lavender.desc": "一种开着许多紫色花簇，散发着清新的香味的植物。",
 
-  "agricraft.plant.biomesoplenty_orange_cosmos.seed": "Orange Cosmos Seeds",
-  "agricraft.plant.biomesoplenty_orange_cosmos.desc": "Doesn't it look like the sun?",
+  "agricraft.plant.biomesoplenty_orange_cosmos.seed": "橙色波斯菊",
+  "agricraft.plant.biomesoplenty_orange_cosmos.desc": "它看起来像不像小太阳？",
 
-  "agricraft.plant.biomesoplenty_pink_daffodil.seed": "Pink Daffodil Seeds",
-  "agricraft.plant.biomesoplenty_pink_daffodil.desc": "This flower is generally found near ponds or lakes.",
+  "agricraft.plant.biomesoplenty_pink_daffodil.seed": "粉水仙种子",
+  "agricraft.plant.biomesoplenty_pink_daffodil.desc": "这种花通常在池塘或湖泊附近出现。",
 
-  "agricraft.plant.biomesoplenty_pink_hibiscus.seed": "Pink Hibiscus Seeds",
-  "agricraft.plant.biomesoplenty_pink_hibiscus.desc": "Its gigantic blooms are loved by bees, butterflies and hummingbirds.",
+  "agricraft.plant.biomesoplenty_pink_hibiscus.seed": "粉木槿种子",
+  "agricraft.plant.biomesoplenty_pink_hibiscus.desc": "它巨大的花朵深受蜜蜂、蝴蝶和蜂鸟的喜爱。",
 
-  "agricraft.plant.biomesoplenty_rose.seed": "Rose Seeds",
-  "agricraft.plant.biomesoplenty_rose.desc": "One of the most popular and widely cultivated groups of flowering plants.",
+  "agricraft.plant.biomesoplenty_rose.seed": "玫瑰种子",
+  "agricraft.plant.biomesoplenty_rose.desc": "最受欢迎和广泛种植的花朵之一。",
 
-  "agricraft.plant.biomesoplenty_toadstool.seed": "Toadstool Seeds",
-  "agricraft.plant.biomesoplenty_toadstool.desc": "A type of edible mushroom found in the forest.",
+  "agricraft.plant.biomesoplenty_toadstool.seed": "伞菌种子",
+  "agricraft.plant.biomesoplenty_toadstool.desc": "一种在森林中发现的可食用蘑菇。",
 
-  "agricraft.plant.biomesoplenty_violet.seed": "Violet Seeds",
-  "agricraft.plant.biomesoplenty_violet.desc": "A delicate flower growing in meadows.",
+  "agricraft.plant.biomesoplenty_violet.seed": "紫罗兰种子",
+  "agricraft.plant.biomesoplenty_violet.desc": "一种生长在草地上的娇嫩的花。",
 
-  "agricraft.plant.biomesoplenty_wildflower.seed": "Wildflower Seeds",
-  "agricraft.plant.biomesoplenty_wildflower.desc": "A type of flower that grows almost everywhere.",
+  "agricraft.plant.biomesoplenty_wildflower.seed": "野花种子",
+  "agricraft.plant.biomesoplenty_wildflower.desc": "一种几乎随处可见的花。",
 
-  "agricraft.plant.biomesoplenty_wilted_lily.seed": "Wilted Lily Seeds",
-  "agricraft.plant.biomesoplenty_wilted_lily.desc": "That's what happens when you don't water your plants.",
+  "agricraft.plant.biomesoplenty_wilted_lily.seed": "枯萎的百合种子",
+  "agricraft.plant.biomesoplenty_wilted_lily.desc": "当你不给植物浇水时，就会发生这种情况。",
 
   "agricraft.plant.botania_black_flower.seed": "Mystical Black Seeds",
   "agricraft.plant.botania_black_flower.desc": "A beautiful flower that is as dark as the night.",
