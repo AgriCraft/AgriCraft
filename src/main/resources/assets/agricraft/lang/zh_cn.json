@@ -277,11 +277,11 @@
 
   "agricraft.plant.beet_root.name": "甜菜根",
   "agricraft.plant.beet_root.seed": "甜菜种子",
-  "agricraft.plant.beet_root.desc": "甜菜，简直是为了晚餐而生。",
+  "agricraft.plant.beet_root.desc": "甜菜，晚餐就它了。",
 
   "agricraft.plant.bluet.name": "蓝花美耳草",
   "agricraft.plant.bluet.seed": "蓝花美耳草种子",
-  "agricraft.plant.bluet.desc": "一位清秀而纤细的女士。",
+  "agricraft.plant.bluet.desc": "窈窕淑女。",
 
   "agricraft.plant.brown_mushroom.name": "棕色蘑菇",
   "agricraft.plant.brown_mushroom.seed": "棕色蘑菇种子",
@@ -297,7 +297,7 @@
 
   "agricraft.plant.cornflower.name": "矢车菊",
   "agricraft.plant.cornflower.seed": "矢车菊种子",
-  "agricraft.plant.cornflower.desc": "也被称为单身汉的钮扣(bachelor's button)。",
+  "agricraft.plant.cornflower.desc": "也被称为“单身汉的钮扣”。",
 
   "agricraft.plant.crimson_fungus.name": "绯红菌",
   "agricraft.plant.crimson_fungus.seed": "绯红菌孢子",
@@ -309,11 +309,11 @@
 
   "agricraft.plant.dandelion.name": "蒲公英",
   "agricraft.plant.dandelion.seed": "蒲公英种子",
-  "agricraft.plant.dandelion.desc": "尽管常常被认为是杂草，这种有着黄色花朵的植物仍具有不言而喻的价值。它具有深入土壤的主根，能够从深层的土壤中汲取养分，使其成为浅根植物的良好伴侣。",
+  "agricraft.plant.dandelion.desc": "尽管常常被认为是杂草，这种有着黄色花朵的植物却有着鲜为人知的价值。它具有深入土壤的主根，能够从深层的土壤中汲取养分，使其成为浅根植物的良好伴侣。",
 
   "agricraft.plant.kelp.name": "海带",
   "agricraft.plant.kelp.seed": "海带种子",
-  "agricraft.plant.kelp.desc": "素食主义食人鱼的首选点心。",
+  "agricraft.plant.kelp.desc": "素食主义美人鱼的首选点心。",
 
   "agricraft.plant.lily.name": "铃兰",
   "agricraft.plant.lily.seed": "铃兰种子",
@@ -345,7 +345,7 @@
 
   "agricraft.plant.potato.name": "马铃薯",
   "agricraft.plant.potato.seed": "马铃薯种子",
-  "agricraft.plant.potato.desc": "马-铃-薯！煮熟它，捣碎它，丢进炖菜里。",
+  "agricraft.plant.potato.desc": "马—铃—薯！煮土豆、土豆泥、大锅炖土豆！",
 
   "agricraft.plant.pumpkin.name": "南瓜",
   "agricraft.plant.pumpkin.seed": "南瓜种子",
@@ -365,7 +365,7 @@
 
   "agricraft.plant.sea_pickle.name": "海泡菜",
   "agricraft.plant.sea_pickle.seed": "海泡菜种子",
-  "agricraft.plant.sea_pickle.desc": "并不像大家期望的那样美味。",
+  "agricraft.plant.sea_pickle.desc": "并不像你所期望的那样美味。",
 
   "agricraft.plant.sweet_berry.name": "甜浆果",
   "agricraft.plant.sweet_berry.seed": "甜浆果种子",
@@ -373,7 +373,7 @@
 
   "agricraft.plant.sugarcane.name": "甘蔗",
   "agricraft.plant.sugarcane.seed": "甘蔗种子",
-  "agricraft.plant.sugarcane.desc": "富含果糖，现已加入健康早餐计划。",
+  "agricraft.plant.sugarcane.desc": "富含糖分，现已加入健康早餐计划。",
 
   "agricraft.plant.warped_fungus.name": "诡异菌",
   "agricraft.plant.warped_fungus.seed": "诡异菌孢子",
@@ -389,7 +389,7 @@
 
   "agricraft.plant.wither_rose.name": "凋灵玫瑰",
   "agricraft.plant.wither_rose.seed": "凋灵玫瑰种子",
-  "agricraft.plant.wither_rose.desc": "没有人喜欢看到玫瑰凋零，但可不仅仅是“不喜欢”。",
+  "agricraft.plant.wither_rose.desc": "没有人喜欢看到玫瑰凋零，但这可不仅仅是“不喜欢”。",
 
   "agricraft.plant.amathyllis.name": "紫晶花",
   "agricraft.plant.amathyllis.seed": "紫晶花种子",
