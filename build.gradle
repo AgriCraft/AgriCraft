@@ -224,6 +224,7 @@ dependencies {
     // AgriCore
     minecraftLibrary project(':AgriCore')
     shade project(':AgriCore')
+    shade 'org.reflections:reflections:0.10.2'
 
     // InfinityLib
     implementation project(":InfinityLib")
@@ -318,6 +319,9 @@ jar {
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
+    relocate 'org.reflections', "com.infinityraider.agricraft.relocated.reflections"
+    exclude 'org/slf4j', 'org/slf4j/**'
+    exclude 'com/google', 'com/google/**'
     finalizedBy 'reobfShadowJar'
 }
 assemble.dependsOn shadowJar
