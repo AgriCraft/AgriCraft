@@ -19,7 +19,7 @@ itemIcon="agricraft:debugger"
 [[dependencies.agricraft]]
     modId="forge"
     mandatory=true
-    versionRange="[40.1,)"
+    versionRange="[40.2,)"
     ordering="AFTER"
     side="BOTH"
 

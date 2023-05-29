@@ -31,7 +31,8 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
-	id 'jacoco'
+    id 'jacoco'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 
@@ -197,6 +198,10 @@ repositories {
         url 'https://maven.blakesmods.com'
     }
 
+    maven { // Registrate
+        url "https://maven.tterrag.com/"
+    }
+
     // For AgriCore dependencies
     mavenCentral()
 }
@@ -204,29 +209,23 @@ repositories {
 
 // Add "embedded" configuration
 configurations {
-    embed
-    implementation.extendsFrom(embed)
-}
-
-// To make sure Forge does not ignore the embedded projects
-// See: https://gist.github.com/SizableShrimp/66b22f1b24c255e1491c8d98d3f11f83
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.embed.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
+    shade
+    implementation.extendsFrom shade
 }
 
 // List Deps.
 dependencies {
     // Minecraft
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.51'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.2'//"net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // AgriCore
-    embed project(':AgriCore')
-    
+    minecraftLibrary project(':AgriCore')
+    shade project(':AgriCore')
+    shade 'org.reflections:reflections:0.10.2'
+
     // InfinityLib
     implementation project(":InfinityLib")
 
@@ -239,10 +238,11 @@ dependencies {
     //runtimeOnly fg.deobf("vazkii.botania:Botania:1.18.2-430")
 
     //Create
-    compileOnly fg.deobf("curse.maven:create-328085:3872145")
-    compileOnly fg.deobf("curse.maven:flywheel-486392:3871082") // create dependency v1.16.5-0.1.1
-    //runtimeOnly fg.deobf("curse.maven:create-328085:3872145")
-    //runtimeOnly fg.deobf("curse.maven:flywheel-486392:3871082") // create dependency
+    compileOnly fg.deobf("curse.maven:create-328085:4341477")  // 1.18.2-0.5.0h
+    compileOnly fg.deobf("curse.maven:flywheel-486392:4341461")  // 1.18.2-0.6.8.a
+    compileOnly fg.deobf("com.tterrag.registrate:Registrate:MC1.18.2-1.1.3")
+    runtimeOnly fg.deobf("curse.maven:create-328085:4341477")
+    runtimeOnly fg.deobf("curse.maven:flywheel-486392:4341461")
 
     //Cyclic
     compileOnly fg.deobf("curse.maven:cyclic-239286:3708026")
@@ -250,7 +250,7 @@ dependencies {
 
     //Immersive Engineering
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
-    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
+//    runtimeOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.18.2-8.0.0-146.7")
 
     //Industrial Foregoing
     compileOnly fg.deobf("curse.maven:industrial_foregoing-266515:3817385")
@@ -269,8 +269,8 @@ dependencies {
     //Quark
     compileOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
     compileOnly fg.deobf("vazkii.autoreglib:AutoRegLib:1.7-53.111")
-    runtimeOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
-    runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:1.7-53.111")
+//    runtimeOnly fg.deobf("vazkii.quark:Quark:3.2-358.2422")
+//    runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:1.7-53.111")
 
 
     //Serene Seasons
@@ -301,6 +301,7 @@ processResources {
 }
 
 jar {
+    archiveClassifier = 'slim'
     // Manifest
     manifest {
         attributes([
@@ -313,16 +314,20 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    // Fix Shading
-    configurations.embed.each { dep ->
-        from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
-            exclude 'com/google', 'com/google/**'
-            exclude 'net/jcip', 'net/jcip/**'
-            exclude 'edu/umd', 'edu/umd/**'
-            exclude 'javax/annotation', 'javax/annotation/**'
-        }
-    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    relocate 'org.reflections', "com.infinityraider.agricraft.relocated.reflections"
+    exclude 'org/slf4j', 'org/slf4j/**'
+    exclude 'com/google', 'com/google/**'
+    finalizedBy 'reobfShadowJar'
+}
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
 }
 
 // Example configuration to allow publishing using the maven-publish task

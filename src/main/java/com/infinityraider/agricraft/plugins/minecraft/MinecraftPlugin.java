@@ -29,6 +29,7 @@ public class MinecraftPlugin implements IAgriPlugin {
     public final IJsonPlantCallback.Factory tree;
     public final IJsonPlantCallback.Factory poisoning;
     public final IJsonPlantCallback.Factory redstone;
+    public final IJsonPlantCallback.Factory summon;
     public final IJsonPlantCallback.Factory thorns;
     public final IJsonPlantCallback.Factory withering;
 
@@ -42,6 +43,7 @@ public class MinecraftPlugin implements IAgriPlugin {
         this.poisoning = JsonPlantCallBackPoisoning.getFactory();
         this.redstone = JsonPlantCallBackRedstone.getFactory();
         this.thorns = JsonPlantCallBackThorns.getFactory();
+        this.summon = JsonPlantCallBackSummon.getFactory();
         this.withering = JsonPlantCallBackWithering.getFactory();
     }
 

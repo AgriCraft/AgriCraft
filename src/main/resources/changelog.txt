@@ -1,5 +1,13 @@
 Changelog
 ---------
+3.1.5 (unreleased)
+- ADDED: Summon entity json plant callback
+- CHANGED: Forge minimum version is 40.2
+- FIXED: Farmer's delight rice and tomatoes texture errors
+- FIXED: Create compatibility crash
+- FIXED: Multiple mutations with the same output register only one mutation (LordPINE)
+- FIXED: Planting crops replaces non-full blocks
+
 3.1.4
  - FIXED: Tooltip showing twice with Jade
  - FIXED: Compatibility with latest Create

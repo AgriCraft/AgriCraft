@@ -590,7 +590,10 @@ public class BlockCrop extends BlockBaseTile<TileEntityCrop> implements IFluidLo
     @SuppressWarnings("deprecation")
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder context) {
         List<ItemStack> drops = Lists.newArrayList();
-        BlockEntity tile = context.getParameter(LootContextParams.BLOCK_ENTITY);
+        BlockEntity tile = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (tile == null) {
+            return drops;
+        }
         CropState cropState = STATE.fetch(state);
         CropStickVariant stickType = VARIANT.fetch(state);
         // add crop sticks
