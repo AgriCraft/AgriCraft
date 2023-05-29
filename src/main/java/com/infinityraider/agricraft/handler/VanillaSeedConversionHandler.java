@@ -149,6 +149,10 @@ public class VanillaSeedConversionHandler {
                 if(cropSticks) {
                     return consumed.getValue();
                 }
+                // there is a block, do not place the seed
+                if (!world.getBlockState(pos).isAir()) {
+                    return false;
+                }
                 // no crop sticks, try planting as a plant
                 BlockCrop blockCrop = AgriBlockRegistry.getInstance().getCropBlock();
                 BlockState newState = blockCrop.adaptStateForPlacement(blockCrop.blockStatePlant(), world, pos);
