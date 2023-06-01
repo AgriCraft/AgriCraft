@@ -230,8 +230,8 @@ dependencies {
     implementation project(":InfinityLib")
 
     //JEI
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.153")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.281")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.281")
 
     //Botania
     compileOnly fg.deobf("vazkii.botania:Botania:1.18.2-430:api")
