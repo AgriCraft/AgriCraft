@@ -40,9 +40,9 @@
 
   "agricraft.stat.gain": "丰产",
   "agricraft.stat.growth": "速成",
-  "agricraft.stat.strength": "适应",
-  "agricraft.stat.resistance": "抵抗",
-  "agricraft.stat.fertility": "繁育",
+  "agricraft.stat.strength": "抗逆",
+  "agricraft.stat.resistance": "御草",
+  "agricraft.stat.fertility": "杂交",
   "agricraft.stat.mutativity": "突变",
 
   "agricraft.gene.agri_species": "品种",
