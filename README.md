@@ -1,4 +1,4 @@
-# AgriCraft ![branch] [![build](https://github.com/Agricraft/AgriCraft/actions/workflows/gradle.yml/badge.svg)[build-link] [![coverage]][coverage-link] [![curse]][curse-link]
+# AgriCraft ![branch] [![build](https://github.com/Agricraft/AgriCraft/actions/workflows/gradle.yml/badge.svg)][build-link]] [![coverage]][coverage-link] [![curse]][curse-link]
 
 Agricultural farming extended.
 
