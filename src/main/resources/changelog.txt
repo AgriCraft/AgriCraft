@@ -1,7 +1,8 @@
 Changelog
 ---------
-3.1.5 (unreleased)
+3.1.5
 - ADDED: Summon entity json plant callback
+- ADDED: zh_cn translation (Chen-Luan)
 - CHANGED: Forge minimum version is 40.2
 - FIXED: Farmer's delight rice and tomatoes texture errors
 - FIXED: Create compatibility crash

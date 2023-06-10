@@ -16,7 +16,7 @@ AgriCraft has releases for Minecraft versions 1.7.10 and onwards, status per Min
 |![1.10]   | Closed.
 |![1.11]   | Skipped 1.11.
 |![1.12]   | Closed.
-|![1.16]   | Ported and supported
+|![1.16]   | Closed.
 |![1.18]   | Ported and supported
 
 ## Bug Reports [![bug]][bug-link]
