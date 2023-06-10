@@ -1,0 +1,27 @@
+architectury {
+	common(rootProject.enabled_platforms.split(","))
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/agricraft.accesswidener")
+}
+
+dependencies {
+	modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+	modCompileOnly "mezz.jei:jei-1.19.3-common-api:$rootProject.jei_version"
+	modRuntimeOnly "mezz.jei:jei-1.19.3-common:$rootProject.jei_version"
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:$rootProject.rei_version"
+	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:$rootProject.rei_version"
+
+	modApi "com.teamresourceful.resourcefullib:resourcefullib-common-$rootProject.minecraft_version:$rootProject.resourcefullib_version"
+	modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version"
+}
+
+processResources {
+	inputs.property "version", rootProject.version
+	inputs.property "resourcefullib_version", rootProject.resourcefullib_version
+	inputs.property "resourcefulconfig_version", rootProject.resourcefulconfig_version
+}
+
+def ENV = System.getenv()

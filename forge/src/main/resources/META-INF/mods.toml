@@ -1,0 +1,72 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="license.txt"
+issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
+
+[[mods]]
+modId="agricraft"
+version="${version}"
+displayName="AgriCraft"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
+updateJSONURL = "https://raw.githubusercontent.com/AgriCraft/AgriCraft/master/version.json"
+logoFile="logo.png"
+authors="InfinityRaider, Ketherith"
+description='''
+Agricultural farming extended
+'''
+
+[[dependencies.agricraft]]
+modId="forge"
+mandatory=true
+versionRange="[43,)"
+ordering="NONE"
+side="BOTH"
+
+#[[dependencies.agricraft]]
+#modId = "resourcefullib"
+#mandatory = true
+#versionRange = "[${resourcefullib_version},)"
+#ordering = "NONE"
+#side = "BOTH"
+#
+#[[dependencies.agricraft]]
+#modId = "resourcefulconfig"
+#mandatory = true
+#versionRange = "[${resourcefulconfig_version},)"
+#ordering = "NONE"
+#side = "BOTH"
+#
+#[[dependencies.agricraft]]
+#modId="infinitylib"
+#mandatory=true
+#versionRange="[1.18.2-2.1.4,)"
+#ordering="AFTER"
+#side="BOTH"
+#
+#[[dependencies.agricraft]]
+#modId="betterweather"
+#mandatory=false
+#versionRange="[2.0,)"
+#ordering="AFTER"
+#side="BOTH"
+#
+#[[dependencies.agricraft]]
+#modId="botanypots"
+#mandatory=false
+#versionRange="[1.16.5-7.1.20,)"
+#ordering="AFTER"
+#side="BOTH"
+#
+#[[dependencies.agricraft]]
+#modId="cyclic"
+#mandatory=false
+#versionRange="[1.16.5-1.2.8,)"
+#ordering="AFTER"
+#side="BOTH"
+#
+#[[dependencies.agricraft]]
+#modId="immersiveengineering"
+#mandatory=false
+#versionRange="[1.16.5-5.0.0-135,)"
+#ordering="AFTER"
+#side="BOTH"

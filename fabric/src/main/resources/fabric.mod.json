@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "agricraft",
+	"version": "${version}",
+	"name": "AgriCraft",
+	"description": "Agricultural farming extended",
+	"authors": [
+		"InfinityRaider",
+		"Ketheroth"
+	],
+	"contact": {
+		"website": "https://www.curseforge.com/minecraft/mc-mods/agricraft",
+		"repo": "https://github.com/AgriCraft/AgriCraft",
+		"issues": "https://github.com/AgriCraft/AgriCraft/issues"
+	},
+	"license": "Terrarium Licence",
+	"icon": "logo.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.agricraft.agricraft.fabric.AgriCraftFabric"
+		],
+		"client": []
+	},
+	"depends": {
+		"fabric": "*",
+		"minecraft": ">=1.19",
+		"resourcefullib": ">=${resourcefullib_version}",
+		"resourcefulconfig": ">=${resourcefulconfig_version}"
+	}
+}

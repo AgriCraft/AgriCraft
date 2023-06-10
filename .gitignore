@@ -1,0 +1,8 @@
+.idea/
+.gradle/
+build/
+**/build/
+**/run/
+out/
+forge/src/generated/resources/.cache/
+
