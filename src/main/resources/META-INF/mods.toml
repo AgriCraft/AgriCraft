@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
 [[mods]]
 modId="agricraft"
-version="1.18.2-3.1.5"
+version="1.18.2-3.1.6"
 displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
 updateJSONURL = "https://raw.githubusercontent.com/AgriCraft/AgriCraft/master/version.json"
@@ -27,6 +27,13 @@ itemIcon="agricraft:debugger"
     modId="infinitylib"
     mandatory=true
     versionRange="[1.18.2-2.1.4,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.agricraft]]
+    modId="create"
+    mandatory=false
+    versionRange="[0.5.1.b,)"
     ordering="AFTER"
     side="BOTH"
 

@@ -1,5 +1,9 @@
 Changelog
 ---------
+
+3.1.6
+- FIXED: Crash with create 0.5.1b
+
 3.1.5
 - ADDED: Summon entity json plant callback
 - ADDED: zh_cn translation (Chen-Luan)
