@@ -38,7 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
+//import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,9 +63,10 @@ final class AgriApiConnectorFake implements IAgriApiConnector {
 		throw new UnsupportedOperationException("The stand-in version of the AgriCraft API does not support this operation.");
 	}
 
+	// FIXME: update
 	@Nullable
 	@Override
-	public IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
+	public IAgriCropStickItem.Variant createCropStickVariant(String name/*, Material material*/, SoundType sound, Predicate<Fluid> fluidPredicate) {
 		return null;
 	}
 

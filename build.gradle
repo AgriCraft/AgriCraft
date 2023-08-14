@@ -1,32 +1,34 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
-
-    id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0" // literally never gonna update
+//
+//    id "com.modrinth.minotaur" version "2.+"
+//    id "com.matthewprenger.cursegradle" version "1.4.0" // literally never gonna update
 }
 
 architectury {
-    minecraft = rootProject.minecraft_version
+    minecraft = minecraft_version
 }
 
 
 subprojects {
     apply plugin: "dev.architectury.loom"
-    apply plugin: "com.modrinth.minotaur"
-    apply plugin: "com.matthewprenger.cursegradle"
+//    apply plugin: "com.modrinth.minotaur"
+//    apply plugin: "com.matthewprenger.cursegradle"
 
     loom {
         silentMojangMappingsLicense()
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.layered() {
             officialMojangMappings()
-//            parchment("org.parchmentmc.data:parchment-$rootProject.minecraft_version:$rootProject.parchment_version@zip")
-            parchment("org.parchmentmc.data:parchment-1.19.3:$rootProject.parchment_version@zip")
+            parchment("org.parchmentmc.data:parchment-${minecraft_version}:$parchment_version@zip")
         }
+        modApi "com.teamresourceful.resourcefullib:resourcefullib-$name-$minecraft_version:$resourcefullib_version"
+        modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20:$resourcefulconfig_version"
+
     }
 
 }
@@ -34,20 +36,20 @@ subprojects {
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
+//    apply plugin: "maven-publish"
 
-    archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
-    group = rootProject.maven_group
+    archivesBaseName = archives_base_name
+    version = mod_version
+    group = maven_group
 
     repositories {
+        maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
         maven {
             url "https://cursemaven.com"
             content {
                 includeGroup "curse.maven"
             }
         }
-        maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
     }
 
     tasks.withType(JavaCompile).tap {

@@ -8,11 +8,8 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import org.apache.logging.log4j.util.TriConsumer;
-
-import java.util.List;
 
 public class ModItems {
 	public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(BuiltInRegistries.ITEM, AgriCraft.MOD_ID);
@@ -24,7 +21,12 @@ public class ModItems {
 	public static final RegistryEntry<Item> SEED = ITEMS.register("seed", () -> PlatformUtils.createAgriSeedItem(new Item.Properties()));
 
 
-	public static void onRegisterCreativeTabs(TriConsumer<ResourceLocation, RegistryEntry<Item>, List<Item>> consumer) {
-		consumer.accept(new ResourceLocation(AgriCraft.MOD_ID, "main"), ModItems.DEBUGGER, List.of(DEBUGGER.get(), RAKE_WOOD.get(), RAKE_IRON.get()));
+	public static void addItemsToTabs(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+		AgriCraft.LOGGER.info("register item in tab");
+		output.accept(ModItems.DEBUGGER.get());
+		output.accept(ModItems.RAKE_WOOD.get());
+		output.accept(ModItems.RAKE_IRON.get());
+//		output.accept(ModItems.SEED.get());
 	}
+
 }

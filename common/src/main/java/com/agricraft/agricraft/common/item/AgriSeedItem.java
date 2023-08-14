@@ -3,6 +3,7 @@ package com.agricraft.agricraft.common.item;
 import com.agricraft.agricraft.common.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -15,14 +16,14 @@ public class AgriSeedItem extends Item {
 	public AgriSeedItem(Properties properties) {
 		super(properties);
 	}
-	public static ItemStack toStack(String machineId) {
-		return toStack(machineId, 1);
+	public static ItemStack toStack(ResourceLocation plantId) {
+		return toStack(plantId, 1);
 	}
 
-	public static ItemStack toStack(String seedId, int amount) {
+	public static ItemStack toStack(ResourceLocation plantId, int amount) {
 		ItemStack stack = new ItemStack(ModItems.SEED.get(), amount);
 		CompoundTag tag = new CompoundTag();
-		tag.putString("seed", seedId);
+		tag.putString("seed", plantId.toString());
 		stack.setTag(tag);
 		return stack;
 	}

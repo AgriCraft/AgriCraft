@@ -20,12 +20,16 @@
 		"main": [
 			"com.agricraft.agricraft.fabric.AgriCraftFabric"
 		],
-		"client": []
+		"client": [
+			"com.agricraft.agricraft.client.AgriCraftFabricClient"
+		]
 	},
+	"mixins": [
+		"agricraft-fabric.mixins.json"
+	],
 	"depends": {
 		"fabric": "*",
-		"minecraft": ">=1.19",
-		"resourcefullib": ">=${resourcefullib_version}",
-		"resourcefulconfig": ">=${resourcefulconfig_version}"
+		"minecraft": ">=1.20",
+		"resourcefullib": ">=${resourcefullib_version}"
 	}
 }

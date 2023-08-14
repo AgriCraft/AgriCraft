@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
+//import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -45,10 +45,11 @@ public interface IAgriCropStickItem {
 		 */
 		SoundType getSound();
 
+		// FIXME: update
 		/**
 		 * @return the material of the variant
 		 */
-		Material getMaterial();
+//		Material getMaterial();
 
 		/**
 		 * @return the item representation of this variant
@@ -132,9 +133,10 @@ public interface IAgriCropStickItem {
 		 * @param fluidPredicate predicate determining if this crop stick type can survive in certain fluids
 		 * @return a new crop stick variant, or null
 		 */
+		// FIXME: update
 		@Nullable
-		static Variant create(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
-			return AgriApi.createCropStickVariant(name, material, sound, fluidPredicate);
+		static Variant create(String name/*, Material material*/, SoundType sound, Predicate<Fluid> fluidPredicate) {
+			return AgriApi.createCropStickVariant(name/*, material*/, sound, fluidPredicate);
 		}
 
 	}

@@ -38,7 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
+//import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,8 +56,9 @@ public interface IAgriApiConnector {
 	@NotNull
 	IAgriContent connectAgriContent();
 
+	// FIXME: update
 	@Nullable
-	IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate);
+	IAgriCropStickItem.Variant createCropStickVariant(String name/*, Material material*/, SoundType sound, Predicate<Fluid> fluidPredicate);
 
 	@NotNull
 	IAgriConfig connectAgriConfig();

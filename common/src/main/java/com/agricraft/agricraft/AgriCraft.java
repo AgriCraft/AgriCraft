@@ -1,5 +1,6 @@
 package com.agricraft.agricraft;
 
+import com.agricraft.agricraft.common.registry.ModCreativeTabs;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.NonNullList;
@@ -17,6 +18,7 @@ public class AgriCraft {
 
 	public static void init() {
 		ModItems.ITEMS.init();
+		ModCreativeTabs.CREATIVE_MODE_TAB.init();
 		LOGGER.info("Intializing API for " + MOD_ID);
 	}
 

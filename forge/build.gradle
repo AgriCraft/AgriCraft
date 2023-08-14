@@ -42,22 +42,22 @@ configurations {
 }
 
 dependencies {
-	forge "net.minecraftforge:forge:$rootProject.minecraft_version-$rootProject.forge_version"
+	forge "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
 	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-//	modCompileOnly "mezz.jei:jei-1.19.3-forge-api:$rootProject.jei_version"
-//	modLocalRuntime("mezz.jei:jei-1.19.3-forge:$rootProject.jei_version") { transitive = false }
+//	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
+//	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
 
-	modApi "com.teamresourceful.resourcefullib:resourcefullib-forge-$rootProject.minecraft_version:$rootProject.resourcefullib_version"
-	modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-$rootProject.minecraft_version:$rootProject.resourcefulconfig_version"
 }
 
 processResources {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	filesMatching("META-INF/mods.toml") {
-		expand "version": rootProject.version, "resourcefullib_version": rootProject.resourcefullib_version, "resourcefulconfig_version": rootProject.resourcefulconfig_version
+		expand "version": version,
+				"resourcefullib_version": resourcefullib_version,
+				"resourcefulconfig_version": resourcefulconfig_version
 	}
 }
 
@@ -65,17 +65,17 @@ shadowJar {
 	exclude "fabric.mod.json"
 
 	configurations = [project.configurations.shadowCommon]
-	archiveClassifier.set  "dev-shadow"
+	archiveClassifier.set "dev-shadow"
 }
 
 remapJar {
 	input.set shadowJar.archiveFile
 	dependsOn shadowJar
-	archiveClassifier.set  null
+	archiveClassifier.set null
 }
 
 jar {
-	archiveClassifier.set  "dev"
+	archiveClassifier.set "dev"
 	archivesBaseName = "$mod_id-forge-$minecraft_version"
 }
 
@@ -91,5 +91,3 @@ components.java {
 		skip()
 	}
 }
-
-def ENV = System.getenv()

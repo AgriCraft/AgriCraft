@@ -2,5 +2,6 @@
 	"parent": "builtin/entity",
 	"textures": {
 		"layer0": "agricraft:item/seed_unknown"
-	}
+	},
+	"gui_light": "front"
 }

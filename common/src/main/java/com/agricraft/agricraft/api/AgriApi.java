@@ -38,7 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
+//import net.minecraft.world.level.material.Material;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
@@ -107,8 +107,9 @@ public final class AgriApi {
 	 * @return a new crop stick variant, or null
 	 */
 	@Nullable
-	public static IAgriCropStickItem.Variant createCropStickVariant(String name, Material material, SoundType sound, Predicate<Fluid> fluidPredicate) {
-		return AgriApi.CONNECTOR.createCropStickVariant(name, material, sound, fluidPredicate);
+	public static IAgriCropStickItem.Variant createCropStickVariant(String name/*, Material material*/, SoundType sound, Predicate<Fluid> fluidPredicate) {
+		// FIXME: update
+		return AgriApi.CONNECTOR.createCropStickVariant(name/*, material*/, sound, fluidPredicate);
 	}
 
 	/**

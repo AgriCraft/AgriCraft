@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[47,)"
 license="license.txt"
 issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
@@ -10,7 +10,7 @@ displayName="AgriCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agricraft"
 updateJSONURL = "https://raw.githubusercontent.com/AgriCraft/AgriCraft/master/version.json"
 logoFile="logo.png"
-authors="InfinityRaider, Ketherith"
+authors="InfinityRaider, Ketheroth"
 description='''
 Agricultural farming extended
 '''
@@ -18,9 +18,16 @@ Agricultural farming extended
 [[dependencies.agricraft]]
 modId="forge"
 mandatory=true
-versionRange="[43,)"
+versionRange="[47,)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.agricraft]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
 
 #[[dependencies.agricraft]]
 #modId = "resourcefullib"

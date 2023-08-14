@@ -2,7 +2,7 @@ package com.agricraft.agricraft.datagen;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.common.codecs.AgriSeed;
-import com.agricraft.agricraft.common.registry.ModSeeds;
+import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -32,10 +32,10 @@ public class DatagenEventHandler {
 						event.getLookupProvider(),
 						// The objects to generate
 						new RegistrySetBuilder()
-								.add(ModSeeds.AGRISEEDS, context -> {
+								.add(PlatformUtils.getSeedRegistryKey(), context -> {
 									AgriCraft.LOGGER.info("hello from datagen");
 									context.register(
-											ResourceKey.create(ModSeeds.AGRISEEDS, new ResourceLocation(AgriCraft.MOD_ID, "wheat_seeds")),
+											ResourceKey.create(PlatformUtils.getSeedRegistryKey(), new ResourceLocation(AgriCraft.MOD_ID, "wheat")),
 											wheat
 									);
 								}),
