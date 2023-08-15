@@ -24,6 +24,10 @@ public class AgriCraftForgeClient {
 			ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/seed", "seed").replace(".json", ""));
 			event.register(seed);
 		}
+		for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/crop").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
+			ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/crop", "crop").replace(".json", ""));
+			event.register(seed);
+		}
 	}
 
 	@SubscribeEvent

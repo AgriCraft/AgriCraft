@@ -8,7 +8,7 @@ architectury {
 }
 
 loom {
-	accessWidenerPath = project(":common").loom.accessWidenerPath
+	accessWidenerPath = file("src/main/resources/agricraft-fabric.accesswidener")
 }
 
 sourceSets {

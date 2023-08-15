@@ -19,7 +19,8 @@ sourceSets {
 loom {
 	accessWidenerPath = project(":common").loom.accessWidenerPath
 	forge {
-//		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+		convertAccessWideners = true
+		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 //		mixinConfig "$project.mod_id-common.mixins.json"
 //		mixinConfig "${project.mod_id}.mixins.json"
 		dataGen {

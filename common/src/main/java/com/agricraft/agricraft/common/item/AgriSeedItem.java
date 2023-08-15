@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class AgriSeedItem extends BlockItem {
 
-	public AgriSeedItem(Block block, Properties properties) {
-		super(block, properties);
+	public AgriSeedItem(Properties properties) {
+		super(ModBlocks.CROP.get(), properties);
 	}
 	public static ItemStack toStack(ResourceLocation plantId) {
 		return toStack(plantId, 1);

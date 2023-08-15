@@ -25,8 +25,8 @@ public class PlatformUtilsImpl {
 
 	public static final ResourceKey<Registry<AgriSeed>> AGRISEEDS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "seed"));
 
-	public static AgriSeedItem createAgriSeedItem(Block block, Item.Properties properties) {
-		return new ForgeAgriSeedItem(block, properties);
+	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
+		return new ForgeAgriSeedItem(properties);
 	}
 
 	public static ResourceKey<Registry<AgriSeed>> getSeedRegistryKey() {

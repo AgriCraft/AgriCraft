@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 
 public class ForgeAgriSeedItem extends AgriSeedItem {
 
-	public ForgeAgriSeedItem(Block block, Properties properties) {
-		super(block, properties);
+	public ForgeAgriSeedItem(Properties properties) {
+		super(properties);
 	}
 
 	@Override

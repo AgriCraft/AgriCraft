@@ -14,7 +14,7 @@ import org.apache.commons.lang3.NotImplementedException;
 public class PlatformUtils {
 
 	@ExpectPlatform
-	public static AgriSeedItem createAgriSeedItem(Block block, Item.Properties properties) {
+	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
 		throw new NotImplementedException();
 	}
 
