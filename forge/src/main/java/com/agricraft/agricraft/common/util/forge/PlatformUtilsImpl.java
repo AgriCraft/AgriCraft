@@ -16,6 +16,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Map;
@@ -24,8 +25,8 @@ public class PlatformUtilsImpl {
 
 	public static final ResourceKey<Registry<AgriSeed>> AGRISEEDS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "seed"));
 
-	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
-		return new ForgeAgriSeedItem(properties);
+	public static AgriSeedItem createAgriSeedItem(Block block, Item.Properties properties) {
+		return new ForgeAgriSeedItem(block, properties);
 	}
 
 	public static ResourceKey<Registry<AgriSeed>> getSeedRegistryKey() {

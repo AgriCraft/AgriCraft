@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "minecraft:block/air"
+    },
+    "age=1": {
+      "model": "minecraft:block/air"
+    },
+    "age=2": {
+      "model": "minecraft:block/air"
+    },
+    "age=3": {
+      "model": "minecraft:block/air"
+    },
+    "age=4": {
+      "model": "minecraft:block/air"
+    },
+    "age=5": {
+      "model": "minecraft:block/air"
+    },
+    "age=6": {
+      "model": "minecraft:block/air"
+    },
+    "age=7": {
+      "model": "minecraft:block/air"
+    }
+  }
+}

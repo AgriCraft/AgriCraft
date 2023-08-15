@@ -18,7 +18,7 @@ public class ModItems {
 
 	public static final RegistryEntry<Item> RAKE_WOOD = ITEMS.register("rake_wood", () -> new RakeItem(new Item.Properties(), RakeItem.WOOD_LOGIC));
 	public static final RegistryEntry<Item> RAKE_IRON = ITEMS.register("rake_iron", () -> new RakeItem(new Item.Properties(), RakeItem.IRON_LOGIC));
-	public static final RegistryEntry<Item> SEED = ITEMS.register("seed", () -> PlatformUtils.createAgriSeedItem(new Item.Properties()));
+	public static final RegistryEntry<Item> SEED = ITEMS.register("seed", () -> PlatformUtils.createAgriSeedItem(ModBlocks.CROP.get(), new Item.Properties()));
 
 
 	public static void addItemsToTabs(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
