@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.common.codecs.AgriPlant;
 import com.agricraft.agricraft.common.codecs.AgriSeed;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.fabricmc.api.ModInitializer;
@@ -16,6 +17,7 @@ public class AgriCraftFabric implements ModInitializer {
 	public void onInitialize() {
 		AgriCraft.init();
 		DynamicRegistries.registerSynced(PlatformUtils.getSeedRegistryKey(), AgriSeed.CODEC, AgriSeed.CODEC);
+		DynamicRegistries.registerSynced(PlatformUtils.getPlantRegistryKey(), AgriPlant.CODEC, AgriPlant.CODEC);
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> cachedServer = player.getServer());
 	}
 

@@ -1,10 +1,13 @@
 package com.agricraft.agricraft.common.util;
 
+import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.common.codecs.AgriPlant;
 import com.agricraft.agricraft.common.codecs.AgriSeed;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -12,15 +15,20 @@ import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class PlatformUtils {
+	public static final ResourceKey<Registry<AgriSeed>> AGRISEEDS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "seed"));
+	public static final ResourceKey<Registry<AgriPlant>> AGRIPLANTS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "plants"));
 
 	@ExpectPlatform
 	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
 		throw new NotImplementedException();
 	}
 
-	@ExpectPlatform
 	public static ResourceKey<Registry<AgriSeed>> getSeedRegistryKey() {
-		throw new NotImplementedException();
+		return AGRISEEDS;
+	}
+
+	public static ResourceKey<Registry<AgriPlant>> getPlantRegistryKey() {
+		return AGRIPLANTS;
 	}
 
 	@ExpectPlatform

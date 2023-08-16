@@ -22,6 +22,9 @@
 		],
 		"client": [
 			"com.agricraft.agricraft.client.AgriCraftFabricClient"
+		],
+		"modmenu": [
+			"com.agricraft.agricraft.common.config.fabric.ModMenuConfig"
 		]
 	},
 	"mixins": [

@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.common.block.entity;
 
+import com.agricraft.agricraft.common.config.StatsConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -67,6 +68,7 @@ public class CropBlockEntity extends BlockEntity {
 
 	public void use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		player.sendSystemMessage(Component.literal("rightclick is " + this.seed));
+		player.sendSystemMessage(Component.literal("config max strength " + StatsConfig.strengthMax));
 	}
 
 }

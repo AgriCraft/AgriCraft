@@ -14,7 +14,7 @@ public record AgriBlockCondition(ExtraCodecs.TagOrElementLocation block, Compoun
                                  int strength, int amount, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
 	public static final Codec<AgriBlockCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("fluid").forGetter(blockCondition -> blockCondition.block),
+			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("block").forGetter(blockCondition -> blockCondition.block),
 			CompoundTag.CODEC.optionalFieldOf("nbt").forGetter(blockCondition -> blockCondition.nbt.isEmpty() ? Optional.empty() : Optional.of(blockCondition.nbt)),
 			Codec.STRING.listOf().comapFlatMap(AgriBlockCondition::readStates, list -> list).optionalFieldOf("states").forGetter(blockCondition -> blockCondition.states.isEmpty() ? Optional.empty() : Optional.of(blockCondition.states)),
 			Codec.INT.fieldOf("strength").forGetter(blockCondition -> blockCondition.strength),

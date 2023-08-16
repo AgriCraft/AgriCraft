@@ -3,6 +3,7 @@ package com.agricraft.agricraft.common.codecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 
 import java.util.Optional;
@@ -24,4 +25,52 @@ public record AgriProduct(ExtraCodecs.TagOrElementLocation item, CompoundTag nbt
 		this(item, nbt.orElse(new CompoundTag()), min, max, chance, required);
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		ExtraCodecs.TagOrElementLocation item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation("minecraft", "air"), false);
+		CompoundTag nbt = new CompoundTag();
+		int min = 1;
+		int max = 3;
+		double chance = 0.95;
+		boolean required = true;
+
+		public AgriProduct build() {
+			return new AgriProduct(item, nbt, min, max, chance, required);
+		}
+
+		public Builder item(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), false);
+			return this;
+		}
+		public Builder item(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), false);
+			return this;
+		}
+		public Builder tag(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), true);
+			return this;
+		}
+		public Builder tag(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), true);
+			return this;
+		}
+		public Builder nbt(CompoundTag nbt) {
+			this.nbt = nbt;
+			return this;
+		}
+		public Builder count(int min, int max, double chance) {
+			this.min = min;
+			this.max = max;
+			this.chance = chance;
+			return this;
+		}
+		public Builder required(boolean required) {
+			this.required = required;
+			return this;
+		}
+
+	}
 }

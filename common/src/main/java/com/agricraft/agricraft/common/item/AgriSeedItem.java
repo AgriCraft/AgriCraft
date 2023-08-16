@@ -3,21 +3,19 @@ package com.agricraft.agricraft.common.item;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class AgriSeedItem extends BlockItem {
 
@@ -60,6 +58,21 @@ public class AgriSeedItem extends BlockItem {
 			}
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+		if (isAdvanced.isAdvanced()) {
+			CompoundTag tag = stack.getTag();
+			if (tag != null) {
+				tooltipComponents.add(Component.literal("id: " + tag.getString("seed")));
+			}
+		}
+	}
+
+	@Override
+	public Component getDescription() {
+		return super.getDescription();
 	}
 
 }

@@ -2,13 +2,18 @@ package com.agricraft.agricraft.client;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.client.ber.CropBlockEntityRenderer;
+import com.agricraft.agricraft.common.config.forge.ForgeMenuConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -33,6 +38,10 @@ public class AgriCraftForgeClient {
 	@SubscribeEvent
 	public static void registerBer(EntityRenderersEvent.RegisterRenderers event) {
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.CROP.get(), CropBlockEntityRenderer::new);
+	}
+
+	public static void init() {
+		ForgeMenuConfig.register();
 	}
 
 }

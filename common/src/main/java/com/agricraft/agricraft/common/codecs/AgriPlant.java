@@ -3,12 +3,15 @@ package com.agricraft.agricraft.common.codecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds, List<Integer> stages,
                         int harvestStage,
-                        double growthChance, double growthBonus, int tier, boolean cloneable, double spreadChance,
+                        double growthChance, double growthBonus, boolean cloneable, double spreadChance,
                         List<AgriProduct> products, List<AgriProduct> clipProducts, AgriRequirement requirement,
                         List<AgriPlantCallback> callbacks, List<AgriParticleEffect> particleEffects) {
 
@@ -20,7 +23,6 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 			Codec.INT.fieldOf("harvest_stage").forGetter(plant -> plant.harvestStage),
 			Codec.DOUBLE.fieldOf("growth_chance").forGetter(plant -> plant.growthChance),
 			Codec.DOUBLE.fieldOf("growth_bonus").forGetter(plant -> plant.growthBonus),
-			Codec.INT.fieldOf("tier").forGetter(plant -> plant.tier),
 			Codec.BOOL.fieldOf("cloneable").forGetter(plant -> plant.cloneable),
 			Codec.DOUBLE.fieldOf("spread_chance").forGetter(plant -> plant.spreadChance),
 			AgriProduct.CODEC.listOf().optionalFieldOf("products").forGetter(plant -> plant.products.isEmpty() ? Optional.empty() : Optional.of(plant.products)),
@@ -31,10 +33,10 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 	).apply(instance, AgriPlant::new));
 
 	public AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds, List<Integer> stages, int harvestStage,
-	                 double growthChance, double growthBonus, int tier, boolean cloneable, double spreadChance,
+	                 double growthChance, double growthBonus, boolean cloneable, double spreadChance,
 	                 Optional<List<AgriProduct>> products, Optional<List<AgriProduct>> clipProducts, AgriRequirement requirement,
 	                 Optional<List<AgriPlantCallback>> callbacks, Optional<List<AgriParticleEffect>> particleEffects) {
-		this(enabled, mods, seeds, stages, harvestStage, growthChance, growthBonus, tier, cloneable, spreadChance,
+		this(enabled, mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance,
 				products.orElse(List.of()), clipProducts.orElse(List.of()), requirement,
 				callbacks.orElse(List.of()), particleEffects.orElse(List.of()));
 	}
@@ -49,19 +51,80 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 //    private final String desc_lang_key;
 //
 
-
-	public int getGrowthStages() {
-		return this.stages.size();
+	public static Builder builder() {
+		return new Builder();
 	}
 
-	public int getGrowthStageHeight(int stage) {
-		return this.stages.get(stage);
-	}
+	public static class Builder {
+		List<String> mods = new ArrayList<>();
+		List<AgriSeed> seeds = new ArrayList<>();
+		List<Integer> stages = new ArrayList<>();
+		int harvestStage = 4;
+		double growthChance = 0.75;
+		double growthBonus = 0.025;
+		double spreadChance = 0.1;
+		boolean cloneable = true;
+		List<AgriProduct> products = new ArrayList<>();
+		List<AgriProduct> clipProducts = List.of();
+		AgriRequirement requirement = null;
+		List<AgriPlantCallback> callbacks = List.of();
+		List<AgriParticleEffect> particleEffects = List.of();
 
-	public boolean checkMods() {
-		// FIXME: datapack
-//		return this.mods.stream().allMatch(mod -> AgriCore.getValidator().isValidMod(mod));
-		return true;
-	}
+		public AgriPlant build() {
+			return new AgriPlant(true, mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, products, clipProducts, requirement, callbacks, particleEffects);
+		}
 
+		public Builder mods(String... mods) {
+			Collections.addAll(this.mods, mods);
+			return this;
+		}
+		public Builder seeds(AgriSeed... seeds) {
+			Collections.addAll(this.seeds, seeds);
+			return this;
+		}
+		public Builder stages(Integer... stages) {
+			Collections.addAll(this.stages, stages);
+			return this;
+		}
+		public Builder stages16() {
+			for (int i = 2; i < 17; i+=2) {
+				this.stages.add(i);
+			}
+			return this;
+		}
+		public Builder harvest(int stage) {
+			this.harvestStage = stage;
+			return this;
+		}
+		public Builder chances(double growth, double growthBonus, double spread) {
+			this.growthChance = growth;
+			this.growthBonus = growthBonus;
+			this.spreadChance = spread;
+			return this;
+		}
+		public Builder cloneable(boolean cloneable) {
+			this.cloneable = cloneable;
+			return this;
+		}
+		public Builder products(AgriProduct... products) {
+			Collections.addAll(this.products, products);
+			return this;
+		}
+		public Builder clips(AgriProduct... clips) {
+			this.clipProducts = List.of(clips);
+			return this;
+		}
+		public Builder requirement(AgriRequirement requirement) {
+			this.requirement = requirement;
+			return this;
+		}
+		public Builder callbacks(AgriPlantCallback... callbacks) {
+			this.callbacks = List.of(callbacks);
+			return this;
+		}
+		public Builder particles(AgriParticleEffect... particles) {
+			this.particleEffects = List.of(particles);
+			return this;
+		}
+	}
 }

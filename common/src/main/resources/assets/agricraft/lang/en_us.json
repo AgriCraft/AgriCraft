@@ -267,6 +267,28 @@
   "agricraft.journal.growth_reqs.seasons": "Seasons",
   "agricraft.journal.growth_reqs.seasons.desc": "Some plants choose to only grow during certain seasons, nobody really knows why.",
 
+  "agricraft.option.stats_config": "Plant stats",
+  "agricraft.option.stats_config.gain_min": "Min Gain",
+  "agricraft.option.stats_config.gain_max": "Max Gain",
+  "agricraft.option.stats_config.gain_hidden": "Hide Gain",
+  "agricraft.option.stats_config.growth_min": "Min Growth",
+  "agricraft.option.stats_config.growth_max": "Max Growth",
+  "agricraft.option.stats_config.growth_hidden": "Hide Growth",
+  "agricraft.option.stats_config.strength_min": "Min Strength",
+  "agricraft.option.stats_config.strength_max": "Max Strength",
+  "agricraft.option.stats_config.strength_hidden": "Hide Strength",
+  "agricraft.option.stats_config.resistance_min": "Min Resistance",
+  "agricraft.option.stats_config.resistance_max": "Max Resistance",
+  "agricraft.option.stats_config.resistance_hidden": "Hide Resistance",
+  "agricraft.option.stats_config.fertility_min": "Min Fertility",
+  "agricraft.option.stats_config.fertility_max": "Max Fertility",
+  "agricraft.option.stats_config.fertility_hidden": "Hide Fertility",
+  "agricraft.option.stats_config.mutativity_min": "Min Mutativity",
+  "agricraft.option.stats_config.mutativity_max": "Max Mutativity",
+  "agricraft.option.stats_config.mutativity_hidden": "Hide Mutativity",
+
+
+
   "seed.agricraft.agricraft.unknown": "Unknown Seeds",
   "seed.agricraft.agricraft.wheat": "Wheat Seeds",
   "seed.agricraft.agricraft.potato": "Potato Seeds",

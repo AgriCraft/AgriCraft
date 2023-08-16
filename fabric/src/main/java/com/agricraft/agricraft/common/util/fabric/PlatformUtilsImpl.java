@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.util.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.common.codecs.AgriPlant;
 import com.agricraft.agricraft.common.codecs.AgriSeed;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -21,15 +22,11 @@ import java.util.Map;
 
 public class PlatformUtilsImpl {
 
-	public static final ResourceKey<Registry<AgriSeed>> AGRISEEDS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "seed"));
 
 	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
 		return new AgriSeedItem( properties);
 	}
 
-	public static ResourceKey<Registry<AgriSeed>> getSeedRegistryKey() {
-		return AGRISEEDS;
-	}
 
 	public static CreativeModeTab createMainCreativeTab() {
 		return FabricItemGroup.builder()
@@ -45,9 +42,9 @@ public class PlatformUtilsImpl {
 				.icon(() ->new ItemStack(Items.WHEAT_SEEDS))
 				.displayItems((itemDisplayParameters, output) -> {
 					if (AgriCraftFabric.cachedServer != null) {
-						Registry<AgriSeed> registry = AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getSeedRegistryKey()).get();
+						Registry<AgriPlant> registry = AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get();
 						AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-						for (Map.Entry<ResourceKey<AgriSeed>, AgriSeed> entry : registry.entrySet()) {
+						for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
 							output.accept(AgriSeedItem.toStack(entry.getKey().location()));
 						}
 					} else {
