@@ -1,6 +1,5 @@
 package com.agricraft.agricraft.client.ber;
 
-import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -14,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CropBlockEntityRenderer implements BlockEntityRenderer<CropBlockEntity> {
 
-//	public static final ModelResourceLocation AIR_MODEL = new ModelResourceLocation("minecraft", "air", "");
+	public static final ModelResourceLocation AIR_MODEL = new ModelResourceLocation("minecraft", "air", "");
 	public CropBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
 
 	}
@@ -22,18 +21,16 @@ public class CropBlockEntityRenderer implements BlockEntityRenderer<CropBlockEnt
 	@Override
 	public void render(CropBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-		int stage = blockEntity.getBlockState().getValue(CropBlock.AGE);
-		String seed = blockEntity.getSeed();
+		int stage = blockEntity.getGrowthStage();
+		String plantId = blockEntity.getPlantId();
 		BakedModel model;
-		if (seed.isEmpty()) {
-			model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ModelResourceLocation("minecraft", "air", ""));
+		if (plantId.isEmpty()) {
+			model = Minecraft.getInstance().getModelManager().bakedRegistry.get(AIR_MODEL);
 		} else {
-			String plant = seed.replace(":", ":crop/") + "_stage" + stage;
-
+			String plant = plantId.replace(":", ":crop/") + "_stage" + stage;
 			model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plant));
 			if (model == null) {
 				model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation("agricraft:crop/unknown"));
-//				model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ModelResourceLocation("minecraft", "air", ""));
 			}
 		}
 

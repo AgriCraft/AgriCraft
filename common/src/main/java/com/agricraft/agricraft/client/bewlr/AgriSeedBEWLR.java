@@ -21,7 +21,7 @@ public class AgriSeedBEWLR extends BlockEntityWithoutLevelRenderer {
 
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-		String plant = stack.getTag() == null ? DEFAULT_SEED : stack.getTag().getString("seed");
+		String plant = stack.getTag() == null ? DEFAULT_SEED : stack.getTag().getString("plant");
 		if (plant.isEmpty()) {
 			plant = DEFAULT_SEED;
 		}

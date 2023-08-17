@@ -3,6 +3,7 @@ package com.agricraft.agricraft.common.item;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
+import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +31,7 @@ public class AgriSeedItem extends BlockItem {
 	public static ItemStack toStack(ResourceLocation plantId, int amount) {
 		ItemStack stack = new ItemStack(ModItems.SEED.get(), amount);
 		CompoundTag tag = new CompoundTag();
-		tag.putString("seed", plantId.toString());
+		tag.putString("plant", plantId.toString());
 		stack.setTag(tag);
 		return stack;
 	}
@@ -39,25 +41,26 @@ public class AgriSeedItem extends BlockItem {
 		if (stack.getTag()==null) {
 			return Component.translatable("seed.agricraft.agricraft.unknown");
 		}
-		return Component.translatable("seed.agricraft." + stack.getTag().getString("seed").replace(":", "."));
+		return Component.translatable("seed.agricraft." + stack.getTag().getString("plant").replace(":", "."));
 	}
 
 	@Override
 	public InteractionResult place(BlockPlaceContext context) {
-		super.place(context);
+		InteractionResult result = super.place(context);
 		Level level = context.getLevel();
-		if (!level.isClientSide) {
+		System.out.println(level.isClientSide + " " + result);
+		if (result.consumesAction() && !level.isClientSide) {
 			System.out.println(level.getBlockState(context.getClickedPos()));
 			BlockEntity be = level.getBlockEntity(context.getClickedPos());
-			System.out.println(be);
 			if (be instanceof CropBlockEntity cbe) {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {
-					cbe.setSeed(tag.getString("seed"));
+					String plant = tag.getString("plant");
+					cbe.setPlant(plant, level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(plant)));
 				}
 			}
 		}
-		return InteractionResult.sidedSuccess(level.isClientSide);
+		return result;
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class AgriSeedItem extends BlockItem {
 		if (isAdvanced.isAdvanced()) {
 			CompoundTag tag = stack.getTag();
 			if (tag != null) {
-				tooltipComponents.add(Component.literal("id: " + tag.getString("seed")));
+				tooltipComponents.add(Component.literal("id: " + tag.getString("plant")));
 			}
 		}
 	}

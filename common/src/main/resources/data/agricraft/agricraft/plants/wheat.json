@@ -1,0 +1,64 @@
+{
+  "cloneable": true,
+  "enabled": true,
+  "growth_bonus": 0.025,
+  "growth_chance": 0.75,
+  "harvest_stage": 4,
+  "mods": [
+    "agricraft",
+    "minecraft"
+  ],
+  "products": [
+    {
+      "chance": 0.95,
+      "item": "minecraft:wheat",
+      "max": 3,
+      "min": 1,
+      "required": true
+    }
+  ],
+  "requirement": {
+    "light_tolerance_factor": 0.5,
+    "max_light": 16,
+    "min_light": 10,
+    "seasons": [
+      "summer",
+      "autumn"
+    ],
+    "soil_acidity": {
+      "type": "equal",
+      "condition": "slightly_acidic",
+      "tolerance_factor": 0.2
+    },
+    "soil_humidity": {
+      "type": "equal",
+      "condition": "wet",
+      "tolerance_factor": 0.15
+    },
+    "soil_nutrients": {
+      "type": "equal_or_higher",
+      "condition": "high",
+      "tolerance_factor": 0.1
+    }
+  },
+  "seeds": [
+    {
+      "grass_drop_chance": 0.0,
+      "item": "minecraft:wheat_seeds",
+      "override_planting": true,
+      "seed_drop_bonus": 0.0,
+      "seed_drop_chance": 1.0
+    }
+  ],
+  "spread_chance": 0.1,
+  "stages": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16
+  ]
+}

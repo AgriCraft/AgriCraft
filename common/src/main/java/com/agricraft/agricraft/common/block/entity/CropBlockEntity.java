@@ -1,57 +1,96 @@
 package com.agricraft.agricraft.common.block.entity;
 
+import com.agricraft.agricraft.common.codecs.AgriPlant;
 import com.agricraft.agricraft.common.config.StatsConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
+import com.agricraft.agricraft.common.util.PlatformUtils;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CropBlockEntity extends BlockEntity {
 
-	private String seed = "agricraft:unknown";
+	private String plantId = "";
+	private AgriPlant plant;
+	private int growthStage = 0;
+	private final Map<Integer, VoxelShape> shapeByAge = new HashMap<>();
 
 	public CropBlockEntity(BlockPos blockPos, BlockState blockState) {
 		super(ModBlockEntityTypes.CROP.get(), blockPos, blockState);
 	}
 
-	public boolean setSeed(String seed) {
-		if (seed.isEmpty()) {
+	public boolean setPlant(String plantId, AgriPlant plant) {
+		if (plantId.isEmpty() || plant == null) {
 			return false;
 		}
-		this.seed = seed;
+		this.plantId = plantId;
+		this.plant = plant;
+		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
 		return true;
 	}
 
-	public String getSeed() {
-		return this.seed;
+	public String getPlantId() {
+		return this.plantId;
+	}
+
+	public AgriPlant getPlant() {
+		return this.plant;
+	}
+
+	public int getGrowthStage() {
+		return this.growthStage;
+	}
+
+	public int getPlantHeight() {
+		return this.plant.stages().get(this.growthStage);
+	}
+
+	public VoxelShape getShape() {
+		if (this.plant == null) {
+			return Shapes.empty();
+		}
+		return shapeByAge.computeIfAbsent(this.growthStage, stage -> Block.box(0, 0, 0, 16, this.plant.stages().get(stage), 16));
 	}
 
 	@Override
 	public void load(CompoundTag tag) {
 		super.load(tag);
-		String s = tag.getString("seed");
-		if (s.isEmpty()) {
-			this.seed = "agricraft:unknown";
+		String p = tag.getString("plant");
+		if (p.isEmpty()) {
+			this.plantId = "agricraft:unknown";
 		} else {
-			this.seed = s;
+			this.plantId = p;
+		}
+		this.growthStage = tag.getInt("growth");
+		if (plant == null && level != null) {
+			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
 		}
 	}
 
 	@Override
 	protected void saveAdditional(CompoundTag tag) {
 		super.saveAdditional(tag);
-		tag.putString("seed", this.seed);
+		tag.putString("plant", this.plantId);
+		tag.putInt("growth", this.growthStage);
 	}
 
 	@NotNull
@@ -66,9 +105,24 @@ public class CropBlockEntity extends BlockEntity {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		if (level != null && !level.isClientSide) {
+			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
+			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+			System.out.println(level);
+		}
+	}
+
 	public void use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		player.sendSystemMessage(Component.literal("rightclick is " + this.seed));
-		player.sendSystemMessage(Component.literal("config max strength " + StatsConfig.strengthMax));
+		player.sendSystemMessage(Component.literal("client " + level.isClientSide +" id " + this.plantId + " " + (this.plant != null) + " growth " + this.growthStage));
+	}
+
+	public void performBonemeal() {
+		this.growthStage++;
+		this.setChanged();
+		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
 	}
 
 }
