@@ -1,10 +1,9 @@
 package com.agricraft.agricraft.common.block.entity;
 
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.config.StatsConfig;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.util.PlatformUtils;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,6 +28,7 @@ import java.util.Map;
 
 public class CropBlockEntity extends BlockEntity {
 
+	private AgriGenome genome;
 	private String plantId = "";
 	private AgriPlant plant;
 	private int growthStage = 0;
@@ -38,14 +38,11 @@ public class CropBlockEntity extends BlockEntity {
 		super(ModBlockEntityTypes.CROP.get(), blockPos, blockState);
 	}
 
-	public boolean setPlant(String plantId, AgriPlant plant) {
-		if (plantId.isEmpty() || plant == null) {
-			return false;
-		}
-		this.plantId = plantId;
-		this.plant = plant;
+	public void setGenome(AgriGenome genome) {
+		this.genome = genome;
+		this.plantId = genome.getSpeciesGene().getDominant().trait();
+		this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
 		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
-		return true;
 	}
 
 	public String getPlantId() {
@@ -74,11 +71,11 @@ public class CropBlockEntity extends BlockEntity {
 	@Override
 	public void load(CompoundTag tag) {
 		super.load(tag);
-		String p = tag.getString("plant");
-		if (p.isEmpty()) {
+		this.genome = AgriGenome.fromNBT(tag);
+		if (this.genome == null) {
 			this.plantId = "agricraft:unknown";
 		} else {
-			this.plantId = p;
+			this.plantId = this.genome.getSpeciesGene().getDominant().trait();
 		}
 		this.growthStage = tag.getInt("growth");
 		if (plant == null && level != null) {
@@ -89,7 +86,7 @@ public class CropBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag) {
 		super.saveAdditional(tag);
-		tag.putString("plant", this.plantId);
+		genome.writeToNBT(tag);
 		tag.putInt("growth", this.growthStage);
 	}
 

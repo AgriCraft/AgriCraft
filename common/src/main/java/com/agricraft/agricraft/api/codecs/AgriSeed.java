@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.common.codecs;
+package com.agricraft.agricraft.api.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

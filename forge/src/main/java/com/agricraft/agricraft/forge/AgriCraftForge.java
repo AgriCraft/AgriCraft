@@ -2,8 +2,8 @@ package com.agricraft.agricraft.forge;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.client.AgriCraftForgeClient;
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriSeed;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.client.bewlr;
 
+import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.util.PlatformClientUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -21,7 +22,7 @@ public class AgriSeedBEWLR extends BlockEntityWithoutLevelRenderer {
 
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-		String plant = stack.getTag() == null ? DEFAULT_SEED : stack.getTag().getString("plant");
+		String plant = AgriSeedItem.getSpecies(stack);
 		if (plant.isEmpty()) {
 			plant = DEFAULT_SEED;
 		}

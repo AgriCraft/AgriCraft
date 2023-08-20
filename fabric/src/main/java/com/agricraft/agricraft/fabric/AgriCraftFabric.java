@@ -1,8 +1,8 @@
 package com.agricraft.agricraft.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriSeed;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

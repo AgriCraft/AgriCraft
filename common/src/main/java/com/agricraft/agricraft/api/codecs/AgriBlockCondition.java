@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.common.codecs;
+package com.agricraft.agricraft.api.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ExtraCodecs;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

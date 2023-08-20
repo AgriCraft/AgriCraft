@@ -1,17 +1,15 @@
 package com.agricraft.agricraft.common.util;
 
 import com.agricraft.agricraft.AgriCraft;
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriSeed;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class PlatformUtils {
@@ -38,6 +36,16 @@ public class PlatformUtils {
 
 	@ExpectPlatform
 	public static CreativeModeTab createSeedsCreativeTab() {
+		throw new NotImplementedException();
+	}
+
+	@ExpectPlatform
+	public static String getIdFromPlant(AgriPlant plant) {
+		throw new NotImplementedException();
+	}
+
+	@ExpectPlatform
+	public static AgriPlant getPlantFromId(String id) {
 		throw new NotImplementedException();
 	}
 

@@ -22,9 +22,11 @@ assets
          |- seed
              |- potato.png  # texture to use for the seed item (it is not required to be here, as long as the texture is loaded that's fine)
 ```
+*agricraft will load files from the directories `models/crop`, `models/seed`, and `textures/seed`*
+
 translation :
 ```
-seed.agricraft.mood.potato: "Potato Seeds"  # the name of the seed
+seed.agricraft.mood.potato: "Potato Seeds"  # for the name of the seed
 ```
 
 Plant json (`data/agricraft/mood/potato.json`):

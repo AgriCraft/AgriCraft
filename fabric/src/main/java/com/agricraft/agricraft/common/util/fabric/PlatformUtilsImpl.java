@@ -1,8 +1,7 @@
 package com.agricraft.agricraft.common.util.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.PlatformUtils;
@@ -16,7 +15,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
 
@@ -45,7 +43,7 @@ public class PlatformUtilsImpl {
 						Registry<AgriPlant> registry = AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get();
 						AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
 						for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
-							output.accept(AgriSeedItem.toStack(entry.getKey().location()));
+							output.accept(AgriSeedItem.toStack(entry.getValue()));
 						}
 					} else {
 						AgriCraft.LOGGER.info("cached server is null");
@@ -54,4 +52,17 @@ public class PlatformUtilsImpl {
 				.build();
 	}
 
+	public static String getIdFromPlant(AgriPlant plant) {
+		if (AgriCraftFabric.cachedServer == null) {
+			return "";
+		}
+		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().getKey(plant).toString();
+	}
+
+	public static AgriPlant getPlantFromId(String id) {
+		if (AgriCraftFabric.cachedServer == null) {
+			return null;
+		}
+		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
+	}
 }

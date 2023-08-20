@@ -45,7 +45,7 @@
   "agricraft.stat.fertility": "Fertility",
   "agricraft.stat.mutativity": "Mutativity",
 
-  "agricraft.gene.agri_species": "Species",
+  "agricraft.gene.species": "Species",
   "agricraft.gene.animal_attractant.cow": "Cow Attractor",
   "agricraft.gene.animal_attractant.chicken": "Chicken Attractor",
   "agricraft.gene.animal_attractant.panda": "Panda Attractor",

@@ -1,10 +1,13 @@
-package com.agricraft.agricraft.common.codecs;
+package com.agricraft.agricraft.api.codecs;
 
+import com.agricraft.agricraft.api.genetic.AgriAllele;
+import com.agricraft.agricraft.api.genetic.AgriGene;
+import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

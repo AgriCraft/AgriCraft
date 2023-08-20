@@ -1,27 +1,22 @@
 package com.agricraft.agricraft.datagen;
 
 import com.agricraft.agricraft.AgriCraft;
-import com.agricraft.agricraft.common.codecs.AgriParticleEffect;
-import com.agricraft.agricraft.common.codecs.AgriPlant;
-import com.agricraft.agricraft.common.codecs.AgriPlantCallback;
-import com.agricraft.agricraft.common.codecs.AgriProduct;
-import com.agricraft.agricraft.common.codecs.AgriRequirement;
-import com.agricraft.agricraft.common.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriProduct;
+import com.agricraft.agricraft.api.codecs.AgriRequirement;
+import com.agricraft.agricraft.api.codecs.AgriSeed;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.BootstapContext;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = AgriCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

@@ -75,7 +75,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	@Override
 	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
-			return AgriSeedItem.toStack(new ResourceLocation(cbe.getPlantId()));
+			return AgriSeedItem.toStack(cbe.getPlant());
 		}
 		return super.getCloneItemStack(level, pos, state);
 	}
