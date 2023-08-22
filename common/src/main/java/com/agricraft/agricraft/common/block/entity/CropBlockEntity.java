@@ -1,12 +1,16 @@
 package com.agricraft.agricraft.common.block.entity;
 
+import com.agricraft.agricraft.api.IHaveMagnifyingInformation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.genetic.AgriGenePair;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
+import com.agricraft.agricraft.common.util.LangUtils;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -23,10 +27,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CropBlockEntity extends BlockEntity {
+public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInformation {
 
 	private AgriGenome genome;
 	private String plantId = "";
@@ -53,8 +59,16 @@ public class CropBlockEntity extends BlockEntity {
 		return this.plant;
 	}
 
+	public AgriGenome getGenome() {
+		return genome;
+	}
+
 	public int getGrowthStage() {
 		return this.growthStage;
+	}
+
+	public int getGrowthPercent() {
+		return (this.growthStage + 1) * 100 / this.plant.stages().size();
 	}
 
 	public int getPlantHeight() {
@@ -113,13 +127,37 @@ public class CropBlockEntity extends BlockEntity {
 	}
 
 	public void use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		player.sendSystemMessage(Component.literal("client " + level.isClientSide +" id " + this.plantId + " " + (this.plant != null) + " growth " + this.growthStage));
+		player.sendSystemMessage(Component.literal("client " + level.isClientSide + " id " + this.plantId + " " + (this.plant != null) + " growth " + this.growthStage));
 	}
 
 	public void performBonemeal() {
 		this.growthStage++;
 		this.setChanged();
 		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+	}
+
+	MutableComponent spacing = Component.literal("  ");
+	MutableComponent dash = Component.literal(" - ");
+
+	@Override
+	public boolean addToMagnifyingGlassTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		tooltip.add(Component.translatable("agricraft.tooltip.magnifying.crop"));
+		tooltip.add(spacing.plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.species"))
+				.append(LangUtils.plantName(genome.getSpeciesGene().getDominant().trait()))
+				.append(dash.plainCopy())
+				.append(LangUtils.plantName(genome.getSpeciesGene().getRecessive().trait()))
+		);
+		for (AgriGenePair<Integer> statGene : this.genome.getStatGenes().stream().sorted(Comparator.comparing(p -> p.getGene().getId())).toList()) {
+			tooltip.add(spacing.plainCopy()
+					.append(Component.translatable("agricraft.tooltip.magnifying.stat." + statGene.getGene().getId(),
+							statGene.getDominant().trait(), statGene.getRecessive().trait()))
+			);
+		}
+
+		if (isPlayerSneaking) {
+			tooltip.add(spacing.plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
+		}
+		return true;
 	}
 
 }

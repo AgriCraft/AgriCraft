@@ -9,10 +9,12 @@ loom {
 dependencies {
 	modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
 
-//	modCompileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
+	modCompileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
 //	modRuntimeOnly "mezz.jei:jei-$minecraft_version-common:$jei_version"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:$rei_version"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:$rei_version"
+
+	modCompileOnly "curse.maven:jade-324717:4681835"  // Jade-1.20-fabric-11.4.3-api
 
 }
 

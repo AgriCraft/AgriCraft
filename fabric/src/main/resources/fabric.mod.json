@@ -25,6 +25,12 @@
 		],
 		"modmenu": [
 			"com.agricraft.agricraft.common.config.fabric.ModMenuConfig"
+		],
+		"jei_mod_plugin": [
+			"com.agricraft.agricraft.compat.jei.AgriCraftJeiPlugin"
+		],
+		"jade": [
+			"com.agricraft.agricraft.compat.jade.CropBlockPlugin"
 		]
 	},
 	"mixins": [

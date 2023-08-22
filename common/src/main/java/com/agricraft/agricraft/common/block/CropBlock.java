@@ -28,6 +28,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
@@ -49,6 +50,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	}
 
 	@Override
+	@NotNull
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
 			return cbe.getShape();
@@ -56,13 +58,14 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 		return super.getShape(state, level, pos, context);
 	}
 
-	@Nullable
 	@Override
+	@Nullable
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new CropBlockEntity(pos, state);
 	}
 
 	@Override
+	@NotNull
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
 			cbe.use(state, level, pos, player, hand, hit);
@@ -73,6 +76,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	}
 
 	@Override
+	@NotNull
 	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
 			return AgriSeedItem.toStack(cbe.getPlant());

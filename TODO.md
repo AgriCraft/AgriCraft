@@ -1,0 +1,12 @@
+-[ ] magnifying glass
+  -[ ] plant tooltip
+    -[ ] is fertile
+    -[ ] soil under
+    -[ ] weed information
+    -[ ] in world animation
+    -[ ] config option
+  -[ ] soil tooltip
+
+-[ ] jade
+  -[ ] config option
+  -[ ] soil information

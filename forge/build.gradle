@@ -48,8 +48,14 @@ dependencies {
 	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-//	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
-//	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
+	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
+	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
+
+//	modCompileOnly "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
+//	modLocalRuntime "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
+
+	modCompileOnly "curse.maven:jade-324717:4681836"  // Jade-1.20.1-forge-11.4.3-api
+	modLocalRuntime "curse.maven:jade-324717:4681833"  // Jade-1.20.1-forge-11.4.3
 
 }
 

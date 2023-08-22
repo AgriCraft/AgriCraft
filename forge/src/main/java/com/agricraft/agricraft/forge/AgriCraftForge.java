@@ -19,16 +19,14 @@ public class AgriCraftForge {
 	public AgriCraftForge() {
 		AgriCraft.init();
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		bus.addListener(AgriCraftForge::onClientSetup);
+//		bus.addListener(AgriCraftForge::onClientSetup);
 		bus.addListener(AgriCraftForge::onRegisterDatapackRegistry);
 		if (FMLEnvironment.dist.isClient()) {
 			AgriCraftForgeClient.init();
 		}
 	}
 
-	public static void onClientSetup(FMLClientSetupEvent event) {
 
-	}
 
 	@SubscribeEvent
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {
