@@ -7,16 +7,25 @@ import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import com.agricraft.agricraft.fabric.AgriCraftFabric;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class PlatformUtilsImpl {
 
@@ -65,4 +74,13 @@ public class PlatformUtilsImpl {
 		}
 		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
 	}
+
+	public static List<Item> getItemsFromTag(ResourceLocation tag) {
+		return BuiltInRegistries.ITEM.getTag(TagKey.create(Registries.ITEM, tag))
+				.map(HolderSet.ListBacked::stream)
+				.map(str -> str.map(Holder::value))
+				.map(Stream::toList)
+				.orElse(List.of());
+	}
+
 }

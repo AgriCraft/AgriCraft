@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.client;
+package com.agricraft.agricraft.client.forge;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.mojang.datafixers.util.Either;

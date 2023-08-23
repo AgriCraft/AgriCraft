@@ -11,13 +11,18 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.List;
 import java.util.Map;
 
 public class PlatformUtilsImpl {
@@ -57,4 +62,9 @@ public class PlatformUtilsImpl {
 	public static AgriPlant getPlantFromId(String id) {
 		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
 	}
+
+	public static List<Item> getItemsFromTag(ResourceLocation tag) {
+		return ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(tag)).stream().toList();
+	}
+
 }

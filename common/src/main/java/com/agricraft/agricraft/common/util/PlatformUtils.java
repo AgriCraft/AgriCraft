@@ -12,6 +12,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.List;
+
 public class PlatformUtils {
 	public static final ResourceKey<Registry<AgriSeed>> AGRISEEDS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "seed"));
 	public static final ResourceKey<Registry<AgriPlant>> AGRIPLANTS = ResourceKey.createRegistryKey(new ResourceLocation(AgriCraft.MOD_ID, "plants"));
@@ -46,6 +48,11 @@ public class PlatformUtils {
 
 	@ExpectPlatform
 	public static AgriPlant getPlantFromId(String id) {
+		throw new NotImplementedException();
+	}
+
+	@ExpectPlatform
+	public static List<Item> getItemsFromTag(ResourceLocation tag) {
 		throw new NotImplementedException();
 	}
 

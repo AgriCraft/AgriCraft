@@ -40,6 +40,13 @@
 
   "agricraft.tooltip.magnifying_glass": "A tool to inspect the genome of crops and other things",
 
+  "agricraft.command.seed_default": "Gave %s as a seed",
+  "agricraft.command.seed_all": "Gave %s as a seed with all stats at %d",
+  "agricraft.command.seed_distinct": "Gave %s as a seed with stats %s",
+
+  "agricraft.option.core_config": "Core",
+  "agricraft.option.core_config.growth_multiplier": "Growth rate multiplier",
+  "agricraft.option.core_config.only_mature_seed_drops": "Only mature crops drop seeds",
   "agricraft.option.stats_config": "Plant stats",
   "agricraft.option.stats_config.gain_min": "Min Gain",
   "agricraft.option.stats_config.gain_max": "Max Gain",

@@ -17,7 +17,7 @@ public class GeneStat implements AgriGene<Integer> {
 	public GeneStat(AgriStat stat) {
 		this.stat = stat;
 		alleles = new HashMap<>();
-		for (int i = stat.getMin(); i < stat.getMax(); i++) {
+		for (int i = stat.getMin(); i <= stat.getMax(); ++i) {
 			alleles.put(i, new IntAllele(i, this));
 		}
 	}

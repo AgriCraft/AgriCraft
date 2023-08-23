@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
 
 public abstract class AgriRegistry<T extends AgriRegistrable> implements Iterable<T> {
 
@@ -36,10 +37,18 @@ public abstract class AgriRegistry<T extends AgriRegistrable> implements Iterabl
 		return this.registry.remove(element.getId()) != null;
 	}
 
+	public int size() {
+		return this.registry.size();
+	}
+
 	@NotNull
 	@Override
 	public Iterator<T> iterator() {
 		return registry.values().iterator();
+	}
+
+	public Stream<T> stream() {
+		return registry.values().stream();
 	}
 
 }

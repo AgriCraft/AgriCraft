@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class AgriSeedItem extends BlockItem {
@@ -97,9 +98,9 @@ public class AgriSeedItem extends BlockItem {
 				if (isAdvanced.isAdvanced()) {
 					genome.getSpeciesGene().getGene().addTooltip(tooltipComponents, genome.getSpeciesGene().getTrait());
 				}
-				for (AgriGenePair<Integer> pair : genome.getStatGenes()) {
-					pair.getGene().addTooltip(tooltipComponents, pair.getTrait());
-				}
+				genome.getStatGenes().stream()
+						.sorted(Comparator.comparing(pair -> pair.getGene().getId()))
+						.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
 			}
 		}
 	}

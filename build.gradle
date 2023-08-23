@@ -1,5 +1,4 @@
-plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
+plugins {id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "1.2-SNAPSHOT" apply false
 //
 //    id "com.modrinth.minotaur" version "2.+"

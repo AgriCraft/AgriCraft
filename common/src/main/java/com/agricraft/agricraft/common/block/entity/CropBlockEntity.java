@@ -2,12 +2,17 @@ package com.agricraft.agricraft.common.block.entity;
 
 import com.agricraft.agricraft.api.IHaveMagnifyingInformation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.genetic.AgriGenePair;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
+import com.agricraft.agricraft.api.stat.AgriStatRegistry;
+import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.util.LangUtils;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,8 +20,17 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,10 +41,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInformation {
 
@@ -69,6 +85,10 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 
 	public int getGrowthPercent() {
 		return (this.growthStage + 1) * 100 / this.plant.stages().size();
+	}
+
+	public boolean isMaxStage() {
+		return this.growthStage == this.plant.stages().size() - 1;
 	}
 
 	public int getPlantHeight() {
@@ -122,40 +142,106 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		if (level != null && !level.isClientSide) {
 			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
 			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
-			System.out.println(level);
 		}
 	}
 
-	public void use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		player.sendSystemMessage(Component.literal("client " + level.isClientSide + " id " + this.plantId + " " + (this.plant != null) + " growth " + this.growthStage));
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		// do nothing from off hand
+		if (hand == InteractionHand.OFF_HAND) {
+			return InteractionResult.PASS;
+		}
+		// harvesting
+		if (this.isMaxStage()) {
+			this.getHarvestProducts(this::spawnItem, level.random);
+			this.growthStage = this.plant.harvestStage();
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.FAIL;
+	}
+
+	private void spawnItem(ItemStack stack) {
+		this.level.addFreshEntity(new ItemEntity(this.level, this.getBlockPos().getX() + 0.5, this.getBlockPos().getY() + 0.5, this.getBlockPos().getZ() + 0.5, stack));
+	}
+
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		System.out.println("boop");
+		this.applyGrowthTick();
+	}
+
+	public void getHarvestProducts(Consumer<ItemStack> addToHarvest, RandomSource random) {
+		if (!this.isMaxStage()) {
+			return;
+		}
+		for (int trials = (this.genome.getStatGene(AgriStatRegistry.getInstance().gainStat()).getTrait() + 3) / 3; trials > 0; --trials) {
+			for (AgriProduct product : this.plant.products()) {
+				if (product.chance() > random.nextDouble()) {
+					int amount = random.nextInt(product.min(), product.max() + 1);
+					ItemStack stack;
+					if (product.item().tag()) {
+						ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
+						for (int i = 0; i < amount; ++i) {
+							addToHarvest.accept(items[random.nextInt(items.length)].copy());
+						}
+					} else {
+						Item item = BuiltInRegistries.ITEM.get(product.item().id());
+						stack = item.getDefaultInstance();
+						stack.setCount(amount);
+						addToHarvest.accept(stack);
+					}
+				}
+			}
+		}
+	}
+
+	public void applyGrowthTick() {
+		if (this.level == null || this.level.isClientSide()) {
+			return;
+		}
+		this.executePlantGrowthTick();
+
+	}
+
+	protected void executePlantGrowthTick() {
+		if (this.isMaxStage()) {
+			return;
+		}
+		double a = this.calculateGrowthRate();
+		double b = this.level.random.nextDouble();
+		System.out.printf("%.2f | %.2f%n", a, b);
+		if (a > b) {
+			this.growthStage++;
+			this.setChanged();
+			this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+		}
+	}
+
+	protected double calculateGrowthRate() {
+		int growth = this.genome.getStatGene(AgriStatRegistry.getInstance().growthStat()).getTrait();
+		double soilFactor = 1.0;
+		return soilFactor * (this.plant.growthChance() + growth * this.plant.growthBonus() * CoreConfig.growthMultiplier);
 	}
 
 	public void performBonemeal() {
-		this.growthStage++;
-		this.setChanged();
-		this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+		this.applyGrowthTick();
 	}
-
-	MutableComponent spacing = Component.literal("  ");
-	MutableComponent dash = Component.literal(" - ");
 
 	@Override
 	public boolean addToMagnifyingGlassTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 		tooltip.add(Component.translatable("agricraft.tooltip.magnifying.crop"));
-		tooltip.add(spacing.plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.species"))
+		tooltip.add(Component.literal("  ").plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.species"))
 				.append(LangUtils.plantName(genome.getSpeciesGene().getDominant().trait()))
-				.append(dash.plainCopy())
+				.append(Component.literal(" - ").plainCopy())
 				.append(LangUtils.plantName(genome.getSpeciesGene().getRecessive().trait()))
 		);
 		for (AgriGenePair<Integer> statGene : this.genome.getStatGenes().stream().sorted(Comparator.comparing(p -> p.getGene().getId())).toList()) {
-			tooltip.add(spacing.plainCopy()
+			tooltip.add(Component.literal("  ").plainCopy()
 					.append(Component.translatable("agricraft.tooltip.magnifying.stat." + statGene.getGene().getId(),
 							statGene.getDominant().trait(), statGene.getRecessive().trait()))
 			);
 		}
 
 		if (isPlayerSneaking) {
-			tooltip.add(spacing.plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
+			tooltip.add(Component.literal("  ").plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
 		}
 		return true;
 	}

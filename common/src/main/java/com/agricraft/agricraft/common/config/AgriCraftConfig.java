@@ -8,6 +8,9 @@ import com.teamresourceful.resourcefulconfig.common.annotations.InlineCategory;
 public final class AgriCraftConfig {
 
 	@InlineCategory
+	public static CoreConfig coreConfig;
+
+	@InlineCategory
 	public static StatsConfig statsConfig;
 
 }
