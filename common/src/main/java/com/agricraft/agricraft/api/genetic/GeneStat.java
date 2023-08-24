@@ -46,14 +46,14 @@ public class GeneStat implements AgriGene<Integer> {
 	}
 
 	@Override
-	public AgriGenePair<Integer> fromNBT(CompoundTag genes) {
+	public AgriGenePair<Integer> readFromNBT(CompoundTag genes) {
 		CompoundTag stat = genes.getCompound(this.getId());
 		return new AgriGenePair<>(this, this.getAllele(stat.getInt("dom")), this.getAllele(stat.getInt("rec")));
 	}
 
 	@Override
 	public void addTooltip(List<Component> tooltipComponents, Integer trait) {
-		tooltipComponents.add(Component.translatable("agricraft.stat." + this.getId()).append(": " + trait).withStyle(ChatFormatting.DARK_GRAY));
+		this.stat.addTooltip(tooltipComponents::add, trait);
 	}
 
 	public static class IntAllele implements AgriAllele<Integer> {

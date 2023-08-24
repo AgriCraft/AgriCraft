@@ -43,7 +43,7 @@ public class DatagenEventHandler {
 		AgriPlant potato = AgriPlant.builder()
 				.mods("agricraft", "minecraft")
 				.seeds(AgriSeed.builder().item("minecraft:potato").chances(0.0, 1.0, 0.0).build())
-				.stages16()
+				.stages(2, 3, 4, 5, 6, 7, 8, 9)
 				.harvest(4)
 				.chances(0.75, 0.025, 0.1)
 				.products(
@@ -61,7 +61,7 @@ public class DatagenEventHandler {
 		AgriPlant carrot = AgriPlant.builder()
 				.mods("agricraft", "minecraft")
 				.seeds(AgriSeed.builder().item("minecraft:carrot").chances(0.0, 1.0, 0.0).build())
-				.stages16()
+				.stages(2, 3, 4, 5, 6, 7, 8, 9)
 				.harvest(4)
 				.chances(0.75, 0.025, 0.1)
 				.products(AgriProduct.builder().item("minecraft:carrot").count(1, 4, 1.0).build())

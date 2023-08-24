@@ -27,8 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Fabric implementation of {@link com.agricraft.agricraft.common.util.PlatformUtils}
+ */
 public class PlatformUtilsImpl {
-
 
 	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
 		return new AgriSeedItem( properties);

@@ -7,7 +7,6 @@ import com.agricraft.agricraft.common.item.crafting.MagnifyingHelmetRecipe;
 import com.agricraft.agricraft.common.registry.ModItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +17,6 @@ public class AgriCraftJeiPlugin  implements IModPlugin {
 
 	public static final ResourceLocation ID = new ResourceLocation(AgriCraft.MOD_ID, "compat_jei");
 
-
 	@Override
 	@NotNull
 	public ResourceLocation getPluginUid() {
@@ -27,7 +25,7 @@ public class AgriCraftJeiPlugin  implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
-		// Register All The Seeds.
+		// Register all The Seeds.
 		registration.registerSubtypeInterpreter(ModItems.SEED.get(), (stack, context) -> {
 			AgriGenome genome = AgriGenome.fromNBT(stack.getTag());
 			if (genome != null) {
@@ -40,10 +38,6 @@ public class AgriCraftJeiPlugin  implements IModPlugin {
 	@Override
 	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
 		registration.getCraftingCategory().addCategoryExtension(MagnifyingHelmetRecipe.class, MagnifyingHelmetExtension::new);
-	}
-
-	@Override
-	public void registerRecipes(IRecipeRegistration registration) {
 	}
 
 }

@@ -47,6 +47,7 @@
   "agricraft.option.core_config": "Core",
   "agricraft.option.core_config.growth_multiplier": "Growth rate multiplier",
   "agricraft.option.core_config.only_mature_seed_drops": "Only mature crops drop seeds",
+  "agricraft.option.core_config.seed_compost_value": "Seed compost value",
   "agricraft.option.stats_config": "Plant stats",
   "agricraft.option.stats_config.gain_min": "Min Gain",
   "agricraft.option.stats_config.gain_max": "Max Gain",

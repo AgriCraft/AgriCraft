@@ -11,6 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Renderer for the agricraft seed item
+ */
 public class AgriSeedBEWLR extends BlockEntityWithoutLevelRenderer {
 
 	public static final AgriSeedBEWLR INSTANCE = new AgriSeedBEWLR();
@@ -26,18 +29,17 @@ public class AgriSeedBEWLR extends BlockEntityWithoutLevelRenderer {
 		if (plant.isEmpty()) {
 			plant = DEFAULT_SEED;
 		}
+		// compute the model of the seed from the plant id. the seed model path will look like <namespace>:seed/<id> so the file is /assets/<namespace>/models/seed/<id>.json
 		plant = plant.replace(":", ":seed/");
 
 		BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plant));
 		if (model == null) {
+			// model not found, defaults to the missing model
 			model = Minecraft.getInstance().getModelManager().getMissingModel();
 		}
 
+		// render the item using the computed model
 		PlatformClientUtils.renderItem(model, stack, itemDisplayContext, poseStack, buffer, packedLight, packedOverlay);
-	}
-
-	private static boolean isLeftHand(ItemDisplayContext itemDisplayContext) {
-		return itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
 	}
 
 }

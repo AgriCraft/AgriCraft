@@ -1,5 +1,9 @@
 package com.agricraft.agricraft.api.genetic;
 
+/**
+ * Gene Pair for two alleles of a gene in a genome
+ * @param <T> the type of the gene
+ */
 public class AgriGenePair<T> {
 
 	private final AgriGene<T> gene;

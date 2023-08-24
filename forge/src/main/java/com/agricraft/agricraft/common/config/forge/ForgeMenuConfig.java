@@ -9,6 +9,9 @@ import net.minecraftforge.fml.ModLoadingContext;
 
 public class ForgeMenuConfig {
 
+	/**
+	 * Register our configuration menu to the modlist menu
+	 */
 	public static void register() {
 		ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
 				() -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> {

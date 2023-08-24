@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +59,10 @@ public class AgriGenome {
 			return null;
 		}
 		CompoundTag genes = tag.getCompound("genes");
-		AgriGenePair<String> species = AgriGeneRegistry.getInstance().getGeneSpecies().fromNBT(genes);
+		AgriGenePair<String> species = AgriGeneRegistry.getInstance().getGeneSpecies().readFromNBT(genes);
 		List<AgriGenePair<Integer>> stats = new ArrayList<>();
 		for (AgriStat stat : AgriStatRegistry.getInstance()) {
-			AgriGeneRegistry.getInstance().getGeneStat(stat).ifPresent(gene -> stats.add(gene.fromNBT(genes)));
+			AgriGeneRegistry.getInstance().getGeneStat(stat).ifPresent(gene -> stats.add(gene.readFromNBT(genes)));
 		}
 		return new AgriGenome(species, stats);
 	}

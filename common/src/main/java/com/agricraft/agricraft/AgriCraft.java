@@ -1,6 +1,7 @@
 package com.agricraft.agricraft;
 
 import com.agricraft.agricraft.common.config.AgriCraftConfig;
+import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;
@@ -8,6 +9,7 @@ import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.registry.ModRecipeSerializers;
 import com.mojang.logging.LogUtils;
 import com.teamresourceful.resourcefulconfig.common.config.Configurator;
+import net.minecraft.world.level.block.ComposterBlock;
 import org.slf4j.Logger;
 
 public class AgriCraft {

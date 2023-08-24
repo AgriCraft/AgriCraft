@@ -11,6 +11,9 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * Fabric implementation of {@link com.agricraft.agricraft.common.util.PlatformClientUtils}
+ */
 public class PlatformClientUtilsImpl {
 
 	public static void renderItem(BakedModel model, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {

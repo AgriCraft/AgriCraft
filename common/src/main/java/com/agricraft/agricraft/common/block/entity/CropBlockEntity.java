@@ -3,7 +3,6 @@ package com.agricraft.agricraft.common.block.entity;
 import com.agricraft.agricraft.api.IHaveMagnifyingInformation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
-import com.agricraft.agricraft.api.genetic.AgriGenePair;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.config.CoreConfig;
@@ -15,7 +14,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -25,7 +23,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -41,7 +38,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +56,11 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		super(ModBlockEntityTypes.CROP.get(), blockPos, blockState);
 	}
 
+	/**
+	 * Change the genome of the plant.
+	 * It will also change the plant to match the new genome.
+	 * @param genome the new genome of the crop
+	 */
 	public void setGenome(AgriGenome genome) {
 		this.genome = genome;
 		this.plantId = genome.getSpeciesGene().getDominant().trait();
@@ -95,6 +96,9 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		return this.plant.stages().get(this.growthStage);
 	}
 
+	/**
+	 * @return the block shape of the crop
+	 */
 	public VoxelShape getShape() {
 		if (this.plant == null) {
 			return Shapes.empty();
@@ -139,12 +143,18 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 	@Override
 	public void setLevel(Level level) {
 		super.setLevel(level);
+		// when the block id deserialized the level is null so we can't load the plant from the registry yet
+		// thus, we're doing it now, as soon as the level is present
 		if (level != null && !level.isClientSide) {
 			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
 			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
 		}
 	}
 
+	/**
+	 * Right click interaction
+	 * @see com.agricraft.agricraft.common.block.CropBlock#use
+	 */
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		// do nothing from off hand
 		if (hand == InteractionHand.OFF_HAND) {
@@ -163,11 +173,20 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		this.level.addFreshEntity(new ItemEntity(this.level, this.getBlockPos().getX() + 0.5, this.getBlockPos().getY() + 0.5, this.getBlockPos().getZ() + 0.5, stack));
 	}
 
+	/**
+	 * Random tick interaction
+	 * @see com.agricraft.agricraft.common.block.CropBlock#randomTick
+	 */
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		System.out.println("boop");
 		this.applyGrowthTick();
 	}
 
+	/**
+	 * Compute the harvest products for the crop
+	 * @param addToHarvest consumer to add the products to
+	 * @param random a random generator
+	 */
 	public void getHarvestProducts(Consumer<ItemStack> addToHarvest, RandomSource random) {
 		if (!this.isMaxStage()) {
 			return;
@@ -178,11 +197,13 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 					int amount = random.nextInt(product.min(), product.max() + 1);
 					ItemStack stack;
 					if (product.item().tag()) {
+						// product is a tag, get a random item from it
 						ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
 						for (int i = 0; i < amount; ++i) {
 							addToHarvest.accept(items[random.nextInt(items.length)].copy());
 						}
 					} else {
+						// product is an item
 						Item item = BuiltInRegistries.ITEM.get(product.item().id());
 						stack = item.getDefaultInstance();
 						stack.setCount(amount);
@@ -193,6 +214,9 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		}
 	}
 
+	/**
+	 * Apply a growth tick to the crop (plant+weed)
+	 */
 	public void applyGrowthTick() {
 		if (this.level == null || this.level.isClientSide()) {
 			return;
@@ -201,6 +225,9 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 
 	}
 
+	/**
+	 * Apply a growth tick to the plant
+	 */
 	protected void executePlantGrowthTick() {
 		if (this.isMaxStage()) {
 			return;
@@ -221,24 +248,30 @@ public class CropBlockEntity extends BlockEntity implements IHaveMagnifyingInfor
 		return soilFactor * (this.plant.growthChance() + growth * this.plant.growthBonus() * CoreConfig.growthMultiplier);
 	}
 
+	/**
+	 *  Right click with a bonemeal interaction
+	 * 	@see com.agricraft.agricraft.common.block.CropBlock#performBonemeal
+	 */
 	public void performBonemeal() {
 		this.applyGrowthTick();
 	}
 
 	@Override
-	public boolean addToMagnifyingGlassTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+	public void addMagnifyingTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
 		tooltip.add(Component.translatable("agricraft.tooltip.magnifying.crop"));
 		tooltip.add(Component.literal("  ").plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.species"))
 				.append(LangUtils.plantName(genome.getSpeciesGene().getDominant().trait()))
 				.append(Component.literal(" - ").plainCopy())
 				.append(LangUtils.plantName(genome.getSpeciesGene().getRecessive().trait()))
 		);
-		for (AgriGenePair<Integer> statGene : this.genome.getStatGenes().stream().sorted(Comparator.comparing(p -> p.getGene().getId())).toList()) {
-			tooltip.add(Component.literal("  ").plainCopy()
-					.append(Component.translatable("agricraft.tooltip.magnifying.stat." + statGene.getGene().getId(),
-							statGene.getDominant().trait(), statGene.getRecessive().trait()))
-			);
-		}
+		AgriStatRegistry.getInstance().stream()
+				.filter(stat -> !stat.isHidden())
+				.map(stat -> this.genome.getStatGene(stat))
+				.sorted(Comparator.comparing(p -> p.getGene().getId()))
+				.map(genePair -> Component.translatable("agricraft.tooltip.magnifying.stat." + genePair.getGene().getId(),
+						genePair.getDominant().trait(), genePair.getRecessive().trait()))
+				.map(component -> Component.literal("  ").append(component))
+				.forEach(tooltip::add);
 
 		if (isPlayerSneaking) {
 			tooltip.add(Component.literal("  ").plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));

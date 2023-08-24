@@ -2,6 +2,7 @@ package com.agricraft.agricraft.compat.jade;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.genetic.AgriGenePair;
+import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.util.LangUtils;
@@ -23,13 +24,7 @@ import java.util.Comparator;
 public class CropBlockPlugin implements IWailaPlugin {
 
 	@Override
-	public void register(IWailaCommonRegistration registration) {
-		System.out.println("registering agricraft crop block plugin");
-	}
-
-	@Override
 	public void registerClient(IWailaClientRegistration registration) {
-		System.out.println("registering agricraft crop block plugin client");
 		registration.registerBlockComponent(CropBlockComponentProvider.INSTANCE, CropBlock.class);
 	}
 
@@ -50,9 +45,12 @@ public class CropBlockPlugin implements IWailaPlugin {
 					iTooltip.add(Component.translatable("agricraft.tooltip.jade.species")
 							.append(LangUtils.plantName(cbe.getGenome().getSpeciesGene().getTrait()))
 					);
-					for (AgriGenePair<Integer> statGene : cbe.getGenome().getStatGenes().stream().sorted(Comparator.comparing(p -> p.getGene().getId())).toList()) {
-						iTooltip.add(Component.translatable("agricraft.tooltip.jade.stat." + statGene.getGene().getId(), statGene.getTrait()));
-					}
+					AgriStatRegistry.getInstance().stream()
+							.filter(stat -> !stat.isHidden())
+							.map(stat -> cbe.getGenome().getStatGene(stat))
+							.sorted(Comparator.comparing(p -> p.getGene().getId()))
+							.map(genePair -> Component.translatable("agricraft.tooltip.jade.stat." + genePair.getGene().getId(), genePair.getTrait()))
+							.forEach(iTooltip::add);
 				}
 			}
 		}

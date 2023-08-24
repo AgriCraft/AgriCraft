@@ -28,6 +28,9 @@ import org.checkerframework.checker.units.qual.C;
 
 import java.util.Map;
 
+/**
+ * Forge client event handler in the mod event bus
+ */
 @Mod.EventBusSubscriber(modid = AgriCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AgriCraftForgeClient {
 

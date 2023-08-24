@@ -6,6 +6,9 @@ import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
 import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
 import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 
+/**
+ * Agricraft configuration category related to statistics.
+ */
 @Category(id = "stats_config", translation = "agricraft.option.stats_config")
 public final class StatsConfig {
 

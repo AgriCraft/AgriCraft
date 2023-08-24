@@ -22,6 +22,7 @@
 -[ ] send events for things
 -[ ] growth stage as objects / api
 -[ ] plant api, onGrowth,Break,etc
+-[ ] agricraft plugin
 
 -[ ] jade
   -[ ] config option

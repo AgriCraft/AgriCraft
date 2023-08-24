@@ -14,6 +14,10 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Custom recipe to add the magnifying property to a helmet, crafted from the helmet and a magnifying glass.
+ * An item is considered as a helmet if it is an instance of {@link  ArmorItem} and his equipment slot is {@link  EquipmentSlot#HEAD}
+ */
 public class MagnifyingHelmetRecipe extends CustomRecipe {
 
 	public MagnifyingHelmetRecipe(ResourceLocation resourceLocation, CraftingBookCategory craftingBookCategory) {

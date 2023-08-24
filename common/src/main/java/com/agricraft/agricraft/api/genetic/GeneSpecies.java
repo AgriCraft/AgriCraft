@@ -51,7 +51,7 @@ public class GeneSpecies implements AgriGene<String> {
 		genes.put(ID, species);
 	}
 
-	public AgriGenePair<String> fromNBT(CompoundTag genes) {
+	public AgriGenePair<String> readFromNBT(CompoundTag genes) {
 		CompoundTag species = genes.getCompound(ID);
 		return new AgriGenePair<>(this, this.getAllele(species.getString("dom")),
 				this.getAllele(species.getString("rec")));

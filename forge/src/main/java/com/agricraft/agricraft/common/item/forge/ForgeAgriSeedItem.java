@@ -8,6 +8,9 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Consumer;
 
+/**
+ * Wrapper for the AgriSeedItem for Forge specific method
+ */
 public class ForgeAgriSeedItem extends AgriSeedItem {
 
 	public ForgeAgriSeedItem(Properties properties) {

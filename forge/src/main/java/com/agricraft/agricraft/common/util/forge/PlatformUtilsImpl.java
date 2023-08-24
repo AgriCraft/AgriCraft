@@ -25,6 +25,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Forge implementation of {@link com.agricraft.agricraft.common.util.PlatformUtils}
+ */
 public class PlatformUtilsImpl {
 
 	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {

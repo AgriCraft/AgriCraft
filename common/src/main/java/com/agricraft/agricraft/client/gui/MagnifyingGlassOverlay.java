@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +21,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * Display a tooltip in the world when holding a magnifying glass or having a magnifying helmet equipped.
+ * The tooltip shows information about the genome of the plant.
+ * <br>
+ * You can register a new predicate to allow the tooltip to be rendered with {@link #addAllowingPredicate}
+ * You can add text to the tooltip by implementing the interface {@link IHaveMagnifyingInformation}
+ */
 public class MagnifyingGlassOverlay {
 
 	private static int hoverTicks;
@@ -37,6 +43,10 @@ public class MagnifyingGlassOverlay {
 		});
 	}
 
+	/**
+	 * Add a predicate to allow the overlay to render
+	 * @param predicate the predicate
+	 */
 	public static void addAllowingPredicate(Predicate<Player> predicate) {
 		allowingPredicates.add(predicate);
 	}
@@ -70,10 +80,10 @@ public class MagnifyingGlassOverlay {
 			hoverTicks++;
 			int posX = graphics.guiWidth() / 2 + 20 ; //cfg.overlayOffsetX.get();
 			int posY = graphics.guiHeight() / 2;// + cfg.overlayOffsetY.get();
-			float fade = Mth.clamp(hoverTicks / 48f, 0, 1);  // goes from 0 to 1 in 24 ticks, then stays at 1
+			float fade = Mth.clamp(hoverTicks / 48f, 0, 1);  // goes from 0 to 1 in 48 ticks, then stays at 1
 			posX += (int) (Math.pow(1 - fade, 3) * 8);
 			List<Component> tooltip = new ArrayList<>();
-			mgInfo.addToMagnifyingGlassTooltip(tooltip, mc.player.isShiftKeyDown());
+			mgInfo.addMagnifyingTooltip(tooltip, mc.player.isShiftKeyDown());
 
 			if (!tooltip.isEmpty()) {
 				int tooltipHeight = 8;

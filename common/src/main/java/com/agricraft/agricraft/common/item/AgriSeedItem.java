@@ -28,6 +28,12 @@ public class AgriSeedItem extends BlockItem {
 		super(ModBlocks.CROP.get(), properties);
 	}
 
+	/**
+	 * Create an ItemStack with the default genome for a plant
+	 *
+	 * @param plant the plant to create to genome from
+	 * @return an ItemStack with the default genome of the plant
+	 */
 	public static ItemStack toStack(AgriPlant plant) {
 		ItemStack stack = new ItemStack(ModItems.SEED.get(), 1);
 		AgriGenome genome = new AgriGenome(plant);
@@ -36,6 +42,13 @@ public class AgriSeedItem extends BlockItem {
 		stack.setTag(tag);
 		return stack;
 	}
+
+	/**
+	 * Create an ItemStack with the given genome
+	 *
+	 * @param genome the genome to create the ItemStack from
+	 * @return an ItemStack with the given genome
+	 */
 	public static ItemStack toStack(AgriGenome genome) {
 		ItemStack stack = new ItemStack(ModItems.SEED.get(), 1);
 		CompoundTag tag = new CompoundTag();
@@ -44,6 +57,12 @@ public class AgriSeedItem extends BlockItem {
 		return stack;
 	}
 
+	/**
+	 * Compute the plant species from an ItemStack
+	 *
+	 * @param stack the itemstack to compute the species from
+	 * @return the plant species formatted as a resource location, or {@code agricraft:unknown} if not found
+	 */
 	public static String getSpecies(ItemStack stack) {
 		if (stack.getItem() != ModItems.SEED.get()) {
 			return "agricraft:unknown";
@@ -61,7 +80,7 @@ public class AgriSeedItem extends BlockItem {
 
 	@Override
 	public Component getName(ItemStack stack) {
-		if (stack.getTag()==null) {
+		if (stack.getTag() == null) {
 			return Component.translatable("seed.agricraft.agricraft.unknown");
 		}
 		AgriGenome genome = AgriGenome.fromNBT(stack.getTag());

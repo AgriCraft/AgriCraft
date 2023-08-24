@@ -49,6 +49,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Command to give an agricraft seed for a specific plant and statistics
+ */
 public class GiveSeedCommand {
 
 	private static final SuggestionProvider<CommandSourceStack> SUGGEST_PLANTS = (commandContext, suggestionsBuilder) -> {
@@ -56,25 +59,20 @@ public class GiveSeedCommand {
 		return SharedSuggestionProvider.suggestResource(collection, suggestionsBuilder);
 	};
 
-	private static final SuggestionProvider<CommandSourceStack> SUGGEST_STATS = (commandContext, suggestionsBuilder) -> {
-		List<String> statIds = new ArrayList<>();
-		for (AgriStat stat : AgriStatRegistry.getInstance()) {
-			statIds.add(stat.getId());
-		}
-		return SharedSuggestionProvider.suggest(statIds, suggestionsBuilder);
-	};
-
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register((Commands.literal("agricraft_seed")
 				.requires(commandSourceStack -> commandSourceStack.hasPermission(2)))
 				.then(Commands.argument("plant", ResourceLocationArgument.id())
 						.suggests(SUGGEST_PLANTS)
+						// give a seed with default stats (1 to all)
 						.executes(commandContext -> GiveSeedCommand.giveSeed(commandContext.getSource(), ResourceLocationArgument.getId(commandContext, "plant")))
+						// give a seed with the same given value to all stats
 						.then(Commands.literal("all")
 								.then(Commands.argument("count", IntegerArgumentType.integer(1, 10))
 										.executes(commandContext -> GiveSeedCommand.giveSeed(commandContext.getSource(), ResourceLocationArgument.getId(commandContext, "plant"), IntegerArgumentType.getInteger(commandContext, "count")))
 								)
 						)
+						// give a seed with a different given value to the stats, value are ordered by the stats id alphabetical order, default to 1 if not filled
 						.then(Commands.literal("distinct")
 								.then(Commands.argument("value", StringArgumentType.string())
 										.executes(commandContext -> GiveSeedCommand.giveSeed(commandContext.getSource(), ResourceLocationArgument.getId(commandContext, "plant"), StringArgumentType.getString(commandContext, "value")))
