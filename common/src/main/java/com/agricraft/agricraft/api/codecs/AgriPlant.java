@@ -35,6 +35,10 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 			AgriParticleEffect.CODEC.listOf().optionalFieldOf("particle_effects").forGetter(plant -> plant.particleEffects.isEmpty() ? Optional.empty() : Optional.of(plant.particleEffects))
 	).apply(instance, AgriPlant::new));
 
+	public static final AgriPlant NO_PLANT = AgriPlant.builder()
+			.harvest(0).chances(0, 0, 0)
+			.build();
+
 	public AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds, List<Integer> stages, int harvestStage,
 	                 double growthChance, double growthBonus, boolean cloneable, double spreadChance,
 	                 Optional<List<AgriProduct>> products, Optional<List<AgriProduct>> clipProducts, AgriRequirement requirement,
@@ -69,7 +73,7 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 		boolean cloneable = true;
 		List<AgriProduct> products = new ArrayList<>();
 		List<AgriProduct> clipProducts = List.of();
-		AgriRequirement requirement = null;
+		AgriRequirement requirement = AgriRequirement.NO_REQUIREMENT;
 		List<AgriPlantCallback> callbacks = List.of();
 		List<AgriParticleEffect> particleEffects = List.of();
 

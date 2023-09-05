@@ -1,5 +1,7 @@
 package com.agricraft.agricraft.common.block;
 
+import com.agricraft.agricraft.api.crop.AgriCrop;
+import com.agricraft.agricraft.api.crop.AgriCropBehaviour;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.config.CoreConfig;
@@ -73,7 +75,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
 			// transfert the right click to the block entity
-			return cbe.use(state, level, pos, player, hand, hit);
+			return cbe.use(level, pos, state, player, hand, hit);
 		}
 		return InteractionResult.FAIL;
 	}
@@ -81,8 +83,8 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	@Override
 	@NotNull
 	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
-			return AgriSeedItem.toStack(cbe.getGenome());
+		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
+			return AgriSeedItem.toStack(crop.getGenome());
 		}
 		return super.getCloneItemStack(level, pos, state);
 	}
@@ -93,9 +95,9 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 			// nothing on server
 			return;
 		}
-		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
+		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
 			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-			String plant = cbe.getPlantId().replace(":", ":crop/") + "_stage" + cbe.getGrowthStage();
+			String plant = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage();
 			ClientUtil.spawnParticlesForPlant(plant, level, state, pos);
 		}
 	}
@@ -105,9 +107,9 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
 		if (!state.canSurvive(level, pos)) {
-			if (level.isClientSide() && level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
+			if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop) {
 				// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-				String plant = cbe.getPlantId().replace(":", ":crop/") + "_stage" + cbe.getGrowthStage();
+				String plant = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage();
 				ClientUtil.spawnParticlesForPlant(plant, level, state, pos);
 			}
 			return Blocks.AIR.defaultBlockState();
@@ -122,7 +124,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 
 	@Override
 	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
-		return level.getBlockEntity(pos) instanceof CropBlockEntity cbe && !cbe.isMaxStage();
+		return level.getBlockEntity(pos) instanceof AgriCrop crop && !crop.isMaxStage();
 	}
 
 	@Override
@@ -132,17 +134,17 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 
 	@Override
 	public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
+		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
 			// transfert the right click with a bonemeal to the block entity
-			cbe.performBonemeal();
+			crop.onPerformBonemeal(crop, random);
 		}
 	}
 
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
+		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
 			// transfert the random tick to the block entity
-			cbe.randomTick(state, level, pos, random);
+			crop.onRandomTick(crop, random);
 		}
 	}
 
@@ -154,10 +156,10 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 			return drops;
 		}
 		// ask the block entity for the harvest products
-		if (tile instanceof CropBlockEntity cbe) {
-			cbe.getHarvestProducts(drops::add, params.getLevel().random);
-			if (cbe.isMaxStage() || !CoreConfig.onlyMatureSeedDrops) {
-				drops.add(AgriSeedItem.toStack(cbe.getGenome()));
+		if (tile instanceof AgriCrop crop) {
+			crop.getHarvestProducts(drops::add);
+			if (crop.isMaxStage() || !CoreConfig.onlyMatureSeedDrops) {
+				drops.add(AgriSeedItem.toStack(crop.getGenome()));
 			}
 		}
 		return drops;

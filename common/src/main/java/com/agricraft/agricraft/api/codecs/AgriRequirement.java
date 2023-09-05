@@ -25,6 +25,14 @@ public record AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition 
 			AgriFluidCondition.CODEC.optionalFieldOf("fluid_conditions").forGetter(requirement -> requirement.fluidCondition.isEmpty() ? Optional.empty() : Optional.of(requirement.fluidCondition))
 	).apply(instance, AgriRequirement::new));
 
+	public static final AgriRequirement NO_REQUIREMENT = AgriRequirement.builder()
+			.humidity("", "", 0)
+			.acidity("", "", 0)
+			.nutrients("", "", 0)
+			.light(0, 0, 0)
+			.seasons()
+			.build();
+
 	public AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition soilAcidity, AgriSoilCondition soilNutrients,
 	                       int minLight, int maxLight, double lightToleranceFactor, Optional<AgriListCondition> biomes,
 	                       Optional<AgriListCondition> dimensions, Optional<List<String>> seasons, Optional<List<AgriBlockCondition>> conditions, Optional<AgriFluidCondition> fluid) {
