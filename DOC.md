@@ -95,14 +95,14 @@ Plant json (`data/agricraft/mood/potato.json`):
 		"max_light": 16,
 		"light_tolerance_factor": 0.5,
 		"biomes": {  // [optional] (default=this)
-			"values": [],
+			"values": [],  // must be resource locations (like minecraft:plains)
 			"blacklist": true,
-			"ignore_from_strength": -1 // [optional] (default=-1) {-1=never ignored}
+			"ignore_from_strength": 11 // [optional] (default=11) is ignored if strength of the plant is >= of this value
 		},
 		"dimensions": {  // [optional] (default=this)
-			"values": [],
+			"values": [],  // must be resource locations (like minecraft:overworld)
 			"blacklist": true,
-			"ignore_from_strength": -1 // [optional] (default=this) {-1=never ignored}
+			"ignore_from_strength": 11 // [optional] (default=11) is ignored if strength of the plant is >= of this value
 		},
 		"seasons": [  // [optional] (default=this)
 			"spring",
@@ -112,10 +112,10 @@ Plant json (`data/agricraft/mood/potato.json`):
 		],
 		"block_conditions": [  // [optional] (default=[]) block condition
 			{
-				"block": "forge:ores/gold", // tag or element id
-				"nbt": "",  // [optional] (default="")
-				"states": [],  // [optional] (default=[])
-				"strength": 11,
+				"block": "#forge:ores/gold", // tag or element id, block must be the element or in the tag
+				"nbt": "",  // [optional] (default="") all tags in this one must be present and of same value in the block entity. (if a tag isn't present in this one it will be ignored in the block entity)
+				"states": [],  // [optional] (default=[]) all states must be present in the blocks for the condition to be valid
+				"strength": 11,  // strength at which this block condition become ignored
 				"amount": 1, // the amount required in the given range
 				"min_x": 0,  // The bounding box, relative to the crop at 0, 0, 0 in which the block(s) are to be placed.
 				"min_y": -2, // In this case we specify the box {(0, -2, 0), (0, -2, 0)}, which is the single block directly
@@ -125,10 +125,9 @@ Plant json (`data/agricraft/mood/potato.json`):
 				"max_z": 0,
 			}
 		],
-		"fluid_conditions": {  // [optional] (default=this)
+		"fluid_condition": {  // [optional] (default=this)  warning, if the fluid condition is unmatched it is lethal for the crop
 			"fluid": "minecraft:empty",  // tag or element id
 			"states": [],  // [optional] (default=[])
-			"nbt": "",  // [optional] (default="")
 		}
 	},
 	"callbacks": [],  // [optional] (default=[])

@@ -3,6 +3,7 @@ package com.agricraft.agricraft.fabric;
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSeed;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -35,8 +36,8 @@ public class AgriCraftFabric implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		AgriCraft.init();
-		DynamicRegistries.registerSynced(PlatformUtils.getSeedRegistryKey(), AgriSeed.CODEC, AgriSeed.CODEC);
 		DynamicRegistries.registerSynced(PlatformUtils.getPlantRegistryKey(), AgriPlant.CODEC, AgriPlant.CODEC);
+		DynamicRegistries.registerSynced(PlatformUtils.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> cachedServer = player.getServer());
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			GiveSeedCommand.register(dispatcher, registryAccess);

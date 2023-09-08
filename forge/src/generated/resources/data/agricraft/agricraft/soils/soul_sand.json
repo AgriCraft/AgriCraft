@@ -1,0 +1,16 @@
+{
+  "acidity": "neutral",
+  "enabled": true,
+  "growth_modifier": 0.8,
+  "humidity": "arid",
+  "mods": [
+    "agricraft",
+    "minecraft"
+  ],
+  "nutrients": "high",
+  "variants": [
+    {
+      "block": "minecraft:soul_sand"
+    }
+  ]
+}

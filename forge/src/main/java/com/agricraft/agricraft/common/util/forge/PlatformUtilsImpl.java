@@ -2,28 +2,37 @@ package com.agricraft.agricraft.common.util.forge;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.item.forge.ForgeAgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Forge implementation of {@link com.agricraft.agricraft.common.util.PlatformUtils}
@@ -66,8 +75,32 @@ public class PlatformUtilsImpl {
 		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
 	}
 
+	public static Optional<AgriSoil> getSoilFromBlock(BlockState blockState) {
+		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.AGRISOILS).get().stream().filter(soil -> soil.isVariant(blockState)).findFirst();
+	}
+
 	public static List<Item> getItemsFromTag(ResourceLocation tag) {
 		return ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(tag)).stream().toList();
+	}
+
+	public static String getIdFromSoil(AgriSoil soil) {
+		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.AGRISOILS).get().getKey(soil).toString();
+	}
+
+	public static List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+		if (!tag.tag()) {
+			return List.of(ForgeRegistries.BLOCKS.getValue(tag.id()));
+		} else {
+			return ForgeRegistries.BLOCKS.tags().getTag(BlockTags.create(tag.id())).stream().toList();
+		}
+	}
+
+	public static List<Fluid> getFluidsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+		if (!tag.tag()) {
+			return List.of(ForgeRegistries.FLUIDS.getValue(tag.id()));
+		} else {
+			return ForgeRegistries.FLUIDS.tags().getTag(FluidTags.create(tag.id())).stream().toList();
+		}
 	}
 
 }

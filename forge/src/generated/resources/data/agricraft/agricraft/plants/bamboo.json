@@ -1,8 +1,8 @@
 {
   "cloneable": true,
   "enabled": true,
-  "growth_bonus": 0.025,
-  "growth_chance": 0.75,
+  "growth_bonus": 0.01,
+  "growth_chance": 0.9,
   "harvest_stage": 4,
   "mods": [
     "agricraft",
@@ -10,9 +10,9 @@
   ],
   "products": [
     {
-      "chance": 0.95,
-      "item": "minecraft:wheat",
-      "max": 3,
+      "chance": 1000.0,
+      "item": "minecraft:bamboo",
+      "max": 2,
       "min": 1,
       "required": true
     }
@@ -22,29 +22,29 @@
     "max_light": 16,
     "min_light": 10,
     "seasons": [
-      "summer",
-      "autumn"
+      "spring",
+      "summer"
     ],
     "soil_acidity": {
       "type": "equal",
-      "condition": "slightly_acidic",
-      "tolerance_factor": 0.2
+      "tolerance_factor": 0.4,
+      "value": "slightly_acidic"
     },
     "soil_humidity": {
       "type": "equal",
-      "condition": "wet",
-      "tolerance_factor": 0.15
+      "tolerance_factor": 0.4,
+      "value": "damp"
     },
     "soil_nutrients": {
       "type": "equal_or_higher",
-      "condition": "high",
-      "tolerance_factor": 0.1
+      "tolerance_factor": 0.4,
+      "value": "medium"
     }
   },
   "seeds": [
     {
       "grass_drop_chance": 0.0,
-      "item": "minecraft:wheat_seeds",
+      "item": "minecraft:bamboo",
       "override_planting": true,
       "seed_drop_bonus": 0.0,
       "seed_drop_chance": 1.0
@@ -52,13 +52,13 @@
   ],
   "spread_chance": 0.1,
   "stages": [
-    2,
-    4,
+    3,
     6,
-    8,
-    10,
+    9,
     12,
-    14,
-    16
+    15,
+    18,
+    21,
+    24
   ]
 }

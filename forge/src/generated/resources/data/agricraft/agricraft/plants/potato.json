@@ -33,18 +33,18 @@
     ],
     "soil_acidity": {
       "type": "equal",
-      "condition": "slightly_acidic",
-      "tolerance_factor": 0.2
+      "tolerance_factor": 0.2,
+      "value": "slightly_acidic"
     },
     "soil_humidity": {
       "type": "equal",
-      "condition": "wet",
-      "tolerance_factor": 0.15
+      "tolerance_factor": 0.15,
+      "value": "wet"
     },
     "soil_nutrients": {
       "type": "equal_or_higher",
-      "condition": "high",
-      "tolerance_factor": 0.1
+      "tolerance_factor": 0.1,
+      "value": "high"
     }
   },
   "seeds": [

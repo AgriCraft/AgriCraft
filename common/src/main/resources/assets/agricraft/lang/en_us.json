@@ -15,6 +15,26 @@
   "agricraft.stat.fertility": "Fertility",
   "agricraft.stat.mutativity": "Mutativity",
 
+  "agricraft.soil.humidity.arid": "Arid",
+  "agricraft.soil.humidity.dry": "Dry",
+  "agricraft.soil.humidity.damp": "Damp",
+  "agricraft.soil.humidity.wet": "Wet",
+  "agricraft.soil.humidity.watery": "Watery",
+  "agricraft.soil.humidity.flooded": "Flooded",
+  "agricraft.soil.acidity.highly_acidic": "Highly Acidic",
+  "agricraft.soil.acidity.acidic": "Acidic",
+  "agricraft.soil.acidity.slightly_acidic": "Slightly Acidic",
+  "agricraft.soil.acidity.neutral": "Neutral",
+  "agricraft.soil.acidity.slightly_alkaline": "Slightly Alkaline",
+  "agricraft.soil.acidity.alkaline": "Alkaline",
+  "agricraft.soil.acidity.highly_alkaline": "Highly Alkaline",
+  "agricraft.soil.nutrients.none": "None",
+  "agricraft.soil.nutrients.very_low": "Very Low",
+  "agricraft.soil.nutrients.low": "Low",
+  "agricraft.soil.nutrients.medium": "Medium",
+  "agricraft.soil.nutrients.high": "High",
+  "agricraft.soil.nutrients.very_high": "Very High",
+
   "agricraft.gene.species": "Species",
 
   "agricraft.tooltip.magnifying": "Magnifying",
@@ -27,6 +47,11 @@
   "agricraft.tooltip.magnifying.stat.fertility": "Fertility: %d - %d",
   "agricraft.tooltip.magnifying.stat.mutativity": "Mutativity: %d - %d",
   "agricraft.tooltip.magnifying.growth": "Growth: %d/%d",
+  "agricraft.tooltip.magnifying.soil": "Soil Information:",
+  "agricraft.tooltip.magnifying.soil.soil": "Soil: ",
+  "agricraft.tooltip.magnifying.soil.humidity": "Humidity: ",
+  "agricraft.tooltip.magnifying.soil.acidity": "Acidity: ",
+  "agricraft.tooltip.magnifying.soil.nutrients": "Nutrients: ",
 
   "config.jade.plugin_agricraft.crop_block": "Crop Block",
   "agricraft.tooltip.jade.species": "Species: ",
@@ -70,14 +95,30 @@
 
 
 
+  "soil.agricraft.agricraft.clay": "Clay",
+  "soil.agricraft.agricraft.crimsum_nylium": "Crimsum Nylium",
+  "soil.agricraft.agricraft.farmland": "Farmland",
+  "soil.agricraft.agricraft.mycelium": "Mycelium",
+  "soil.agricraft.agricraft.podzol": "Podzol",
+  "soil.agricraft.agricraft.sand": "Sand",
+  "soil.agricraft.agricraft.soul_sand": "Soul Sand",
+  "soil.agricraft.agricraft.soul_soil": "Soul Soil",
+  "soil.agricraft.agricraft.warped_nylium": "Warped Nylium",
+
   "plant.agricraft.agricraft.unknown": "Unknown",
   "plant.agricraft.agricraft.wheat": "Wheat",
   "plant.agricraft.agricraft.potato": "Potato",
   "plant.agricraft.agricraft.carrot": "Carrot",
+  "plant.agricraft.agricraft.cactus": "Cactus",
+  "plant.agricraft.agricraft.sugar_cane": "Sugar Cane",
+  "plant.agricraft.agricraft.bamboo": "Bamboo",
 
   "seed.agricraft.agricraft.unknown": "Unknown Seeds",
   "seed.agricraft.agricraft.wheat": "Wheat Seeds",
   "seed.agricraft.agricraft.potato": "Potato Seeds",
-  "seed.agricraft.agricraft.carrot": "Carrot Seeds"
+  "seed.agricraft.agricraft.carrot": "Carrot Seeds",
+  "seed.agricraft.agricraft.cactus": "Cactus Seeds",
+  "seed.agricraft.agricraft.sugar_cane": "Sugar Cane Seeds",
+  "seed.agricraft.agricraft.bamboo": "Bamboo Seeds"
 
 }

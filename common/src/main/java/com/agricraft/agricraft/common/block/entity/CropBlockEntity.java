@@ -1,11 +1,13 @@
 package com.agricraft.agricraft.common.block.entity;
 
-import com.agricraft.agricraft.api.IHaveMagnifyingInformation;
+import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
-import com.agricraft.agricraft.api.crop.AgriCropBehaviour;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
+import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
+import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
@@ -20,7 +22,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -32,8 +33,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -44,9 +48,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagnifyingInformation {
+public class CropBlockEntity extends BlockEntity implements AgriCrop, MagnifyingInspectable {
 
 	private AgriGenome genome;
 	private String plantId = "";
@@ -140,8 +145,31 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 	}
 
 	@Override
-	public Object getFertilityResponse() {
-		return null;
+	public AgriGrowthResponse getFertilityResponse() {
+		// check growth space
+		int height = this.plant.stages().get(this.growthStage);
+		while (height > 16) {
+			if (!level.getBlockState(this.getBlockPos().above(height / 16)).isAir()) {
+				return AgriGrowthResponse.INFERTILE;
+			}
+			height -= 16;
+		}
+		// if there is no condition registered
+		if (AgriGrowthConditionRegistry.getInstance().isEmpty()) {
+			return AgriGrowthResponse.FERTILE;
+		}
+		// check every growth condition registered and take the one with the highest priority
+		int strength = this.genome.getStatGene(AgriStatRegistry.getInstance().strengthStat()).getTrait();
+		Optional<AgriGrowthResponse> optional = AgriGrowthConditionRegistry.getInstance().stream()
+				.map(condition -> condition.check(this, this.level, this.getBlockPos(), strength))
+				.reduce((result, element) -> result.priority() >= element.priority() ? result : element);
+		return optional.orElse(AgriGrowthResponse.FERTILE);
+	}
+
+	@Override
+	public Optional<AgriSoil> getSoil() {
+		BlockState state = this.level.getBlockState(getBlockPos().below());
+		return PlatformUtils.getSoilFromBlock(state);
 	}
 
 	/**
@@ -151,11 +179,17 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 		if (this.plant == null) {
 			return Shapes.empty();
 		}
-		return shapeByAge.computeIfAbsent(this.growthStage, stage -> Block.box(0, 0, 0, 16, this.plant.stages().get(stage), 16));
+		double yoffset = 0;
+		if (level.getBlockState(this.getBlockPos().below()).is(Blocks.FARMLAND)) {
+			// TODO: should we change this to allow other soil to offsets the plant shape ?
+			yoffset = -1.0D / 16.0D;
+		}
+		return shapeByAge.computeIfAbsent(this.growthStage, stage -> Block.box(0, 0, 0, 16, this.plant.stages().get(stage), 16)).move(0, yoffset, 0);
 	}
 
 	/**
 	 * Right click interaction
+	 *
 	 * @see com.agricraft.agricraft.common.block.CropBlock#use
 	 */
 	public InteractionResult use(Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand, BlockHitResult hit) {
@@ -178,12 +212,12 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 
 	@Override
 	public void onRandomTick(AgriCrop crop, RandomSource random) {
-		System.out.println("boop");
-		this.onApplyGrowthTick(crop ,random);
+		this.onApplyGrowthTick(crop, random);
 	}
 
 	/**
 	 * Compute the harvest products for the crop
+	 *
 	 * @param addToHarvest consumer to add the products to
 	 */
 	public void getHarvestProducts(Consumer<ItemStack> addToHarvest) {
@@ -221,8 +255,32 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 		if (this.level == null || this.level.isClientSide()) {
 			return;
 		}
-		if (this.isFertile()) {
+		AgriGrowthResponse fertility = this.getFertilityResponse();
+		System.out.println(fertility);
+		if (fertility.isInstantKill()) {
+			// kill plant
+			fertility.onPlantKilled(this);
+			this.removeBlock();
+		} else if (fertility.isLethal()) {
+			// reverse growth stage
+			this.growthStage--;
+			if (this.growthStage < 0) {
+				this.removeBlock();
+			} else {
+				this.setChanged();
+				this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+			}
+		} else if (fertility.isFertile()) {
+			// plant growth tick
 			this.executePlantGrowthTick();
+		}
+	}
+
+	private void removeBlock() {
+		if (this.getBlockState().getValue(BlockStateProperties.WATERLOGGED)) {
+			level.setBlockAndUpdate(this.getBlockPos(), Fluids.WATER.defaultFluidState().createLegacyBlock());
+		} else {
+			level.setBlockAndUpdate(this.getBlockPos(), Blocks.AIR.defaultBlockState());
 		}
 	}
 
@@ -235,7 +293,6 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 		}
 		double a = this.calculateGrowthRate();
 		double b = this.level.random.nextDouble();
-		System.out.printf("%.2f | %.2f%n", a, b);
 		if (a > b) {
 			this.growthStage++;
 			this.setChanged();
@@ -245,13 +302,14 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, IHaveMagni
 
 	protected double calculateGrowthRate() {
 		int growth = this.genome.getStatGene(AgriStatRegistry.getInstance().growthStat()).getTrait();
-		double soilFactor = 1.0;
+		double soilFactor = this.getSoil().map(AgriSoil::growthModifier).orElse(1.0D);
 		return soilFactor * (this.plant.growthChance() + growth * this.plant.growthBonus() * CoreConfig.growthMultiplier);
 	}
 
 	/**
-	 *  Right click with a bonemeal interaction
-	 * 	@see com.agricraft.agricraft.common.block.CropBlock#performBonemeal
+	 * Right click with a bonemeal interaction
+	 *
+	 * @see com.agricraft.agricraft.common.block.CropBlock#performBonemeal
 	 */
 	@Override
 	public void onPerformBonemeal(AgriCrop crop, RandomSource random) {

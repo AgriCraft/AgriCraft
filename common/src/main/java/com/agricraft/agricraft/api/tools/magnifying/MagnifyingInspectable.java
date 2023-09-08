@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.api;
+package com.agricraft.agricraft.api.tools.magnifying;
 
 import net.minecraft.network.chat.Component;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Interface to add components to the magnifying tooltip
  */
-public interface IHaveMagnifyingInformation {
+public interface MagnifyingInspectable {
 
 	/**
 	 * Add components to the tooltip that will be rendered

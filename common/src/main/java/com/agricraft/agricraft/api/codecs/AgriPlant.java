@@ -1,11 +1,7 @@
 package com.agricraft.agricraft.api.codecs;
 
-import com.agricraft.agricraft.api.genetic.AgriAllele;
-import com.agricraft.agricraft.api.genetic.AgriGene;
-import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,6 +77,10 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 			return new AgriPlant(true, mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, products, clipProducts, requirement, callbacks, particleEffects);
 		}
 
+		public Builder defaultMods() {
+			Collections.addAll(this.mods, "agricraft", "minecraft");
+			return this;
+		}
 		public Builder mods(String... mods) {
 			Collections.addAll(this.mods, mods);
 			return this;

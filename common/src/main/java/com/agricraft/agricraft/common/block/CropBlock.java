@@ -6,14 +6,17 @@ import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
+import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -21,10 +24,17 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -37,8 +47,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
+public class CropBlock extends Block implements EntityBlock, BonemealableBlock, BucketPickup, LiquidBlockContainer {
 
 	public CropBlock() {
 		super(Properties.of()
@@ -51,7 +62,13 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 				.noParticlesOnBreak()
 				.lightLevel(BlockStateBase::getLightEmission)
 				.sound(SoundType.CROP));
-//		this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
+		this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(BlockStateProperties.WATERLOGGED);
+		// TODO: @Ketheroth add lavalogged property
 	}
 
 	@Override
@@ -62,6 +79,22 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 			return cbe.getShape();
 		}
 		return super.getShape(state, level, pos, context);
+	}
+
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		BlockState state = this.defaultBlockState();
+		if (context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER)) {
+			state = state.setValue(BlockStateProperties.WATERLOGGED, true);
+		}
+		return state;
+	}
+
+	@Override
+	@NotNull
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
 	}
 
 	@Override
@@ -106,11 +139,17 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+		}
 		if (!state.canSurvive(level, pos)) {
 			if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop) {
 				// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
 				String plant = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage();
 				ClientUtil.spawnParticlesForPlant(plant, level, state, pos);
+			}
+			if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+				return Fluids.WATER.defaultFluidState().createLegacyBlock();
 			}
 			return Blocks.AIR.defaultBlockState();
 		}
@@ -119,7 +158,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && level.getBlockState(pos.below()).is(Blocks.FARMLAND);
+		return PlatformUtils.getSoilFromBlock(level.getBlockState(pos.below())).isPresent();
 	}
 
 	@Override
@@ -163,6 +202,41 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock {
 			}
 		}
 		return drops;
+	}
+
+	@Override
+	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+			level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, false), 3);
+			return Fluids.WATER.getBucket().getDefaultInstance();
+		}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public Optional<SoundEvent> getPickupSound() {
+		// TODO: @Ketheroth wrap CropBlock in loader specific block to have the blockstate passed in
+//		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+//			return Fluids.WATER.getPickupSound()
+//		}
+		return Fluids.WATER.getPickupSound();
+	}
+
+	@Override
+	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+		return !state.getValue(BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidState) {
+		if (this.canPlaceLiquid(level, pos, state, fluidState.getType()) && fluidState.getType() == Fluids.WATER) {
+			if (!level.isClientSide()) {
+				level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, true), 3);
+				level.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(level));
+			}
+			return true;
+		}
+		return false;
 	}
 
 }

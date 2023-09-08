@@ -2,6 +2,7 @@ package com.agricraft.agricraft.api.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,12 +10,13 @@ import java.util.Optional;
 public record AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition soilAcidity,
                               AgriSoilCondition soilNutrients, int minLight, int maxLight,
                               double lightToleranceFactor, AgriListCondition biomes, AgriListCondition dimensions,
-                              List<String> seasons, List<AgriBlockCondition> blockConditions, AgriFluidCondition fluidCondition) {
+                              List<String> seasons, List<AgriBlockCondition> blockConditions,
+                              AgriFluidCondition fluidCondition) {
 
 	public static final Codec<AgriRequirement> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			AgriSoilCondition.CODEC.fieldOf("soil_humidity").forGetter(requirement -> requirement.soilHumidity),
-			AgriSoilCondition.CODEC.fieldOf("soil_acidity").forGetter(requirement -> requirement.soilAcidity),
-			AgriSoilCondition.CODEC.fieldOf("soil_nutrients").forGetter(requirement -> requirement.soilNutrients),
+			AgriSoilCondition.codecForProperty(AgriSoilCondition.Humidity.CODEC).fieldOf("soil_humidity").forGetter(requirement -> requirement.soilHumidity),
+			AgriSoilCondition.codecForProperty(AgriSoilCondition.Acidity.CODEC).fieldOf("soil_acidity").forGetter(requirement -> requirement.soilAcidity),
+			AgriSoilCondition.codecForProperty(AgriSoilCondition.Nutrients.CODEC).fieldOf("soil_nutrients").forGetter(requirement -> requirement.soilNutrients),
 			Codec.INT.fieldOf("min_light").forGetter(requirement -> requirement.minLight),
 			Codec.INT.fieldOf("max_light").forGetter(requirement -> requirement.maxLight),
 			Codec.DOUBLE.fieldOf("light_tolerance_factor").forGetter(requirement -> requirement.lightToleranceFactor),
@@ -22,13 +24,13 @@ public record AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition 
 			AgriListCondition.CODEC.optionalFieldOf("dimensions").forGetter(requirement -> requirement.dimensions.isEmpty() ? Optional.empty() : Optional.of(requirement.dimensions)),
 			Codec.STRING.listOf().optionalFieldOf("seasons").forGetter(requirement -> requirement.seasons.isEmpty() ? Optional.empty() : Optional.of(requirement.seasons)),
 			AgriBlockCondition.CODEC.listOf().optionalFieldOf("block_conditions").forGetter(requirement -> requirement.blockConditions.isEmpty() ? Optional.empty() : Optional.of(requirement.blockConditions)),
-			AgriFluidCondition.CODEC.optionalFieldOf("fluid_conditions").forGetter(requirement -> requirement.fluidCondition.isEmpty() ? Optional.empty() : Optional.of(requirement.fluidCondition))
+			AgriFluidCondition.CODEC.optionalFieldOf("fluid_condition").forGetter(requirement -> requirement.fluidCondition.isEmpty() ? Optional.empty() : Optional.of(requirement.fluidCondition))
 	).apply(instance, AgriRequirement::new));
 
 	public static final AgriRequirement NO_REQUIREMENT = AgriRequirement.builder()
-			.humidity("", "", 0)
-			.acidity("", "", 0)
-			.nutrients("", "", 0)
+			.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0)
+			.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0)
+			.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL, 0)
 			.light(0, 0, 0)
 			.seasons()
 			.build();
@@ -46,9 +48,9 @@ public record AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition 
 
 	public static class Builder {
 
-		AgriSoilCondition humidity = new AgriSoilCondition("wet", "equal", 0.2);
-		AgriSoilCondition acidity = new AgriSoilCondition("neutral", "equal", 0.2);
-		AgriSoilCondition nutrients = new AgriSoilCondition("medium", "equal", 0.2);
+		AgriSoilCondition humidity = new AgriSoilCondition(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.2);
+		AgriSoilCondition acidity = new AgriSoilCondition(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2);
+		AgriSoilCondition nutrients = new AgriSoilCondition(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL, 0.2);
 		int minLight = 10;
 		int maxLight = 16;
 		double lightToleranceFactor = 0.5;
@@ -62,70 +64,72 @@ public record AgriRequirement(AgriSoilCondition soilHumidity, AgriSoilCondition 
 			return new AgriRequirement(humidity, acidity, nutrients, minLight, maxLight, lightToleranceFactor, biomes, dimensions, seasons, blockConditions, fluidCondition);
 		}
 
-		public Builder humidity(String condition, String type, double toleranceFactor) {
+		public Builder humidity(AgriSoilValue condition, AgriSoilCondition.Type type, double toleranceFactor) {
 			this.humidity = new AgriSoilCondition(condition, type, toleranceFactor);
 			return this;
 		}
-		public Builder acidity(String condition, String type, double toleranceFactor) {
+
+		public Builder acidity(AgriSoilValue condition, AgriSoilCondition.Type type, double toleranceFactor) {
 			this.acidity = new AgriSoilCondition(condition, type, toleranceFactor);
 			return this;
 		}
-		public Builder nutrients(String condition, String type, double toleranceFactor) {
+
+		public Builder nutrients(AgriSoilValue condition, AgriSoilCondition.Type type, double toleranceFactor) {
 			this.nutrients = new AgriSoilCondition(condition, type, toleranceFactor);
 			return this;
 		}
+
 		public Builder light(int min, int max, double toleranceFactor) {
 			this.minLight = min;
 			this.maxLight = max;
 			this.lightToleranceFactor = toleranceFactor;
 			return this;
 		}
-		public Builder biomes(String... biomes) {
+
+		public Builder biomes(ResourceLocation... biomes) {
 			this.biomes = new AgriListCondition(List.of(biomes), false, -1);
 			return this;
 		}
-		public Builder biomes(boolean blacklist, String... biomes) {
+
+		public Builder biomes(boolean blacklist, ResourceLocation... biomes) {
 			this.biomes = new AgriListCondition(List.of(biomes), blacklist, -1);
 			return this;
 		}
-		public Builder biomes(int ingnoreFromStrength, boolean blacklist, String... biomes) {
+
+		public Builder biomes(int ingnoreFromStrength, boolean blacklist, ResourceLocation... biomes) {
 			this.biomes = new AgriListCondition(List.of(biomes), blacklist, ingnoreFromStrength);
 			return this;
 		}
-		public Builder dimensions(String... dimensions) {
+
+		public Builder dimensions(ResourceLocation... dimensions) {
 			this.dimensions = new AgriListCondition(List.of(dimensions), false, -1);
 			return this;
 		}
-		public Builder dimensions(boolean blacklist, String... dimensions) {
+
+		public Builder dimensions(boolean blacklist, ResourceLocation... dimensions) {
 			this.dimensions = new AgriListCondition(List.of(dimensions), blacklist, -1);
 			return this;
 		}
-		public Builder dimensions(int ingnoreFromStrength, boolean blacklist, String... dimensions) {
+
+		public Builder dimensions(int ingnoreFromStrength, boolean blacklist, ResourceLocation... dimensions) {
 			this.dimensions = new AgriListCondition(List.of(dimensions), blacklist, ingnoreFromStrength);
 			return this;
 		}
+
 		public Builder seasons(String... seasons) {
 			this.seasons = List.of(seasons);
 			return this;
 		}
+
 		public Builder blocks(AgriBlockCondition... blocks) {
 			this.blockConditions = List.of(blocks);
 			return this;
 		}
+
 		public Builder fluid(AgriFluidCondition fluid) {
 			this.fluidCondition = fluid;
 			return this;
 		}
-	}
-
-
-	public record AgriSoilCondition(String condition, String type, double toleranceFactor) {
-
-		public static final Codec<AgriSoilCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.STRING.fieldOf("condition").forGetter(soilCondition -> soilCondition.condition),
-				Codec.STRING.fieldOf("type").forGetter(soilCondition -> soilCondition.type),
-				Codec.DOUBLE.fieldOf("tolerance_factor").forGetter(soilCondition -> soilCondition.toleranceFactor)
-		).apply(instance, AgriSoilCondition::new));
 
 	}
 

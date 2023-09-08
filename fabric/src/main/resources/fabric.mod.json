@@ -30,7 +30,7 @@
 			"com.agricraft.agricraft.compat.jei.AgriCraftJeiPlugin"
 		],
 		"jade": [
-			"com.agricraft.agricraft.compat.jade.CropBlockPlugin"
+			"com.agricraft.agricraft.compat.jade.AgriCraftJadePlugin"
 		]
 	},
 	"mixins": [

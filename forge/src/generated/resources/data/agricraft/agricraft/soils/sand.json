@@ -1,0 +1,19 @@
+{
+  "acidity": "neutral",
+  "enabled": true,
+  "growth_modifier": 0.8,
+  "humidity": "arid",
+  "mods": [
+    "agricraft",
+    "minecraft"
+  ],
+  "nutrients": "low",
+  "variants": [
+    {
+      "block": "#forge:sand"
+    },
+    {
+      "block": "#minecraft:sand"
+    }
+  ]
+}

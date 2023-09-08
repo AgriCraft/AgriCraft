@@ -1,7 +1,7 @@
 -[ ] stat usage
   -[x] gain (only on right click, not on block break)  # yield more fruits
   -[x] growth  # grow faster
-  -[ ] strength  # overcome soil requirement
+  -[x] strength  # overcome soil requirement
   -[ ] resistance  # tougher against weed
   -[ ] fertility  # breed faster
   -[ ] mutativity  # mutate faster
@@ -13,7 +13,7 @@
     -[ ] weed information
     -[ ] in world animation
     -[ ] config option
-  -[ ] soil tooltip
+  -[x] soil tooltip
 
 - [ ] weeds
 - [ ] mutations
@@ -26,7 +26,10 @@
 
 -[ ] jade
   -[ ] config option
-  -[ ] soil information
+  -[x] soil information
 
 -[ ] jei
   -[ ] hide seeds not researched
+  -[ ] plant requirements
+  -[ ] plant mutations
+  -[ ] plant production

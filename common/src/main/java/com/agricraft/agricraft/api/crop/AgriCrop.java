@@ -1,12 +1,15 @@
 package com.agricraft.agricraft.api.crop;
 
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.genetic.AgriGenomeCarrier;
+import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
@@ -51,7 +54,12 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	/**
 	 * @return the current fertility response for this crop
 	 */
-	Object getFertilityResponse();
+	AgriGrowthResponse getFertilityResponse();
+
+	/**
+	 * @return the soil this crop is planted on
+	 */
+	Optional<AgriSoil> getSoil();
 
 	/**
 	 * Retrieve the products that would be produced upon harvesting this crop.

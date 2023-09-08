@@ -94,9 +94,7 @@ public class AgriSeedItem extends BlockItem {
 	public InteractionResult place(BlockPlaceContext context) {
 		InteractionResult result = super.place(context);
 		Level level = context.getLevel();
-		System.out.println(level.isClientSide + " " + result);
 		if (result.consumesAction() && !level.isClientSide) {
-			System.out.println(level.getBlockState(context.getClickedPos()));
 			BlockEntity be = level.getBlockEntity(context.getClickedPos());
 			if (be instanceof CropBlockEntity cbe) {
 				CompoundTag tag = context.getItemInHand().getTag();

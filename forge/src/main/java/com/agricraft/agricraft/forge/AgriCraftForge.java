@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.forge;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.client.forge.AgriCraftForgeClient;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSeed;
@@ -38,8 +39,8 @@ public class AgriCraftForge {
 	}
 
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {
-		event.dataPackRegistry(PlatformUtils.getSeedRegistryKey(), AgriSeed.CODEC, AgriSeed.CODEC);
 		event.dataPackRegistry(PlatformUtils.getPlantRegistryKey(), AgriPlant.CODEC, AgriPlant.CODEC);
+		event.dataPackRegistry(PlatformUtils.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);
 	}
 
 	public static void onRegisterCommands(RegisterCommandsEvent event) {

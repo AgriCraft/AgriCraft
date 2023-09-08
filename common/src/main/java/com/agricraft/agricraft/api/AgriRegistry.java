@@ -41,6 +41,10 @@ public abstract class AgriRegistry<T extends AgriRegistrable> implements Iterabl
 		return this.registry.size();
 	}
 
+	public boolean isEmpty() {
+		return this.registry.isEmpty();
+	}
+
 	@NotNull
 	@Override
 	public Iterator<T> iterator() {

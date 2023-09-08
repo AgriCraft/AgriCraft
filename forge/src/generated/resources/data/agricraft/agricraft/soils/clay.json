@@ -1,0 +1,16 @@
+{
+  "acidity": "slightly_acidic",
+  "enabled": true,
+  "growth_modifier": 1.0,
+  "humidity": "flooded",
+  "mods": [
+    "agricraft",
+    "minecraft"
+  ],
+  "nutrients": "medium",
+  "variants": [
+    {
+      "block": "minecraft:clay"
+    }
+  ]
+}

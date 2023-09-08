@@ -1,7 +1,0 @@
-{
-  "grass_drop_chance": 0.0,
-  "item": "minecraft:wheat_seeds",
-  "override_planting": true,
-  "seed_drop_bonus": 0.0,
-  "seed_drop_chance": 1.0
-}

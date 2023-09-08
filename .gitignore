@@ -5,4 +5,4 @@ build/
 **/run/
 out/
 forge/src/generated/resources/.cache/
-
+.architectury-transformer/
