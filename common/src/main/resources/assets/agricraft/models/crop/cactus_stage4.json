@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/crop",
-  "textures": {
-    "crop": "agricraft:block/cactus_stage1"
-  }
-}

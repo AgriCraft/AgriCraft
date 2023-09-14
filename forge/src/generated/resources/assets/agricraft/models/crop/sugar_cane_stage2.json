@@ -1,0 +1,6 @@
+{
+  "parent": "agricraft:crop/crop_hash",
+  "textures": {
+    "crop": "agricraft:block/sugar_cane_stage0"
+  }
+}

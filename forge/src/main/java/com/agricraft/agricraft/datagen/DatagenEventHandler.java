@@ -14,11 +14,17 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.BlockModelProvider;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.List;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -40,7 +46,8 @@ public class DatagenEventHandler {
 						Set.of(AgriApi.MOD_ID)
 				)
 		);
-		// TODO: @Ketheroth datagen model and lang files
+		generator.addProvider(event.includeClient(), new CropModelProvider(event.getGenerator(), event.getExistingFileHelper()));
+		generator.addProvider(event.includeClient(), new SeedModelProvider(event.getGenerator(), event.getExistingFileHelper()));
 	}
 
 	private static void registerPlant(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
@@ -229,6 +236,87 @@ public class DatagenEventHandler {
 				.nutrients(AgriSoilCondition.Nutrients.LOW)
 				.growthModifier(0.75)
 				.build());
+	}
+
+	private static class CropModelProvider extends ModelProvider<BlockModelBuilder> {
+
+		public CropModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+			super(generator.getPackOutput(), AgriApi.MOD_ID, "crop", BlockModelBuilder::new, existingFileHelper);
+		}
+
+
+		@Override
+		protected void registerModels() {
+			this.withExistingParent("bamboo_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/bamboo_stage0");
+			cropPlus("bamboo", 1, 2, 3);
+			tallCropPlus("bamboo", 4, 5, 6, 7);
+			this.with4TexturesIn7stage("cactus_stage", "agricraft:crop/crop_hash", "agricraft:block/cactus_stage");
+			this.with4TexturesIn7stage("carrot_stage", "agricraft:crop/crop_hash", "minecraft:block/carrots_stage");
+			this.with4TexturesIn7stage("potato_stage", "agricraft:crop/crop_hash", "minecraft:block/potatoes_stage");
+			this.with4TexturesIn7stage("sugar_cane_stage", "agricraft:crop/crop_hash", "agricraft:block/sugar_cane_stage");
+			for (int stage : List.of(0, 1, 2, 3, 4, 5, 6, 7)) {
+				this.withExistingParent("wheat_stage"+stage, "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage"+stage);
+			}
+		}
+
+		private void cropPlus(String name, int... stages) {
+			for (int stage : stages) {
+				this.withExistingParent(name + "_stage" + stage, "agricraft:crop/crop_plus")
+						.texture("crop", "agricraft:block/" + name + "_stage" + stage);
+			}
+		}
+		private void tallCropPlus(String name, int... stages) {
+			for (int stage : stages) {
+				this.withExistingParent(name + "_stage" + stage, "agricraft:crop/tall_crop_plus")
+						.texture("crop", "agricraft:block/"+name+"_base")
+						.texture("crop_top", "agricraft:block/" + name + "_stage" + stage);
+
+			}
+		}
+
+		private void with4TexturesIn7stage(String name, String parent, String baseTexture) {
+			this.withExistingParent(name + "0", parent).texture("crop", baseTexture + "0");
+			this.withExistingParent(name + "1", parent).texture("crop", baseTexture + "0");
+			this.withExistingParent(name + "2", parent).texture("crop", baseTexture + "0");
+			this.withExistingParent(name + "3", parent).texture("crop", baseTexture + "1");
+			this.withExistingParent(name + "4", parent).texture("crop", baseTexture + "1");
+			this.withExistingParent(name + "5", parent).texture("crop", baseTexture + "2");
+			this.withExistingParent(name + "6", parent).texture("crop", baseTexture + "2");
+			this.withExistingParent(name + "7", parent).texture("crop", baseTexture + "3");
+
+		}
+
+		@Override
+		public String getName() {
+			return "Crop Models: " + this.modid;
+		}
+
+	}
+
+	private static class SeedModelProvider extends ModelProvider<ItemModelBuilder> {
+
+		public SeedModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+			super(generator.getPackOutput(), AgriApi.MOD_ID, "seed", ItemModelBuilder::new, existingFileHelper);
+		}
+
+
+		@Override
+		protected void registerModels() {
+			List.of("bamboo", "cactus", "carrot", "potato", "sugar_cane", "unknown")
+					.forEach(this::seed);
+			this.withExistingParent("wheat", "minecraft:item/wheat_seeds");
+		}
+
+		private void seed(String name) {
+			this.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/" + name);
+
+		}
+
+		@Override
+		public String getName() {
+			return "Seed Models: " + this.modid;
+		}
+
 	}
 
 }
