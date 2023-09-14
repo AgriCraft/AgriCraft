@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.registry;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.common.item.DebuggerItem;
 import com.agricraft.agricraft.common.item.MagnifyingGlassItem;
 import com.agricraft.agricraft.common.item.RakeItem;
@@ -13,7 +14,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 public class ModItems {
-	public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(BuiltInRegistries.ITEM, AgriCraft.MOD_ID);
+	public static final ResourcefulRegistry<Item> ITEMS = ResourcefulRegistries.create(BuiltInRegistries.ITEM, AgriApi.MOD_ID);
 
 	public static final RegistryEntry<Item> DEBUGGER = ITEMS.register("debugger", () -> new DebuggerItem(new Item.Properties()));
 

@@ -1,10 +1,12 @@
 package com.agricraft.agricraft.api.genetic;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +24,7 @@ public class GeneSpecies implements AgriGene<String> {
 
 	@Override
 	public AgriAllele<String> defaultAllele(AgriPlant object) {
-		String id = PlatformUtils.getIdFromPlant(object);
+		String id = AgriApi.getPlantId(object).map(ResourceLocation::toString).orElse("");
 		StringAllele allele = alleles.get(id);
 		if (allele != null) {
 			return allele;
@@ -79,7 +81,7 @@ public class GeneSpecies implements AgriGene<String> {
 
 		@Override
 		public boolean isDominant(AgriAllele<String> other) {
-			// TODO: @Kether fix this later with species complexity
+			// TODO: @Ketheroth fix this later with species complexity
 			return this.trait.compareTo(other.trait()) >= 0;
 		}
 

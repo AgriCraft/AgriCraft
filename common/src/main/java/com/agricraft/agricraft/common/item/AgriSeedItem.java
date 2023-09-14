@@ -1,15 +1,13 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.api.genetic.AgriGenePair;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -87,7 +85,7 @@ public class AgriSeedItem extends BlockItem {
 		if (genome == null) {
 			return Component.translatable("seed.agricraft.agricraft.unknown");
 		}
-		return Component.translatable("seed.agricraft." + genome.getSpeciesGene().getDominant().trait().replace(":", "."));
+		return LangUtils.seedName(genome.getSpeciesGene().getDominant().trait());
 	}
 
 	@Override
@@ -96,6 +94,7 @@ public class AgriSeedItem extends BlockItem {
 		Level level = context.getLevel();
 		if (result.consumesAction() && !level.isClientSide) {
 			BlockEntity be = level.getBlockEntity(context.getClickedPos());
+			System.out.println("be " + (be instanceof CropBlockEntity));
 			if (be instanceof CropBlockEntity cbe) {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {
@@ -120,11 +119,6 @@ public class AgriSeedItem extends BlockItem {
 						.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
 			}
 		}
-	}
-
-	@Override
-	public Component getDescription() {
-		return super.getDescription();
 	}
 
 }

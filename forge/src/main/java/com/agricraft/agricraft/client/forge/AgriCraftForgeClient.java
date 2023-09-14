@@ -1,37 +1,27 @@
 package com.agricraft.agricraft.client.forge;
 
-import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.client.ber.CropBlockEntityRenderer;
 import com.agricraft.agricraft.client.gui.MagnifyingGlassOverlay;
 import com.agricraft.agricraft.common.config.forge.ForgeMenuConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
-import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.datafixers.util.Either;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.Map;
 
 /**
  * Forge client event handler in the mod event bus
  */
-@Mod.EventBusSubscriber(modid = AgriCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AgriCraftForgeClient {
 
 	@SubscribeEvent

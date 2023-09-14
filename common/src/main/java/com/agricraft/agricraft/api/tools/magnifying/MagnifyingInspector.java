@@ -7,7 +7,7 @@ import net.minecraft.world.phys.HitResult;
 import java.util.Optional;
 
 /**
- * Interface to add components to the magnifying tooltip
+ * An inspector produce an inspectable that will be used to add components to the magnifying tooltip
  */
 public interface MagnifyingInspector {
 

@@ -1,12 +1,11 @@
 package com.agricraft.agricraft.common.block;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.crop.AgriCrop;
-import com.agricraft.agricraft.api.crop.AgriCropBehaviour;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -158,7 +157,8 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		return PlatformUtils.getSoilFromBlock(level.getBlockState(pos.below())).isPresent();
+		System.out.println("can survive " + level.isClientSide() + " " + AgriApi.getSoil(level, pos, level.registryAccess()).isPresent());
+		return AgriApi.getSoil(level, pos.below(), level.registryAccess()).isPresent();
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.datagen;
 
-import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriRequirement;
@@ -8,7 +8,6 @@ import com.agricraft.agricraft.api.codecs.AgriSeed;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.codecs.AgriSoilVariant;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -22,7 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Set;
 
-@Mod.EventBusSubscriber(modid = AgriCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DatagenEventHandler {
 
 	@SubscribeEvent
@@ -35,27 +34,25 @@ public class DatagenEventHandler {
 						event.getLookupProvider(),
 						// The objects to generate
 						new RegistrySetBuilder()
-								.add(PlatformUtils.getPlantRegistryKey(), DatagenEventHandler::registerPlants)
-								.add(PlatformUtils.AGRISOILS, DatagenEventHandler::registerSoils),
+								.add(AgriApi.AGRIPLANTS, DatagenEventHandler::registerPlants)
+								.add(AgriApi.AGRISOILS, DatagenEventHandler::registerSoils),
 						// Generate dynamic registry objects for this mod
-						Set.of(AgriCraft.MOD_ID)
+						Set.of(AgriApi.MOD_ID)
 				)
 		);
 		// TODO: @Ketheroth datagen model and lang files
-		// TODO: @Ketheroth plant/soil id to lang fix for subfolder in resource location
-		// TODO: @Ketheroth wrap PlatformUtils in AgriApi
 	}
 
 	private static void registerPlant(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
 		context.register(
-				ResourceKey.create(PlatformUtils.getPlantRegistryKey(), new ResourceLocation(AgriCraft.MOD_ID, plantId)),
+				ResourceKey.create(AgriApi.AGRIPLANTS, new ResourceLocation(AgriApi.MOD_ID, plantId)),
 				plant
 		);
 	}
 
 	private static void registerSoil(BootstapContext<AgriSoil> context, String soilId, AgriSoil soil) {
 		context.register(
-				ResourceKey.create(PlatformUtils.AGRISOILS, new ResourceLocation(AgriCraft.MOD_ID, soilId)),
+				ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation(AgriApi.MOD_ID, soilId)),
 				soil
 		);
 	}

@@ -1,14 +1,12 @@
 package com.agricraft.agricraft.common.util.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModItems;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import com.agricraft.agricraft.fabric.AgriCraftFabric;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -24,9 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
@@ -57,11 +53,13 @@ public class PlatformUtilsImpl {
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
 				.displayItems((itemDisplayParameters, output) -> {
 					if (AgriCraftFabric.cachedServer != null) {
-						Registry<AgriPlant> registry = AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get();
-						AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-						for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
-							output.accept(AgriSeedItem.toStack(entry.getValue()));
-						}
+						AgriApi.getPlantRegistry(AgriCraftFabric.cachedServer.registryAccess())
+								.ifPresent(registry -> {
+									AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
+									for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
+										output.accept(AgriSeedItem.toStack(entry.getValue()));
+									}
+								});
 					} else {
 						AgriCraft.LOGGER.info("cached server is null");
 					}
@@ -69,32 +67,11 @@ public class PlatformUtilsImpl {
 				.build();
 	}
 
-	public static String getIdFromPlant(AgriPlant plant) {
-		if (AgriCraftFabric.cachedServer == null) {
-			return "";
-		}
-		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().getKey(plant).toString();
-	}
-
-	public static AgriPlant getPlantFromId(String id) {
-		if (AgriCraftFabric.cachedServer == null) {
-			return null;
-		}
-		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
-	}
-
-	public static String getIdFromSoil(AgriSoil soil) {
-		if (AgriCraftFabric.cachedServer == null) {
-			return "";
-		}
-		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.AGRISOILS).get().getKey(soil).toString();
-	}
-
-	public static Optional<AgriSoil> getSoilFromBlock(BlockState blockState) {
+	public static <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
 		if (AgriCraftFabric.cachedServer == null) {
 			return Optional.empty();
 		}
-		return AgriCraftFabric.cachedServer.registryAccess().registry(PlatformUtils.AGRISOILS).get().stream().filter(soil -> soil.isVariant(blockState)).findFirst();
+		return AgriCraftFabric.cachedServer.registryAccess().registry(resourceKey);
 	}
 
 	public static List<Item> getItemsFromTag(ResourceLocation tag) {

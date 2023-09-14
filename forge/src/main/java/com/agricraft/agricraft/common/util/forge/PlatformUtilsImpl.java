@@ -1,22 +1,19 @@
 package com.agricraft.agricraft.common.util.forge;
 
 import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.item.forge.ForgeAgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;
 import com.agricraft.agricraft.common.registry.ModItems;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -24,11 +21,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
@@ -57,34 +52,24 @@ public class PlatformUtilsImpl {
 				.title(Component.translatable("itemGroup.agricraft.seeds"))
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
 				.displayItems((itemDisplayParameters, output) -> {
-					Registry<AgriPlant> registry = ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get();
-					AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-					for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
-						output.accept(AgriSeedItem.toStack(entry.getValue()));
-					}
+					AgriApi.getPlantRegistry(ServerLifecycleHooks.getCurrentServer().registryAccess())
+							.ifPresent(registry -> {
+								AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
+								for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
+									output.accept(AgriSeedItem.toStack(entry.getValue()));
+								}
+							});
 				})
 				.withTabsBefore(ModCreativeTabs.MAIN_TAB.getId())
 				.build();
 	}
 
-	public static String getIdFromPlant(AgriPlant plant) {
-		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().getKey(plant).toString();
-	}
-
-	public static AgriPlant getPlantFromId(String id) {
-		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(id));
-	}
-
-	public static Optional<AgriSoil> getSoilFromBlock(BlockState blockState) {
-		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.AGRISOILS).get().stream().filter(soil -> soil.isVariant(blockState)).findFirst();
+	public static <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
+		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(resourceKey);
 	}
 
 	public static List<Item> getItemsFromTag(ResourceLocation tag) {
 		return ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(tag)).stream().toList();
-	}
-
-	public static String getIdFromSoil(AgriSoil soil) {
-		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(PlatformUtils.AGRISOILS).get().getKey(soil).toString();
 	}
 
 	public static List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {

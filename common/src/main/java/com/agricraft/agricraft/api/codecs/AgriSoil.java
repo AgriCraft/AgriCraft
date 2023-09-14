@@ -1,10 +1,13 @@
 package com.agricraft.agricraft.api.codecs;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
+import com.agricraft.agricraft.common.util.LangUtils;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
@@ -49,7 +52,7 @@ public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant>
 		tooltip.add(Component.translatable("agricraft.tooltip.magnifying.soil"));
 		tooltip.add(Component.literal("  ")
 				.append(Component.translatable("agricraft.tooltip.magnifying.soil.soil"))
-				.append(Component.translatable("soil.agricraft." + PlatformUtils.getIdFromSoil(this).replace(":", "."))));
+				.append(LangUtils.soilName(AgriApi.getSoilId(this).map(ResourceLocation::toString).orElse(""))));
 		tooltip.add(Component.literal("  ")
 				.append(Component.translatable("agricraft.tooltip.magnifying.soil.humidity"))
 				.append(Component.translatable("agricraft.soil.humidity." + this.humidity.name().toLowerCase())));

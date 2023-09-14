@@ -1,7 +1,7 @@
 package com.agricraft.agricraft.compat.jei;
 
 
-import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.item.crafting.MagnifyingHelmetRecipe;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @JeiPlugin
 public class AgriCraftJeiPlugin  implements IModPlugin {
 
-	public static final ResourceLocation ID = new ResourceLocation(AgriCraft.MOD_ID, "compat_jei");
+	public static final ResourceLocation ID = new ResourceLocation(AgriApi.MOD_ID, "compat_jei");
 
 	@Override
 	@NotNull

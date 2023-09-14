@@ -1,10 +1,10 @@
 package com.agricraft.agricraft.client.gui;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspector;
 import com.agricraft.agricraft.common.registry.ModItems;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class MagnifyingGlassOverlay {
 				if (level.getBlockEntity(result.getBlockPos()) instanceof MagnifyingInspectable inspectable) {
 					return Optional.of(inspectable);
 				}
-				Optional<AgriSoil> soil = PlatformUtils.getSoilFromBlock(level.getBlockState(result.getBlockPos()));
+			Optional<AgriSoil> soil = AgriApi.getSoil(level, result.getBlockPos(), level.registryAccess());
 				if (soil.isPresent()) {
 					return Optional.of(soil.get());
 				}

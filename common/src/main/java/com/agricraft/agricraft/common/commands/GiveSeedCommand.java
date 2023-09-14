@@ -1,5 +1,7 @@
 package com.agricraft.agricraft.common.commands;
 
+import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.genetic.AgriAllele;
 import com.agricraft.agricraft.api.genetic.AgriGene;
 import com.agricraft.agricraft.api.genetic.AgriGenePair;
@@ -8,56 +10,42 @@ import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.commands.arguments.UuidArgument;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.commands.AttributeCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Command to give an agricraft seed for a specific plant and statistics
  */
 public class GiveSeedCommand {
 
-	private static final SuggestionProvider<CommandSourceStack> SUGGEST_PLANTS = (commandContext, suggestionsBuilder) -> {
-		Collection<ResourceLocation> collection = commandContext.getSource().getServer().registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().keySet();
-		return SharedSuggestionProvider.suggestResource(collection, suggestionsBuilder);
-	};
+	private static final SuggestionProvider<CommandSourceStack> SUGGEST_PLANTS = (commandContext, suggestionsBuilder) -> SharedSuggestionProvider
+			.suggestResource(AgriApi.getPlantRegistry(commandContext.getSource().registryAccess())
+					.map(Registry::keySet)
+					.orElse(Set.of()), suggestionsBuilder);
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
 		dispatcher.register((Commands.literal("agricraft_seed")
@@ -84,7 +72,11 @@ public class GiveSeedCommand {
 	}
 
 	public static int giveSeed(CommandSourceStack source, ResourceLocation plant) {
-		ItemStack itemStack = AgriSeedItem.toStack(PlatformUtils.getPlantFromId(plant.toString()));
+		Optional<AgriPlant> optional = AgriApi.getPlant(plant, source.getLevel().registryAccess());
+		if (optional.isEmpty()) {
+			return 0;
+		}
+		ItemStack itemStack = AgriSeedItem.toStack(optional.get());
 		if (giveItemStack(itemStack, source.getPlayer(), source.getLevel())) {
 			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_default", plant), true);
 			return 1;
@@ -104,7 +96,7 @@ public class GiveSeedCommand {
 						.toList());
 		ItemStack itemStack = AgriSeedItem.toStack(genome);
 		if (giveItemStack(itemStack, source.getPlayer(), source.getLevel())) {
-			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_all",plant, value), true);
+			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_all", plant, value), true);
 			return 1;
 		}
 		return 0;

@@ -1,12 +1,11 @@
 package com.agricraft.agricraft.compat.jade;
 
-import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.util.LangUtils;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,7 +34,7 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 
 		public static final CropBlockComponentProvider INSTANCE = new CropBlockComponentProvider();
 
-		private static final ResourceLocation ID = new ResourceLocation(AgriCraft.MOD_ID, "crop_block");
+		private static final ResourceLocation ID = new ResourceLocation(AgriApi.MOD_ID, "crop_block");
 
 		private CropBlockComponentProvider() {
 		}
@@ -69,14 +68,14 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 
 		public static final SoilComponentProvider INSTANCE = new SoilComponentProvider();
 
-		private static final ResourceLocation ID = new ResourceLocation(AgriCraft.MOD_ID, "soil");
+		private static final ResourceLocation ID = new ResourceLocation(AgriApi.MOD_ID, "soil");
 
 		private SoilComponentProvider() {
 		}
 
 		@Override
-		public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
-			Optional<AgriSoil> soil = PlatformUtils.getSoilFromBlock(blockAccessor.getBlockState());
+		public void appendTooltip(ITooltip iTooltip, BlockAccessor accessor, IPluginConfig iPluginConfig) {
+			Optional<AgriSoil> soil = AgriApi.getSoil(accessor.getLevel(), accessor.getPosition(), accessor.getLevel().registryAccess());
 			if (soil.isPresent() && Minecraft.getInstance().player.isShiftKeyDown()) {
 				AgriSoil soil1 = soil.get();
 				iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.soil.humidity")

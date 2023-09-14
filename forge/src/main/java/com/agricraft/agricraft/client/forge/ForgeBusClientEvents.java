@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.client.forge;
 
-import com.agricraft.agricraft.AgriCraft;
+import com.agricraft.agricraft.api.AgriApi;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 /**
  * Forge client event handler in the forge event bus
  */
-@Mod.EventBusSubscriber(modid = AgriCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeBusClientEvents {
 
 	@SubscribeEvent

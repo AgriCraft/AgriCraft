@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.common.block.entity;
 
-import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
@@ -9,10 +9,10 @@ import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
+import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.util.LangUtils;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -21,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -74,7 +73,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		}
 		this.growthStage = tag.getInt("growth");
 		if (plant == null && level != null) {
-			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
+			this.plant = AgriApi.getPlant(this.plantId, this.level.registryAccess()).orElse(null);
 		}
 	}
 
@@ -103,7 +102,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		// when the block id deserialized the level is null so we can't load the plant from the registry yet
 		// thus, we're doing it now, as soon as the level is present
 		if (level != null && !level.isClientSide) {
-			this.plant = level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
+			this.plant = AgriApi.getPlant(this.plantId, level.registryAccess()).orElse(null);
 			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
 		}
 	}
@@ -111,7 +110,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 	public void setGenome(AgriGenome genome) {
 		this.genome = genome;
 		this.plantId = genome.getSpeciesGene().getDominant().trait();
-		this.plant = this.level.registryAccess().registry(PlatformUtils.getPlantRegistryKey()).get().get(new ResourceLocation(this.plantId));
+		this.plant = AgriApi.getPlant(this.plantId, this.level.registryAccess()).orElse(null);
 		this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
 	}
 
@@ -168,8 +167,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 
 	@Override
 	public Optional<AgriSoil> getSoil() {
-		BlockState state = this.level.getBlockState(getBlockPos().below());
-		return PlatformUtils.getSoilFromBlock(state);
+		return AgriApi.getSoil(this.level, getBlockPos().below(), this.level.registryAccess());
 	}
 
 	/**
