@@ -157,7 +157,6 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		System.out.println("can survive " + level.isClientSide() + " " + AgriApi.getSoil(level, pos, level.registryAccess()).isPresent());
 		return AgriApi.getSoil(level, pos.below(), level.registryAccess()).isPresent();
 	}
 

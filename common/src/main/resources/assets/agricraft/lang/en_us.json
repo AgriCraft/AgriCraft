@@ -52,6 +52,9 @@
   "agricraft.tooltip.magnifying.soil.humidity": "Humidity: ",
   "agricraft.tooltip.magnifying.soil.acidity": "Acidity: ",
   "agricraft.tooltip.magnifying.soil.nutrients": "Nutrients: ",
+  "agricraft.tooltip.magnifying.requirement.fertile": "Fertile",
+  "agricraft.tooltip.magnifying.requirement.not_fertile": "Not Fertile",
+  "agricraft.tooltip.magnifying.requirement.lethal": "Lethal",
 
   "config.jade.plugin_agricraft.crop_block": "Crop Block",
   "agricraft.tooltip.jade.species": "Species: ",

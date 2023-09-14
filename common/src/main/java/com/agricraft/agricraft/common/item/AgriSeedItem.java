@@ -94,7 +94,6 @@ public class AgriSeedItem extends BlockItem {
 		Level level = context.getLevel();
 		if (result.consumesAction() && !level.isClientSide) {
 			BlockEntity be = level.getBlockEntity(context.getClickedPos());
-			System.out.println("be " + (be instanceof CropBlockEntity));
 			if (be instanceof CropBlockEntity cbe) {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {

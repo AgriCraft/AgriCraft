@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * Display a tooltip in the world when holding a magnifying glass or having a magnifying helmet equipped.
@@ -53,7 +52,7 @@ public class MagnifyingGlassOverlay {
 				if (level.getBlockEntity(result.getBlockPos()) instanceof MagnifyingInspectable inspectable) {
 					return Optional.of(inspectable);
 				}
-			Optional<AgriSoil> soil = AgriApi.getSoil(level, result.getBlockPos(), level.registryAccess());
+				Optional<AgriSoil> soil = AgriApi.getSoil(level, result.getBlockPos(), level.registryAccess());
 				if (soil.isPresent()) {
 					return Optional.of(soil.get());
 				}

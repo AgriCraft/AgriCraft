@@ -140,11 +140,12 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 
 	@Override
 	public boolean isFertile() {
-		return true;
+		return this.getFertilityResponse().isFertile();
 	}
 
 	@Override
 	public AgriGrowthResponse getFertilityResponse() {
+		// TODO: should we cache the fertility response ?
 		// check growth space
 		int height = this.plant.stages().get(this.growthStage);
 		while (height > 16) {
@@ -330,10 +331,11 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 						genePair.getDominant().trait(), genePair.getRecessive().trait()))
 				.map(component -> Component.literal("  ").append(component))
 				.forEach(tooltip::add);
-
 		if (isPlayerSneaking) {
-			tooltip.add(Component.literal("  ").plainCopy().append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
+			tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
 		}
+		AgriGrowthResponse response = this.getFertilityResponse();
+		tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile"))));
 	}
 
 }

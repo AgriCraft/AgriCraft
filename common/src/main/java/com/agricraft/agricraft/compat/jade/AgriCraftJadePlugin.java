@@ -2,9 +2,10 @@ package com.agricraft.agricraft.compat.jade;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
+import com.agricraft.agricraft.api.crop.AgriCrop;
+import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
-import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -41,18 +42,20 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 
 		@Override
 		public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
-			if (blockAccessor.getBlockEntity() instanceof CropBlockEntity cbe) {
-				iTooltip.add(Component.translatable("agricraft.tooltip.jade.growth", cbe.getGrowthPercent()));
+			if (blockAccessor.getBlockEntity() instanceof AgriCrop crop) {
+				iTooltip.add(Component.translatable("agricraft.tooltip.jade.growth", crop.getGrowthPercent()));
 				if (Minecraft.getInstance().player.isShiftKeyDown()) {
 					iTooltip.add(Component.translatable("agricraft.tooltip.jade.species")
-							.append(LangUtils.plantName(cbe.getGenome().getSpeciesGene().getTrait()))
+							.append(LangUtils.plantName(crop.getGenome().getSpeciesGene().getTrait()))
 					);
 					AgriStatRegistry.getInstance().stream()
 							.filter(stat -> !stat.isHidden())
-							.map(stat -> cbe.getGenome().getStatGene(stat))
+							.map(stat -> crop.getGenome().getStatGene(stat))
 							.sorted(Comparator.comparing(p -> p.getGene().getId()))
 							.map(genePair -> Component.translatable("agricraft.tooltip.jade.stat." + genePair.getGene().getId(), genePair.getTrait()))
 							.forEach(iTooltip::add);
+					AgriGrowthResponse response = crop.getFertilityResponse();
+					iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile")));
 				}
 			}
 		}
