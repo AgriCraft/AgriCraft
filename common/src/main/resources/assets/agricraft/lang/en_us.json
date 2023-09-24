@@ -5,6 +5,7 @@
 
   "item.agricraft.debugger": "Debugger",
   "item.agricraft.magnifying_glass": "Magnifying Glass",
+  "item.agricraft.clipper": "Plant Clipper",
   "item.agricraft.rake_iron": "Iron Hand Rake",
   "item.agricraft.rake_wood": "Wooden Hand Rake",
 
@@ -55,8 +56,12 @@
   "agricraft.tooltip.magnifying.requirement.fertile": "Fertile",
   "agricraft.tooltip.magnifying.requirement.not_fertile": "Not Fertile",
   "agricraft.tooltip.magnifying.requirement.lethal": "Lethal",
+  "agricraft.tooltip.jei.strength": "Strength: %d",
+  "agricraft.tooltip.jei.stage": "Stage: %d",
+  "agricraft.tooltip.jei.light": "Light Level: %d",
 
   "config.jade.plugin_agricraft.crop_block": "Crop Block",
+  "config.jade.plugin_agricraft.soil": "Soil",
   "agricraft.tooltip.jade.species": "Species: ",
   "agricraft.tooltip.jade.stat.gain": "Gain: %d",
   "agricraft.tooltip.jade.stat.growth": "Growth: %d",
@@ -96,7 +101,11 @@
   "agricraft.option.stats_config.mutativity_max": "Max Mutativity",
   "agricraft.option.stats_config.mutativity_hidden": "Hide Mutativity",
 
+  "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
 
+  "agricraft.gui.jei.produce": "Plant Products",
+  "agricraft.gui.jei.clipping": "Plant Clipping",
+  "agricraft.gui.jei.requirement": "Growth Requirements",
 
   "soil.agricraft.agricraft.clay": "Clay",
   "soil.agricraft.agricraft.crimsum_nylium": "Crimsum Nylium",
@@ -115,6 +124,8 @@
   "plant.agricraft.agricraft.cactus": "Cactus",
   "plant.agricraft.agricraft.sugar_cane": "Sugar Cane",
   "plant.agricraft.agricraft.bamboo": "Bamboo",
+  "plant.agricraft.agricraft.allium": "Allium",
+  "plant.agricraft.agricraft.kelp": "Kelp",
 
   "seed.agricraft.agricraft.unknown": "Unknown Seeds",
   "seed.agricraft.agricraft.wheat": "Wheat Seeds",
@@ -122,6 +133,17 @@
   "seed.agricraft.agricraft.carrot": "Carrot Seeds",
   "seed.agricraft.agricraft.cactus": "Cactus Seeds",
   "seed.agricraft.agricraft.sugar_cane": "Sugar Cane Seeds",
-  "seed.agricraft.agricraft.bamboo": "Bamboo Seeds"
+  "seed.agricraft.agricraft.bamboo": "Bamboo Seeds",
+  "seed.agricraft.agricraft.allium": "Allium Seeds",
+  "seed.agricraft.agricraft.kelp": "Kelp Seeds",
 
+  "description.agricraft.agricraft.unknown": "This plant is unknown",
+  "description.agricraft.agricraft.wheat": "The cornerstone of the Agricultural Revolution.",
+  "description.agricraft.agricraft.potato": "Po-ta-toes! Boil them, mash them, stick them in a stew.",
+  "description.agricraft.agricraft.carrot": "Rabbit attractant.",
+  "description.agricraft.agricraft.cactus": "A very prickly plant.",
+  "description.agricraft.agricraft.sugar_cane": "High in fructose, a healthy part of your daily breakfast.",
+  "description.agricraft.agricraft.bamboo": "Delicious! -some panda probably.",
+  "description.agricraft.agricraft.allium": "From the family of plants including the garlic, onion, and chive this plant produces a beautiful umbel consisting of many small purple blooms.",
+  "description.agricraft.agricraft.kelp": "The vegan mermaid's snack of preference."
 }

@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,15 +52,13 @@ public class PlatformUtilsImpl {
 		return CreativeModeTab.builder()
 				.title(Component.translatable("itemGroup.agricraft.seeds"))
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
-				.displayItems((itemDisplayParameters, output) -> {
-					AgriApi.getPlantRegistry(ServerLifecycleHooks.getCurrentServer().registryAccess())
-							.ifPresent(registry -> {
-								AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-								for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
-									output.accept(AgriSeedItem.toStack(entry.getValue()));
-								}
-							});
-				})
+				.displayItems((itemDisplayParameters, output) -> AgriApi.getPlantRegistry(ServerLifecycleHooks.getCurrentServer().registryAccess())
+						.ifPresent(registry -> {
+							AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
+							for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet().stream().sorted(Map.Entry.comparingByKey()).toList()) {
+								output.accept(AgriSeedItem.toStack(entry.getValue()));
+							}
+						}))
 				.withTabsBefore(ModCreativeTabs.MAIN_TAB.getId())
 				.build();
 	}

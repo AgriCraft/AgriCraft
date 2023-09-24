@@ -30,6 +30,13 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	int getGrowthStage();
 
 	/**
+	 * Change the growth stage of the crop
+	 *
+	 * @param stage the new stage value
+	 */
+	void setGrowthStage(int stage);
+
+	/**
 	 * @return the growth percentage of the crop.
 	 */
 	int getGrowthPercent();
@@ -67,6 +74,20 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	 * @param addToHarvest a consumer that accepts the items that were harvested.
 	 */
 	void getHarvestProducts(Consumer<ItemStack> addToHarvest);
+
+	/**
+	 * @return true if the crop can be clipped
+	 */
+	default boolean allowsClipping() {
+		return this.canBeHarvested();
+	}
+
+	/**
+	 * Retrieve the products that would be produced upon clipping this crop.
+	 *
+	 * @param addToClipping a consumer that accepts the items that were clipped.
+	 */
+	void getClippingProducts(Consumer<ItemStack> addToClipping);
 
 	//#region block helper methods
 

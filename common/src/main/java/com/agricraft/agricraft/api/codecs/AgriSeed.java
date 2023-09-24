@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public record AgriSeed(ExtraCodecs.TagOrElementLocation item, boolean overridePlanting, CompoundTag nbt,
                        double grassDropChance, double seedDropChance, double seedDropBonus) {
+	// TODO: @Ketheroth move drop chances in AgriPlant to make it usable for the default agricraft seed
 
 	public static final Codec<AgriSeed> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("item").forGetter(seed -> seed.item),

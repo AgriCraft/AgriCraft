@@ -95,8 +95,7 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 		NEUTRAL("7"),
 		SLIGHTLY_ALKALINE("8", "slightly-alkaline", "slightly alkaline"),
 		ALKALINE("9", "10", "11"),
-		HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline"),
-		INVALID;
+		HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline");
 
 		public static final Codec<AgriSoilValue> CODEC = Codec.STRING.comapFlatMap(s -> Acidity.fromString(s)
 						.map(DataResult::success)
@@ -128,8 +127,7 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 		LOW,
 		MEDIUM("normal", "average"),
 		HIGH("standard", "default"),
-		VERY_HIGH("rich"),
-		INVALID;
+		VERY_HIGH("rich");
 
 		public static final Codec<AgriSoilValue> CODEC = Codec.STRING.comapFlatMap(s -> Nutrients.fromString(s)
 						.map(DataResult::success)

@@ -8,7 +8,7 @@
 
 - [ ] magnifying glass
   -[ ] plant tooltip
-    -[ ] is fertile
+    -[x] is fertile
     -[ ] soil under
     -[ ] weed information
     -[ ] in world animation
@@ -30,6 +30,6 @@
 
 -[ ] jei
   -[ ] hide seeds not researched
-  -[ ] plant requirements
+  -[x] plant requirements
   -[ ] plant mutations
-  -[ ] plant production
+  -[x] plant production

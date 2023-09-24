@@ -1,7 +1,7 @@
 package com.agricraft.agricraft.common.registry;
 
-import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.common.item.ClipperItem;
 import com.agricraft.agricraft.common.item.DebuggerItem;
 import com.agricraft.agricraft.common.item.MagnifyingGlassItem;
 import com.agricraft.agricraft.common.item.RakeItem;
@@ -21,15 +21,16 @@ public class ModItems {
 	public static final RegistryEntry<Item> RAKE_WOOD = ITEMS.register("rake_wood", () -> new RakeItem(new Item.Properties()));
 	public static final RegistryEntry<Item> RAKE_IRON = ITEMS.register("rake_iron", () -> new RakeItem(new Item.Properties()));
 	public static final RegistryEntry<Item> MAGNIFYING_GLASS = ITEMS.register("magnifying_glass", () -> new MagnifyingGlassItem(new Item.Properties().stacksTo(1)));
+	public static final RegistryEntry<Item> CLIPPER = ITEMS.register("clipper", () -> new ClipperItem(new Item.Properties().stacksTo(1)));
 	public static final RegistryEntry<Item> SEED = ITEMS.register("seed", () -> PlatformUtils.createAgriSeedItem(new Item.Properties()));
 
 
 	public static void addItemsToTabs(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
-		AgriCraft.LOGGER.info("register item in tab");
 		output.accept(ModItems.DEBUGGER.get());
 		output.accept(ModItems.RAKE_WOOD.get());
 		output.accept(ModItems.RAKE_IRON.get());
 		output.accept(ModItems.MAGNIFYING_GLASS.get());
+		output.accept(ModItems.CLIPPER.get());
 	}
 
 }

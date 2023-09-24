@@ -24,6 +24,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +57,7 @@ public class PlatformUtilsImpl {
 						AgriApi.getPlantRegistry(AgriCraftFabric.cachedServer.registryAccess())
 								.ifPresent(registry -> {
 									AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-									for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet()) {
+									for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet().stream().sorted(Comparator.comparing(o -> o.getKey().location())).toList()) {
 										output.accept(AgriSeedItem.toStack(entry.getValue()));
 									}
 								});

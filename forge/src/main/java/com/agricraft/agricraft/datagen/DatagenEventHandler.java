@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.datagen;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.codecs.AgriFluidCondition;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriRequirement;
@@ -14,6 +15,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -158,9 +160,41 @@ public class DatagenEventHandler {
 						.seasons("spring", "summer")
 						.build())
 				.build());
+		registerPlant(context, "allium", AgriPlant.builder()
+				.defaultMods()
+				.seeds()  // AgriSeed.builder().chances(0.0, 1.0, 0.0).build()
+				.stages(2, 4, 6, 8, 10, 12, 14, 16)
+				.harvest(4)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:magenta_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:allium").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+
+		registerPlant(context, "kelp", AgriPlant.builder()
+				.defaultMods()
+				.seeds()  // AgriSeed.builder().chances(0.0, 1.0, 0.0).build()
+				.stages(6, 6, 12, 12, 12, 18, 18, 24)
+				.harvest(4)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:kelp").count(1, 1, 0.75).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WATERY, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(5, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.fluid(new AgriFluidCondition(new ExtraCodecs.TagOrElementLocation(new ResourceLocation("minecraft:water"), false), List.of()))
+						.build())
+				.build());
 
 	}
-
 
 	private static void registerSoils(BootstapContext<AgriSoil> context) {
 		registerSoil(context, "farmland", AgriSoil.builder()
@@ -257,6 +291,15 @@ public class DatagenEventHandler {
 			for (int stage : List.of(0, 1, 2, 3, 4, 5, 6, 7)) {
 				this.withExistingParent("wheat_stage"+stage, "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage"+stage);
 			}
+			this.with4TexturesIn7stage("allium_stage", "agricraft:crop/crop_hash", "agricraft:block/allium_stage");
+			this.withExistingParent("kelp_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage1", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:block/kelp");
+			this.withExistingParent("kelp_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:block/kelp");
+			this.withExistingParent("kelp_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:block/kelp");
+			this.withExistingParent("kelp_stage5", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage6", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage7", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "agricraft:block/kelp");
 		}
 
 		private void cropPlus(String name, int... stages) {
@@ -302,7 +345,7 @@ public class DatagenEventHandler {
 
 		@Override
 		protected void registerModels() {
-			List.of("bamboo", "cactus", "carrot", "potato", "sugar_cane", "unknown")
+			List.of("bamboo", "cactus", "carrot", "potato", "sugar_cane", "allium", "kelp", "unknown")
 					.forEach(this::seed);
 			this.withExistingParent("wheat", "minecraft:item/wheat_seeds");
 		}

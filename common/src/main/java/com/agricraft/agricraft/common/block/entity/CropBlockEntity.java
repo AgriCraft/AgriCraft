@@ -12,7 +12,9 @@ import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.common.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
+import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.LangUtils;
+import mezz.jei.api.constants.ModIds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -130,6 +132,12 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		return this.growthStage;
 	}
 
+	@Override
+	public void setGrowthStage(int stage) {
+		this.growthStage = stage;
+		this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+	}
+
 	public int getGrowthPercent() {
 		return (this.growthStage + 1) * 100 / this.plant.stages().size();
 	}
@@ -196,11 +204,17 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		if (hand == InteractionHand.OFF_HAND) {
 			return InteractionResult.PASS;
 		}
-		// harvesting
-		if (this.canBeHarvested()) {
-			this.getHarvestProducts(this::spawnItem);
-			this.growthStage = this.plant.harvestStage();
-			return InteractionResult.SUCCESS;
+		ItemStack heldItem = player.getItemInHand(hand);
+		// harvesting if empty-handed
+		if (heldItem.isEmpty()) {
+			if (this.canBeHarvested()) {
+				this.getHarvestProducts(this::spawnItem);
+				this.growthStage = this.plant.harvestStage();
+				return InteractionResult.SUCCESS;
+			}
+		}
+		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.RAKE_IRON.get()) || heldItem.is(ModItems.RAKE_WOOD.get())) {
+			return InteractionResult.PASS;
 		}
 		return InteractionResult.FAIL;
 	}
@@ -227,7 +241,6 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			for (AgriProduct product : this.plant.products()) {
 				if (product.chance() > this.level.random.nextDouble()) {
 					int amount = this.level.random.nextInt(product.min(), product.max() + 1);
-					ItemStack stack;
 					if (product.item().tag()) {
 						// product is a tag, get a random item from it
 						ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
@@ -237,10 +250,30 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 					} else {
 						// product is an item
 						Item item = BuiltInRegistries.ITEM.get(product.item().id());
-						stack = item.getDefaultInstance();
+						ItemStack stack = item.getDefaultInstance();
 						stack.setCount(amount);
 						addToHarvest.accept(stack);
 					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void getClippingProducts(Consumer<ItemStack> addToClipping) {
+		if (!this.isMaxStage()) {
+			return;
+		}
+		for (AgriProduct product : this.plant.clipProducts()) {
+			if (product.chance() > this.level.random.nextDouble()) {
+				if (product.item().tag()) {
+					// product is a tag, get a random item from it
+					ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
+					addToClipping.accept(items[this.level.random.nextInt(items.length)].copy());
+				} else {
+					// product is an item
+					Item item = BuiltInRegistries.ITEM.get(product.item().id());
+					addToClipping.accept(item.getDefaultInstance());
 				}
 			}
 		}

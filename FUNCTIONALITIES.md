@@ -16,6 +16,8 @@
 - jei
   - magnifying helmet crafting recipe
   - display all seeds registered
+  - crop requirements
+  - crop production
 
 # api
 - magnifying glass

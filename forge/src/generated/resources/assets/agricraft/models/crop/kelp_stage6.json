@@ -1,0 +1,7 @@
+{
+  "parent": "agricraft:crop/tall_crop_plus",
+  "textures": {
+    "crop": "minecraft:block/kelp_plant",
+    "crop_top": "minecraft:block/kelp"
+  }
+}

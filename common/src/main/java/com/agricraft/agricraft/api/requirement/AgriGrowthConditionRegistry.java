@@ -5,6 +5,7 @@ import com.agricraft.agricraft.api.AgriRegistry;
 import com.agricraft.agricraft.api.codecs.AgriBlockCondition;
 import com.agricraft.agricraft.api.codecs.AgriFluidCondition;
 import com.agricraft.agricraft.api.codecs.AgriListCondition;
+import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.codecs.AgriSoilValue;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * Encapsulate the growth conditions of a crop
  */
 public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditionRegistry.AgriGrowthConditionWithId> {
+
 	private static AgriGrowthConditionRegistry INSTANCE;
 
 	public static AgriGrowthConditionRegistry getInstance() {
@@ -70,10 +72,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 			double f = crop.getPlant().requirement().lightToleranceFactor();
 			int minLight = crop.getPlant().requirement().minLight();
 			int maxLight = crop.getPlant().requirement().maxLight();
-			int lower = minLight - (int) (f * strength);
-			int upper = maxLight + (int) (f * strength);
-			int light = level.getMaxLocalRawBrightness(pos);
-			return light >= lower && light <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
+			return forLightStat(minLight, maxLight, f, level.getMaxLocalRawBrightness(pos), strength);
 		});
 		blocks = create("blocks", (crop, level, pos, strength) -> {
 			List<AgriBlockCondition> blockConditions = crop.getPlant().requirement().blockConditions();
@@ -179,13 +178,22 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 			return AgriGrowthResponse.INFERTILE;
 		}
 		AgriSoil soil = optionalSoil.get();
-		AgriSoilValue actual = valueGetter.apply(soil);
+		return forSoilStat(valueGetter.apply(soil), condition, strength);
+	}
+
+	public static AgriGrowthResponse forSoilStat(AgriSoilValue soilValue, AgriSoilCondition condition, int strength) {
 		int lower = condition.type().lowerLimit(condition.value().ordinal() - (int) (condition.toleranceFactor() * strength));
 		int upper = condition.type().upperLimit(condition.value().ordinal() + (int) (condition.toleranceFactor() * strength));
-		if (lower <= actual.ordinal() && actual.ordinal() <= upper) {
+		if (lower <= soilValue.ordinal() && soilValue.ordinal() <= upper) {
 			return AgriGrowthResponse.FERTILE;
 		}
 		return AgriGrowthResponse.INFERTILE;
+	}
+
+	public static AgriGrowthResponse forLightStat(int minLight, int maxLight, double toleranceFactor, int light, int strength) {
+		int lower = minLight - (int) (toleranceFactor * strength);
+		int upper = maxLight + (int) (toleranceFactor * strength);
+		return light >= lower && light <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
 	}
 
 	public static class AgriGrowthConditionWithId implements AgriGrowthCondition, AgriRegistrable {
@@ -209,7 +217,9 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 		}
 
 	}
+
 	public static AgriGrowthConditionWithId create(String id, AgriGrowthCondition condition) {
 		return new AgriGrowthConditionWithId(id, condition);
 	}
+
 }
