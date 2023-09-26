@@ -6,8 +6,11 @@
   "item.agricraft.debugger": "Debugger",
   "item.agricraft.magnifying_glass": "Magnifying Glass",
   "item.agricraft.clipper": "Plant Clipper",
-  "item.agricraft.rake_iron": "Iron Hand Rake",
-  "item.agricraft.rake_wood": "Wooden Hand Rake",
+  "item.agricraft.iron_rake": "Iron Hand Rake",
+  "item.agricraft.wooden_rake": "Wooden Hand Rake",
+  "item.agricraft.wooden_crop_sticks": "Crop Sticks",
+  "item.agricraft.iron_crop_sticks": "Iron Crop Sticks",
+  "item.agricraft.obsidian_crop_sticks": "Obsidian Crop Sticks",
 
   "agricraft.stat.gain": "Gain",
   "agricraft.stat.growth": "Growth",
@@ -78,6 +81,7 @@
   "agricraft.command.seed_distinct": "Gave %s as a seed with stats %s",
 
   "agricraft.option.core_config": "Core",
+  "agricraft.option.core_config.clone_mutations": "Clone Mutations",
   "agricraft.option.core_config.growth_multiplier": "Growth rate multiplier",
   "agricraft.option.core_config.only_mature_seed_drops": "Only mature crops drop seeds",
   "agricraft.option.core_config.seed_compost_value": "Seed compost value",
@@ -105,6 +109,7 @@
 
   "agricraft.gui.jei.produce": "Plant Products",
   "agricraft.gui.jei.clipping": "Plant Clipping",
+  "agricraft.gui.jei.mutation": "Plant Mutation",
   "agricraft.gui.jei.requirement": "Growth Requirements",
 
   "soil.agricraft.agricraft.clay": "Clay",

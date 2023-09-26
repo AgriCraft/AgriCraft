@@ -1,7 +1,7 @@
 package com.agricraft.agricraft.common.config.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
-import com.agricraft.agricraft.common.config.AgriCraftConfig;
+import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;

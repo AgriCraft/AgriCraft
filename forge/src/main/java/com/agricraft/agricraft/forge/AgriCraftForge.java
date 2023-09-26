@@ -2,6 +2,7 @@ package com.agricraft.agricraft.forge;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.client.forge.AgriCraftForgeClient;
@@ -37,6 +38,7 @@ public class AgriCraftForge {
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {
 		event.dataPackRegistry(AgriApi.AGRIPLANTS, AgriPlant.CODEC, AgriPlant.CODEC);
 		event.dataPackRegistry(AgriApi.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);
+		event.dataPackRegistry(AgriApi.AGRIMUTATIONS, AgriMutation.CODEC, AgriMutation.CODEC);
 	}
 
 	public static void onRegisterCommands(RegisterCommandsEvent event) {

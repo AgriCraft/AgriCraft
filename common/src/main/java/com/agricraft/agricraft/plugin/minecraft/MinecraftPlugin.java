@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.plugin.minecraft;
 
-import com.agricraft.agricraft.common.config.CoreConfig;
+import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModItems;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.item.ItemStack;

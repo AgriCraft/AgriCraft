@@ -2,7 +2,6 @@ package com.agricraft.agricraft.api.genetic;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,6 +45,11 @@ public class GeneSpecies implements AgriGene<String> {
 	}
 
 	@Override
+	public AgriGeneMutator<String> mutator() {
+		return AgriMutationHandler.getInstance().getActivePlantMutator();
+	}
+
+	@Override
 	public void writeToNBT(CompoundTag genes, AgriAllele<String> dominant, AgriAllele<String> recessive) {
 		CompoundTag species = new CompoundTag();
 		species.putString("dom", dominant.trait());
@@ -81,8 +85,18 @@ public class GeneSpecies implements AgriGene<String> {
 
 		@Override
 		public boolean isDominant(AgriAllele<String> other) {
-			// TODO: @Ketheroth fix this later with species complexity
-			return this.trait.compareTo(other.trait()) >= 0;
+			if (this.equals(other)) {
+				return true;
+			}
+			// Fetch complexity of both plants
+			int a = AgriApi.getMutationHandler().complexity(this.trait());
+			int b = AgriApi.getMutationHandler().complexity(other.trait());
+			if(a == b) {
+				// Equal complexity, therefore we use an arbitrary definition for dominance, which we will base on the plant id
+				return this.trait().compareTo(other.trait()) < 0;
+			}
+			// Having more difficult obtain plants be dominant will be more challenging to deal with than having them recessive
+			return a > b;
 		}
 
 		@Override

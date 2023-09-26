@@ -54,4 +54,8 @@ public class AgriGenePair<T> {
 		return this.recessive;
 	}
 
+	public AgriGenePair<T> copy() {
+		return new AgriGenePair<>(this.getGene(), this.getDominant(), this.getRecessive());
+	}
+
 }

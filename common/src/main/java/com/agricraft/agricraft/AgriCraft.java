@@ -1,7 +1,7 @@
 package com.agricraft.agricraft;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.common.config.AgriCraftConfig;
+import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;

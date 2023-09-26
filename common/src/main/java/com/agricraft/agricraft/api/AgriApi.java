@@ -1,9 +1,11 @@
 package com.agricraft.agricraft.api;
 
+import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
+import com.agricraft.agricraft.api.genetic.AgriMutationHandler;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.util.PlatformUtils;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * The AgriCraft API v2
@@ -28,6 +31,7 @@ public final class AgriApi {
 
 	public static final ResourceKey<Registry<AgriPlant>> AGRIPLANTS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "plants"));
 	public static final ResourceKey<Registry<AgriSoil>> AGRISOILS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "soils"));
+	public static final ResourceKey<Registry<AgriMutation>> AGRIMUTATIONS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "mutations"));
 
 	public static Optional<Registry<AgriPlant>> getPlantRegistry() {
 		return PlatformUtils.getRegistry(AGRIPLANTS);
@@ -95,6 +99,27 @@ public final class AgriApi {
 		}
 		BlockState blockState = level.getBlockState(pos);
 		return optionalRegistry.get().stream().filter(soil -> soil.isVariant(blockState)).findFirst();
+	}
+
+	public static Optional<Registry<AgriMutation>> getMutationRegistry() {
+		return PlatformUtils.getRegistry(AGRIMUTATIONS);
+	}
+
+	public static Optional<Registry<AgriMutation>> getMutationRegistry(RegistryAccess registryAccess) {
+		return registryAccess.registry(AGRIMUTATIONS);
+	}
+
+	public static Stream<AgriMutation> getMutationsFromParents(String parent1, String parent2) {
+		return AgriApi.getMutationRegistry().map(registry -> registry.stream()
+				.filter(mutation -> {
+					String p1 = mutation.parent1().toString();
+					String p2 = mutation.parent2().toString();
+					return (p1.equals(parent1) && p2.equals(parent2)) || (p1.equals(parent2) && p2.equals(parent1));
+				})).orElse(Stream.empty());
+	}
+
+	public static AgriMutationHandler getMutationHandler() {
+		return AgriMutationHandler.getInstance();
 	}
 
 	// getWeedRegistry()

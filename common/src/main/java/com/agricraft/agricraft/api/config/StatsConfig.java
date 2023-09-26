@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.common.config;
+package com.agricraft.agricraft.api.config;
 
 import com.teamresourceful.resourcefulconfig.common.annotations.Category;
 import com.teamresourceful.resourcefulconfig.common.annotations.Comment;

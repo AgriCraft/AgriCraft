@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
@@ -94,10 +95,10 @@ public class AgriSeedItem extends BlockItem {
 		Level level = context.getLevel();
 		if (result.consumesAction() && !level.isClientSide) {
 			BlockEntity be = level.getBlockEntity(context.getClickedPos());
-			if (be instanceof CropBlockEntity cbe) {
+			if (be instanceof AgriCrop crop) {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {
-					cbe.setGenome(AgriGenome.fromNBT(tag));
+					crop.setGenome(AgriGenome.fromNBT(tag));
 				}
 			}
 		}

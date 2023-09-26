@@ -1,7 +1,7 @@
 package com.agricraft.agricraft.api.stat;
 
 import com.agricraft.agricraft.api.AgriRegistry;
-import com.agricraft.agricraft.common.config.StatsConfig;
+import com.agricraft.agricraft.api.config.StatsConfig;
 import org.joml.Vector3f;
 
 public class AgriStatRegistry extends AgriRegistry<AgriStat> {

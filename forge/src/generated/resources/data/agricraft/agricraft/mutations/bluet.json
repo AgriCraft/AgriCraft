@@ -1,0 +1,11 @@
+{
+  "chance": 0.75,
+  "child": "agricraft:bluet",
+  "enabled": true,
+  "mods": [
+    "agricraft",
+    "minecraft"
+  ],
+  "parent1": "agricraft:dandelion",
+  "parent2": "agricraft:lily"
+}

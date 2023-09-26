@@ -2,6 +2,7 @@ package com.agricraft.agricraft.compat.jei;
 
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.item.crafting.MagnifyingHelmetRecipe;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -50,6 +51,7 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		registration.addRecipeCategories(new CropProduceCategory());
 		registration.addRecipeCategories(new CropClippingCategory());
+		registration.addRecipeCategories(new CropMutationCategory());
 		registration.addRecipeCategories(new CropRequirementCategory(registration.getJeiHelpers().getGuiHelper()));
 	}
 
@@ -58,6 +60,7 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropProduceCategory.TYPE, registry.stream().toList()));
 		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropClippingCategory.TYPE, registry.stream().filter(plant -> !plant.clipProducts().isEmpty()).toList()));
 		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropRequirementCategory.TYPE, registry.stream().map(CropRequirementCategory.Recipe::new).toList()));
+		AgriApi.getMutationRegistry().ifPresent(registry -> registration.addRecipes(CropMutationCategory.TYPE, registry.stream().filter(AgriMutation::isValid).toList()));
 	}
 
 	@Override
@@ -68,6 +71,18 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		registration.addRecipeCatalyst(ModItems.CLIPPER.get().getDefaultInstance(), CropClippingCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.WOODEN_CROP_STICKS.get().getDefaultInstance(), CropProduceCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.WOODEN_CROP_STICKS.get().getDefaultInstance(), CropClippingCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.WOODEN_CROP_STICKS.get().getDefaultInstance(), CropMutationCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.WOODEN_CROP_STICKS.get().getDefaultInstance(), CropRequirementCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.IRON_CROP_STICKS.get().getDefaultInstance(), CropProduceCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.IRON_CROP_STICKS.get().getDefaultInstance(), CropClippingCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.IRON_CROP_STICKS.get().getDefaultInstance(), CropMutationCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.IRON_CROP_STICKS.get().getDefaultInstance(), CropRequirementCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.OBSIDIAN_CROP_STICKS.get().getDefaultInstance(), CropProduceCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.OBSIDIAN_CROP_STICKS.get().getDefaultInstance(), CropClippingCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.OBSIDIAN_CROP_STICKS.get().getDefaultInstance(), CropMutationCategory.TYPE);
+		registration.addRecipeCatalyst(ModItems.OBSIDIAN_CROP_STICKS.get().getDefaultInstance(), CropRequirementCategory.TYPE);
 	}
 
 	public static IDrawable createDrawable(ResourceLocation location, int uOffset, int vOffset, int width, int height, int textureWidth, int textureHeight) {

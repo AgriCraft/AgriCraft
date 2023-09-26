@@ -2,7 +2,6 @@ package com.agricraft.agricraft.api.genetic;
 
 import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
@@ -35,6 +34,11 @@ public class GeneStat implements AgriGene<Integer> {
 	@Override
 	public AgriAllele<Integer> getAllele(Integer value) {
 		return alleles.get(value);
+	}
+
+	@Override
+	public AgriGeneMutator<Integer> mutator() {
+		return AgriMutationHandler.getInstance().getActiveStatMutator();
 	}
 
 	@Override

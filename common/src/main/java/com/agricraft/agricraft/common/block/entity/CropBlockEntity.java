@@ -10,11 +10,10 @@ import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
-import com.agricraft.agricraft.common.config.CoreConfig;
+import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.LangUtils;
-import mezz.jei.api.constants.ModIds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -213,7 +212,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 				return InteractionResult.SUCCESS;
 			}
 		}
-		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.RAKE_IRON.get()) || heldItem.is(ModItems.RAKE_WOOD.get())) {
+		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.IRON_RAKE.get()) || heldItem.is(ModItems.WOODEN_RAKE.get())) {
 			return InteractionResult.PASS;
 		}
 		return InteractionResult.FAIL;

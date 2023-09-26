@@ -2,6 +2,7 @@ package com.agricraft.agricraft.common.commands;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriAllele;
 import com.agricraft.agricraft.api.genetic.AgriGene;
 import com.agricraft.agricraft.api.genetic.AgriGenePair;
@@ -9,7 +10,9 @@ import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
+import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -19,7 +22,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -29,6 +34,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +42,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Command to give an agricraft seed for a specific plant and statistics
@@ -48,8 +55,8 @@ public class GiveSeedCommand {
 					.orElse(Set.of()), suggestionsBuilder);
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-		dispatcher.register((Commands.literal("agricraft_seed")
-				.requires(commandSourceStack -> commandSourceStack.hasPermission(2)))
+		dispatcher.register(Commands.literal("agricraft_seed")
+				.requires(commandSourceStack -> commandSourceStack.hasPermission(2))
 				.then(Commands.argument("plant", ResourceLocationArgument.id())
 						.suggests(SUGGEST_PLANTS)
 						// give a seed with default stats (1 to all)
@@ -68,6 +75,37 @@ public class GiveSeedCommand {
 						)
 				)
 		);
+
+		dispatcher.register(Commands.literal("agricraft_complexity")
+				.requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+				.executes(commandContext -> AgriApi.getMutationHandler().complexity("agricraft:cactus")));
+
+		dispatcher.register(Commands.literal("agricraft_mutate")
+				.requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+				.executes(commandContext -> {
+					ServerPlayer player = commandContext.getSource().getPlayer();
+					if (player == null) {
+						return 0;
+					}
+					ItemStack mainHandItem = player.getMainHandItem();
+					ItemStack offhandItem = player.getOffhandItem();
+					AgriGenome parent1 = AgriGenome.fromNBT(mainHandItem.getTag());
+					AgriGenome parent2 = AgriGenome.fromNBT(offhandItem.getTag());
+					AgriCrop crop1 = new FakeCrop();
+					crop1.setGenome(parent1);
+					AgriCrop crop2 = new FakeCrop();
+					crop2.setGenome(parent2);
+					AgriCrop target = new FakeCrop();
+					AgriApi.getMutationHandler().getActiveCrossBreedEngine().handleCrossBreedTick(target, Stream.of(crop1, crop2), player.getRandom());
+					if (target.getGenome() == null) {
+						return 0;
+					}
+					CompoundTag tag = new CompoundTag();
+					target.getGenome().writeToNBT(tag);
+					ItemStack stack = AgriSeedItem.toStack(target.getGenome());
+					giveItemStack(stack, player, commandContext.getSource().getLevel());
+					return 1;
+				}));
 
 	}
 

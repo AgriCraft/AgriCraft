@@ -4,7 +4,7 @@ import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
-import com.agricraft.agricraft.common.config.CoreConfig;
+import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

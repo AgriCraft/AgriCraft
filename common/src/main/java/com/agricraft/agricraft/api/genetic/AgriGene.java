@@ -32,6 +32,10 @@ public interface AgriGene<T> extends AgriRegistrable {
 	 */
 	AgriAllele<T> getAllele(T value);
 
+	/**
+	 * @return The mutator object which controls mutations for this gene
+	 */
+	AgriGeneMutator<T> mutator();
 
 	/**
 	 * Used when serializing genomes, write the alleles to the tag

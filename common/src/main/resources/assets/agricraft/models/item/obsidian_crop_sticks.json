@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "agricraft:item/rake_wood"
+		"layer0": "agricraft:item/obsidian_crop_sticks"
 	}
 }

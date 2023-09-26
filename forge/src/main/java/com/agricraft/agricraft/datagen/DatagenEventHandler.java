@@ -2,6 +2,7 @@ package com.agricraft.agricraft.datagen;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriFluidCondition;
+import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriRequirement;
@@ -43,7 +44,8 @@ public class DatagenEventHandler {
 						// The objects to generate
 						new RegistrySetBuilder()
 								.add(AgriApi.AGRIPLANTS, DatagenEventHandler::registerPlants)
-								.add(AgriApi.AGRISOILS, DatagenEventHandler::registerSoils),
+								.add(AgriApi.AGRISOILS, DatagenEventHandler::registerSoils)
+								.add(AgriApi.AGRIMUTATIONS, DatagenEventHandler::registerMutations),
 						// Generate dynamic registry objects for this mod
 						Set.of(AgriApi.MOD_ID)
 				)
@@ -63,6 +65,12 @@ public class DatagenEventHandler {
 		context.register(
 				ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation(AgriApi.MOD_ID, soilId)),
 				soil
+		);
+	}
+	private static void registerMutation(BootstapContext<AgriMutation> context, String mutationId, AgriMutation mutation) {
+		context.register(
+				ResourceKey.create(AgriApi.AGRIMUTATIONS, new ResourceLocation(AgriApi.MOD_ID, mutationId)),
+				mutation
 		);
 	}
 
@@ -270,6 +278,15 @@ public class DatagenEventHandler {
 				.nutrients(AgriSoilCondition.Nutrients.LOW)
 				.growthModifier(0.75)
 				.build());
+	}
+
+	private static void registerMutations(BootstapContext<AgriMutation> context) {
+		registerMutation(context, "allium", AgriMutation.builder().defaultMods().child("agricraft:allium").parents("agricraft:poppy", "agricraft:orchid").chance(0.75).build());
+		registerMutation(context, "bamboo", AgriMutation.builder().defaultMods().child("agricraft:bamboo").parents("agricraft:sugar_cane", "agricraft:cactus").chance(0.5).build());
+		registerMutation(context, "bluet", AgriMutation.builder().defaultMods().child("agricraft:bluet").parents("agricraft:dandelion", "agricraft:lily").chance(0.75).build());
+		registerMutation(context, "brown_mushroom", AgriMutation.builder().defaultMods().child("agricraft:brown_mushroom").parents("agricraft:potato", "agricraft:carrot").chance(0.5).build());
+		registerMutation(context, "cactus", AgriMutation.builder().defaultMods().child("agricraft:cactus").parents("agricraft:sugar_cane", "agricraft:potato").chance(0.5).build());
+		registerMutation(context, "carrot", AgriMutation.builder().defaultMods().child("agricraft:carrot").parents("agricraft:wheat", "agricraft:potato").chance(0.5).build());
 	}
 
 	private static class CropModelProvider extends ModelProvider<BlockModelBuilder> {
