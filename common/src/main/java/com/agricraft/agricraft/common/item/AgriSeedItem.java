@@ -1,8 +1,11 @@
 package com.agricraft.agricraft.common.item;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
+import com.agricraft.agricraft.common.block.CropBlock;
+import com.agricraft.agricraft.common.block.CropState;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -14,6 +17,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -103,6 +107,25 @@ public class AgriSeedItem extends BlockItem {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
+		if (level.isClientSide) {
+			return InteractionResult.PASS;
+		}
+		return AgriApi.getSoil(level, context.getClickedPos()).map(soil -> AgriApi.getCrop(level, context.getClickedPos().above()).map(crop -> {
+			if (crop.hasPlant()) {
+				return InteractionResult.PASS;
+			}
+			crop.setGenome(AgriGenome.fromNBT(context.getItemInHand().getTag()));
+			level.setBlock(crop.getBlockPos(), crop.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS), 3);
+			if (context.getPlayer() != null && !context.getPlayer().isCreative()) {
+				context.getItemInHand().shrink(1);
+			}
+			return InteractionResult.CONSUME;
+		}).orElse(InteractionResult.PASS)).orElse(super.useOn(context));
 	}
 
 	@Override

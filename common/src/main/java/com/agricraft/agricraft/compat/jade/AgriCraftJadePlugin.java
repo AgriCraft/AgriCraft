@@ -43,6 +43,10 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 		@Override
 		public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
 			if (blockAccessor.getBlockEntity() instanceof AgriCrop crop) {
+				if (!crop.hasPlant()) {
+					iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.no_plant"));
+					return;
+				}
 				iTooltip.add(Component.translatable("agricraft.tooltip.jade.growth", crop.getGrowthPercent()));
 				if (Minecraft.getInstance().player.isShiftKeyDown()) {
 					iTooltip.add(Component.translatable("agricraft.tooltip.jade.species")

@@ -67,4 +67,11 @@ public class AgriGenome {
 		return new AgriGenome(species, stats);
 	}
 
+	@Override
+	public String toString() {
+		CompoundTag compoundTag = new CompoundTag();
+		this.writeToNBT(compoundTag);
+		return compoundTag.toString();
+	}
+
 }

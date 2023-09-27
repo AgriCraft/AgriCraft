@@ -1,7 +1,9 @@
 package com.agricraft.agricraft.common.registry;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.common.block.CropStickVariant;
 import com.agricraft.agricraft.common.item.ClipperItem;
+import com.agricraft.agricraft.common.item.CropSticksItem;
 import com.agricraft.agricraft.common.item.DebuggerItem;
 import com.agricraft.agricraft.common.item.MagnifyingGlassItem;
 import com.agricraft.agricraft.common.item.RakeItem;
@@ -22,9 +24,9 @@ public class ModItems {
 	public static final RegistryEntry<Item> IRON_RAKE = ITEMS.register("iron_rake", () -> new RakeItem(new Item.Properties()));
 	public static final RegistryEntry<Item> MAGNIFYING_GLASS = ITEMS.register("magnifying_glass", () -> new MagnifyingGlassItem(new Item.Properties().stacksTo(1)));
 	public static final RegistryEntry<Item> CLIPPER = ITEMS.register("clipper", () -> new ClipperItem(new Item.Properties().stacksTo(1)));
-	public static final RegistryEntry<Item> WOODEN_CROP_STICKS = ITEMS.register("wooden_crop_sticks", () -> new Item(new Item.Properties()));
-	public static final RegistryEntry<Item> IRON_CROP_STICKS = ITEMS.register("iron_crop_sticks", () -> new Item(new Item.Properties()));
-	public static final RegistryEntry<Item> OBSIDIAN_CROP_STICKS = ITEMS.register("obsidian_crop_sticks", () -> new Item(new Item.Properties()));
+	public static final RegistryEntry<Item> WOODEN_CROP_STICKS = ITEMS.register("wooden_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.WOODEN));
+	public static final RegistryEntry<Item> IRON_CROP_STICKS = ITEMS.register("iron_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.IRON));
+	public static final RegistryEntry<Item> OBSIDIAN_CROP_STICKS = ITEMS.register("obsidian_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.OBSIDIAN));
 	public static final RegistryEntry<Item> SEED = ITEMS.register("seed", () -> PlatformUtils.createAgriSeedItem(new Item.Properties()));
 
 

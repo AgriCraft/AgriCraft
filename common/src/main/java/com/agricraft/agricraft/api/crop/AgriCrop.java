@@ -15,6 +15,21 @@ import java.util.function.Consumer;
 public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 
 	/**
+	 * @return true if the crop has a plant
+	 */
+	boolean hasPlant();
+
+	/**
+	 * @return true if the crop has crop sticks
+	 */
+	boolean hasCropSticks();
+
+	/**
+	 * @return true if the crop has cross crop sticks
+	 */
+	boolean isCrossCropSticks();
+
+	/**
 	 * @return the id of the plant or an empty string if there is no plant
 	 */
 	String getPlantId();

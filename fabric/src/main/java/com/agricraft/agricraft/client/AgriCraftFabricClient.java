@@ -36,6 +36,9 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 				ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/crop", "crop").replace(".json", ""));
 				pluginContext.addModels(seed);
 			}
+			// add the crop sticks models else they're not loaded
+			pluginContext.addModels(new ResourceLocation("agricraft:block/wooden_crop_sticks"), new ResourceLocation("agricraft:block/iron_crop_sticks"), new ResourceLocation("agricraft:block/obsidian_crop_sticks"),
+					new ResourceLocation("agricraft:block/wooden_cross_crop_sticks"), new ResourceLocation("agricraft:block/iron_cross_crop_sticks"), new ResourceLocation("agricraft:block/obsidian_cross_crop_sticks"));
 		});
 
 		BlockEntityRenderers.register(ModBlockEntityTypes.CROP.get(), CropBlockEntityRenderer::new);

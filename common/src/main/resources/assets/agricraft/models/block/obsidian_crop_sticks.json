@@ -1,0 +1,7 @@
+{
+	"parent": "agricraft:block/crop_sticks",
+	"textures": {
+		"crop_sticks": "agricraft:block/obsidian_crop_sticks",
+		"particle": "minecraft:block/obsidian"
+	}
+}

@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.client;
 
+import com.agricraft.agricraft.common.block.CropStickVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TerrainParticle;
@@ -8,15 +9,32 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ClientUtil {
 
-	public static void spawnParticlesForPlant(String plant, LevelAccessor level, BlockState state, BlockPos pos) {
-		BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plant));
+	public static String getModelForSticks(CropStickVariant variant) {
+		return switch (variant) {
+			case WOODEN -> "agricraft:block/wooden_crop_sticks";
+			case IRON -> "agricraft:block/iron_crop_sticks";
+			case OBSIDIAN -> "agricraft:block/obsidian_crop_sticks";
+		};
+	}
+
+	public static void spawnParticlesForPlant(String plantModelId, LevelAccessor level, BlockState state, BlockPos pos) {
+		BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plantModelId));
+		spawnParticlesForModel(model, level, state, pos);
+	}
+
+	public static void spawnParticlesForSticks(CropStickVariant variant, LevelAccessor level, BlockState state, BlockPos pos) {
+		String modelId = getModelForSticks(variant);
+		BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(modelId));
+		spawnParticlesForModel(model, level, state, pos);
+	}
+
+	public static void spawnParticlesForModel(BakedModel model, LevelAccessor level, BlockState state, BlockPos pos) {
 		if (model == null) {
 			return;
 		}

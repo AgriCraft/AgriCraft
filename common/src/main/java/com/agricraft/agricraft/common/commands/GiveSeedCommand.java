@@ -76,37 +76,6 @@ public class GiveSeedCommand {
 				)
 		);
 
-		dispatcher.register(Commands.literal("agricraft_complexity")
-				.requires(commandSourceStack -> commandSourceStack.hasPermission(2))
-				.executes(commandContext -> AgriApi.getMutationHandler().complexity("agricraft:cactus")));
-
-		dispatcher.register(Commands.literal("agricraft_mutate")
-				.requires(commandSourceStack -> commandSourceStack.hasPermission(2))
-				.executes(commandContext -> {
-					ServerPlayer player = commandContext.getSource().getPlayer();
-					if (player == null) {
-						return 0;
-					}
-					ItemStack mainHandItem = player.getMainHandItem();
-					ItemStack offhandItem = player.getOffhandItem();
-					AgriGenome parent1 = AgriGenome.fromNBT(mainHandItem.getTag());
-					AgriGenome parent2 = AgriGenome.fromNBT(offhandItem.getTag());
-					AgriCrop crop1 = new FakeCrop();
-					crop1.setGenome(parent1);
-					AgriCrop crop2 = new FakeCrop();
-					crop2.setGenome(parent2);
-					AgriCrop target = new FakeCrop();
-					AgriApi.getMutationHandler().getActiveCrossBreedEngine().handleCrossBreedTick(target, Stream.of(crop1, crop2), player.getRandom());
-					if (target.getGenome() == null) {
-						return 0;
-					}
-					CompoundTag tag = new CompoundTag();
-					target.getGenome().writeToNBT(tag);
-					ItemStack stack = AgriSeedItem.toStack(target.getGenome());
-					giveItemStack(stack, player, commandContext.getSource().getLevel());
-					return 1;
-				}));
-
 	}
 
 	public static int giveSeed(CommandSourceStack source, ResourceLocation plant) {

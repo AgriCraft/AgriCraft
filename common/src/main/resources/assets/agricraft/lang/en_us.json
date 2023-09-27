@@ -59,6 +59,7 @@
   "agricraft.tooltip.magnifying.requirement.fertile": "Fertile",
   "agricraft.tooltip.magnifying.requirement.not_fertile": "Not Fertile",
   "agricraft.tooltip.magnifying.requirement.lethal": "Lethal",
+  "agricraft.tooltip.magnifying.no_plant": "No Plant",
   "agricraft.tooltip.jei.strength": "Strength: %d",
   "agricraft.tooltip.jei.stage": "Stage: %d",
   "agricraft.tooltip.jei.light": "Light Level: %d",
@@ -81,6 +82,9 @@
   "agricraft.command.seed_distinct": "Gave %s as a seed with stats %s",
 
   "agricraft.option.core_config": "Core",
+  "agricraft.option.core_config.plant_off_crop_sticks": "Plant outside crop sticks",
+  "agricraft.option.core_config.crop_sticks_collide": "Crop sticks collide",
+  "agricraft.option.core_config.only_fertile_crops_spread": "Only fertile crops spread/mutate",
   "agricraft.option.core_config.clone_mutations": "Clone Mutations",
   "agricraft.option.core_config.growth_multiplier": "Growth rate multiplier",
   "agricraft.option.core_config.only_mature_seed_drops": "Only mature crops drop seeds",

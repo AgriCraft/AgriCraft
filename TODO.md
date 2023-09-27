@@ -3,8 +3,8 @@
   -[x] growth  # grow faster
   -[x] strength  # overcome soil requirement
   -[ ] resistance  # tougher against weed
-  -[ ] fertility  # breed faster
-  -[ ] mutativity  # mutate faster
+  -[x] fertility  # breed faster
+  -[x] mutativity  # mutate faster
 
 - [ ] magnifying glass
   -[ ] plant tooltip
@@ -15,14 +15,19 @@
     -[ ] config option
   -[x] soil tooltip
 
+- [ ] soil tooltip property
+- [ ] seed display genes only after researched (with config)
 - [ ] weeds
-- [ ] mutations
+- [x] mutations
 - [ ] fertilizers
+- [ ] journal
+- [ ] seed analyzer
 
 -[ ] send events for things
 -[ ] growth stage as objects / api
 -[ ] plant api, onGrowth,Break,etc
 -[ ] agricraft plugin
+-[ ] dev how to do things with the new code/api
 
 -[ ] jade
   -[ ] config option
@@ -31,5 +36,5 @@
 -[ ] jei
   -[ ] hide seeds not researched
   -[x] plant requirements
-  -[ ] plant mutations
+  -[x] plant mutations
   -[x] plant production

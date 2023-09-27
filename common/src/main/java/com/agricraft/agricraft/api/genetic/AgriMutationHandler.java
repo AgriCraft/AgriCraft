@@ -80,10 +80,8 @@ public class AgriMutationHandler {
 	public int complexity(String plant) {
 		// the first time a complexity is wanted, we compute the complexity of each plant
 		if (!computed) {
-			System.out.println("Computing the complexities");
 			computed = true;
 			setupComplexities();
-			complexities.forEach((key, value) -> System.out.println(key + ": " + value));
 		}
 		return complexities.getOrDefault(plant, 0);
 	}

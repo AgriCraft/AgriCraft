@@ -1,0 +1,7 @@
+{
+	"parent": "agricraft:block/crop_sticks",
+	"textures": {
+		"crop_sticks": "agricraft:block/wooden_crop_sticks",
+		"particle": "minecraft:block/oak_planks"
+	}
+}

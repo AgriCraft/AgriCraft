@@ -13,11 +13,19 @@ import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 @Category(id = "core_config", translation = "agricraft.option.core_config")
 public final class CoreConfig {
 
+	@ConfigEntry(id = "plant_off_crop_sticks", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.plant_off_crop_sticks")
+	@Comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
+	public static boolean plantOffCropSticks = true;
+
+	@ConfigEntry(id = "crop_sticks_collide", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.crop_sticks_collide")
+	@Comment("Set to false to disable collision boxes on crop sticks")
+	public static boolean cropSticksCollide = true;
+
 	@ConfigEntry(id = "only_fertile_crops_spread", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.only_fertile_crops_spread")
 	@Comment("Set to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action (note that this may cause issues with obtaining some specific plants)")
 	public static boolean onlyFertileCropsSpread = false;
 
-	@ConfigEntry(id = "clone_mutations", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.clone_mutation")
+	@ConfigEntry(id = "clone_mutations", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.clone_mutations")
 	@Comment("Set to true to allow mutations on clone events (spreading from single crop).")
 	public static boolean cloneMutations = false;
 

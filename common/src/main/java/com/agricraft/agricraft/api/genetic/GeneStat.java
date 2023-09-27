@@ -4,6 +4,7 @@ import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,8 @@ public class GeneStat implements AgriGene<Integer> {
 
 	@Override
 	public AgriAllele<Integer> getAllele(Integer value) {
-		return alleles.get(value);
+		int val = Mth.clamp(value, this.stat.getMin(), this.stat.getMax());
+		return alleles.get(val);
 	}
 
 	@Override

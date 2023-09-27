@@ -35,6 +35,13 @@ public class AgriCraftForgeClient {
 			ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/crop", "crop").replace(".json", ""));
 			event.register(seed);
 		}
+		// add the crop sticks models else they're not loaded
+		event.register(new ResourceLocation("agricraft:block/wooden_crop_sticks"));
+		event.register(new ResourceLocation("agricraft:block/iron_crop_sticks"));
+		event.register(new ResourceLocation("agricraft:block/obsidian_crop_sticks"));
+		event.register(new ResourceLocation("agricraft:block/wooden_cross_crop_sticks"));
+		event.register(new ResourceLocation("agricraft:block/iron_cross_crop_sticks"));
+		event.register(new ResourceLocation("agricraft:block/obsidian_cross_crop_sticks"));
 	}
 
 	@SubscribeEvent
