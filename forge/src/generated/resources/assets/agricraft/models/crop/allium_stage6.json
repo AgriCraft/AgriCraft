@@ -1,6 +1,6 @@
 {
   "parent": "agricraft:crop/crop_hash",
   "textures": {
-    "crop": "agricraft:block/allium_stage2"
+    "crop": "agricraft:plant/allium_stage2"
   }
 }

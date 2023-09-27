@@ -1,7 +1,7 @@
 {
   "parent": "agricraft:crop/tall_crop_plus",
   "textures": {
-    "crop": "agricraft:block/bamboo_base",
-    "crop_top": "agricraft:block/bamboo_stage6"
+    "crop": "agricraft:plant/bamboo_base",
+    "crop_top": "agricraft:plant/bamboo_stage6"
   }
 }
