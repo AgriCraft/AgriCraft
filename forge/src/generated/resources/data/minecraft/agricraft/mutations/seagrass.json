@@ -1,0 +1,8 @@
+{
+  "chance": 0.5,
+  "child": "minecraft:seagrass",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:wheat",
+  "parent2": "minecraft:bamboo"
+}

@@ -55,11 +55,6 @@ public record AgriMutation(boolean enabled, List<String> mods, ResourceLocation 
 			return new AgriMutation(enabled, mods, child, parent1, parent2, chance);
 		}
 
-		public Builder defaultMods() {
-			Collections.addAll(this.mods, "agricraft", "minecraft");
-			return this;
-		}
-
 		public Builder mods(String... mods) {
 			Collections.addAll(this.mods, mods);
 			return this;

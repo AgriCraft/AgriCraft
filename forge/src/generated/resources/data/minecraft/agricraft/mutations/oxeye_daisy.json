@@ -1,0 +1,8 @@
+{
+  "chance": 0.75,
+  "child": "minecraft:oxeye_daisy",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:dandelion",
+  "parent2": "minecraft:blue_orchid"
+}

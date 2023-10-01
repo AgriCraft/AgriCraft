@@ -22,6 +22,8 @@
 - [ ] fertilizers
 - [ ] journal
 - [ ] seed analyzer
+- [ ] plant callback
+- [ ] plant particle effects
 
 -[ ] send events for things
 -[ ] growth stage as objects / api

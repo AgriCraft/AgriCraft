@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,46 @@ public record AgriFluidCondition(ExtraCodecs.TagOrElementLocation fluid, List<St
 
 	public boolean isEmpty() {
 		return this == EMPTY;
+	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		ExtraCodecs.TagOrElementLocation item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation("minecraft", "air"), false);
+		List<String> states = new ArrayList<>();
+
+		public AgriFluidCondition build() {
+			return new AgriFluidCondition(item, states);
+		}
+
+		public Builder fluid(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), false);
+			return this;
+		}
+
+		public Builder fluid(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), false);
+			return this;
+		}
+
+		public Builder tag(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), true);
+			return this;
+		}
+
+		public Builder tag(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), true);
+			return this;
+		}
+
+		public Builder states(String... states) {
+			Collections.addAll(this.states, states);
+			return this;
+		}
+
 	}
 
 }

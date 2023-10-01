@@ -1,0 +1,8 @@
+{
+  "chance": 0.75,
+  "child": "minecraft:crimson_fungus",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:nether_wart",
+  "parent2": "minecraft:poppy"
+}

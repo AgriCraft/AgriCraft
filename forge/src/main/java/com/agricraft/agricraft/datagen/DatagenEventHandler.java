@@ -16,9 +16,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
@@ -47,14 +45,21 @@ public class DatagenEventHandler {
 								.add(AgriApi.AGRISOILS, DatagenEventHandler::registerSoils)
 								.add(AgriApi.AGRIMUTATIONS, DatagenEventHandler::registerMutations),
 						// Generate dynamic registry objects for this mod
-						Set.of(AgriApi.MOD_ID)
+						Set.of("minecraft", AgriApi.MOD_ID)
 				)
 		);
-		generator.addProvider(event.includeClient(), new CropModelProvider(event.getGenerator(), event.getExistingFileHelper()));
-		generator.addProvider(event.includeClient(), new SeedModelProvider(event.getGenerator(), event.getExistingFileHelper()));
+		generator.addProvider(event.includeClient(), new MinecraftCropModelProvider(event.getGenerator(), event.getExistingFileHelper()));
+		generator.addProvider(event.includeClient(), new MinecraftSeedModelProvider(event.getGenerator(), event.getExistingFileHelper()));
 	}
 
-	private static void registerPlant(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
+	private static void registerMinecraftPlant(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
+		context.register(
+				ResourceKey.create(AgriApi.AGRIPLANTS, new ResourceLocation("minecraft", plantId)),
+				plant
+		);
+	}
+
+	private static void registerAgriCraftPlant(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
 		context.register(
 				ResourceKey.create(AgriApi.AGRIPLANTS, new ResourceLocation(AgriApi.MOD_ID, plantId)),
 				plant
@@ -67,7 +72,15 @@ public class DatagenEventHandler {
 				soil
 		);
 	}
-	private static void registerMutation(BootstapContext<AgriMutation> context, String mutationId, AgriMutation mutation) {
+
+	private static void registerMinecraftMutation(BootstapContext<AgriMutation> context, String mutationId, AgriMutation mutation) {
+		context.register(
+				ResourceKey.create(AgriApi.AGRIMUTATIONS, new ResourceLocation("minecraft", mutationId)),
+				mutation
+		);
+	}
+
+	private static void registerAgricraftMutation(BootstapContext<AgriMutation> context, String mutationId, AgriMutation mutation) {
 		context.register(
 				ResourceKey.create(AgriApi.AGRIMUTATIONS, new ResourceLocation(AgriApi.MOD_ID, mutationId)),
 				mutation
@@ -75,26 +88,258 @@ public class DatagenEventHandler {
 	}
 
 	private static void registerPlants(BootstapContext<AgriPlant> context) {
-		registerPlant(context, "wheat", AgriPlant.builder()
-				.defaultMods()
-				.seeds(AgriSeed.builder().item("minecraft:wheat_seeds").chances(0.0, 1.0, 0.0).build())
+		registerMinecraftPlant(context, "allium", AgriPlant.builder()
+				.seeds()  // AgriSeed.builder().chances(0.0, 1.0, 0.0).build()
 				.stages16()
-				.harvest(4)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:magenta_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:allium").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "azure_bluet", AgriPlant.builder()
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:light_gray_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:azure_bluet").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "bamboo", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:bamboo").chances(0.0, 1.0, 0.0).build())
+				.stages(3, 6, 9, 12, 15, 18, 21, 24)
+				.chances(0.9, 0.01, 0.1)
+				.products(AgriProduct.builder().item("minecraft:bamboo").count(1, 2, 1000.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.4)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.4)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.light(10, 16, 0.5)
+						.seasons("spring", "summer")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "beetroot", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:beetroot_seeds").chances(0.0, 1.0, 0.0).build())
+				.stages16()
 				.chances(0.75, 0.025, 0.1)
-				.products(AgriProduct.builder().item("minecraft:wheat").count(1, 3, 0.95).build())
+				.products(AgriProduct.builder().item("minecraft:beetroot").count(1, 3, 0.95).build())
 				.requirement(AgriRequirement.builder()
 						.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.15)
 						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
 						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
 						.light(10, 16, 0.5)
-						.seasons("summer", "autumn")
+						.seasons("autumn")
 						.build())
 				.build());
-		registerPlant(context, "potato", AgriPlant.builder()
-				.defaultMods()
+		registerMinecraftPlant(context, "blue_orchid", AgriPlant.builder()
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:light_blue_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:blue_orchid").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "brown_mushroom", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:brown_mushroom").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:brown_mushroom").count(2, 5, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_LOWER, 0.2)
+						.light(0, 10, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "cactus", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:cactus").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:cactus").count(1, 3, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.ARID, AgriSoilCondition.Type.EQUAL, 0.34)
+						.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.LOW, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(10, 16, 0.5)
+						.seasons("summer")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "carrot", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:carrot").chances(0.0, 1.0, 0.0).build())
+				.stages(2, 3, 4, 5, 6, 7, 8, 9)
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:carrot").count(1, 4, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(10, 16, 0.5)
+						.seasons("spring", "autumn")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "cornflower", AgriPlant.builder()
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:blue_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:cornflower").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "crimson_fungus", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:crimson_fungus").chances(0.0, 1.0, 0.0).build())
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:crimson_fungus").count(2, 5, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.ARID, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.HIGHLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.LOW, AgriSoilCondition.Type.EQUAL_OR_LOWER, 0.1)
+						.light(0, 10, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "dandelion", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:yellow_dye").count(1, 1, 0.5).build())
+				.clips(AgriProduct.builder().item("minecraft:dandelion").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "kelp", AgriPlant.builder()
+				.seeds()
+				.stages(6, 6, 12, 12, 12, 18, 18, 24)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:kelp").count(1, 1, 0.75).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WATERY, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(5, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.fluid(AgriFluidCondition.builder().fluid("minecraft:water").build())
+						.build())
+				.build());
+		registerMinecraftPlant(context, "lily_of_the_valley", AgriPlant.builder()
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:white_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:lily_of_the_valley").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "melon", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:melon_seeds").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:melon").count(3, 5, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(10, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "nether_wart", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:nether_wart").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:nether_wart").count(1, 3, 0.95).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.ARID, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(10, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "orange_tulip", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:orange_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:orange_tulip").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "oxeye_daisy", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:light_gray_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:oxeye_daisy").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "pink_tulip", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:pink_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:pink_tulip").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "poppy", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:red_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:poppy").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "potato", AgriPlant.builder()
 				.seeds(AgriSeed.builder().item("minecraft:potato").chances(0.0, 1.0, 0.0).build())
 				.stages(2, 3, 4, 5, 6, 7, 8, 9)
-				.harvest(4)
 				.chances(0.75, 0.025, 0.1)
 				.products(
 						AgriProduct.builder().item("minecraft:potato").count(1, 4, 0.95).build(),
@@ -108,26 +353,74 @@ public class DatagenEventHandler {
 						.seasons("spring")
 						.build())
 				.build());
-		registerPlant(context, "carrot", AgriPlant.builder()
-				.defaultMods()
-				.seeds(AgriSeed.builder().item("minecraft:carrot").chances(0.0, 1.0, 0.0).build())
-				.stages(2, 3, 4, 5, 6, 7, 8, 9)
-				.harvest(4)
+		registerMinecraftPlant(context, "pumpkin", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:pumpkin_seeds").chances(0.0, 1.0, 0.0).build())
+				.stages16()
 				.chances(0.75, 0.025, 0.1)
-				.products(AgriProduct.builder().item("minecraft:carrot").count(1, 4, 1.0).build())
+				.products(AgriProduct.builder().item("minecraft:pumpkin").count(1, 2, 1.0).build())
 				.requirement(AgriRequirement.builder()
 						.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.15)
 						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
 						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
 						.light(10, 16, 0.5)
-						.seasons("spring", "autumn")
+						.seasons("summer", "autumn")
 						.build())
 				.build());
-		registerPlant(context, "sugar_cane", AgriPlant.builder()
-				.defaultMods()
+		registerMinecraftPlant(context, "red_mushroom", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:red_mushroom").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:red_mushroom").count(2, 4, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_LOWER, 0.2)
+						.light(0, 10, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "red_tulip", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:red_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:red_tulip").count(0, 1, 0.5).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "seagrass", AgriPlant.builder()
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:seagrass").count(1, 1, 0.75).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WATERY, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(5, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.fluid(AgriFluidCondition.builder().fluid("minecraft:water").build())
+						.build())
+				.build());
+		registerMinecraftPlant(context, "sea_pickle", AgriPlant.builder()
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:sea_pickle").count(1, 1, 0.75).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WATERY, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(0, 16, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.fluid(AgriFluidCondition.builder().fluid("minecraft:water").build())
+						.build())
+				.build());
+		registerMinecraftPlant(context, "sugar_cane", AgriPlant.builder()
 				.seeds(AgriSeed.builder().item("minecraft:sugar_cane").chances(0.0, 1.0, 0.0).build())
-				.stages(2, 4, 6, 8, 10, 12, 14, 16)
-				.harvest(4)
+				.stages16()
 				.chances(0.75, 0.025, 0.1)
 				.products(AgriProduct.builder().item("minecraft:sugar_cane").count(1, 2, 1000.0).build())
 				.requirement(AgriRequirement.builder()
@@ -138,44 +431,49 @@ public class DatagenEventHandler {
 						.seasons("summer")
 						.build())
 				.build());
-		registerPlant(context, "cactus", AgriPlant.builder()
-				.defaultMods()
-				.seeds(AgriSeed.builder().item("minecraft:cactus").chances(0.0, 1.0, 0.0).build())
-				.stages(2, 4, 6, 8, 10, 12, 14, 16)
-				.harvest(4)
+		registerMinecraftPlant(context, "sweet_berries", AgriPlant.builder()
+				.stages16()
 				.chances(0.75, 0.025, 0.1)
-				.products(AgriProduct.builder().item("minecraft:cactus").count(1, 3, 1.0).build())
+				.products(AgriProduct.builder().item("minecraft:sweet_berries").count(1, 1, 0.75).build())
 				.requirement(AgriRequirement.builder()
-						.humidity(AgriSoilCondition.Humidity.ARID, AgriSoilCondition.Type.EQUAL, 0.34)
-						.acidity(AgriSoilCondition.Acidity.NEUTRAL, AgriSoilCondition.Type.EQUAL, 0.2)
-						.nutrients(AgriSoilCondition.Nutrients.LOW, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
 						.light(10, 16, 0.5)
-						.seasons("summer")
+						.seasons("spring", "summer", "autumn")
 						.build())
 				.build());
-		registerPlant(context, "bamboo", AgriPlant.builder()
-				.defaultMods()
-				.seeds(AgriSeed.builder().item("minecraft:bamboo").chances(0.0, 1.0, 0.0).build())
-				.stages(3, 6, 9, 12, 15, 18, 21, 24)
-				.harvest(4)
-				.chances(0.9, 0.01, 0.1)
-				.products(AgriProduct.builder().item("minecraft:bamboo").count(1, 2, 1000.0).build())
-				.requirement(AgriRequirement.builder()
-						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.4)
-						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.4)
-						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
-						.light(10, 16, 0.5)
-						.seasons("spring", "summer")
-						.build())
-				.build());
-		registerPlant(context, "allium", AgriPlant.builder()
-				.defaultMods()
-				.seeds()  // AgriSeed.builder().chances(0.0, 1.0, 0.0).build()
-				.stages(2, 4, 6, 8, 10, 12, 14, 16)
-				.harvest(4)
+		registerMinecraftPlant(context, "warped_fungus", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:warped_fungus").chances(0.0, 1.0, 0.0).build())
+				.stages(2, 3, 5, 6, 8, 9, 11, 12)
 				.chances(0.65, 0.025, 0.1)
-				.products(AgriProduct.builder().item("minecraft:magenta_dye").count(1, 1, 0.75).build())
-				.clips(AgriProduct.builder().item("minecraft:allium").count(0, 1, 0.5).build())
+				.products(AgriProduct.builder().item("minecraft:warped_fungus").count(2, 5, 1.0).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.ARID, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.HIGHLY_ALKALINE, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.LOW, AgriSoilCondition.Type.EQUAL_OR_LOWER, 0.1)
+						.light(0, 10, 0.5)
+						.seasons("spring", "summer", "autumn", "winter")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "wheat", AgriPlant.builder()
+				.seeds(AgriSeed.builder().item("minecraft:wheat_seeds").chances(0.0, 1.0, 0.0).build())
+				.stages16()
+				.chances(0.75, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:wheat").count(1, 3, 0.95).build())
+				.requirement(AgriRequirement.builder()
+						.humidity(AgriSoilCondition.Humidity.WET, AgriSoilCondition.Type.EQUAL, 0.15)
+						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
+						.nutrients(AgriSoilCondition.Nutrients.HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
+						.light(10, 16, 0.5)
+						.seasons("summer", "autumn")
+						.build())
+				.build());
+		registerMinecraftPlant(context, "white_tulip", AgriPlant.builder()
+				.stages16()
+				.chances(0.65, 0.025, 0.1)
+				.products(AgriProduct.builder().item("minecraft:light_gray_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:white_tulip").count(0, 1, 0.5).build())
 				.requirement(AgriRequirement.builder()
 						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
 						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
@@ -184,21 +482,17 @@ public class DatagenEventHandler {
 						.seasons("spring")
 						.build())
 				.build());
-
-		registerPlant(context, "kelp", AgriPlant.builder()
-				.defaultMods()
-				.seeds()  // AgriSeed.builder().chances(0.0, 1.0, 0.0).build()
-				.stages(6, 6, 12, 12, 12, 18, 18, 24)
-				.harvest(4)
+		registerMinecraftPlant(context, "wither_rose", AgriPlant.builder()
+				.stages16()
 				.chances(0.65, 0.025, 0.1)
-				.products(AgriProduct.builder().item("minecraft:kelp").count(1, 1, 0.75).build())
+				.products(AgriProduct.builder().item("minecraft:black_dye").count(1, 1, 0.75).build())
+				.clips(AgriProduct.builder().item("minecraft:wither_rose").count(0, 1, 0.5).build())
 				.requirement(AgriRequirement.builder()
-						.humidity(AgriSoilCondition.Humidity.WATERY, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.4)
+						.humidity(AgriSoilCondition.Humidity.DAMP, AgriSoilCondition.Type.EQUAL, 0.2)
 						.acidity(AgriSoilCondition.Acidity.SLIGHTLY_ACIDIC, AgriSoilCondition.Type.EQUAL, 0.2)
-						.nutrients(AgriSoilCondition.Nutrients.MEDIUM, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.1)
-						.light(5, 16, 0.5)
-						.seasons("spring", "summer", "autumn", "winter")
-						.fluid(new AgriFluidCondition(new ExtraCodecs.TagOrElementLocation(new ResourceLocation("minecraft:water"), false), List.of()))
+						.nutrients(AgriSoilCondition.Nutrients.VERY_HIGH, AgriSoilCondition.Type.EQUAL_OR_HIGHER, 0.2)
+						.light(10, 16, 0.5)
+						.seasons("spring")
 						.build())
 				.build());
 
@@ -281,42 +575,86 @@ public class DatagenEventHandler {
 	}
 
 	private static void registerMutations(BootstapContext<AgriMutation> context) {
-		registerMutation(context, "allium", AgriMutation.builder().defaultMods().child("agricraft:allium").parents("agricraft:poppy", "agricraft:orchid").chance(0.75).build());
-		registerMutation(context, "bamboo", AgriMutation.builder().defaultMods().child("agricraft:bamboo").parents("agricraft:sugar_cane", "agricraft:cactus").chance(0.5).build());
-		registerMutation(context, "bluet", AgriMutation.builder().defaultMods().child("agricraft:bluet").parents("agricraft:dandelion", "agricraft:lily").chance(0.75).build());
-		registerMutation(context, "brown_mushroom", AgriMutation.builder().defaultMods().child("agricraft:brown_mushroom").parents("agricraft:potato", "agricraft:carrot").chance(0.5).build());
-		registerMutation(context, "cactus", AgriMutation.builder().defaultMods().child("agricraft:cactus").parents("agricraft:sugar_cane", "agricraft:potato").chance(0.5).build());
-		registerMutation(context, "carrot", AgriMutation.builder().defaultMods().child("agricraft:carrot").parents("agricraft:wheat", "agricraft:potato").chance(0.5).build());
+		registerMinecraftMutation(context, "allium", AgriMutation.builder().child("minecraft:allium").parents("minecraft:poppy", "minecraft:blue_orchid").chance(0.75).build());
+		registerMinecraftMutation(context, "azure_bluet", AgriMutation.builder().child("minecraft:azure_bluet").parents("minecraft:dandelion", "minecraft:lily").chance(0.75).build());
+		registerMinecraftMutation(context, "bamboo", AgriMutation.builder().child("minecraft:bamboo").parents("minecraft:sugar_cane", "minecraft:cactus").chance(0.5).build());
+		registerMinecraftMutation(context, "blue_orchid", AgriMutation.builder().child("minecraft:blue_orchid").parents("minecraft:poppy", "minecraft:dandelion").chance(0.75).build());
+		registerMinecraftMutation(context, "brown_mushroom", AgriMutation.builder().child("minecraft:brown_mushroom").parents("minecraft:potato", "minecraft:carrot").chance(0.5).build());
+		registerMinecraftMutation(context, "cactus", AgriMutation.builder().child("minecraft:cactus").parents("minecraft:sugar_cane", "minecraft:potato").chance(0.5).build());
+		registerMinecraftMutation(context, "carrot", AgriMutation.builder().child("minecraft:carrot").parents("minecraft:wheat", "minecraft:potato").chance(0.75).build());
+		registerMinecraftMutation(context, "cornflower", AgriMutation.builder().child("minecraft:cornflower").parents("minecraft:blue_orchid", "minecraft:lily_of_the_valley").chance(0.75).build());
+		registerMinecraftMutation(context, "crimson_fungus", AgriMutation.builder().child("minecraft:crimson_fungus").parents("minecraft:nether_wart", "minecraft:poppy").chance(0.75).build());
+		registerMinecraftMutation(context, "dandelion", AgriMutation.builder().child("minecraft:dandelion").parents("minecraft:pumpkin", "minecraft:wheat").chance(0.75).build());
+		registerMinecraftMutation(context, "kelp", AgriMutation.builder().child("minecraft:kelp").parents("minecraft:seagrass", "minecraft:bamboo").chance(0.5).build());
+		registerMinecraftMutation(context, "lily_of_the_valley", AgriMutation.builder().child("minecraft:lily_of_the_valley").parents("minecraft:white_tulip", "minecraft:oxeye_daisy").chance(0.75).build());
+		registerMinecraftMutation(context, "melon", AgriMutation.builder().child("minecraft:melon").parents("minecraft:sugar_cane", "minecraft:pumpkin").chance(0.25).build());
+		registerMinecraftMutation(context, "orange_tulip", AgriMutation.builder().child("minecraft:orange_tulip").parents("minecraft:oxeye_daisy", "minecraft:blue_orchid").chance(0.75).build());
+		registerMinecraftMutation(context, "oxeye_daisy", AgriMutation.builder().child("minecraft:oxeye_daisy").parents("minecraft:dandelion", "minecraft:blue_orchid").chance(0.75).build());
+		registerMinecraftMutation(context, "pink_tulip", AgriMutation.builder().child("minecraft:pink_tulip").parents("minecraft:allium", "minecraft:dandelion").chance(0.75).build());
+		registerMinecraftMutation(context, "poppy", AgriMutation.builder().child("minecraft:poppy").parents("minecraft:sugar_cane", "minecraft:melon").chance(0.75).build());
+		registerMinecraftMutation(context, "pumpkin", AgriMutation.builder().child("minecraft:pumpkin").parents("minecraft:carrot", "minecraft:potato").chance(0.25).build());
+		registerMinecraftMutation(context, "red_mushroom", AgriMutation.builder().child("minecraft:red_mushroom").parents("minecraft:potato", "minecraft:carrot").chance(0.5).build());
+		registerMinecraftMutation(context, "red_tulip", AgriMutation.builder().child("minecraft:red_tulip").parents("minecraft:poppy", "minecraft:allium").chance(0.75).build());
+		registerMinecraftMutation(context, "seagrass", AgriMutation.builder().child("minecraft:seagrass").parents("minecraft:wheat", "minecraft:bamboo").chance(0.5).build());
+		registerMinecraftMutation(context, "sea_pickle", AgriMutation.builder().child("minecraft:sea_pickle").parents("minecraft:seagrass", "minecraft:carrot").chance(0.5).build());
+		registerMinecraftMutation(context, "sugar_cane", AgriMutation.builder().child("minecraft:sugar_cane").parents("minecraft:wheat", "minecraft:beetroot").chance(0.5).build());
+		registerMinecraftMutation(context, "sweet_berries", AgriMutation.builder().child("minecraft:sweet_berries").parents("minecraft:sugar_cane", "minecraft:beetroot").chance(0.75).build());
+		registerMinecraftMutation(context, "warped_fungus", AgriMutation.builder().child("minecraft:warped_fungus").parents("minecraft:nether_wart", "minecraft:blue_orchid").chance(0.75).build());
+		registerMinecraftMutation(context, "white_tulip", AgriMutation.builder().child("minecraft:white_tulip").parents("minecraft:daisy", "minecraft:dandelion").chance(0.75).build());
+		registerMinecraftMutation(context, "whither_rose", AgriMutation.builder().child("minecraft:whither_rose").parents("minecraft:cornflower", "minecraft:poppy").chance(0.75).build());
 	}
 
-	private static class CropModelProvider extends ModelProvider<BlockModelBuilder> {
+	private static class MinecraftCropModelProvider extends ModelProvider<BlockModelBuilder> {
 
-		public CropModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-			super(generator.getPackOutput(), AgriApi.MOD_ID, "crop", BlockModelBuilder::new, existingFileHelper);
+		public MinecraftCropModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+			super(generator.getPackOutput(), "minecraft", "crop", BlockModelBuilder::new, existingFileHelper);
 		}
 
 
 		@Override
 		protected void registerModels() {
+			this.with4TexturesIn8stage("allium", "agricraft:crop/crop_hash", "agricraft:plant/allium");
+			this.cropPlus("azure_bluet_stage0").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.cropPlus("azure_bluet_stage1").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.cropPlus("azure_bluet_stage2").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.cropPlus("azure_bluet_stage3").texture("crop", "agricraft:plant/azure_bluet_stage1");
+			this.cropPlus("azure_bluet_stage4").texture("crop", "agricraft:plant/azure_bluet_stage1");
+			this.cropPlus("azure_bluet_stage5").texture("crop", "agricraft:plant/azure_bluet_stage2");
+			this.cropPlus("azure_bluet_stage6").texture("crop", "agricraft:plant/azure_bluet_stage2");
+			this.cropPlus("azure_bluet_stage7").texture("crop", "minecraft:block/azure_bluet");
 			this.withExistingParent("bamboo_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/bamboo_stage0");
 			cropPlus("bamboo", 1, 2, 3);
 			tallCropPlus("bamboo", 4, 5, 6, 7);
-			this.with4TexturesIn7stage("cactus_stage", "agricraft:crop/crop_hash", "agricraft:plant/cactus_stage");
-			this.with4TexturesIn7stage("carrot_stage", "agricraft:crop/crop_hash", "minecraft:block/carrots_stage");
-			this.with4TexturesIn7stage("potato_stage", "agricraft:crop/crop_hash", "minecraft:block/potatoes_stage");
-			this.with4TexturesIn7stage("sugar_cane_stage", "agricraft:crop/crop_hash", "agricraft:plant/sugar_cane_stage");
+			this.with4TexturesIn8stage("beetroot", "agricraft:crop/crop_hash", "minecraft:block/beetroots");
+			this.with4TexturesIn8stage("brown_mushroom", "agricraft:crop/crop_hash", "agricraft:plant/brown_mushroom");
+			this.with4TexturesIn8stage("cactus", "agricraft:crop/crop_hash", "agricraft:plant/cactus");
+			this.with4TexturesIn8stage("carrot", "agricraft:crop/crop_hash", "minecraft:block/carrots");
+			this.with4TexturesIn8stage("cornflower", "agricraft:crop/crop_plus", "agricraft:plant/cornflower");
+			this.with4TexturesIn8stage("crimson_fungus", "agricraft:crop/crop_plus", "agricraft:plant/crimson_fungus");
+			this.with4TexturesIn8stage("dandelion", "agricraft:crop/crop_hash", "agricraft:plant/dandelion");
+			this.cropPlus("kelp_stage0").texture("crop", "minecraft:block/kelp");
+			this.cropPlus("kelp_stage1").texture("crop", "minecraft:block/kelp");
+			this.cropPlus("kelp_stage2").texture("crop", "agricraft:plant/kelp");
+			this.cropPlus("kelp_stage3").texture("crop", "agricraft:plant/kelp");
+			this.cropPlus("kelp_stage4").texture("crop", "agricraft:plant/kelp");
+			this.tallCropPlus("kelp_stage5").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.tallCropPlus("kelp_stage6").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.tallCropPlus("kelp_stage7").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "agricraft:plant/kelp");
+			this.with4TexturesIn8stage("lily_of_the_valley", "agricraft:crop/crop_plus", "agricraft:plant/lily_of_the_valley");
+			this.withExistingParent("melon_stage0", "agricraft:crop/crop_gourd").texture("crop", "minecraft:block/bamboo_stage0");
+			this.with4TexturesIn8stage("oxeye_daisy", "agricraft:crop/crop_plus", "agricraft:plant/oxeye_daisy");
+			this.with4TexturesIn8stage("potato", "agricraft:crop/crop_hash", "minecraft:block/potatoes");
+			this.with4TexturesIn8stage("sugar_cane", "agricraft:crop/crop_hash", "agricraft:plant/sugar_cane");
 			for (int stage : List.of(0, 1, 2, 3, 4, 5, 6, 7)) {
-				this.withExistingParent("wheat_stage"+stage, "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage"+stage);
+				this.withExistingParent("wheat_stage" + stage, "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage" + stage);
 			}
-			this.with4TexturesIn7stage("allium_stage", "agricraft:crop/crop_hash", "agricraft:plant/allium_stage");
-			this.withExistingParent("kelp_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
-			this.withExistingParent("kelp_stage1", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
-			this.withExistingParent("kelp_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
-			this.withExistingParent("kelp_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
-			this.withExistingParent("kelp_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
-			this.withExistingParent("kelp_stage5", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
-			this.withExistingParent("kelp_stage6", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
-			this.withExistingParent("kelp_stage7", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "agricraft:plant/kelp");
+		}
+
+		private BlockModelBuilder cropPlus(String name) {
+			return this.withExistingParent(name, "agricraft:crop/crop_plus");
+		}
+		private BlockModelBuilder tallCropPlus(String name) {
+			return this.withExistingParent(name, "agricraft:crop/tall_crop_plus");
 		}
 
 		private void cropPlus(String name, int... stages) {
@@ -325,25 +663,24 @@ public class DatagenEventHandler {
 						.texture("crop", "agricraft:plant/" + name + "_stage" + stage);
 			}
 		}
+
 		private void tallCropPlus(String name, int... stages) {
 			for (int stage : stages) {
 				this.withExistingParent(name + "_stage" + stage, "agricraft:crop/tall_crop_plus")
-						.texture("crop", "agricraft:plant/"+name+"_base")
+						.texture("crop", "agricraft:plant/" + name + "_base")
 						.texture("crop_top", "agricraft:plant/" + name + "_stage" + stage);
-
 			}
 		}
 
-		private void with4TexturesIn7stage(String name, String parent, String baseTexture) {
-			this.withExistingParent(name + "0", parent).texture("crop", baseTexture + "0");
-			this.withExistingParent(name + "1", parent).texture("crop", baseTexture + "0");
-			this.withExistingParent(name + "2", parent).texture("crop", baseTexture + "0");
-			this.withExistingParent(name + "3", parent).texture("crop", baseTexture + "1");
-			this.withExistingParent(name + "4", parent).texture("crop", baseTexture + "1");
-			this.withExistingParent(name + "5", parent).texture("crop", baseTexture + "2");
-			this.withExistingParent(name + "6", parent).texture("crop", baseTexture + "2");
-			this.withExistingParent(name + "7", parent).texture("crop", baseTexture + "3");
-
+		private void with4TexturesIn8stage(String name, String parent, String baseTexture) {
+			this.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
+			this.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");
+			this.withExistingParent(name + "_stage2", parent).texture("crop", baseTexture + "_stage0");
+			this.withExistingParent(name + "_stage3", parent).texture("crop", baseTexture + "_stage1");
+			this.withExistingParent(name + "_stage4", parent).texture("crop", baseTexture + "_stage1");
+			this.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage2");
+			this.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage2");
+			this.withExistingParent(name + "_stage7", parent).texture("crop", baseTexture + "_stage3");
 		}
 
 		@Override
@@ -353,16 +690,16 @@ public class DatagenEventHandler {
 
 	}
 
-	private static class SeedModelProvider extends ModelProvider<ItemModelBuilder> {
+	private static class MinecraftSeedModelProvider extends ModelProvider<ItemModelBuilder> {
 
-		public SeedModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-			super(generator.getPackOutput(), AgriApi.MOD_ID, "seed", ItemModelBuilder::new, existingFileHelper);
+		public MinecraftSeedModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+			super(generator.getPackOutput(), "minecraft", "seed", ItemModelBuilder::new, existingFileHelper);
 		}
 
 
 		@Override
 		protected void registerModels() {
-			List.of("bamboo", "cactus", "carrot", "potato", "sugar_cane", "allium", "kelp", "unknown")
+			List.of("allium", "bamboo", "beetroot", "cactus", "carrot", "potato", "sugar_cane", "kelp", "unknown")
 					.forEach(this::seed);
 			this.withExistingParent("wheat", "minecraft:item/wheat_seeds");
 		}

@@ -1,0 +1,8 @@
+{
+  "chance": 0.75,
+  "child": "minecraft:azure_bluet",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:dandelion",
+  "parent2": "minecraft:lily"
+}

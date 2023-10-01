@@ -1,0 +1,8 @@
+{
+  "chance": 0.5,
+  "child": "minecraft:sugar_cane",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:wheat",
+  "parent2": "minecraft:beetroot"
+}

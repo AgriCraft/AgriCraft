@@ -76,11 +76,6 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 		public AgriPlant build() {
 			return new AgriPlant(true, mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, products, clipProducts, requirement, callbacks, particleEffects);
 		}
-
-		public Builder defaultMods() {
-			Collections.addAll(this.mods, "agricraft", "minecraft");
-			return this;
-		}
 		public Builder mods(String... mods) {
 			Collections.addAll(this.mods, mods);
 			return this;

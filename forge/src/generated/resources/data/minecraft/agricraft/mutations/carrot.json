@@ -1,0 +1,8 @@
+{
+  "chance": 0.75,
+  "child": "minecraft:carrot",
+  "enabled": true,
+  "mods": [],
+  "parent1": "minecraft:wheat",
+  "parent2": "minecraft:potato"
+}
