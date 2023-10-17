@@ -1,4 +1,19 @@
--[ ] stat usage
+- journal
+- seed analyzer
+- rake
+- trowel
+- seed_bag
+
+- tank
+- irrigation channel
+- sprinkler
+- valve
+- greenhouse
+- grate
+
+- 1.19 and 1.20 plants
+
+- [ ] stat usage
   -[x] gain (only on right click, not on block break)  # yield more fruits
   -[x] growth  # grow faster
   -[x] strength  # overcome soil requirement
