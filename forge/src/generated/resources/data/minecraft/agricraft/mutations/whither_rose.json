@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:whither_rose",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:cornflower",
-  "parent2": "minecraft:poppy"
-}

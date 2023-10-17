@@ -1,8 +1,0 @@
-{
-  "chance": 0.5,
-  "child": "minecraft:sea_pickle",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:seagrass",
-  "parent2": "minecraft:carrot"
-}

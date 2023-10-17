@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:white_tulip",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:daisy",
-  "parent2": "minecraft:dandelion"
-}

@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:warped_fungus",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:nether_wart",
-  "parent2": "minecraft:blue_orchid"
-}

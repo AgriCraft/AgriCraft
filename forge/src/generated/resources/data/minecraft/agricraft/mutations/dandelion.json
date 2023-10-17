@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:dandelion",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:pumpkin",
-  "parent2": "minecraft:wheat"
-}

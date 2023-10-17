@@ -1,6 +1,0 @@
-{
-  "parent": "agricraft:crop/crop_hash",
-  "textures": {
-    "crop": "agricraft:plant/cactus_stage2"
-  }
-}

@@ -614,62 +614,99 @@ public class DatagenEventHandler {
 		@Override
 		protected void registerModels() {
 			this.with4TexturesIn8stage("allium", "agricraft:crop/crop_hash", "agricraft:plant/allium");
-			this.cropPlus("azure_bluet_stage0").texture("crop", "agricraft:plant/azure_bluet_stage0");
-			this.cropPlus("azure_bluet_stage1").texture("crop", "agricraft:plant/azure_bluet_stage0");
-			this.cropPlus("azure_bluet_stage2").texture("crop", "agricraft:plant/azure_bluet_stage0");
-			this.cropPlus("azure_bluet_stage3").texture("crop", "agricraft:plant/azure_bluet_stage1");
-			this.cropPlus("azure_bluet_stage4").texture("crop", "agricraft:plant/azure_bluet_stage1");
-			this.cropPlus("azure_bluet_stage5").texture("crop", "agricraft:plant/azure_bluet_stage2");
-			this.cropPlus("azure_bluet_stage6").texture("crop", "agricraft:plant/azure_bluet_stage2");
-			this.cropPlus("azure_bluet_stage7").texture("crop", "minecraft:block/azure_bluet");
+			this.withExistingParent("azure_bluet_stage0", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.withExistingParent("azure_bluet_stage1", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.withExistingParent("azure_bluet_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage0");
+			this.withExistingParent("azure_bluet_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage1");
+			this.withExistingParent("azure_bluet_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage1");
+			this.withExistingParent("azure_bluet_stage5", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage2");
+			this.withExistingParent("azure_bluet_stage6", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/azure_bluet_stage2");
+			this.withExistingParent("azure_bluet_stage7", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/azure_bluet");
 			this.withExistingParent("bamboo_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/bamboo_stage0");
-			cropPlus("bamboo", 1, 2, 3);
-			tallCropPlus("bamboo", 4, 5, 6, 7);
+			this.withExistingParent("bamboo_stage1", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/bamboo_stage1");
+			this.withExistingParent("bamboo_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/bamboo_stage2");
+			this.withExistingParent("bamboo_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/bamboo_stage3");
+			this.withExistingParent("bamboo_stage4", "agricraft:crop/tall_crop_plus").texture("crop", "agricraft:plant/bamboo_base").texture("crop_top", "agricraft:plant/bamboo_stage4");
+			this.withExistingParent("bamboo_stage5", "agricraft:crop/tall_crop_plus").texture("crop", "agricraft:plant/bamboo_base").texture("crop_top", "agricraft:plant/bamboo_stage5");
+			this.withExistingParent("bamboo_stage6", "agricraft:crop/tall_crop_plus").texture("crop", "agricraft:plant/bamboo_base").texture("crop_top", "agricraft:plant/bamboo_stage6");
+			this.withExistingParent("bamboo_stage7", "agricraft:crop/tall_crop_plus").texture("crop", "agricraft:plant/bamboo_base").texture("crop_top", "agricraft:plant/bamboo_stage7");
 			this.with4TexturesIn8stage("beetroot", "agricraft:crop/crop_hash", "minecraft:block/beetroots");
+			this.withExistingParent("blue_orchid_stage0", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage0");
+			this.withExistingParent("blue_orchid_stage1", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage0");
+			this.withExistingParent("blue_orchid_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage0");
+			this.withExistingParent("blue_orchid_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage1");
+			this.withExistingParent("blue_orchid_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage1");
+			this.withExistingParent("blue_orchid_stage5", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage2");
+			this.withExistingParent("blue_orchid_stage6", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/blue_orchid_stage2");
+			this.withExistingParent("blue_orchid_stage7", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/blue_orchid");
 			this.with4TexturesIn8stage("brown_mushroom", "agricraft:crop/crop_hash", "agricraft:plant/brown_mushroom");
 			this.with4TexturesIn8stage("cactus", "agricraft:crop/crop_hash", "agricraft:plant/cactus");
 			this.with4TexturesIn8stage("carrot", "agricraft:crop/crop_hash", "minecraft:block/carrots");
 			this.with4TexturesIn8stage("cornflower", "agricraft:crop/crop_plus", "agricraft:plant/cornflower");
 			this.with4TexturesIn8stage("crimson_fungus", "agricraft:crop/crop_plus", "agricraft:plant/crimson_fungus");
 			this.with4TexturesIn8stage("dandelion", "agricraft:crop/crop_hash", "agricraft:plant/dandelion");
-			this.cropPlus("kelp_stage0").texture("crop", "minecraft:block/kelp");
-			this.cropPlus("kelp_stage1").texture("crop", "minecraft:block/kelp");
-			this.cropPlus("kelp_stage2").texture("crop", "agricraft:plant/kelp");
-			this.cropPlus("kelp_stage3").texture("crop", "agricraft:plant/kelp");
-			this.cropPlus("kelp_stage4").texture("crop", "agricraft:plant/kelp");
-			this.tallCropPlus("kelp_stage5").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
-			this.tallCropPlus("kelp_stage6").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
-			this.tallCropPlus("kelp_stage7").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "agricraft:plant/kelp");
+			this.withExistingParent("kelp_stage0", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage1", "agricraft:crop/crop_plus").texture("crop", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
+			this.withExistingParent("kelp_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
+			this.withExistingParent("kelp_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/kelp");
+			this.withExistingParent("kelp_stage5", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage6", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "minecraft:block/kelp");
+			this.withExistingParent("kelp_stage7", "agricraft:crop/tall_crop_plus").texture("crop", "minecraft:block/kelp_plant").texture("crop_top", "agricraft:plant/kelp");
 			this.with4TexturesIn8stage("lily_of_the_valley", "agricraft:crop/crop_plus", "agricraft:plant/lily_of_the_valley");
-			this.withExistingParent("melon_stage0", "agricraft:crop/crop_gourd").texture("crop", "minecraft:block/bamboo_stage0");
-			this.with4TexturesIn8stage("oxeye_daisy", "agricraft:crop/crop_plus", "agricraft:plant/oxeye_daisy");
+			this.withExistingParent("melon_stage0", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage0");
+			this.withExistingParent("melon_stage1", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage0");
+			this.withExistingParent("melon_stage2", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage0");
+			this.withExistingParent("melon_stage3", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage1");
+			this.withExistingParent("melon_stage4", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage1");
+			this.withExistingParent("melon_stage5", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage2");
+			this.withExistingParent("melon_stage6", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/melon_stage2");
+			this.withExistingParent("melon_stage7", "agricraft:crop/crop_gourd").texture("crop", "agricraft:plant/melon_stage3").texture("gourd", "minecraft:block/melon_side");
+			this.withExistingParent("nether_wart_stage0", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage0");
+			this.withExistingParent("nether_wart_stage1", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage0");
+			this.withExistingParent("nether_wart_stage2", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage0");
+			this.withExistingParent("nether_wart_stage3", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage1");
+			this.withExistingParent("nether_wart_stage4", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage1");
+			this.withExistingParent("nether_wart_stage5", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage1");
+			this.withExistingParent("nether_wart_stage6", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage1");
+			this.withExistingParent("nether_wart_stage7", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/nether_wart_stage2");
+			this.with4TexturesIn8stage("orange_tulip", "agricraft:crop/crop_hash", "agricraft:plant/orange_tulip");
+			this.with4TexturesIn8stage("oxeye_daisy", "agricraft:crop/crop_hash", "agricraft:plant/oxeye_daisy");
+			this.with4TexturesIn8stage("pink_tulip", "agricraft:crop/crop_hash", "agricraft:plant/pink_tulip");
+			this.with4TexturesIn8stage("poppy", "agricraft:crop/crop_hash", "agricraft:plant/poppy");
 			this.with4TexturesIn8stage("potato", "agricraft:crop/crop_hash", "minecraft:block/potatoes");
+			this.withExistingParent("pumpkin_stage0", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage0");
+			this.withExistingParent("pumpkin_stage1", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage0");
+			this.withExistingParent("pumpkin_stage2", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage0");
+			this.withExistingParent("pumpkin_stage3", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage1");
+			this.withExistingParent("pumpkin_stage4", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage1");
+			this.withExistingParent("pumpkin_stage5", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage2");
+			this.withExistingParent("pumpkin_stage6", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/pumpkin_stage2");
+			this.withExistingParent("pumpkin_stage7", "agricraft:crop/crop_gourd").texture("crop", "agricraft:plant/pumpkin_stage3").texture("gourd", "minecraft:block/pumpkin_side");
+			this.with4TexturesIn8stage("red_mushroom", "agricraft:crop/crop_hash", "agricraft:plant/red_mushroom");
+			this.with4TexturesIn8stage("red_tulip", "agricraft:crop/crop_hash", "agricraft:plant/red_tulip");
+			this.withExistingParent("seagrass_stage0", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage0");
+			this.withExistingParent("seagrass_stage1", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage0");
+			this.withExistingParent("seagrass_stage2", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage0");
+			this.withExistingParent("seagrass_stage3", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage1");
+			this.withExistingParent("seagrass_stage4", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage1");
+			this.withExistingParent("seagrass_stage5", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage2");
+			this.withExistingParent("seagrass_stage6", "agricraft:crop/crop_hash").texture("crop", "agricraft:plant/seagrass_stage2");
+			this.withExistingParent("seagrass_stage7", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/seagrass");
+			this.with4TexturesIn8stage("sea_pickle", "agricraft:crop/crop_hash", "agricraft:plant/sea_pickle");
 			this.with4TexturesIn8stage("sugar_cane", "agricraft:crop/crop_hash", "agricraft:plant/sugar_cane");
-			for (int stage : List.of(0, 1, 2, 3, 4, 5, 6, 7)) {
-				this.withExistingParent("wheat_stage" + stage, "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage" + stage);
-			}
-		}
-
-		private BlockModelBuilder cropPlus(String name) {
-			return this.withExistingParent(name, "agricraft:crop/crop_plus");
-		}
-		private BlockModelBuilder tallCropPlus(String name) {
-			return this.withExistingParent(name, "agricraft:crop/tall_crop_plus");
-		}
-
-		private void cropPlus(String name, int... stages) {
-			for (int stage : stages) {
-				this.withExistingParent(name + "_stage" + stage, "agricraft:crop/crop_plus")
-						.texture("crop", "agricraft:plant/" + name + "_stage" + stage);
-			}
-		}
-
-		private void tallCropPlus(String name, int... stages) {
-			for (int stage : stages) {
-				this.withExistingParent(name + "_stage" + stage, "agricraft:crop/tall_crop_plus")
-						.texture("crop", "agricraft:plant/" + name + "_base")
-						.texture("crop_top", "agricraft:plant/" + name + "_stage" + stage);
-			}
+			this.with4TexturesIn8stage("sweet_berries", "agricraft:crop/crop_hash", "agricraft:plant/sweet_berries");
+			this.with4TexturesIn8stage("warped_fungus", "agricraft:crop/crop_plus", "agricraft:plant/warped_fungus");
+			this.withExistingParent("wheat_stage0", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage0");
+			this.withExistingParent("wheat_stage1", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage1");
+			this.withExistingParent("wheat_stage2", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage2");
+			this.withExistingParent("wheat_stage3", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage3");
+			this.withExistingParent("wheat_stage4", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage4");
+			this.withExistingParent("wheat_stage5", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage5");
+			this.withExistingParent("wheat_stage6", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage6");
+			this.withExistingParent("wheat_stage7", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage7");
+			this.with4TexturesIn8stage("white_tulip", "agricraft:crop/crop_hash", "agricraft:plant/white_tulip");
+			this.with4TexturesIn8stage("wither_rose", "agricraft:crop/crop_hash", "agricraft:plant/wither_rose");
 		}
 
 		private void with4TexturesIn8stage(String name, String parent, String baseTexture) {
@@ -699,8 +736,15 @@ public class DatagenEventHandler {
 
 		@Override
 		protected void registerModels() {
-			List.of("allium", "bamboo", "beetroot", "cactus", "carrot", "potato", "sugar_cane", "kelp", "unknown")
+			List.of("allium", "azure_bluet", "bamboo", "blue_orchid", "brown_mushroom", "cactus", "carrot",
+							"cornflower", "crimson_fungus", "dandelion", "kelp", "lily_of_the_valley", "nether_wart",
+							"orange_tulip", "oxeye_daisy", "pink_tulip", "poppy", "potato", "red_mushroom",
+							"red_tulip", "seagrass", "sea_pickle", "sugar_cane","sweet_berries", "warped_fungus",
+							"white_tulip", "wither_rose", "unknown")
 					.forEach(this::seed);
+			this.withExistingParent("beetroot", "minecraft:item/beetroot_seeds");
+			this.withExistingParent("melon", "minecraft:item/melon_seeds");
+			this.withExistingParent("pumpkin", "minecraft:item/pumpkin_seeds");
 			this.withExistingParent("wheat", "minecraft:item/wheat_seeds");
 		}
 

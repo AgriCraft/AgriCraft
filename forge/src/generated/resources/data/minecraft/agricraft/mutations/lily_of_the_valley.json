@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:lily_of_the_valley",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:white_tulip",
-  "parent2": "minecraft:oxeye_daisy"
-}

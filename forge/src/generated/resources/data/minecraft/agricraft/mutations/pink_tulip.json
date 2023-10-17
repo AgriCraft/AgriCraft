@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:pink_tulip",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:allium",
-  "parent2": "minecraft:dandelion"
-}

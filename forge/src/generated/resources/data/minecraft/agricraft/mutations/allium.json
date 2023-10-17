@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:allium",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:poppy",
-  "parent2": "minecraft:blue_orchid"
-}

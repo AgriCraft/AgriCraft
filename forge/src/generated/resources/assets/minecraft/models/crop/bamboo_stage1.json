@@ -1,6 +1,0 @@
-{
-  "parent": "agricraft:crop/crop_plus",
-  "textures": {
-    "crop": "agricraft:plant/bamboo_stage1"
-  }
-}

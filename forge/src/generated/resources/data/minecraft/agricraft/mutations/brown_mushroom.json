@@ -1,8 +1,0 @@
-{
-  "chance": 0.5,
-  "child": "minecraft:brown_mushroom",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:potato",
-  "parent2": "minecraft:carrot"
-}

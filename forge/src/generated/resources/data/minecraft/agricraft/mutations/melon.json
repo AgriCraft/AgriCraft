@@ -1,8 +1,0 @@
-{
-  "chance": 0.25,
-  "child": "minecraft:melon",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:sugar_cane",
-  "parent2": "minecraft:pumpkin"
-}

@@ -1,8 +1,0 @@
-{
-  "chance": 0.75,
-  "child": "minecraft:cornflower",
-  "enabled": true,
-  "mods": [],
-  "parent1": "minecraft:blue_orchid",
-  "parent2": "minecraft:lily_of_the_valley"
-}
