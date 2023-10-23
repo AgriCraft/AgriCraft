@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.api.stat;
 
 import com.agricraft.agricraft.api.AgriRegistrable;
+import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import org.joml.Vector3f;
@@ -43,7 +44,7 @@ public class AgriStat implements AgriRegistrable {
 
 	public void addTooltip(Consumer<Component> consumer, int value) {
 		if(!this.isHidden()) {
-			consumer.accept(Component.translatable("agricraft.stat." + this.id)
+			consumer.accept(LangUtils.statName(this)
 					.append(": " + value)
 					.withStyle(ChatFormatting.DARK_GRAY));
 		}

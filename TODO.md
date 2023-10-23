@@ -11,7 +11,7 @@
 - greenhouse
 - grate
 
-- 1.19 and 1.20 plants
+- 1.19 and 1.20 plants (torchflower, spore blossom, glow berries)
 
 - [ ] stat usage
   -[x] gain (only on right click, not on block break)  # yield more fruits

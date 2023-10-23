@@ -1,11 +1,13 @@
 package com.agricraft.agricraft.api.requirement;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.AgriRegistrable;
 import com.agricraft.agricraft.api.AgriRegistry;
 import com.agricraft.agricraft.api.codecs.AgriBlockCondition;
 import com.agricraft.agricraft.api.codecs.AgriFluidCondition;
 import com.agricraft.agricraft.api.codecs.AgriListCondition;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.codecs.AgriRequirement;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.codecs.AgriSoilValue;
@@ -13,144 +15,125 @@ import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.AABB;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
  * Encapsulate the growth conditions of a crop
  */
-public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditionRegistry.AgriGrowthConditionWithId> {
+public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditionRegistry.BaseGrowthCondition<?>> {
 
 	private static AgriGrowthConditionRegistry INSTANCE;
+	private final BaseGrowthCondition<AgriSoilCondition.Humidity> humidity;
+	private final BaseGrowthCondition<AgriSoilCondition.Acidity> acidity;
+	private final BaseGrowthCondition<AgriSoilCondition.Nutrients> nutrients;
+	private final BaseGrowthCondition<Integer> light;
+	private final BaseGrowthCondition<BlockState> block;
+	private final BaseGrowthCondition<Holder<Biome>> biome;
+	private final BaseGrowthCondition<ResourceKey<DimensionType>> dimension;
+	private final BaseGrowthCondition<AgriSeason> season;
+	private final BaseGrowthCondition<FluidState> fluid;
 
-	public static AgriGrowthConditionRegistry getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new AgriGrowthConditionRegistry();
-			INSTANCE.add(INSTANCE.humidity);
-			INSTANCE.add(INSTANCE.acidity);
-			INSTANCE.add(INSTANCE.nutrients);
-			INSTANCE.add(INSTANCE.light);
-			INSTANCE.add(INSTANCE.blocks);
-			INSTANCE.add(INSTANCE.biome);
-			INSTANCE.add(INSTANCE.dimension);
-			INSTANCE.add(INSTANCE.fluid);
-		}
-		return INSTANCE;
-	}
-
-	private final AgriGrowthConditionWithId humidity;
-	private final AgriGrowthConditionWithId acidity;
-	private final AgriGrowthConditionWithId nutrients;
-	private final AgriGrowthConditionWithId light;
-	private final AgriGrowthConditionWithId blocks;
-	private final AgriGrowthConditionWithId biome;
-	private final AgriGrowthConditionWithId dimension;
-	private final AgriGrowthConditionWithId fluid;
 
 	private AgriGrowthConditionRegistry() {
 		super();
-		humidity = create("humidity", (crop, level, pos, strength) -> handleSoilCriterion(crop, crop.getPlant().requirement().soilHumidity(), AgriSoil::humidity, strength));
-		acidity = create("acidity", (crop, level, pos, strength) -> handleSoilCriterion(crop, crop.getPlant().requirement().soilAcidity(), AgriSoil::acidity, strength));
-		nutrients = create("nutrients", (crop, level, pos, strength) -> handleSoilCriterion(crop, crop.getPlant().requirement().soilNutrients(), AgriSoil::nutrients, strength));
-		light = create("light", (crop, level, pos, strength) -> {
-			double f = crop.getPlant().requirement().lightToleranceFactor();
-			int minLight = crop.getPlant().requirement().minLight();
-			int maxLight = crop.getPlant().requirement().maxLight();
-			return forLightStat(minLight, maxLight, f, level.getMaxLocalRawBrightness(pos), strength);
-		});
-		blocks = create("blocks", (crop, level, pos, strength) -> {
-			List<AgriBlockCondition> blockConditions = crop.getPlant().requirement().blockConditions();
+		humidity = new BaseGrowthCondition<>("humidity",
+				(plant, strength, value) -> AgriGrowthConditionRegistry.handleSoilCriterion(strength, value, plant.requirement().soilHumidity()),
+				(level, blockPos) -> AgriApi.getCrop(level, blockPos).flatMap(AgriCrop::getSoil).map(AgriSoil::humidity).orElse(AgriSoilCondition.Humidity.INVALID));
+		acidity = new BaseGrowthCondition<>("acidity",
+				(plant, strength, value) -> AgriGrowthConditionRegistry.handleSoilCriterion(strength, value, plant.requirement().soilAcidity()),
+				(level, blockPos) -> AgriApi.getCrop(level, blockPos).flatMap(AgriCrop::getSoil).map(AgriSoil::acidity).orElse(AgriSoilCondition.Acidity.INVALID));
+		nutrients = new BaseGrowthCondition<>("nutrients",
+				(plant, strength, value) -> AgriGrowthConditionRegistry.handleSoilCriterion(strength, value, plant.requirement().soilNutrients()),
+				(level, blockPos) -> AgriApi.getCrop(level, blockPos).flatMap(AgriCrop::getSoil).map(AgriSoil::nutrients).orElse(AgriSoilCondition.Nutrients.INVALID));
+		light = new BaseGrowthCondition<>("light", (plant, strength, value) -> {
+			AgriRequirement requirement = plant.requirement();
+			int lower = requirement.minLight() - (int) (requirement.lightToleranceFactor() * strength);
+			int upper = requirement.maxLight() + (int) (requirement.lightToleranceFactor() * strength);
+			return lower <= value && value <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
+		}, LevelReader::getMaxLocalRawBrightness);
+		block = new BaseGrowthCondition<>("block", (plant, strength, blockstate) -> {
+			List<AgriBlockCondition> blockConditions = plant.requirement().blockConditions();
 			if (blockConditions.isEmpty()) {
 				return AgriGrowthResponse.FERTILE;
 			}
 			for (AgriBlockCondition blockCondition : blockConditions) {
-				if (blockCondition.strength() <= strength) {
+				if (strength >= blockCondition.strength()) {
 					continue;
 				}
-				CompoundTag nbt = blockCondition.nbt();
 				List<Block> requiredBlocks = PlatformUtils.getBlocksFromLocation(blockCondition.block());
 				// regular block state requirement
-				AABB area = new AABB(crop.getBlockPos().offset(blockCondition.minX(), blockCondition.minY(), blockCondition.minZ()), crop.getBlockPos().offset(blockCondition.maxX(), blockCondition.maxY(), blockCondition.maxZ()));
-				if (level.getBlockStates(area)
-						.filter(state -> requiredBlocks.contains(state.getBlock()))
-						.filter(state -> {
-							if (blockCondition.states().isEmpty()) {
-								return true;
-							}
-							Set<String> list = state.getValues().entrySet().stream().map(StateHolder.PROPERTY_ENTRY_TO_STRING_FUNCTION).collect(Collectors.toSet());
-							return list.containsAll(blockCondition.states());
-						})
-						.count() < blockCondition.amount()) {
-					return AgriGrowthResponse.INFERTILE;
-				}
-				if (!nbt.isEmpty()) {
-					// block entity requirement
-					if (BlockPos.betweenClosedStream(area)
-							.map(level::getBlockEntity)
-							.map(BlockEntity::saveWithFullMetadata)
-							.filter(tag -> blockCondition.nbt().getAllKeys().stream().allMatch(key -> tag.contains(key) && tag.getTagType(key) == blockCondition.nbt().getTagType(key) && tag.get(key).equals(blockCondition.nbt().get(key))))
-							.count() < blockCondition.amount()) {
-						return AgriGrowthResponse.INFERTILE;
+				if (requiredBlocks.contains(blockstate.getBlock())) {
+					if (blockCondition.states().isEmpty()) {
+						return AgriGrowthResponse.FERTILE;
+					}
+					Set<String> list = blockstate.getValues().entrySet().stream().map(StateHolder.PROPERTY_ENTRY_TO_STRING_FUNCTION).collect(Collectors.toSet());
+					if (list.containsAll(blockCondition.states())) {
+						return AgriGrowthResponse.FERTILE;
 					}
 				}
+				return AgriGrowthResponse.INFERTILE;
 			}
 			return AgriGrowthResponse.FERTILE;
-		});
-		biome = create("biome", (crop, level, pos, strength) -> {
-			AgriListCondition listCondition = crop.getPlant().requirement().biomes();
-			Holder<Biome> holder = level.getBiome(pos);
+		}, (level, blockPos) -> level.getBlockState(blockPos.below()));
+		biome = new BaseGrowthCondition<>("biome", (plant, strength, biome) -> {
+			AgriListCondition listCondition = plant.requirement().biomes();
+			if (strength >= listCondition.ignoreFromStrength() || (listCondition.blacklist() && listCondition.isEmpty())) {
+				return AgriGrowthResponse.FERTILE;
+			}
+			if (listCondition.blacklist()) {
+				if (listCondition.values().stream().anyMatch(biome::is)) {
+					return AgriGrowthResponse.INFERTILE;
+				}
+			} else {
+				if (listCondition.values().stream().noneMatch(biome::is)) {
+					return AgriGrowthResponse.INFERTILE;
+				}
+			}
+			return AgriGrowthResponse.FERTILE;
+		}, LevelReader::getBiome);
+		dimension = new BaseGrowthCondition<>("dimension", (plant, strength, dimension) -> {
+			AgriListCondition listCondition = plant.requirement().dimensions();
 			if (strength >= listCondition.ignoreFromStrength() || listCondition.blacklist() && listCondition.isEmpty()) {
 				return AgriGrowthResponse.FERTILE;
 			}
 			if (listCondition.blacklist()) {
-				if (listCondition.values().stream().anyMatch(holder::is)) {
+				if (listCondition.values().stream().anyMatch(dimension.location()::equals)) {
 					return AgriGrowthResponse.INFERTILE;
 				}
 			} else {
-				if (listCondition.values().stream().noneMatch(holder::is)) {
+				if (listCondition.values().stream().noneMatch(dimension.location()::equals)) {
 					return AgriGrowthResponse.INFERTILE;
 				}
 			}
 			return AgriGrowthResponse.FERTILE;
-		});
-		dimension = create("dimension", (crop, level, pos, strength) -> {
-			AgriListCondition listCondition = crop.getPlant().requirement().dimensions();
-			ResourceKey<DimensionType> resourceKey = level.dimensionTypeId();
-			if (strength >= listCondition.ignoreFromStrength() || listCondition.blacklist() && listCondition.isEmpty()) {
+		}, (level, blockPos) -> level.dimensionTypeId());
+		season = new BaseGrowthCondition<>("season", (plant, strength, season) -> {
+			List<AgriSeason> seasons = plant.requirement().seasons();
+			if (!AgriApi.getSeasonLogic().isActive()
+					|| seasons.isEmpty()
+					|| strength >= AgriApi.getStatRegistry().strengthStat().getMax()
+					|| seasons.stream().anyMatch(season::matches)) {
 				return AgriGrowthResponse.FERTILE;
 			}
-			if (listCondition.blacklist()) {
-				if (listCondition.values().stream().anyMatch(resourceKey.location()::equals)) {
-					return AgriGrowthResponse.INFERTILE;
-				}
-			} else {
-				if (listCondition.values().stream().noneMatch(resourceKey.location()::equals)) {
-					return AgriGrowthResponse.INFERTILE;
-				}
-			}
-			return AgriGrowthResponse.FERTILE;
-		});
-		// season
-		// TODO: @Ketheroth seasons
-		fluid = create("fluid", (crop, level, pos, strength) -> {
-			FluidState fluid = level.getFluidState(pos);
-			AgriFluidCondition fluidCondition = crop.getPlant().requirement().fluidCondition();
+			return AgriGrowthResponse.INFERTILE;
+		}, (level, blockPos) -> AgriApi.getSeasonLogic().getSeason(level, blockPos));
+		fluid = new BaseGrowthCondition<>("fluid", (plant, strength, fluid) -> {
+			AgriFluidCondition fluidCondition = plant.requirement().fluidCondition();
 			List<Fluid> requiredFluids = PlatformUtils.getFluidsFromLocation(fluidCondition.fluid());
 			if (requiredFluids.isEmpty()) {
 				if (fluid.is(Fluids.LAVA)) {
@@ -167,43 +150,89 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 				}
 				return fluid.is(Fluids.LAVA) ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.LETHAL;
 			}
-		});
+		}, Level::getFluidState);
+
 
 		// TODO: @Ketheroth warn if no soil matches this requirement
 	}
 
-	private static AgriGrowthResponse handleSoilCriterion(AgriCrop crop, AgriSoilCondition condition, Function<AgriSoil, AgriSoilValue> valueGetter, int strength) {
-		Optional<AgriSoil> optionalSoil = crop.getSoil();
-		if (optionalSoil.isEmpty()) {
-			return AgriGrowthResponse.INFERTILE;
+	public static AgriGrowthConditionRegistry getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new AgriGrowthConditionRegistry();
+			INSTANCE.add(INSTANCE.humidity);
+			INSTANCE.add(INSTANCE.acidity);
+			INSTANCE.add(INSTANCE.nutrients);
+			INSTANCE.add(INSTANCE.light);
+			INSTANCE.add(INSTANCE.block);
+			INSTANCE.add(INSTANCE.biome);
+			INSTANCE.add(INSTANCE.dimension);
+			INSTANCE.add(INSTANCE.season);
+			INSTANCE.add(INSTANCE.fluid);
 		}
-		AgriSoil soil = optionalSoil.get();
-		return forSoilStat(valueGetter.apply(soil), condition, strength);
+		return INSTANCE;
 	}
 
-	public static AgriGrowthResponse forSoilStat(AgriSoilValue soilValue, AgriSoilCondition condition, int strength) {
+	public static BaseGrowthCondition<AgriSoilCondition.Humidity> getHumidity() {
+		return getInstance().humidity;
+	}
+
+	public static BaseGrowthCondition<AgriSoilCondition.Acidity> getAcidity() {
+		return getInstance().acidity;
+	}
+
+	public static BaseGrowthCondition<AgriSoilCondition.Nutrients> getNutrients() {
+		return getInstance().nutrients;
+	}
+
+	public static BaseGrowthCondition<Integer> getLight() {
+		return getInstance().light;
+	}
+
+	public static BaseGrowthCondition<BlockState> getBlock() {
+		return getInstance().block;
+	}
+
+	public static BaseGrowthCondition<Holder<Biome>> getBiome() {
+		return getInstance().biome;
+	}
+
+	public static BaseGrowthCondition<ResourceKey<DimensionType>> getDimension() {
+		return getInstance().dimension;
+	}
+
+	public static BaseGrowthCondition<AgriSeason> getSeason() {
+		return getInstance().season;
+	}
+
+	public static BaseGrowthCondition<FluidState> getFluid() {
+		return getInstance().fluid;
+	}
+
+	private static AgriGrowthResponse handleSoilCriterion(int strength, AgriSoilValue value, AgriSoilCondition<?> condition) {
 		int lower = condition.type().lowerLimit(condition.value().ordinal() - (int) (condition.toleranceFactor() * strength));
 		int upper = condition.type().upperLimit(condition.value().ordinal() + (int) (condition.toleranceFactor() * strength));
-		if (lower <= soilValue.ordinal() && soilValue.ordinal() <= upper) {
+		if (value.isValid() && lower <= value.ordinal() && value.ordinal() <= upper) {
 			return AgriGrowthResponse.FERTILE;
 		}
 		return AgriGrowthResponse.INFERTILE;
 	}
 
-	public static AgriGrowthResponse forLightStat(int minLight, int maxLight, double toleranceFactor, int light, int strength) {
-		int lower = minLight - (int) (toleranceFactor * strength);
-		int upper = maxLight + (int) (toleranceFactor * strength);
-		return light >= lower && light <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
+	public interface ResponseGetter<T> {
+
+		AgriGrowthResponse apply(AgriPlant plant, int strength, T value);
+
 	}
 
-	public static class AgriGrowthConditionWithId implements AgriGrowthCondition, AgriRegistrable {
+	public static class BaseGrowthCondition<T> implements AgriGrowthCondition<T>, AgriRegistrable {
 
 		private final String id;
-		private final AgriGrowthCondition condition;
+		private final ResponseGetter<T> response;
+		private final BiFunction<Level, BlockPos, T> getter;
 
-		public AgriGrowthConditionWithId(String id, AgriGrowthCondition condition) {
+		public BaseGrowthCondition(String id, ResponseGetter<T> response, BiFunction<Level, BlockPos, T> getter) {
 			this.id = id;
-			this.condition = condition;
+			this.response = response;
+			this.getter = getter;
 		}
 
 		@Override
@@ -213,13 +242,14 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 
 		@Override
 		public AgriGrowthResponse check(AgriCrop crop, Level level, BlockPos pos, int strength) {
-			return condition.check(crop, level, pos, strength);
+			return this.response.apply(crop.getPlant(), strength, this.getter.apply(level, pos));
 		}
 
-	}
+		@Override
+		public AgriGrowthResponse apply(AgriPlant plant, int strength, T value) {
+			return this.response.apply(plant, strength, value);
+		}
 
-	public static AgriGrowthConditionWithId create(String id, AgriGrowthCondition condition) {
-		return new AgriGrowthConditionWithId(id, condition);
 	}
 
 }

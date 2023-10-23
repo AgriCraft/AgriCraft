@@ -26,6 +26,7 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		AgriCraftClient.init();
 		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.SEED.get(), AgriSeedBEWLR.INSTANCE::renderByItem);
 		ModelLoadingPlugin.register(pluginContext -> {
 			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/seed").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {

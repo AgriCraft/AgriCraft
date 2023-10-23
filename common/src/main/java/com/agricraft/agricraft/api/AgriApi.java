@@ -7,6 +7,7 @@ import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
 import com.agricraft.agricraft.api.genetic.AgriMutationHandler;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
+import com.agricraft.agricraft.api.requirement.SeasonLogic;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.BlockPos;
@@ -142,6 +143,10 @@ public final class AgriApi {
 
 	public static AgriGrowthConditionRegistry getGrowthConditionRegistry() {
 		return AgriGrowthConditionRegistry.getInstance();
+	}
+
+	public static SeasonLogic getSeasonLogic() {
+		return SeasonLogic.INSTANCE;
 	}
 
 }

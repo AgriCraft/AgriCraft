@@ -44,7 +44,7 @@ public class PlatformUtilsImpl {
 				.icon(() -> new ItemStack(ModItems.DEBUGGER.get()))
 				.title(Component.translatable("itemGroup.agricraft.main"))
 				.displayItems(ModItems::addItemsToTabs)
-				.withTabsBefore(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+//				.withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
 				.build();
 	}
 

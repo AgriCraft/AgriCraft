@@ -1,10 +1,11 @@
 package com.agricraft.agricraft.api.requirement;
 
+import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
-public interface AgriGrowthCondition {
+public interface AgriGrowthCondition<T> {
 
 	/**
 	 * Checks this value at the given position in the given world.
@@ -16,5 +17,7 @@ public interface AgriGrowthCondition {
 	 * @return the response.
 	 */
 	AgriGrowthResponse check(AgriCrop crop, Level level, BlockPos pos, int strength);
+
+	AgriGrowthResponse apply(AgriPlant crop, int strength, T value);
 
 }

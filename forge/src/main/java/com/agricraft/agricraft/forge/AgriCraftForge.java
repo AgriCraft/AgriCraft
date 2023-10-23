@@ -7,6 +7,7 @@ import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.client.forge.AgriCraftForgeClient;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
+import com.agricraft.agricraft.common.plugin.SereneSeasonPlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -33,6 +34,7 @@ public class AgriCraftForge {
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftPlugin.init();
+		SereneSeasonPlugin.init();
 	}
 
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {

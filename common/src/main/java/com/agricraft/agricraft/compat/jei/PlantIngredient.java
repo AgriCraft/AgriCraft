@@ -62,7 +62,7 @@ public class PlantIngredient {
 			if (optional.isPresent()) {
 				ResourceLocation plantId = optional.get();
 				// get the model for the last growth stage and use the particle texture (that is also the crop texture) to render in jei
-				BakedModel model = AgriClientApi.getModel(plantId.toString(), plant.stages().size() - 1);
+				BakedModel model = AgriClientApi.getPlantModel(plantId.toString(), plant.stages().size() - 1);
 
 				TextureAtlasSprite sprite = model.getParticleIcon();
 				guiGraphics.blit(0, 0, 0, 16, 16, sprite);

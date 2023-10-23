@@ -47,6 +47,9 @@ dependencies {
 	modRuntimeOnly "curse.maven:jade-324717:4681829"  // Jade-1.20-fabric-11.4.3
 	modCompileOnly "curse.maven:jade-324717:4681835"  // Jade-1.20-fabric-11.4.3-api
 
+	modRuntimeOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
+	modCompileOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
+
 }
 
 processResources {

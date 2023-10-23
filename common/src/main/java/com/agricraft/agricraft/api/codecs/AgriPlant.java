@@ -2,6 +2,7 @@ package com.agricraft.agricraft.api.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 	public static final AgriPlant NO_PLANT = AgriPlant.builder()
 			.harvest(0).chances(0, 0, 0)
 			.build();
+	public static final ResourceLocation UNKNOWN = new ResourceLocation("agricraft:unknown");
 
 	public AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds, List<Integer> stages, int harvestStage,
 	                 double growthChance, double growthBonus, boolean cloneable, double spreadChance,
@@ -59,6 +61,7 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 	}
 
 	public static class Builder {
+
 		List<String> mods = new ArrayList<>();
 		List<AgriSeed> seeds = new ArrayList<>();
 		List<Integer> stages = new ArrayList<>();
@@ -76,57 +79,71 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 		public AgriPlant build() {
 			return new AgriPlant(true, mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, products, clipProducts, requirement, callbacks, particleEffects);
 		}
+
 		public Builder mods(String... mods) {
 			Collections.addAll(this.mods, mods);
 			return this;
 		}
+
 		public Builder seeds(AgriSeed... seeds) {
 			Collections.addAll(this.seeds, seeds);
 			return this;
 		}
+
 		public Builder stages(Integer... stages) {
 			Collections.addAll(this.stages, stages);
 			return this;
 		}
+
 		public Builder stages16() {
-			for (int i = 2; i < 17; i+=2) {
+			for (int i = 2; i < 17; i += 2) {
 				this.stages.add(i);
 			}
 			return this;
 		}
+
 		public Builder harvest(int stage) {
 			this.harvestStage = stage;
 			return this;
 		}
+
 		public Builder chances(double growth, double growthBonus, double spread) {
 			this.growthChance = growth;
 			this.growthBonus = growthBonus;
 			this.spreadChance = spread;
 			return this;
 		}
+
 		public Builder cloneable(boolean cloneable) {
 			this.cloneable = cloneable;
 			return this;
 		}
+
 		public Builder products(AgriProduct... products) {
 			Collections.addAll(this.products, products);
 			return this;
 		}
+
 		public Builder clips(AgriProduct... clips) {
 			this.clipProducts = List.of(clips);
 			return this;
 		}
+
 		public Builder requirement(AgriRequirement requirement) {
 			this.requirement = requirement;
 			return this;
 		}
+
 		public Builder callbacks(AgriPlantCallback... callbacks) {
 			this.callbacks = List.of(callbacks);
 			return this;
 		}
+
 		public Builder particles(AgriParticleEffect... particles) {
 			this.particleEffects = List.of(particles);
 			return this;
 		}
+
 	}
+
 }

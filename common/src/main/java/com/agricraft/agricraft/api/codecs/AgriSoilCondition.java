@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.IntUnaryOperator;
 
-public record AgriSoilCondition(AgriSoilValue value, Type type, double toleranceFactor) {
+public record AgriSoilCondition<T extends AgriSoilValue>(T value, Type type, double toleranceFactor) {
 
-	public static Codec<AgriSoilCondition> codecForProperty(Codec<AgriSoilValue> propertyCodec) {
+	public static <T extends AgriSoilValue> Codec<AgriSoilCondition<T>> codecForProperty(Codec<T> propertyCodec) {
 		return RecordCodecBuilder.create(instance -> instance.group(
 				propertyCodec.fieldOf("value").forGetter(soilCondition -> soilCondition.value),
 				Type.CODEC.fieldOf("type").forGetter(soilCondition -> soilCondition.type),
@@ -38,17 +38,17 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 			this.upper = upper;
 		}
 
+		public static Optional<Type> fromString(String type) {
+			return Arrays.stream(values()).filter(value -> value.name().equalsIgnoreCase(type)).findAny();
+
+		}
+
 		public int lowerLimit(int limit) {
 			return this.lower.applyAsInt(limit);
 		}
 
 		public int upperLimit(int limit) {
 			return this.upper.applyAsInt(limit);
-		}
-
-		public static Optional<Type> fromString(String type) {
-			return Arrays.stream(values()).filter(value -> value.name().equalsIgnoreCase(type)).findAny();
-
 		}
 
 	}
@@ -62,9 +62,10 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 		DAMP("moist"),
 		WET("standard", "default"),
 		WATERY,
-		FLOODED;
+		FLOODED,
+		INVALID;
 
-		public static final Codec<AgriSoilValue> CODEC = Codec.STRING.comapFlatMap(s -> Humidity.fromString(s)
+		public static final Codec<Humidity> CODEC = Codec.STRING.comapFlatMap(s -> Humidity.fromString(s)
 						.map(DataResult::success)
 						.orElseGet(() -> DataResult.error(() -> s + " is no a valid humidity value")),
 				type -> type.name().toLowerCase());
@@ -75,13 +76,18 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 			this.synonyms = new ImmutableList.Builder<String>().add(this.name()).add(synonyms).build();
 		}
 
+		public static Optional<Humidity> fromString(final String string) {
+			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
+		}
+
+		@Override
+		public boolean isValid() {
+			return this != INVALID;
+		}
+
 		@Override
 		public List<String> synonyms() {
 			return this.synonyms;
-		}
-
-		public static Optional<Humidity> fromString(final String string) {
-			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
 		}
 	}
 
@@ -95,9 +101,10 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 		NEUTRAL("7"),
 		SLIGHTLY_ALKALINE("8", "slightly-alkaline", "slightly alkaline"),
 		ALKALINE("9", "10", "11"),
-		HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline");
+		HIGHLY_ALKALINE("12", "13", "14", "highly-alkaline", "highly alkaline", "very-alkaline", "very alkaline", "very_alkaline"),
+		INVALID;
 
-		public static final Codec<AgriSoilValue> CODEC = Codec.STRING.comapFlatMap(s -> Acidity.fromString(s)
+		public static final Codec<Acidity> CODEC = Codec.STRING.comapFlatMap(s -> Acidity.fromString(s)
 						.map(DataResult::success)
 						.orElseGet(() -> DataResult.error(() -> s + " is no a valid acidity value")),
 				type -> type.name().toLowerCase());
@@ -108,13 +115,18 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 			this.synonyms = new ImmutableList.Builder<String>().add(this.name()).add(synonyms).build();
 		}
 
+		public static Optional<Acidity> fromString(final String string) {
+			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
+		}
+
+		@Override
+		public boolean isValid() {
+			return this != INVALID;
+		}
+
 		@Override
 		public List<String> synonyms() {
 			return this.synonyms;
-		}
-
-		public static Optional<Acidity> fromString(final String string) {
-			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
 		}
 	}
 
@@ -127,9 +139,10 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 		LOW,
 		MEDIUM("normal", "average"),
 		HIGH("standard", "default"),
-		VERY_HIGH("rich");
+		VERY_HIGH("rich"),
+		INVALID;
 
-		public static final Codec<AgriSoilValue> CODEC = Codec.STRING.comapFlatMap(s -> Nutrients.fromString(s)
+		public static final Codec<Nutrients> CODEC = Codec.STRING.comapFlatMap(s -> Nutrients.fromString(s)
 						.map(DataResult::success)
 						.orElseGet(() -> DataResult.error(() -> s + " is no a valid nutrients value")),
 				type -> type.name().toLowerCase());
@@ -140,13 +153,18 @@ public record AgriSoilCondition(AgriSoilValue value, Type type, double tolerance
 			this.synonyms = new ImmutableList.Builder<String>().add(this.name()).add(synonyms).build();
 		}
 
+		public static Optional<Nutrients> fromString(final String string) {
+			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
+		}
+
+		@Override
+		public boolean isValid() {
+			return this != INVALID;
+		}
+
 		@Override
 		public List<String> synonyms() {
 			return this.synonyms;
-		}
-
-		public static Optional<Nutrients> fromString(final String string) {
-			return Arrays.stream(values()).filter(value -> value.isSynonym(string)).findAny();
 		}
 	}
 

@@ -56,6 +56,8 @@ dependencies {
 
 	modCompileOnly "curse.maven:jade-324717:4681836"  // Jade-1.20.1-forge-11.4.3-api
 	modLocalRuntime "curse.maven:jade-324717:4681833"  // Jade-1.20.1-forge-11.4.3
+	modCompileOnly "curse.maven:serene-seasons-291874:4761605"  // Serene Seasons 1.20.1-9.0.0.46-api
+	modLocalRuntime "curse.maven:serene-seasons-291874:4761603"  // Serene Seasons 1.20.1-9.0.0.46
 
 }
 

@@ -1,5 +1,7 @@
 package com.agricraft.agricraft.api;
 
+import com.agricraft.agricraft.api.tools.journal.JournalPageDrawer;
+import com.agricraft.agricraft.api.tools.journal.JournalPageDrawers;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspector;
 import com.agricraft.agricraft.client.gui.MagnifyingGlassOverlay;
 import net.minecraft.client.Minecraft;
@@ -16,6 +18,7 @@ import java.util.function.Predicate;
 public final class AgriClientApi {
 
 	private static final ModelResourceLocation AIR_MODEL = new ModelResourceLocation("minecraft", "air", "");
+	private static final String DEFAULT_SEED = "agricraft:unknown";
 
 
 	/**
@@ -36,7 +39,11 @@ public final class AgriClientApi {
 		MagnifyingGlassOverlay.addAllowingPredicate(predicate);
 	}
 
-	public static BakedModel getModel(String plantId, int stage) {
+	public static BakedModel getPlantModel(ResourceLocation plantId, int stage) {
+		return getPlantModel(plantId.toString(), stage);
+	}
+
+	public static BakedModel getPlantModel(String plantId, int stage) {
 		if (plantId.isEmpty()) {
 			// somehow there is no plant, display nothing
 			return Minecraft.getInstance().getModelManager().bakedRegistry.get(AIR_MODEL);
@@ -51,6 +58,25 @@ public final class AgriClientApi {
 			}
 			return model;
 		}
+	}
+
+	public static BakedModel getSeedModel(String plantId) {
+		if (plantId.isEmpty()) {
+			plantId = DEFAULT_SEED;
+		}
+		// compute the model of the seed from the plant id. the seed model path will look like <namespace>:seed/<id> so the file is /assets/<namespace>/models/seed/<id>.json
+		plantId = plantId.replace(":", ":seed/");
+
+		BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plantId));
+		if (model == null) {
+			// model not found, defaults to the missing model
+			model = Minecraft.getInstance().getModelManager().getMissingModel();
+		}
+		return model;
+	}
+
+	public static void registerPageDrawer(ResourceLocation id, JournalPageDrawer<?> pageDrawer) {
+		JournalPageDrawers.registerPageDrawer(id, pageDrawer);
 	}
 
 }

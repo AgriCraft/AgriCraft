@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.client.forge;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.client.AgriCraftClient;
 import com.agricraft.agricraft.client.ber.CropBlockEntityRenderer;
 import com.agricraft.agricraft.client.gui.MagnifyingGlassOverlay;
 import com.agricraft.agricraft.common.config.forge.ForgeMenuConfig;
@@ -55,8 +56,8 @@ public class AgriCraftForgeClient {
 	}
 
 	public static void init() {
+		AgriCraftClient.init();
 		ForgeMenuConfig.register();
-
 	}
 
 }

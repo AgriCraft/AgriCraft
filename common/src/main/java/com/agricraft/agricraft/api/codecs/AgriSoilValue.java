@@ -8,6 +8,8 @@ public interface AgriSoilValue {
 
 	int ordinal();
 
+	boolean isValid();
+
 	List<String> synonyms();
 
 	default boolean isSynonym(String string) {

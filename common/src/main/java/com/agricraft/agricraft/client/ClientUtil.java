@@ -1,6 +1,8 @@
 package com.agricraft.agricraft.client;
 
+import com.agricraft.agricraft.client.gui.JournalScreen;
 import com.agricraft.agricraft.common.block.CropStickVariant;
+import com.agricraft.agricraft.common.item.JournalItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.TerrainParticle;
@@ -9,6 +11,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -64,6 +68,10 @@ public class ClientUtil {
 				}
 			}
 		});
+	}
+
+	public static void openJournalScreen(Player player, InteractionHand hand) {
+		Minecraft.getInstance().setScreen(new JournalScreen(new JournalItem.Data(player.getItemInHand(hand))));
 	}
 
 }

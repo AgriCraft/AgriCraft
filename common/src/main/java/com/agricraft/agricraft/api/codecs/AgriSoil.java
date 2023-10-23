@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant> variants, AgriSoilValue humidity,
-                       AgriSoilValue acidity, AgriSoilValue nutrients, Double growthModifier)  implements MagnifyingInspectable {
+public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant> variants,
+                       AgriSoilCondition.Humidity humidity,
+                       AgriSoilCondition.Acidity acidity, AgriSoilCondition.Nutrients nutrients,
+                       Double growthModifier) implements MagnifyingInspectable {
 
 	public static final Codec<AgriSoil> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.fieldOf("enabled").forGetter(soil -> soil.enabled),
@@ -30,6 +32,10 @@ public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant>
 			AgriSoilCondition.Nutrients.CODEC.fieldOf("nutrients").forGetter(soil -> soil.nutrients),
 			Codec.DOUBLE.fieldOf("growth_modifier").forGetter(soil -> soil.growthModifier)
 	).apply(instance, AgriSoil::new));
+
+	public static Builder builder() {
+		return new Builder();
+	}
 
 	public boolean isVariant(BlockState blockState) {
 		for (AgriSoilVariant variant : this.variants) {
@@ -55,26 +61,22 @@ public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant>
 				.append(LangUtils.soilName(AgriApi.getSoilId(this).map(ResourceLocation::toString).orElse(""))));
 		tooltip.add(Component.literal("  ")
 				.append(Component.translatable("agricraft.tooltip.magnifying.soil.humidity"))
-				.append(Component.translatable("agricraft.soil.humidity." + this.humidity.name().toLowerCase())));
+				.append(LangUtils.soilPropertyName("humidity", this.humidity)));
 		tooltip.add(Component.literal("  ")
 				.append(Component.translatable("agricraft.tooltip.magnifying.soil.acidity"))
-				.append(Component.translatable("agricraft.soil.acidity." + this.acidity.name().toLowerCase())));
+				.append(LangUtils.soilPropertyName("acidity", this.acidity)));
 		tooltip.add(Component.literal("  ")
 				.append(Component.translatable("agricraft.tooltip.magnifying.soil.nutrients"))
-				.append(Component.translatable("agricraft.soil.nutrients." + this.nutrients.name().toLowerCase())));
-	}
-
-	public static Builder builder() {
-		return new Builder();
+				.append(LangUtils.soilPropertyName("nutrients", this.nutrients)));
 	}
 
 	public static class Builder {
 
 		List<String> mods = new ArrayList<>();
 		List<AgriSoilVariant> soilVariants = new ArrayList<>();
-		AgriSoilValue humidity = AgriSoilCondition.Humidity.WET;
-		AgriSoilValue acidity = AgriSoilCondition.Acidity.NEUTRAL;
-		AgriSoilValue nutrients = AgriSoilCondition.Nutrients.MEDIUM;
+		AgriSoilCondition.Humidity humidity = AgriSoilCondition.Humidity.INVALID;
+		AgriSoilCondition.Acidity acidity = AgriSoilCondition.Acidity.INVALID;
+		AgriSoilCondition.Nutrients nutrients = AgriSoilCondition.Nutrients.INVALID;
 		double growthModifier = 1.0;
 
 		public AgriSoil build() {

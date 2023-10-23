@@ -5,6 +5,7 @@ import com.agricraft.agricraft.api.AgriClientApi;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
+import com.agricraft.agricraft.api.requirement.AgriSeason;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.util.LangUtils;
 import com.agricraft.agricraft.common.util.PlatformUtils;
@@ -107,14 +108,17 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		guiGraphics.blit(COMPONENTS, 93, strengthY, 7, strengthHeight, 0, 69, 7, 1, 128, 128);
 		// render light levels
 		for (int i = 15; i >= 0; --i) {
-			boolean fertile = AgriGrowthConditionRegistry.forLightStat(recipe.plant.requirement().minLight(), recipe.plant.requirement().maxLight(), recipe.plant.requirement().lightToleranceFactor(), i, recipe.currentStrength).isFertile();
+			boolean fertile = AgriGrowthConditionRegistry.getLight().apply(recipe.plant, recipe.currentStrength, i).isFertile();
 			if (fertile) {
 				guiGraphics.blit(COMPONENTS, 32, 26 + 3 * (15 - i), 3, 3, 0, 18 + 3 * (15 - i), 3, 3, 128, 128);
 			}
 		}
 		// render soil property icons
 		for (AgriSoilCondition.Humidity humidity : AgriSoilCondition.Humidity.values()) {
-			if (AgriGrowthConditionRegistry.forSoilStat(humidity, recipe.plant.requirement().soilHumidity(), recipe.currentStrength).isFertile()) {
+			if (!humidity.isValid()) {
+				continue;
+			}
+			if (AgriGrowthConditionRegistry.getHumidity().apply(recipe.plant, recipe.currentStrength, humidity).isFertile()) {
 				int index = humidity.ordinal();
 				int offset = 0;
 				for (int i = 0; i < index; ++i) {
@@ -124,7 +128,10 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			}
 		}
 		for (AgriSoilCondition.Acidity acidity : AgriSoilCondition.Acidity.values()) {
-			if (AgriGrowthConditionRegistry.forSoilStat(acidity, recipe.plant.requirement().soilAcidity(), recipe.currentStrength).isFertile()) {
+			if (!acidity.isValid()) {
+				continue;
+			}
+			if (AgriGrowthConditionRegistry.getAcidity().apply(recipe.plant, recipe.currentStrength, acidity).isFertile()) {
 				int index = acidity.ordinal();
 				int offset = 0;
 				for (int i = 0; i < index; ++i) {
@@ -134,7 +141,10 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			}
 		}
 		for (AgriSoilCondition.Nutrients nutrients : AgriSoilCondition.Nutrients.values()) {
-			if (AgriGrowthConditionRegistry.forSoilStat(nutrients, recipe.plant.requirement().soilNutrients(), recipe.currentStrength).isFertile()) {
+			if (!nutrients.isValid()) {
+				continue;
+			}
+			if (AgriGrowthConditionRegistry.getNutrients().apply(recipe.plant, recipe.currentStrength, nutrients).isFertile()) {
 				int index = nutrients.ordinal();
 				int offset = 0;
 				for (int i = 0; i < index; ++i) {
@@ -143,7 +153,17 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 				guiGraphics.blit(GUI_COMPONENTS, 37 + offset, 109, NUTRIENTS_OFFSETS[index], 12, offset, 24, NUTRIENTS_OFFSETS[index], 12, 128, 128);
 			}
 		}
-		// TODO: @ketheroth display season
+		// render seasons
+		if (AgriApi.getSeasonLogic().isActive()) {
+			for (AgriSeason season : AgriSeason.values()) {
+				if (season == AgriSeason.ANY) {
+					continue;
+				}
+				if (AgriGrowthConditionRegistry.getSeason().apply(recipe.plant, recipe.currentStrength, season).isFertile()) {
+					guiGraphics.blit(GUI_COMPONENTS, 17, 24 + 13 * season.ordinal(), 10 * season.ordinal(), 44, 10, 12, 128, 128);
+				}
+			}
+		}
 		// render soils and plant stage
 		long l = System.currentTimeMillis();
 		if (lastTime + 1500 <= l && !Screen.hasShiftDown()) {  // change soil to render
@@ -160,16 +180,18 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		stack.mulPose(Axis.YP.rotationDegrees(45));
 		MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		// render soil
-		stack.pushPose();
-		Minecraft.getInstance().getBlockRenderer().renderSingleBlock(recipe.soils.get(recipe.soil).defaultBlockState(), stack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
-		stack.popPose();
+		if (!recipe.soils.isEmpty() && recipe.soil < recipe.soils.size()) {
+			stack.pushPose();
+			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(recipe.soils.get(recipe.soil).defaultBlockState(), stack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+			stack.popPose();
+		}
 		// render plant
-		BakedModel model = AgriClientApi.getModel(recipe.plantId, recipe.currentStage);
+		BakedModel model = AgriClientApi.getPlantModel(recipe.plantId, recipe.currentStage);
 		stack.pushPose();
 		stack.translate(0, 1, 0);
 		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), guiGraphics.bufferSource().getBuffer(RenderType.cutoutMipped()), null, model, 1, 1, 1, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 		stack.popPose();
-		// TODO: @ketheroth should we display block requirements
+		// TODO: @ketheroth display block below requirement
 		bufferSource.endBatch();
 		stack.popPose();
 	}
@@ -248,6 +270,20 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		if (50 <= mouseX && mouseX <= 76 && 58 <= mouseY && mouseY <= 74) {
 			return Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(recipe.soils.get(recipe.soil)));
 		}
+		if (AgriApi.getSeasonLogic().isActive()) {
+			if (17 <= mouseX && mouseX <= 29 && 24 <= mouseY && mouseY <= 36) {
+				return List.of(LangUtils.seasonName(AgriSeason.SPRING));
+			}
+			if (17 <= mouseX && mouseX <= 29 && 37 <= mouseY && mouseY <= 49) {
+				return List.of(LangUtils.seasonName(AgriSeason.SUMMER));
+			}
+			if (17 <= mouseX && mouseX <= 29 && 50 <= mouseY && mouseY <= 62) {
+				return List.of(LangUtils.seasonName(AgriSeason.AUTUMN));
+			}
+			if (17 <= mouseX && mouseX <= 29 && 63 <= mouseY && mouseY <= 74) {
+				return List.of(LangUtils.seasonName(AgriSeason.WINTER));
+			}
+		}
 		return IRecipeCategory.super.getTooltipStrings(recipe, recipeSlotsView, mouseX, mouseY);
 	}
 
@@ -255,15 +291,14 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 
 		private final AgriPlant plant;
 		private final String plantId;
-		private int currentStrength = AgriApi.getStatRegistry().strengthStat().getMin();
-		private int currentStage;
-		private List<Block> soils;
-		private int soil;
-
 		private final Btn incStrButton;
 		private final Btn decStrButton;
 		private final Btn incStageButton;
 		private final Btn decStageButton;
+		private int currentStrength = AgriApi.getStatRegistry().strengthStat().getMin();
+		private int currentStage;
+		private List<Block> soils;
+		private int soil;
 
 		public Recipe(AgriPlant plant) {
 			this.plant = plant;
@@ -300,9 +335,9 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 
 		public void updateSoils() {
 			this.soils = AgriApi.getSoilRegistry().map(registry -> registry.stream().filter(soil -> {
-								boolean humidity = AgriGrowthConditionRegistry.forSoilStat(soil.humidity(), this.plant.requirement().soilHumidity(), this.currentStrength).isFertile();
-								boolean acidity = AgriGrowthConditionRegistry.forSoilStat(soil.acidity(), this.plant.requirement().soilAcidity(), this.currentStrength).isFertile();
-								boolean nutrients = AgriGrowthConditionRegistry.forSoilStat(soil.nutrients(), this.plant.requirement().soilNutrients(), this.currentStrength).isFertile();
+								boolean humidity = AgriGrowthConditionRegistry.getHumidity().apply(this.plant, this.currentStrength, soil.humidity()).isFertile();
+								boolean acidity = AgriGrowthConditionRegistry.getAcidity().apply(this.plant, this.currentStrength, soil.acidity()).isFertile();
+								boolean nutrients = AgriGrowthConditionRegistry.getNutrients().apply(this.plant, this.currentStrength, soil.nutrients()).isFertile();
 								return humidity && acidity && nutrients;
 							})
 							.flatMap(soil -> soil.variants().stream())

@@ -6,6 +6,7 @@ import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
+import com.agricraft.agricraft.common.plugin.FabricSeasonPlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -28,6 +29,7 @@ public class AgriCraftFabric implements ModInitializer {
 			GiveSeedCommand.register(dispatcher, registryAccess);
 		});
 		MinecraftPlugin.init();
+		FabricSeasonPlugin.init();
 	}
 
 }
