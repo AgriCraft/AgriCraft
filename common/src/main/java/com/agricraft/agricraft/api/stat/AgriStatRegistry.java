@@ -31,12 +31,12 @@ public class AgriStatRegistry extends AgriRegistry<AgriStat> {
 	private AgriStatRegistry() {
 		super();
 		//initiate default stats
-		this.gain = new AgriStat("gain", () -> StatsConfig.gainMin, () -> StatsConfig.gainMax, () -> StatsConfig.gainHidden, new Vector3f(0, 0, 1));
-		this.growth = new AgriStat("growth",() -> StatsConfig.growthMin, () -> StatsConfig.growthMax, () -> StatsConfig.growthHidden, new Vector3f(0, 1, 0));
-		this.strength = new AgriStat("strength", () -> StatsConfig.strengthMin, () -> StatsConfig.strengthMax, () -> StatsConfig.strengthHidden, new Vector3f(1, 0, 0));
-		this.resistance = new AgriStat("resistance",() -> StatsConfig.resistanceMin, () -> StatsConfig.resistanceMax, () -> StatsConfig.resistanceHidden, new Vector3f(1, 1, 0));
-		this.fertility = new AgriStat("fertility",() -> StatsConfig.fertilityMin, () -> StatsConfig.fertilityMax, () -> StatsConfig.fertilityHidden, new Vector3f(1, 0.5F, 0));
-		this.mutativity = new AgriStat("mutativity",() -> StatsConfig.mutativityMin, () -> StatsConfig.mutativityMax, () -> StatsConfig.mutativityHidden, new Vector3f(0, 1, 1));
+		this.gain = new AgriStat("gain", () -> StatsConfig.gainMin, () -> StatsConfig.gainMax, () -> StatsConfig.gainHidden, 0xff0000ff);
+		this.growth = new AgriStat("growth",() -> StatsConfig.growthMin, () -> StatsConfig.growthMax, () -> StatsConfig.growthHidden, 0xff00ff00);
+		this.strength = new AgriStat("strength", () -> StatsConfig.strengthMin, () -> StatsConfig.strengthMax, () -> StatsConfig.strengthHidden, 0xffff0000);
+		this.resistance = new AgriStat("resistance",() -> StatsConfig.resistanceMin, () -> StatsConfig.resistanceMax, () -> StatsConfig.resistanceHidden, 0xffffff00);
+		this.fertility = new AgriStat("fertility",() -> StatsConfig.fertilityMin, () -> StatsConfig.fertilityMax, () -> StatsConfig.fertilityHidden, 0xffff7f00);
+		this.mutativity = new AgriStat("mutativity",() -> StatsConfig.mutativityMin, () -> StatsConfig.mutativityMax, () -> StatsConfig.mutativityHidden, 0xff00ffff);
 	}
 
 	public AgriStat gainStat() {

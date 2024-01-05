@@ -25,22 +25,42 @@ public final class CoreConfig {
 	@Comment("Set to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action (note that this may cause issues with obtaining some specific plants)")
 	public static boolean onlyFertileCropsSpread = false;
 
+//	public static boolean allowFertilizerMutation = true;
+
 	@ConfigEntry(id = "clone_mutations", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.clone_mutations")
 	@Comment("Set to true to allow mutations on clone events (spreading from single crop).")
 	public static boolean cloneMutations = false;
 
+	@ConfigEntry(id = "override_vanilla_farming", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.override_vanilla_farming")
+	@Comment("Set to true to override vanilla farming, meaning vanilla seeds will be converted to agricraft seeds on planting.")
+	public static boolean overrideVanillaFarming = true;
+
+
+	@ConfigEntry(id = "converts_seed_only_in_analyzer", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.converts_seed_only_in_analyzer")
+	@Comment("Set to true to convert seeds only in the analyzer. Has no effect if \"Override vanilla farming\" is set to false.")
+	public static boolean convertSeedsOnlyInAnalyzer = false;
+
 	@ConfigEntry(id = "growth_multiplier", type = EntryType.DOUBLE, translation = "agricraft.option.core_config.growth_multiplier")
 	@DoubleRange(min = 0.0, max = 3.0)
-	@Comment("Global growth rate multiplier for crops planted on crop sticks.")
+	@Comment("Global growth rate multiplier for crops.")
 	public static double growthMultiplier = 1.0;
 
 	@ConfigEntry(id = "only_mature_seed_drops", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.only_mature_seed_drops")
 	@Comment("Set this to true to make only mature crops drop seeds (to encourage trowel usage).")
 	public static boolean onlyMatureSeedDrops = false;
 
+//	public static boolean disableWeeds = false;
+//	public static boolean weedsSpreading = false;
+//	public static boolean weedsDestroyCropSticks = false;
+//	public static boolean rakingDropsItems = false;
+
 	@ConfigEntry(id = "seed_compost_value", type = EntryType.FLOAT, translation = "agricraft.option.core_config.seed_compost_value")
 	@FloatRange(min = 0F, max = 1F)
 	@Comment("Defines the seed compost value, if set to zero, seeds will not be compostable")
 	public static float seedCompostValue = 0.3F;
+
+//	public static boolean animalAttraction = false;
+//	public static boolean seedBagEnchantCost = false;
+//	public static boolean allowGrassDropResets = false;
 
 }

@@ -14,6 +14,7 @@
   "item.agricraft.obsidian_crop_sticks": "Obsidian Crop Sticks",
 
   "screen.agricraft.journal": "Agricultural Journal",
+  "screen.agricraft.seed_analyzer": "Seed Analyzer",
 
   "agricraft.stat.gain": "Gain",
   "agricraft.stat.growth": "Growth",
@@ -87,6 +88,7 @@
   "agricraft.journal.products": "Crop Products",
   "agricraft.journal.mutations": "Crop Mutations",
 
+  "agricraft.tooltip.journal": "%d researched plants",
   "agricraft.tooltip.magnifying": "Magnifying",
   "agricraft.tooltip.magnifying.crop": "Crop Information:",
   "agricraft.tooltip.magnifying.species": "Species: ",
@@ -172,7 +174,7 @@
   "soil.agricraft.agricraft.soul_soil": "Soul Soil",
   "soil.agricraft.agricraft.warped_nylium": "Warped Nylium",
 
-  "plant.agricraft.minecraft.unknown": "Unknown",
+  "plant.agricraft.agricraft.unknown": "Unknown",
   "plant.agricraft.minecraft.allium": "Allium",
   "plant.agricraft.minecraft.azure_bluet": "Azure Bluet",
   "plant.agricraft.minecraft.bamboo": "Bamboo",
@@ -205,7 +207,7 @@
   "plant.agricraft.minecraft.white_tulip": "White Tulip",
   "plant.agricraft.minecraft.wither_rose": "Wither Rose",
 
-  "seed.agricraft.minecraft.unknown": "Unknown Seeds",
+  "seed.agricraft.agricraft.unknown": "Unknown Seeds",
   "seed.agricraft.minecraft.allium": "Allium Seeds",
   "seed.agricraft.minecraft.azure_bluet": "Azure Bluet Seeds",
   "seed.agricraft.minecraft.bamboo": "Bamboo Seeds",
@@ -238,7 +240,7 @@
   "seed.agricraft.minecraft.white_tulip": "White Tulip Seeds",
   "seed.agricraft.minecraft.wither_rose": "Wither Rose Seeds",
 
-  "description.agricraft.minecraft.unknown": "This plant is unknown",
+  "description.agricraft.agricraft.unknown": "This plant is unknown",
   "description.agricraft.minecraft.allium": "From the family of plants including the garlic, onion, and chive this plant produces a beautiful umbel consisting of many small purple blooms.",
   "description.agricraft.minecraft.azure_bluet": "Delicate ladies.",
   "description.agricraft.minecraft.bamboo": "Delicious! -some panda probably.",

@@ -7,14 +7,19 @@ import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.item.forge.ForgeAgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;
 import com.agricraft.agricraft.common.registry.ModItems;
+import com.agricraft.agricraft.common.util.ExtraDataMenuProvider;
+import com.agricraft.agricraft.common.util.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -22,6 +27,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -85,6 +92,14 @@ public class PlatformUtilsImpl {
 		} else {
 			return ForgeRegistries.FLUIDS.tags().getTag(FluidTags.create(tag.id())).stream().toList();
 		}
+	}
+
+	public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(PlatformUtils.MenuFactory<T> factory) {
+		return IForgeMenuType.create(factory::create);
+	}
+
+	public static void openMenu(ServerPlayer player, ExtraDataMenuProvider provider) {
+		NetworkHooks.openScreen(player, provider, (data) -> provider.writeExtraData(player, data));
 	}
 
 }

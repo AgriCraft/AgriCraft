@@ -62,4 +62,14 @@ public interface AgriGene<T> extends AgriRegistrable {
 	 */
 	void addTooltip(List<Component> tooltipComponents, T trait);
 
+	/**
+	 * @return the dominant color as an argb int
+	 */
+	int getDominantColor();
+
+	/**
+	 * @return the recessive color as an argb int
+	 */
+	int getRecessiveColor();
+
 }

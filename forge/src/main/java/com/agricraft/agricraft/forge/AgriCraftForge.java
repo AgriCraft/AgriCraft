@@ -27,9 +27,6 @@ public class AgriCraftForge {
 		bus.addListener(AgriCraftForge::onCommonSetup);
 		bus.addListener(AgriCraftForge::onRegisterDatapackRegistry);
 		MinecraftForge.EVENT_BUS.addListener(AgriCraftForge::onRegisterCommands);
-		if (FMLEnvironment.dist.isClient()) {
-			AgriCraftForgeClient.init();
-		}
 	}
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {

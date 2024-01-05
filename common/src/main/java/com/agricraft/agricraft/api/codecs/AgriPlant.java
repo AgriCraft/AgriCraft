@@ -15,6 +15,8 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
                         List<AgriProduct> products, List<AgriProduct> clipProducts, AgriRequirement requirement,
                         List<AgriPlantCallback> callbacks, List<AgriParticleEffect> particleEffects) {
 
+	// TODO: @Ketheroth add fertilizer list (when implementing fertilizers)
+
 	public static final Codec<AgriPlant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.fieldOf("enabled").forGetter(plant -> plant.enabled),
 			Codec.STRING.listOf().fieldOf("mods").forGetter(plant -> plant.mods),
@@ -46,15 +48,6 @@ public record AgriPlant(boolean enabled, List<String> mods, List<AgriSeed> seeds
 				callbacks.orElse(List.of()), particleEffects.orElse(List.of()));
 	}
 
-//    private String path;
-//    private final String version;
-//    private final String json_documentation = "https://agridocs.readthedocs.io/en/master/agri_plant/";
-//    private final String id;
-//
-//    private final String plant_lang_key;
-//    private final String seed_lang_key;
-//    private final String desc_lang_key;
-//
 
 	public static Builder builder() {
 		return new Builder();

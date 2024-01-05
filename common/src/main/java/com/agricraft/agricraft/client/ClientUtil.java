@@ -71,7 +71,7 @@ public class ClientUtil {
 	}
 
 	public static void openJournalScreen(Player player, InteractionHand hand) {
-		Minecraft.getInstance().setScreen(new JournalScreen(new JournalItem.Data(player.getItemInHand(hand))));
+		Minecraft.getInstance().setScreen(new JournalScreen(JournalItem.getJournalData(player.getItemInHand(hand))));
 	}
 
 }

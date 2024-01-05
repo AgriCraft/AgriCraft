@@ -13,6 +13,7 @@ import com.teamresourceful.resourcefullib.common.registry.RegistryEntry;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries;
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
@@ -22,6 +23,7 @@ public class ModItems {
 	public static final RegistryEntry<Item> DEBUGGER = ITEMS.register("debugger", () -> new DebuggerItem(new Item.Properties()));
 
 	public static final RegistryEntry<Item> JOURNAL = ITEMS.register("journal", () -> new JournalItem(new Item.Properties()));
+	public static final RegistryEntry<Item> SEED_ANALYZER = ITEMS.register("seed_analyzer", () -> new BlockItem(ModBlocks.SEED_ANALYZER.get(), new Item.Properties()));
 	public static final RegistryEntry<Item> CLIPPER = ITEMS.register("clipper", () -> new ClipperItem(new Item.Properties().stacksTo(1)));
 	public static final RegistryEntry<Item> MAGNIFYING_GLASS = ITEMS.register("magnifying_glass", () -> new MagnifyingGlassItem(new Item.Properties().stacksTo(1)));
 	public static final RegistryEntry<Item> WOODEN_RAKE = ITEMS.register("wooden_rake", () -> new RakeItem(new Item.Properties()));
@@ -36,7 +38,8 @@ public class ModItems {
 		if (itemDisplayParameters.hasPermissions()) {
 			output.accept(ModItems.DEBUGGER.get());
 		}
-		output.accept(ModItems.JOURNAL.get());
+		output.accept(ModItems.JOURNAL.get().getDefaultInstance());
+		output.accept(ModItems.SEED_ANALYZER.get());
 		output.accept(ModItems.CLIPPER.get());
 		output.accept(ModItems.MAGNIFYING_GLASS.get());
 		output.accept(ModItems.WOODEN_RAKE.get());

@@ -1,0 +1,34 @@
+{
+	"variants": {
+		"journal=false,facing=north": [{
+			"model": "agricraft:block/seed_analyzer"
+		}],
+		"journal=false,facing=east": [{
+			"model": "agricraft:block/seed_analyzer",
+			"y": 90
+		}],
+		"journal=false,facing=south": [{
+			"model": "agricraft:block/seed_analyzer",
+			"y": 180
+		}],
+		"journal=false,facing=west": [{
+			"model": "agricraft:block/seed_analyzer",
+			"y": 270
+		}],
+		"journal=true,facing=north": [{
+			"model": "agricraft:block/seed_analyzer_journal"
+		}],
+		"journal=true,facing=east": [{
+			"model": "agricraft:block/seed_analyzer_journal",
+			"y": 90
+		}],
+		"journal=true,facing=south": [{
+			"model": "agricraft:block/seed_analyzer_journal",
+			"y": 180
+		}],
+		"journal=true,facing=west": [{
+			"model": "agricraft:block/seed_analyzer_journal",
+			"y": 270
+		}]
+	}
+}

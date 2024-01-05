@@ -7,12 +7,14 @@ import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.CropState;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
+import com.agricraft.agricraft.common.block.entity.SeedAnalyzerBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -24,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class AgriSeedItem extends BlockItem {
 
@@ -115,17 +118,44 @@ public class AgriSeedItem extends BlockItem {
 		if (level.isClientSide) {
 			return InteractionResult.PASS;
 		}
-		return AgriApi.getSoil(level, context.getClickedPos()).map(soil -> AgriApi.getCrop(level, context.getClickedPos().above()).map(crop -> {
-			if (crop.hasPlant()) {
+		ItemStack heldItem = context.getItemInHand();
+		// if crop sticks were clicked, attempt to plant the seed
+		Optional<AgriCrop> optionalAgriCrop = AgriApi.getCrop(level, context.getClickedPos());
+		if (optionalAgriCrop.isPresent()) {
+			AgriCrop crop = optionalAgriCrop.get();
+			if (crop.hasPlant() || crop.isCrossCropSticks()) {
 				return InteractionResult.PASS;
 			}
-			crop.setGenome(AgriGenome.fromNBT(context.getItemInHand().getTag()));
-			level.setBlock(crop.getBlockPos(), crop.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS), 3);
-			if (context.getPlayer() != null && !context.getPlayer().isCreative()) {
-				context.getItemInHand().shrink(1);
+			plantSeed(level, context.getPlayer(), crop, heldItem);
+			return InteractionResult.CONSUME;
+		}
+		// if a seed analyzer was clicked, insert the seed inside
+		if (level.getBlockEntity(context.getClickedPos()) instanceof SeedAnalyzerBlockEntity seedAnalyzer) {
+			if (seedAnalyzer.hasSeed()) {
+				return InteractionResult.PASS;
 			}
+			ItemStack remaining = seedAnalyzer.insertSeed(heldItem);
+			heldItem.setCount(remaining.getCount());
+			return InteractionResult.CONSUME;
+		}
+		// if a soil was clicked, check the block above and handle accordingly
+		return AgriApi.getSoil(level, context.getClickedPos()).map(soil -> AgriApi.getCrop(level, context.getClickedPos().above()).map(crop -> {
+			// there is a crop with a plant or is a cross crop stick, do nothing
+			if (crop.hasPlant() || crop.isCrossCropSticks()) {
+				return InteractionResult.PASS;
+			}
+			// there is a crop without a plant, plant the seed in the crop
+			plantSeed(level, context.getPlayer(), crop, heldItem);
 			return InteractionResult.CONSUME;
 		}).orElse(InteractionResult.PASS)).orElse(super.useOn(context));
+	}
+
+	private void plantSeed(Level level, Player player, AgriCrop crop, ItemStack seed) {
+		crop.setGenome(AgriGenome.fromNBT(seed.getTag()));
+		level.setBlock(crop.getBlockPos(), crop.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS), 3);
+		if (player != null && !player.isCreative()) {
+			seed.shrink(1);
+		}
 	}
 
 	@Override

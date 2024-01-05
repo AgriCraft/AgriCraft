@@ -5,6 +5,7 @@ import com.agricraft.agricraft.api.codecs.AgriPlant;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,20 @@ public class GeneStat implements AgriGene<Integer> {
 	@Override
 	public void addTooltip(List<Component> tooltipComponents, Integer trait) {
 		this.stat.addTooltip(tooltipComponents::add, trait);
+	}
+
+	@Override
+	public int getDominantColor() {
+		return stat.getColor();
+	}
+
+	@Override
+	public int getRecessiveColor() {
+		int col = this.stat.getColor();
+		int r = (int) ((col >> 16 & 255) * 0.6f);
+		int g = (int) ((col >> 8 & 255) * 0.6f);
+		int b = (int) ((col & 255) * 0.6f);
+		return 0xFF << 24 | r << 16 | g << 8 | b & 0xFF;
 	}
 
 	public static class IntAllele implements AgriAllele<Integer> {

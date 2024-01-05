@@ -16,9 +16,9 @@ public class AgriStat implements AgriRegistrable {
 	private final IntSupplier min;
 	private final IntSupplier max;
 	private final BooleanSupplier hidden;
-	private final Vector3f color;
+	private final int color;
 
-	public AgriStat(String id, IntSupplier min, IntSupplier max, BooleanSupplier hidden, Vector3f color) {
+	public AgriStat(String id, IntSupplier min, IntSupplier max, BooleanSupplier hidden, int color) {
 		this.id = id;
 		this.min = min;
 		this.max = max;
@@ -38,7 +38,7 @@ public class AgriStat implements AgriRegistrable {
 		return this.hidden.getAsBoolean();
 	}
 
-	public Vector3f getColor() {
+	public int getColor() {
 		return color;
 	}
 

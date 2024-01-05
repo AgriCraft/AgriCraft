@@ -106,4 +106,14 @@ public class GeneSpecies implements AgriGene<String> {
 
 	}
 
+	@Override
+	public int getDominantColor() {
+		return 0xffbf007f;
+	}
+
+	@Override
+	public int getRecessiveColor() {
+		return 0xff7f00bf;
+	}
+
 }

@@ -232,7 +232,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			return InteractionResult.FAIL;
 		}
 		AgriCrop crop = optional.get();
-		// future: run plant pre logic
+		// TODO: @Ketheroth future: run plant pre logic
 		// run crop logic
 		// do nothing from off hand
 		if (hand == InteractionHand.OFF_HAND) {
@@ -271,7 +271,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			}
 		}
 		// planting from seed
-		if (!crop.hasPlant()) {
+		if (!crop.hasPlant() && !crop.isCrossCropSticks()) {
 			AgriGenome genome = AgriGenome.fromNBT(heldItem.getTag());
 			if (genome != null) {
 				crop.setGenome(genome);

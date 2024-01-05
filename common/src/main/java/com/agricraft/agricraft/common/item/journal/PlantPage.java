@@ -42,10 +42,10 @@ public class PlantPage implements JournalPage {
 	private final boolean[] nutrientsMask;
 	private final boolean[] seasonMask;
 
-	public PlantPage(AgriPlant plant, List<ResourceLocation> researched) {
-		this.plant = plant;
+	public PlantPage(ResourceLocation plantId, List<ResourceLocation> researched) {
+		this.plantId = plantId;
+		this.plant = AgriApi.getPlant(plantId).orElse(AgriPlant.NO_PLANT);
 		this.researched = researched;
-		this.plantId = AgriApi.getPlantId(plant).orElse(AgriPlant.UNKNOWN);
 		this.brightnessMask = new boolean[16];
 		AgriRequirement req = this.plant.requirement();
 		for (int light = 0; light < this.brightnessMask.length; light++) {
