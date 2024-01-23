@@ -1,10 +1,13 @@
 package com.agricraft.agricraft.api;
 
+import com.agricraft.agricraft.api.adapter.AgriAdapter;
+import com.agricraft.agricraft.api.adapter.AgriAdapters;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
+import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.genetic.AgriMutationHandler;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.SeasonLogic;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -143,6 +147,10 @@ public final class AgriApi {
 
 	public static AgriGrowthConditionRegistry getGrowthConditionRegistry() {
 		return AgriGrowthConditionRegistry.getInstance();
+	}
+
+	public static Optional<AgriAdapter<AgriGenome>> getGenomeAdapter(Object obj) {
+		return AgriAdapters.GENOME_ADAPTERS.stream().filter(adapter -> adapter.accepts(obj)).findFirst();
 	}
 
 	public static SeasonLogic getSeasonLogic() {

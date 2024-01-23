@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class JournalItem extends Item {
@@ -76,7 +77,7 @@ public class JournalItem extends Item {
 	@Override
 	public ItemStack getDefaultInstance() {
 		ItemStack stack = new ItemStack(this);
-		researchPlant(stack, new ResourceLocation("minecraft:wheat"));
+//		researchPlant(stack, new ResourceLocation("minecraft:wheat"));
 		return stack;
 	}
 
@@ -130,6 +131,7 @@ public class JournalItem extends Item {
 					}
 				}
 			}
+			this.plants.sort(Comparator.comparing(ResourceLocation::toString));
 			this.initializePages();
 		}
 

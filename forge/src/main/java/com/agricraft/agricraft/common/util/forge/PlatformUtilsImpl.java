@@ -74,8 +74,12 @@ public class PlatformUtilsImpl {
 		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(resourceKey);
 	}
 
-	public static List<Item> getItemsFromTag(ResourceLocation tag) {
-		return ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(tag)).stream().toList();
+	public static List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+		if (!tag.tag()) {
+			return List.of(ForgeRegistries.ITEMS.getValue(tag.id()));
+		} else {
+			return ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(tag.id())).stream().toList();
+		}
 	}
 
 	public static List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {

@@ -8,6 +8,7 @@ import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.item.CropSticksItem;
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -259,7 +260,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.IRON_RAKE.get()) || heldItem.is(ModItems.WOODEN_RAKE.get())) {
 			return InteractionResult.PASS;
 		}
-		// future: fertilization
+		// TODO: @Ketheroth future: fertilization
 		// placement of crop sticks or creation of cross crop
 		if (heldItem.getItem() instanceof CropSticksItem) {
 			InteractionResult result = applyCropSticks(level, pos, state, CropStickVariant.fromItem(heldItem));
@@ -271,17 +272,18 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			}
 		}
 		// planting from seed
-		if (!crop.hasPlant() && !crop.isCrossCropSticks()) {
-			AgriGenome genome = AgriGenome.fromNBT(heldItem.getTag());
-			if (genome != null) {
-				crop.setGenome(genome);
+		Optional<AgriGenome> genome = AgriApi.getGenomeAdapter(heldItem).flatMap(adapter -> adapter.valueOf(heldItem));
+		if (genome.isPresent()) {
+			if (!crop.isCrossCropSticks() && !crop.hasPlant()) {
+				player.level().setBlock(pos, state.setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS), 3);
+				crop.setGenome(genome.get());
 				if (!player.isCreative()) {
 					player.getItemInHand(hand).shrink(1);
 				}
-				level.setBlock(pos, state.setValue(CROP_STATE, CropState.PLANT_STICKS), 3);
-				player.swing(hand);
+				return InteractionResult.SUCCESS;
+			} else {
+				return InteractionResult.CONSUME;
 			}
-			return InteractionResult.PASS;
 		}
 		return InteractionResult.FAIL;
 	}

@@ -40,6 +40,7 @@
 - [ ] plant callback
 - [ ] plant particle effects
 
+-[ ] seed crafting recipe to original mod item
 -[ ] send events for things
 -[ ] growth stage as objects / api
 -[ ] plant api, onGrowth,Break,etc

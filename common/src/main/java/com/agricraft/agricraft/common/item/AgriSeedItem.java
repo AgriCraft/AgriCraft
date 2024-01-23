@@ -101,13 +101,12 @@ public class AgriSeedItem extends BlockItem {
 		InteractionResult result = super.place(context);
 		Level level = context.getLevel();
 		if (result.consumesAction() && !level.isClientSide) {
-			BlockEntity be = level.getBlockEntity(context.getClickedPos());
-			if (be instanceof AgriCrop crop) {
+			AgriApi.getCrop(level, context.getClickedPos()).ifPresent(crop -> {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {
 					crop.setGenome(AgriGenome.fromNBT(tag));
 				}
-			}
+			});
 		}
 		return result;
 	}

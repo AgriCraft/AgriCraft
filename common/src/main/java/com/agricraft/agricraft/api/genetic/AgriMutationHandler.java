@@ -225,10 +225,10 @@ public class AgriMutationHandler {
 		}
 
 		protected AgriAllele<Integer> rollAndExecuteMutation(AgriGene<Integer> gene, AgriAllele<Integer> allele, AgriStat mutativity, int statValue, RandomSource random) {
-			// Mutativity stat of 1 results in 25/50/25 probability of positive/no/negative mutation
+			// Mutativity stat of 1 results in 30.25/45/24.75 probability of positive/no/negative mutation
 			// Mutativity stat of 10 results in 100/0/0 probability of positive/no/negative mutation
 			int max = mutativity.getMax();
-			if (random.nextInt(max) < statValue) {
+			if (random.nextInt() >= (1-statValue/max)/2) {
 				int delta = random.nextInt(max) < (max + statValue) / 2 ? 1 : -1;
 				return gene.getAllele(allele.trait() + delta);
 			} else {

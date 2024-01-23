@@ -1,8 +1,8 @@
 package com.agricraft.agricraft.common.item;
 
+import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.block.entity.SeedAnalyzerBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
@@ -18,8 +18,8 @@ public class DebuggerItem extends Item {
 	public InteractionResult useOn(UseOnContext context) {
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
+		System.out.println("side: " + (level.isClientSide?"client":"server"));
 		if (level.getBlockEntity(pos) instanceof SeedAnalyzerBlockEntity analyzer) {
-			System.out.println("side: " + (level.isClientSide?"client":"server"));
 			System.out.println("  tag: " + analyzer.saveWithoutMetadata());
 			System.out.println("  hasSeed: " + analyzer.hasSeed());
 			if (analyzer.hasSeed()) {
@@ -29,6 +29,11 @@ public class DebuggerItem extends Item {
 			if (analyzer.hasJournal()) {
 				System.out.println("    journal: " + analyzer.getJournal() + " " + analyzer.getJournal().getTag());
 			}
+		}
+		if (level.getBlockEntity(pos) instanceof CropBlockEntity crop) {
+			System.out.println("  tag: " + crop.saveWithoutMetadata());
+			System.out.println("  plant id: " + crop.getPlantId());
+			System.out.println("  plant: " + crop.getPlant());
 		}
 		return super.useOn(context);
 	}

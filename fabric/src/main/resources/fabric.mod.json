@@ -13,7 +13,7 @@
 		"repo": "https://github.com/AgriCraft/AgriCraft",
 		"issues": "https://github.com/AgriCraft/AgriCraft/issues"
 	},
-	"license": "Terrarium Licence",
+	"license": "MIT",
 	"icon": "logo.png",
 	"environment": "*",
 	"entrypoints": {

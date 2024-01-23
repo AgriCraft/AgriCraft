@@ -65,7 +65,7 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	 * @return true if this crop can be harvested
 	 */
 	default boolean canBeHarvested() {
-		return this.isMaxStage();
+		return this.hasPlant() && this.isMaxStage();
 	}
 
 	/**

@@ -121,7 +121,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		this.genome = genome;
 		this.plantId = genome.getSpeciesGene().getDominant().trait();
 		this.plant = AgriApi.getPlant(this.plantId, this.level.registryAccess()).orElse(null);
-		level.setBlock(this.getBlockPos(), this.isCrossCropSticks() ? this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS) : this.getBlockState(), 3);
+		level.setBlock(this.getBlockPos(), this.hasCropSticks() ? this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS) : this.getBlockState(), 3);
 	}
 
 	public AgriGenome getGenome() {

@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="license.txt"
+license="MIT"
 issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
 [[mods]]

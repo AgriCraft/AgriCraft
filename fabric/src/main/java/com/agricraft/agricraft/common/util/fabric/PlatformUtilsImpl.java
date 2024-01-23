@@ -86,12 +86,16 @@ public class PlatformUtilsImpl {
 		return AgriCraftFabric.cachedServer.registryAccess().registry(resourceKey);
 	}
 
-	public static List<Item> getItemsFromTag(ResourceLocation tag) {
-		return BuiltInRegistries.ITEM.getTag(TagKey.create(Registries.ITEM, tag))
-				.map(HolderSet.ListBacked::stream)
-				.map(str -> str.map(Holder::value))
-				.map(Stream::toList)
-				.orElse(List.of());
+	public static List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+		if (!tag.tag()) {
+			return List.of(BuiltInRegistries.ITEM.get(tag.id()));
+		} else {
+			return BuiltInRegistries.ITEM.getTag(TagKey.create(Registries.ITEM, tag.id()))
+					.map(HolderSet.ListBacked::stream)
+					.map(str -> str.map(Holder::value))
+					.map(Stream::toList)
+					.orElse(List.of());
+		}
 	}
 
 	public static List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {

@@ -43,7 +43,7 @@ public class PlatformUtils {
 	}
 
 	@ExpectPlatform
-	public static List<Item> getItemsFromTag(ResourceLocation tag) {
+	public static List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
 		throw new NotImplementedException();
 	}
 
