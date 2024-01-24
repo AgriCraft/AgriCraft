@@ -8,7 +8,7 @@ import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriSeason;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.util.LangUtils;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -341,7 +341,7 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 								return humidity && acidity && nutrients;
 							})
 							.flatMap(soil -> soil.variants().stream())
-							.flatMap(variant -> PlatformUtils.getBlocksFromLocation(variant.block()).stream())
+							.flatMap(variant -> Platform.get().getBlocksFromLocation(variant.block()).stream())
 							.distinct()
 							.toList())
 					.orElse(List.of());

@@ -2,7 +2,7 @@ package com.agricraft.agricraft.client.bewlr;
 
 import com.agricraft.agricraft.api.AgriClientApi;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
-import com.agricraft.agricraft.common.util.PlatformClientUtils;
+import com.agricraft.agricraft.common.util.PlatformClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -28,7 +28,7 @@ public class AgriSeedBEWLR extends BlockEntityWithoutLevelRenderer {
 		String plant = AgriSeedItem.getSpecies(stack);
 		BakedModel seedModel = AgriClientApi.getSeedModel(plant);
 		// render the item using the computed model
-		PlatformClientUtils.renderItem(seedModel, stack, itemDisplayContext, poseStack, buffer, packedLight, packedOverlay);
+		PlatformClient.get().renderItem(seedModel, stack, itemDisplayContext, poseStack, buffer, packedLight, packedOverlay);
 	}
 
 }

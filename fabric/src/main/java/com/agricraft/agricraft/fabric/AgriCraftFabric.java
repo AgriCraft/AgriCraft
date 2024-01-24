@@ -8,6 +8,8 @@ import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.FabricSeasonPlugin;
+import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.fabric.FabricPlatform;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -23,6 +25,7 @@ public class AgriCraftFabric implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Platform.setup(new FabricPlatform());
 		AgriCraft.init();
 		DynamicRegistries.registerSynced(AgriApi.AGRIPLANTS, AgriPlant.CODEC, AgriPlant.CODEC);
 		DynamicRegistries.registerSynced(AgriApi.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);

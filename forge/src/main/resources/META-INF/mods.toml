@@ -29,27 +29,13 @@ versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"
 
-#[[dependencies.agricraft]]
-#modId = "resourcefullib"
-#mandatory = true
-#versionRange = "[${resourcefullib_version},)"
-#ordering = "NONE"
-#side = "BOTH"
-#
-#[[dependencies.agricraft]]
-#modId = "resourcefulconfig"
-#mandatory = true
-#versionRange = "[${resourcefulconfig_version},)"
-#ordering = "NONE"
-#side = "BOTH"
-#
-#[[dependencies.agricraft]]
-#modId="infinitylib"
-#mandatory=true
-#versionRange="[1.18.2-2.1.4,)"
-#ordering="AFTER"
-#side="BOTH"
-#
+[[dependencies.agricraft]]
+modId = "resourcefulconfig"
+mandatory = true
+versionRange = "[${resourcefulconfig_version},)"
+ordering = "NONE"
+side = "BOTH"
+
 #[[dependencies.agricraft]]
 #modId="betterweather"
 #mandatory=false

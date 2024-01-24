@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.common.util.fabric;
 
+import com.agricraft.agricraft.common.util.PlatformClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -12,11 +13,23 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Fabric implementation of {@link com.agricraft.agricraft.common.util.PlatformClientUtils}
+ * Fabric implementation of {@link PlatformClient}
  */
-public class PlatformClientUtilsImpl {
+public class FabricPlatformClient extends PlatformClient {
 
-	public static void renderItem(BakedModel model, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+	private static RenderType getEntityRenderType(RenderType chunkRenderType, boolean cull) {
+		if (chunkRenderType != RenderType.translucent()) {
+			return Sheets.cutoutBlockSheet();
+		}
+		return cull || !Minecraft.useShaderTransparency() ? Sheets.translucentCullBlockSheet() : Sheets.translucentItemSheet();
+	}
+
+	private static boolean isLeftHand(ItemDisplayContext itemDisplayContext) {
+		return itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
+	}
+
+	@Override
+	public void renderItem(BakedModel model, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
 		// https://gist.github.com/XFactHD/11ccae6a54da62909caf6d555cd4d8b9
 		ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
@@ -30,17 +43,6 @@ public class PlatformClientUtilsImpl {
 		RenderType type = getEntityRenderType(RenderType.cutoutMipped(), true);
 		VertexConsumer consumer = ItemRenderer.getFoilBuffer(buffer, type, true, glint);
 		renderer.renderModelLists(model, stack, packedLight, packedOverlay, poseStack, consumer);
-	}
-
-	private static RenderType getEntityRenderType(RenderType chunkRenderType, boolean cull) {
-		if (chunkRenderType != RenderType.translucent()) {
-			return Sheets.cutoutBlockSheet();
-		}
-		return cull || !Minecraft.useShaderTransparency() ? Sheets.translucentCullBlockSheet() : Sheets.translucentItemSheet();
-	}
-
-	private static boolean isLeftHand(ItemDisplayContext itemDisplayContext) {
-		return itemDisplayContext == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || itemDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
 	}
 
 }

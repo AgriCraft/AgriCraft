@@ -8,6 +8,8 @@ import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.SereneSeasonPlugin;
+import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.forge.ForgePlatform;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -23,6 +25,7 @@ import net.minecraftforge.registries.DataPackRegistryEvent;
 public class AgriCraftForge {
 
 	public AgriCraftForge() {
+		Platform.setup(new ForgePlatform());
 		AgriCraft.init();
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		bus.addListener(AgriCraftForge::onCommonSetup);

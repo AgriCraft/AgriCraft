@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.common.util.forge;
 
+import com.agricraft.agricraft.common.util.PlatformClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -12,11 +13,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.RenderTypeHelper;
 
 /**
- * Forge implementation of {@link com.agricraft.agricraft.common.util.PlatformClientUtils}
+ * Forge implementation of {@link PlatformClient}
  */
-public class PlatformClientUtilsImpl {
+public class ForgePlatformClient extends PlatformClient {
 
-	public static void renderItem(BakedModel model, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+	@Override
+	public void renderItem(BakedModel model, ItemStack stack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
 		// https://gist.github.com/XFactHD/11ccae6a54da62909caf6d555cd4d8b9
 		ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 

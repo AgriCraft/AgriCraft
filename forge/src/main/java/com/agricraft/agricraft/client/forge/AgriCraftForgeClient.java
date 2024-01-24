@@ -10,6 +10,8 @@ import com.agricraft.agricraft.common.config.forge.ForgeMenuConfig;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModMenus;
+import com.agricraft.agricraft.common.util.PlatformClient;
+import com.agricraft.agricraft.common.util.forge.ForgePlatformClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -35,6 +37,7 @@ public class AgriCraftForgeClient {
 
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
+		PlatformClient.setup(new ForgePlatformClient());
 		AgriCraftForgeClient.init();
 		MenuScreens.register(ModMenus.SEED_ANALYZER_MENU.get(), SeedAnalyzerScreen::new);
 		ItemBlockRenderTypes.setRenderLayer(ModBlocks.SEED_ANALYZER.get(), RenderType.cutout());

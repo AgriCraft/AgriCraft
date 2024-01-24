@@ -12,7 +12,7 @@ import com.agricraft.agricraft.api.genetic.AgriMutationHandler;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.SeasonLogic;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -39,7 +38,7 @@ public final class AgriApi {
 	public static final ResourceKey<Registry<AgriMutation>> AGRIMUTATIONS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "mutations"));
 
 	public static Optional<Registry<AgriPlant>> getPlantRegistry() {
-		return PlatformUtils.getRegistry(AGRIPLANTS);
+		return Platform.get().getRegistry(AGRIPLANTS);
 	}
 
 	public static Optional<Registry<AgriPlant>> getPlantRegistry(RegistryAccess registryAccess) {
@@ -71,7 +70,7 @@ public final class AgriApi {
 	}
 
 	public static Optional<Registry<AgriSoil>> getSoilRegistry() {
-		return PlatformUtils.getRegistry(AGRISOILS);
+		return Platform.get().getRegistry(AGRISOILS);
 	}
 
 	public static Optional<Registry<AgriSoil>> getSoilRegistry(RegistryAccess registryAccess) {
@@ -107,7 +106,7 @@ public final class AgriApi {
 	}
 
 	public static Optional<Registry<AgriMutation>> getMutationRegistry() {
-		return PlatformUtils.getRegistry(AGRIMUTATIONS);
+		return Platform.get().getRegistry(AGRIMUTATIONS);
 	}
 
 	public static Optional<Registry<AgriMutation>> getMutationRegistry(RegistryAccess registryAccess) {

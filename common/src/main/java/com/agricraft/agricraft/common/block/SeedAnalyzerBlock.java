@@ -1,10 +1,8 @@
 package com.agricraft.agricraft.common.block;
 
 import com.agricraft.agricraft.common.block.entity.SeedAnalyzerBlockEntity;
-import com.agricraft.agricraft.common.item.AgriSeedItem;
-import com.agricraft.agricraft.common.item.JournalItem;
 import com.agricraft.agricraft.common.registry.ModBlocks;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,12 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -98,7 +94,7 @@ public class SeedAnalyzerBlock extends Block implements EntityBlock {
 			return InteractionResult.FAIL;
 		} else {
 			if (!level.isClientSide) {
-				PlatformUtils.openMenu((ServerPlayer) player, analyzer);
+				Platform.get().openMenu((ServerPlayer) player, analyzer);
 			}
 			return InteractionResult.CONSUME;
 		}

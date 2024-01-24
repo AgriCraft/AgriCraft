@@ -9,6 +9,8 @@ import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.registry.ModMenus;
+import com.agricraft.agricraft.common.util.PlatformClient;
+import com.agricraft.agricraft.common.util.fabric.FabricPlatformClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -31,6 +33,7 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		PlatformClient.setup(new FabricPlatformClient());
 		AgriCraftClient.init();
 		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.SEED.get(), AgriSeedBEWLR.INSTANCE::renderByItem);
 		ModelLoadingPlugin.register(pluginContext -> {

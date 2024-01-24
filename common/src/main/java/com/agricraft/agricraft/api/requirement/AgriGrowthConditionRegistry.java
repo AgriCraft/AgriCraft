@@ -12,7 +12,7 @@ import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.codecs.AgriSoilValue;
 import com.agricraft.agricraft.api.crop.AgriCrop;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -75,7 +75,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 				if (strength >= blockCondition.strength()) {
 					continue;
 				}
-				List<Block> requiredBlocks = PlatformUtils.getBlocksFromLocation(blockCondition.block());
+				List<Block> requiredBlocks = Platform.get().getBlocksFromLocation(blockCondition.block());
 				// regular block state requirement
 				if (requiredBlocks.contains(blockstate.getBlock())) {
 					if (blockCondition.states().isEmpty()) {
@@ -134,7 +134,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 		}, (level, blockPos) -> AgriApi.getSeasonLogic().getSeason(level, blockPos));
 		fluid = new BaseGrowthCondition<>("fluid", (plant, strength, fluid) -> {
 			AgriFluidCondition fluidCondition = plant.requirement().fluidCondition();
-			List<Fluid> requiredFluids = PlatformUtils.getFluidsFromLocation(fluidCondition.fluid());
+			List<Fluid> requiredFluids = Platform.get().getFluidsFromLocation(fluidCondition.fluid());
 			if (requiredFluids.isEmpty()) {
 				if (fluid.is(Fluids.LAVA)) {
 					return AgriGrowthResponse.KILL_IT_WITH_FIRE;

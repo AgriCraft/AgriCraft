@@ -8,11 +8,11 @@ import com.agricraft.agricraft.common.item.forge.ForgeAgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModCreativeTabs;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.ExtraDataMenuProvider;
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.PlatformRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -21,7 +21,6 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,21 +31,27 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * Forge implementation of {@link com.agricraft.agricraft.common.util.PlatformUtils}
+ * Forge implementation of {@link Platform}
  */
-public class PlatformUtilsImpl {
+public class ForgePlatform extends Platform {
 
-	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
+	@Override
+	public <T> PlatformRegistry<T> createRegistry(Registry<T> registry, String modid) {
+		return new ForgeRegistry<>(registry, modid);
+	}
+
+	@Override
+	public AgriSeedItem createAgriSeedItem(Item.Properties properties) {
 		return new ForgeAgriSeedItem(properties);
 	}
 
-	public static CreativeModeTab createMainCreativeTab() {
+	@Override
+	public CreativeModeTab createMainCreativeTab() {
 		return CreativeModeTab.builder()
 				.icon(() -> new ItemStack(ModItems.DEBUGGER.get()))
 				.title(Component.translatable("itemGroup.agricraft.main"))
@@ -55,7 +60,8 @@ public class PlatformUtilsImpl {
 				.build();
 	}
 
-	public static CreativeModeTab createSeedsCreativeTab() {
+	@Override
+	public CreativeModeTab createSeedsCreativeTab() {
 		return CreativeModeTab.builder()
 				.title(Component.translatable("itemGroup.agricraft.seeds"))
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
@@ -66,15 +72,17 @@ public class PlatformUtilsImpl {
 								output.accept(AgriSeedItem.toStack(entry.getValue()));
 							}
 						}))
-				.withTabsBefore(ModCreativeTabs.MAIN_TAB.getId())
+				.withTabsBefore(ModCreativeTabs.MAIN_TAB.id())
 				.build();
 	}
 
-	public static <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
+	@Override
+	public <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
 		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(resourceKey);
 	}
 
-	public static List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+	@Override
+	public List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
 		if (!tag.tag()) {
 			return List.of(ForgeRegistries.ITEMS.getValue(tag.id()));
 		} else {
@@ -82,7 +90,8 @@ public class PlatformUtilsImpl {
 		}
 	}
 
-	public static List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+	@Override
+	public List<Block> getBlocksFromLocation(ExtraCodecs.TagOrElementLocation tag) {
 		if (!tag.tag()) {
 			return List.of(ForgeRegistries.BLOCKS.getValue(tag.id()));
 		} else {
@@ -90,7 +99,8 @@ public class PlatformUtilsImpl {
 		}
 	}
 
-	public static List<Fluid> getFluidsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
+	@Override
+	public List<Fluid> getFluidsFromLocation(ExtraCodecs.TagOrElementLocation tag) {
 		if (!tag.tag()) {
 			return List.of(ForgeRegistries.FLUIDS.getValue(tag.id()));
 		} else {
@@ -98,11 +108,13 @@ public class PlatformUtilsImpl {
 		}
 	}
 
-	public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(PlatformUtils.MenuFactory<T> factory) {
+	@Override
+	public <T extends AbstractContainerMenu> MenuType<T> createMenuType(Platform.MenuFactory<T> factory) {
 		return IForgeMenuType.create(factory::create);
 	}
 
-	public static void openMenu(ServerPlayer player, ExtraDataMenuProvider provider) {
+	@Override
+	public void openMenu(ServerPlayer player, ExtraDataMenuProvider provider) {
 		NetworkHooks.openScreen(player, provider, (data) -> provider.writeExtraData(player, data));
 	}
 

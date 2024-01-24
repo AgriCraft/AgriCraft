@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.api.codecs;
 
-import com.agricraft.agricraft.common.util.PlatformUtils;
+import com.agricraft.agricraft.common.util.Platform;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +36,7 @@ public record AgriSeed(ExtraCodecs.TagOrElementLocation item, boolean overridePl
 	}
 
 	public boolean isVariant(ItemStack itemStack) {
-		List<Item> items = PlatformUtils.getItemsFromLocation(this.item());
+		List<Item> items = Platform.get().getItemsFromLocation(this.item());
 		if (items.contains(itemStack.getItem())) {
 			if (this.nbt.isEmpty()) {
 				return true;
