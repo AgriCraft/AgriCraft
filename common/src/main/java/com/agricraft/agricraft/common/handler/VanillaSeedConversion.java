@@ -78,7 +78,7 @@ public class VanillaSeedConversion {
 	}
 
 	private static void plantSeedOnCrop(Player player, InteractionHand hand, AgriCrop crop, ItemStack seed) {
-		crop.setGenome(AgriGenome.fromNBT(seed.getTag()));
+		crop.plantGenome(AgriGenome.fromNBT(seed.getTag()));
 		if (player != null && !player.isCreative()) {
 			player.getItemInHand(hand).shrink(1);
 		}

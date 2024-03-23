@@ -1,11 +1,10 @@
 package com.agricraft.agricraft.api.genetic;
 
 import com.agricraft.agricraft.api.stat.AgriStat;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;

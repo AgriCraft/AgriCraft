@@ -1,7 +1,9 @@
 package com.agricraft.agricraft.common.block.entity;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.crop.AgriGrowthStage;
+import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.config.CoreConfig;
@@ -26,6 +28,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -51,11 +54,11 @@ import java.util.stream.Stream;
 
 public class CropBlockEntity extends BlockEntity implements AgriCrop, MagnifyingInspectable {
 
+	private final Map<Integer, VoxelShape> shapeByAge = new HashMap<>();
 	private AgriGenome genome;
 	private String plantId = "";
 	private AgriPlant plant;
-	private int growthStage = 0;
-	private final Map<Integer, VoxelShape> shapeByAge = new HashMap<>();
+	private AgriGrowthStage growthStage = null;
 
 	public CropBlockEntity(BlockPos blockPos, BlockState blockState) {
 		super(ModBlockEntityTypes.CROP.get(), blockPos, blockState);
@@ -72,7 +75,9 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			} else {
 				this.plantId = this.genome.getSpeciesGene().getDominant().trait();
 			}
-			this.growthStage = tag.getInt("growth");
+			int growthIndex = tag.getInt("growthIndex");
+			int growthTotal = tag.getInt("growthTotal");
+			this.growthStage = new AgriGrowthStage(growthIndex, growthTotal);
 			if (plant == null && level != null) {
 				this.plant = AgriApi.getPlant(this.plantId, this.level.registryAccess()).orElse(null);
 			}
@@ -85,7 +90,8 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		if (this.hasPlant()) {
 			tag.putBoolean("hasPlant", true);
 			genome.writeToNBT(tag);
-			tag.putInt("growth", this.growthStage);
+			tag.putInt("growthIndex", this.growthStage.index());
+			tag.putInt("growthTotal", this.growthStage.total());
 		} else {
 			tag.putBoolean("hasPlant", false);
 		}
@@ -108,24 +114,60 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		super.setLevel(level);
 		// when the block id deserialized the level is null so we can't load the plant from the registry yet
 		// thus, we're doing it now, as soon as the level is present
-		if (level != null && !level.isClientSide) {
-			this.plant = AgriApi.getPlant(this.plantId, level.registryAccess()).orElse(null);
-			level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+		if (level != null) {
+			if (!level.isClientSide) {
+				this.plant = AgriApi.getPlant(this.plantId, level.registryAccess()).orElse(null);
+				if (this.plant != null && this.growthStage == null) {
+					this.growthStage = this.plant.getInitialGrowthStage();
+				}
+				level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+			}
 		}
 	}
 
-	public void setGenome(AgriGenome genome) {
+	@Override
+	public boolean removeGenome() {
+		if (this.hasPlant()) {
+			this.getPlant().onRemoved(this);
+			this.genome = null;
+			this.plant = null;
+			this.plantId = "";
+			this.growthStage = null;
+
+			if (this.getBlockState().getValue(CropBlock.CROP_STATE) == CropState.PLANT_STICKS) {
+				this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.SINGLE_STICKS));
+			} else {
+				if (this.getBlockState().getValue(BlockStateProperties.WATERLOGGED)) {
+					level.setBlockAndUpdate(this.getBlockPos(), Fluids.WATER.defaultFluidState().createLegacyBlock());
+				} else {
+					level.setBlockAndUpdate(this.getBlockPos(), Blocks.AIR.defaultBlockState());
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public AgriGenome getGenome() {
+		return genome;
+	}
+
+	@Override
+	public void plantGenome(AgriGenome genome, @Nullable LivingEntity entity) {
 		if (genome == null) {
 			return;
 		}
 		this.genome = genome;
 		this.plantId = genome.getSpeciesGene().getDominant().trait();
 		this.plant = AgriApi.getPlant(this.plantId, this.level.registryAccess()).orElse(null);
-		level.setBlock(this.getBlockPos(), this.hasCropSticks() ? this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS) : this.getBlockState(), 3);
-	}
-
-	public AgriGenome getGenome() {
-		return genome;
+		if (this.plant != null) {
+			this.growthStage = this.plant.getInitialGrowthStage();
+		}
+		level.setBlock(this.getBlockPos(), this.hasCropSticks() ?
+				this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS).setValue(CropBlock.LIGHT, this.plant.getBrightness(this))
+				: this.getBlockState().setValue(CropBlock.LIGHT, this.plant.getBrightness(this)), 3);
+		this.plant.onPlanted(this, null);
 	}
 
 	@Override
@@ -151,34 +193,22 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		return this.plant;
 	}
 
-	public int getGrowthStage() {
+	public AgriGrowthStage getGrowthStage() {
 		return this.growthStage;
 	}
 
 	@Override
-	public void setGrowthStage(int stage) {
+	public void setGrowthStage(AgriGrowthStage stage) {
 		this.growthStage = stage;
-		this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
-	}
-
-	public int getGrowthPercent() {
-		return (this.growthStage + 1) * 100 / this.plant.stages().size();
-	}
-
-	public boolean isMaxStage() {
-		return this.growthStage == this.plant.stages().size() - 1;
-	}
-
-	@Override
-	public boolean isFertile() {
-		return this.getFertilityResponse().isFertile();
+		this.setChanged();
+		this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState().setValue(CropBlock.LIGHT, this.plant.getBrightness(this)), Block.UPDATE_ALL);
 	}
 
 	@Override
 	public AgriGrowthResponse getFertilityResponse() {
 		// TODO: should we cache the fertility response ?
 		// check growth space
-		int height = this.plant.stages().get(this.growthStage);
+		int height = this.plant.getPlantHeight(this.growthStage);
 		while (height > 16) {
 			if (!level.getBlockState(this.getBlockPos().above(height / 16)).isAir()) {
 				return AgriGrowthResponse.INFERTILE;
@@ -214,12 +244,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			// TODO: should we change this to allow other soil to offsets the plant shape ?
 			yoffset = -1.0D / 16.0D;
 		}
-		return shapeByAge.computeIfAbsent(this.growthStage, stage -> Block.box(0, 0, 0, 16, this.plant.stages().get(stage), 16)).move(0, yoffset, 0);
-	}
-
-	@Override
-	public void onRandomTick(AgriCrop crop, RandomSource random) {
-		this.onApplyGrowthTick(crop, random);
+		return shapeByAge.computeIfAbsent(this.growthStage.index(), stage -> Block.box(0, 0, 0, 16, this.plant.getPlantHeight(this.growthStage), 16)).move(0, yoffset, 0);
 	}
 
 	/**
@@ -228,56 +253,43 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 	 * @param addToHarvest consumer to add the products to
 	 */
 	public void getHarvestProducts(Consumer<ItemStack> addToHarvest) {
-		if (!this.hasPlant() || !this.isMaxStage()) {
+		if (!this.hasPlant() || !this.isFullyGrown()) {
 			return;
 		}
-		for (int trials = (this.genome.getStatGene(AgriStatRegistry.getInstance().gainStat()).getTrait() + 3) / 3; trials > 0; --trials) {
-			for (AgriProduct product : this.plant.products()) {
-				if (product.chance() > this.level.random.nextDouble()) {
-					int amount = this.level.random.nextInt(product.min(), product.max() + 1);
-					if (product.item().tag()) {
-						// product is a tag, get a random item from it
-						ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
-						for (int i = 0; i < amount; ++i) {
-							addToHarvest.accept(items[this.level.random.nextInt(items.length)].copy());
-						}
-					} else {
-						// product is an item
-						Item item = BuiltInRegistries.ITEM.get(product.item().id());
-						ItemStack stack = item.getDefaultInstance();
-						stack.setCount(amount);
-						addToHarvest.accept(stack);
-					}
-				}
-			}
+		for (int trials = (this.genome.getGain() + 3) / 3; trials > 0; --trials) {
+			this.plant.getHarvestProducts(addToHarvest, this.growthStage, this.genome, this.level.random);
 		}
 	}
 
 	@Override
-	public void getClippingProducts(Consumer<ItemStack> addToClipping) {
-		if (!this.hasPlant() || !this.isMaxStage()) {
+	public void getClippingProducts(Consumer<ItemStack> addToClipping, ItemStack clipper) {
+		if (!this.hasPlant() || !this.isFullyGrown()) {
 			return;
 		}
-		for (AgriProduct product : this.plant.clipProducts()) {
-			if (product.chance() > this.level.random.nextDouble()) {
-				if (product.item().tag()) {
-					// product is a tag, get a random item from it
-					ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
-					addToClipping.accept(items[this.level.random.nextInt(items.length)].copy());
-				} else {
-					// product is an item
-					Item item = BuiltInRegistries.ITEM.get(product.item().id());
-					addToClipping.accept(item.getDefaultInstance());
-				}
-			}
+		this.plant.getClipProducts(addToClipping, clipper, this.growthStage, this.genome, this.level.random);
+	}
+
+	@Override
+	public boolean acceptsFertilizer(AgriFertilizer fertilizer) {
+		if (this.isCrossCropSticks()) {
+			return CoreConfig.allowFertilizerMutation && fertilizer.canTriggerMutation();
+		} else if (this.hasPlant()) {
+			return !this.isFullyGrown() && fertilizer.canFertilize(this);
+		} else {
+			return fertilizer.canTriggerWeeds();
 		}
+	}
+
+	@Override
+	public void onApplyFertilizer(AgriFertilizer fertilizer, RandomSource rand) {
+
 	}
 
 	/**
 	 * Apply a growth tick to the crop (plant+weed)
 	 */
 	@Override
-	public void onApplyGrowthTick(AgriCrop crop, RandomSource random) {
+	public void applyGrowthTick() {
 		if (this.level == null || this.level.isClientSide()) {
 			return;
 		}
@@ -292,16 +304,10 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			if (fertility.isInstantKill()) {
 				// kill plant
 				fertility.onPlantKilled(this);
-				this.removeBlock();
+				this.removeGenome();
 			} else if (fertility.isLethal()) {
 				// reverse growth stage
-				this.growthStage--;
-				if (this.growthStage < 0) {
-					this.removeBlock();
-				} else {
-					this.setChanged();
-					this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
-				}
+				this.revertGrowthStage();
 			} else if (fertility.isFertile()) {
 				// plant growth tick
 				this.executePlantGrowthTick();
@@ -317,11 +323,13 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 				.map(Optional::get);
 	}
 
-	private void removeBlock() {
-		if (this.getBlockState().getValue(BlockStateProperties.WATERLOGGED)) {
-			level.setBlockAndUpdate(this.getBlockPos(), Fluids.WATER.defaultFluidState().createLegacyBlock());
+	protected void revertGrowthStage() {
+		AgriGrowthStage current = this.growthStage;
+		AgriGrowthStage prev = this.growthStage.getPrevious(this, this.level.random);
+		if (current.equals(prev)) {
+			this.removeGenome();
 		} else {
-			level.setBlockAndUpdate(this.getBlockPos(), Blocks.AIR.defaultBlockState());
+			this.setGrowthStage(prev);
 		}
 	}
 
@@ -329,32 +337,20 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 	 * Apply a growth tick to the plant
 	 */
 	protected void executePlantGrowthTick() {
-		if (this.isMaxStage()) {
+		if (this.isFullyGrown()) {
 			return;
 		}
 		double a = this.calculateGrowthRate();
 		double b = this.level.random.nextDouble();
 		if (a > b) {
-			this.growthStage++;
-			this.setChanged();
-			this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+			this.setGrowthStage(this.growthStage.getNext(this, this.level.random));
 		}
 	}
 
 	protected double calculateGrowthRate() {
 		int growth = this.genome.getStatGene(AgriStatRegistry.getInstance().growthStat()).getTrait();
 		double soilFactor = this.getSoil().map(AgriSoil::growthModifier).orElse(1.0D);
-		return soilFactor * (this.plant.growthChance() + growth * this.plant.growthBonus() * CoreConfig.growthMultiplier);
-	}
-
-	/**
-	 * Right click with a bonemeal interaction
-	 *
-	 * @see com.agricraft.agricraft.common.block.CropBlock#performBonemeal
-	 */
-	@Override
-	public void onPerformBonemeal(AgriCrop crop, RandomSource random) {
-		this.onApplyGrowthTick(crop, random);
+		return soilFactor * (this.plant.getGrowthChance(this.growthStage) + growth * this.plant.getBonusGrowthChance(this.growthStage) * CoreConfig.growthMultiplier);
 	}
 
 	@Override
@@ -378,7 +374,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 				.map(component -> Component.literal("  ").append(component))
 				.forEach(tooltip::add);
 		if (isPlayerSneaking) {
-			tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage + 1, this.plant.stages().size())));
+			tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage.index() + 1, this.growthStage.total())));
 		}
 		AgriGrowthResponse response = this.getFertilityResponse();
 		tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile"))));

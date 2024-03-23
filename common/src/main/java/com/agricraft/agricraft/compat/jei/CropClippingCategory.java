@@ -1,7 +1,7 @@
 package com.agricraft.agricraft.compat.jei;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import mezz.jei.api.constants.VanillaTypes;
@@ -17,7 +17,10 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.ArrayList;
 
 public class CropClippingCategory implements IRecipeCategory<AgriPlant> {
 
@@ -63,19 +66,17 @@ public class CropClippingCategory implements IRecipeCategory<AgriPlant> {
 
 		// outputs
 		int index = 0;
+		ArrayList<ItemStack> clipProducts = new ArrayList<>();
+		plant.getAllPossibleClipProducts(clipProducts::add);
 		for (int y = 33; y < 83; y += 18) {
-			if (index >= plant.clipProducts().size()) {
+			if (index >= clipProducts.size()) {
 				break;
 			}
 			for (int x = 75; x < 129; x += 18) {
-				if (index < plant.clipProducts().size()) {
-					AgriProduct product = plant.clipProducts().get(index);
+				if (index < clipProducts.size()) {
+					ItemStack product = clipProducts.get(index);
 					IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, x, y).setSlotName("output_" + index);
-					if (product.item().tag()) {
-						slotBuilder.addIngredients(Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())));
-					} else {
-						slotBuilder.addItemStack(BuiltInRegistries.ITEM.get(product.item().id()).getDefaultInstance());
-					}
+					slotBuilder.addItemStack(product);
 					index++;
 				} else {
 					break;

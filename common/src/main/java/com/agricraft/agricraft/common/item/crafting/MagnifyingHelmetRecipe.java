@@ -3,7 +3,6 @@ package com.agricraft.agricraft.common.item.crafting;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.registry.ModRecipeSerializers;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ArmorItem;
@@ -20,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MagnifyingHelmetRecipe extends CustomRecipe {
 
-	public MagnifyingHelmetRecipe(ResourceLocation resourceLocation, CraftingBookCategory craftingBookCategory) {
-		super(resourceLocation, craftingBookCategory);
+	public MagnifyingHelmetRecipe(CraftingBookCategory craftingBookCategory) {
+		super(craftingBookCategory);
 	}
 
 	@Override

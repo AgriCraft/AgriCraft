@@ -29,15 +29,15 @@ public class ClipperItem extends Item {
 		BlockPos pos = context.getClickedPos();
 		Player player = context.getPlayer();
 		return AgriApi.getCrop(level, pos).map(crop -> {
-			if (!crop.allowsClipping()) {
+			if (!crop.getPlant().allowsClipping(crop.getGrowthStage(), context.getItemInHand(), player)) {
 				if (player != null) {
 					player.sendSystemMessage(Component.translatable("agricraft.message.clipping_impossible"));
 				}
 				return InteractionResult.FAIL;
 			}
 			List<ItemStack> drops = new ArrayList<>();
-			crop.getClippingProducts(drops::add);
-			crop.setGrowthStage(0);
+			crop.getClippingProducts(drops::add, context.getItemInHand());
+			crop.setGrowthStage(crop.getPlant().getInitialGrowthStage());
 			for (ItemStack drop : drops) {
 				level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop));
 			}

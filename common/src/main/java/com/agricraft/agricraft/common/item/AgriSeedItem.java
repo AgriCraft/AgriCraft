@@ -1,12 +1,10 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.genetic.AgriGenomeProviderItem;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
-import com.agricraft.agricraft.common.block.CropBlock;
-import com.agricraft.agricraft.common.block.CropState;
-import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.block.entity.SeedAnalyzerBlockEntity;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
@@ -21,14 +19,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class AgriSeedItem extends BlockItem {
+public class AgriSeedItem extends BlockItem implements AgriGenomeProviderItem {
 
 	public AgriSeedItem(Properties properties) {
 		super(ModBlocks.CROP.get(), properties);
@@ -104,7 +101,7 @@ public class AgriSeedItem extends BlockItem {
 			AgriApi.getCrop(level, context.getClickedPos()).ifPresent(crop -> {
 				CompoundTag tag = context.getItemInHand().getTag();
 				if (tag != null) {
-					crop.setGenome(AgriGenome.fromNBT(tag));
+					crop.plantGenome(AgriGenome.fromNBT(tag));
 				}
 			});
 		}
@@ -125,7 +122,7 @@ public class AgriSeedItem extends BlockItem {
 			if (crop.hasPlant() || crop.isCrossCropSticks()) {
 				return InteractionResult.PASS;
 			}
-			plantSeed(level, context.getPlayer(), crop, heldItem);
+			plantSeed(context.getPlayer(), crop, heldItem);
 			return InteractionResult.CONSUME;
 		}
 		// if a seed analyzer was clicked, insert the seed inside
@@ -144,14 +141,13 @@ public class AgriSeedItem extends BlockItem {
 				return InteractionResult.PASS;
 			}
 			// there is a crop without a plant, plant the seed in the crop
-			plantSeed(level, context.getPlayer(), crop, heldItem);
+			plantSeed(context.getPlayer(), crop, heldItem);
 			return InteractionResult.CONSUME;
 		}).orElse(InteractionResult.PASS)).orElse(super.useOn(context));
 	}
 
-	private void plantSeed(Level level, Player player, AgriCrop crop, ItemStack seed) {
-		crop.setGenome(AgriGenome.fromNBT(seed.getTag()));
-		level.setBlock(crop.getBlockPos(), crop.getBlockState().setValue(CropBlock.CROP_STATE, CropState.PLANT_STICKS), 3);
+	private void plantSeed(Player player, AgriCrop crop, ItemStack seed) {
+		crop.plantGenome(AgriGenome.fromNBT(seed.getTag()), player);
 		if (player != null && !player.isCreative()) {
 			seed.shrink(1);
 		}
@@ -171,6 +167,16 @@ public class AgriSeedItem extends BlockItem {
 						.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
 			}
 		}
+	}
+
+	@Override
+	public void setGenome(ItemStack stack, AgriGenome genome) {
+		genome.writeToNBT(stack.getOrCreateTag());
+	}
+
+	@Override
+	public Optional<AgriGenome> getGenome(ItemStack stack) {
+		return Optional.ofNullable(AgriGenome.fromNBT(stack.getOrCreateTag()));
 	}
 
 }

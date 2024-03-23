@@ -3,8 +3,10 @@ package com.agricraft.agricraft.forge;
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
+import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.SereneSeasonPlugin;
@@ -43,10 +45,12 @@ public class AgriCraftForge {
 		event.dataPackRegistry(AgriApi.AGRIPLANTS, AgriPlant.CODEC, AgriPlant.CODEC);
 		event.dataPackRegistry(AgriApi.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);
 		event.dataPackRegistry(AgriApi.AGRIMUTATIONS, AgriMutation.CODEC, AgriMutation.CODEC);
+		event.dataPackRegistry(AgriApi.AGRIFERTILIZERS, AgriFertilizer.CODEC, AgriFertilizer.CODEC);
 	}
 
 	public static void onRegisterCommands(RegisterCommandsEvent event) {
 		GiveSeedCommand.register(event.getDispatcher(), event.getBuildContext());
+		DumpRegistriesCommand.register(event.getDispatcher(), event.getBuildContext());
 	}
 
 	public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {

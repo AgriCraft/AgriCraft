@@ -1,5 +1,7 @@
 package com.agricraft.agricraft.client.ber;
 
+import com.agricraft.agricraft.api.AgriClientApi;
+import com.agricraft.agricraft.api.crop.AgriGrowthStage;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
@@ -10,6 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -37,22 +40,13 @@ public class CropBlockEntityRenderer implements BlockEntityRenderer<CropBlockEnt
 		if (!blockEntity.hasPlant()) {
 			return;
 		}
-		int stage = blockEntity.getGrowthStage();
+		AgriGrowthStage stage = blockEntity.getGrowthStage();
 		String plantId = blockEntity.getPlantId();
-		if (!plantId.isEmpty()) {
-			// compute the block model from the plant id and growth stage
-			// will look like <namespace>:crop/<id>_stage<growth_stage> so the file is assets/<namespace>/models/crop/<id>_stage<growth_stage>.json
-			String plant = plantId.replace(":", ":crop/") + "_stage" + stage;
-			BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plant));
-			if (model == null) {
-				// model not found, default to the unknown crop model that should always be present
-				model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation("agricraft:crop/unknown"));
-			}
-			// render the computed plant model
-			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(),
-					buffer.getBuffer(RenderType.cutoutMipped()),
-					blockEntity.getBlockState(), model, 1, 1, 1, packedLight, packedOverlay);
-		}
+		BakedModel plantModel = AgriClientApi.getPlantModel(plantId, stage.index());
+		// render the computed plant model
+		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(),
+				buffer.getBuffer(RenderType.cutoutMipped()),
+				blockEntity.getBlockState(), plantModel, 1, 1, 1, packedLight, packedOverlay);
 
 	}
 

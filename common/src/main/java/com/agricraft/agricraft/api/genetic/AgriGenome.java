@@ -2,7 +2,7 @@ package com.agricraft.agricraft.api.genetic;
 
 import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
@@ -33,12 +33,49 @@ public class AgriGenome {
 		}
 	}
 
+	public static AgriGenome fromNBT(CompoundTag tag) {
+		if (tag == null || !tag.contains("genes")) {
+			return null;
+		}
+		CompoundTag genes = tag.getCompound("genes");
+		AgriGenePair<String> species = AgriGeneRegistry.getInstance().getGeneSpecies().readFromNBT(genes);
+		List<AgriGenePair<Integer>> stats = new ArrayList<>();
+		for (AgriStat stat : AgriStatRegistry.getInstance()) {
+			AgriGeneRegistry.getInstance().getGeneStat(stat).ifPresent(gene -> stats.add(gene.readFromNBT(genes)));
+		}
+		return new AgriGenome(species, stats);
+	}
+
 	public AgriGenePair<String> getSpeciesGene() {
 		return this.species;
 	}
 
 	public AgriGenePair<Integer> getStatGene(AgriStat stat) {
 		return this.stats.get(stat.getId());
+	}
+
+	public int getGain() {
+		return this.getStatGene(AgriStatRegistry.getInstance().gainStat()).getTrait();
+	}
+
+	public int getGrowth() {
+		return this.getStatGene(AgriStatRegistry.getInstance().growthStat()).getTrait();
+	}
+
+	public int getStrength() {
+		return this.getStatGene(AgriStatRegistry.getInstance().strengthStat()).getTrait();
+	}
+
+	public int getFertility() {
+		return this.getStatGene(AgriStatRegistry.getInstance().fertilityStat()).getTrait();
+	}
+
+	public int getResistance() {
+		return this.getStatGene(AgriStatRegistry.getInstance().resistanceStat()).getTrait();
+	}
+
+	public int getMutativity() {
+		return this.getStatGene(AgriStatRegistry.getInstance().mutativityStat()).getTrait();
 	}
 
 	public Collection<AgriGenePair<Integer>> getStatGenes() {
@@ -52,19 +89,6 @@ public class AgriGenome {
 			statPair.getGene().writeToNBT(genes, statPair.getDominant(), statPair.getRecessive());
 		}
 		tag.put("genes", genes);
-	}
-
-	public static AgriGenome fromNBT(CompoundTag tag) {
-		if (tag == null || !tag.contains("genes")) {
-			return null;
-		}
-		CompoundTag genes = tag.getCompound("genes");
-		AgriGenePair<String> species = AgriGeneRegistry.getInstance().getGeneSpecies().readFromNBT(genes);
-		List<AgriGenePair<Integer>> stats = new ArrayList<>();
-		for (AgriStat stat : AgriStatRegistry.getInstance()) {
-			AgriGeneRegistry.getInstance().getGeneStat(stat).ifPresent(gene -> stats.add(gene.readFromNBT(genes)));
-		}
-		return new AgriGenome(species, stats);
 	}
 
 	@Override

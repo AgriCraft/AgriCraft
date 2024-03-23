@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.api.genetic;
 
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.stat.AgriStat;
@@ -97,11 +97,11 @@ public class AgriCrossBreedEngine {
 	protected boolean doClone(AgriCrop target, AgriCrop parent, RandomSource random) {
 		AgriPlant plant = parent.getPlant();
 		// Try spawning a clone if cloning is allowed
-		if (plant.cloneable()) {
+		if (plant.allowsCloning(parent.getGrowthStage())) {
 			// roll for spread chance
-			if (random.nextDouble() < parent.getPlant().spreadChance()) {
+			if (random.nextDouble() < parent.getPlant().getSpreadChance(parent.getGrowthStage())) {
 				AgriGenome clone = this.getCloner().clone(target, parent.getGenome(), random);
-				target.setGenome(clone);
+				target.plantGenome(clone);
 				return true;
 			}
 		}
@@ -113,7 +113,7 @@ public class AgriCrossBreedEngine {
 		// Determine the child's genome
 		AgriGenome genome = this.getCombiner().combine(target, a.getGenome(), b.getGenome(), random);
 		// Spawn the child
-		target.setGenome(genome);
+		target.plantGenome(genome);
 		return true;
 	}
 

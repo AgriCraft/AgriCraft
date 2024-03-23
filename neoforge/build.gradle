@@ -1,0 +1,150 @@
+architectury {
+	platformSetupLoomIde()
+	neoForge()
+}
+
+loom {
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+	runs {
+		data {
+			data()
+			programArgs "--all", "--mod", "${mod_id}"
+			programArgs "--output", file("src/generated/resources").absolutePath
+			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+		}
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += project(":neoforge").file("src/generated/resources").absolutePath
+			exclude '.cache'
+		}
+	}
+}
+
+configurations {
+	common
+	shadowCommon
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentNeoForge.extendsFrom common
+}
+
+dependencies {
+	neoForge "net.neoforged:neoforge:${neoforge_version}"
+
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
+	shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+
+	modCompileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
+	modLocalRuntime("mezz.jei:jei-$minecraft_version-neoforge:$jei_version") { transitive = false }
+
+	modCompileOnly "curse.maven:jade-324717:5111969"  // Jade-1.20.4-neoforge-13.3.1-api
+	modLocalRuntime "curse.maven:jade-324717:5109393"  // Jade-1.20.4-neoforge-13.3.1
+
+//	modLocalRuntime "curse.maven:serene-seasons-291874:5073504"  // Serene Seasons 1.20.4-9.3.0.17
+//	modLocalRuntime "curse.maven:glitchcore-955399:5088441"  // GlitchCore 1.20.4-1.0.0.59 (serene season dep)
+
+
+//	modLocalRuntime "curse.maven:bananarangs-861492:4584937"  // Bananarang 1.1 (1.20-1.20.1)
+}
+
+shadowJar {
+	configurations = [project.configurations.shadowCommon]
+	archiveClassifier.set "dev-shadow"
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier = null
+	atAccessWideners.add "agricraft.accesswidener"
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	def commonSources = project(":common").sourcesJar
+	dependsOn commonSources
+	from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+		skip()
+	}
+}
+
+
+//plugins {
+//	id 'java-library'
+//	id 'idea'
+//	id 'maven-publish'
+//	id 'net.neoforged.gradle.userdev' version '[7.0.33,)'
+//}
+//base {
+//	archivesName = "${mod_name}-neoforge-${minecraft_version}"
+//}
+//
+//minecraft.accessTransformers.file project.file('src/main/resources/META-INF/accesstransformer.cfg')
+//
+//runs {
+//	configureEach {
+//		modSource project.sourceSets.main
+//	}
+//	client {
+//		workingDirectory project.file('run/client')
+//		systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+//	}
+//	server {
+//		workingDirectory project.file('run/server')
+//		systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+//		programArgument '--nogui'
+//	}
+//
+//	gameTestServer {
+//		systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+//	}
+//
+//	data {
+//		programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+//	}
+//}
+//subsystems {
+//	parchment {
+//		minecraftVersion = "1.20.4"
+//		mappingsVersion = "${parchment_version}"
+//	}
+//}
+//
+//sourceSets.main.resources { srcDir 'src/generated/resources' }
+//
+//dependencies {
+//	implementation "net.neoforged:neoforge:${neoforge_version}"
+//	compileOnly project(":common")
+//
+//	implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20.4:$resourcefulconfig_version"
+//
+//	compileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
+//	compileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
+//	runtimeOnly "mezz.jei:jei-$minecraft_version-neoforge:$jei_version"
+//
+//	implementation "curse.maven:jade-324717:4980188-api-4980190"  // Jade-1.20.4-neoforge-13.2.2
+//	implementation "curse.maven:serene-seasons-291874:5073506"  // Serene Seasons 1.20.4-9.3.0.17
+//	implementation "curse.maven:glitchcore-955399:5088442"  // GlitchCore 1.20.4-1.0.0.59 (serene season dep)
+//}
+//
+//// NeoGradle compiles the game, but we don't want to add our common code to the game's code
+//Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
+//
+//tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+//	source(project(":common").sourceSets.main.allSource)
+//}
+//tasks.named("sourcesJar", Jar) {
+//	from(project(":common").sourceSets.main.allSource)
+//}
+//
+//tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
+//	from project(":common").sourceSets.main.resources
+//}

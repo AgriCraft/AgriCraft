@@ -5,4 +5,5 @@ build/
 **/run/
 out/
 forge/src/generated/
+neoforge/src/generated/
 .architectury-transformer/

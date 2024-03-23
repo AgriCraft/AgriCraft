@@ -1,24 +1,24 @@
 package com.agricraft.agricraft.api.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.api.annotations.Category;
+import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption;
+import com.teamresourceful.resourcefulconfig.api.types.options.EntryType;
 
 /**
  * Agricraft configuration category related to statistics.
  */
-@Category(id = "stats_config", translation = "agricraft.option.stats_config")
+@Category("config.agricraft.stats")
 public final class StatsConfig {
 
 	@ConfigEntry(id = "gain_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.gain_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int gainMin = 1;
 
 	@ConfigEntry(id = "gain_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.gain_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Gain stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int gainMax = 10;
 
@@ -27,12 +27,12 @@ public final class StatsConfig {
 	public static boolean gainHidden = false;
 
 	@ConfigEntry(id = "growth_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.growth_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int growthMin = 1;
 
 	@ConfigEntry(id = "growth_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.growth_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Growth stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int growthMax = 10;
 
@@ -41,12 +41,12 @@ public final class StatsConfig {
 	public static boolean growthHidden = false;
 
 	@ConfigEntry(id = "strength_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.strength_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int strengthMin = 1;
 
 	@ConfigEntry(id = "strength_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.strength_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Strength stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int strengthMax = 10;
 
@@ -55,12 +55,12 @@ public final class StatsConfig {
 	public static boolean strengthHidden = false;
 
 	@ConfigEntry(id = "resistance_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.resistance_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int resistanceMin = 1;
 
 	@ConfigEntry(id = "resistance_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.resistance_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Resistance stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int resistanceMax = 10;
 
@@ -69,12 +69,12 @@ public final class StatsConfig {
 	public static boolean resistanceHidden = false;
 
 	@ConfigEntry(id = "fertility_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.fertility_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int fertilityMin = 1;
 
 	@ConfigEntry(id = "fertility_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.fertility_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Fertility stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int fertilityMax = 10;
 
@@ -83,12 +83,12 @@ public final class StatsConfig {
 	public static boolean fertilityHidden = false;
 
 	@ConfigEntry(id = "mutativity_min", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.mutativity_min")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Minimum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int mutativityMin = 1;
 
 	@ConfigEntry(id = "mutativity_max", type = EntryType.INTEGER, translation = "agricraft.option.stats_config.mutativity_max")
-	@IntRange(min = 1, max = 10)
+	@ConfigOption.Range(min = 1, max = 10)
 	@Comment("Maximum allowed value of the Mutativity stat (setting min and max equal will freeze the stat to that value in crop breeding)")
 	public static int mutativityMax = 10;
 

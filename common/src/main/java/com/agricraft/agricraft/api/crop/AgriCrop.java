@@ -1,18 +1,20 @@
 package com.agricraft.agricraft.api.crop;
 
-import com.agricraft.agricraft.api.codecs.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
-import com.agricraft.agricraft.api.genetic.AgriGenomeCarrier;
+import com.agricraft.agricraft.api.fertilizer.IAgriFertilizable;
+import com.agricraft.agricraft.api.genetic.AgriGenomeProvider;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
+public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 
 	/**
 	 * @return true if the crop has a plant
@@ -42,36 +44,42 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	/**
 	 * @return the growth stage of the crop.
 	 */
-	int getGrowthStage();
+	AgriGrowthStage getGrowthStage();
 
 	/**
 	 * Change the growth stage of the crop
 	 *
 	 * @param stage the new stage value
 	 */
-	void setGrowthStage(int stage);
+	void setGrowthStage(AgriGrowthStage stage);
 
 	/**
 	 * @return the growth percentage of the crop.
 	 */
-	int getGrowthPercent();
+	default double getGrowthPercent() {
+		return this.getGrowthStage().growthPercentage();
+	}
 
 	/**
 	 * @return true if this crop is fully grown (has no more growth stages)
 	 */
-	boolean isMaxStage();
+	default boolean isFullyGrown() {
+		return this.getGrowthStage().isFinal();
+	}
 
 	/**
 	 * @return true if this crop can be harvested
 	 */
 	default boolean canBeHarvested() {
-		return this.hasPlant() && this.isMaxStage();
+		return this.hasPlant() && this.getGrowthStage().isMature();
 	}
 
 	/**
 	 * @return true if this crop is fertile and thus can grow
 	 */
-	boolean isFertile();
+	default boolean isFertile() {
+		return this.getFertilityResponse().isFertile();
+	}
 
 	/**
 	 * @return the current fertility response for this crop
@@ -91,18 +99,12 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	void getHarvestProducts(Consumer<ItemStack> addToHarvest);
 
 	/**
-	 * @return true if the crop can be clipped
-	 */
-	default boolean allowsClipping() {
-		return this.canBeHarvested();
-	}
-
-	/**
 	 * Retrieve the products that would be produced upon clipping this crop.
 	 *
 	 * @param addToClipping a consumer that accepts the items that were clipped.
+	 * @param clipper the itemstack representing the clipper
 	 */
-	void getClippingProducts(Consumer<ItemStack> addToClipping);
+	void getClippingProducts(Consumer<ItemStack> addToClipping, ItemStack clipper);
 
 	//#region block helper methods
 
@@ -120,6 +122,13 @@ public interface AgriCrop extends AgriCropBehaviour, AgriGenomeCarrier {
 	 * @return the World in which this crop exists (may be null if the tile is invalid)
 	 */
 	Level getLevel();
+
+	/**
+	 * @return this, but cast to a TileEntity
+	 */
+	default BlockEntity asBlockEntity() {
+		return (BlockEntity) this;
+	}
 
 	//#endregion
 

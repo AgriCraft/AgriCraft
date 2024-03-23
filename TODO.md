@@ -1,8 +1,9 @@
-- journal
-- seed analyzer
+-[x] journal
+-[x] seed analyzer
 - rake
 - trowel
 - seed_bag
+- seed storage
 
 - tank
 - irrigation channel
@@ -30,13 +31,13 @@
     -[ ] config option
   -[x] soil tooltip
 
-- [ ] soil tooltip property
+- [x] soil tooltip property
 - [ ] seed display genes only after researched (with config)
 - [ ] weeds
 - [x] mutations
-- [ ] fertilizers
-- [ ] journal
-- [ ] seed analyzer
+- [x] fertilizers
+- [x] journal
+- [x] seed analyzer
 - [ ] plant callback
 - [ ] plant particle effects
 

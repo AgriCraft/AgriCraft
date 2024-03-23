@@ -1,16 +1,14 @@
 package com.agricraft.agricraft.api.config;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.teamresourceful.resourcefulconfig.common.annotations.Config;
-import com.teamresourceful.resourcefulconfig.common.annotations.InlineCategory;
+import com.teamresourceful.resourcefulconfig.api.annotations.Config;
 
-@Config(AgriApi.MOD_ID)
+@Config(
+		value = "agricraft",
+		categories = {
+				CoreConfig.class,
+				StatsConfig.class
+		})
 public final class AgriCraftConfig {
-
-	@InlineCategory
-	public static CoreConfig coreConfig;
-
-	@InlineCategory
-	public static StatsConfig statsConfig;
 
 }

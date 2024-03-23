@@ -2,8 +2,8 @@ package com.agricraft.agricraft.common.config.forge;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.config.AgriCraftConfig;
+import com.teamresourceful.resourcefulconfig.api.types.ResourcefulConfig;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
-import com.teamresourceful.resourcefulconfig.common.config.ResourcefulConfig;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 

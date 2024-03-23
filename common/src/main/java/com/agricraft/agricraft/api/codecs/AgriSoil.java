@@ -8,6 +8,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
@@ -18,13 +20,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant> variants,
+public record AgriSoil(List<String> mods, List<AgriSoilVariant> variants,
                        AgriSoilCondition.Humidity humidity,
                        AgriSoilCondition.Acidity acidity, AgriSoilCondition.Nutrients nutrients,
                        Double growthModifier) implements MagnifyingInspectable {
 
 	public static final Codec<AgriSoil> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.BOOL.fieldOf("enabled").forGetter(soil -> soil.enabled),
 			Codec.STRING.listOf().fieldOf("mods").forGetter(soil -> soil.mods),
 			AgriSoilVariant.CODEC.listOf().fieldOf("variants").forGetter(soil -> soil.variants),
 			AgriSoilCondition.Humidity.CODEC.fieldOf("humidity").forGetter(soil -> soil.humidity),
@@ -51,6 +52,13 @@ public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant>
 			}
 		}
 		return false;
+	}
+
+	public boolean isVariant(Item item) {
+		return this.variants.stream()
+				.flatMap(variant -> Platform.get().getBlocksFromLocation(variant.block()).stream())
+				.map(Block::asItem)
+				.anyMatch(it -> it == item);
 	}
 
 	@Override
@@ -80,7 +88,7 @@ public record AgriSoil(boolean enabled, List<String> mods, List<AgriSoilVariant>
 		double growthModifier = 1.0;
 
 		public AgriSoil build() {
-			return new AgriSoil(true, mods, soilVariants, humidity, acidity, nutrients, growthModifier);
+			return new AgriSoil(mods, soilVariants, humidity, acidity, nutrients, growthModifier);
 		}
 
 		public Builder defaultMods() {

@@ -56,4 +56,9 @@ public class CropSticksItem extends BlockItem {
 		return result;
 	}
 
+	@Override
+	public String getDescriptionId() {
+		return "item.agricraft." + variant.getSerializedName() + "_crop_sticks";
+	}
+
 }

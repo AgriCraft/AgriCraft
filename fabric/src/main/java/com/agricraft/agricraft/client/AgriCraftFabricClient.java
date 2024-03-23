@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.client;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.client.ber.CropBlockEntityRenderer;
 import com.agricraft.agricraft.client.ber.SeedAnalyzerEntityRenderer;
 import com.agricraft.agricraft.client.bewlr.AgriSeedBEWLR;
@@ -9,6 +10,7 @@ import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.registry.ModMenus;
+import com.agricraft.agricraft.common.util.LangUtils;
 import com.agricraft.agricraft.common.util.PlatformClient;
 import com.agricraft.agricraft.common.util.fabric.FabricPlatformClient;
 import net.fabricmc.api.ClientModInitializer;
@@ -38,12 +40,14 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.SEED.get(), AgriSeedBEWLR.INSTANCE::renderByItem);
 		ModelLoadingPlugin.register(pluginContext -> {
 			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/seed").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
-				ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/seed", "seed").replace(".json", ""));
+				ResourceLocation seed = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/seed", "seed").replace(".json", ""));
+//				System.out.println(entry.getKey() + "  " + seed);
 				pluginContext.addModels(seed);
 			}
 			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/crop").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
-				ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/crop", "crop").replace(".json", ""));
-				pluginContext.addModels(seed);
+				ResourceLocation crop = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/crop", "crop").replace(".json", ""));
+//				System.out.println(entry.getKey() + "  " + crop + " " + entry.getKey().getClass());
+				pluginContext.addModels(crop);
 			}
 			// add the crop sticks models else they're not loaded
 			pluginContext.addModels(new ResourceLocation("agricraft:block/wooden_crop_sticks"), new ResourceLocation("agricraft:block/iron_crop_sticks"), new ResourceLocation("agricraft:block/obsidian_crop_sticks"),
@@ -61,6 +65,21 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 			if (stack.hasTag() && stack.getTag().getBoolean("magnifying")) {
 				lines.add(1, Component.translatable("agricraft.tooltip.magnifying").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC));
 			}
+			AgriApi.getSoilRegistry().ifPresent(registry -> registry.forEach(soil -> {
+						if (soil.isVariant(stack.getItem())) {
+							lines.add(1, Component.translatable("agricraft.tooltip.magnifying.soil.soil").withStyle(ChatFormatting.DARK_GRAY));
+							lines.add(2, Component.literal("  ").withStyle(ChatFormatting.DARK_GRAY)
+									.append(Component.translatable("agricraft.tooltip.magnifying.soil.humidity"))
+									.append(LangUtils.soilPropertyName("humidity", soil.humidity())));
+							lines.add(3, Component.literal("  ").withStyle(ChatFormatting.DARK_GRAY)
+									.append(Component.translatable("agricraft.tooltip.magnifying.soil.acidity"))
+									.append(LangUtils.soilPropertyName("acidity", soil.acidity())));
+							lines.add(4, Component.literal("  ").withStyle(ChatFormatting.DARK_GRAY)
+									.append(Component.translatable("agricraft.tooltip.magnifying.soil.nutrients"))
+									.append(LangUtils.soilPropertyName("nutrients", soil.nutrients())));
+						}
+					}
+			));
 		});
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SEED_ANALYZER.get(), RenderType.cutout());
 	}

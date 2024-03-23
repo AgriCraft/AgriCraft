@@ -3,7 +3,8 @@ package com.agricraft.agricraft.api;
 import com.agricraft.agricraft.api.adapter.AgriAdapter;
 import com.agricraft.agricraft.api.adapter.AgriAdapters;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGeneRegistry;
@@ -18,6 +19,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -36,6 +38,7 @@ public final class AgriApi {
 	public static final ResourceKey<Registry<AgriPlant>> AGRIPLANTS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "plants"));
 	public static final ResourceKey<Registry<AgriSoil>> AGRISOILS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "soils"));
 	public static final ResourceKey<Registry<AgriMutation>> AGRIMUTATIONS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "mutations"));
+	public static final ResourceKey<Registry<AgriFertilizer>> AGRIFERTILIZERS = ResourceKey.createRegistryKey(new ResourceLocation(AgriApi.MOD_ID, "fertilizers"));
 
 	public static Optional<Registry<AgriPlant>> getPlantRegistry() {
 		return Platform.get().getRegistry(AGRIPLANTS);
@@ -124,6 +127,22 @@ public final class AgriApi {
 
 	public static AgriMutationHandler getMutationHandler() {
 		return AgriMutationHandler.getInstance();
+	}
+
+	public static Optional<Registry<AgriFertilizer>> getFertilizerRegistry() {
+		return Platform.get().getRegistry(AGRIFERTILIZERS);
+	}
+
+	public static Optional<Registry<AgriFertilizer>> getFertilizerRegistry(RegistryAccess registryAccess) {
+		return registryAccess.registry(AGRIFERTILIZERS);
+	}
+
+	public static Optional<AgriFertilizer> getFertilizer(ItemStack stack) {
+		return AgriApi.getFertilizerAdapter(stack).flatMap(adapter -> adapter.valueOf(stack));
+	}
+
+	public static Optional<AgriAdapter<AgriFertilizer>> getFertilizerAdapter(Object obj) {
+		return AgriAdapters.FERTILIZER_ADAPTERS.stream().filter(adapter -> adapter.accepts(obj)).findFirst();
 	}
 
 	// getWeedRegistry()

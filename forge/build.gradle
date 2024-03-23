@@ -1,129 +1,202 @@
-plugins {
-	id 'idea'
-	id 'maven-publish'
-	id 'net.minecraftforge.gradle'
-	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-	id 'org.spongepowered.mixin'
+architectury {
+	platformSetupLoomIde()
+	forge()
 }
-base {
-	archivesName = "${mod_name}-forge-${minecraft_version}"
-}
-//mixin {
-//	add(sourceSets.main, "${mod_id}.refmap.json")
-//
-//	config("${mod_id}.mixins.json")
-//	config("${mod_id}.forge.mixins.json")
-//}
-minecraft {
-	mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
 
-	copyIdeResources = true //Calls processResources when in dev
-
-	// Automatically enable forge AccessTransformers if the file exists
-	// This location is hardcoded in Forge and can not be changed.
-	// https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-	if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-		accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+loom {
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+	forge {
+		convertAccessWideners = true
+		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+//		mixinConfig "$project.mod_id-common.mixins.json"
+//		mixinConfig "${project.mod_id}.mixins.json"
+		dataGen {
+			mod project.mod_id
+		}
 	}
-
 	runs {
-		client {
-			workingDirectory project.file('run')
-			ideaModule "${rootProject.name}.${project.name}.main"
-			taskName 'Client'
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-			mods {
-				modClientRun {
-					source sourceSets.main
-					source project(":common").sourceSets.main
-				}
-			}
-		}
-
-		server {
-			workingDirectory project.file('run')
-			ideaModule "${rootProject.name}.${project.name}.main"
-			taskName 'Server'
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-			mods {
-				modServerRun {
-					source sourceSets.main
-					source project(":common").sourceSets.main
-				}
-			}
-		}
-
 		data {
-			workingDirectory project.file('run')
-			ideaModule "${rootProject.name}.${project.name}.main"
-			args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-			taskName 'Data'
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-			mods {
-				modDataRun {
-					source sourceSets.main
-					source project(":common").sourceSets.main
-				}
-			}
+			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
 		}
 	}
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
+sourceSets {
+	main {
+		resources {
+			srcDirs += project(":neoforge").file("src/generated/resources").absolutePath
+			exclude '.cache'
+		}
+	}
+}
+
+configurations {
+	common
+	shadowCommon
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentForge.extendsFrom common
+}
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-	compileOnly project(":common")
-	annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+	forge "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
-	implementation fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20:$resourcefulconfig_version")
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
+	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
-	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge-api:$jei_version")
-	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge:$jei_version")
+	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
+	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
 
-//	compileOnly fg.deobf("curse.maven:jei-238222:4690097")  // JEI 15.2.0.25
+//	modCompileOnly "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
 //	modLocalRuntime "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
 
-//	compileOnly fg.deobf("curse.maven:jade-324717:4681836")  // Jade-1.20.1-forge-11.4.3-api
-	implementation fg.deobf("curse.maven:jade-324717:4681833-api-4681836")  // Jade-1.20.1-forge-11.4.3
-//	compileOnly fg.deobf("curse.maven:serene-seasons-291874:4761605")  // Serene Seasons 1.20.1-9.0.0.46-api
-	implementation fg.deobf("curse.maven:serene-seasons-291874:4761603-api-4761605")  // Serene Seasons 1.20.1-9.0.0.46
-}
+	modCompileOnly "curse.maven:jade-324717:4980189"  // Jade-1.20.4-forge-13.2.1-api
+	modLocalRuntime "curse.maven:jade-324717:4978952"  // Jade-1.20.4-forge-13.2.1
 
-tasks.withType(JavaCompile).configureEach {
-	source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).configureEach {
-	source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-	from(project(":common").sourceSets.main.allSource)
-}
-
-processResources {
-	from project(":common").sourceSets.main.resources
-}
-
-jar.finalizedBy('reobfJar')
+	modLocalRuntime "curse.maven:serene-seasons-291874:5073504"  // Serene Seasons 1.20.4-9.3.0.17
+	modLocalRuntime "curse.maven:glitchcore-955399:5088441"  // GlitchCore 1.20.4-1.0.0.59 (serene season dep)
 
 
-//loom {
-//	accessWidenerPath = project(":common").loom.accessWidenerPath
-//	forge {
-//		convertAccessWideners = true
-//		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-////		mixinConfig "$project.mod_id-common.mixins.json"
-////		mixinConfig "${project.mod_id}.mixins.json"
-//		dataGen {
-//			mod project.mod_id
+//	modLocalRuntime "curse.maven:bananarangs-861492:4584937"  // Bananarang 1.1 (1.20-1.20.1)
+}
+
+shadowJar {
+	configurations = [project.configurations.shadowCommon]
+	archiveClassifier.set "dev-shadow"
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier.set null
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	def commonSources = project(":common").sourcesJar
+	dependsOn commonSources
+	from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+		skip()
+	}
+}
+
+
+
+
+
+//
+//plugins {
+//	id 'idea'
+//	id 'maven-publish'
+//	id 'net.minecraftforge.gradle' version '6.0.+'
+//	id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+//	id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+//}
+//base {
+//	archivesName = "${mod_name}-forge-${minecraft_version}"
+//}
+////mixin {
+////	add(sourceSets.main, "${mod_id}.refmap.json")
+////
+////	config("${mod_id}.mixins.json")
+////	config("${mod_id}.forge.mixins.json")
+////}
+//minecraft {
+//	mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
+//
+//	copyIdeResources = true //Calls processResources when in dev
+//
+//	// Automatically enable forge AccessTransformers if the file exists
+//	// This location is hardcoded in Forge and can not be changed.
+//	// https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+//	if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+//		accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+//	}
+//
+//	runs {
+//		client {
+//			workingDirectory project.file('run')
+//			ideaModule "${rootProject.name}.${project.name}.main"
+//			taskName 'Client'
+//			property 'mixin.env.remapRefMap', 'true'
+//			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//			mods {
+//				modClientRun {
+//					source sourceSets.main
+//					source project(":common").sourceSets.main
+//				}
+//			}
+//		}
+//
+//		server {
+//			workingDirectory project.file('run')
+//			ideaModule "${rootProject.name}.${project.name}.main"
+//			taskName 'Server'
+//			property 'mixin.env.remapRefMap', 'true'
+//			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//			mods {
+//				modServerRun {
+//					source sourceSets.main
+//					source project(":common").sourceSets.main
+//				}
+//			}
+//		}
+//
+//		data {
+//			workingDirectory project.file('run')
+//			ideaModule "${rootProject.name}.${project.name}.main"
+//			args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+//			taskName 'Data'
+//			property 'mixin.env.remapRefMap', 'true'
+//			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//			mods {
+//				modDataRun {
+//					source sourceSets.main
+//					source project(":common").sourceSets.main
+//				}
+//			}
 //		}
 //	}
-
 //}
-
-
-
+//
+//sourceSets.main.resources.srcDir 'src/generated/resources'
+//
+//dependencies {
+//	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//	compileOnly project(":common")
+//	annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+//
+//	implementation fg.deobf("com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20.4:$resourcefulconfig_version")
+//
+//	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
+//	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge-api:$jei_version")
+//	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge:$jei_version")
+//
+//	implementation fg.deobf("curse.maven:jade-324717:4978952-api-4980189")  // Jade-1.20.4-forge-13.2.1
+//	implementation fg.deobf("curse.maven:serene-seasons-291874:5073504")  // Serene Seasons 1.20.4-9.3.0.17
+//	implementation fg.deobf("curse.maven:glitchcore-955399:5088441")  // GlitchCore 1.20.4-1.0.0.59 (serene season dep)
+//	implementation fg.deobf("curse.maven:bananarangs-861492:4584937")  // Bananarang 1.1 (1.20-1.20.1)
+//}
+//
+//tasks.withType(JavaCompile).configureEach {
+//	source(project(":common").sourceSets.main.allSource)
+//}
+//tasks.named("sourcesJar", Jar) {
+//	from(project(":common").sourceSets.main.allSource)
+//}
+//
+//processResources {
+//	from project(":common").sourceSets.main.resources
+//}
+//
+//jar.finalizedBy('reobfJar')
+//
+//sourceSets.each {
+//	def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+//	it.output.resourcesDir = dir
+//	it.java.destinationDirectory = dir
+//}

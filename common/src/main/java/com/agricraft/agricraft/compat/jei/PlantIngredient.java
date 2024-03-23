@@ -2,7 +2,7 @@ package com.agricraft.agricraft.compat.jei;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.AgriClientApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.common.util.LangUtils;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -62,7 +62,7 @@ public class PlantIngredient {
 			if (optional.isPresent()) {
 				ResourceLocation plantId = optional.get();
 				// get the model for the last growth stage and use the particle texture (that is also the crop texture) to render in jei
-				BakedModel model = AgriClientApi.getPlantModel(plantId.toString(), plant.stages().size() - 1);
+				BakedModel model = AgriClientApi.getPlantModel(plantId.toString(), plant.getInitialGrowthStage().total() - 1);
 
 				TextureAtlasSprite sprite = model.getParticleIcon();
 				guiGraphics.blit(0, 0, 0, 16, 16, sprite);

@@ -1,8 +1,6 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.api.codecs.AgriRequirement;
 import com.agricraft.agricraft.api.tools.journal.JournalData;
 import com.agricraft.agricraft.api.tools.journal.JournalPage;
 import com.agricraft.agricraft.client.ClientUtil;

@@ -2,22 +2,16 @@ package com.agricraft.agricraft.common.item.journal;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
-import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriRequirement;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriSeason;
 import com.agricraft.agricraft.api.tools.journal.JournalPage;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +41,7 @@ public class PlantPage implements JournalPage {
 		this.plant = AgriApi.getPlant(plantId).orElse(AgriPlant.NO_PLANT);
 		this.researched = researched;
 		this.brightnessMask = new boolean[16];
-		AgriRequirement req = this.plant.requirement();
+		AgriRequirement req = this.plant.getGrowthRequirements();
 		for (int light = 0; light < this.brightnessMask.length; light++) {
 			this.brightnessMask[light] = AgriGrowthConditionRegistry.getLight().apply(this.plant, 1, light).isFertile();
 		}
@@ -68,20 +62,7 @@ public class PlantPage implements JournalPage {
 			this.seasonMask[season] = AgriGrowthConditionRegistry.getSeason().apply(this.plant, 1, AgriSeason.values()[season]).isFertile();
 		}
 		this.products = new ArrayList<>();
-		for (AgriProduct product : this.plant.products()) {
-			if (product.item().tag()) {
-				// product is a tag, get a random item from it
-				ItemStack[] items = Ingredient.of(TagKey.create(Registries.ITEM, product.item().id())).getItems();
-				if (items.length > 0) {
-					// should we add every item in the tag ?
-					products.add(items[0]);
-				}
-			} else {
-				// product is an item
-				Item item = BuiltInRegistries.ITEM.get(product.item().id());
-				this.products.add(item.getDefaultInstance());
-			}
-		}
+		this.plant.getAllPossibleProducts(products::add);
 		List<List<ResourceLocation>> mutations = Stream.concat(
 				this.gatherMutationSprites(mutation -> mutation.parent1().equals(this.plantId) || mutation.parent2().equals(this.plantId)),
 				this.gatherMutationSprites(mutation -> mutation.child().equals(this.plantId))

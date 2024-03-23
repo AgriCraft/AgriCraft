@@ -2,7 +2,8 @@ package com.agricraft.agricraft.compat.jei;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.AgriClientApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.crop.AgriGrowthStage;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriSeason;
@@ -102,10 +103,11 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		for (int i = 0; i < recipe.currentStrength; ++i) {
 			guiGraphics.blit(COMPONENTS, 105, 66 - i * 5, 0, 66, 7, 3, 128, 128);
 		}
+		// render stage increment
 		int maxHeight = 48;
-		int strengthHeight = (int) (maxHeight * ((recipe.currentStage + 1f) / recipe.plant.stages().size()));
-		int strengthY = 21 + maxHeight - strengthHeight;
-		guiGraphics.blit(COMPONENTS, 93, strengthY, 7, strengthHeight, 0, 69, 7, 1, 128, 128);
+		int stageHeight = (int) (maxHeight * recipe.currentStage.growthPercentage());
+		int stageY = 21 + maxHeight - stageHeight;
+		guiGraphics.blit(COMPONENTS, 93, stageY, 7, stageHeight, 0, 69, 7, 1, 128, 128);
 		// render light levels
 		for (int i = 15; i >= 0; --i) {
 			boolean fertile = AgriGrowthConditionRegistry.getLight().apply(recipe.plant, recipe.currentStrength, i).isFertile();
@@ -186,7 +188,7 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			stack.popPose();
 		}
 		// render plant
-		BakedModel model = AgriClientApi.getPlantModel(recipe.plantId, recipe.currentStage);
+		BakedModel model = AgriClientApi.getPlantModel(recipe.plantId, recipe.currentStage.index());
 		stack.pushPose();
 		stack.translate(0, 1, 0);
 		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), guiGraphics.bufferSource().getBuffer(RenderType.cutoutMipped()), null, model, 1, 1, 1, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
@@ -228,7 +230,7 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			return List.of(Component.translatable("agricraft.tooltip.jei.strength", recipe.currentStrength));
 		}
 		if (92 <= mouseX && mouseX <= 101 && 20 <= mouseY && mouseY <= 70) {
-			return List.of(Component.translatable("agricraft.tooltip.jei.stage", recipe.currentStage));
+			return List.of(Component.translatable("agricraft.tooltip.jei.stage", recipe.currentStage.index()));
 		}
 		if (32 <= mouseX && mouseX <= 35 && 26 <= mouseY && mouseY <= 73) {
 			int light = 15 - ((int) (mouseY - 26) / 3);
@@ -296,14 +298,14 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		private final Btn incStageButton;
 		private final Btn decStageButton;
 		private int currentStrength = AgriApi.getStatRegistry().strengthStat().getMin();
-		private int currentStage;
+		private AgriGrowthStage currentStage;
 		private List<Block> soils;
 		private int soil;
 
 		public Recipe(AgriPlant plant) {
 			this.plant = plant;
 			this.plantId = AgriApi.getPlantId(plant).map(ResourceLocation::toString).orElse("");
-			this.currentStage = plant.stages().size() - 1;
+			this.currentStage = plant.getInitialGrowthStage();
 			this.incStrButton = new Btn(104, 10, 9, 9, this::incrementStrength, true);
 			this.decStrButton = new Btn(104, 71, 9, 9, this::decrementStrength, false);
 			this.incStageButton = new Btn(92, 10, 9, 9, this::incrementStage, true);
@@ -324,12 +326,12 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		}
 
 		public boolean incrementStage() {
-			this.currentStage = Math.min(this.plant.stages().size() - 1, this.currentStage + 1);
+			this.currentStage = this.currentStage.getNext(null, null);
 			return true;
 		}
 
 		public boolean decrementStage() {
-			this.currentStage = Math.max(0, this.currentStage - 1);
+			this.currentStage = this.currentStage.getPrevious(null, null);
 			return true;
 		}
 

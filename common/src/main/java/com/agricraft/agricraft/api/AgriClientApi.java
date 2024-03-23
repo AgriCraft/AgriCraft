@@ -18,7 +18,8 @@ import java.util.function.Predicate;
 public final class AgriClientApi {
 
 	private static final ModelResourceLocation AIR_MODEL = new ModelResourceLocation("minecraft", "air", "");
-	private static final String DEFAULT_SEED = "agricraft:unknown";
+	private static final String UNKNOWN_SEED = "agricraft:unknown";
+	private static final String UNKNOWN_PLANT = "agricraft:crop/unknown";
 
 
 	/**
@@ -54,7 +55,7 @@ public final class AgriClientApi {
 			BakedModel model = Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(plant));
 			if (model == null) {
 				// model not found, default to the unknown crop model that should always be present
-				return Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation("agricraft:crop/unknown"));
+				return Minecraft.getInstance().getModelManager().bakedRegistry.get(new ResourceLocation(UNKNOWN_PLANT));
 			}
 			return model;
 		}
@@ -62,7 +63,7 @@ public final class AgriClientApi {
 
 	public static BakedModel getSeedModel(String plantId) {
 		if (plantId.isEmpty()) {
-			plantId = DEFAULT_SEED;
+			plantId = UNKNOWN_SEED;
 		}
 		// compute the model of the seed from the plant id. the seed model path will look like <namespace>:seed/<id> so the file is /assets/<namespace>/models/seed/<id>.json
 		plantId = plantId.replace(":", ":seed/");

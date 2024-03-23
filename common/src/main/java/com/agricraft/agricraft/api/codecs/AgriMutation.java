@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.api.codecs;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -10,11 +11,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public record AgriMutation(boolean enabled, List<String> mods, ResourceLocation child, ResourceLocation parent1,
+public record AgriMutation(List<String> mods, ResourceLocation child, ResourceLocation parent1,
                            ResourceLocation parent2, double chance) {
 
+	// TODO: @Ketheroth mutation condition (check what is this in the old agricraft code)
+
 	public static final Codec<AgriMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.BOOL.fieldOf("enabled").forGetter(mutation -> mutation.enabled),
 			Codec.STRING.listOf().fieldOf("mods").forGetter(mutation -> mutation.mods),
 			ResourceLocation.CODEC.fieldOf("child").forGetter(mutation -> mutation.child),
 			ResourceLocation.CODEC.fieldOf("parent1").forGetter(mutation -> mutation.parent1),
@@ -46,13 +48,12 @@ public record AgriMutation(boolean enabled, List<String> mods, ResourceLocation 
 
 		List<String> mods = new ArrayList<>();
 		double chance = 0;
-		boolean enabled = true;
 		ResourceLocation child;
 		ResourceLocation parent1;
 		ResourceLocation parent2;
 
 		public AgriMutation build() {
-			return new AgriMutation(enabled, mods, child, parent1, parent2, chance);
+			return new AgriMutation(mods, child, parent1, parent2, chance);
 		}
 
 		public Builder mods(String... mods) {

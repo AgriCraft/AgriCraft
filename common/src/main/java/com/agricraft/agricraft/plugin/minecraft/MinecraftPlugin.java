@@ -25,6 +25,7 @@ public class MinecraftPlugin {
 		}
 		builder.accept(ModItems.SEED.get().getDefaultInstance());
 		Chicken.FOOD_ITEMS = Ingredient.of(builder.build());
+		MinecraftPlantModifiers.register();
 	}
 
 }

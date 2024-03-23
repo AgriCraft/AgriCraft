@@ -6,6 +6,10 @@ pluginManagement {
 			url = 'https://maven.minecraftforge.net/'
 		}
 		maven {
+			name = 'NeoForge'
+			url = 'https://maven.neoforged.net/releases/'
+		}
+		maven {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
@@ -17,12 +21,20 @@ pluginManagement {
 			name = "ParchmentMC"
 			url = 'https://maven.parchmentmc.org'
 		}
+		maven {
+			name = "Architectury"
+			url = "https://maven.architectury.dev/"
+		}
 	}
 }
 
-// This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
+//plugins {
+//	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+//}
+
 rootProject.name = 'AgriCraft'
 
 include("common")
 include("fabric")
 include("forge")
+include("neoforge")

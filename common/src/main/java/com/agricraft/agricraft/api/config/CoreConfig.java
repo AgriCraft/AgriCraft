@@ -1,16 +1,15 @@
 package com.agricraft.agricraft.api.config;
 
-import com.teamresourceful.resourcefulconfig.common.annotations.Category;
-import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.common.annotations.DoubleRange;
-import com.teamresourceful.resourcefulconfig.common.annotations.FloatRange;
-import com.teamresourceful.resourcefulconfig.common.config.EntryType;
+import com.teamresourceful.resourcefulconfig.api.annotations.Category;
+import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
+import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption;
+import com.teamresourceful.resourcefulconfig.api.types.options.EntryType;
 
 /**
  * Agricraft main configuration category.
  */
-@Category(id = "core_config", translation = "agricraft.option.core_config")
+@Category("config.agricraft.core")
 public final class CoreConfig {
 
 	@ConfigEntry(id = "plant_off_crop_sticks", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.plant_off_crop_sticks")
@@ -25,7 +24,9 @@ public final class CoreConfig {
 	@Comment("Set to true to allow only fertile plants to be able to cause, participate in, or contribute to a spreading / mutation action (note that this may cause issues with obtaining some specific plants)")
 	public static boolean onlyFertileCropsSpread = false;
 
-//	public static boolean allowFertilizerMutation = true;
+	@ConfigEntry(id = "allow_fertilizer_mutation", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.allow_fertilizer_mutation")
+	@Comment("Set to false if to disable triggering of mutations by using fertilizers on a cross crop.")
+	public static boolean allowFertilizerMutation = true;
 
 	@ConfigEntry(id = "clone_mutations", type = EntryType.BOOLEAN, translation = "agricraft.option.core_config.clone_mutations")
 	@Comment("Set to true to allow mutations on clone events (spreading from single crop).")
@@ -41,7 +42,7 @@ public final class CoreConfig {
 	public static boolean convertSeedsOnlyInAnalyzer = false;
 
 	@ConfigEntry(id = "growth_multiplier", type = EntryType.DOUBLE, translation = "agricraft.option.core_config.growth_multiplier")
-	@DoubleRange(min = 0.0, max = 3.0)
+	@ConfigOption.Range(min = 0.0, max = 3.0)
 	@Comment("Global growth rate multiplier for crops.")
 	public static double growthMultiplier = 1.0;
 
@@ -55,7 +56,7 @@ public final class CoreConfig {
 //	public static boolean rakingDropsItems = false;
 
 	@ConfigEntry(id = "seed_compost_value", type = EntryType.FLOAT, translation = "agricraft.option.core_config.seed_compost_value")
-	@FloatRange(min = 0F, max = 1F)
+	@ConfigOption.Range(min = 0F, max = 1F)
 	@Comment("Defines the seed compost value, if set to zero, seeds will not be compostable")
 	public static float seedCompostValue = 0.3F;
 

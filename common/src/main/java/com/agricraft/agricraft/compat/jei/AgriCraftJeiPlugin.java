@@ -17,7 +17,10 @@ import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 @JeiPlugin
 public class AgriCraftJeiPlugin implements IModPlugin {
@@ -44,7 +47,7 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-		registration.getCraftingCategory().addCategoryExtension(MagnifyingHelmetRecipe.class, MagnifyingHelmetExtension::new);
+		registration.getCraftingCategory().addExtension(MagnifyingHelmetRecipe.class, new MagnifyingHelmetExtension());
 	}
 
 	@Override
@@ -58,7 +61,11 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
 		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropProduceCategory.TYPE, registry.stream().toList()));
-		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropClippingCategory.TYPE, registry.stream().filter(plant -> !plant.clipProducts().isEmpty()).toList()));
+		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropClippingCategory.TYPE, registry.stream().filter(plant -> {
+			ArrayList<ItemStack> cliProducts = new ArrayList<>();
+			plant.getAllPossibleClipProducts(cliProducts::add);
+			return !cliProducts.isEmpty();
+		}).toList()));
 		AgriApi.getPlantRegistry().ifPresent(registry -> registration.addRecipes(CropRequirementCategory.TYPE, registry.stream().map(CropRequirementCategory.Recipe::new).toList()));
 		AgriApi.getMutationRegistry().ifPresent(registry -> registration.addRecipes(CropMutationCategory.TYPE, registry.stream().filter(AgriMutation::isValid).toList()));
 	}

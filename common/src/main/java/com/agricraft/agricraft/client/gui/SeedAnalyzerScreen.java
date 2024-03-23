@@ -41,7 +41,7 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerMenu
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 		super.render(guiGraphics, mouseX, mouseY, partialTick);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
@@ -141,24 +141,24 @@ public class SeedAnalyzerScreen extends AbstractContainerScreen<SeedAnalyzerMenu
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 		Optional<AgriGenome> opt = menu.getGenomeToRender();
 		if (opt.isEmpty()) {
-			return super.mouseScrolled(mouseX, mouseY, delta);
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 		}
 		int maxIndex = opt.get().getStatGenes().size() - 1;
 		if (maxIndex > 6) {
-			if (delta < 0) {
+			if (scrollY < 0) {
 				if (maxIndex - geneIndex > 6) {
 					geneIndex++;
 				}
-			} else if (delta > 0) {
+			} else if (scrollY > 0) {
 				if (geneIndex > 0) {
 					geneIndex--;
 				}
 			}
 		}
-		return super.mouseScrolled(mouseX, mouseY, delta);
+		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 
 }

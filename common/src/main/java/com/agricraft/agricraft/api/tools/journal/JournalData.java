@@ -1,6 +1,5 @@
 package com.agricraft.agricraft.api.tools.journal;
 
-import com.agricraft.agricraft.api.codecs.AgriPlant;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;

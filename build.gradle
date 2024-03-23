@@ -1,39 +1,74 @@
 plugins {
-	id 'fabric-loom' version '1.2-SNAPSHOT' apply(false)
-	id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
-	id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
-	id "org.spongepowered.mixin" version "0.7-SNAPSHOT" apply(false)
+	id 'java'
+//	id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+//	id 'fabric-loom' version '1.2-SNAPSHOT' apply(false)
+//	id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
+//	id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
+//	id "org.spongepowered.mixin" version "0.7-SNAPSHOT" apply(false)
+	id "dev.architectury.loom" version "1.4-SNAPSHOT" apply(false)
+	id "architectury-plugin" version "3.4-SNAPSHOT"
+	id "com.github.johnrengelman.shadow" version "7.1.2" apply false
+}
+
+architectury {
+	minecraft = minecraft_version
 }
 
 subprojects {
-	apply plugin: 'java'
+	apply plugin: "dev.architectury.loom"
+	apply plugin: "architectury-plugin"
+	apply plugin: "com.github.johnrengelman.shadow"
 
-	java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-	java.withSourcesJar()
-	java.withJavadocJar()
+	base {
+		archivesName = "${mod_name}-${name}-${minecraft_version}"
+	}
+
+	loom {
+		silentMojangMappingsLicense()
+	}
 
 	repositories {
-		mavenCentral()
 		maven {
-			name = 'Sponge / Mixin'
-			url = 'https://repo.spongepowered.org/repository/maven-public/'
+			name = "Jared's maven"
+			url = "https://maven.blamejared.com/"
 		}
-		maven {
-			name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
-			url = 'https://maven.blamejared.com'
-		}
-		maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
 		maven {
 			url "https://cursemaven.com"
 			content {
 				includeGroup "curse.maven"
 			}
 		}
+		maven { url = "https://nexus.resourcefulbees.com/repository/maven-public/" }
+		maven { url = "https://maven.neoforged.net/releases/" }
+		maven { url = "https://maven.minecraftforge.net/" }
+		maven { url = "https://maven.architectury.dev//" }
 	}
-	tasks.withType(JavaCompile).configureEach {
 
-		it.options.encoding = 'UTF-8'
-		it.options.getRelease().set(17)
+	dependencies {
+		minecraft "com.mojang:minecraft:${minecraft_version}"
+		mappings loom.layered() {
+			officialMojangMappings()
+			parchment("org.parchmentmc.data:parchment-${minecraft_version}:$parchment_version@zip")
+		}
+		modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20.4:$resourcefulconfig_version"
+
+	}
+
+	tasks.withType(JavaCompile).tap {
+		configureEach {
+			options.encoding = "UTF-8"
+			options.release = 17
+		}
+	}
+
+	java {
+		withSourcesJar()
+		toolchain.languageVersion = JavaLanguageVersion.of(17)
+	}
+
+	jar {
+		archiveClassifier.set "dev"
+		archivesBaseName = "$mod_id-$name-$minecraft_version"
 	}
 
 	processResources {
@@ -42,6 +77,7 @@ subprojects {
 				"group": project.group, //Else we target the task's group.
 				"minecraft_version": minecraft_version,
 				"forge_version": forge_version,
+				"neoforge_version": neoforge_version,
 				"fabric_version": fabric_version,
 				"fabric_loader_version": fabric_loader_version,
 				"mod_id": mod_id,
@@ -55,3 +91,4 @@ subprojects {
 	}
 
 }
+

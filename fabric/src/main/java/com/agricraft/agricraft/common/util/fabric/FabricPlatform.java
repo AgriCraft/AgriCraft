@@ -2,7 +2,7 @@ package com.agricraft.agricraft.common.util.fabric;
 
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.ExtraDataMenuProvider;
@@ -15,11 +15,13 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
@@ -157,6 +159,11 @@ public class FabricPlatform extends Platform {
 				return provider.createMenu(i, inventory, player);
 			}
 		});
+	}
+
+	@Override
+	public ParticleType<?> getParticleType(ResourceLocation particleId) {
+		return BuiltInRegistries.PARTICLE_TYPE.get(particleId);
 	}
 
 }

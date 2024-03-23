@@ -36,9 +36,9 @@ public class MutationPageDrawer implements JournalPageDrawer<MutationsPage> {
 
 	public void drawMutation(GuiGraphics guiGraphics, List<ResourceLocation> plants, int pageX, int pageY) {
 		guiGraphics.blit(GUI_COMPONENTS, pageX + 10, pageY + 24, 0, 76, 86, 18, 128, 128);
-		TextureAtlasSprite parent1 = AgriClientApi.getPlantModel(plants.get(0), AgriApi.getPlant(plants.get(0)).map(plant -> plant.stages().size() - 1).orElse(0)).getParticleIcon();
-		TextureAtlasSprite parent2 = AgriClientApi.getPlantModel(plants.get(1), AgriApi.getPlant(plants.get(1)).map(plant -> plant.stages().size() - 1).orElse(0)).getParticleIcon();
-		TextureAtlasSprite child = AgriClientApi.getPlantModel(plants.get(2), AgriApi.getPlant(plants.get(2)).map(plant -> plant.stages().size() - 1).orElse(0)).getParticleIcon();
+		TextureAtlasSprite parent1 = AgriClientApi.getPlantModel(plants.get(0), AgriApi.getPlant(plants.get(0)).map(plant -> plant.getInitialGrowthStage().total() - 1).orElse(0)).getParticleIcon();
+		TextureAtlasSprite parent2 = AgriClientApi.getPlantModel(plants.get(1), AgriApi.getPlant(plants.get(1)).map(plant -> plant.getInitialGrowthStage().total() - 1).orElse(0)).getParticleIcon();
+		TextureAtlasSprite child = AgriClientApi.getPlantModel(plants.get(2), AgriApi.getPlant(plants.get(2)).map(plant -> plant.getInitialGrowthStage().total() - 1).orElse(0)).getParticleIcon();
 		guiGraphics.blit(pageX + 11, pageY + 25, 1, 16, 16, parent1);
 		guiGraphics.blit(pageX + 45, pageY + 25, 1, 16, 16, parent2);
 		guiGraphics.blit(pageX + 79, pageY + 25, 1, 16, 16, child);

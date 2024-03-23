@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
 
 import java.util.Optional;
 
@@ -25,8 +26,16 @@ public record AgriProduct(ExtraCodecs.TagOrElementLocation item, CompoundTag nbt
 		this(item, nbt.orElse(new CompoundTag()), min, max, chance, required);
 	}
 
+	public boolean shouldDrop(RandomSource random) {
+		return this.chance > random.nextDouble();
+	}
+
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	public int getAmount(RandomSource random) {
+		return random.nextIntBetweenInclusive(this.min, this.max);
 	}
 
 	public static class Builder {

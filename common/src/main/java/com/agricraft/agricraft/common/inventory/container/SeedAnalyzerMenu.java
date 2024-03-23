@@ -34,10 +34,9 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 			@Override
 			public void set(ItemStack stack) {
 				super.set(stack);
-				if (analyzer.hasJournal()) {
+				if (analyzer.hasJournal() && !stack.isEmpty()) {
 					ItemStack journal = analyzer.getJournal();
 					JournalItem.researchPlant(journal, new ResourceLocation(AgriSeedItem.getSpecies(stack)));
-//					analyzer.insertJournal(journal);
 				}
 			}
 

@@ -1,10 +1,14 @@
 package com.agricraft.agricraft.common.util;
 
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -17,6 +21,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class Platform {
 
@@ -84,9 +89,23 @@ public abstract class Platform {
 
 	public abstract List<Fluid> getFluidsFromLocation(ExtraCodecs.TagOrElementLocation tag);
 
+	public Stream<ResourceLocation> getPlantIdsFromTag(ExtraCodecs.TagOrElementLocation tag) {
+		if (!tag.tag()) {
+			return Stream.of(tag.id());
+		} else {
+			return AgriApi.getPlantRegistry().flatMap(registry ->
+							registry.getTag(TagKey.create(AgriApi.AGRIPLANTS, tag.id()))
+									.map(named -> named.stream().map(holder -> registry.getKey(holder.value())))
+					)
+					.orElse(Stream.empty());
+		}
+	}
+
 	public abstract  <T extends AbstractContainerMenu> MenuType<T> createMenuType(MenuFactory<T> factory);
 
 	public abstract void openMenu(ServerPlayer player, ExtraDataMenuProvider provider);
+
+	public abstract ParticleType<?> getParticleType(ResourceLocation particleId);
 
 	@FunctionalInterface
 	public interface MenuFactory<T extends AbstractContainerMenu> {

@@ -1,34 +1,56 @@
-plugins {
-	id 'java'
-	id 'idea'
-	id 'maven-publish'
-	id 'fabric-loom'
-}
-base {
-	archivesName = "${mod_name}-fabric-${minecraft_version}"
-}
-dependencies {
-	minecraft "com.mojang:minecraft:${minecraft_version}"
-	mappings loom.layered() {
-		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-${minecraft_version}:$parchment_version@zip")
-	}
-	modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-
-	modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20:$resourcefulconfig_version"
-
-	modCompileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
-//	modRuntimeOnly "mezz.jei:jei-$minecraft_version-common:$jei_version"
-//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:$rei_version"
-//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:$rei_version"
-
-	modCompileOnly "curse.maven:jade-324717:4681835"  // Jade-1.20-fabric-11.4.3-api
+architectury {
+	common(rootProject.enabled_platforms.split(","))
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/agricraft.accesswidener")
 }
 
-repositories {
-	maven { url "https://maven.shedaniel.me" }
+dependencies {
+	modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+
+	modCompileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
+//	modRuntimeOnly "mezz.jei:jei-$minecraft_version-common:$jei_version"
+//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:$rei_version"
+//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:$rei_version"
+
+//	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//plugins {
+//	id 'java'
+//	id 'idea'
+//	id 'maven-publish'
+//	id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
+//}
+//base {
+//	archivesName = "${mod_name}-common-${minecraft_version}"
+//}
+//minecraft {
+//	version(minecraft_version)
+//	if(file("src/main/resources/${mod_id}.accesswidener").exists()){
+//		accessWideners(file("src/main/resources/${mod_id}.accesswidener"))
+//	}
+//}
+//dependencies {
+//	compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+//
+//	implementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20.4:$resourcefulconfig_version"
+//
+//	compileOnly "mezz.jei:jei-$minecraft_version-common-api:$jei_version"
+//
+////	compileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
+//}
+
