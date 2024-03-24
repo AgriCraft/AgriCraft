@@ -169,14 +169,4 @@ public class AgriSeedItem extends BlockItem implements AgriGenomeProviderItem {
 		}
 	}
 
-	@Override
-	public void setGenome(ItemStack stack, AgriGenome genome) {
-		genome.writeToNBT(stack.getOrCreateTag());
-	}
-
-	@Override
-	public Optional<AgriGenome> getGenome(ItemStack stack) {
-		return Optional.ofNullable(AgriGenome.fromNBT(stack.getOrCreateTag()));
-	}
-
 }

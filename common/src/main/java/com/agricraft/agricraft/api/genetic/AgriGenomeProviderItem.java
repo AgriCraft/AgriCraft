@@ -10,8 +10,12 @@ public interface AgriGenomeProviderItem {
 	 * Change the genome of the plant.
 	 * @param genome the new genome of the crop
 	 */
-	void setGenome(ItemStack stack, AgriGenome genome);
+	default void setGenome(ItemStack stack, AgriGenome genome) {
+		genome.writeToNBT(stack.getOrCreateTag());
+	}
 
-	Optional<AgriGenome> getGenome(ItemStack stack);
+	default Optional<AgriGenome> getGenome(ItemStack stack) {
+		return Optional.ofNullable(AgriGenome.fromNBT(stack.getOrCreateTag()));
+	}
 
 }

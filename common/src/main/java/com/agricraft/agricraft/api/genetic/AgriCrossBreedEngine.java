@@ -65,7 +65,6 @@ public class AgriCrossBreedEngine {
 	public boolean handleCrossBreedTick(AgriCrop crop, Stream<AgriCrop> neighbours, RandomSource random) {
 		// select candidate parents from the neighbours
 		List<AgriCrop> candidates = this.getSelector().selectAndOrder(neighbours, random);
-		candidates.forEach(System.out::println);
 		// No candidates: do nothing
 		if (candidates.isEmpty()) {
 			return false;

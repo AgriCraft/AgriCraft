@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.common.inventory.container;
 
-import com.agricraft.agricraft.api.genetic.AgriGenePair;
+import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.common.block.SeedAnalyzerBlock;
 import com.agricraft.agricraft.common.block.entity.SeedAnalyzerBlockEntity;
@@ -17,8 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class SeedAnalyzerMenu extends AbstractContainerMenu {
@@ -33,6 +31,12 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 		this.addSlot(new Slot(this.analyzer.getInventory(), SeedAnalyzerBlockEntity.SEED_SLOT, 26, 38) {
 			@Override
 			public void set(ItemStack stack) {
+				if (!(stack.getItem() instanceof AgriSeedItem)) {
+					ItemStack finalStack = stack;  // lambda :(
+					stack = AgriApi.getPlantRegistry().flatMap(registry -> registry.stream().filter(plant -> plant.isSeedItem(finalStack)).findFirst())
+							.map(AgriSeedItem::toStack)
+							.orElse(stack);
+				}
 				super.set(stack);
 				if (analyzer.hasJournal() && !stack.isEmpty()) {
 					ItemStack journal = analyzer.getJournal();
@@ -42,7 +46,7 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 
 			@Override
 			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem() instanceof AgriSeedItem;
+				return stack.getItem() instanceof AgriSeedItem || AgriApi.getPlantRegistry().map(registry -> registry.stream().anyMatch(plant-> plant.isSeedItem(stack))).orElse(false);
 			}
 		});
 		this.addSlot(new Slot(this.analyzer.getInventory(), SeedAnalyzerBlockEntity.JOURNAL_SLOT, 26, 71) {

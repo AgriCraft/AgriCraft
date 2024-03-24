@@ -3,10 +3,8 @@ package com.agricraft.agricraft.common.block;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.api.crop.AgriCrop;
-import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
 import com.agricraft.agricraft.api.fertilizer.IAgriFertilizable;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
-import com.agricraft.agricraft.api.genetic.AgriGenomeProviderItem;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
@@ -21,7 +19,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -64,6 +61,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@SuppressWarnings("deprecation")
 public class CropBlock extends Block implements EntityBlock, BonemealableBlock, BucketPickup, LiquidBlockContainer {
 
 	public static final VoxelShape SINGLE_STICKS = Stream.of(
@@ -473,7 +471,12 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-		return state.getValue(CROP_STATE).hasPlant() ? AgriApi.getCrop(level, pos).map(crop -> crop.getPlant().getRedstonePower(crop)).orElse(0) : 0;
+		return state.getValue(CROP_STATE).hasPlant() ? AgriApi.getCrop(level, pos).map(crop -> {
+			if (crop.getPlant() != null) {
+				return crop.getPlant().getRedstonePower(crop);
+			}
+			return 0;
+		}).orElse(0) : 0;
 	}
 
 }

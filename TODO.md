@@ -1,9 +1,9 @@
 -[x] journal
 -[x] seed analyzer
-- rake
-- trowel
-- seed_bag
-- seed storage
+-[ ] rake
+-[x] trowel
+-[ ] seed_bag
+-[ ] seed storage
 
 - tank
 - irrigation channel
@@ -46,6 +46,7 @@
 -[ ] growth stage as objects / api
 -[ ] plant api, onGrowth,Break,etc
 -[ ] agricraft plugin
+-[ ] ability to change the growth logic
 -[ ] dev how to do things with the new code/api
 
 -[ ] jade

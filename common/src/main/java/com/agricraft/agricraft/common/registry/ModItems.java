@@ -8,6 +8,7 @@ import com.agricraft.agricraft.common.item.DebuggerItem;
 import com.agricraft.agricraft.common.item.JournalItem;
 import com.agricraft.agricraft.common.item.MagnifyingGlassItem;
 import com.agricraft.agricraft.common.item.RakeItem;
+import com.agricraft.agricraft.common.item.TrowelItem;
 import com.agricraft.agricraft.common.util.Platform;
 import com.agricraft.agricraft.common.util.PlatformRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,6 +27,7 @@ public class ModItems {
 	public static final PlatformRegistry.Entry<Item> MAGNIFYING_GLASS = ITEMS.register("magnifying_glass", () -> new MagnifyingGlassItem(new Item.Properties().stacksTo(1)));
 	public static final PlatformRegistry.Entry<Item> WOODEN_RAKE = ITEMS.register("wooden_rake", () -> new RakeItem(new Item.Properties()));
 	public static final PlatformRegistry.Entry<Item> IRON_RAKE = ITEMS.register("iron_rake", () -> new RakeItem(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> TROWEL = ITEMS.register("trowel", () -> new TrowelItem(new Item.Properties().stacksTo(1)));
 	public static final PlatformRegistry.Entry<Item> WOODEN_CROP_STICKS = ITEMS.register("wooden_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.WOODEN));
 	public static final PlatformRegistry.Entry<Item> IRON_CROP_STICKS = ITEMS.register("iron_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.IRON));
 	public static final PlatformRegistry.Entry<Item> OBSIDIAN_CROP_STICKS = ITEMS.register("obsidian_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.OBSIDIAN));
@@ -42,6 +44,7 @@ public class ModItems {
 		output.accept(ModItems.MAGNIFYING_GLASS.get());
 		output.accept(ModItems.WOODEN_RAKE.get());
 		output.accept(ModItems.IRON_RAKE.get());
+		output.accept(ModItems.TROWEL.get());
 		output.accept(ModItems.WOODEN_CROP_STICKS.get());
 		output.accept(ModItems.IRON_CROP_STICKS.get());
 		output.accept(ModItems.OBSIDIAN_CROP_STICKS.get());

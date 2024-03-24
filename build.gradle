@@ -1,10 +1,5 @@
 plugins {
 	id 'java'
-//	id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
-//	id 'fabric-loom' version '1.2-SNAPSHOT' apply(false)
-//	id 'net.minecraftforge.gradle' version '[6.0,6.2)' apply(false)
-//	id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply(false)
-//	id "org.spongepowered.mixin" version "0.7-SNAPSHOT" apply(false)
 	id "dev.architectury.loom" version "1.4-SNAPSHOT" apply(false)
 	id "architectury-plugin" version "3.4-SNAPSHOT"
 	id "com.github.johnrengelman.shadow" version "7.1.2" apply false

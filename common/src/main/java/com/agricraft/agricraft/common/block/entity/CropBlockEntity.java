@@ -128,12 +128,6 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 	@Override
 	public boolean removeGenome() {
 		if (this.hasPlant()) {
-			this.getPlant().onRemoved(this);
-			this.genome = null;
-			this.plant = null;
-			this.plantId = "";
-			this.growthStage = null;
-
 			if (this.getBlockState().getValue(CropBlock.CROP_STATE) == CropState.PLANT_STICKS) {
 				this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.SINGLE_STICKS));
 			} else {
@@ -143,6 +137,11 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 					level.setBlockAndUpdate(this.getBlockPos(), Blocks.AIR.defaultBlockState());
 				}
 			}
+			this.getPlant().onRemoved(this);
+			this.genome = null;
+			this.plant = null;
+			this.plantId = "";
+			this.growthStage = null;
 			return true;
 		}
 		return false;

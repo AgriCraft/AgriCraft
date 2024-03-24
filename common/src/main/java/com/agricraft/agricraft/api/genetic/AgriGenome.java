@@ -46,6 +46,10 @@ public class AgriGenome {
 		return new AgriGenome(species, stats);
 	}
 
+	public static void removeFromNBT(CompoundTag tag) {
+		tag.remove("genes");
+	}
+
 	public AgriGenePair<String> getSpeciesGene() {
 		return this.species;
 	}

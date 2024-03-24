@@ -28,8 +28,12 @@ dependencies {
 
 	modApi "com.terraformersmc:modmenu:$modmenu_version"
 
-	modCompileOnly "mezz.jei:jei-$minecraft_version-fabric-api:$jei_version"
-	modRuntimeOnly "mezz.jei:jei-$minecraft_version-fabric:$jei_version"
+//	modCompileOnly "mezz.jei:jei-$minecraft_version-fabric-api:$jei_version"
+//	modRuntimeOnly "mezz.jei:jei-$minecraft_version-fabric:$jei_version"
+
+	modCompileOnly "dev.emi:emi-xplat-intermediary:${emi_version}:api"
+	modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+	modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
 	modRuntimeOnly "curse.maven:jade-324717:4978962"  // Jade-1.20.4-fabric-13.2.1
 	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
@@ -71,78 +75,3 @@ components.java {
 	}
 }
 
-
-//plugins {
-//	id 'java'
-//	id 'idea'
-//	id 'maven-publish'
-//	id 'fabric-loom' version '1.4-SNAPSHOT'
-//}
-//base {
-//	archivesName = "${mod_name}-fabric-${minecraft_version}"
-//}
-//dependencies {
-//	minecraft "com.mojang:minecraft:${minecraft_version}"
-//	mappings loom.layered() {
-//		officialMojangMappings()
-//		parchment("org.parchmentmc.data:parchment-1.20.4:$parchment_version@zip")
-//	}
-//	modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-//	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-//	compileOnly project(":common")
-//
-//
-//	modApi "com.teamresourceful.resourcefulconfig:resourcefulconfig-$name-1.20.4:$resourcefulconfig_version"
-//	modApi "com.terraformersmc:modmenu:$modmenu_version"
-//
-////	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$rei_version"
-////	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$rei_version"
-////	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:$rei_version"
-////	modCompileOnly "dev.emi:emi:$rootProject.emi_version+$rootProject.minecraft_version"
-//	modCompileOnly "mezz.jei:jei-$minecraft_version-fabric-api:$jei_version"
-//	modRuntimeOnly "mezz.jei:jei-$minecraft_version-fabric:$jei_version"
-//
-//	modRuntimeOnly "curse.maven:jade-324717:4978962"  // Jade-1.20.4-fabric-13.2.1
-//	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
-//
-////	modRuntimeOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
-////	modCompileOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
-//}
-//
-//loom {
-//	accessWidenerPath = file("src/main/resources/agricraft-fabric.accesswidener")
-//	mixin {
-//		defaultRefmapName.set("${mod_id}.refmap.json")
-//	}
-//	runs {
-//		client {
-//			client()
-//			setConfigName("Fabric Client")
-//			ideConfigGenerated(true)
-//			runDir("run")
-//		}
-//		server {
-//			server()
-//			setConfigName("Fabric Server")
-//			ideConfigGenerated(true)
-//			runDir("run")
-//		}
-//	}
-//}
-//
-//tasks.withType(JavaCompile).configureEach {
-//	source(project(":common").sourceSets.main.allSource)
-//}
-//tasks.named("sourcesJar", Jar) {
-//	from(project(":common").sourceSets.main.allSource)
-//}
-//
-//processResources {
-//	from project(":common").sourceSets.main.resources
-//}
-//
-//sourceSets.main.resources.srcDirs += project(":forge").file("src/generated/resources").absolutePath
-//
-//repositories {
-//	maven { url "https://maven.terraformersmc.com" }
-//}

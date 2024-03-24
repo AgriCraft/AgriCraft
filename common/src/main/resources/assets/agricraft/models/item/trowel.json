@@ -1,0 +1,14 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "agricraft:item/trowel"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"agricraft:plant": 1
+			},
+			"model": "agricraft:item/trowel_plant"
+		}
+	]
+}

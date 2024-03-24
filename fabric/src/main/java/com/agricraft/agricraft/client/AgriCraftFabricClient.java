@@ -41,12 +41,10 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 		ModelLoadingPlugin.register(pluginContext -> {
 			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/seed").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
 				ResourceLocation seed = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/seed", "seed").replace(".json", ""));
-//				System.out.println(entry.getKey() + "  " + seed);
 				pluginContext.addModels(seed);
 			}
 			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/crop").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
 				ResourceLocation crop = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/crop", "crop").replace(".json", ""));
-//				System.out.println(entry.getKey() + "  " + crop + " " + entry.getKey().getClass());
 				pluginContext.addModels(crop);
 			}
 			// add the crop sticks models else they're not loaded
