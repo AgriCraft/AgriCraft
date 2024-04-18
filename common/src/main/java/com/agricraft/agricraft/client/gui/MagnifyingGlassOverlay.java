@@ -17,6 +17,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,10 +36,9 @@ import java.util.function.Predicate;
  */
 public class MagnifyingGlassOverlay {
 
-	private static int hoverTicks;
-
 	private static final List<Predicate<Player>> allowingPredicates = new ArrayList<>();
 	private static final Set<MagnifyingInspector> inspectors = new HashSet<>();
+	private static int hoverTicks;
 
 	static {
 		addAllowingPredicate(player -> player.getMainHandItem().is(ModItems.MAGNIFYING_GLASS.get()));
@@ -55,6 +56,32 @@ public class MagnifyingGlassOverlay {
 				Optional<AgriSoil> soil = AgriApi.getSoil(level, result.getBlockPos(), level.registryAccess());
 				if (soil.isPresent()) {
 					return Optional.of(soil.get());
+				}
+			}
+			return Optional.empty();
+		});
+
+		inspectors.add((level, player, hitResult) -> {
+			Vec3 lookAngle = player.getLookAngle();
+			if (-0.1 <= lookAngle.z && lookAngle.z <= 0.1) {
+				HitResult pick = Minecraft.getInstance().getCameraEntity().pick(100, 0, false);
+				double sunOrientation = level.getTimeOfDay(0);  // angle in circle in [0,1]
+				double playerOrientation = Math.atan2(lookAngle.x, lookAngle.y) / Math.PI / 2.0;  // angle in a circle in [0,1]
+				// modify the orientation of the player to be in the same system as the sun's
+				if (-0.5 < playerOrientation && playerOrientation < 0) {
+					playerOrientation = Math.abs(playerOrientation);
+				} else if (0 < playerOrientation && playerOrientation < 0.5) {
+					playerOrientation = 1 - playerOrientation;
+				}
+				// when level time is around noon/midnight and the player look at the sun it will bug
+				// the difference will be around 1 instead of 0
+				// this happens because the if-else above does nothing on 0
+				// I could handle it and check when player tod is 0-1 and level tod too, but I do not want to :)
+
+				double diff = sunOrientation - playerOrientation;
+
+				if (-0.013 <= diff && diff <= 0.013 && pick.getType() == HitResult.Type.MISS) {
+					return Optional.of((tooltip, isPlayerSneaking) -> tooltip.add(Component.translatable("agricraft.tooltip.magnifying.sun")));
 				}
 			}
 			return Optional.empty();

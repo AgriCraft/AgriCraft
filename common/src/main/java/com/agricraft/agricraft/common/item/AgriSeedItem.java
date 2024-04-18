@@ -11,6 +11,7 @@ import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -167,6 +168,11 @@ public class AgriSeedItem extends BlockItem implements AgriGenomeProviderItem {
 						.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
 			}
 		}
+	}
+
+	@Override
+	public ItemStack getDefaultInstance() {
+		return AgriApi.getPlant(new ResourceLocation("minecraft:wheat")).map(AgriSeedItem::toStack).orElse(super.getDefaultInstance());
 	}
 
 }

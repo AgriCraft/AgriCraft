@@ -111,6 +111,7 @@
   "agricraft.tooltip.magnifying.requirement.not_fertile": "Not Fertile",
   "agricraft.tooltip.magnifying.requirement.lethal": "Lethal",
   "agricraft.tooltip.magnifying.no_plant": "No Plant",
+  "agricraft.tooltip.magnifying.sun": "Do not look directly at the sun",
   "agricraft.tooltip.jei.strength": "Strength: %d",
   "agricraft.tooltip.jei.stage": "Stage: %d",
   "agricraft.tooltip.jei.light": "Light Level: %d",
@@ -172,6 +173,7 @@
   "agricraft.gui.jei.clipping": "Plant Clipping",
   "agricraft.gui.jei.mutation": "Plant Mutation",
   "agricraft.gui.jei.requirement": "Growth Requirements",
+  "emi.category.agricraft.mutation": "Plant Mutation",
 
   "soil.agricraft.minecraft.clay": "Clay",
   "soil.agricraft.minecraft.crimsum_nylium": "Crimsum Nylium",
