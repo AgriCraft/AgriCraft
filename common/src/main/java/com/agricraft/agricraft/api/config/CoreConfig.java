@@ -50,10 +50,25 @@ public final class CoreConfig {
 	@Comment("Set this to true to make only mature crops drop seeds (to encourage trowel usage).")
 	public static boolean onlyMatureSeedDrops = false;
 
-//	public static boolean disableWeeds = false;
-//	public static boolean weedsSpreading = false;
-//	public static boolean weedsDestroyCropSticks = false;
-//	public static boolean rakingDropsItems = false;
+	@ConfigEntry(id = "disable_weeds", type = EntryType.BOOLEAN, translation = "config.agricraft.core.disable_weeds")
+	@Comment("Set to true to completely disable the spawning of weeds")
+	public static boolean disableWeeds = false;
+
+	@ConfigEntry(id = "mature_weeds_kill_plants", type = EntryType.BOOLEAN, translation = "config.agricraft.core.mature_weeds_kill_plants")
+	@Comment("Set to false to disable mature weeds killing plants")
+	public static boolean matureWeedsKillPlants = true;
+
+	@ConfigEntry(id = "weeds_spreading", type = EntryType.BOOLEAN, translation = "config.agricraft.core.weeds_spreading")
+	@Comment("Set to false to disable the spreading of weeds")
+	public static boolean weedsSpreading = true;
+
+	@ConfigEntry(id = "weeds_destroy_crop_sticks", type = EntryType.BOOLEAN, translation = "config.agricraft.core.weeds_destroy_crop_sticks")
+	@Comment("Set this to true to have weeds destroy the crop sticks when they are broken with weeds (to encourage rake usage).")
+	public static boolean weedsDestroyCropSticks = false;
+
+	@ConfigEntry(id = "raking_drops_items", type = EntryType.BOOLEAN, translation = "config.agricraft.core.raking_drops_items")
+	@Comment("Set to false if you wish to disable drops from raking weeds.")
+	public static boolean rakingDropsItems = true;
 
 	@ConfigEntry(id = "seed_compost_value", type = EntryType.FLOAT, translation = "config.agricraft.core.seed_compost_value")
 	@ConfigOption.Range(min = 0F, max = 1F)

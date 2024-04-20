@@ -37,16 +37,24 @@ public class CropBlockEntityRenderer implements BlockEntityRenderer<CropBlockEnt
 					buffer.getBuffer(RenderType.cutoutMipped()),
 					blockEntity.getBlockState(), model, 1, 1, 1, packedLight, packedOverlay);
 		}
-		if (!blockEntity.hasPlant()) {
-			return;
+		if (blockEntity.hasPlant()) {
+			AgriGrowthStage stage = blockEntity.getGrowthStage();
+			String plantId = blockEntity.getPlantId();
+			BakedModel plantModel = AgriClientApi.getPlantModel(plantId, stage.index());
+			// render the computed plant model
+			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(),
+					buffer.getBuffer(RenderType.cutoutMipped()),
+					blockEntity.getBlockState(), plantModel, 1, 1, 1, packedLight, packedOverlay);
 		}
-		AgriGrowthStage stage = blockEntity.getGrowthStage();
-		String plantId = blockEntity.getPlantId();
-		BakedModel plantModel = AgriClientApi.getPlantModel(plantId, stage.index());
-		// render the computed plant model
-		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(),
-				buffer.getBuffer(RenderType.cutoutMipped()),
-				blockEntity.getBlockState(), plantModel, 1, 1, 1, packedLight, packedOverlay);
+		if (blockEntity.hasWeeds()) {
+			AgriGrowthStage weedStage = blockEntity.getWeedGrowthStage();
+			String weedId = blockEntity.getWeedId();
+			BakedModel weedModel = AgriClientApi.getWeedModel(weedId, weedStage.index());
+			// render the computed plant model
+			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(),
+					buffer.getBuffer(RenderType.cutoutMipped()),
+					blockEntity.getBlockState(), weedModel, 1, 1, 1, packedLight, packedOverlay);
+		}
 
 	}
 

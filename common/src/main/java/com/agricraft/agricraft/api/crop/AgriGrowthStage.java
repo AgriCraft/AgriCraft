@@ -41,6 +41,9 @@ public class AgriGrowthStage {
 		return this.stage <= 0 ? this : new AgriGrowthStage(this.stage - 1, this.total);
 	}
 
+	/**
+	 * @return the growth as a value between 0 and 1
+	 */
 	public double growthPercentage() {
 		return (this.stage + 1.0) / this.total;
 	}

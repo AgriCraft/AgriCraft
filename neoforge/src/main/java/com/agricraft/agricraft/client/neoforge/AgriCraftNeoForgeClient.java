@@ -54,6 +54,10 @@ public class AgriCraftNeoForgeClient {
 			ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/crop", "crop").replace(".json", ""));
 			event.register(seed);
 		}
+		for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/weed").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
+			ResourceLocation seed = new ResourceLocation(entry.getKey().toString().replace("models/weed", "weed").replace(".json", ""));
+			event.register(seed);
+		}
 		// add the crop sticks models else they're not loaded
 		event.register(new ResourceLocation("agricraft:block/wooden_crop_sticks"));
 		event.register(new ResourceLocation("agricraft:block/iron_crop_sticks"));

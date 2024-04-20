@@ -9,6 +9,11 @@
 			"type": "directory",
 			"source": "plant",
 			"prefix": "plant/"
+		},
+		{
+			"type": "directory",
+			"source": "weed",
+			"prefix": "weed/"
 		}
 	]
 }

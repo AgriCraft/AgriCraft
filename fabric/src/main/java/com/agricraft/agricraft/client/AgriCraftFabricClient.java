@@ -47,6 +47,10 @@ public class AgriCraftFabricClient implements ClientModInitializer {
 				ResourceLocation crop = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/crop", "crop").replace(".json", ""));
 				pluginContext.addModels(crop);
 			}
+			for (Map.Entry<ResourceLocation, Resource> entry : FileToIdConverter.json("models/weed").listMatchingResources(Minecraft.getInstance().getResourceManager()).entrySet()) {
+				ResourceLocation crop = new ResourceLocation(entry.getKey().getNamespace(), entry.getKey().getPath().replace("models/weed", "weed").replace(".json", ""));
+				pluginContext.addModels(crop);
+			}
 			// add the crop sticks models else they're not loaded
 			pluginContext.addModels(new ResourceLocation("agricraft:block/wooden_crop_sticks"), new ResourceLocation("agricraft:block/iron_crop_sticks"), new ResourceLocation("agricraft:block/obsidian_crop_sticks"),
 					new ResourceLocation("agricraft:block/wooden_cross_crop_sticks"), new ResourceLocation("agricraft:block/iron_cross_crop_sticks"), new ResourceLocation("agricraft:block/obsidian_cross_crop_sticks"));

@@ -40,11 +40,12 @@ public class TrowelItem extends Item implements AgriGenomeProviderItem {
 	}
 
 	protected InteractionResult tryUseOnCrop(AgriCrop crop, ItemStack heldItem, Player player) {
-		// TODO: @Ketheroth uncomment that when there are weeds
-//		if (crop.hasWeed() && player != null) {
-//			player.sendSystemMessage(Component.translatable("agricraft.message.trowel_weed"));
-//		} else
-		if (crop.isCrossCropSticks()) {
+		if (crop.hasWeeds()) {
+			if (player != null && player.level().isClientSide()) {
+				player.sendSystemMessage(Component.translatable("agricraft.message.trowel_weed"));
+			}
+			return InteractionResult.FAIL;
+		} else if (crop.isCrossCropSticks()) {
 			return InteractionResult.FAIL;
 		}
 		if (crop.hasPlant()) {

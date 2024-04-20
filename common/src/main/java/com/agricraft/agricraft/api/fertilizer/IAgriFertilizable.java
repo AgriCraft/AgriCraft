@@ -25,7 +25,7 @@ public interface IAgriFertilizable {
 	 * @param fertilizer the fertilizer to be applied.
 	 * @param rand the random number generator to be used.
 	 */
-	void onApplyFertilizer(AgriFertilizer fertilizer, RandomSource rand);
+	default void onApplyFertilizer(AgriFertilizer fertilizer, RandomSource rand) { }
 
 	/**
 	 * Applies a growth tick

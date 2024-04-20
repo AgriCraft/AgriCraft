@@ -111,6 +111,7 @@
   "agricraft.tooltip.magnifying.requirement.not_fertile": "Not Fertile",
   "agricraft.tooltip.magnifying.requirement.lethal": "Lethal",
   "agricraft.tooltip.magnifying.no_plant": "No Plant",
+  "agricraft.tooltip.magnifying.weeds": "Weeds: ",
   "agricraft.tooltip.magnifying.sun": "Do not look directly at the sun",
   "agricraft.tooltip.jei.strength": "Strength: %d",
   "agricraft.tooltip.jei.stage": "Stage: %d",
@@ -282,5 +283,7 @@
   "description.agricraft.minecraft.warped_fungus": "Efficient Hoglin repellent.",
   "description.agricraft.minecraft.wheat": "The cornerstone of the Agricultural Revolution.",
   "description.agricraft.minecraft.white_tulip": "A snow-white varient of the perennial tulip plant. The plant is valued mostly for its distinctive blooms.",
-  "description.agricraft.minecraft.wither_rose": "Nobody likes their roses withering, but this is on another level."
+  "description.agricraft.minecraft.wither_rose": "Nobody likes their roses withering, but this is on another level.",
+
+  "weed.agricraft.agricraft.weed": "Weed"
 }

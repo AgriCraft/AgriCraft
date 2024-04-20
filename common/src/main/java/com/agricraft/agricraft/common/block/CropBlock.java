@@ -99,7 +99,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 				.setValue(LIGHT, 0));
 	}
 
-	private static void spawnItem(Level level, BlockPos pos, ItemStack stack) {
+	public static void spawnItem(Level level, BlockPos pos, ItemStack stack) {
 		level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
 	}
 
@@ -168,11 +168,11 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 		if (cropState == CropState.DOUBLE_STICKS) {
 			return CROSS_STICKS;
 		}
-		if (!cropState.hasPlant()) {
-			return SINGLE_STICKS;
-		}
 		if (level.getBlockEntity(pos) instanceof CropBlockEntity cbe) {
-			// shape is dependant of the plant
+			if (!cbe.hasPlant() && !cbe.hasWeeds()) {
+				return SINGLE_STICKS;
+			}
+			// shape is dependant of the plant and the weed
 			return cropState.hasSticks() ? Shapes.join(SINGLE_STICKS, cbe.getShape(), BooleanOp.OR) : cbe.getShape();
 		}
 		return super.getShape(state, level, pos, context);

@@ -1,10 +1,13 @@
 package com.agricraft.agricraft.api.crop;
 
 import com.agricraft.agricraft.api.codecs.AgriSoil;
+import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.api.fertilizer.IAgriFertilizable;
 import com.agricraft.agricraft.api.genetic.AgriGenomeProvider;
 import com.agricraft.agricraft.api.plant.AgriPlant;
+import com.agricraft.agricraft.api.plant.AgriWeed;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
+import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,6 +23,11 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	 * @return true if the crop has a plant
 	 */
 	boolean hasPlant();
+
+	/**
+	 * @return true if the crop has a plant
+	 */
+	boolean hasWeeds();
 
 	/**
 	 * @return true if the crop has crop sticks
@@ -47,6 +55,21 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	AgriGrowthStage getGrowthStage();
 
 	/**
+	 * @return the id of the weed or an empty string if there is no weed
+	 */
+	String getWeedId();
+
+	/**
+	 * @return the weed associated to this crop or null if there is no weed
+	 */
+	AgriWeed getWeed();
+
+	/**
+	 * @return the growth stage of the weed.
+	 */
+	AgriGrowthStage getWeedGrowthStage();
+
+	/**
 	 * Change the growth stage of the crop
 	 *
 	 * @param stage the new stage value
@@ -54,7 +77,16 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	void setGrowthStage(AgriGrowthStage stage);
 
 	/**
-	 * @return the growth percentage of the crop.
+	 * Change the growth stage of the weed
+	 *
+	 * @param stage the new stage value
+	 */
+	void setWeedGrowthStage(AgriGrowthStage stage);
+
+	void removeWeeds();
+
+	/**
+	 * @return the growth percentage of the crop, as a value between 0 and 1.
 	 */
 	default double getGrowthPercent() {
 		return this.getGrowthStage().growthPercentage();
@@ -105,6 +137,30 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	 * @param clipper the itemstack representing the clipper
 	 */
 	void getClippingProducts(Consumer<ItemStack> addToClipping, ItemStack clipper);
+
+	/**
+	 * @return true if the weed should activate on this crop
+	 */
+	default boolean shouldWeedsActivate() {
+		if (CoreConfig.disableWeeds || this.getLevel() == null) {
+			return false;
+		}
+		if (this.hasPlant()) {
+			int resistance = this.getGenome().getResistance();
+			int max = AgriStatRegistry.getInstance().resistanceStat().getMax();
+			// At 1 resistance, 45% chance for weed growth tick
+			// At 10 resistance, 0% chance
+			return this.getLevel().getRandom().nextInt(max) >= (max + resistance) / 2;
+		}
+		return this.getLevel().getRandom().nextBoolean();
+	}
+
+	/**
+	 *
+	 * @param weedId the id of the inserted weed
+	 * @param weed the weed to insert on the crop
+	 */
+	void setWeed(String weedId, AgriWeed weed);
 
 	//#region block helper methods
 

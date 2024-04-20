@@ -16,6 +16,10 @@ public class LangUtils {
 		return Component.translatable("description.agricraft." + plantId.replace(":", ".").replace("/", "."));
 	}
 
+	public static Component weedName(String weedId) {
+		return Component.translatable("weed.agricraft." + weedId.replace(":", ".").replace("/", "."));
+	}
+
 	public static Component seedName(String plantId) {
 		return Component.translatable("seed.agricraft." + plantId.replace(":", ".").replace("/", "."));
 	}
