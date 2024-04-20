@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -228,7 +229,7 @@ public class AgriMutationHandler {
 			// Mutativity stat of 1 results in 30.25/45/24.75 probability of positive/no/negative mutation
 			// Mutativity stat of 10 results in 100/0/0 probability of positive/no/negative mutation
 			int max = mutativity.getMax();
-			if (random.nextInt() >= (1-statValue/max)/2) {
+			if (random.nextFloat() >= (1.0 - (double) statValue /max) / 2.0) {
 				int delta = random.nextInt(max) < (max + statValue) / 2 ? 1 : -1;
 				return gene.getAllele(allele.trait() + delta);
 			} else {
