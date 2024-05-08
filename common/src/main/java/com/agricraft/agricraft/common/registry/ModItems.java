@@ -8,6 +8,7 @@ import com.agricraft.agricraft.common.item.DebuggerItem;
 import com.agricraft.agricraft.common.item.JournalItem;
 import com.agricraft.agricraft.common.item.MagnifyingGlassItem;
 import com.agricraft.agricraft.common.item.RakeItem;
+import com.agricraft.agricraft.common.item.SeedBagItem;
 import com.agricraft.agricraft.common.item.TrowelItem;
 import com.agricraft.agricraft.common.util.Platform;
 import com.agricraft.agricraft.common.util.PlatformRegistry;
@@ -31,6 +32,7 @@ public class ModItems {
 	public static final PlatformRegistry.Entry<Item> WOODEN_CROP_STICKS = ITEMS.register("wooden_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.WOODEN));
 	public static final PlatformRegistry.Entry<Item> IRON_CROP_STICKS = ITEMS.register("iron_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.IRON));
 	public static final PlatformRegistry.Entry<Item> OBSIDIAN_CROP_STICKS = ITEMS.register("obsidian_crop_sticks", () -> new CropSticksItem(ModBlocks.CROP.get(), CropStickVariant.OBSIDIAN));
+	public static final PlatformRegistry.Entry<Item> SEED_BAG = ITEMS.register("seed_bag", () -> new SeedBagItem(new Item.Properties().stacksTo(1)));
 	public static final PlatformRegistry.Entry<Item> SEED = ITEMS.register("seed", () -> Platform.get().createAgriSeedItem(new Item.Properties()));
 
 
@@ -48,6 +50,7 @@ public class ModItems {
 		output.accept(ModItems.WOODEN_CROP_STICKS.get());
 		output.accept(ModItems.IRON_CROP_STICKS.get());
 		output.accept(ModItems.OBSIDIAN_CROP_STICKS.get());
+		output.accept(ModItems.SEED_BAG.get());
 	}
 
 }

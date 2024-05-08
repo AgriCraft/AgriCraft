@@ -2,7 +2,7 @@ package com.agricraft.agricraft.api.stat;
 
 import com.agricraft.agricraft.api.AgriRegistry;
 import com.agricraft.agricraft.api.config.StatsConfig;
-import org.joml.Vector3f;
+import com.agricraft.agricraft.common.item.SeedBagItem;
 
 public class AgriStatRegistry extends AgriRegistry<AgriStat> {
 
@@ -61,6 +61,15 @@ public class AgriStatRegistry extends AgriRegistry<AgriStat> {
 
 	public AgriStat mutativityStat() {
 		return this.mutativity;
+	}
+
+	@Override
+	public boolean add(AgriStat object) {
+		boolean r = super.add(object);
+		if (r) {
+			SeedBagItem.addStatSorter(object);
+		}
+		return r;
 	}
 
 }

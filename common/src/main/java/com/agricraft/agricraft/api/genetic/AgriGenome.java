@@ -4,9 +4,15 @@ import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,4 +108,12 @@ public class AgriGenome {
 		return compoundTag.toString();
 	}
 
+	public void appendHoverText(List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+		if (isAdvanced.isAdvanced()) {
+			this.getSpeciesGene().getGene().addTooltip(tooltipComponents, this.getSpeciesGene().getTrait());
+		}
+		this.getStatGenes().stream()
+				.sorted(Comparator.comparing(pair -> pair.getGene().getId()))
+				.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
+	}
 }

@@ -76,7 +76,17 @@ public final class CoreConfig {
 	public static float seedCompostValue = 0.3F;
 
 //	public static boolean animalAttraction = false;
-//	public static boolean seedBagEnchantCost = false;
+
+	@ConfigEntry(id = "seed_bag_capactity", type = EntryType.INTEGER, translation = "config.agricraft.core.seed_bag_capactity")
+	@ConfigOption.Range(min = 8, max = 256)
+	@Comment("The amount of seeds one seed bag can hold.")
+	public static int seedBagCapacity = 64;
+
+	@ConfigEntry(id = "seed_bag_enchant_cost", type = EntryType.INTEGER, translation = "config.agricraft.core.seed_bag_enchant_cost")
+	@ConfigOption.Range(min = 0, max = 30)
+	@Comment("Enchantment cost in player levels to enchant the seed bag.")
+	public static int seedBagEnchantCost = 10;
+
 //	public static boolean allowGrassDropResets = false;
 
 }

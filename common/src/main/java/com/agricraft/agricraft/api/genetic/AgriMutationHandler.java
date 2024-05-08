@@ -220,8 +220,8 @@ public class AgriMutationHandler {
 			AgriStat mutativity = AgriStatRegistry.getInstance().mutativityStat();
 			return new AgriGenePair<>(
 					gene,
-					this.rollAndExecuteMutation(gene, first, mutativity, parent1.getStatGene(mutativity).getTrait(), random),
-					this.rollAndExecuteMutation(gene, second, mutativity, parent2.getStatGene(mutativity).getTrait(), random)
+					this.rollAndExecuteMutation(gene, first, mutativity, parent1.getMutativity(), random),
+					this.rollAndExecuteMutation(gene, second, mutativity, parent2.getMutativity(), random)
 			);
 		}
 

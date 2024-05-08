@@ -2,7 +2,8 @@
 -[x] seed analyzer
 -[ ] rake
 -[x] trowel
--[ ] seed_bag
+-[x] seed_bag
+-[ ] seed sorting enchantment
 -[ ] seed storage
 
 - tank
@@ -14,11 +15,11 @@
 
 - 1.19 and 1.20 plants (torchflower, spore blossom, glow berries)
 
-- [ ] stat usage
+- [x] stat usage
   -[x] gain (only on right click, not on block break)  # yield more fruits
   -[x] growth  # grow faster
   -[x] strength  # overcome soil requirement
-  -[ ] resistance  # tougher against weed
+  -[x] resistance  # tougher against weed
   -[x] fertility  # breed faster
   -[x] mutativity  # mutate faster
 
@@ -26,14 +27,14 @@
   -[ ] plant tooltip
     -[x] is fertile
     -[ ] soil under
-    -[ ] weed information
+    -[x] weed information
     -[ ] in world animation
     -[ ] config option
   -[x] soil tooltip
 
 - [x] soil tooltip property
 - [ ] seed display genes only after researched (with config)
-- [ ] weeds
+- [x] weeds
 - [x] mutations
 - [x] fertilizers
 - [x] journal

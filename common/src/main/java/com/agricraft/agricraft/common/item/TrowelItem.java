@@ -8,6 +8,7 @@ import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.genetic.AgriGenomeProviderItem;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.registry.ModBlocks;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -24,6 +26,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 public class TrowelItem extends Item implements AgriGenomeProviderItem {
@@ -163,6 +167,18 @@ public class TrowelItem extends Item implements AgriGenomeProviderItem {
 			return Optional.of(new AgriGrowthStage(growthIndex, growthTotal));
 		}
 		return Optional.empty();
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+		tooltipComponents.add(Component.translatable("agricraft.tooltip.trowel").withStyle(ChatFormatting.DARK_GRAY));
+		CompoundTag tag = stack.getTag();
+		if (tag != null) {
+			AgriGenome genome = AgriGenome.fromNBT(tag);
+			if (genome != null) {
+				genome.appendHoverText(tooltipComponents, TooltipFlag.ADVANCED);
+			}
+		}
 	}
 
 }

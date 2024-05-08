@@ -160,19 +160,14 @@ public class AgriSeedItem extends BlockItem implements AgriGenomeProviderItem {
 		if (tag != null) {
 			AgriGenome genome = AgriGenome.fromNBT(tag);
 			if (genome != null) {
-				if (isAdvanced.isAdvanced()) {
-					genome.getSpeciesGene().getGene().addTooltip(tooltipComponents, genome.getSpeciesGene().getTrait());
-				}
-				genome.getStatGenes().stream()
-						.sorted(Comparator.comparing(pair -> pair.getGene().getId()))
-						.forEach(pair -> pair.getGene().addTooltip(tooltipComponents, pair.getTrait()));
+				genome.appendHoverText(tooltipComponents, isAdvanced);
 			}
 		}
 	}
 
-	@Override
-	public ItemStack getDefaultInstance() {
-		return AgriApi.getPlant(new ResourceLocation("minecraft:wheat")).map(AgriSeedItem::toStack).orElse(super.getDefaultInstance());
-	}
+//	@Override
+//	public ItemStack getDefaultInstance() {
+//		return AgriApi.getPlant(new ResourceLocation("minecraft:wheat")).map(AgriSeedItem::toStack).orElse(super.getDefaultInstance());
+//	}
 
 }
