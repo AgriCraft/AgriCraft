@@ -3,8 +3,11 @@ package com.agricraft.agricraft.api.codecs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,4 +32,42 @@ public record AgriBlockCondition(ExtraCodecs.TagOrElementLocation block, List<St
 		return DataResult.success(states);
 	}
 
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		ExtraCodecs.TagOrElementLocation item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation("minecraft", "air"), false);
+		List<String> states = List.of();
+		int strength = 11;
+
+		public AgriBlockCondition build() {
+			return new AgriBlockCondition(this.item, this.states, this.strength);
+		}
+
+		public Builder item(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), false);
+			return this;
+		}
+		public Builder item(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), false);
+			return this;
+		}
+		public Builder tag(String location) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(location), true);
+			return this;
+		}
+		public Builder tag(String namespace, String path) {
+			this.item = new ExtraCodecs.TagOrElementLocation(new ResourceLocation(namespace, path), true);
+			return this;
+		}
+		public Builder states(String... states) {
+			this.states = List.of(states);
+			return this;
+		}
+		public Builder strength(int strength) {
+			this.strength = strength;
+			return this;
+		}
+	}
 }

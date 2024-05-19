@@ -74,7 +74,10 @@ public class PlantIngredient {
 			ArrayList<Component> list = new ArrayList<>();
 			AgriApi.getPlantId(ingredient).map(ResourceLocation::toString).ifPresent(id -> {
 				list.add(LangUtils.plantName(id));
-				list.add(LangUtils.plantDescription(id));
+				Component desc = LangUtils.plantDescription(id);
+				if (desc != null) {
+					list.add(desc);
+				}
 			});
 			return list;
 		}

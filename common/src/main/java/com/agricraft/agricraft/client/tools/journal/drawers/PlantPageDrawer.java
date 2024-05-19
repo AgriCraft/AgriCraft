@@ -48,7 +48,7 @@ public class PlantPageDrawer implements JournalPageDrawer<PlantPage> {
 		// Description
 		Component plantDescription = LangUtils.plantDescription(plantId);
 		float offset = 0.0F;
-		if (!plantDescription.getString().isEmpty()) {
+		if (plantDescription != null) {
 			offset = this.drawScaledText(guiGraphics, plantDescription, pageX + 10, pageY + 30, 0.70F);
 		}
 		// Growth requirements
@@ -167,7 +167,10 @@ public class PlantPageDrawer implements JournalPageDrawer<PlantPage> {
 
 		// Growth requirements
 
-		float offset = 35 + this.drawScaledText(guiGraphics, plantDescription, -1000, -1000, 0.70F);  // draw offscreen to get offset
+		float offset = 35;
+		if (plantDescription != null) {
+			offset += this.drawScaledText(guiGraphics, plantDescription, -1000, -1000, 0.70F);  // draw offscreen to get offset
+		}
 		float dy = Math.max(offset, 60);
 		dy += this.drawScaledText(guiGraphics, GROWTH_REQUIREMENTS, -1000, -1000, 0.80F) + 1;  // draw offscreen to get offset
 		// Light level

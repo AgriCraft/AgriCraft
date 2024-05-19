@@ -267,7 +267,8 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			}
 		}
 		if (50 <= mouseX && mouseX <= 76 && 34 <= mouseY && mouseY <= 58) {
-			return List.of(LangUtils.plantName(recipe.plantId), LangUtils.plantDescription(recipe.plantId));
+			Component desc = LangUtils.plantDescription(recipe.plantId);
+			return desc == null ? List.of(LangUtils.plantName(recipe.plantId)) : List.of(LangUtils.plantName(recipe.plantId), desc);
 		}
 		if (50 <= mouseX && mouseX <= 76 && 58 <= mouseY && mouseY <= 74) {
 			return Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(recipe.soils.get(recipe.soil)));

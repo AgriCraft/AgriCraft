@@ -1,6 +1,6 @@
 -[x] journal
 -[x] seed analyzer
--[ ] rake
+-[x] rake
 -[x] trowel
 -[x] seed_bag
 -[ ] seed sorting enchantment
@@ -13,7 +13,7 @@
 - greenhouse
 - grate
 
-- 1.19 and 1.20 plants (torchflower, spore blossom, glow berries)
+- [x] 1.19 and 1.20 plants (torchflower, spore blossom, glow berries)
 
 - [x] stat usage
   -[x] gain (only on right click, not on block break)  # yield more fruits
@@ -32,8 +32,10 @@
     -[ ] config option
   -[x] soil tooltip
 
+- [ ] tool to convert json from 3.0 to 4.0 (jq script / python / javascript)
+
 - [x] soil tooltip property
-- [ ] seed display genes only after researched (with config)
+- [ ] seed display genes only after researched in jei (with config)
 - [x] weeds
 - [x] mutations
 - [x] fertilizers

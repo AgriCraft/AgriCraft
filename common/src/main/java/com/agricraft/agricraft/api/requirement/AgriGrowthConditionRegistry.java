@@ -89,7 +89,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 				return AgriGrowthResponse.INFERTILE;
 			}
 			return AgriGrowthResponse.FERTILE;
-		}, (level, blockPos) -> level.getBlockState(blockPos.below()));
+		}, (level, blockPos) -> level.getBlockState(blockPos.below().below()));
 		biome = new BaseGrowthCondition<>("biome", (plant, strength, biome) -> {
 			AgriListCondition listCondition = plant.getGrowthRequirements().biomes();
 			if (strength >= listCondition.ignoreFromStrength() || (listCondition.blacklist() && listCondition.isEmpty())) {

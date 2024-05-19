@@ -16,4 +16,8 @@ public record AgriPlantModifierInfo(String id, String value) {
 		this(id, value.orElse(""));
 	}
 
+	public AgriPlantModifierInfo(String id) {
+		this(id, "");
+	}
+
 }

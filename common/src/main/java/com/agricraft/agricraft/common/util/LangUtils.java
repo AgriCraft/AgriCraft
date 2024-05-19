@@ -13,7 +13,12 @@ public class LangUtils {
 	}
 
 	public static Component plantDescription(String plantId) {
-		return Component.translatable("description.agricraft." + plantId.replace(":", ".").replace("/", "."));
+		String id = "description.agricraft." + plantId.replace(":", ".").replace("/", ".");
+		MutableComponent component = Component.translatable(id);
+		if (component.getString().equals(id)) {
+			return null;
+		}
+		return component;
 	}
 
 	public static Component weedName(String weedId) {

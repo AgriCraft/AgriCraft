@@ -24,6 +24,11 @@ public class FertilizersDatagen {
 				.variants(new AgriFertilizerVariant.Builder().item("minecraft:bone_meal").build())
 				.particles(new AgriFertilizerParticle("minecraft:happy_villager", 0.6, 0.4, 0.6, 2, List.of("positive")),
 						new AgriFertilizerParticle("minecraft:smoke", 0.6, 0.4, 0.6, 2, List.of("negative")))
+				.neutralOn("agricraft:amathyllis", "agricraft:aurigold", "agricraft:carbonation", "agricraft:cuprosia",
+						"agricraft:diamahlia", "agricraft:emeryllis", "agricraft:ferranium", "agricraft:jaslumine",
+						"agricraft:lapender", "agricraft:nethereed", "agricraft:niccissus", "agricraft:nitor_wart",
+						"agricraft:osmonium", "agricraft:petinia", "agricraft:platiolus", "agricraft:plombean",
+						"agricraft:quartzanthemum", "agricraft:redstodendron")
 				.build());
 	}
 

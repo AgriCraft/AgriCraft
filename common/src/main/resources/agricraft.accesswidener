@@ -6,3 +6,4 @@ mutable field net/minecraft/world/entity/animal/Chicken FOOD_ITEMS Lnet/minecraf
 accessible field net/minecraft/world/level/block/state/StateHolder PROPERTY_ENTRY_TO_STRING_FUNCTION Ljava/util/function/Function;
 accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
 accessible method net/minecraft/client/renderer/item/ItemProperties register (Lnet/minecraft/world/item/Item;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/client/renderer/item/ClampedItemPropertyFunction;)V
+extendable method net/minecraft/data/metadata/PackMetadataGenerator getName ()Ljava/lang/String;

@@ -29,7 +29,7 @@ public class CropMutationCategory implements IRecipeCategory<AgriMutation> {
 
 	@Override
 	public Component getTitle() {
-		return Component.translatable("agricraft.gui.jei.produce");
+		return Component.translatable("agricraft.gui.jei.mutation");
 	}
 
 	@Override

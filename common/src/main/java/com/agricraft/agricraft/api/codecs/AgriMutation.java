@@ -6,23 +6,22 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-public record AgriMutation(List<String> mods, ResourceLocation child, ResourceLocation parent1,
-                           ResourceLocation parent2, double chance) {
+public record AgriMutation(ResourceLocation child, ResourceLocation parent1, ResourceLocation parent2, double chance) {
 
-	// TODO: @Ketheroth mutation condition (check what is this in the old agricraft code)
+	// TODO: @Ketheroth mutation condition (check what this is in the old agricraft code)
 
 	public static final Codec<AgriMutation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.STRING.listOf().fieldOf("mods").forGetter(mutation -> mutation.mods),
 			ResourceLocation.CODEC.fieldOf("child").forGetter(mutation -> mutation.child),
 			ResourceLocation.CODEC.fieldOf("parent1").forGetter(mutation -> mutation.parent1),
 			ResourceLocation.CODEC.fieldOf("parent2").forGetter(mutation -> mutation.parent2),
 			Codec.DOUBLE.fieldOf("chance").forGetter(mutation -> mutation.chance)
 	).apply(instance, AgriMutation::new));
+
+	public AgriMutation(String child, String parent1, String parent2, double chance) {
+		this(new ResourceLocation(child), new ResourceLocation(parent1), new ResourceLocation(parent2), chance);
+	}
 
 	public Optional<AgriPlant> getParent1() {
 		return AgriApi.getPlant(this.parent1);
@@ -46,19 +45,13 @@ public record AgriMutation(List<String> mods, ResourceLocation child, ResourceLo
 
 	public static class Builder {
 
-		List<String> mods = new ArrayList<>();
 		double chance = 0;
 		ResourceLocation child;
 		ResourceLocation parent1;
 		ResourceLocation parent2;
 
 		public AgriMutation build() {
-			return new AgriMutation(mods, child, parent1, parent2, chance);
-		}
-
-		public Builder mods(String... mods) {
-			Collections.addAll(this.mods, mods);
-			return this;
+			return new AgriMutation(child, parent1, parent2, chance);
 		}
 
 		public Builder chance(double chance) {

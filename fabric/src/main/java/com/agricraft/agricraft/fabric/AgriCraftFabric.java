@@ -19,6 +19,13 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionResult;
 
@@ -48,6 +55,17 @@ public class AgriCraftFabric implements ModInitializer {
 		});
 		MinecraftPlugin.init();
 		FabricSeasonPlugin.init();
+
+		FabricLoader.getInstance().getModContainer("agricraft").ifPresent(agricraft -> {
+			for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
+				String modid = mod.getMetadata().getId();
+				if (!modid.equals("minecraft") && !modid.equals("agricraft")) {
+					// yeah we need to use the impl to match neoforge's way
+					ResourceManagerHelperImpl.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_resourcepacks_" + modid), "resourcepacks/" + modid, agricraft, Component.translatable("agricraft.resourcepacks." + modid), ResourcePackActivationType.DEFAULT_ENABLED);
+					ResourceManagerHelperImpl.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_datapacks_" + modid), "datapacks/" + modid, agricraft, Component.translatable("agricraft.datapacks." + modid), ResourcePackActivationType.DEFAULT_ENABLED);
+				}
+			}
+		});
 	}
 
 }

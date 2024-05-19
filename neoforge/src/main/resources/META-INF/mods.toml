@@ -15,9 +15,6 @@ description='''
 Agricultural farming extended
 '''
 
-[[accessTransformers]]
-file="accesstransformer.cfg"
-
 [[dependencies.agricraft]]
 modId="neoforge"
 type="required"

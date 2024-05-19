@@ -11,6 +11,9 @@ loom {
 			programArgs "--all", "--mod", "${mod_id}"
 			programArgs "--output", file("src/generated/resources").absolutePath
 			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+			programArgs "--existing-mod", "biomesoplenty"
+			programArgs "--existing-mod", "immersiveengineering"
+			programArgs "--existing-mod", "pamhc2crops"
 		}
 	}
 }

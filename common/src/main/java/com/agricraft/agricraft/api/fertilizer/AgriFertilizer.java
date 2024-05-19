@@ -293,22 +293,28 @@ public class AgriFertilizer {
 			return this;
 		}
 
-		public Builder neutralOn(ResourceLocation... neutralOn) {
-			for (ResourceLocation rl : neutralOn) {
-				this.neutralOn.add(new ExtraCodecs.TagOrElementLocation(rl, false));
+		public Builder neutralOn(String... neutralOn) {
+			for (String str : neutralOn) {
+				this.neutralOn.add(new ExtraCodecs.TagOrElementLocation(new ResourceLocation(str), false));
+			}
+			return this;
+		}
+		public Builder neutralOnTag(String... neutralOn) {
+			for (String str : neutralOn) {
+				this.neutralOn.add(new ExtraCodecs.TagOrElementLocation(new ResourceLocation(str), true));
 			}
 			return this;
 		}
 
-		public Builder negativeOn(ResourceLocation... negativeOn) {
-			for (ResourceLocation rl : negativeOn) {
-				this.negativeOn.add(new ExtraCodecs.TagOrElementLocation(rl, false));
+		public Builder negativeOn(String... negativeOn) {
+			for (String str : negativeOn) {
+				this.negativeOn.add(new ExtraCodecs.TagOrElementLocation(new ResourceLocation(str), false));
 			}
 			return this;
 		}
-		public Builder negativeOnTag(ResourceLocation... negativeOn) {
-			for (ResourceLocation rl : negativeOn) {
-				this.negativeOn.add(new ExtraCodecs.TagOrElementLocation(rl, true));
+		public Builder negativeOnTag(String... negativeOn) {
+			for (String str : negativeOn) {
+				this.negativeOn.add(new ExtraCodecs.TagOrElementLocation(new ResourceLocation(str), true));
 			}
 			return this;
 		}

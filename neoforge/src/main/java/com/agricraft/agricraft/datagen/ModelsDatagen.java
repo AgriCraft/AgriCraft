@@ -92,6 +92,14 @@ public class ModelsDatagen {
 		with4TexturesIn8stage(m, "sea_pickle", "agricraft:crop/crop_hash", "agricraft:plant/sea_pickle");
 		with4TexturesIn8stage(m, "sugar_cane", "agricraft:crop/crop_hash", "agricraft:plant/sugar_cane");
 		with4TexturesIn8stage(m, "sweet_berries", "agricraft:crop/crop_hash", "agricraft:plant/sweet_berries");
+		m.withExistingParent("torchflower_stage0", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage0");
+		m.withExistingParent("torchflower_stage1", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage0");
+		m.withExistingParent("torchflower_stage2", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage0");
+		m.withExistingParent("torchflower_stage3", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage0");
+		m.withExistingParent("torchflower_stage4", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage1");
+		m.withExistingParent("torchflower_stage5", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage1");
+		m.withExistingParent("torchflower_stage6", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower_crop_stage1");
+		m.withExistingParent("torchflower_stage7", "agricraft:crop/crop_cross").texture("crop", "minecraft:block/torchflower");
 		with4TexturesIn8stage(m, "warped_fungus", "agricraft:crop/crop_plus", "agricraft:plant/warped_fungus");
 		m.withExistingParent("wheat_stage0", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage0");
 		m.withExistingParent("wheat_stage1", "agricraft:crop/crop_hash").texture("crop", "minecraft:block/wheat_stage1");
@@ -115,11 +123,120 @@ public class ModelsDatagen {
 		m.withExistingParent("beetroot", "minecraft:item/beetroot_seeds");
 		m.withExistingParent("melon", "minecraft:item/melon_seeds");
 		m.withExistingParent("pumpkin", "minecraft:item/pumpkin_seeds");
+		m.withExistingParent("torchflower", "minecraft:item/torchflower_seeds");
 		m.withExistingParent("wheat", "minecraft:item/wheat_seeds");
+	}
+
+	public static void registerAgricraftPlant(ModelProvider<BlockModelBuilder> m) {
+		with4TexturesIn8stage(m, "amathyllis", "agricraft:crop/crop_plus", "agricraft:plant/amathyllis");
+		with4TexturesIn8stage(m, "aurigold", "agricraft:crop/crop_hash", "agricraft:plant/aurigold");
+		with4TexturesIn8stage(m, "carbonation", "agricraft:crop/crop_hash", "agricraft:plant/carbonation");
+		with4TexturesIn8stage(m, "cuprosia", "agricraft:crop/crop_hash", "agricraft:plant/cuprosia");
+		with4TexturesIn8stage(m, "diamahlia", "agricraft:crop/crop_hash", "agricraft:plant/diamahlia");
+		with4TexturesIn8stage(m, "emeryllis", "agricraft:crop/crop_hash", "agricraft:plant/emeryllis");
+		with4TexturesIn8stage(m, "ferranium", "agricraft:crop/crop_hash", "agricraft:plant/ferranium");
+		with4TexturesIn8stage(m, "jaslumine", "agricraft:crop/crop_hash", "agricraft:plant/jaslumine");
+		with4TexturesIn8stage(m, "lapender", "agricraft:crop/crop_hash", "agricraft:plant/lapender");
+		m.withExistingParent("nethereed_stage0", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage0").texture("crop_top", "agricraft:plant/nethereed_stage0");
+		m.withExistingParent("nethereed_stage1", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage1").texture("crop_top", "agricraft:plant/nethereed_stage1");
+		m.withExistingParent("nethereed_stage2", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage1").texture("crop_top", "agricraft:plant/nethereed_stage1");
+		m.withExistingParent("nethereed_stage3", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage2").texture("crop_top", "agricraft:plant/nethereed_stage2");
+		m.withExistingParent("nethereed_stage4", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage2").texture("crop_top", "agricraft:plant/nethereed_stage2");
+		m.withExistingParent("nethereed_stage5", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage3").texture("crop_top", "agricraft:plant/nethereed_stage3");
+		m.withExistingParent("nethereed_stage6", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage3").texture("crop_top", "agricraft:plant/nethereed_stage3");
+		m.withExistingParent("nethereed_stage7", "agricraft:crop/tall_crop_hash").texture("crop", "agricraft:plant/nethereed_base_stage4").texture("crop_top", "agricraft:plant/nethereed_stage4");
+		with4TexturesIn8stage(m, "niccissus", "agricraft:crop/crop_hash", "agricraft:plant/niccissus");
+		with4TexturesIn8stage(m, "nitor_wart", "agricraft:crop/crop_hash", "agricraft:plant/nitor_wart");
+		with4TexturesIn8stage(m, "osmonium", "agricraft:crop/crop_hash", "agricraft:plant/osmonium");
+		with4TexturesIn8stage(m, "petinia", "agricraft:crop/crop_hash", "agricraft:plant/petinia");
+		with4TexturesIn8stage(m, "platiolus", "agricraft:crop/crop_hash", "agricraft:plant/platiolus");
+		with4TexturesIn8stage(m, "plombean", "agricraft:crop/crop_hash", "agricraft:plant/plombean");
+		with4TexturesIn8stage(m, "quartzanthemum", "agricraft:crop/crop_hash", "agricraft:plant/quartzanthemum");
+		with4TexturesIn8stage(m, "redstodendron", "agricraft:crop/crop_hash", "agricraft:plant/redstodendron");
+	}
+
+	public static void registerAgricraftSeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("amathyllis", "aurigold", "carbonation", "cuprosia", "diamahlia", "emeryllis", "ferranium",
+						"jaslumine", "lapender", "nethereed", "niccissus", "nitor_wart", "osmonium", "petinia",
+						"platiolus", "plombean", "quartzanthemum", "redstodendron")
+				.forEach(name -> m.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/" + name));
 	}
 
 	public static void registerAgricraftWeed(ModelProvider<BlockModelBuilder> m) {
 		with4TexturesIn8stage(m, "weed", "agricraft:crop/crop_rhombus", "agricraft:weed/weed");
+	}
+
+	public static void registerBiomesOPlentyPlant(ModelProvider<BlockModelBuilder> m) {
+		with4TexturesIn8stage(m, "burning_blossom", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/burning_blossom", "biomesoplenty:block/burning_blossom");
+		with4TexturesIn8stage(m, "glowflower", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/glowflower", "biomesoplenty:block/glowflower");
+		with4TexturesIn8stage(m, "glowshroom", "agricraft:crop/crop_cross", "agricraft:plant/biomesoplenty/glowshroom", "biomesoplenty:block/glowshroom");
+		with4TexturesIn8stage(m, "lavender", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/lavender", "biomesoplenty:block/lavender");
+		with4TexturesIn8stage(m, "orange_cosmos", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/orange_cosmos", "biomesoplenty:block/orange_cosmos");
+		with4TexturesIn8stage(m, "pink_daffodil", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/pink_daffodil", "biomesoplenty:block/pink_daffodil");
+		with4TexturesIn8stage(m, "pink_hibiscus", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/pink_hibiscus", "biomesoplenty:block/pink_hibiscus");
+		with4TexturesIn8stage(m, "rose", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/rose", "biomesoplenty:block/rose");
+		with4TexturesIn8stage(m, "toadstool", "agricraft:crop/crop_hash", "agricraft:plant/biomesoplenty/toadstool");
+		with4TexturesIn8stage(m, "violet", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/violet", "biomesoplenty:block/violet");
+		with4TexturesIn8stage(m, "white_lavender", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/white_lavender", "biomesoplenty:block/white_lavender");
+		with4TexturesIn8stage(m, "wilted_lily", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/wilted_lily", "biomesoplenty:block/wilted_lily");
+	}
+
+	public static void registerBiomesOPlentySeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("burning_blossom", "glowflower", "glowshroom", "lavender", "orange_cosmos", "pink_daffodil",
+						"pink_hibiscus", "rose", "toadstool", "violet", "white_lavender", "wilted_lily")
+				.forEach(name -> m.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/biomesoplenty/" + name));
+	}
+
+	public static void registerImmersiveEngineeringPlant(ModelProvider<BlockModelBuilder> m) {
+		m.withExistingParent("hemp_stage0", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom0");
+		m.withExistingParent("hemp_stage1", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom0");
+		m.withExistingParent("hemp_stage2", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom1");
+		m.withExistingParent("hemp_stage3", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom1");
+		m.withExistingParent("hemp_stage4", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom2");
+		m.withExistingParent("hemp_stage5", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom2");
+		m.withExistingParent("hemp_stage6", "agricraft:crop/crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom3");
+		m.withExistingParent("hemp_stage7", "agricraft:crop/tall_crop_hash").texture("crop", "immersiveengineering:block/hemp/bottom4").texture("crop_top", "immersiveengineering:block/hemp/top0");
+	}
+
+	public static void registerImmersiveEngineeringSeed(ModelProvider<ItemModelBuilder> m) {
+		m.withExistingParent("hemp", "immersiveengineering:item/hemp");
+	}
+
+	public static void registerPamsHarvestCraft2Plant(ModelProvider<BlockModelBuilder> m) {
+		List.of("agave", "amaranth", "arrowroot", "artichoke", "asparagus", "barley", "bean", "bellpepper", "blackberry",
+						"blueberry", "broccoli", "brusselsprout", "cabbage", "cactusfruit", "candleberry", "cantaloupe", "cassava",
+						"cauliflower", "celery", "chickpea", "chilipepper", "coffeebean", "corn", "cotton", "cranberry", "cucumber",
+						"eggplant", "elderberry", "flax", "garlic", "ginger", "grape", "greengrape", "huckleberry", "jicama", "juniperberry",
+						"jute", "kale", "kenaf", "kiwi", "kohlrabi", "leek", "lentil", "lettuce", "millet", "mulberry", "mustardseeds",
+						"oats", "okra", "onion", "parsnip", "peanut", "peas", "pineapple", "quinoa", "radish", "raspberry", "rhubarb",
+						"rice", "rutabaga", "rye", "scallion", "sesameseeds", "sisal", "soybean", "spiceleaf", "spinach", "strawberry",
+						"sweetpotato", "taro", "tealeaf", "tomatillo", "tomato", "turnip", "waterchestnut", "whitemushroom", "wintersquash",
+						"zucchini", "alfalfa", "aloe", "barrelcactus", "canola", "cattail", "chia", "cloudberry", "lotus", "nettles",
+						"nopales", "sorghum", "truffle", "wolfberry", "yucca", "bokchoy", "calabash", "guarana", "papyrus", "sunchoke")
+				.forEach(name -> {
+					m.withExistingParent(name + "_stage0", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_0");
+					m.withExistingParent(name + "_stage1", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_0");
+					m.withExistingParent(name + "_stage2", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_0");
+					m.withExistingParent(name + "_stage3", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_1");
+					m.withExistingParent(name + "_stage4", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_1");
+					m.withExistingParent(name + "_stage5", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_1");
+					m.withExistingParent(name + "_stage6", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_1");
+					m.withExistingParent(name + "_stage7", "agricraft:crop/crop_hash").texture("crop", "pamhc2crops:block/" + name + "_stage_3");
+				});
+	}
+
+	public static void registerPamsHarvestCraft2Seed(ModelProvider<ItemModelBuilder> m) {
+		List.of("agave", "amaranth", "arrowroot", "artichoke", "asparagus", "barley", "bean", "bellpepper", "blackberry",
+						"blueberry", "broccoli", "brusselsprout", "cabbage", "cactusfruit", "candleberry", "cantaloupe", "cassava",
+						"cauliflower", "celery", "chickpea", "chilipepper", "coffeebean", "corn", "cotton", "cranberry", "cucumber",
+						"eggplant", "elderberry", "flax", "garlic", "ginger", "grape", "greengrape", "huckleberry", "jicama", "juniperberry",
+						"jute", "kale", "kenaf", "kiwi", "kohlrabi", "leek", "lentil", "lettuce", "millet", "mulberry", "mustardseeds",
+						"oats", "okra", "onion", "parsnip", "peanut", "peas", "pineapple", "quinoa", "radish", "raspberry", "rhubarb",
+						"rice", "rutabaga", "rye", "scallion", "sesameseeds", "sisal", "soybean", "spiceleaf", "spinach", "strawberry",
+						"sweetpotato", "taro", "tealeaf", "tomatillo", "tomato", "turnip", "waterchestnut", "whitemushroom", "wintersquash",
+						"zucchini", "alfalfa", "aloe", "barrelcactus", "canola", "cattail", "chia", "cloudberry", "lotus", "nettles",
+						"nopales", "sorghum", "truffle", "wolfberry", "yucca", "bokchoy", "calabash", "guarana", "papyrus", "sunchoke")
+				.forEach(name -> m.withExistingParent(name, "pamhc2crops:item/" + name + "seeditem"));
 	}
 
 	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
@@ -131,6 +248,17 @@ public class ModelsDatagen {
 		m.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage2");
 		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage2");
 		m.withExistingParent(name + "_stage7", parent).texture("crop", baseTexture + "_stage3");
+	}
+
+	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture, String mature) {
+		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
+		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");
+		m.withExistingParent(name + "_stage2", parent).texture("crop", baseTexture + "_stage0");
+		m.withExistingParent(name + "_stage3", parent).texture("crop", baseTexture + "_stage1");
+		m.withExistingParent(name + "_stage4", parent).texture("crop", baseTexture + "_stage1");
+		m.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage2");
+		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage2");
+		m.withExistingParent(name + "_stage7", parent).texture("crop", mature);
 	}
 
 }
