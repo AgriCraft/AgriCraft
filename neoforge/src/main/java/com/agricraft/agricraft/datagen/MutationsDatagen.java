@@ -64,8 +64,8 @@ public class MutationsDatagen {
 		r(context, "biomesoplenty", "glowshroom", new AgriMutation("biomesoplenty:glowshroom", "minecraft:brown_mushroom", "minecraft:blue_orchid", 0.5));
 		r(context, "biomesoplenty", "lavender", new AgriMutation("biomesoplenty:lavender", "minecraft:azure_bluet", "biomesoplenty:violet", 0.5));
 		r(context, "biomesoplenty", "orange_cosmos", new AgriMutation("biomesoplenty:orange_cosmos", "minecraft:oxeye_daisy", "minecraft:carrot", 0.5));
-		r(context, "biomesoplenty", "pink_daffodil", new AgriMutation("biomesoplenty:pink_daffodil", "minecraft:ping_tulip", "minecraft:azure_bluet", 0.5));
-		r(context, "biomesoplenty", "pink_hibiscus", new AgriMutation("biomesoplenty:pink_hibiscus", "minecraft:ping_tulip", "minecraft:seagrass", 0.5));
+		r(context, "biomesoplenty", "pink_daffodil", new AgriMutation("biomesoplenty:pink_daffodil", "minecraft:pink_tulip", "minecraft:azure_bluet", 0.5));
+		r(context, "biomesoplenty", "pink_hibiscus", new AgriMutation("biomesoplenty:pink_hibiscus", "minecraft:pink_tulip", "minecraft:seagrass", 0.5));
 		r(context, "biomesoplenty", "rose", new AgriMutation("biomesoplenty:rose", "minecraft:poppy", "minecraft:sweet_berries", 0.5));
 		r(context, "biomesoplenty", "toadstool", new AgriMutation("biomesoplenty:toadstool", "minecraft:brown_mushroom", "minecraft:carrot", 0.5));
 		r(context, "biomesoplenty", "violet", new AgriMutation("biomesoplenty:violet", "minecraft:poppy", "minecraft:cornflower", 0.5));

@@ -41,6 +41,7 @@
 	],
 	"depends": {
 		"fabric": "*",
-		"minecraft": ">=1.20"
+		"minecraft": ">=1.20",
+		"resourcefulconfig": ">=2.4.4"
 	}
 }

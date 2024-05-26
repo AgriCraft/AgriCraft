@@ -75,7 +75,7 @@ public class CropProduceCategory implements IRecipeCategory<AgriPlant> {
 			}
 			for (int x = 75; x < 129; x += 18) {
 				if (index < products.size()) {
-					ItemStack product =products.get(index);
+					ItemStack product = products.get(index);
 					IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, x, y).setSlotName("output_" + index);
 					slotBuilder.addItemStack(product);
 					index++;

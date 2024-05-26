@@ -3,6 +3,10 @@ architectury {
 	fabric()
 }
 
+base {
+	archivesName = "${mod_name}-${project.name}-${minecraft_version}"
+}
+
 loom {
 	accessWidenerPath = file("src/main/resources/agricraft-fabric.accesswidener")
 }

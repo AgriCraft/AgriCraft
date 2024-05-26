@@ -52,7 +52,7 @@ public class AgriCraftNeoForge {
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftPlugin.init();
-		SereneSeasonPlugin.init();
+//		SereneSeasonPlugin.init();
 	}
 
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {

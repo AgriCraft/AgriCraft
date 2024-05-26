@@ -5,6 +5,7 @@ import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -49,19 +50,21 @@ public class CropMutationRecipe implements EmiRecipe {
 
 	@Override
 	public int getDisplayWidth() {
-		return 128;
+		return 125;
 	}
 
 	@Override
 	public int getDisplayHeight() {
-		return 64;
+		return 18;
 	}
 
 	@Override
 	public void addWidgets(WidgetHolder widgets) {
-		widgets.addSlot(input.get(0), 16, 6);
-		widgets.addSlot(input.get(1), 96, 6);
-		widgets.addSlot(output.get(0), 56, 2).recipeContext(this);
+		widgets.addSlot(input.get(0), 0, 0);
+		widgets.addSlot(input.get(1), 49, 0);
+		widgets.addSlot(output.get(0), 107, 0).recipeContext(this);
+		widgets.addTexture(EmiTexture.PLUS, 27, 3);
+		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
 	}
 
 }
