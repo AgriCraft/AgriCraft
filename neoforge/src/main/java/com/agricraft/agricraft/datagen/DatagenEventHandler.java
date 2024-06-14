@@ -7,6 +7,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.metadata.PackMetadataGenerator;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -24,6 +26,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -37,6 +40,8 @@ public class DatagenEventHandler {
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
+		generator.addProvider(event.includeServer(), (DataProvider.Factory<RecipeProvider>) ModRecipeProvider::new);
+		generator.addProvider(event.includeServer(), (DataProvider.Factory<ItemTagsProvider>) output -> new ModTagProvider(output, event.getLookupProvider(), CompletableFuture.completedFuture(null)));
 		generator.addProvider(
 				event.includeServer(),
 				(DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(

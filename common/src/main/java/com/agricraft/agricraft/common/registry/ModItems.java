@@ -18,6 +18,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
 public class ModItems {
+
 	public static final PlatformRegistry<Item> ITEMS = Platform.get().createRegistry(BuiltInRegistries.ITEM, AgriApi.MOD_ID);
 
 	public static final PlatformRegistry.Entry<Item> DEBUGGER = ITEMS.register("debugger", () -> new DebuggerItem(new Item.Properties()));
@@ -35,22 +36,37 @@ public class ModItems {
 	public static final PlatformRegistry.Entry<Item> SEED_BAG = ITEMS.register("seed_bag", () -> new SeedBagItem(new Item.Properties().stacksTo(1)));
 	public static final PlatformRegistry.Entry<Item> SEED = ITEMS.register("seed", () -> Platform.get().createAgriSeedItem(new Item.Properties()));
 
+	public static final PlatformRegistry.Entry<Item> COAL_PEBBLE = ITEMS.register("coal_pebble", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> COPPER_NUGGET = ITEMS.register("copper_nugget", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> DIAMOND_SHARD = ITEMS.register("diamond_shard", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> EMERALD_SHARD = ITEMS.register("emerald_shard", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> QUARTZ_SHARD = ITEMS.register("quartz_shard", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> NETHERITE_SLIVER = ITEMS.register("netherite_sliver", () -> new Item(new Item.Properties()));
+	public static final PlatformRegistry.Entry<Item> AMATHYLLIS_PETAL = ITEMS.register("amathyllis_petal", () -> new Item(new Item.Properties()));
 
 	public static void addItemsToTabs(CreativeModeTab.ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
 		if (itemDisplayParameters.hasPermissions()) {
-			output.accept(ModItems.DEBUGGER.get());
+			output.accept(DEBUGGER.get());
 		}
-		output.accept(ModItems.JOURNAL.get().getDefaultInstance());
-		output.accept(ModItems.SEED_ANALYZER.get());
-		output.accept(ModItems.CLIPPER.get());
-		output.accept(ModItems.MAGNIFYING_GLASS.get());
-		output.accept(ModItems.WOODEN_RAKE.get());
-		output.accept(ModItems.IRON_RAKE.get());
-		output.accept(ModItems.TROWEL.get());
-		output.accept(ModItems.WOODEN_CROP_STICKS.get());
-		output.accept(ModItems.IRON_CROP_STICKS.get());
-		output.accept(ModItems.OBSIDIAN_CROP_STICKS.get());
-		output.accept(ModItems.SEED_BAG.get());
+		output.accept(JOURNAL.get().getDefaultInstance());
+		output.accept(SEED_ANALYZER.get());
+		output.accept(CLIPPER.get());
+		output.accept(MAGNIFYING_GLASS.get());
+		output.accept(WOODEN_RAKE.get());
+		output.accept(IRON_RAKE.get());
+		output.accept(TROWEL.get());
+		output.accept(WOODEN_CROP_STICKS.get());
+		output.accept(IRON_CROP_STICKS.get());
+		output.accept(OBSIDIAN_CROP_STICKS.get());
+		output.accept(SEED_BAG.get());
+
+		output.accept(COAL_PEBBLE.get());
+		output.accept(COPPER_NUGGET.get());
+		output.accept(DIAMOND_SHARD.get());
+		output.accept(EMERALD_SHARD.get());
+		output.accept(QUARTZ_SHARD.get());
+		output.accept(NETHERITE_SLIVER.get());
+		output.accept(AMATHYLLIS_PETAL.get());
 	}
 
 }

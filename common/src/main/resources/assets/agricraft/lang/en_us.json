@@ -16,6 +16,13 @@
   "item.agricraft.iron_crop_sticks": "Iron Crop Sticks",
   "item.agricraft.obsidian_crop_sticks": "Obsidian Crop Sticks",
   "item.agricraft.seed_bag": "Suspiciously Savvy Seed Sorting Sack",
+  "item.agricraft.copper_nugget": "Copper Nugget",
+  "item.agricraft.coal_pebble": "Coal Pebble",
+  "item.agricraft.diamond_shard": "Diamond Shard",
+  "item.agricraft.emerald_shard": "Emerald Shard",
+  "item.agricraft.quartz_shard": "Quartz Shard",
+  "item.agricraft.netherite_sliver": "Netherite Sliver",
+  "item.agricraft.amathyllis_petal": "Amathyllis Petal",
 
   "screen.agricraft.journal": "Agricultural Journal",
   "screen.agricraft.seed_analyzer": "Seed Analyzer",
@@ -58,12 +65,12 @@
   "agricraft.journal.introduction.paragraph_2": "When analyzing the genome of a seed, you learn one or two things about it, such as what kind of environments it likes, how it will grow, what fruits it might bear, and to and from which other species it might mutate.",
   "agricraft.journal.introduction.paragraph_3": "Can you discover all plant species?",
   "agricraft.journal.introduction.discovered": "Discovered Seeds",
-  "agricraft.journal.introduction.alpha": "Alpha Notice",
+  "agricraft.journal.introduction.alpha": "Beta Notice",
   "agricraft.journal.introduction.alpha.notice": "Thanks for downloading AgriCraft. However, this version is not a full release yet. As such, many features are not implemented. This version is more intended for pack-maker to tinker with our new way of registering custom crops in the game, to get feedbacks and find bugs that may occur.",
   "agricraft.journal.introduction.alpha.features": "Implemented Features:",
-  "agricraft.journal.introduction.alpha.features.list": "Custom plants / soils / mutations / fertilizers / weeds, Default plants for minecraft, Agricultural Journal, Seed Analyzer, Seed Bag, Trowel, JEI & Jade compatibility",
+  "agricraft.journal.introduction.alpha.features.list": "Custom plants / soils / mutations / fertilizers / weeds, Default plants for minecraft, Agricultural Journal, Seed Analyzer, Seed Bag, Trowel, JEI & Jade compatibility, default datapack for immersive engineering, biomes'o plenty, and pam's harvestcrap 2",
   "agricraft.journal.introduction.alpha.not_features": "Not Implemented Features:",
-  "agricraft.journal.introduction.alpha.not_features.list": "Mod compatibility (via default datapack), Mod compatibility (via code), Greenhouses, Irrigation, Decorations, Rakes",
+  "agricraft.journal.introduction.alpha.not_features.list": "Greenhouses, Irrigation, Decorations, Rakes",
   "agricraft.journal.crop_breeding": "Plant Breeding Genetics",
   "agricraft.journal.crop_breeding.paragraph_1": "To cross-breed two plants, they must be planted on crop sticks, with one block space in between. Place double crop sticks on this spot in the middle.",
   "agricraft.journal.crop_breeding.paragraph_2": "When both plants are mature, they have a probability of producing offspring, each passing on half of their DNA to their progeny.",
@@ -361,7 +368,6 @@
   "description.agricraft.agricraft.redstodendron": "Much more complex than the average red algae.",
 
   "weed.agricraft.agricraft.weed": "Weed",
-
 
   "agricraft.datapacks.biomesoplenty": "Biomes O'Plenty extra crops (data)",
   "agricraft.resourcepacks.biomesoplenty": "Biomes O'Plenty extra crops (resources)",
