@@ -9,16 +9,16 @@ import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.registry.ModMenus;
 import com.agricraft.agricraft.common.registry.ModRecipeSerializers;
 import com.mojang.logging.LogUtils;
-import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
+import com.teamresourceful.resourcefulconfig.common.config.Configurator;
 import org.slf4j.Logger;
 
 public class AgriCraft {
 
 	public static final Logger LOGGER = LogUtils.getLogger();
-	public static final Configurator CONFIGURATOR = new Configurator(AgriApi.MOD_ID);
+	public static final Configurator CONFIGURATOR = new Configurator();
 
 	public static void init() {
-		CONFIGURATOR.register(AgriCraftConfig.class);
+		CONFIGURATOR.registerConfig(AgriCraftConfig.class);
 
 		ModBlocks.BLOCKS.init();
 		ModItems.ITEMS.init();

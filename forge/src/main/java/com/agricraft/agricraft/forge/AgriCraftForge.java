@@ -101,15 +101,12 @@ public class AgriCraftForge {
 		String id = "builtin/agricraft_" + type + "_" + modid;
 		Function<String, PackResources> onName = path -> new PathPackResources(path, resourcePath, true);
 		Pack.ResourcesSupplier resources = new Pack.ResourcesSupplier() {
-			public PackResources openPrimary(String id) {
-				return onName.apply(id);
-			}
-
-			public PackResources openFull(String id, Pack.Info info) {
+			@Override
+			public PackResources open(String string) {
 				return onName.apply(id);
 			}
 		};
-		try (PackResources packresources = resources.openPrimary(id)) {
+		try (PackResources packresources = resources.open(id)) {
 			PackMetadataSection packmetadatasection = packresources.getMetadataSection(PackMetadataSection.TYPE);
 			if (packmetadatasection == null) {
 				return;

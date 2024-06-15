@@ -116,7 +116,7 @@ public class ForgePlatform extends Platform {
 
 	@Override
 	public void openMenu(ServerPlayer player, ExtraDataMenuProvider provider) {
-		player.openMenu(provider, (data) -> provider.writeExtraData(player, data));
+		player.openMenu(provider);
 	}
 
 	@Override

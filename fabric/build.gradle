@@ -39,8 +39,9 @@ dependencies {
 	modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
 	modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
-	modRuntimeOnly "curse.maven:jade-324717:4978962"  // Jade-1.20.4-fabric-13.2.1
-	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
+	//modRuntimeOnly "curse.maven:jade-324717:4978962"  // Jade-1.20.4-fabric-13.2.1
+	//modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
+	modImplementation "curse.maven:jade-324717:5339230"
 
 	//	modRuntimeOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
 	//	modCompileOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
@@ -49,7 +50,7 @@ dependencies {
 sourceSets {
 	main {
 		resources {
-			srcDirs += project(":neoforge").file("src/generated/resources").absolutePath
+			srcDirs += project(":forge").file("src/generated/resources").absolutePath
 			exclude '.cache'
 		}
 	}
