@@ -3,9 +3,9 @@ package com.agricraft.agricraft.fabric;
 import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
+import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
 import com.agricraft.agricraft.api.plant.AgriPlant;
-import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.plant.AgriWeed;
 import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
@@ -20,11 +20,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionResult;
@@ -60,9 +57,9 @@ public class AgriCraftFabric implements ModInitializer {
 			for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
 				String modid = mod.getMetadata().getId();
 				if (!modid.equals("minecraft") && !modid.equals("agricraft")) {
-					// yeah we need to use the impl to match neoforge's way
-					ResourceManagerHelperImpl.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_resourcepacks_" + modid), "resourcepacks/" + modid, agricraft, Component.translatable("agricraft.resourcepacks." + modid), ResourcePackActivationType.DEFAULT_ENABLED);
-					ResourceManagerHelperImpl.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_datapacks_" + modid), "datapacks/" + modid, agricraft, Component.translatable("agricraft.datapacks." + modid), ResourcePackActivationType.DEFAULT_ENABLED);
+					// don't use Fabric API internals, in order to stay compatible with Quilted Fabric API
+					ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_resourcepacks_" + modid), "resourcepacks/" + modid, agricraft, true);
+					ResourceManagerHelper.registerBuiltinResourcePack(new ResourceLocation("builtin", "agricraft_datapacks_" + modid), "datapacks/" + modid, agricraft, true);
 				}
 			}
 		});
