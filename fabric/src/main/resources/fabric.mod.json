@@ -43,5 +43,6 @@
 		"fabric": "*",
 		"minecraft": ">=1.20",
 		"resourcefulconfig": ">=2.4.4"
-	}
+	},
+	"accessWidener": "agricraft-fabric.accesswidener"
 }
