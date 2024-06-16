@@ -319,21 +319,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
-		if (!level.isClientSide) {
-			// nothing on server
-			return;
-		}
-		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
-			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-			CropState cropState = state.getValue(CROP_STATE);
-			if (cropState.hasSticks()) {
-				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos);
-			}
-			if (crop.hasPlant()) {
-				String plantModelId = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
-				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos);
-			}
-		}
+		this.spawnDestroyParticles(level, state, pos);
 	}
 
 	@Override
@@ -342,11 +328,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 		if (!state.canSurvive(level, pos)) {
-			if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop) {
-				// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-				String plant = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
-				ClientUtil.spawnParticlesForPlant(plant, level, state, pos);
-			}
+			this.spawnDestroyParticles(level, state, pos);
 			if (state.getValue(BlockStateProperties.WATERLOGGED)) {
 				return Fluids.WATER.defaultFluidState().createLegacyBlock();
 			}
@@ -477,6 +459,20 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			}
 			return 0;
 		}).orElse(0) : 0;
+	}
+
+	private void spawnDestroyParticles(LevelAccessor level, BlockState state, BlockPos pos) {
+		if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop) {
+			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
+			CropState cropState = state.getValue(CROP_STATE);
+			if (cropState.hasSticks()) {
+				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos);
+			}
+			if (crop.hasPlant()) {
+				String plantModelId = crop.getPlantId().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
+				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos);
+			}
+		}
 	}
 
 }
