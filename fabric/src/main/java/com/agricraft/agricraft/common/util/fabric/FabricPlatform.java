@@ -9,12 +9,16 @@ import com.agricraft.agricraft.common.util.ExtraDataMenuProvider;
 import com.agricraft.agricraft.common.util.Platform;
 import com.agricraft.agricraft.common.util.PlatformRegistry;
 import com.agricraft.agricraft.fabric.AgriCraftFabric;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -72,28 +76,28 @@ public class FabricPlatform extends Platform {
 		return FabricItemGroup.builder()
 				.title(Component.translatable("itemGroup.agricraft.seeds"))
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
-				.displayItems((itemDisplayParameters, output) -> {
-					if (AgriCraftFabric.cachedServer != null) {
-						AgriApi.getPlantRegistry(AgriCraftFabric.cachedServer.registryAccess())
-								.ifPresent(registry -> {
-									AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
-									for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet().stream().sorted(Comparator.comparing(o -> o.getKey().location())).toList()) {
-										output.accept(AgriSeedItem.toStack(entry.getValue()));
-									}
-								});
-					} else {
-						AgriCraft.LOGGER.info("cached server is null");
-					}
-				})
+				.displayItems((itemDisplayParameters, output) -> AgriApi.getPlantRegistry()
+						.ifPresent(registry -> {
+							AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
+							for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet().stream().sorted(Comparator.comparing(o -> o.getKey().location())).toList()) {
+								output.accept(AgriSeedItem.toStack(entry.getValue()));
+							}
+						}))
 				.build();
 	}
 
 	@Override
-	public <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
-		if (AgriCraftFabric.cachedServer == null) {
-			return Optional.empty();
+	public Optional<RegistryAccess> getRegistryAccess() {
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+			if (Minecraft.getInstance().level != null) {
+				return Optional.of(Minecraft.getInstance().level.registryAccess());
+			}
+		} else {
+			if (AgriCraftFabric.cachedServer != null) {
+				return Optional.of(AgriCraftFabric.cachedServer.registryAccess());
+			}
 		}
-		return AgriCraftFabric.cachedServer.registryAccess().registry(resourceKey);
+		return Optional.empty();
 	}
 
 	@Override
