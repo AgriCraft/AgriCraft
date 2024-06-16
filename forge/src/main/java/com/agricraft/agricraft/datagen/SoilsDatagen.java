@@ -26,7 +26,7 @@ public class SoilsDatagen {
 
 	public static void registerSoils(BootstapContext<AgriSoil> context) {
 		mc(context, "farmland", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:farmland").build()).humidity(WET).acidity(SLIGHTLY_ACIDIC).nutrients(HIGH).growthModifier(1.0).build());
-		mc(context, "sand", AgriSoil.builder().variants(AgriSoilVariant.builder().tag("forge:sand").build(), AgriSoilVariant.builder().tag("minecraft:sand").build()).humidity(ARID).acidity(NEUTRAL).nutrients(LOW).growthModifier(0.8).build());
+		mc(context, "sand", AgriSoil.builder().variants(AgriSoilVariant.builder().tag("c:sand").build(), AgriSoilVariant.builder().tag("forge:sand").build(), AgriSoilVariant.builder().tag("minecraft:sand").build()).humidity(ARID).acidity(NEUTRAL).nutrients(LOW).growthModifier(0.8).build());
 		mc(context, "clay", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:clay").build()).humidity(FLOODED).acidity(SLIGHTLY_ACIDIC).nutrients(MEDIUM).growthModifier(1.0).build());
 		mc(context, "podzol", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:podzol").build()).humidity(DAMP).acidity(SLIGHTLY_ACIDIC).nutrients(VERY_HIGH).growthModifier(1.1).build());
 		mc(context, "mycelium", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:mycelium").build()).humidity(DAMP).acidity(NEUTRAL).nutrients(LOW).growthModifier(0.8).build());
@@ -35,7 +35,7 @@ public class SoilsDatagen {
 		mc(context, "crimson_nylium", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:crimson_nylium").build()).humidity(ARID).acidity(HIGHLY_ACIDIC).nutrients(LOW).growthModifier(0.75).build());
 		mc(context, "warped_nylium", AgriSoil.builder().variants(AgriSoilVariant.builder().block("minecraft:warped_nylium").build()).humidity(ARID).acidity(HIGHLY_ALKALINE).nutrients(LOW).growthModifier(0.75).build());
 
-		agricraft(context, "gravel", AgriSoil.builder().variants(AgriSoilVariant.builder().tag("forge:gravel").build()).humidity(DRY).acidity(SLIGHTLY_ALKALINE).nutrients(LOW).growthModifier(0.5).build());
+		agricraft(context, "gravel", AgriSoil.builder().variants(AgriSoilVariant.builder().tag("c:gravel").build(), AgriSoilVariant.builder().tag("forge:gravel").build(), AgriSoilVariant.builder().block("minecraft:gravel").build()).humidity(DRY).acidity(SLIGHTLY_ALKALINE).nutrients(LOW).growthModifier(0.5).build());
 	}
 
 	private static void mc(BootstapContext<AgriSoil> context, String soilId, AgriSoil soil) {
