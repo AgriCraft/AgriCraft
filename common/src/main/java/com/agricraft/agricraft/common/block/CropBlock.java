@@ -243,23 +243,6 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			return InteractionResult.PASS;
 		}
 		ItemStack heldItem = player.getItemInHand(hand);
-		// harvesting ord de-cross-crop'ing if empty-handed
-		if (heldItem.isEmpty()) {
-			if (crop.isCrossCropSticks()) {
-				InteractionResultHolder<CropStickVariant> result = removeCropSticks(level, pos, state);
-				if (result.getResult() == InteractionResult.SUCCESS) {
-					if (!player.isCreative()) {
-						spawnItem(level, pos, CropStickVariant.toItem(result.getObject()));
-					}
-					return InteractionResult.CONSUME;
-				}
-			} else if (crop.hasPlant() && crop.canBeHarvested()) {
-				crop.getHarvestProducts(itemStack -> spawnItem(level, pos, itemStack));
-				crop.setGrowthStage(crop.getPlant().getGrowthStageAfterHarvest());
-				crop.getPlant().onHarvest(crop, player);
-				return InteractionResult.SUCCESS;
-			}
-		}
 		// TODO: @Ketheroth replace with item tag
 		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.IRON_RAKE.get()) || heldItem.is(ModItems.WOODEN_RAKE.get())) {
 			return InteractionResult.PASS;
@@ -298,6 +281,21 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			} else {
 				return InteractionResult.CONSUME;
 			}
+		}
+		// harvesting or de-cross-crop'ing if nothing else checks out
+		if (crop.isCrossCropSticks()) {
+			InteractionResultHolder<CropStickVariant> result = removeCropSticks(level, pos, state);
+			if (result.getResult() == InteractionResult.SUCCESS) {
+				if (!player.isCreative()) {
+					spawnItem(level, pos, CropStickVariant.toItem(result.getObject()));
+				}
+				return InteractionResult.CONSUME;
+			}
+		} else if (crop.hasPlant() && crop.canBeHarvested()) {
+			crop.getHarvestProducts(itemStack -> spawnItem(level, pos, itemStack));
+			crop.setGrowthStage(crop.getPlant().getGrowthStageAfterHarvest());
+			crop.getPlant().onHarvest(crop, player);
+			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.FAIL;
 	}
