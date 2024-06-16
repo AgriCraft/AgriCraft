@@ -47,7 +47,7 @@ public class AgriCraftJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-		registration.getCraftingCategory().addExtension(MagnifyingHelmetRecipe.class, new MagnifyingHelmetExtension());
+		registration.getCraftingCategory().addCategoryExtension(MagnifyingHelmetRecipe.class, (recipe) -> new MagnifyingHelmetExtension());
 	}
 
 	@Override

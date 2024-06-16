@@ -13,18 +13,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelProvider;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.common.data.LanguageProvider;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ModelBuilder;
+import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -33,9 +33,9 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DatagenEventHandler {
 
-	private static final boolean biomesoplenty = true;
-	private static final boolean immersiveengineering = true;
-	private static final boolean pamhc2crops = true;
+	private static final boolean biomesoplenty = false;
+	private static final boolean immersiveengineering = false;
+	private static final boolean pamhc2crops = false;
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
@@ -99,7 +99,7 @@ public class DatagenEventHandler {
 			public String getName() {
 				return "DataPack Metadata " + modid;
 			}
-		}.add(PackMetadataSection.TYPE, new PackMetadataSection(Component.translatable("agricraft.datapacks." + modid), DetectedVersion.BUILT_IN.getPackVersion(PackType.SERVER_DATA), Optional.empty())));
+		}.add(PackMetadataSection.TYPE, new PackMetadataSection(Component.translatable("agricraft.datapacks." + modid), DetectedVersion.BUILT_IN.getPackVersion(PackType.SERVER_DATA), Map.of())));
 		generator.addProvider(event.includeServer(),
 				(DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(dataOutput, event.getLookupProvider(), registrySetBuilder, Set.of(modid)) {
 					@Override
@@ -114,7 +114,7 @@ public class DatagenEventHandler {
 			public String getName() {
 				return "ResourcePack Metadata " + modid;
 			}
-		}.add(PackMetadataSection.TYPE, new PackMetadataSection(Component.translatable("agricraft.resourcepacks." + modid), DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES), Optional.empty())));
+		}.add(PackMetadataSection.TYPE, new PackMetadataSection(Component.translatable("agricraft.resourcepacks." + modid), DetectedVersion.BUILT_IN.getPackVersion(PackType.CLIENT_RESOURCES), Map.of())));
 		generator.addProvider(event.includeClient(), new ModelProvider<BlockModelBuilder>(resourceOutput, modid, "crop", BlockModelBuilder::new, event.getExistingFileHelper()) {
 			@Override
 			protected void registerModels() {

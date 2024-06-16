@@ -1,6 +1,6 @@
 package com.agricraft.agricraft.datagen;
 
-import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangDatagen {
 

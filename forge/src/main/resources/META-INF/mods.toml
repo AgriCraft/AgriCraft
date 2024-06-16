@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[49,)"
+loaderVersion="[47,)"
 license="MIT"
 issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
 
@@ -18,14 +18,14 @@ Agricultural farming extended
 [[dependencies.agricraft]]
 modId="forge"
 mandatory=true
-versionRange="[49,)"
+versionRange="[47,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.agricraft]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.4,)"
+versionRange = "[1.20,)"
 ordering = "NONE"
 side = "BOTH"
 

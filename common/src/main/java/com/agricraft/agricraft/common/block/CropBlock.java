@@ -90,7 +90,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 				.randomTicks()
 				.noOcclusion()
 				.forceSolidOff()
-				.noTerrainParticles()
+				.noParticlesOnBreak()
 				.lightLevel(blockState -> blockState.getValue(LIGHT))
 				.sound(SoundType.CROP));
 		this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false)
@@ -304,7 +304,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	@NotNull
-	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
 		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
 			if (crop.hasPlant()) {
 				// prioritize the plant if there is any
@@ -361,7 +361,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 	}
 
 	@Override
-	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
 		return AgriApi.getCrop(level, pos).map(crop -> crop.isFertile() && !crop.isFullyGrown()).orElse(false);
 	}
 
@@ -416,7 +416,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 	}
 
 	@Override
-	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
+	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
 		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
 			level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, false), 3);
 			return Fluids.WATER.getBucket().getDefaultInstance();
@@ -433,13 +433,13 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 		return Fluids.WATER.getPickupSound();
 	}
 	@Override
-	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
 		return !state.getValue(BlockStateProperties.WATERLOGGED);
 	}
 
 	@Override
 	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidState) {
-		if (this.canPlaceLiquid(null, level, pos, state, fluidState.getType()) && fluidState.getType() == Fluids.WATER) {
+		if (this.canPlaceLiquid(level, pos, state, fluidState.getType()) && fluidState.getType() == Fluids.WATER) {
 			if (!level.isClientSide()) {
 				level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, true), 3);
 				level.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(level));

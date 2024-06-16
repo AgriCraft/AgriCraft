@@ -1,15 +1,17 @@
 package com.agricraft.agricraft.api.config;
 
-import com.teamresourceful.resourcefulconfig.api.annotations.Category;
-import com.teamresourceful.resourcefulconfig.api.annotations.Comment;
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigEntry;
-import com.teamresourceful.resourcefulconfig.api.annotations.ConfigOption;
-import com.teamresourceful.resourcefulconfig.api.types.options.EntryType;
+import com.teamresourceful.resourcefulconfig.common.annotations.Category;
+import com.teamresourceful.resourcefulconfig.common.annotations.Comment;
+import com.teamresourceful.resourcefulconfig.common.annotations.ConfigEntry;
+import com.teamresourceful.resourcefulconfig.common.annotations.DoubleRange;
+import com.teamresourceful.resourcefulconfig.common.annotations.FloatRange;
+import com.teamresourceful.resourcefulconfig.common.annotations.IntRange;
+import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 
 /**
  * Agricraft main configuration category.
  */
-@Category("config.agricraft.core")
+@Category(id = "core", translation = "config.agricraft.core")
 public final class CoreConfig {
 
 	@ConfigEntry(id = "plant_off_crop_sticks", type = EntryType.BOOLEAN, translation = "config.agricraft.core.plant_off_crop_sticks")
@@ -42,7 +44,7 @@ public final class CoreConfig {
 	public static boolean convertSeedsOnlyInAnalyzer = false;
 
 	@ConfigEntry(id = "growth_multiplier", type = EntryType.DOUBLE, translation = "config.agricraft.core.growth_multiplier")
-	@ConfigOption.Range(min = 0.0, max = 3.0)
+	@DoubleRange(min = 0.0, max = 3.0)
 	@Comment("Global growth rate multiplier for crops.")
 	public static double growthMultiplier = 1.0;
 
@@ -71,19 +73,19 @@ public final class CoreConfig {
 	public static boolean rakingDropsItems = true;
 
 	@ConfigEntry(id = "seed_compost_value", type = EntryType.FLOAT, translation = "config.agricraft.core.seed_compost_value")
-	@ConfigOption.Range(min = 0F, max = 1F)
+	@FloatRange(min = 0F, max = 1F)
 	@Comment("Defines the seed compost value, if set to zero, seeds will not be compostable")
 	public static float seedCompostValue = 0.3F;
 
 //	public static boolean animalAttraction = false;
 
 	@ConfigEntry(id = "seed_bag_capactity", type = EntryType.INTEGER, translation = "config.agricraft.core.seed_bag_capactity")
-	@ConfigOption.Range(min = 8, max = 256)
+	@IntRange(min = 8, max = 256)
 	@Comment("The amount of seeds one seed bag can hold.")
 	public static int seedBagCapacity = 64;
 
 	@ConfigEntry(id = "seed_bag_enchant_cost", type = EntryType.INTEGER, translation = "config.agricraft.core.seed_bag_enchant_cost")
-	@ConfigOption.Range(min = 0, max = 30)
+	@IntRange(min = 0, max = 30)
 	@Comment("Enchantment cost in player levels to enchant the seed bag.")
 	public static int seedBagEnchantCost = 10;
 

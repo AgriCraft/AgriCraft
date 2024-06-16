@@ -42,6 +42,7 @@
 	"depends": {
 		"fabric": "*",
 		"minecraft": ">=1.20",
-		"resourcefulconfig": ">=2.4.4"
-	}
+		"resourcefulconfig": ">=2.1.2"
+	},
+	"accessWidener": "agricraft-fabric.accesswidener"
 }
