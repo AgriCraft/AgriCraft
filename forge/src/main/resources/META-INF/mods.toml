@@ -32,6 +32,6 @@ side = "BOTH"
 [[dependencies.agricraft]]
 modId = "resourcefulconfig"
 mandatory = true
-versionRange = "[${resourcefulconfig_version},)"
+versionRange = "[2.4.2,)"
 ordering = "NONE"
 side = "BOTH"

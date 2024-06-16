@@ -516,4 +516,10 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		}
 	}
 
+	@Nullable
+	@Override
+	public Level getLevel() {
+		return super.getLevel();
+	}
+
 }

@@ -23,11 +23,11 @@ public class ModRecipeProvider extends RecipeProvider {
 
 	@Override
 	protected void buildRecipes(RecipeOutput output) {
-		TagKey<Item> stick = TagKey.create(Registries.ITEM, new ResourceLocation("forge:rods/wooden"));
-		TagKey<Item> ironNugget = TagKey.create(Registries.ITEM, new ResourceLocation("forge:nuggets/iron"));
-		TagKey<Item> obsidian = TagKey.create(Registries.ITEM, new ResourceLocation("forge:obsidian"));
-		TagKey<Item> seed = TagKey.create(Registries.ITEM, new ResourceLocation("forge:seeds"));
-		TagKey<Item> ironIngot = TagKey.create(Registries.ITEM, new ResourceLocation("forge:ingots/iron"));
+		TagKey<Item> stick = TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:rods/wooden"));
+		TagKey<Item> ironNugget = TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:nuggets/iron"));
+		TagKey<Item> obsidian = TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:obsidian"));
+		TagKey<Item> seed = TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:seeds"));
+		TagKey<Item> ironIngot = TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:ingots/iron"));
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, new ItemStack(ModItems.WOODEN_CROP_STICKS.get(), 8))
 				.pattern("##")
 				.pattern("##")
@@ -56,7 +56,7 @@ public class ModRecipeProvider extends RecipeProvider {
 				.pattern(" bs")
 				.pattern("pwp")
 				.define('s', stick)
-				.define('g', TagKey.create(Registries.ITEM, new ResourceLocation("forge:glass_panes/colorless")))
+				.define('g', TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:glass_panes/colorless")))
 				.define('b', Items.STONE_SLAB)
 				.define('p', TagKey.create(Registries.ITEM, new ResourceLocation("minecraft:planks")))
 				.define('w', TagKey.create(Registries.ITEM, new ResourceLocation("minecraft:wooden_slabs")))
@@ -75,14 +75,14 @@ public class ModRecipeProvider extends RecipeProvider {
 				.pattern("sgs")
 				.pattern(" s ")
 				.pattern(" s ")
-				.define('g', TagKey.create(Registries.ITEM, new ResourceLocation("forge:glass_panes/colorless")))
+				.define('g', TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:glass_panes/colorless")))
 				.define('s', stick)
 				.unlockedBy("has_stick", has(stick))
 				.save(output);
 		ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, new ItemStack(ModItems.WOODEN_RAKE.get()))
 				.pattern("f")
 				.pattern("s")
-				.define('f', TagKey.create(Registries.ITEM, new ResourceLocation("forge:fences/wooden")))
+				.define('f', TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:fences/wooden")))
 				.define('s', stick)
 				.unlockedBy("has_stick", has(stick))
 				.save(output);
@@ -104,8 +104,8 @@ public class ModRecipeProvider extends RecipeProvider {
 				.pattern(" s ")
 				.pattern("l l")
 				.pattern(" l ")
-				.define('s', TagKey.create(Registries.ITEM, new ResourceLocation("forge:string")))
-				.define('l', TagKey.create(Registries.ITEM, new ResourceLocation("forge:leather")))
+				.define('s', TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:string")))
+				.define('l', TagKey.create(Registries.ITEM, new ResourceLocation("agricraft:leather")))
 				.unlockedBy("has_seed", has(seed))
 				.save(output);
 

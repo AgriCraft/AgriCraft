@@ -266,7 +266,9 @@ public class CropRequirementRecipe implements EmiRecipe {
 		}, 37, 109, 6+8+9+9+11+10, 12);
 		Component desc = LangUtils.plantDescription(plantId);
 		widgets.addTooltipText(desc == null ? List.of(LangUtils.plantName(plantId)) : List.of(LangUtils.plantName(plantId), desc), 50, 30, 26, 24);
-		widgets.addTooltip((mouseX, mouseY) -> Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(soils.get(soil))).stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList(), 50, 58, 26, 16);
+		if (!soils.isEmpty() && soil < soils.size()) {
+			widgets.addTooltip((mouseX, mouseY) -> Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(soils.get(soil))).stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList(), 50, 58, 26, 16);
+		}
 		if (AgriApi.getSeasonLogic().isActive()) {
 			widgets.addTooltipText(List.of(LangUtils.seasonName(AgriSeason.SPRING)), 17, 24, 12, 12);
 			widgets.addTooltipText(List.of(LangUtils.seasonName(AgriSeason.SUMMER)), 17, 37, 12, 12);
