@@ -15,7 +15,7 @@ public class LangDatagen {
 		lang.add("plant.agricraft.biomesoplenty.rose", "Rose");
 		lang.add("plant.agricraft.biomesoplenty.toadstool", "Toadstool");
 		lang.add("plant.agricraft.biomesoplenty.violet", "Violet");
-		lang.add("plant.agricraft.biomesoplenty.white_lavender", "White Lavender");
+//		lang.add("plant.agricraft.biomesoplenty.white_lavender", "White Lavender");
 		lang.add("plant.agricraft.biomesoplenty.wilted_lily", "Wilted Lily");
 		lang.add("seed.agricraft.biomesoplenty.burning_blossom", "Burning Blossom Seeds");
 		lang.add("seed.agricraft.biomesoplenty.glowflower", "Glowflower Seeds");
@@ -27,7 +27,7 @@ public class LangDatagen {
 		lang.add("seed.agricraft.biomesoplenty.rose", "Rose Seeds");
 		lang.add("seed.agricraft.biomesoplenty.toadstool", "Toadstool Spores");
 		lang.add("seed.agricraft.biomesoplenty.violet", "Violet Seeds");
-		lang.add("seed.agricraft.biomesoplenty.white_lavender", "White Lavender Seeds");
+//		lang.add("seed.agricraft.biomesoplenty.white_lavender", "White Lavender Seeds");
 		lang.add("seed.agricraft.biomesoplenty.wilted_lily", "Wilted Lily Seeds");
 		lang.add("description.agricraft.biomesoplenty.burning_blossom", "Watch out for burns.");
 		lang.add("description.agricraft.biomesoplenty.glowflower", "A flower glowing in the dark.");
@@ -39,7 +39,7 @@ public class LangDatagen {
 		lang.add("description.agricraft.biomesoplenty.rose", "One of the most popular and widely cultivated groups of flowering plants.");
 		lang.add("description.agricraft.biomesoplenty.toadstool", "A type of edible mushroom found in the forest.");
 		lang.add("description.agricraft.biomesoplenty.violet", "A delicate flower growing in meadows.");
-		lang.add("description.agricraft.biomesoplenty.white_lavender", "A delicate lavender");
+//		lang.add("description.agricraft.biomesoplenty.white_lavender", "A delicate lavender");
 		lang.add("description.agricraft.biomesoplenty.wilted_lily", "That's what happens when you don't water your plants.");
 	}
 

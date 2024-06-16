@@ -177,13 +177,13 @@ public class ModelsDatagen {
 		with4TexturesIn8stage(m, "rose", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/rose", "biomesoplenty:block/rose");
 		with4TexturesIn8stage(m, "toadstool", "agricraft:crop/crop_hash", "agricraft:plant/biomesoplenty/toadstool");
 		with4TexturesIn8stage(m, "violet", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/violet", "biomesoplenty:block/violet");
-		with4TexturesIn8stage(m, "white_lavender", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/white_lavender", "biomesoplenty:block/white_lavender");
+//		with4TexturesIn8stage(m, "white_lavender", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/white_lavender", "biomesoplenty:block/white_lavender");
 		with4TexturesIn8stage(m, "wilted_lily", "agricraft:crop/crop_plus", "agricraft:plant/biomesoplenty/wilted_lily", "biomesoplenty:block/wilted_lily");
 	}
 
 	public static void registerBiomesOPlentySeed(ModelProvider<ItemModelBuilder> m) {
 		List.of("burning_blossom", "glowflower", "glowshroom", "lavender", "orange_cosmos", "pink_daffodil",
-						"pink_hibiscus", "rose", "toadstool", "violet", "white_lavender", "wilted_lily")
+						"pink_hibiscus", "rose", "toadstool", "violet"/*, "white_lavender"*/, "wilted_lily")
 				.forEach(name -> m.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/biomesoplenty/" + name));
 	}
 

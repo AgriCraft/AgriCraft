@@ -33,9 +33,9 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(modid = AgriApi.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DatagenEventHandler {
 
-	private static final boolean biomesoplenty = false;
+	private static final boolean biomesoplenty = true;
 	private static final boolean immersiveengineering = false;
-	private static final boolean pamhc2crops = false;
+	private static final boolean pamhc2crops = true;
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
@@ -138,6 +138,11 @@ public class DatagenEventHandler {
 			}
 		});
 		generator.addProvider(event.includeClient(), new LanguageProvider(resourceOutput, modid, "en_us") {
+			@Override
+			public String getName() {
+				return "Languages: en_us for " + modid;
+			}
+
 			@Override
 			protected void addTranslations() {
 				translations.accept(this);

@@ -69,7 +69,7 @@ public class MutationsDatagen {
 		r(context, "biomesoplenty", "rose", new AgriMutation("biomesoplenty:rose", "minecraft:poppy", "minecraft:sweet_berries", 0.5));
 		r(context, "biomesoplenty", "toadstool", new AgriMutation("biomesoplenty:toadstool", "minecraft:brown_mushroom", "minecraft:carrot", 0.5));
 		r(context, "biomesoplenty", "violet", new AgriMutation("biomesoplenty:violet", "minecraft:poppy", "minecraft:cornflower", 0.5));
-		r(context, "biomesoplenty", "white_lavender", new AgriMutation("biomesoplenty:white_lavender", "minecraft:azure_bluet", "biomesoplenty:lavender", 0.5));
+//		r(context, "biomesoplenty", "white_lavender", new AgriMutation("biomesoplenty:white_lavender", "minecraft:azure_bluet", "biomesoplenty:lavender", 0.5));
 		r(context, "biomesoplenty", "wilted_lily", new AgriMutation("biomesoplenty:wilted_lily", "minecraft:lily_of_the_valley", "minecraft:brown_mushroom", 0.5));
 	}
 
