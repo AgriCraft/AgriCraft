@@ -362,7 +362,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
-		return AgriApi.getCrop(level, pos).map(crop -> crop.isFertile() && !crop.isFullyGrown()).orElse(false);
+		return AgriApi.getCrop(level, pos).map(crop -> crop.hasPlant() && crop.isFertile() && !crop.isFullyGrown()).orElse(false);
 	}
 
 	@Override
