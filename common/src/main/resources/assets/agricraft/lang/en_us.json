@@ -2,8 +2,8 @@
   "itemGroup.agricraft.main": "AgriCraft",
   "itemGroup.agricraft.seeds": "AgriCraft Seeds",
 
-  "block.agricraft.seed_analyzer": "Seed analyzer",
-  "block.agricraft.crop_sticks": "Crop Sticks",
+  "block.agricraft.seed_analyzer": "Seed Analyzer",
+  "block.agricraft.crop": "Crop Sticks",
 
   "item.agricraft.debugger": "Debugger",
   "item.agricraft.journal": "Agricultural Journal",
