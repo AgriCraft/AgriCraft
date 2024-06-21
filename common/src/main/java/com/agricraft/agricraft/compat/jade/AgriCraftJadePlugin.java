@@ -7,16 +7,10 @@ import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.util.LangUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.IWailaClientRegistration;
-import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
+import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 
 import java.util.Comparator;
@@ -45,7 +39,7 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 			if (blockAccessor.getBlockEntity() instanceof AgriCrop crop) {
 				if (crop.hasPlant()) {
 					iTooltip.add(Component.translatable("agricraft.tooltip.jade.growth", crop.getGrowthPercent() * 100));
-					if (Minecraft.getInstance().player.isShiftKeyDown()) {
+					if (blockAccessor.getPlayer().isShiftKeyDown()) {
 						iTooltip.add(Component.translatable("agricraft.tooltip.jade.species")
 								.append(LangUtils.plantName(crop.getGenome().getSpeciesGene().getTrait()))
 						);
@@ -63,7 +57,7 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 				}
 				if (crop.hasWeeds()) {
 					iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.weeds").append(LangUtils.weedName(crop.getWeedId())));
-					if (Minecraft.getInstance().player.isShiftKeyDown()) {
+					if (blockAccessor.getPlayer().isShiftKeyDown()) {
 						iTooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.growth", crop.getWeedGrowthStage().index() + 1, crop.getWeedGrowthStage().total())));
 					}
 				}
@@ -87,9 +81,9 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 		}
 
 		@Override
-		public void appendTooltip(ITooltip iTooltip, BlockAccessor accessor, IPluginConfig iPluginConfig) {
-			Optional<AgriSoil> soil = AgriApi.getSoil(accessor.getLevel(), accessor.getPosition(), accessor.getLevel().registryAccess());
-			if (soil.isPresent() && Minecraft.getInstance().player.isShiftKeyDown()) {
+		public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
+			Optional<AgriSoil> soil = AgriApi.getSoil(blockAccessor.getLevel(), blockAccessor.getPosition(), blockAccessor.getLevel().registryAccess());
+			if (soil.isPresent() && blockAccessor.getPlayer().isShiftKeyDown()) {
 				AgriSoil soil1 = soil.get();
 				iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.soil.humidity")
 						.append(Component.translatable("agricraft.soil.humidity." + soil1.humidity().name().toLowerCase())));
