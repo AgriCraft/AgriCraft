@@ -48,8 +48,7 @@ dependencies {
 	modCompileOnly "mezz.jei:jei-$minecraft_version-neoforge-api:$jei_version"
 	modLocalRuntime("mezz.jei:jei-$minecraft_version-neoforge:$jei_version") { transitive = false }
 
-	modCompileOnly "curse.maven:jade-324717:5111969"  // Jade-1.20.4-neoforge-13.3.1-api
-	modLocalRuntime "curse.maven:jade-324717:5109393"  // Jade-1.20.4-neoforge-13.3.1
+	modImplementation "curse.maven:jade-324717:$jade_neoforge_version"  // Jade-1.20.4-neoforge-13.3.1
 
 //	modLocalRuntime "curse.maven:serene-seasons-291874:5073504"  // Serene Seasons 1.20.4-9.3.0.17
 //	modLocalRuntime "curse.maven:glitchcore-955399:5088441"  // GlitchCore 1.20.4-1.0.0.59 (serene season dep)

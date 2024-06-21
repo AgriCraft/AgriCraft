@@ -33,7 +33,7 @@ dependencies {
 
 	modLocalRuntime "dev.emi:emi-fabric:$emi_version"
 
-	modImplementation "curse.maven:jade-324717:4978962"
+	modImplementation "curse.maven:jade-324717:$jade_fabric_version"
 
 	//	modRuntimeOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
 	//	modCompileOnly "curse.maven:fabric-seasons-413523:4699698"  // Fabric Seasons 2.3
