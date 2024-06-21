@@ -13,7 +13,8 @@ dependencies {
 //	modRuntimeOnly "mezz.jei:jei-$minecraft_version-common:$jei_version"
 //	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:$rei_version"
 //	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:$rei_version"
+	modCompileOnly "dev.emi:emi-xplat-intermediary:${emi_version}:api"
 
 //	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
-
+	modImplementation "curse.maven:jade-324717:5339230"
 }
