@@ -51,10 +51,9 @@ dependencies {
 	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
 	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
 
-
 	//modCompileOnly "curse.maven:jade-324717:4980189"  // Jade-1.20.4-forge-13.2.1-api
 	//modLocalRuntime "curse.maven:jade-324717:4978952"  // Jade-1.20.4-forge-13.2.1
-	modImplementation "curse.maven:jade-324717:5339264"
+	modImplementation "curse.maven:jade-324717:$jade_forge_version"
 
 	modImplementation "curse.maven:biomesoplenty-220318:4617259"  // Biomes O' Plenty 1.20.1-18.0.0.592
 	modImplementation "curse.maven:terrablender-563928:5378180"  // TerraBlender Forge 1.20.1-3.0.1.7
