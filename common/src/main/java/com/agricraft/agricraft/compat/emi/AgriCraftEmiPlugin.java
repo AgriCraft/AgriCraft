@@ -1,8 +1,6 @@
 package com.agricraft.agricraft.compat.emi;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.codecs.AgriMutation;
-import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.common.registry.ModItems;
 import dev.emi.emi.api.EmiInitRegistry;
 import dev.emi.emi.api.EmiPlugin;

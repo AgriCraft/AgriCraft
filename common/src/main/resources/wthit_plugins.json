@@ -1,0 +1,5 @@
+{
+  "agricraft:plugin": {
+    "initializer": "com.agricraft.agricraft.compat.wthit.AgriCraftWthitPlugin"
+  }
+}
