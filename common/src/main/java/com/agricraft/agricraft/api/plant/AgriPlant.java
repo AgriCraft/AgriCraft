@@ -144,7 +144,9 @@ public class AgriPlant {
 		this.products.forEach(product -> {
 			Platform.get().getItemsFromLocation(product.item()).forEach(item -> {
 				ItemStack itemStack = new ItemStack(item, product.min());
-				itemStack.getOrCreateTag().merge(product.nbt());
+				if (!product.nbt().isEmpty()) {
+					itemStack.getOrCreateTag().merge(product.nbt());
+				}
 				products.accept(itemStack);
 			});
 		});
@@ -157,7 +159,9 @@ public class AgriPlant {
 						List<Item> possible = Platform.get().getItemsFromLocation(product.item());
 						Item item = possible.get(random.nextInt(possible.size()));
 						ItemStack itemStack = new ItemStack(item, product.getAmount(random));
-						itemStack.getOrCreateTag().merge(product.nbt());
+						if (!product.nbt().isEmpty()) {
+							itemStack.getOrCreateTag().merge(product.nbt());
+						}
 						products.accept(itemStack);
 					});
 		}
@@ -177,7 +181,9 @@ public class AgriPlant {
 						List<Item> possible = Platform.get().getItemsFromLocation(product.item());
 						Item item = possible.get(random.nextInt(possible.size()));
 						ItemStack itemStack = new ItemStack(item, product.getAmount(random));
-						itemStack.getOrCreateTag().merge(product.nbt());
+						if (!product.nbt().isEmpty()) {
+							itemStack.getOrCreateTag().merge(product.nbt());
+						}
 						products.accept(itemStack);
 					});
 		}

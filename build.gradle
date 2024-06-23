@@ -24,7 +24,15 @@ subprojects {
 			url = "https://maven.blamejared.com/"
 		}
 		maven {
-			url "https://cursemaven.com"
+			name = "TerraformersMC"
+			url = "https://maven.terraformersmc.com/"
+		}
+		maven {
+			name = "badasintended"
+			url = "https://maven2.bai.lol/"
+		}
+		maven {
+			url "https://cursemaven.com/"
 			content {
 				includeGroup "curse.maven"
 			}

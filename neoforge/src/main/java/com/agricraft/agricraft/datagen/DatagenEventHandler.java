@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -26,7 +27,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -41,7 +41,8 @@ public class DatagenEventHandler {
 	public static void onGatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
 		generator.addProvider(event.includeServer(), (DataProvider.Factory<RecipeProvider>) ModRecipeProvider::new);
-		generator.addProvider(event.includeServer(), (DataProvider.Factory<ItemTagsProvider>) output -> new ModTagProvider(output, event.getLookupProvider(), CompletableFuture.completedFuture(null)));
+		BlockTagsProvider blockTagsProvider = generator.addProvider(event.includeServer(), (DataProvider.Factory<BlockTagsProvider>) output -> new ModBlockTagProvider(output, event.getLookupProvider(), AgriApi.MOD_ID, event.getExistingFileHelper()));
+		generator.addProvider(event.includeServer(), (DataProvider.Factory<ItemTagsProvider>) output -> new ModItemTagProvider(output, event.getLookupProvider(), blockTagsProvider.contentsGetter(), AgriApi.MOD_ID, event.getExistingFileHelper()));
 		generator.addProvider(
 				event.includeServer(),
 				(DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(

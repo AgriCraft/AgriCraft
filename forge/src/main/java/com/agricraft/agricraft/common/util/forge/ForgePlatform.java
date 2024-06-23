@@ -10,7 +10,9 @@ import com.agricraft.agricraft.common.registry.ModItems;
 import com.agricraft.agricraft.common.util.ExtraDataMenuProvider;
 import com.agricraft.agricraft.common.util.Platform;
 import com.agricraft.agricraft.common.util.PlatformRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -29,6 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -66,7 +69,7 @@ public class ForgePlatform extends Platform {
 		return CreativeModeTab.builder()
 				.title(Component.translatable("itemGroup.agricraft.seeds"))
 				.icon(() -> new ItemStack(Items.WHEAT_SEEDS))
-				.displayItems((itemDisplayParameters, output) -> AgriApi.getPlantRegistry(ServerLifecycleHooks.getCurrentServer().registryAccess())
+				.displayItems((itemDisplayParameters, output) -> AgriApi.getPlantRegistry()
 						.ifPresent(registry -> {
 							AgriCraft.LOGGER.info("add seeds in tab: " + registry.stream().count());
 							for (Map.Entry<ResourceKey<AgriPlant>, AgriPlant> entry : registry.entrySet().stream().sorted(Map.Entry.comparingByKey()).toList()) {
@@ -78,8 +81,17 @@ public class ForgePlatform extends Platform {
 	}
 
 	@Override
-	public <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
-		return ServerLifecycleHooks.getCurrentServer().registryAccess().registry(resourceKey);
+	public Optional<RegistryAccess> getRegistryAccess() {
+		if (FMLLoader.getDist().isClient()) {
+			if (Minecraft.getInstance().level != null) {
+				return Optional.of(Minecraft.getInstance().level.registryAccess());
+			}
+		} else {
+			if (ServerLifecycleHooks.getCurrentServer() != null) {
+				return Optional.of(ServerLifecycleHooks.getCurrentServer().registryAccess());
+			}
+		}
+		return Optional.empty();
 	}
 
 	@Override

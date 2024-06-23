@@ -3,6 +3,7 @@ package com.agricraft.agricraft.common.util;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -80,7 +81,11 @@ public abstract class Platform {
 
 	public abstract CreativeModeTab createSeedsCreativeTab();
 
-	public abstract  <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey);
+	public abstract Optional<RegistryAccess> getRegistryAccess();
+
+	public <T> Optional<Registry<T>> getRegistry(ResourceKey<Registry<T>> resourceKey) {
+		return this.getRegistryAccess().flatMap(registryAccess -> registryAccess.registry(resourceKey));
+	}
 
 	public abstract List<Item> getItemsFromLocation(ExtraCodecs.TagOrElementLocation tag);
 
