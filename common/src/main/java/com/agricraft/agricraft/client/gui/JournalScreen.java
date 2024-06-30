@@ -48,12 +48,11 @@ public class JournalScreen extends Screen {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTick);
-//		this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 		int journalX = (this.width - PAGE_WIDTH) / 2;
 		int journalY = (this.height - PAGE_HEIGHT) / 2;
 //		Lighting.setupForFlatItems();
-//		guiGraphics.blit(PAGE_BACKGROUND, journalX, journalY, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, 292, 292);
 		JournalPage page = this.journalData.getPage(this.index);
 		JournalPageDrawers.getPageDrawer(page).drawLeftSheet(guiGraphics, page, journalX + OFFSET_LEFT_PAGE, journalY, this.journalData);
 		JournalPageDrawers.getPageDrawer(page).drawRightSheet(guiGraphics, page, journalX + OFFSET_RIGHT_PAGE, journalY, this.journalData);
