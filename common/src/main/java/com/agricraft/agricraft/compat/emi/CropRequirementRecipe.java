@@ -16,7 +16,6 @@ import com.mojang.math.Axis;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
-import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.ButtonWidget;
@@ -71,7 +70,7 @@ public class CropRequirementRecipe implements EmiRecipe {
 
 	public CropRequirementRecipe(ResourceLocation id, AgriPlant plant) {
 		this.id = id;
-		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(Comparison.compareNbt()));
+		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(AgriCraftEmiPlugin.compareSeeds()));
 		this.plant = plant;
 		output = new ArrayList<>();
 		this.plantId = AgriApi.getPlantId(plant).map(ResourceLocation::toString).orElse("");
