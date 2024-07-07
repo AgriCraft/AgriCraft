@@ -6,7 +6,6 @@ import com.agricraft.agricraft.common.item.AgriSeedItem;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
-import dev.emi.emi.api.stack.Comparison;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
@@ -23,9 +22,9 @@ public class CropMutationRecipe implements EmiRecipe {
 
 	public CropMutationRecipe(ResourceLocation id, AgriMutation mutation) {
 		this.id = id;
-		input = List.of(EmiStack.of(AgriSeedItem.toStack(mutation.getParent1().orElse(AgriPlant.NO_PLANT))).comparison(Comparison.compareNbt()),
-				EmiStack.of(AgriSeedItem.toStack(mutation.getParent2().orElse(AgriPlant.NO_PLANT))).comparison(Comparison.compareNbt()));
-		output = List.of(EmiStack.of(AgriSeedItem.toStack(mutation.getChild().orElse(AgriPlant.NO_PLANT))).comparison(Comparison.compareNbt()));
+		input = List.of(EmiStack.of(AgriSeedItem.toStack(mutation.getParent1().orElse(AgriPlant.NO_PLANT))).comparison(AgriCraftEmiPlugin.compareSeeds()),
+				EmiStack.of(AgriSeedItem.toStack(mutation.getParent2().orElse(AgriPlant.NO_PLANT))).comparison(AgriCraftEmiPlugin.compareSeeds()));
+		output = List.of(EmiStack.of(AgriSeedItem.toStack(mutation.getChild().orElse(AgriPlant.NO_PLANT))).comparison(AgriCraftEmiPlugin.compareSeeds()));
 	}
 
 	@Override
