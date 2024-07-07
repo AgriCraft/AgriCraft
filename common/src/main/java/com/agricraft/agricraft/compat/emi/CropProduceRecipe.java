@@ -31,7 +31,7 @@ public class CropProduceRecipe implements EmiRecipe {
 
 	public CropProduceRecipe(ResourceLocation id, AgriPlant plant) {
 		this.id = id;
-		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(Comparison.compareNbt()));
+		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(AgriCraftEmiPlugin.compareSeeds()));
 		this.plant = plant;
 		output = new ArrayList<>();
 		plant.getAllPossibleProducts(product -> output.add(EmiStack.of(product).comparison(Comparison.compareNbt())));
