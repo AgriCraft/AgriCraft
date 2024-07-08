@@ -55,6 +55,7 @@ public class DumpRegistriesCommand {
 				.then(Commands.literal("soils").executes(commandContext -> DumpRegistriesCommand.dumpSoils()))
 				.then(Commands.literal("mutations").executes(commandContext -> DumpRegistriesCommand.dumpMutations()))
 				.then(Commands.literal("fertilizers").executes(commandContext -> DumpRegistriesCommand.dumpFertilizers()))
+				.then(Commands.literal("complexities").executes(commandContext -> DumpRegistriesCommand.dumpComplexities()))
 				.executes(commandContext -> DumpRegistriesCommand.dumpAllRegistries())
 		);
 
@@ -86,6 +87,11 @@ public class DumpRegistriesCommand {
 	public static int dumpFertilizers() {
 		System.out.println("Fertilizers:");
 		AgriApi.getFertilizerRegistry().ifPresent(registry -> registry.keySet().forEach(System.out::println));
+		return 1;
+	}
+	public static int dumpComplexities() {
+		System.out.println("Complexities:");
+		AgriApi.getPlantRegistry().ifPresent(registry -> registry.keySet().forEach(plant -> System.out.printf("%s | %d%n", plant.toString(), AgriApi.getMutationHandler().complexity(plant.toString()))));
 		return 1;
 	}
 
