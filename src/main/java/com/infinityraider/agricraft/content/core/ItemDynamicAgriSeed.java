@@ -11,20 +11,31 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.infinityraider.agricraft.content.AgriTabs;
 import com.infinityraider.agricraft.reference.Names;
 import com.infinityraider.infinitylib.item.IInfinityItem;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -73,6 +84,7 @@ public class ItemDynamicAgriSeed extends BlockItem implements IInfinityItem, IAg
     @Nonnull
     @Override
     public InteractionResult useOn(@Nonnull UseOnContext context) {
+
         Level world = context.getLevel();
         if (world.isClientSide()) {
             return InteractionResult.PASS;
@@ -86,7 +98,7 @@ public class ItemDynamicAgriSeed extends BlockItem implements IInfinityItem, IAg
             return this.attemptSeedPlant((TileEntityCrop) tile, stack, player);
         }
         // If a soil was clicked, check the block on top of the soil and handle accordingly
-        return AgriApi.getSoil(world, pos).map(soil -> {
+        return (InteractionResult) AgriApi.getSoil(world, pos).map(soil -> {
             BlockPos up = pos.above();
             BlockEntity above = world.getBlockEntity(up);
             // There are currently crop sticks on the soil, attempt to plant on the crop sticks
@@ -95,8 +107,81 @@ public class ItemDynamicAgriSeed extends BlockItem implements IInfinityItem, IAg
             }
             // There are currently no crop sticks, return null to redirect to super method
             return null;
-        }).orElse(super.useOn(context));
+        }).orElse(this.place(new BlockPlaceContext(context)));
     }
+
+    // Mostly borrowing with a slight change
+    @Override
+    public InteractionResult place(BlockPlaceContext pContext) {
+        if (!pContext.canPlace()) {
+            return InteractionResult.FAIL;
+        } else {
+            BlockPlaceContext blockplacecontext = this.updatePlacementContext(pContext);
+            if (blockplacecontext == null) {
+                return InteractionResult.FAIL;
+            } else {
+                BlockState blockstate = this.getPlacementState(blockplacecontext);
+                if (blockstate == null) {
+                    return InteractionResult.FAIL;
+                } else if (!this.placeBlock(blockplacecontext, blockstate)) {
+                    return InteractionResult.FAIL;
+                } else {
+                    BlockPos blockpos = blockplacecontext.getClickedPos();
+                    Level level = blockplacecontext.getLevel();
+                    Player player = blockplacecontext.getPlayer();
+                    ItemStack itemstack = blockplacecontext.getItemInHand();
+                    BlockState blockstate1 = level.getBlockState(blockpos);
+                    if (blockstate1.is(blockstate.getBlock())) {
+                        blockstate1 = this.updateBlockStateFromTag(blockpos, level, itemstack, blockstate1);
+                        this.updateCustomBlockEntityTag(blockpos, level, player, itemstack, blockstate1);
+                        blockstate1.getBlock().setPlacedBy(level, blockpos, blockstate1, player, itemstack);
+                        if (player instanceof ServerPlayer) {
+                            CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)player, blockpos, itemstack);
+                        }
+                    }
+                    level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
+                    SoundType soundtype = blockstate1.getSoundType(level, blockpos, pContext.getPlayer());
+                    level.playSound(player, blockpos, this.getPlaceSound(blockstate1, level, blockpos, pContext.getPlayer()), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                    if (player == null || !player.getAbilities().instabuild) {
+                        itemstack.shrink(0);
+                    }
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                }
+            }
+        }
+    }
+
+    // Borrowing/Stealing a method that should've been protected
+    private BlockState updateBlockStateFromTag(BlockPos pPos, Level pLevel, ItemStack pStack, BlockState pState) {
+        BlockState blockstate = pState;
+        CompoundTag compoundtag = pStack.getTag();
+        if (compoundtag != null) {
+            CompoundTag compoundtag1 = compoundtag.getCompound("BlockStateTag");
+            StateDefinition<Block, BlockState> statedefinition = pState.getBlock().getStateDefinition();
+
+            for(String s : compoundtag1.getAllKeys()) {
+                Property<?> property = statedefinition.getProperty(s);
+                if (property != null) {
+                    String s1 = compoundtag1.get(s).getAsString();
+                    blockstate = updateState(blockstate, property, s1);
+                }
+            }
+        }
+
+        if (blockstate != pState) {
+            pLevel.setBlock(pPos, blockstate, 2);
+        }
+
+        return blockstate;
+    }
+
+    // Borrowing/Stealing a method that should've been protected
+    private static <T extends Comparable<T>> BlockState updateState(BlockState pState, Property<T> pProperty, String pValueIdentifier) {
+        return pProperty.getValue(pValueIdentifier).map((p_40592_) -> {
+            return pState.setValue(pProperty, p_40592_);
+        }).orElse(pState);
+    }
+
 
     protected InteractionResult attemptSeedPlant(IAgriCrop crop, ItemStack stack, Player player) {
         return AgriApi.getGenomeAdapterizer().valueOf(stack)
