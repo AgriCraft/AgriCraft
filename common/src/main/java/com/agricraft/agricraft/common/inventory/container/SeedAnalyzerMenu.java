@@ -31,16 +31,14 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 		this.addSlot(new Slot(this.analyzer.getInventory(), SeedAnalyzerBlockEntity.SEED_SLOT, 26, 38) {
 			@Override
 			public void set(ItemStack stack) {
-				if (!(stack.getItem() instanceof AgriSeedItem)) {
-					ItemStack finalStack = stack;  // lambda :(
-					stack = AgriApi.getPlantRegistry().flatMap(registry -> registry.stream().filter(plant -> plant.isSeedItem(finalStack)).findFirst())
-							.map(AgriSeedItem::toStack)
-							.orElse(stack);
-				}
-				super.set(stack);
-				if (analyzer.hasJournal() && !stack.isEmpty()) {
+				ItemStack agricraftSeed = getAgriCraftEquivalent(stack);
+				// Only call super with the AgriCraft seed if we find it -- stick with the original, un-mutated input otherwise
+				super.set(agricraftSeed.isEmpty() ? stack : agricraftSeed);
+
+				// Assuming we did in fact find an AgriCraft Seed, let's add it to the journal research!!
+				if (analyzer.hasJournal() && !agricraftSeed.isEmpty()) {
 					ItemStack journal = analyzer.getJournal();
-					JournalItem.researchPlant(journal, new ResourceLocation(AgriSeedItem.getSpecies(stack)));
+					JournalItem.researchPlant(journal, new ResourceLocation(AgriSeedItem.getSpecies(agricraftSeed)));
 				}
 			}
 
@@ -96,6 +94,10 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 					if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
+				} else if (!getAgriCraftEquivalent(slotStack).isEmpty()) {
+					if (!this.moveItemStackTo(slotStack, 0, 1, false)) {
+						return ItemStack.EMPTY;
+					}
 				} else if (slotStack.getItem() instanceof JournalItem) {
 					if (!this.moveItemStackTo(slotStack, 1, 2, false)) {
 						return ItemStack.EMPTY;
@@ -129,4 +131,20 @@ public class SeedAnalyzerMenu extends AbstractContainerMenu {
 		return player.distanceToSqr(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5) < 64.0F;
 	}
 
+	private ItemStack getAgriCraftEquivalent(ItemStack originalStack) {
+		if (originalStack.getItem() instanceof AgriSeedItem) return originalStack;
+
+		// Attempt to find an AgriCraft seed that matches the input stack -- fallback to EMPTY if we find nothing
+		ItemStack agricraftSeed = AgriApi.getPlantRegistry()
+				.flatMap(registry -> registry.stream().filter(plant -> plant.isSeedItem(originalStack)).findFirst())
+				.map(AgriSeedItem::toStack)
+				.orElse(ItemStack.EMPTY);
+
+		// Prevent count > 1 of EMPTY
+		if (!agricraftSeed.isEmpty()) {
+			agricraftSeed.setCount(originalStack.getCount());
+		}
+
+		return agricraftSeed;
+	}
 }
