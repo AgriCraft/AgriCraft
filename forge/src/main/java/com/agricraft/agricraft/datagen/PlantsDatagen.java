@@ -213,6 +213,29 @@ public class PlantsDatagen {
 		hcVegetable(context, "sunchoke", SPRING, AUTUMN);
 	}
 
+	public static void registerMysticalAgriculture(BootstapContext<AgriPlant> context) {
+		List.of("air", "earth", "water", "fire", "inferium", "stone", "dirt", "wood", "ice", "deepslate", "nature", "dye",
+				"nether", "coal", "coral", "honey", "amethyst", "pig", "chicken", "cow", "sheep", "squid", "fish", "slime",
+				"turtle", "rubber", "silicon", "sulfur", "aluminum", "saltpeter", "apatite", "grains_of_infinity", "mystical_flower",
+				"marble", "limestone", "basalt", "menril", "iron", "copper", "nether_quartz", "glowstone", "redstone", "obsidian",
+				"prismarine", "zombie", "skeleton", "creeper", "spider", "rabbit", "tin", "bronze", "zinc", "brass", "silver", "lead",
+				"graphite", "blizz", "blitz", "basalz", "amethyst_bronze", "slimesteel", "pig_iron", "copper_alloy", "redstone_alloy",
+				"conductive_alloy", "manasteel", "steeleaf", "ironwood", "aquamarine", "sky_stone", "certus_quartz", "quartz_enriched_iron",
+				"gold", "lapis_lazuli", "end", "experience", "blaze", "ghast", "enderman", "steel", "nickel", "constantan", "electrum",
+				"invar", "mithril", "tungsten", "titanium", "uranium", "chrome", "ruby", "sapphire", "peridot", "soulium", "signalum",
+				"lumium", "flux_infused_ingot", "hop_graphite", "cobalt", "rose_gold", "soularium", "dark_steel", "pulsating_alloy",
+				"energetic_alloy", "elementium", "osmium", "fluorite", "refined_glowstone", "refined_obsidian", "knightmetal", "fiery_ingot",
+				"starmetal", "compressed_iron", "fluix", "energized_steel", "blazing_crystal", "diamond", "emerald", "netherite",
+				"wither_skeleton", "platinum", "iridium", "enderium", "flux_infused_gem", "manyullyn", "queens_slime", "hepatizon",
+				"vibrant_alloy", "end_steel", "terrasteel", "rock_crystal", "draconium", "yellorium", "cyanite", "niotic_crystal",
+				"spirited_crystal", "uraninite")
+					.forEach(name -> mysticalagriculture(context, name));
+	}
+
+	public static void mysticalagriculture(BootstapContext<AgriPlant> context, String plantId) {
+		r(context, "mysticalagriculture", plantId, new AgriPlant.Builder().seeds(AgriSeed.builder().item("mysticalagriculture:" + plantId + "_seeds").build()).stages16().harvest(3).cloneable(false).chances(0.65, 0.025, 0.1).products(AgriProduct.builder().item("mysticalagriculture:" + plantId + "_essence").count(1, 1, 0.75).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.2).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.2).light(10, 16, 0.5).build()).build());
+	}
+
 	private static void minecraft(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
 		r(context, "minecraft", plantId, plant);
 	}

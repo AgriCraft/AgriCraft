@@ -34,8 +34,9 @@ import java.util.function.Consumer;
 public class DatagenEventHandler {
 
 	private static final boolean biomesoplenty = true;
-	private static final boolean immersiveengineering = false;
+	private static final boolean immersiveengineering = true;
 	private static final boolean pamhc2crops = true;
+	private static final boolean mysticalagriculture = true;
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
@@ -73,6 +74,9 @@ public class DatagenEventHandler {
 		}
 		if (pamhc2crops) {
 			addExtraDataPackProvider("pamhc2crops", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerPamsHarvestCraft2).add(AgriApi.AGRIMUTATIONS, MutationsDatagen::registerPamsHarvestCraft2), ModelsDatagen::registerPamsHarvestCraft2Plant, ModelsDatagen::registerPamsHarvestCraft2Seed, LangDatagen::pamhc2crops, event);
+		}
+		if (mysticalagriculture) {
+			addExtraDataPackProvider("mysticalagriculture", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerMysticalAgriculture).add(AgriApi.AGRISOILS, SoilsDatagen::registerMysticalAgriculture).add(AgriApi.AGRIFERTILIZERS, FertilizersDatagen::registerMysticalAgriculture), ModelsDatagen::registerMysticalAgriculturePlant, ModelsDatagen::registerMysticalAgricultureSeed, LangDatagen::mysticalagriculture, event);
 		}
 
 	}

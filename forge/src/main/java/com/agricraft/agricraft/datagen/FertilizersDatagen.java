@@ -32,4 +32,16 @@ public class FertilizersDatagen {
 				.build());
 	}
 
+	public static void registerMysticalAgriculture(BootstapContext<AgriFertilizer> context) {
+		mc(context, "mystical_fertilizer", new AgriFertilizer.Builder()
+				.potency(5)
+				.triggerMutation(false)
+				.triggerWeeds(false)
+				.reduceGrowth(true)
+				.killPlant(true)
+				.variants(new AgriFertilizerVariant.Builder().item("mysticalagriculture:mystical_fertilizer").build())
+				.particles(new AgriFertilizerParticle("minecraft:happy_villager", 0.6, 0.4, 0.6, 2, List.of("positive")),
+						new AgriFertilizerParticle("minecraft:smoke", 0.6, 0.4, 0.6, 2, List.of("negative")))
+				.build());
+	}
 }

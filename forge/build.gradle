@@ -20,7 +20,10 @@ loom {
 			programArgs "--output", file("src/generated/resources").absolutePath
 			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
 			programArgs "--existing-mod", "biomesoplenty"
+			programArgs "--existing-mod", "immersiveengineering"
 			programArgs "--existing-mod", "pamhc2crops"
+			programArgs "--existing-mod", "cucumber"
+			programArgs "--existing-mod", "mysticalagriculture"
 		}
 	}
 }
@@ -55,9 +58,13 @@ dependencies {
 	//modLocalRuntime "curse.maven:jade-324717:4978952"  // Jade-1.20.4-forge-13.2.1
 	modImplementation "curse.maven:jade-324717:$jade_forge_version"
 
-	modImplementation "curse.maven:biomesoplenty-220318:4617259"  // Biomes O' Plenty 1.20.1-18.0.0.592
-	modImplementation "curse.maven:terrablender-563928:5378180"  // TerraBlender Forge 1.20.1-3.0.1.7
-	modImplementation "curse.maven:pamhc2crops-361385:4687624"  // pamhc2crops 1.20-1.0.3
+	modLocalRuntime "curse.maven:resourceful-config-714059:5020441"
+	modLocalRuntime "curse.maven:biomesoplenty-220318:4617259"  // Biomes O' Plenty 1.20.1-18.0.0.592
+	modLocalRuntime "curse.maven:terrablender-563928:5378180"  // TerraBlender Forge 1.20.1-3.0.1.7
+	modLocalRuntime "curse.maven:pamhc2crops-361385:4687624"  // pamhc2crops 1.20-1.0.3
+	modLocalRuntime "curse.maven:immersive-engineering-231951:5224387"
+	modImplementation "curse.maven:cucumber-272335:5502065"
+	modImplementation "curse.maven:mystical-agriculture-246640:5225711"
 }
 
 shadowJar {

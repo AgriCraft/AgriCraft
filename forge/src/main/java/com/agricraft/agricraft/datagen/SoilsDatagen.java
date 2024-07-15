@@ -38,6 +38,19 @@ public class SoilsDatagen {
 		agricraft(context, "gravel", AgriSoil.builder().variants(AgriSoilVariant.builder().tag("c:gravel").build(), AgriSoilVariant.builder().tag("forge:gravel").build(), AgriSoilVariant.builder().block("minecraft:gravel").build()).humidity(DRY).acidity(SLIGHTLY_ALKALINE).nutrients(LOW).growthModifier(0.5).build());
 	}
 
+	public static void registerMysticalAgriculture(BootstapContext<AgriSoil> context) {
+		farmland(context, "mysticalagriculture", "inferium_farmland", 1.0);
+		farmland(context, "mysticalagriculture", "prudentium_farmland", 1.0);
+		farmland(context, "mysticalagriculture", "tertium_farmland", 1.0);
+		farmland(context, "mysticalagriculture", "imperium_farmland", 1.0);
+		farmland(context, "mysticalagriculture", "supremium_farmland", 1.0);
+	}
+
+	private static void farmland(BootstapContext<AgriSoil> context, String namespace, String soilId, double growthModifier) {
+		context.register(ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation(namespace, soilId)),
+				AgriSoil.builder().variants(AgriSoilVariant.builder().block(namespace + ":" + soilId).build()).humidity(WET).acidity(SLIGHTLY_ACIDIC).nutrients(HIGH).growthModifier(growthModifier).build());
+	}
+
 	private static void mc(BootstapContext<AgriSoil> context, String soilId, AgriSoil soil) {
 		context.register(ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation("minecraft", soilId)), soil);
 	}

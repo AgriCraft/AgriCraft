@@ -239,6 +239,74 @@ public class ModelsDatagen {
 				.forEach(name -> m.withExistingParent(name, "pamhc2crops:item/" + name + "seeditem"));
 	}
 
+	public static void registerMysticalAgriculturePlant(ModelProvider<BlockModelBuilder> m) {
+		List.of("basalz", "blaze", "blitz", "blizz", "chicken", "cow", "creeper", "enderman", "fish", "ghast", "pig", "rabbit", "sheep",
+				"skeleton", "slime", "spider", "squid", "turtle", "wither_skeleton", "zombie")
+						.forEach(name -> {
+							m.withExistingParent(name + "_stage0", "mysticalagriculture:block/mystical_mob_crop_0");
+							m.withExistingParent(name + "_stage1", "mysticalagriculture:block/mystical_mob_crop_1");
+							m.withExistingParent(name + "_stage2", "mysticalagriculture:block/mystical_mob_crop_2");
+							m.withExistingParent(name + "_stage3", "mysticalagriculture:block/mystical_mob_crop_3");
+							m.withExistingParent(name + "_stage4", "mysticalagriculture:block/mystical_mob_crop_4");
+							m.withExistingParent(name + "_stage5", "mysticalagriculture:block/mystical_mob_crop_5");
+							m.withExistingParent(name + "_stage6", "mysticalagriculture:block/mystical_mob_crop_6");
+							m.withExistingParent(name + "_stage7", "mysticalagriculture:block/mystical_mob_crop_7").texture("flower", "mysticalagriculture:block/flower/" + name + "_flower");
+						});
+
+		List.of("aluminum", "amethyst_bronze", "amethyst", "apatite", "aquamarine", "basalt", "blazing_crystal", "brass", "bronze",
+						"certus_quartz", "coal", "cobalt", "compressed_iron", "conductive_alloy", "constantan", "copper_alloy", "copper", "coral",
+						"cyanite", "dark_steel", "deepslate", "diamond", "dirt", "draconium", "dye", "electrum", "elementium", "emerald", "enderium",
+						"end", "end_steel", "energetic_alloy", "energized_steel", "experience", "fiery_ingot", "fluix", "fluorite", "flux_infused_gem",
+						"flux_infused_ingot", "glowstone", "gold", "grains_of_infinity", "graphite", "hepatizon", "honey", "hop_graphite", "ice",
+						"invar", "iridium", "ironwood", "iron", "knightmetal", "lapis_lazuli", "lead", "limestone", "lumium", "manasteel", "manyullyn",
+						"marble", "menril", "mystical_flower", "nature", "netherite", "nether", "nether_quartz", "nickel", "niotic_crystal", "obsidian",
+						"osmium", "peridot", "pig_iron", "platinum", "prismarine", "pulsating_alloy", "quartz_enriched_iron", "queens_slime",
+						"redstone_alloy", "redstone", "refined_glowstone", "refined_obsidian", "rock_crystal", "rose_gold", "rubber", "ruby", "saltpeter",
+						"sapphire", "signalum", "silicon", "silver", "sky_stone", "slimesteel", "soularium", "soulium", "spirited_crystal", "starmetal",
+						"steeleaf", "steel", "stone", "sulfur", "terrasteel", "tin", "uraninite", "uranium", "vibrant_alloy", "wood", "yellorium", "zinc")
+				.forEach(name -> {
+					m.withExistingParent(name + "_stage0", "mysticalagriculture:block/mystical_resource_crop_0");
+					m.withExistingParent(name + "_stage1", "mysticalagriculture:block/mystical_resource_crop_1");
+					m.withExistingParent(name + "_stage2", "mysticalagriculture:block/mystical_resource_crop_2");
+					m.withExistingParent(name + "_stage3", "mysticalagriculture:block/mystical_resource_crop_3");
+					m.withExistingParent(name + "_stage4", "mysticalagriculture:block/mystical_resource_crop_4");
+					m.withExistingParent(name + "_stage5", "mysticalagriculture:block/mystical_resource_crop_5");
+					m.withExistingParent(name + "_stage6", "mysticalagriculture:block/mystical_resource_crop_6");
+					m.withExistingParent(name + "_stage7", "mysticalagriculture:block/mystical_resource_crop_7").texture("flower", "mysticalagriculture:block/flower/" + name + "_flower");
+				});
+
+		List.of("air", "chrome", "earth", "fire", "mithril", "titanium", "tungsten", "water")
+				.forEach(name -> {
+					m.withExistingParent(name + "_stage0", "mysticalagriculture:block/mystical_resource_crop_0");
+					m.withExistingParent(name + "_stage1", "mysticalagriculture:block/mystical_resource_crop_1");
+					m.withExistingParent(name + "_stage2", "mysticalagriculture:block/mystical_resource_crop_2");
+					m.withExistingParent(name + "_stage3", "mysticalagriculture:block/mystical_resource_crop_3");
+					m.withExistingParent(name + "_stage4", "mysticalagriculture:block/mystical_resource_crop_4");
+					m.withExistingParent(name + "_stage5", "mysticalagriculture:block/mystical_resource_crop_5");
+					m.withExistingParent(name + "_stage6", "mysticalagriculture:block/mystical_resource_crop_6");
+					m.withExistingParent(name + "_stage7", "mysticalagriculture:block/mystical_resource_crop_7").texture("flower", "mysticalagriculture:block/flower_ingot");
+				});
+	}
+
+	public static void registerMysticalAgricultureSeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("air", "earth", "water", "fire", "inferium", "stone", "dirt", "wood", "ice", "deepslate", "nature", "dye",
+						"nether", "coal", "coral", "honey", "amethyst", "pig", "chicken", "cow", "sheep", "squid", "fish", "slime",
+						"turtle", "rubber", "silicon", "sulfur", "aluminum", "saltpeter", "apatite", "grains_of_infinity", "mystical_flower",
+						"marble", "limestone", "basalt", "menril", "iron", "copper", "nether_quartz", "glowstone", "redstone", "obsidian",
+						"prismarine", "zombie", "skeleton", "creeper", "spider", "rabbit", "tin", "bronze", "zinc", "brass", "silver", "lead",
+						"graphite", "blizz", "blitz", "basalz", "amethyst_bronze", "slimesteel", "pig_iron", "copper_alloy", "redstone_alloy",
+						"conductive_alloy", "manasteel", "steeleaf", "ironwood", "aquamarine", "sky_stone", "certus_quartz", "quartz_enriched_iron",
+						"gold", "lapis_lazuli", "end", "experience", "blaze", "ghast", "enderman", "steel", "nickel", "constantan", "electrum",
+						"invar", "mithril", "tungsten", "titanium", "uranium", "chrome", "ruby", "sapphire", "peridot", "soulium", "signalum",
+						"lumium", "flux_infused_ingot", "hop_graphite", "cobalt", "rose_gold", "soularium", "dark_steel", "pulsating_alloy",
+						"energetic_alloy", "elementium", "osmium", "fluorite", "refined_glowstone", "refined_obsidian", "knightmetal", "fiery_ingot",
+						"starmetal", "compressed_iron", "fluix", "energized_steel", "blazing_crystal", "diamond", "emerald", "netherite",
+						"wither_skeleton", "platinum", "iridium", "enderium", "flux_infused_gem", "manyullyn", "queens_slime", "hepatizon",
+						"vibrant_alloy", "end_steel", "terrasteel", "rock_crystal", "draconium", "yellorium", "cyanite", "niotic_crystal",
+						"spirited_crystal", "uraninite")
+				.forEach(name -> m.withExistingParent(name, "mysticalagriculture:item/" + name + "_seeds"));
+	}
+
 	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
 		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
 		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");
@@ -260,5 +328,4 @@ public class ModelsDatagen {
 		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage2");
 		m.withExistingParent(name + "_stage7", parent).texture("crop", mature);
 	}
-
 }
