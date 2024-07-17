@@ -232,8 +232,11 @@ public class PlantsDatagen {
 					.forEach(name -> mysticalagriculture(context, name));
 	}
 
-	public static void mysticalagriculture(BootstapContext<AgriPlant> context, String plantId) {
-		r(context, "mysticalagriculture", plantId, new AgriPlant.Builder().seeds(AgriSeed.builder().item("mysticalagriculture:" + plantId + "_seeds").build()).stages16().harvest(3).cloneable(false).chances(0.65, 0.025, 0.1).products(AgriProduct.builder().item("mysticalagriculture:" + plantId + "_essence").count(1, 1, 0.75).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.2).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.2).light(10, 16, 0.5).build()).build());
+	public static void registerFarmersDelight(BootstapContext<AgriPlant> context) {
+		r(context, "farmersdelight", "rice", new AgriPlant.Builder().seeds(AgriSeed.builder().item("farmersdelight:rice").chances(0.0, 1.0, 0.0).build()).stages(4, 8, 12, 16, 20, 24, 28, 32).harvest(4).chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("farmersdelight:rice_panicle").count(1, 3, 0.95).build()).requirement(AgriRequirement.builder().humidity(WATERY, EQUAL_OR_HIGHER, 0.4).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(MEDIUM, EQUAL_OR_HIGHER, 0.1).light(5, 16, 0.5).seasons(SPRING, SUMMER).fluid(AgriFluidCondition.builder().fluid("minecraft:water").build()).build()).build());
+		r(context, "farmersdelight", "cabbage", new AgriPlant.Builder().seeds(AgriSeed.builder().item("farmersdelight:cabbage_seeds").chances(0.0, 1.0, 0.0).build()).stages16().harvest(4).chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("farmersdelight:cabbage").count(1, 3, 0.95).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.15).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.1).light(10, 16, 0.5).seasons(SPRING).build()).build());
+		r(context, "farmersdelight", "onion", new AgriPlant.Builder().seeds(AgriSeed.builder().item("farmersdelight:onion").chances(0.0, 1.0, 0.0).build()).stages16().harvest(4).chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("farmersdelight:onion").count(1, 3, 0.95).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.15).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.1).light(10, 16, 0.5).seasons(SUMMER, AUTUMN).build()).build());
+		r(context, "farmersdelight", "tomato", new AgriPlant.Builder().seeds(AgriSeed.builder().item("farmersdelight:tomato_seeds").chances(0.0, 1.0, 0.0).build()).stages16().harvest(4).chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("farmersdelight:tomato").count(1, 3, 0.95).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.15).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.1).light(10, 16, 0.5).seasons(SPRING, SUMMER).build()).build());
 	}
 
 	private static void minecraft(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
@@ -254,6 +257,10 @@ public class PlantsDatagen {
 
 	public static void hcSandy(BootstapContext<AgriPlant> context, String name) {
 		r(context, "pamhc2crops", name, hcCrop(name).requirement(AgriRequirement.builder().humidity(ARID, EQUAL, 0.34).acidity(NEUTRAL, EQUAL, 0.2).nutrients(LOW, EQUAL_OR_HIGHER, 0.1).light(10, 16, 0.5).seasons(SUMMER).build()).build());
+	}
+
+	private static void mysticalagriculture(BootstapContext<AgriPlant> context, String plantId) {
+		r(context, "mysticalagriculture", plantId, new AgriPlant.Builder().seeds(AgriSeed.builder().item("mysticalagriculture:" + plantId + "_seeds").build()).stages16().harvest(3).cloneable(false).chances(0.65, 0.025, 0.1).products(AgriProduct.builder().item("mysticalagriculture:" + plantId + "_essence").count(1, 1, 0.75).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.2).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.2).light(10, 16, 0.5).build()).build());
 	}
 
 	public static void r(BootstapContext<AgriPlant> context, String modid, String plantId, AgriPlant plant) {

@@ -65,6 +65,7 @@ dependencies {
 	modLocalRuntime "curse.maven:immersive-engineering-231951:5224387"
 	modImplementation "curse.maven:cucumber-272335:5502065"
 	modImplementation "curse.maven:mystical-agriculture-246640:5225711"
+	modLocalRuntime "curse.maven:farmers-delight-398521:5051242" // Farmer's Delight 1.2.4 - 1.20.1
 }
 
 shadowJar {

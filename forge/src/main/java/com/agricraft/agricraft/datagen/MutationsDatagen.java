@@ -177,6 +177,13 @@ public class MutationsDatagen {
 		pamhc2crops(context, "sunchoke", "pahmhc2crops:artichoke", "pahmhc2crops:parsnip");
 	}
 
+	public static void registerFarmersDelight(BootstapContext<AgriMutation> context) {
+		r(context, "farmersdelight", "cabbage", new AgriMutation("farmersdelight:cabbage", "farmersdelight:onion", "minecraft:seagrass", 0.5));
+		r(context, "farmersdelight", "onion", new AgriMutation("farmersdelight:onion", "minecraft:allium", "minecraft:potato", 0.5));
+		r(context, "farmersdelight", "rice", new AgriMutation("farmersdelight:rice", "minecraft:seagrass", "minecraft:wheat", 0.5));
+		r(context, "farmersdelight", "tomato", new AgriMutation("farmersdelight:tomato", "minecraft:wheat", "minecraft:beetroot", 0.5));
+	}
+
 	private static void r(BootstapContext<AgriMutation> context, String modid, String mutationId, AgriMutation mutation) {
 		context.register(ResourceKey.create(AgriApi.AGRIMUTATIONS, new ResourceLocation(modid, mutationId)), mutation);
 	}

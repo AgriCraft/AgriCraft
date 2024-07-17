@@ -307,6 +307,28 @@ public class ModelsDatagen {
 				.forEach(name -> m.withExistingParent(name, "mysticalagriculture:item/" + name + "_seeds"));
 	}
 
+	public static void registerFarmersDelightPlant(ModelProvider<BlockModelBuilder> m) {
+		with8TexturesIn8stage(m, "cabbage", "agricraft:crop/crop_cross", "farmersdelight:block/cabbages");
+		with4TexturesIn8stage(m, "onion", "agricraft:crop/crop_hash", "farmersdelight:block/onions");
+		with4TexturesIn8stage(m, "tomato", "agricraft:crop/crop_cross", "farmersdelight:block/tomatoes");
+
+		m.withExistingParent("rice_stage0", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage0");
+		m.withExistingParent("rice_stage1", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage1");
+		m.withExistingParent("rice_stage2", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage2");
+		m.withExistingParent("rice_stage3", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage3");
+		m.withExistingParent("rice_stage4", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage0");
+		m.withExistingParent("rice_stage5", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage1");
+		m.withExistingParent("rice_stage6", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage2");
+		m.withExistingParent("rice_stage7", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage3");
+	}
+
+	public static void registerFarmersDelightSeed(ModelProvider<ItemModelBuilder> m) {
+		m.withExistingParent("cabbage", "farmersdelight:item/cabbage_seeds");
+		m.withExistingParent("onion", "farmersdelight:item/onion");
+		m.withExistingParent("rice", "farmersdelight:item/rice");
+		m.withExistingParent("tomato", "farmersdelight:item/tomato_seeds");
+	}
+
 	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
 		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
 		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");
@@ -327,5 +349,16 @@ public class ModelsDatagen {
 		m.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage2");
 		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage2");
 		m.withExistingParent(name + "_stage7", parent).texture("crop", mature);
+	}
+
+	private static void with8TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
+		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
+		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage1");
+		m.withExistingParent(name + "_stage2", parent).texture("crop", baseTexture + "_stage2");
+		m.withExistingParent(name + "_stage3", parent).texture("crop", baseTexture + "_stage3");
+		m.withExistingParent(name + "_stage4", parent).texture("crop", baseTexture + "_stage4");
+		m.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage5");
+		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage6");
+		m.withExistingParent(name + "_stage7", parent).texture("crop", baseTexture + "_stage7");
 	}
 }

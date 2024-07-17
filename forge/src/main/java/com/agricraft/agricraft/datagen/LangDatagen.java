@@ -573,4 +573,15 @@ public class LangDatagen {
 		lang.add("seed.agricraft.mysticalagriculture.uraninite", "Uraninite Seeds");
 	}
 
+	public static void farmersdelight(LanguageProvider lang) {
+		lang.add("plant.agricraft.farmersdelight.cabbage", "Cabbage");
+		lang.add("plant.agricraft.farmersdelight.onion", "Onions");
+		lang.add("plant.agricraft.farmersdelight.tomato", "Tomato Vine");
+		lang.add("plant.agricraft.farmersdelight.rice", "Rice Crops");
+
+		lang.add("seed.agricraft.farmersdelight.cabbage", "Cabbage Seeds");
+		lang.add("seed.agricraft.farmersdelight.onion", "Onion");
+		lang.add("seed.agricraft.farmersdelight.tomato", "Tomato Seeds");
+		lang.add("seed.agricraft.farmersdelight.rice", "Rice");
+	}
 }

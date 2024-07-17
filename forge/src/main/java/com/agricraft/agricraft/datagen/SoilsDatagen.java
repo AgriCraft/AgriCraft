@@ -46,6 +46,15 @@ public class SoilsDatagen {
 		farmland(context, "mysticalagriculture", "supremium_farmland", 1.0);
 	}
 
+	public static void registerFarmersDelight(BootstapContext<AgriSoil> context) {
+		r(context, "farmersdelight", "rich_soil", AgriSoil.builder().variants(AgriSoilVariant.builder().block("farmersdelight:rich_soil").build()).humidity(DAMP).acidity(NEUTRAL).nutrients(VERY_HIGH).growthModifier(1.8).build());
+		r(context, "farmersdelight", "rich_farmland", AgriSoil.builder().variants(AgriSoilVariant.builder().block("farmersdelight:rich_soil_farmland").build()).humidity(WET).acidity(SLIGHTLY_ACIDIC).nutrients(VERY_HIGH).growthModifier(1.8).build());
+	}
+
+	private static void r(BootstapContext<AgriSoil> context, String modid, String soilId, AgriSoil soil) {
+		context.register(ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation(modid, soilId)), soil);
+	}
+
 	private static void farmland(BootstapContext<AgriSoil> context, String namespace, String soilId, double growthModifier) {
 		context.register(ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation(namespace, soilId)),
 				AgriSoil.builder().variants(AgriSoilVariant.builder().block(namespace + ":" + soilId).build()).humidity(WET).acidity(SLIGHTLY_ACIDIC).nutrients(HIGH).growthModifier(growthModifier).build());
@@ -58,5 +67,4 @@ public class SoilsDatagen {
 	private static void agricraft(BootstapContext<AgriSoil> context, String soilId, AgriSoil soil) {
 		context.register(ResourceKey.create(AgriApi.AGRISOILS, new ResourceLocation("agricraft", soilId)), soil);
 	}
-
 }

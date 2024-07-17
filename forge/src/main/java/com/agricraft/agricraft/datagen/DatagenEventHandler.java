@@ -37,6 +37,7 @@ public class DatagenEventHandler {
 	private static final boolean immersiveengineering = true;
 	private static final boolean pamhc2crops = true;
 	private static final boolean mysticalagriculture = true;
+	private static final boolean farmersdelight = true;
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
@@ -78,7 +79,9 @@ public class DatagenEventHandler {
 		if (mysticalagriculture) {
 			addExtraDataPackProvider("mysticalagriculture", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerMysticalAgriculture).add(AgriApi.AGRISOILS, SoilsDatagen::registerMysticalAgriculture).add(AgriApi.AGRIFERTILIZERS, FertilizersDatagen::registerMysticalAgriculture), ModelsDatagen::registerMysticalAgriculturePlant, ModelsDatagen::registerMysticalAgricultureSeed, LangDatagen::mysticalagriculture, event);
 		}
-
+		if (farmersdelight) {
+			addExtraDataPackProvider("farmersdelight", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerFarmersDelight).add(AgriApi.AGRIMUTATIONS, MutationsDatagen::registerFarmersDelight).add(AgriApi.AGRISOILS, SoilsDatagen::registerFarmersDelight), ModelsDatagen::registerFarmersDelightPlant, ModelsDatagen::registerFarmersDelightSeed, LangDatagen::farmersdelight, event);
+		}
 	}
 
 	private static <T extends ModelBuilder<T>> void addProvider(String modid, String folder, Consumer<ModelProvider<T>> consumer, BiFunction<ResourceLocation, ExistingFileHelper, T> builderFromModId, DataGenerator generator, ExistingFileHelper existingFileHelper, boolean includeClient) {
