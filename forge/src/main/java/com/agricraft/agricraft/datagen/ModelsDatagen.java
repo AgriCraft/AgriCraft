@@ -257,7 +257,7 @@ public class ModelsDatagen {
 						"certus_quartz", "coal", "cobalt", "compressed_iron", "conductive_alloy", "constantan", "copper_alloy", "copper", "coral",
 						"cyanite", "dark_steel", "deepslate", "diamond", "dirt", "draconium", "dye", "electrum", "elementium", "emerald", "enderium",
 						"end", "end_steel", "energetic_alloy", "energized_steel", "experience", "fiery_ingot", "fluix", "fluorite", "flux_infused_gem",
-						"flux_infused_ingot", "glowstone", "gold", "grains_of_infinity", "graphite", "hepatizon", "honey", "hop_graphite", "ice",
+						"flux_infused_ingot", "glowstone", "gold", "grains_of_infinity", "graphite", "hepatizon", "honey", "hop_graphite", "ice", "inferium",
 						"invar", "iridium", "ironwood", "iron", "knightmetal", "lapis_lazuli", "lead", "limestone", "lumium", "manasteel", "manyullyn",
 						"marble", "menril", "mystical_flower", "nature", "netherite", "nether", "nether_quartz", "nickel", "niotic_crystal", "obsidian",
 						"osmium", "peridot", "pig_iron", "platinum", "prismarine", "pulsating_alloy", "quartz_enriched_iron", "queens_slime",
