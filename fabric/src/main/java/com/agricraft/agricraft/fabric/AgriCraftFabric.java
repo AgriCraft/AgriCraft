@@ -39,7 +39,7 @@ public class AgriCraftFabric implements ModInitializer {
 		DynamicRegistries.registerSynced(AgriApi.AGRISOILS, AgriSoil.CODEC, AgriSoil.CODEC);
 		DynamicRegistries.registerSynced(AgriApi.AGRIMUTATIONS, AgriMutation.CODEC, AgriMutation.CODEC);
 		DynamicRegistries.registerSynced(AgriApi.AGRIFERTILIZERS, AgriFertilizer.CODEC, AgriFertilizer.CODEC);
-		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> cachedServer = player.getServer());
+		ServerLifecycleEvents.SERVER_STARTING.register(server -> cachedServer = server);
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			GiveSeedCommand.register(dispatcher, registryAccess);
 			DumpRegistriesCommand.register(dispatcher, registryAccess);
