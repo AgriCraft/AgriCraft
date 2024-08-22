@@ -4,6 +4,7 @@ import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
+import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
 import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.plant.AgriWeed;
@@ -116,7 +117,7 @@ public class AgriCraftForge {
 			}
 		} catch (IOException ignored) {
 		}
-		Pack pack = Pack.readMetaAndCreate(id, Component.translatable("agricraft." + type + "." + modid), false, resources, packType, Pack.Position.TOP, PackSource.BUILT_IN);
+		Pack pack = Pack.readMetaAndCreate(id, Component.translatable("agricraft." + type + "." + modid), CoreConfig.enablePacksByDefault, resources, packType, Pack.Position.TOP, PackSource.BUILT_IN);
 		if (pack != null) {
 			event.addRepositorySource(packConsumer -> packConsumer.accept(pack));
 		}
