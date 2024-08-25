@@ -45,33 +45,37 @@ public interface SimpleFluidloggedBlock extends BucketPickup, LiquidBlockContain
                 return true;
             }
         }
+
         return false;
     }
 
     @Override
     default ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
-        if (state.getValue(WATERLOGGED)) {
-            level.setBlock(pos, state.setValue(WATERLOGGED, false), 3);
-            if (!state.canSurvive(level, pos)) {
-                level.destroyBlock(pos, true);
-            }
-
-            return new ItemStack(Items.WATER_BUCKET);
-        } else if (state.getValue(LAVALOGGED)) {
+        if (state.getValue(LAVALOGGED)) {
             level.setBlock(pos, state.setValue(LAVALOGGED, false), 3);
             if (!state.canSurvive(level, pos)) {
                 level.destroyBlock(pos, true);
             }
 
             return new ItemStack(Items.LAVA_BUCKET);
-        } else {
-            return ItemStack.EMPTY;
+        } else if (state.getValue(WATERLOGGED)) {
+            level.setBlock(pos, state.setValue(WATERLOGGED, false), 3);
+            if (!state.canSurvive(level, pos)) {
+                level.destroyBlock(pos, true);
+            }
+
+            return new ItemStack(Items.WATER_BUCKET);
         }
+
+        return ItemStack.EMPTY;
     }
 
     @Override
     default Optional<SoundEvent> getPickupSound() {
         // TODO: @Ketheroth wrap CropBlock in loader specific block to have the blockstate passed in
+//		if (state.getValue(LAVALOGGED)) {
+//			return Fluids.LAVA.getPickupSound();
+//		}
 //		if (state.getValue(WATERLOGGED)) {
 //			return Fluids.WATER.getPickupSound()
 //		}
