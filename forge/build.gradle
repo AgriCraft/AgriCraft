@@ -12,6 +12,8 @@ loom {
 	forge {
 		convertAccessWideners = true
 		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+		mixinConfig "agricraft-common.mixins.json"
 	}
 	runs {
 		data {
@@ -58,6 +60,8 @@ dependencies {
 	modImplementation "curse.maven:biomesoplenty-220318:4617259"  // Biomes O' Plenty 1.20.1-18.0.0.592
 	modImplementation "curse.maven:terrablender-563928:5378180"  // TerraBlender Forge 1.20.1-3.0.1.7
 	modImplementation "curse.maven:pamhc2crops-361385:4687624"  // pamhc2crops 1.20-1.0.3
+
+	implementation(include("io.github.llamalad7:mixinextras-forge:0.5.0-beta.2"))
 }
 
 shadowJar {

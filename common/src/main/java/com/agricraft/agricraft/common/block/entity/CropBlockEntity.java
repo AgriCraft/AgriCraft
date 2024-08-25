@@ -15,6 +15,7 @@ import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.CropState;
+import com.agricraft.agricraft.common.block.SimpleFluidloggedBlock;
 import com.agricraft.agricraft.common.registry.ModBlockEntityTypes;
 import com.agricraft.agricraft.common.util.LangUtils;
 import net.minecraft.core.BlockPos;
@@ -31,7 +32,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -151,7 +151,9 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			if (this.getBlockState().getValue(CropBlock.CROP_STATE) == CropState.PLANT_STICKS) {
 				this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CropBlock.CROP_STATE, CropState.SINGLE_STICKS));
 			} else {
-				if (this.getBlockState().getValue(BlockStateProperties.WATERLOGGED)) {
+				if (this.getBlockState().getValue(SimpleFluidloggedBlock.LAVALOGGED)) {
+					level.setBlockAndUpdate(this.getBlockPos(), Fluids.LAVA.defaultFluidState().createLegacyBlock());
+				} else if (this.getBlockState().getValue(SimpleFluidloggedBlock.WATERLOGGED)) {
 					level.setBlockAndUpdate(this.getBlockPos(), Fluids.WATER.defaultFluidState().createLegacyBlock());
 				} else {
 					level.setBlockAndUpdate(this.getBlockPos(), Blocks.AIR.defaultBlockState());
