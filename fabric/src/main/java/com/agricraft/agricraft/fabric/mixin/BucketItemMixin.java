@@ -1,4 +1,4 @@
-package com.agricraft.agricraft.common.mixin;
+package com.agricraft.agricraft.fabric.mixin;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;

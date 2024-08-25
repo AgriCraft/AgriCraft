@@ -18,6 +18,4 @@ dependencies {
 //	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
 	modCompileOnly "curse.maven:jade-324717:$jade_fabric_version"
 	modCompileOnly "mcp.mobius.waila:wthit-api:fabric-$wthit_version"
-
-	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0-beta.2"))
 }
