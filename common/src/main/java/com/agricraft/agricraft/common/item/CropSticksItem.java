@@ -3,8 +3,10 @@ package com.agricraft.agricraft.common.item;
 import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.CropStickVariant;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -59,6 +61,16 @@ public class CropSticksItem extends BlockItem {
 	@Override
 	public String getDescriptionId() {
 		return "item.agricraft." + variant.getSerializedName() + "_crop_sticks";
+	}
+
+	@Override
+	public boolean isFireResistant() {
+		return this.variant == CropStickVariant.IRON || this.variant == CropStickVariant.OBSIDIAN;
+	}
+
+	@Override
+	public boolean canBeHurtBy(DamageSource damageSource) {
+		return !this.isFireResistant() || !damageSource.is(DamageTypeTags.IS_FIRE);
 	}
 
 }
