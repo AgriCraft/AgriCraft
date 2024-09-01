@@ -37,6 +37,7 @@
 		]
 	},
 	"mixins": [
+		"agricraft-common.mixins.json",
 		"agricraft-fabric.mixins.json"
 	],
 	"depends": {
