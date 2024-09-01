@@ -10,7 +10,9 @@ import com.agricraft.agricraft.api.plant.AgriWeed;
 import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.plugin.botania.AgriHornHarvestable;
 import com.agricraft.agricraft.plugin.botania.BotaniaPlugin;
 import com.agricraft.agricraft.plugin.create.CreatePlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
@@ -33,6 +35,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import vazkii.botania.api.BotaniaForgeCapabilities;
+import vazkii.botania.forge.CapabilityUtil;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -55,6 +59,7 @@ public class AgriCraftForge {
 		MinecraftPlugin.init();
 		if (Platform.get().isModLoaded("botania")) {
 			BotaniaPlugin.init();
+			CapabilityUtil.registerBlockLookaside(BotaniaForgeCapabilities.HORN_HARVEST, (l, p, s) -> AgriHornHarvestable.INSTANCE, ModBlocks.CROP.get()); // I don't want to mess with capabilities, OK?
 		}
 		if (Platform.get().isModLoaded("create")) {
 			CreatePlugin.init();
