@@ -11,6 +11,7 @@ import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.plugin.botania.BotaniaPlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
@@ -51,6 +52,9 @@ public class AgriCraftForge {
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftPlugin.init();
+		if (Platform.get().isModLoaded("botania")) {
+			BotaniaPlugin.init();
+		}
 //		SereneSeasonPlugin.init();
 	}
 

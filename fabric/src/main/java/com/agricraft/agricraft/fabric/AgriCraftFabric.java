@@ -12,6 +12,7 @@ import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.FabricSeasonPlugin;
 import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.plugin.botania.BotaniaPlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -50,6 +51,9 @@ public class AgriCraftFabric implements ModInitializer {
 		});
 		MinecraftPlugin.init();
 		FabricSeasonPlugin.init();
+		if (Platform.get().isModLoaded("botania")) {
+			BotaniaPlugin.init();
+		}
 
 		FabricLoader.getInstance().getModContainer("agricraft").ifPresent(agricraft -> {
 			for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {

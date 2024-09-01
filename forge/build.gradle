@@ -12,6 +12,10 @@ loom {
 	forge {
 		convertAccessWideners = true
 		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+		mixinConfigs = [
+				"agricraft-common.mixins.json"
+		]
 	}
 	runs {
 		data {
