@@ -370,11 +370,12 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-		AgriApi.getCrop(level, pos).ifPresent(IAgriFertilizable::applyGrowthTick);
 		if (state.getValue(STICK_VARIANT) == CropStickVariant.WOODEN && level.getFluidState(pos).is(Fluids.LAVA)) {
 			this.spawnDestroyParticles(level, state, pos);
 			level.destroyBlock(pos, true);
+			return;
 		}
+		AgriApi.getCrop(level, pos).ifPresent(IAgriFertilizable::applyGrowthTick);
 	}
 
 	@Override
