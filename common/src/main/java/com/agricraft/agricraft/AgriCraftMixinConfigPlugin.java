@@ -1,6 +1,6 @@
 package com.agricraft.agricraft;
 
-import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.PlatformEarly;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -35,7 +35,7 @@ public class AgriCraftMixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public List<String> getMixins() {
         List<String> mixins = new ArrayList<>();
-        if (Platform.get().isModLoaded("create")) {
+        if (PlatformEarly.get().isModLoaded("create")) {
             mixins.add("compat.create.HarvesterMovementBehaviourMixin");
         }
         return mixins;

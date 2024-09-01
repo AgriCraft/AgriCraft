@@ -12,6 +12,8 @@ import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.PlatformEarly;
+import com.agricraft.agricraft.common.util.forge.ForgePlatform;
 import com.agricraft.agricraft.plugin.botania.AgriHornHarvestable;
 import com.agricraft.agricraft.plugin.botania.BotaniaPlugin;
 import com.agricraft.agricraft.plugin.create.CreatePlugin;
@@ -46,6 +48,7 @@ import java.util.function.Function;
 public class AgriCraftForge {
 
 	public AgriCraftForge() {
+		Platform.setup(new ForgePlatform());
 		AgriCraft.init();
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		bus.addListener(AgriCraftForge::onCommonSetup);
@@ -57,11 +60,11 @@ public class AgriCraftForge {
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftPlugin.init();
-		if (Platform.get().isModLoaded("botania")) {
+		if (PlatformEarly.get().isModLoaded("botania")) {
 			BotaniaPlugin.init();
 			CapabilityUtil.registerBlockLookaside(BotaniaForgeCapabilities.HORN_HARVEST, (l, p, s) -> AgriHornHarvestable.INSTANCE, ModBlocks.CROP.get()); // I don't want to mess with capabilities, OK?
 		}
-		if (Platform.get().isModLoaded("create")) {
+		if (PlatformEarly.get().isModLoaded("create")) {
 			CreatePlugin.init();
 		}
 //		SereneSeasonPlugin.init();
