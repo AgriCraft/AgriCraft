@@ -31,6 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -43,6 +44,10 @@ import java.util.Optional;
  * Forge implementation of {@link Platform}
  */
 public class ForgePlatform extends Platform {
+
+	static {
+		Platform.delegate = new ForgePlatform();
+	}
 
 	@Override
 	public <T> PlatformRegistry<T> createRegistry(Registry<T> registry, String modid) {
@@ -136,4 +141,8 @@ public class ForgePlatform extends Platform {
 		return ForgeRegistries.PARTICLE_TYPES.getValue(particleId);
 	}
 
+	@Override
+	public boolean isModLoaded(String id) {
+		return ModList.get().isLoaded(id);
+	}
 }

@@ -10,9 +10,7 @@ import com.agricraft.agricraft.api.plant.AgriWeed;
 import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
-import com.agricraft.agricraft.common.plugin.SereneSeasonPlugin;
 import com.agricraft.agricraft.common.util.Platform;
-import com.agricraft.agricraft.common.util.forge.ForgePlatform;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
@@ -42,7 +40,6 @@ import java.util.function.Function;
 public class AgriCraftForge {
 
 	public AgriCraftForge() {
-		Platform.setup(new ForgePlatform());
 		AgriCraft.init();
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		bus.addListener(AgriCraftForge::onCommonSetup);

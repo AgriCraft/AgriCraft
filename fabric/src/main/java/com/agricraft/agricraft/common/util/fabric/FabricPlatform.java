@@ -52,6 +52,10 @@ import java.util.stream.Stream;
  */
 public class FabricPlatform extends Platform {
 
+	static {
+		Platform.delegate = new FabricPlatform();
+	}
+
 	@Override
 	public <T> PlatformRegistry<T> createRegistry(Registry<T> registry, String modid) {
 		return new FabricRegistry<>(registry, modid);
@@ -170,4 +174,8 @@ public class FabricPlatform extends Platform {
 		return BuiltInRegistries.PARTICLE_TYPE.get(particleId);
 	}
 
+	@Override
+	public boolean isModLoaded(String id) {
+		return FabricLoader.getInstance().isModLoaded(id);
+	}
 }

@@ -25,16 +25,21 @@ import java.util.stream.Stream;
 
 public abstract class Platform {
 
-	private static Platform platform = null;
+	public static Platform delegate = null;
 
-	public static void setup(Platform platform) {
-		if (Platform.platform == null) {
-			Platform.platform = platform;
+	static {
+		try {
+			Class.forName("com.agricraft.agricraft.common.util.fabric.FabricPlatform");
+		} catch (Throwable ignored) {
+		}
+		try {
+			Class.forName("com.agricraft.agricraft.common.util.forge.ForgePlatform");
+		} catch (Throwable ignored) {
 		}
 	}
 
 	public static Platform get() {
-		return Platform.platform;
+		return Platform.delegate;
 	}
 
 //	public static AgriSeedItem createAgriSeedItem(Item.Properties properties) {
@@ -110,6 +115,8 @@ public abstract class Platform {
 	public abstract void openMenu(ServerPlayer player, ExtraDataMenuProvider provider);
 
 	public abstract ParticleType<?> getParticleType(ResourceLocation particleId);
+
+	public abstract boolean isModLoaded(String id);
 
 	@FunctionalInterface
 	public interface MenuFactory<T extends AbstractContainerMenu> {
