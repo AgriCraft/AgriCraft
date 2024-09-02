@@ -65,7 +65,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 			int lower = requirement.minLight() - (int) (requirement.lightToleranceFactor() * strength);
 			int upper = requirement.maxLight() + (int) (requirement.lightToleranceFactor() * strength);
 			return lower <= value && value <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
-		}, LevelReader::getMaxLocalRawBrightness);
+		}, (level, blockPos) -> level.getMaxLocalRawBrightness(blockPos.above()));
 		block = new BaseGrowthCondition<>("block", (plant, strength, blockstate) -> {
 			List<AgriBlockCondition> blockConditions = plant.getGrowthRequirements().blockConditions();
 			if (blockConditions.isEmpty()) {
