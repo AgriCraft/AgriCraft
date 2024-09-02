@@ -239,6 +239,25 @@ public class PlantsDatagen {
 		r(context, "farmersdelight", "tomato", new AgriPlant.Builder().seeds(AgriSeed.builder().item("farmersdelight:tomato_seeds").chances(0.0, 1.0, 0.0).build()).stages16().harvest(4).chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("farmersdelight:tomato").count(1, 3, 0.95).build()).requirement(AgriRequirement.builder().humidity(WET, EQUAL, 0.15).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(HIGH, EQUAL_OR_HIGHER, 0.1).light(10, 16, 0.5).seasons(SPRING, SUMMER).build()).build());
 	}
 
+	public static void registerBotania(BootstapContext<AgriPlant> context) {
+		botaniaFlower(context, "black");
+		botaniaFlower(context, "blue");
+		botaniaFlower(context, "brown");
+		botaniaFlower(context, "cyan");
+		botaniaFlower(context, "gray");
+		botaniaFlower(context, "green");
+		botaniaFlower(context, "light_blue");
+		botaniaFlower(context, "light_gray");
+		botaniaFlower(context, "lime");
+		botaniaFlower(context, "magenta");
+		botaniaFlower(context, "orange");
+		botaniaFlower(context, "pink");
+		botaniaFlower(context, "purple");
+		botaniaFlower(context, "red");
+		botaniaFlower(context, "white");
+		botaniaFlower(context, "yellow");
+	}
+
 	private static void minecraft(BootstapContext<AgriPlant> context, String plantId, AgriPlant plant) {
 		r(context, "minecraft", plantId, plant);
 	}
@@ -273,6 +292,10 @@ public class PlantsDatagen {
 
 	public static AgriPlant.Builder hcCrop(String name) {
 		return new AgriPlant.Builder().seeds(AgriSeed.builder().item("pamhc2crops:" + name + "seeditem").build()).stages16().chances(0.75, 0.025, 0.1).products(AgriProduct.builder().item("pamhc2crops:" + name + "item").count(1, 5, 0.9).build());
+	}
+
+	public static void botaniaFlower(BootstapContext<AgriPlant> context, String color) {
+		r(context, "botania", color + "_mystical_flower", new AgriPlant.Builder().stages(2, 3, 5, 6, 8, 9, 11, 12).chances(0.5, 0.025, 0.1).products(AgriProduct.builder().item("botania:" + color + "_petal").count(1, 4, 1).build()).requirement(AgriRequirement.builder().humidity(DAMP, EQUAL, 0.15).acidity(SLIGHTLY_ACIDIC, EQUAL, 0.2).nutrients(VERY_HIGH, EQUAL, 0.15).light(12, 16, 0.5).seasons(SPRING).build()).modifiers(new AgriPlantModifierInfo("agricraft:botania_mana", "100")).build());
 	}
 
 	public static AgriPlant.Builder vegetable(String seed, String product, AgriSeason... seasons) {

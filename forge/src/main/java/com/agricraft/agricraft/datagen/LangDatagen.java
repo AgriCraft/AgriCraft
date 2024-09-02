@@ -584,4 +584,57 @@ public class LangDatagen {
 		lang.add("seed.agricraft.farmersdelight.tomato", "Tomato Seeds");
 		lang.add("seed.agricraft.farmersdelight.rice", "Rice");
 	}
+
+	public static void botania(LanguageProvider lang) {
+		lang.add("plant.agricraft.botania.black_mystical_flower", "Mystical Black Flower");
+		lang.add("plant.agricraft.botania.blue_mystical_flower", "Mystical Blue Flower");
+		lang.add("plant.agricraft.botania.brown_mystical_flower", "Mystical Brown Flower");
+		lang.add("plant.agricraft.botania.cyan_mystical_flower", "Mystical Cyan Flower");
+		lang.add("plant.agricraft.botania.gray_mystical_flower", "Mystical Gray Flower");
+		lang.add("plant.agricraft.botania.green_mystical_flower", "Mystical Green Flower");
+		lang.add("plant.agricraft.botania.light_blue_mystical_flower", "Mystical Light Blue Flower");
+		lang.add("plant.agricraft.botania.light_gray_mystical_flower", "Mystical Light Gray Flower");
+		lang.add("plant.agricraft.botania.lime_mystical_flower", "Mystical Lime Flower");
+		lang.add("plant.agricraft.botania.magenta_mystical_flower", "Mystical Magenta Flower");
+		lang.add("plant.agricraft.botania.orange_mystical_flower", "Mystical Orange Flower");
+		lang.add("plant.agricraft.botania.pink_mystical_flower", "Mystical Pink Flower");
+		lang.add("plant.agricraft.botania.purple_mystical_flower", "Mystical Purple Flower");
+		lang.add("plant.agricraft.botania.red_mystical_flower", "Mystical Red Flower");
+		lang.add("plant.agricraft.botania.white_mystical_flower", "Mystical White Flower");
+		lang.add("plant.agricraft.botania.yellow_mystical_flower", "Mystical Yellow Flower");
+
+		lang.add("seed.agricraft.botania.black_mystical_flower", "Mystical Black Seeds");
+		lang.add("seed.agricraft.botania.blue_mystical_flower", "Mystical Blue Seeds");
+		lang.add("seed.agricraft.botania.brown_mystical_flower", "Mystical Brown Seeds");
+		lang.add("seed.agricraft.botania.cyan_mystical_flower", "Mystical Cyan Seeds");
+		lang.add("seed.agricraft.botania.gray_mystical_flower", "Mystical Gray Seeds");
+		lang.add("seed.agricraft.botania.green_mystical_flower", "Mystical Green Seeds");
+		lang.add("seed.agricraft.botania.light_blue_mystical_flower", "Mystical Light Blue Seeds");
+		lang.add("seed.agricraft.botania.light_gray_mystical_flower", "Mystical Light Gray Seeds");
+		lang.add("seed.agricraft.botania.lime_mystical_flower", "Mystical Lime Seeds");
+		lang.add("seed.agricraft.botania.magenta_mystical_flower", "Mystical Magenta Seeds");
+		lang.add("seed.agricraft.botania.orange_mystical_flower", "Mystical Orange Seeds");
+		lang.add("seed.agricraft.botania.pink_mystical_flower", "Mystical Pink Seeds");
+		lang.add("seed.agricraft.botania.purple_mystical_flower", "Mystical Purple Seeds");
+		lang.add("seed.agricraft.botania.red_mystical_flower", "Mystical Red Seeds");
+		lang.add("seed.agricraft.botania.white_mystical_flower", "Mystical White Seeds");
+		lang.add("seed.agricraft.botania.yellow_mystical_flower", "Mystical Yellow Seeds");
+
+		lang.add("description.agricraft.botania.black_mystical_flower", "A beautiful flower that is as dark as the night.");
+		lang.add("description.agricraft.botania.blue_mystical_flower", "A beautiful flower that is as blue as the sea.");
+		lang.add("description.agricraft.botania.brown_mystical_flower", "A beautiful flower that is as brown as the dirt.");
+		lang.add("description.agricraft.botania.cyan_mystical_flower", "A beautiful flower of indeterminate color, being both green and blue.");
+		lang.add("description.agricraft.botania.gray_mystical_flower", "A beautiful flower, albeit rather non-descript.");
+		lang.add("description.agricraft.botania.green_mystical_flower", "This flower seems to be envious of its other cousins with better descriptions.");
+		lang.add("description.agricraft.botania.light_blue_mystical_flower", "A beautiful flower that is blue as the sky on a sunny day.");
+		lang.add("description.agricraft.botania.light_gray_mystical_flower", "A beautiful flower, albeit even more non-descript than its cousin, the Mystical Gray Flower.");
+		lang.add("description.agricraft.botania.lime_mystical_flower", "I wonder if this flower would taste sour?");
+		lang.add("description.agricraft.botania.magenta_mystical_flower", "A beautiful flower, of color which my printer is always out.");
+		lang.add("description.agricraft.botania.orange_mystical_flower", "A beautiful flower with a fiery disposition.");
+		lang.add("description.agricraft.botania.pink_mystical_flower", "A truly beautiful flower, emanating the throes of a powerful primal force.");
+		lang.add("description.agricraft.botania.purple_mystical_flower", "A beautiful flower with a regal color, it certainly is of the royal lineage.");
+		lang.add("description.agricraft.botania.red_mystical_flower", "A beautiful flower with a sanguine color.");
+		lang.add("description.agricraft.botania.white_mystical_flower", "A purely divine flower.");
+		lang.add("description.agricraft.botania.yellow_mystical_flower", "Almost as bad as ragweed.");
+	}
 }

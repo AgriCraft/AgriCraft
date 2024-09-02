@@ -313,6 +313,30 @@ public class ModelsDatagen {
 		m.withExistingParent("tomato", "farmersdelight:item/tomato_seeds");
 	}
 
+	public static void registerBotaniaPlant(ModelProvider<BlockModelBuilder> m) {
+		List.of("black_mystical_flower", "blue_mystical_flower", "brown_mystical_flower", "cyan_mystical_flower", "gray_mystical_flower", "green_mystical_flower", "light_blue_mystical_flower",
+						"light_gray_mystical_flower", "lime_mystical_flower", "magenta_mystical_flower", "orange_mystical_flower", "pink_mystical_flower", "purple_mystical_flower", "red_mystical_flower",
+						"white_mystical_flower", "yellow_mystical_flower")
+				.forEach(name -> {
+					m.withExistingParent(name + "_stage0", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage1", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "1");
+					m.withExistingParent(name + "_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "1");
+					m.withExistingParent(name + "_stage5", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "2");
+					m.withExistingParent(name + "_stage6", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "2");
+					m.withExistingParent(name + "_stage7", "agricraft:crop/crop_plus").texture("crop", "botania:block/" + name);
+				});
+
+	}
+
+	public static void registerBotaniaSeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("black_mystical_flower", "blue_mystical_flower", "brown_mystical_flower", "cyan_mystical_flower", "gray_mystical_flower", "green_mystical_flower", "light_blue_mystical_flower",
+						"light_gray_mystical_flower", "lime_mystical_flower", "magenta_mystical_flower", "orange_mystical_flower", "pink_mystical_flower", "purple_mystical_flower", "red_mystical_flower",
+						"white_mystical_flower", "yellow_mystical_flower")
+				.forEach(name -> m.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/botania/" + name));
+	}
+
 	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
 		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
 		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");

@@ -38,6 +38,7 @@ public class DatagenEventHandler {
 	private static final boolean pamhc2crops = true;
 	private static final boolean mysticalagriculture = true;
 	private static final boolean farmersdelight = true;
+	private static final boolean botania = true;
 
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {
@@ -81,6 +82,9 @@ public class DatagenEventHandler {
 		}
 		if (farmersdelight) {
 			addExtraDataPackProvider("farmersdelight", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerFarmersDelight).add(AgriApi.AGRIMUTATIONS, MutationsDatagen::registerFarmersDelight).add(AgriApi.AGRISOILS, SoilsDatagen::registerFarmersDelight), ModelsDatagen::registerFarmersDelightPlant, ModelsDatagen::registerFarmersDelightSeed, LangDatagen::farmersdelight, event);
+		}
+		if (botania) {
+			addExtraDataPackProvider("botania", new RegistrySetBuilder().add(AgriApi.AGRIPLANTS, PlantsDatagen::registerBotania).add(AgriApi.AGRIMUTATIONS, MutationsDatagen::registerBotania), ModelsDatagen::registerBotaniaPlant, ModelsDatagen::registerBotaniaSeed, LangDatagen::botania, event);
 		}
 	}
 
