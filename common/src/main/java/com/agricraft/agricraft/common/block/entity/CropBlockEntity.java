@@ -504,6 +504,18 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			// crop fertility
 			AgriGrowthResponse response = this.getFertilityResponse();
 			tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile"))));
+			// crop conditions
+			if (!response.isFertile()) {
+				if (!this.checkGrowthSpace(this.plant.getPlantHeight(this.growthStage))) {
+					tooltip.add(Component.literal("  ").append(Component.literal("not enough growth space")));
+				}
+				int strength = this.genome.getStatGene(AgriStatRegistry.getInstance().strengthStat()).getTrait();
+				AgriGrowthConditionRegistry.getInstance().stream().forEach(condition -> {
+					if (!condition.check(this, this.level, this.getBlockPos(), strength).isFertile()) {
+						tooltip.add(Component.literal("  ").append(Component.literal("condition failed: "+condition.getId())));
+					}
+				});
+			}
 		} else {
 			tooltip.add(Component.translatable("agricraft.tooltip.magnifying.no_plant"));
 		}
