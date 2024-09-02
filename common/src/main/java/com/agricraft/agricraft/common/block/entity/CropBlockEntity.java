@@ -507,12 +507,12 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			// crop conditions
 			if (!response.isFertile()) {
 				if (!this.checkGrowthSpace(this.plant.getPlantHeight(this.growthStage))) {
-					tooltip.add(Component.literal("  ").append(Component.literal("not enough growth space")));
+					tooltip.add(Component.literal("  - ").append(Component.translatable("agricraft.tooltip.magnifying.condition.growth_space")));
 				}
 				int strength = this.genome.getStatGene(AgriStatRegistry.getInstance().strengthStat()).getTrait();
 				AgriGrowthConditionRegistry.getInstance().stream().forEach(condition -> {
 					if (!condition.check(this, this.level, this.getBlockPos(), strength).isFertile()) {
-						tooltip.add(Component.literal("  ").append(Component.literal("condition failed: "+condition.getId())));
+						tooltip.add(Component.literal("  - ").append(Component.translatable("agricraft.tooltip.magnifying.condition."+condition.getId())));
 					}
 				});
 			}
