@@ -28,6 +28,10 @@ subprojects {
 			url = "https://maven.terraformersmc.com/"
 		}
 		maven {
+			name = "tterrag maven"
+			url = "https://maven.tterrag.com/"
+		}
+		maven {
 			name = "badasintended"
 			url = "https://maven2.bai.lol/"
 		}

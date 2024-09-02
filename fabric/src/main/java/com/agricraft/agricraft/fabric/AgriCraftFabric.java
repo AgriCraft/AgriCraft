@@ -11,8 +11,13 @@ import com.agricraft.agricraft.common.commands.DumpRegistriesCommand;
 import com.agricraft.agricraft.common.commands.GiveSeedCommand;
 import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.FabricSeasonPlugin;
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import com.agricraft.agricraft.common.util.Platform;
+import com.agricraft.agricraft.common.util.PlatformEarly;
 import com.agricraft.agricraft.common.util.fabric.FabricPlatform;
+import com.agricraft.agricraft.plugin.botania.AgriHornHarvestable;
+import com.agricraft.agricraft.plugin.botania.BotaniaPlugin;
+import com.agricraft.agricraft.plugin.create.CreatePlugin;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -25,6 +30,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionResult;
+import vazkii.botania.api.BotaniaFabricCapabilities;
 
 public class AgriCraftFabric implements ModInitializer {
 
@@ -52,6 +58,13 @@ public class AgriCraftFabric implements ModInitializer {
 		});
 		MinecraftPlugin.init();
 		FabricSeasonPlugin.init();
+		if (PlatformEarly.get().isModLoaded("botania")) {
+			BotaniaPlugin.init();
+			BotaniaFabricCapabilities.HORN_HARVEST.registerForBlocks((l, p, s, e, u) -> AgriHornHarvestable.INSTANCE, ModBlocks.CROP.get());
+		}
+		if (PlatformEarly.get().isModLoaded("create")) {
+			CreatePlugin.init();
+		}
 
 		FabricLoader.getInstance().getModContainer("agricraft").ifPresent(agricraft -> {
 			for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {

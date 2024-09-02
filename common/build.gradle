@@ -18,4 +18,7 @@ dependencies {
 //	modCompileOnly "curse.maven:jade-324717:4980187"  // Jade-1.20.4-fabric-13.2.1-api
 	modCompileOnly "curse.maven:jade-324717:$jade_fabric_version"
 	modCompileOnly "mcp.mobius.waila:wthit-api:fabric-$wthit_version"
+
+	modCompileOnly("vazkii.botania:Botania:$botania_version-FORGE:api") { transitive = false }
+	modCompileOnly("com.simibubi.create:create-1.20.1:$create_version:slim") { transitive = false }
 }
