@@ -4,6 +4,7 @@
 	"package": "com.agricraft.agricraft.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
+		"BlockStateBaseMixin",
 		"ItemEntityMixin"
 	],
 	"injectors": {
