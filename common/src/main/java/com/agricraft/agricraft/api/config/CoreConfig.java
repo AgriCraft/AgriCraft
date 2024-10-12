@@ -14,6 +14,10 @@ import com.teamresourceful.resourcefulconfig.common.config.EntryType;
 @Category(id = "core", translation = "config.agricraft.core")
 public final class CoreConfig {
 
+	@ConfigEntry(id = "register_packs_by_default", type = EntryType.BOOLEAN, translation = "config.agricraft.core.register_packs_by_default")
+	@Comment("Set to false to prevent AgriCraft from enabling its mod compatibility datapacks / resourcepacks by default")
+	public static boolean enablePacksByDefault = true;
+
 	@ConfigEntry(id = "plant_off_crop_sticks", type = EntryType.BOOLEAN, translation = "config.agricraft.core.plant_off_crop_sticks")
 	@Comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
 	public static boolean plantOffCropSticks = true;
