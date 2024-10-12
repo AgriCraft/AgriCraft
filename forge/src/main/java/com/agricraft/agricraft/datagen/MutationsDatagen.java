@@ -177,6 +177,32 @@ public class MutationsDatagen {
 		pamhc2crops(context, "sunchoke", "pahmhc2crops:artichoke", "pahmhc2crops:parsnip");
 	}
 
+	public static void registerFarmersDelight(BootstapContext<AgriMutation> context) {
+		r(context, "farmersdelight", "cabbage", new AgriMutation("farmersdelight:cabbage", "farmersdelight:onion", "minecraft:seagrass", 0.5));
+		r(context, "farmersdelight", "onion", new AgriMutation("farmersdelight:onion", "minecraft:allium", "minecraft:potato", 0.5));
+		r(context, "farmersdelight", "rice", new AgriMutation("farmersdelight:rice", "minecraft:seagrass", "minecraft:wheat", 0.5));
+		r(context, "farmersdelight", "tomato", new AgriMutation("farmersdelight:tomato", "minecraft:wheat", "minecraft:beetroot", 0.5));
+	}
+
+	public static void registerBotania(BootstapContext<AgriMutation> context) {
+		r(context, "botania", "black_mystical_flower", new AgriMutation("botania:black_mystical_flower", "botania:magenta_mystical_flower", "botania:blue_mystical_flower", 0.5));
+		r(context, "botania", "blue_mystical_flower", new AgriMutation("botania:blue_mystical_flower", "botania:cyan_mystical_flower", "botania:white_mystical_flower", 0.5));
+		r(context, "botania", "brown_mystical_flower", new AgriMutation("botania:brown_mystical_flower", "botania:yellow_mystical_flower", "botania:white_mystical_flower", 0.5));
+		r(context, "botania", "cyan_mystical_flower", new AgriMutation("botania:cyan_mystical_flower", "botania:gray_mystical_flower", "minecraft:melon", 0.5));
+		r(context, "botania", "gray_mystical_flower", new AgriMutation("botania:gray_mystical_flower", "botania:brown_mystical_flower", "minecraft:sugar_cane", 0.5));
+		r(context, "botania", "green_mystical_flower", new AgriMutation("botania:green_mystical_flower", "botania:blue_mystical_flower", "botania:yellow_mystical_flower", 0.5));
+		r(context, "botania", "light_blue_mystical_flower", new AgriMutation("botania:light_blue_mystical_flower", "botania:blue_mystical_flower", "botania:white_mystical_flower", 0.5));
+		r(context, "botania", "light_gray_mystical_flower", new AgriMutation("botania:light_gray_mystical_flower", "botania:gray_mystical_flower", "botania:white_mystical_flower", 0.5));
+		r(context, "botania", "lime_mystical_flower", new AgriMutation("botania:lime_mystical_flower", "botania:blue_mystical_flower", "botania:yellow_mystical_flower", 0.5));
+		r(context, "botania", "magenta_mystical_flower", new AgriMutation("botania:magenta_mystical_flower", "botania:orange_mystical_flower", "botania:purple_mystical_flower", 0.5));
+		r(context, "botania", "orange_mystical_flower", new AgriMutation("botania:orange_mystical_flower", "botania:red_mystical_flower", "botania:yellow_mystical_flower", 0.5));
+		r(context, "botania", "pink_mystical_flower", new AgriMutation("botania:pink_mystical_flower", "botania:purple_mystical_flower", "botania:cyan_mystical_flower", 0.5));
+		r(context, "botania", "purple_mystical_flower", new AgriMutation("botania:purple_mystical_flower", "botania:red_mystical_flower", "botania:blue_mystical_flower", 0.5));
+		r(context, "botania", "red_mystical_flower", new AgriMutation("botania:red_mystical_flower", "botania:blue_mystical_flower", "botania:brown_mystical_flower", 0.5));
+		r(context, "botania", "white_mystical_flower", new AgriMutation("botania:white_mystical_flower", "minecraft:wheat", "minecraft:melon", 0.5));
+		r(context, "botania", "yellow_mystical_flower", new AgriMutation("botania:yellow_mystical_flower", "botania:white_mystical_flower", "minecraft:wheat", 0.5));
+	}
+
 	private static void r(BootstapContext<AgriMutation> context, String modid, String mutationId, AgriMutation mutation) {
 		context.register(ResourceKey.create(AgriApi.AGRIMUTATIONS, new ResourceLocation(modid, mutationId)), mutation);
 	}

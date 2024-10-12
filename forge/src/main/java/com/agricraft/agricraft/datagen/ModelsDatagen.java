@@ -239,6 +239,104 @@ public class ModelsDatagen {
 				.forEach(name -> m.withExistingParent(name, "pamhc2crops:item/" + name + "seeditem"));
 	}
 
+	public static void registerMysticalAgriculturePlant(ModelProvider<BlockModelBuilder> m) {
+		List.of("basalz", "blaze", "blitz", "blizz", "chicken", "cow", "creeper", "enderman", "fish", "ghast", "pig", "rabbit", "sheep",
+				"skeleton", "slime", "spider", "squid", "turtle", "wither_skeleton", "zombie")
+						.forEach(name -> mysticalAgriculture(m, name, "mysticalagriculture:block/mystical_mob_crop", "mysticalagriculture:block/flower/" + name + "_flower"));
+
+		List.of("aluminum", "amethyst_bronze", "amethyst", "apatite", "aquamarine", "basalt", "blazing_crystal", "brass", "bronze",
+						"certus_quartz", "coal", "cobalt", "compressed_iron", "conductive_alloy", "constantan", "copper_alloy", "copper", "coral",
+						"cyanite", "dark_steel", "deepslate", "diamond", "dirt", "draconium", "dye", "electrum", "elementium", "emerald", "enderium",
+						"end", "end_steel", "energetic_alloy", "energized_steel", "experience", "fiery_ingot", "fluix", "fluorite", "flux_infused_gem",
+						"flux_infused_ingot", "glowstone", "gold", "grains_of_infinity", "graphite", "hepatizon", "honey", "hop_graphite", "ice", "inferium",
+						"invar", "iridium", "ironwood", "iron", "knightmetal", "lapis_lazuli", "lead", "limestone", "lumium", "manasteel", "manyullyn",
+						"marble", "menril", "mystical_flower", "nature", "netherite", "nether", "nether_quartz", "nickel", "niotic_crystal", "obsidian",
+						"osmium", "peridot", "pig_iron", "platinum", "prismarine", "pulsating_alloy", "quartz_enriched_iron", "queens_slime",
+						"redstone_alloy", "redstone", "refined_glowstone", "refined_obsidian", "rock_crystal", "rose_gold", "rubber", "ruby", "saltpeter",
+						"sapphire", "signalum", "silicon", "silver", "sky_stone", "slimesteel", "soularium", "soulium", "spirited_crystal", "starmetal",
+						"steeleaf", "steel", "stone", "sulfur", "terrasteel", "tin", "uraninite", "uranium", "vibrant_alloy", "wood", "yellorium", "zinc")
+				.forEach(name -> mysticalAgriculture(m, name, "mysticalagriculture:block/mystical_resource_crop", "mysticalagriculture:block/flower/" + name + "_flower"));
+
+		List.of("air", "chrome", "earth", "fire", "mithril", "titanium", "tungsten", "water")
+				.forEach(name -> mysticalAgriculture(m, name, "mysticalagriculture:block/mystical_resource_crop", "mysticalagriculture:block/flower_ingot"));
+	}
+
+	private static void mysticalAgriculture(ModelProvider<BlockModelBuilder> m, String name, String baseTexture, String flowerTexture) {
+		m.withExistingParent(name + "_stage0", baseTexture + "_0");
+		m.withExistingParent(name + "_stage1", baseTexture + "_1");
+		m.withExistingParent(name + "_stage2", baseTexture + "_2");
+		m.withExistingParent(name + "_stage3", baseTexture + "_3");
+		m.withExistingParent(name + "_stage4", baseTexture + "_4");
+		m.withExistingParent(name + "_stage5", baseTexture + "_5");
+		m.withExistingParent(name + "_stage6", baseTexture + "_6");
+		m.withExistingParent(name + "_stage7", baseTexture + "_7").texture("flower", flowerTexture);
+	}
+
+	public static void registerMysticalAgricultureSeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("air", "earth", "water", "fire", "inferium", "stone", "dirt", "wood", "ice", "deepslate", "nature", "dye",
+						"nether", "coal", "coral", "honey", "amethyst", "pig", "chicken", "cow", "sheep", "squid", "fish", "slime",
+						"turtle", "rubber", "silicon", "sulfur", "aluminum", "saltpeter", "apatite", "grains_of_infinity", "mystical_flower",
+						"marble", "limestone", "basalt", "menril", "iron", "copper", "nether_quartz", "glowstone", "redstone", "obsidian",
+						"prismarine", "zombie", "skeleton", "creeper", "spider", "rabbit", "tin", "bronze", "zinc", "brass", "silver", "lead",
+						"graphite", "blizz", "blitz", "basalz", "amethyst_bronze", "slimesteel", "pig_iron", "copper_alloy", "redstone_alloy",
+						"conductive_alloy", "manasteel", "steeleaf", "ironwood", "aquamarine", "sky_stone", "certus_quartz", "quartz_enriched_iron",
+						"gold", "lapis_lazuli", "end", "experience", "blaze", "ghast", "enderman", "steel", "nickel", "constantan", "electrum",
+						"invar", "mithril", "tungsten", "titanium", "uranium", "chrome", "ruby", "sapphire", "peridot", "soulium", "signalum",
+						"lumium", "flux_infused_ingot", "hop_graphite", "cobalt", "rose_gold", "soularium", "dark_steel", "pulsating_alloy",
+						"energetic_alloy", "elementium", "osmium", "fluorite", "refined_glowstone", "refined_obsidian", "knightmetal", "fiery_ingot",
+						"starmetal", "compressed_iron", "fluix", "energized_steel", "blazing_crystal", "diamond", "emerald", "netherite",
+						"wither_skeleton", "platinum", "iridium", "enderium", "flux_infused_gem", "manyullyn", "queens_slime", "hepatizon",
+						"vibrant_alloy", "end_steel", "terrasteel", "rock_crystal", "draconium", "yellorium", "cyanite", "niotic_crystal",
+						"spirited_crystal", "uraninite")
+				.forEach(name -> m.withExistingParent(name, "mysticalagriculture:item/" + name + "_seeds"));
+	}
+
+	public static void registerFarmersDelightPlant(ModelProvider<BlockModelBuilder> m) {
+		with8TexturesIn8stage(m, "cabbage", "agricraft:crop/crop_cross", "farmersdelight:block/cabbages");
+		with4TexturesIn8stage(m, "onion", "agricraft:crop/crop_hash", "farmersdelight:block/onions");
+		with4TexturesIn8stage(m, "tomato", "agricraft:crop/crop_cross", "farmersdelight:block/tomatoes");
+
+		m.withExistingParent("rice_stage0", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage0");
+		m.withExistingParent("rice_stage1", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage1");
+		m.withExistingParent("rice_stage2", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage2");
+		m.withExistingParent("rice_stage3", "agricraft:crop/crop_cross").texture("crop", "farmersdelight:block/rice_stage3");
+		m.withExistingParent("rice_stage4", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage0");
+		m.withExistingParent("rice_stage5", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage1");
+		m.withExistingParent("rice_stage6", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage2");
+		m.withExistingParent("rice_stage7", "agricraft:crop/tall_crop_cross").texture("crop", "farmersdelight:block/rice_supporting").texture("crop_top", "farmersdelight:block/rice_panicles_stage3");
+	}
+
+	public static void registerFarmersDelightSeed(ModelProvider<ItemModelBuilder> m) {
+		m.withExistingParent("cabbage", "farmersdelight:item/cabbage_seeds");
+		m.withExistingParent("onion", "farmersdelight:item/onion");
+		m.withExistingParent("rice", "farmersdelight:item/rice");
+		m.withExistingParent("tomato", "farmersdelight:item/tomato_seeds");
+	}
+
+	public static void registerBotaniaPlant(ModelProvider<BlockModelBuilder> m) {
+		List.of("black_mystical_flower", "blue_mystical_flower", "brown_mystical_flower", "cyan_mystical_flower", "gray_mystical_flower", "green_mystical_flower", "light_blue_mystical_flower",
+						"light_gray_mystical_flower", "lime_mystical_flower", "magenta_mystical_flower", "orange_mystical_flower", "pink_mystical_flower", "purple_mystical_flower", "red_mystical_flower",
+						"white_mystical_flower", "yellow_mystical_flower")
+				.forEach(name -> {
+					m.withExistingParent(name + "_stage0", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage1", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage2", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "0");
+					m.withExistingParent(name + "_stage3", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "1");
+					m.withExistingParent(name + "_stage4", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "1");
+					m.withExistingParent(name + "_stage5", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "2");
+					m.withExistingParent(name + "_stage6", "agricraft:crop/crop_plus").texture("crop", "agricraft:plant/botania/" + name + "2");
+					m.withExistingParent(name + "_stage7", "agricraft:crop/crop_plus").texture("crop", "botania:block/" + name);
+				});
+
+	}
+
+	public static void registerBotaniaSeed(ModelProvider<ItemModelBuilder> m) {
+		List.of("black_mystical_flower", "blue_mystical_flower", "brown_mystical_flower", "cyan_mystical_flower", "gray_mystical_flower", "green_mystical_flower", "light_blue_mystical_flower",
+						"light_gray_mystical_flower", "lime_mystical_flower", "magenta_mystical_flower", "orange_mystical_flower", "pink_mystical_flower", "purple_mystical_flower", "red_mystical_flower",
+						"white_mystical_flower", "yellow_mystical_flower")
+				.forEach(name -> m.withExistingParent(name, "minecraft:item/generated").texture("layer0", "agricraft:seed/botania/" + name));
+	}
+
 	private static void with4TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
 		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
 		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage0");
@@ -261,4 +359,14 @@ public class ModelsDatagen {
 		m.withExistingParent(name + "_stage7", parent).texture("crop", mature);
 	}
 
+	private static void with8TexturesIn8stage(ModelProvider<BlockModelBuilder> m, String name, String parent, String baseTexture) {
+		m.withExistingParent(name + "_stage0", parent).texture("crop", baseTexture + "_stage0");
+		m.withExistingParent(name + "_stage1", parent).texture("crop", baseTexture + "_stage1");
+		m.withExistingParent(name + "_stage2", parent).texture("crop", baseTexture + "_stage2");
+		m.withExistingParent(name + "_stage3", parent).texture("crop", baseTexture + "_stage3");
+		m.withExistingParent(name + "_stage4", parent).texture("crop", baseTexture + "_stage4");
+		m.withExistingParent(name + "_stage5", parent).texture("crop", baseTexture + "_stage5");
+		m.withExistingParent(name + "_stage6", parent).texture("crop", baseTexture + "_stage6");
+		m.withExistingParent(name + "_stage7", parent).texture("crop", baseTexture + "_stage7");
+	}
 }
