@@ -130,6 +130,10 @@ public class AgriPlant {
 		return this.seeds.stream().anyMatch(seed -> seed.isVariant(stack));
 	}
 
+	public AgriSeed getSeed(ItemStack stack) {
+		return this.seeds.stream().filter(seed -> seed.isVariant(stack)).findFirst().orElse(null);
+	}
+
 	public AgriRequirement getGrowthRequirements(/*AgriGrowthStage growthStage*/) {
 		return this.requirement;
 	}

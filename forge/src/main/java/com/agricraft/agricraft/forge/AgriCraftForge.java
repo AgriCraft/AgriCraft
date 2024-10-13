@@ -22,6 +22,7 @@ import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -72,7 +73,8 @@ public class AgriCraftForge {
 	}
 
 	public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
-		if (VanillaSeedConversion.onRightClick(event.getEntity(), event.getHand(), event.getPos(), event.getHitVec())) {
+		InteractionResult result = VanillaSeedConversion.onRightClick(event.getEntity(), event.getHand(), event.getPos(), event.getHitVec());
+		if (result != InteractionResult.PASS) {
 			event.setUseItem(Event.Result.DENY);
 			event.setCanceled(true);
 		}

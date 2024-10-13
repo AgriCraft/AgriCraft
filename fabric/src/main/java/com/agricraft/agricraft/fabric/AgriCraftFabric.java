@@ -45,12 +45,7 @@ public class AgriCraftFabric implements ModInitializer {
 			GiveSeedCommand.register(dispatcher, registryAccess);
 			DumpRegistriesCommand.register(dispatcher, registryAccess);
 		});
-		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-			if (VanillaSeedConversion.onRightClick(player, hand, hitResult.getBlockPos(), hitResult)) {
-				return InteractionResult.SUCCESS;
-			}
-			return InteractionResult.PASS;
-		});
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> VanillaSeedConversion.onRightClick(player, hand, hitResult.getBlockPos(), hitResult));
 		MinecraftPlugin.init();
 		FabricSeasonPlugin.init();
 
