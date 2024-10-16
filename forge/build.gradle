@@ -24,10 +24,12 @@ loom {
 			programArgs "--output", file("src/generated/resources").absolutePath
 			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
 			programArgs "--existing-mod", "biomesoplenty"
-			programArgs "--existing-mod", "immersiveengineering"
-			programArgs "--existing-mod", "pamhc2crops"
+			programArgs "--existing-mod", "botania"
 			programArgs "--existing-mod", "cucumber"
+			programArgs "--existing-mod", "farmersdelight"
+			programArgs "--existing-mod", "immersiveengineering"
 			programArgs "--existing-mod", "mysticalagriculture"
+			programArgs "--existing-mod", "pamhc2crops"
 		}
 	}
 }
