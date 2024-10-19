@@ -18,6 +18,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -241,12 +242,30 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 		}
 		AgriCrop crop = optional.get();
 		// TODO: @Ketheroth future: run plant pre logic
-		// run crop logic
+		// plant pre logic
+		if (crop.hasPlant()) {
+			Optional<InteractionResult> result = crop.getPlant().onRightClickPre(crop, player.getItemInHand(hand), player);
+			if (result.isPresent()) {
+				return result.get();
+			}
+		}
+		// crop logic
+		InteractionResult result = rightClickLogic(player.getItemInHand(hand), state, level, pos, player, hand, crop);
+		// plant post logic
+		if (crop.hasPlant()) {
+			Optional<InteractionResult> override = crop.getPlant().onRightClickPost(crop, player.getItemInHand(hand), player);
+			if (override.isPresent()) {
+				return override.get();
+			}
+		}
+		return result;
+	}
+
+	protected InteractionResult rightClickLogic(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, AgriCrop crop) {
 		// do nothing from off hand
 		if (hand == InteractionHand.OFF_HAND) {
 			return InteractionResult.PASS;
 		}
-		ItemStack heldItem = player.getItemInHand(hand);
 		// TODO: @Ketheroth replace with item tag
 		if (heldItem.is(ModItems.CLIPPER.get()) || heldItem.is(ModItems.IRON_RAKE.get()) || heldItem.is(ModItems.WOODEN_RAKE.get())) {
 			return InteractionResult.PASS;
@@ -257,6 +276,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 					InteractionResult result = fertilizer.applyFertilizer(level, pos, crop, heldItem, level.random, player);
 					if (result == InteractionResult.CONSUME || result == InteractionResult.SUCCESS) {
 						crop.onApplyFertilizer(fertilizer, level.random);
+						crop.getPlant().onFertilized(crop, heldItem, level.random);
 					}
 					return result;
 				}
@@ -375,7 +395,12 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			level.destroyBlock(pos, true);
 			return;
 		}
-		AgriApi.getCrop(level, pos).ifPresent(IAgriFertilizable::applyGrowthTick);
+		AgriApi.getCrop(level, pos).ifPresent(agriCrop -> {
+			if (agriCrop.hasPlant()) {
+				agriCrop.getPlant().onRandomTick(agriCrop, random);
+			}
+			agriCrop.applyGrowthTick();
+		});
 	}
 
 	@Override
@@ -383,6 +408,15 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 		AgriApi.getCrop(level, pos).ifPresent(crop -> {
 			if (crop.hasPlant()) {
 				crop.getPlant().spawnParticles(crop, random);
+			}
+		});
+	}
+
+	@Override
+	public void attack(BlockState state, Level level, BlockPos pos, Player player) {
+		AgriApi.getCrop(level, pos).ifPresent(crop -> {
+			if (crop.hasPlant()) {
+				crop.getPlant().onBroken(crop, player);
 			}
 		});
 	}
@@ -406,6 +440,16 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			}
 		}
 		return drops;
+	}
+
+	@Override
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+		super.entityInside(state, level, pos, entity);
+		AgriApi.getCrop(level, pos).ifPresent(crop -> {
+			if (crop.hasPlant()) {
+				crop.getPlant().onEntityCollision(crop, entity);
+			}
+		});
 	}
 
 	@Override

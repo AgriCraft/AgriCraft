@@ -44,6 +44,7 @@ public class ClipperItem extends Item {
 			for (ItemStack drop : drops) {
 				level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop));
 			}
+			crop.getPlant().onClipped(crop, context.getItemInHand(), player);
 			return InteractionResult.SUCCESS;
 		}).orElse(InteractionResult.FAIL);
 	}

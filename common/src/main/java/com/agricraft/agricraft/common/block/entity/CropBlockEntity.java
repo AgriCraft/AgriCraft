@@ -472,6 +472,7 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 		double b = this.level.random.nextDouble();
 		if (a > b) {
 			this.setGrowthStage(this.growthStage.getNext(this, this.level.random));
+			this.getPlant().onGrowth(this);
 		}
 	}
 
