@@ -15,6 +15,7 @@ import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.common.util.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.material.Fluids;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +67,7 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 			int lower = requirement.minLight() - (int) (requirement.lightToleranceFactor() * strength);
 			int upper = requirement.maxLight() + (int) (requirement.lightToleranceFactor() * strength);
 			return lower <= value && value <= upper ? AgriGrowthResponse.FERTILE : AgriGrowthResponse.INFERTILE;
-		}, (level, blockPos) -> level.getMaxLocalRawBrightness(blockPos.above()));
+		}, LevelReader::getMaxLocalRawBrightness);
 		block = new BaseGrowthCondition<>("block", (plant, strength, blockstate) -> {
 			List<AgriBlockCondition> blockConditions = plant.getGrowthRequirements().blockConditions();
 			if (blockConditions.isEmpty()) {
@@ -248,6 +250,11 @@ public class AgriGrowthConditionRegistry extends AgriRegistry<AgriGrowthConditio
 		@Override
 		public AgriGrowthResponse apply(AgriPlant plant, int strength, T value) {
 			return this.response.apply(plant, strength, value);
+		}
+
+		@Override
+		public void notMetDescription(Consumer<Component> consumer) {
+			consumer.accept(Component.translatable("agricraft.tooltip.condition." + this.id));
 		}
 
 	}

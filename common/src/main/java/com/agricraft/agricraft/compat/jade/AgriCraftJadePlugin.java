@@ -3,6 +3,7 @@ package com.agricraft.agricraft.compat.jade;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
+import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
@@ -49,8 +50,20 @@ public class AgriCraftJadePlugin implements IWailaPlugin {
 								.sorted(Comparator.comparing(p -> p.getGene().getId()))
 								.map(genePair -> Component.translatable("agricraft.tooltip.jade.stat." + genePair.getGene().getId(), genePair.getTrait()))
 								.forEach(iTooltip::add);
+
+						if (crop.getLevel().isClientSide) {
+							// somehow the sky brightness is not updated on tick on the client level
+							crop.getLevel().updateSkyBrightness();
+						}
 						AgriGrowthResponse response = crop.getFertilityResponse();
 						iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile")));
+						if (!response.isFertile()) {
+							// crop conditions
+							int strength = crop.getGenome().getStrength();
+							AgriGrowthConditionRegistry.getInstance().stream()
+									.filter(condition -> !condition.check(crop, crop.getLevel(), crop.getBlockPos(), strength).isFertile())
+									.forEach(condition -> condition.notMetDescription(iTooltip::add));
+						}
 					}
 				} else {
 					iTooltip.add(Component.translatable("agricraft.tooltip.magnifying.no_plant"));

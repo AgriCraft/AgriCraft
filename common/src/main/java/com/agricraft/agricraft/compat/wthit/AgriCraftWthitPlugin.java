@@ -3,6 +3,7 @@ package com.agricraft.agricraft.compat.wthit;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
+import com.agricraft.agricraft.api.requirement.AgriGrowthConditionRegistry;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import com.agricraft.agricraft.common.block.CropBlock;
@@ -43,6 +44,17 @@ public class AgriCraftWthitPlugin implements IWailaPlugin {
                                 .forEach(tooltip::addLine);
                         AgriGrowthResponse response = crop.getFertilityResponse();
                         tooltip.addLine(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile")));
+                        if (crop.getLevel().isClientSide) {
+                            // somehow the sky brightness is not updated on tick on the client level
+                            crop.getLevel().updateSkyBrightness();
+                        }
+                        if (!response.isFertile()) {
+                            // crop conditions
+                            int strength = crop.getGenome().getStrength();
+                            AgriGrowthConditionRegistry.getInstance().stream()
+                                    .filter(condition -> !condition.check(crop, crop.getLevel(), crop.getBlockPos(), strength).isFertile())
+                                    .forEach(condition -> condition.notMetDescription(tooltip::addLine));
+                        }
                     }
                 } else {
                     tooltip.addLine(Component.translatable("agricraft.tooltip.magnifying.no_plant"));
