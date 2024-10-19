@@ -45,7 +45,7 @@ public class AgriPlant {
 			Codec.BOOL.optionalFieldOf("fireproof", false).forGetter(plant -> plant.fireproof),
 			Codec.DOUBLE.fieldOf("spread_chance").forGetter(plant -> plant.spreadChance),
 			AgriProduct.CODEC.listOf().optionalFieldOf("products", List.of()).forGetter(plant -> plant.products),
-			AgriProduct.CODEC.listOf().optionalFieldOf("clipProducts", List.of()).forGetter(plant -> plant.clipProducts),
+			AgriProduct.CODEC.listOf().optionalFieldOf("clip_products", List.of()).forGetter(plant -> plant.clipProducts),
 			AgriRequirement.CODEC.fieldOf("requirement").forGetter(plant -> plant.requirement),
 			AgriPlantModifierInfo.CODEC.listOf().optionalFieldOf("modifiers", List.of()).forGetter(plant -> plant.modifierInfos),
 			AgriParticleEffect.CODEC.listOf().optionalFieldOf("particle_effects", List.of()).forGetter(plant -> plant.particleEffects)
