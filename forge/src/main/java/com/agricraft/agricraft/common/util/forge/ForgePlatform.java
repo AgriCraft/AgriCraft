@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -128,7 +129,7 @@ public class ForgePlatform extends Platform {
 
 	@Override
 	public void openMenu(ServerPlayer player, ExtraDataMenuProvider provider) {
-		player.openMenu(provider);
+		NetworkHooks.openScreen(player, provider, buf -> provider.writeExtraData(player, buf));
 	}
 
 	@Override
