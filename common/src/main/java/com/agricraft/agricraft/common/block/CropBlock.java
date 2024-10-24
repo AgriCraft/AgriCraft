@@ -316,9 +316,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 				return InteractionResult.CONSUME;
 			}
 		} else if (crop.hasPlant() && crop.canBeHarvested()) {
-			crop.getHarvestProducts(itemStack -> spawnItem(level, pos, itemStack));
-			crop.setGrowthStage(crop.getPlant().getGrowthStageAfterHarvest());
-			crop.getPlant().onHarvest(crop, player);
+			crop.harvest(itemStack -> spawnItem(level, pos, itemStack), player);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.FAIL;

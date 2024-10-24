@@ -4,6 +4,7 @@ import com.agricraft.agricraft.AgriCraft;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
+import com.agricraft.agricraft.api.config.CompatConfig;
 import com.agricraft.agricraft.api.config.CoreConfig;
 import com.agricraft.agricraft.api.fertilizer.AgriFertilizer;
 import com.agricraft.agricraft.api.plant.AgriPlant;
@@ -14,6 +15,8 @@ import com.agricraft.agricraft.common.handler.VanillaSeedConversion;
 import com.agricraft.agricraft.common.plugin.SereneSeasonPlugin;
 import com.agricraft.agricraft.common.util.Platform;
 import com.agricraft.agricraft.common.util.forge.ForgePlatform;
+import com.agricraft.agricraft.compat.botania.BotaniaPlugin;
+import com.agricraft.agricraft.compat.botania.ManaGrowthCondition;
 import com.agricraft.agricraft.plugin.minecraft.MinecraftPlugin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
@@ -35,6 +38,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.registries.DataPackRegistryEvent;
+import vazkii.botania.api.mana.ManaBlockType;
+import vazkii.botania.api.mana.ManaNetworkAction;
+import vazkii.botania.api.mana.ManaNetworkEvent;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -57,6 +63,14 @@ public class AgriCraftForge {
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftPlugin.init();
 //		SereneSeasonPlugin.init();
+		if (ModList.get().isLoaded("botania") && CompatConfig.enableBotania) {
+			BotaniaPlugin.init();
+			MinecraftForge.EVENT_BUS.addListener((ManaNetworkEvent e) -> {
+				if (e.getAction() == ManaNetworkAction.REMOVE && e.getType() == ManaBlockType.POOL) {
+					ManaGrowthCondition.removePoll(e.getReceiver());
+				}
+			});
+		}
 	}
 
 	public static void onRegisterDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {

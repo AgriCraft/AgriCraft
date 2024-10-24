@@ -74,7 +74,8 @@ dependencies {
 	modLocalRuntime "curse.maven:farmers-delight-398521:5051242" // Farmer's Delight 1.2.4 - 1.20.1
 	modLocalRuntime "curse.maven:patchouli-306770:4966125" // Patchouli-1.20.1-84-FORGE
 	modLocalRuntime "curse.maven:curios-309927:5680164" // curios-forge-5.10.0+1.20.1
-	modLocalRuntime "curse.maven:botania-225643:5594997" // Botania-1.20.1-446-FORGE
+	modImplementation("vazkii.botania:Botania:$botania_version-FORGE") { transitive = false }
+//	modLocalRuntime "curse.maven:botania-225643:5594997" // Botania-1.20.1-446-FORGE
 }
 
 shadowJar {

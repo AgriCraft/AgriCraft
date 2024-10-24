@@ -636,5 +636,7 @@ public class LangDatagen {
 		lang.add("description.agricraft.botania.red_mystical_flower", "A beautiful flower with a sanguine color.");
 		lang.add("description.agricraft.botania.white_mystical_flower", "A purely divine flower.");
 		lang.add("description.agricraft.botania.yellow_mystical_flower", "Almost as bad as ragweed.");
+
+		lang.add("agricraft.tooltip.condition.botania_mana", "This plant can not grow without mana");
 	}
 }

@@ -196,6 +196,9 @@
   "config.agricraft.stats.mutativity_min": "Min Mutativity",
   "config.agricraft.stats.mutativity_max": "Max Mutativity",
   "config.agricraft.stats.mutativity_hidden": "Hide Mutativity",
+  "config.agricraft.compat": "Mod compatibilities",
+  "config.agricraft.compat.botania": "Enable Botania compat",
+  "config.agricraft.compat.mysticalagriculture": "Enable Mystical Agriculture compat",
 
   "agricraft.message.clipping_impossible": "There is nothing worth clipping here.",
   "agricraft.message.trowel_weed": "I can not reach well, I should remove the weeds first.",
@@ -382,8 +385,14 @@
 
   "agricraft.datapacks.biomesoplenty": "Biomes O'Plenty extra crops (data)",
   "agricraft.resourcepacks.biomesoplenty": "Biomes O'Plenty extra crops (resources)",
+  "agricraft.datapacks.botania": "Botania extra crops (data)",
+  "agricraft.resourcepacks.botania": "Botania extra crops (resources)",
+  "agricraft.datapacks.farmersdelight": "Farmer's Delight extra crops (data)",
+  "agricraft.resourcepacks.farmersdelight": "Farmer's Delight extra crops (resources)",
   "agricraft.datapacks.immersiveengineering": "Immersive Engineering extra crops (data)",
   "agricraft.resourcepacks.immersiveengineering": "Immersive Engineering extra crops (resources)",
+  "agricraft.datapacks.mysticalagriculture": "Mystical Agriculture extra crops (data)",
+  "agricraft.resourcepacks.mysticalagriculture": "Mystical Agriculture extra crops (resources)",
   "agricraft.datapacks.pamhc2crops": "Pam's HarvestCraft 2 - Crops extra crops (data)",
   "agricraft.resourcepacks.pamhc2crops": "Pam's HarvestCraft 2 - Crops extra crops (resources)"
 }

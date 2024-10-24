@@ -1,5 +1,6 @@
 package com.agricraft.agricraft.datagen;
 
+import com.agricraft.agricraft.common.registry.ModBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
+import vazkii.botania.common.lib.BotaniaTags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -96,5 +98,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         this.tag(TagKey.create(Registries.BLOCK, new ResourceLocation("agricraft:ores/tin")))
                 .addOptionalTag(new ResourceLocation("c:tin_ores"))
                 .addOptionalTag(new ResourceLocation("forge:ores/tin"));
+
+        this.tag(BotaniaTags.Blocks.AGRICARNATION_GROWTH_CANDIDATE)
+                .add(ModBlocks.CROP.get());
     }
 }

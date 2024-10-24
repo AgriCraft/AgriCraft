@@ -9,10 +9,12 @@ import com.agricraft.agricraft.api.plant.AgriWeed;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.api.stat.AgriStatRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -55,6 +57,13 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	AgriGrowthStage getGrowthStage();
 
 	/**
+	 * Change the growth stage of the crop
+	 *
+	 * @param stage the new stage value
+	 */
+	void setGrowthStage(AgriGrowthStage stage);
+
+	/**
 	 * @return the id of the weed or an empty string if there is no weed
 	 */
 	String getWeedId();
@@ -68,13 +77,6 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	 * @return the growth stage of the weed.
 	 */
 	AgriGrowthStage getWeedGrowthStage();
-
-	/**
-	 * Change the growth stage of the crop
-	 *
-	 * @param stage the new stage value
-	 */
-	void setGrowthStage(AgriGrowthStage stage);
 
 	/**
 	 * Change the growth stage of the weed
@@ -124,6 +126,23 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	Optional<AgriSoil> getSoil();
 
 	/**
+	 * Harvests the crop.
+	 *
+	 * @param consumer a consumer that accepts the items that were harvested
+	 * @param entity   the entity which harvests the crop, may be null if it is harvested by automation.
+	 * @return true if it was harvested, false otherwise
+	 */
+	default boolean harvest(Consumer<ItemStack> consumer, @Nullable LivingEntity entity) {
+		if (this.canBeHarvested()) {
+			this.getHarvestProducts(consumer);
+			this.setGrowthStage(this.getPlant().getGrowthStageAfterHarvest());
+			this.getPlant().onHarvest(this, entity);
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Retrieve the products that would be produced upon harvesting this crop.
 	 *
 	 * @param addToHarvest a consumer that accepts the items that were harvested.
@@ -134,7 +153,7 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	 * Retrieve the products that would be produced upon clipping this crop.
 	 *
 	 * @param addToClipping a consumer that accepts the items that were clipped.
-	 * @param clipper the itemstack representing the clipper
+	 * @param clipper       the itemstack representing the clipper
 	 */
 	void getClippingProducts(Consumer<ItemStack> addToClipping, ItemStack clipper);
 
@@ -156,9 +175,8 @@ public interface AgriCrop extends AgriGenomeProvider, IAgriFertilizable {
 	}
 
 	/**
-	 *
 	 * @param weedId the id of the inserted weed
-	 * @param weed the weed to insert on the crop
+	 * @param weed   the weed to insert on the crop
 	 */
 	void setWeed(String weedId, AgriWeed weed);
 
