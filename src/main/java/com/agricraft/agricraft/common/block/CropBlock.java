@@ -3,7 +3,6 @@ package com.agricraft.agricraft.common.block;
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.agricraft.agricraft.api.crop.AgriCrop;
-import com.agricraft.agricraft.api.fertilizer.IAgriFertilizable;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.client.ClientUtil;
 import com.agricraft.agricraft.common.block.entity.CropBlockEntity;
@@ -13,7 +12,6 @@ import com.agricraft.agricraft.common.registry.AgriItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -33,17 +31,13 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
@@ -64,7 +58,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @SuppressWarnings("deprecation")
-public class CropBlock extends Block implements EntityBlock, BonemealableBlock, BucketPickup, LiquidBlockContainer {
+public class CropBlock extends Block implements EntityBlock, BonemealableBlock, SimpleFluidloggedBlock {
 
 	public static final VoxelShape SINGLE_STICKS = Stream.of(
 			Block.box(2, -3, 2, 3, 14, 3),
@@ -93,9 +87,19 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 				.noOcclusion()
 				.forceSolidOff()
 				.noTerrainParticles()
-				.lightLevel(blockState -> blockState.getValue(LIGHT))
+				.lightLevel(blockState -> {
+					int light = blockState.getValue(LIGHT);
+					if (blockState.getValue(LAVALOGGED)) {
+						int lava = Blocks.LAVA.defaultBlockState().getLightEmission();
+						if (lava > light) {
+							return lava;
+						}
+					}
+					return light;
+				})
 				.sound(SoundType.CROP));
-		this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false)
+		this.registerDefaultState(this.stateDefinition.any().setValue(LAVALOGGED, false)
+				.setValue(WATERLOGGED, false)
 				.setValue(STICK_VARIANT, CropStickVariant.WOODEN)
 				.setValue(CROP_STATE, CropState.SINGLE_STICKS)
 				.setValue(LIGHT, 0));
@@ -156,11 +160,11 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(BlockStateProperties.WATERLOGGED);
+		builder.add(LAVALOGGED);
+		builder.add(WATERLOGGED);
 		builder.add(STICK_VARIANT);
 		builder.add(CROP_STATE);
 		builder.add(LIGHT);
-		// TODO: @Ketheroth add lavalogged property
 	}
 
 	@Override
@@ -197,8 +201,10 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		BlockState state = this.defaultBlockState();
-		if (context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER)) {
-			state = state.setValue(BlockStateProperties.WATERLOGGED, true);
+		if (context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.LAVA)) {
+			state = state.setValue(LAVALOGGED, true);
+		} else if (context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER)) {
+			state = state.setValue(WATERLOGGED, true);
 		}
 		ItemStack stack = context.getItemInHand();
 		if (stack.getItem() instanceof CropSticksItem) {
@@ -223,7 +229,13 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 	@Override
 	@NotNull
 	public FluidState getFluidState(BlockState pState) {
-		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(pState);
+		if (pState.getValue(LAVALOGGED)) {
+			return Fluids.LAVA.getSource(false);
+		}
+		if (pState.getValue(WATERLOGGED)) {
+			return Fluids.WATER.getSource(false);
+		}
+		return super.getFluidState(pState);
 	}
 
 	@Override
@@ -299,7 +311,9 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 					ItemInteractionResult result = fertilizer.applyFertilizer(level, pos, crop, heldItem, level.random, player);
 					if (result == ItemInteractionResult.CONSUME || result == ItemInteractionResult.SUCCESS) {
 						crop.onApplyFertilizer(fertilizer, level.random);
-						crop.getPlant().onFertilized(crop, heldItem, level.random);
+						if (crop.hasPlant()) {
+							crop.getPlant().onFertilized(crop, heldItem, level.random);
+						}
 					}
 					return result;
 				}
@@ -349,37 +363,21 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	protected void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
-		if (!level.isClientSide) {
-			// nothing on server
-			return;
-		}
-		if (level.getBlockEntity(pos) instanceof AgriCrop crop) {
-			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-			CropState cropState = state.getValue(CROP_STATE);
-			if (cropState.hasSticks()) {
-				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos);
-			}
-			if (crop.hasPlant()) {
-				String plantModelId = crop.getPlantId().toString().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
-				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos);
-			}
-		}
+		this.spawnDestroyParticles(level, state, pos);
 	}
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+		if (state.getValue(LAVALOGGED)) {
+			level.scheduleTick(pos, Fluids.LAVA, Fluids.LAVA.getTickDelay(level));
+		} else if (state.getValue(WATERLOGGED)) {
 			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 		if (!state.canSurvive(level, pos)) {
-			if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop && crop.hasPlant()) {
-				// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
-				String plant = crop.getPlantId().toString().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
-				if (level.isClientSide()) {
-					ClientUtil.spawnParticlesForPlant(plant, level, state, pos);
-				}
-			}
-			if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+			this.spawnDestroyParticles(level, state, pos);
+			if (state.getValue(LAVALOGGED)) {
+				return Fluids.LAVA.defaultFluidState().createLegacyBlock();
+			} else if (state.getValue(WATERLOGGED)) {
 				return Fluids.WATER.defaultFluidState().createLegacyBlock();
 			}
 			return Blocks.AIR.defaultBlockState();
@@ -414,13 +412,17 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 
 	@Override
 	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (state.getValue(STICK_VARIANT) == CropStickVariant.WOODEN && level.getFluidState(pos).is(Fluids.LAVA)) {
+			this.spawnDestroyParticles(level, state, pos);
+			level.destroyBlock(pos, true);
+			return;
+		}
 		AgriApi.get().getCrop(level, pos).ifPresent(agriCrop -> {
 			if (agriCrop.hasPlant()) {
 				agriCrop.getPlant().onRandomTick(agriCrop, random);
 			}
 			agriCrop.applyGrowthTick();
 		});
-
 	}
 
 	@Override
@@ -477,45 +479,6 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 	}
 
 	@Override
-	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state) {
-		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
-			level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, false), 3);
-			return Fluids.WATER.getBucket().getDefaultInstance();
-		}
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public Optional<SoundEvent> getPickupSound(BlockState state) {
-		if (state.getValue(BlockStateProperties.WATERLOGGED)) {
-			return Fluids.WATER.getPickupSound();
-		}
-		return Fluids.WATER.getPickupSound();
-	}
-
-	@Override
-	public Optional<SoundEvent> getPickupSound() {
-		return Optional.empty();
-	}
-
-	@Override
-	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
-		return !state.getValue(BlockStateProperties.WATERLOGGED);
-	}
-
-	@Override
-	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState state, FluidState fluidState) {
-		if (this.canPlaceLiquid(null, level, pos, state, fluidState.getType()) && fluidState.getType() == Fluids.WATER) {
-			if (!level.isClientSide()) {
-				level.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, true), 3);
-				level.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(level));
-			}
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public boolean isSignalSource(BlockState state) {
 		return state.getValue(CROP_STATE).hasPlant();
 	}
@@ -543,6 +506,20 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			}
 			return 0;
 		}).orElse(0) : 0;
+	}
+
+	private void spawnDestroyParticles(LevelAccessor level, BlockState state, BlockPos pos) {
+		if (level.isClientSide() && level.getBlockEntity(pos) instanceof AgriCrop crop) {
+			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
+			CropState cropState = state.getValue(CROP_STATE);
+			if (cropState.hasSticks()) {
+				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos);
+			}
+			if (crop.hasPlant()) {
+				String plantModelId = crop.getPlantId().toString().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
+				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos);
+			}
+		}
 	}
 
 }

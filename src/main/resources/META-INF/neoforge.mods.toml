@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[4,)"
 license="MIT"
-issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues/"
+issueTrackerURL="https://github.com/AgriCraft/AgriCraft/issues"
 
 [[mods]]
 modId="agricraft"
@@ -28,7 +28,6 @@ side="BOTH"
 [[dependencies.agricraft]]
 modId = "minecraft"
 type="required"
-versionRange = "[1.21,)"
+versionRange = "[1.21,1.21.1]"
 ordering = "NONE"
 side = "BOTH"
-

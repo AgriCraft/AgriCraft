@@ -30,7 +30,7 @@ public interface AgriRegistries {
 	DeferredRegister.Items ITEMS = DeferredRegister.createItems(AgriApi.MOD_ID);
 	DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AgriApi.MOD_ID);
 	DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, AgriApi.MOD_ID);
-	DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(AgriApi.MOD_ID);
+	DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, AgriApi.MOD_ID);
 	DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, AgriApi.MOD_ID);
 	DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, AgriApi.MOD_ID);
 	DeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLOBAL_LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, AgriApi.MOD_ID);

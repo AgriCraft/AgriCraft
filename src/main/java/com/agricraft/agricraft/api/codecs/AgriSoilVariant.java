@@ -15,7 +15,7 @@ public record AgriSoilVariant(ExtraCodecs.TagOrElementLocation block, List<Strin
 
 	public static final Codec<AgriSoilVariant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("block").forGetter(variant -> variant.block),
-			Codec.STRING.listOf().comapFlatMap(AgriSoilVariant::readStates, list -> list).optionalFieldOf("states").forGetter(variant -> variant.states.isEmpty() ? Optional.empty() : Optional.of(variant.states))
+			Codec.STRING.listOf().comapFlatMap(AgriSoilVariant::readStates, list -> list).optionalFieldOf("states", List.of()).forGetter(variant -> variant.states)
 	).apply(instance, AgriSoilVariant::new));
 
 	public AgriSoilVariant(ExtraCodecs.TagOrElementLocation block, Optional<List<String>> states) {

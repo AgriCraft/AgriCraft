@@ -12,7 +12,7 @@ public record AgriListCondition(List<ResourceLocation> values, boolean blacklist
 	public static final Codec<AgriListCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ResourceLocation.CODEC.listOf().fieldOf("values").forGetter(listCondition -> listCondition.values),
 			Codec.BOOL.fieldOf("blacklist").forGetter(listCondition -> listCondition.blacklist),
-			Codec.INT.optionalFieldOf("ignore_from_strength").forGetter(listCondition -> listCondition.ignoreFromStrength == -1 ? Optional.empty() : Optional.of(listCondition.ignoreFromStrength))
+			Codec.INT.optionalFieldOf("ignore_from_strength", -1).forGetter(listCondition -> listCondition.ignoreFromStrength)
 	).apply(instance, AgriListCondition::new));
 
 	public static final AgriListCondition EMPTY = new AgriListCondition(List.of(), true, 11);

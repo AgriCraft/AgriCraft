@@ -7,16 +7,20 @@ import com.agricraft.agricraft.api.codecs.AgriSoilValue;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SoilGrowthCondition<T extends AgriSoilValue> implements AgriGrowthCondition<T> {
 
+	private final String id;
 	private final Function<AgriRequirement, AgriSoilCondition<T>> conditionGetter;
 	private final Function<AgriSoil, T> valueGetter;
 
-	public SoilGrowthCondition(Function<AgriRequirement, AgriSoilCondition<T>> conditionGetter, Function<AgriSoil, T> valueGetter) {
+	public SoilGrowthCondition(String id, Function<AgriRequirement, AgriSoilCondition<T>> conditionGetter, Function<AgriSoil, T> valueGetter) {
+		this.id = id;
 		this.conditionGetter = conditionGetter;
 		this.valueGetter = valueGetter;
 	}
@@ -40,6 +44,11 @@ public class SoilGrowthCondition<T extends AgriSoilValue> implements AgriGrowthC
 	public AgriGrowthResponse apply(AgriPlant plant, int strength, AgriSoilValue value) {
 		AgriSoilCondition<T> condition = this.conditionGetter.apply(plant.getGrowthRequirements());
 		return response(strength, value, condition);
+	}
+
+	@Override
+	public void notMetDescription(Consumer<Component> consumer) {
+		consumer.accept(Component.translatable("agricraft.tooltip.condition." + this.id));
 	}
 
 }

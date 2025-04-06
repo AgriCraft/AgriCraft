@@ -1,8 +1,8 @@
 package com.agricraft.agricraft.common.registry;
 
-import com.agricraft.agricraft.api.registries.AgriCraftGenes;
 import com.agricraft.agricraft.api.genetic.GeneSpecies;
 import com.agricraft.agricraft.api.genetic.GeneStat;
+import com.agricraft.agricraft.api.registries.AgriCraftGenes;
 import com.agricraft.agricraft.api.registries.AgriCraftStats;
 import org.jetbrains.annotations.ApiStatus;
 

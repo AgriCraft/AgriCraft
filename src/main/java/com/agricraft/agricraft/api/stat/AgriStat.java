@@ -1,8 +1,8 @@
 package com.agricraft.agricraft.api.stat;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.genetic.GeneStat;
 import com.agricraft.agricraft.api.LangUtils;
+import com.agricraft.agricraft.api.genetic.GeneStat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;

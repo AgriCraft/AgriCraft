@@ -25,6 +25,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
@@ -54,7 +55,9 @@ public class AgriCraft {
 		NeoForge.EVENT_BUS.addListener(AgriCraft::onRegisterCommands);
 		NeoForge.EVENT_BUS.addListener(AgriCraft::onRightClick);
 		modContainer.registerConfig(ModConfig.Type.COMMON, AgriCraftConfig.SPEC);
-		modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+		if (FMLEnvironment.dist.isClient()) {
+			modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+		}
 	}
 
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -103,7 +106,7 @@ public class AgriCraft {
 			}
 		} catch (IOException ignored) {
 		}
-		Pack pack = Pack.readMetaAndCreate(packLocationInfo, resources, packType, new PackSelectionConfig(false, Pack.Position.TOP, false));
+		Pack pack = Pack.readMetaAndCreate(packLocationInfo, resources, packType, new PackSelectionConfig(AgriCraftConfig.REGISTER_PACKS_BY_DEFAULT.get(), Pack.Position.TOP, false));
 		if (pack != null) {
 			event.addRepositorySource(packConsumer -> packConsumer.accept(pack));
 		}

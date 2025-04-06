@@ -1,13 +1,13 @@
 package com.agricraft.agricraft.client.tools.journal.drawers;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.codecs.AgriSoilCondition;
 import com.agricraft.agricraft.api.codecs.AgriSoilValue;
 import com.agricraft.agricraft.api.requirement.AgriSeason;
 import com.agricraft.agricraft.api.tools.journal.JournalData;
 import com.agricraft.agricraft.api.tools.journal.JournalPageDrawer;
 import com.agricraft.agricraft.common.item.journal.GrowthReqsPage;
-import com.agricraft.agricraft.api.LangUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

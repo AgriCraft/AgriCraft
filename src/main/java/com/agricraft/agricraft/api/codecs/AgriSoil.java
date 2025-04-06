@@ -1,9 +1,9 @@
 package com.agricraft.agricraft.api.codecs;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.TagUtils;
+import com.agricraft.agricraft.api.tools.magnifying.MagnifyingInspectable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateHolder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

@@ -24,11 +24,11 @@ public record AgriRequirement(AgriSoilCondition<AgriSoilCondition.Humidity> soil
 			Codec.INT.fieldOf("min_light").forGetter(requirement -> requirement.minLight),
 			Codec.INT.fieldOf("max_light").forGetter(requirement -> requirement.maxLight),
 			Codec.DOUBLE.fieldOf("light_tolerance_factor").forGetter(requirement -> requirement.lightToleranceFactor),
-			AgriListCondition.CODEC.optionalFieldOf("biomes").forGetter(requirement -> requirement.biomes.isEmpty() ? Optional.empty() : Optional.of(requirement.biomes)),
-			AgriListCondition.CODEC.optionalFieldOf("dimensions").forGetter(requirement -> requirement.dimensions.isEmpty() ? Optional.empty() : Optional.of(requirement.dimensions)),
-			AgriSeason.CODEC.listOf().optionalFieldOf("seasons").forGetter(requirement -> requirement.seasons.isEmpty() ? Optional.empty() : Optional.of(requirement.seasons)),
-			AgriBlockCondition.CODEC.listOf().optionalFieldOf("block_conditions").forGetter(requirement -> requirement.blockConditions.isEmpty() ? Optional.empty() : Optional.of(requirement.blockConditions)),
-			AgriFluidCondition.CODEC.optionalFieldOf("fluid_condition").forGetter(requirement -> requirement.fluidCondition.isEmpty() ? Optional.empty() : Optional.of(requirement.fluidCondition))
+			AgriListCondition.CODEC.optionalFieldOf("biomes", AgriListCondition.EMPTY).forGetter(requirement -> requirement.biomes),
+			AgriListCondition.CODEC.optionalFieldOf("dimensions", AgriListCondition.EMPTY).forGetter(requirement -> requirement.dimensions),
+			AgriSeason.CODEC.listOf().optionalFieldOf("seasons", List.of()).forGetter(requirement -> requirement.seasons),
+			AgriBlockCondition.CODEC.listOf().optionalFieldOf("block_conditions", List.of()).forGetter(requirement -> requirement.blockConditions),
+			AgriFluidCondition.CODEC.optionalFieldOf("fluid_condition", AgriFluidCondition.EMPTY).forGetter(requirement -> requirement.fluidCondition)
 	).apply(instance, AgriRequirement::new));
 
 	public static final AgriRequirement NO_REQUIREMENT = AgriRequirement.builder()

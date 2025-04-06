@@ -1,8 +1,8 @@
 package com.agricraft.agricraft.compat.jei;
 
 import com.agricraft.agricraft.api.AgriClientApi;
-import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.LangUtils;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;

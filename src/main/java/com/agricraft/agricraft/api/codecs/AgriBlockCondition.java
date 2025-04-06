@@ -13,7 +13,7 @@ public record AgriBlockCondition(ExtraCodecs.TagOrElementLocation block, List<St
 
 	public static final Codec<AgriBlockCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("block").forGetter(blockCondition -> blockCondition.block),
-			Codec.STRING.listOf().comapFlatMap(AgriBlockCondition::readStates, list -> list).optionalFieldOf("states").forGetter(blockCondition -> blockCondition.states.isEmpty() ? Optional.empty() : Optional.of(blockCondition.states)),
+			Codec.STRING.listOf().comapFlatMap(AgriBlockCondition::readStates, list -> list).optionalFieldOf("states", List.of()).forGetter(blockCondition -> blockCondition.states),
 			Codec.INT.fieldOf("strength").forGetter(blockCondition -> blockCondition.strength)
 	).apply(instance, AgriBlockCondition::new));
 

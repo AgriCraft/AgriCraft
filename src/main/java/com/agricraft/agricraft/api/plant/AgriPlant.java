@@ -49,14 +49,15 @@ public class AgriPlant {
 			Codec.DOUBLE.fieldOf("growth_chance").forGetter(plant -> plant.growthChance),
 			Codec.DOUBLE.fieldOf("growth_bonus").forGetter(plant -> plant.growthBonus),
 			Codec.BOOL.fieldOf("cloneable").forGetter(plant -> plant.cloneable),
+			Codec.BOOL.optionalFieldOf("fireproof", false).forGetter(plant -> plant.fireproof),
 			Codec.DOUBLE.fieldOf("spread_chance").forGetter(plant -> plant.spreadChance),
-			Codec.DOUBLE.optionalFieldOf("seed_drop_chance").forGetter(plant -> plant.seedDropChance == 1.0 ? Optional.empty() : Optional.of(plant.seedDropChance)),
-			Codec.DOUBLE.optionalFieldOf("seed_drop_bonus").forGetter(plant -> plant.seedDropBonus == 0.0 ? Optional.empty() : Optional.of(plant.seedDropBonus)),
-			AgriProduct.CODEC.listOf().optionalFieldOf("products").forGetter(plant -> plant.products.isEmpty() ? Optional.empty() : Optional.of(plant.products)),
-			AgriProduct.CODEC.listOf().optionalFieldOf("clipProducts").forGetter(plant -> plant.clipProducts.isEmpty() ? Optional.empty() : Optional.of(plant.clipProducts)),
+			Codec.DOUBLE.optionalFieldOf("seed_drop_chance", 1.0).forGetter(plant -> plant.seedDropChance),
+			Codec.DOUBLE.optionalFieldOf("seed_drop_bonus", 0.0).forGetter(plant -> plant.seedDropBonus),
+			AgriProduct.CODEC.listOf().optionalFieldOf("products", List.of()).forGetter(plant -> plant.products),
+			AgriProduct.CODEC.listOf().optionalFieldOf("clipProducts", List.of()).forGetter(plant -> plant.clipProducts),
 			AgriRequirement.CODEC.fieldOf("requirement").forGetter(plant -> plant.requirement),
-			AgriPlantModifierInfo.CODEC.listOf().optionalFieldOf("modifiers").forGetter(plant -> plant.modifierInfos.isEmpty() ? Optional.empty() : Optional.of(plant.modifierInfos)),
-			AgriParticleEffect.CODEC.listOf().optionalFieldOf("particle_effects").forGetter(plant -> plant.particleEffects.isEmpty() ? Optional.empty() : Optional.of(plant.particleEffects))
+			AgriPlantModifierInfo.CODEC.listOf().optionalFieldOf("modifiers", List.of()).forGetter(plant -> plant.modifierInfos),
+			AgriParticleEffect.CODEC.listOf().optionalFieldOf("particle_effects", List.of()).forGetter(plant -> plant.particleEffects)
 	).apply(instance, AgriPlant::new));
 
 	public static final AgriPlant NO_PLANT = new AgriPlant.Builder().harvest(0).chances(0, 0, 0).build();
@@ -69,6 +70,7 @@ public class AgriPlant {
 	private final double growthChance;
 	private final double growthBonus;
 	private final boolean cloneable;
+	private final boolean fireproof;
 	private final double spreadChance;
 	private final double seedDropChance;
 	private final double seedDropBonus;
@@ -80,7 +82,7 @@ public class AgriPlant {
 	private List<IAgriPlantModifier> modifiers;
 
 	public AgriPlant(List<String> mods, List<AgriSeed> seeds, List<Integer> stages,
-	                 int harvestStage, double growthChance, double growthBonus, boolean cloneable,
+	                 int harvestStage, double growthChance, double growthBonus, boolean cloneable, boolean fireproof,
 	                 double spreadChance, double seedDropChance, double seedDropBonus,
 	                 List<AgriProduct> products, List<AgriProduct> clipProducts, AgriRequirement requirement,
 	                 List<AgriPlantModifierInfo> modifierInfos, List<AgriParticleEffect> particleEffects) {
@@ -91,6 +93,7 @@ public class AgriPlant {
 		this.growthChance = growthChance;
 		this.growthBonus = growthBonus;
 		this.cloneable = cloneable;
+		this.fireproof = fireproof;
 		this.spreadChance = spreadChance;
 		this.seedDropChance = seedDropChance;
 		this.seedDropBonus = seedDropBonus;
@@ -102,11 +105,11 @@ public class AgriPlant {
 	}
 
 	public AgriPlant(List<String> mods, List<AgriSeed> seeds, List<Integer> stages, int harvestStage,
-	                 double growthChance, double growthBonus, boolean cloneable, double spreadChance,
+	                 double growthChance, double growthBonus, boolean cloneable, boolean fireproof, double spreadChance,
 	                 Optional<Double> seedDropChance, Optional<Double> seedDropBonus,
 	                 Optional<List<AgriProduct>> products, Optional<List<AgriProduct>> clipProducts, AgriRequirement requirement,
 	                 Optional<List<AgriPlantModifierInfo>> modifierInfos, Optional<List<AgriParticleEffect>> particleEffects) {
-		this(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable,
+		this(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, fireproof,
 				spreadChance, seedDropChance.orElse(1.0), seedDropBonus.orElse(0.0),
 				products.orElse(List.of()), clipProducts.orElse(List.of()), requirement,
 				modifierInfos.orElse(List.of()), particleEffects.orElse(List.of()));
@@ -204,6 +207,10 @@ public class AgriPlant {
 
 	public boolean allowsCloning(AgriGrowthStage growthStage) {
 		return this.cloneable;
+	}
+
+	public boolean isFireproof() {
+		return this.fireproof;
 	}
 
 	public void spawnParticles(AgriCrop crop, RandomSource random) {
@@ -334,6 +341,7 @@ public class AgriPlant {
 				Double.doubleToLongBits(this.growthChance) == Double.doubleToLongBits(that.growthChance) &&
 				Double.doubleToLongBits(this.growthBonus) == Double.doubleToLongBits(that.growthBonus) &&
 				this.cloneable == that.cloneable &&
+				this.fireproof == that.fireproof &&
 				Double.doubleToLongBits(this.spreadChance) == Double.doubleToLongBits(that.spreadChance) &&
 				Objects.equals(this.products, that.products) &&
 				Objects.equals(this.clipProducts, that.clipProducts) &&
@@ -344,7 +352,7 @@ public class AgriPlant {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, products, clipProducts, requirement, modifierInfos, particleEffects);
+		return Objects.hash(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, fireproof, spreadChance, products, clipProducts, requirement, modifierInfos, particleEffects);
 	}
 
 	@Override
@@ -357,6 +365,7 @@ public class AgriPlant {
 				"growthChance=" + growthChance + ", " +
 				"growthBonus=" + growthBonus + ", " +
 				"cloneable=" + cloneable + ", " +
+				"fireproof=" + fireproof + ", " +
 				"spreadChance=" + spreadChance + ", " +
 				"products=" + products + ", " +
 				"clipProducts=" + clipProducts + ", " +
@@ -378,6 +387,7 @@ public class AgriPlant {
 		double seedDropChance = 1.0;
 		double seedDropBonus = 0.0;
 		boolean cloneable = true;
+		boolean fireproof = false;
 		List<AgriProduct> products = new ArrayList<>();
 		List<AgriProduct> clipProducts = new ArrayList<>();
 		AgriRequirement requirement = AgriRequirement.NO_REQUIREMENT;
@@ -391,6 +401,7 @@ public class AgriPlant {
 					.harvest(plant.harvestStage)
 					.chances(plant.growthChance, plant.growthBonus, plant.spreadChance)
 					.cloneable(plant.cloneable)
+					.fireproof(plant.fireproof)
 					.products(plant.products.toArray(new AgriProduct[0]))
 					.clips(plant.clipProducts.toArray(new AgriProduct[0]))
 					.requirement(plant.requirement)
@@ -399,7 +410,7 @@ public class AgriPlant {
 		}
 
 		public AgriPlant build() {
-			return new AgriPlant(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, spreadChance, seedDropChance, seedDropBonus, products, clipProducts, requirement, modifiers, particleEffects);
+			return new AgriPlant(mods, seeds, stages, harvestStage, growthChance, growthBonus, cloneable, fireproof, spreadChance, seedDropChance, seedDropBonus, products, clipProducts, requirement, modifiers, particleEffects);
 		}
 
 		public Builder mods(String... mods) {
@@ -451,6 +462,11 @@ public class AgriPlant {
 
 		public Builder cloneable(boolean cloneable) {
 			this.cloneable = cloneable;
+			return this;
+		}
+
+		public Builder fireproof(boolean fireproof) {
+			this.fireproof = fireproof;
 			return this;
 		}
 

@@ -2,12 +2,9 @@ package com.agricraft.agricraft.api.codecs;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
-
-import java.util.Optional;
 
 // TODO: @Ketheroth convert nbt to component ?
 public record AgriProduct(ExtraCodecs.TagOrElementLocation item/*, CompoundTag nbt*/, int min, int max, double chance,

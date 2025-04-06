@@ -1,12 +1,12 @@
 package com.agricraft.agricraft.common.commands;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.registries.AgriCraftGenes;
 import com.agricraft.agricraft.api.genetic.AgriGene;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
 import com.agricraft.agricraft.api.genetic.Chromosome;
 import com.agricraft.agricraft.api.genetic.GeneStat;
 import com.agricraft.agricraft.api.plant.AgriPlant;
+import com.agricraft.agricraft.api.registries.AgriCraftGenes;
 import com.agricraft.agricraft.api.stat.AgriStat;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
 import com.mojang.brigadier.CommandDispatcher;
@@ -71,19 +71,25 @@ public class GiveSeedCommand {
 	}
 
 	public static int giveSeed(CommandSourceStack source, ResourceLocation plant) {
+		if (!source.isPlayer()) {
+			return 0;
+		}
 		Optional<AgriPlant> optional = AgriApi.get().getPlant(plant, source.getLevel().registryAccess());
 		if (optional.isEmpty()) {
 			return 0;
 		}
 		ItemStack itemStack = AgriSeedItem.toStack(optional.get());
 		if (giveItemStack(itemStack, source.getPlayer(), source.getLevel())) {
-			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_default", plant), true);
+			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_default", plant.toString()), true);
 			return 1;
 		}
 		return 0;
 	}
 
 	public static int giveSeed(CommandSourceStack source, ResourceLocation plant, int value) {
+		if (!source.isPlayer()) {
+			return 0;
+		}
 		List<Chromosome<?>> chromosomes = new ArrayList<>();
 		chromosomes.add(AgriCraftGenes.SPECIES.get().chromosome(plant.toString()));
 		AgriApi.get().getStatRegistry().stream()
@@ -94,13 +100,16 @@ public class GiveSeedCommand {
 		AgriGenome genome = new AgriGenome(chromosomes);
 		ItemStack itemStack = AgriSeedItem.toStack(genome);
 		if (giveItemStack(itemStack, source.getPlayer(), source.getLevel())) {
-			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_all", plant, value), true);
+			source.sendSuccess(() -> Component.translatable("agricraft.command.seed_all", plant.toString(), value), true);
 			return 1;
 		}
 		return 0;
 	}
 
 	private static int giveSeed(CommandSourceStack source, ResourceLocation plant, String distincts) {
+		if (!source.isPlayer()) {
+			return 0;
+		}
 		List<GeneStat> genes = AgriApi.get().getStatRegistry().stream()
 				.sorted(Comparator.comparing(AgriStat::getId))
 				.map(AgriStat::getGene)

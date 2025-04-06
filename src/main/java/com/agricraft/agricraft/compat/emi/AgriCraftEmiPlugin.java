@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.compat.emi;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.common.registry.AgriDataComponents;
 import com.agricraft.agricraft.common.registry.AgriItems;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
@@ -26,6 +27,19 @@ public class AgriCraftEmiPlugin implements EmiPlugin {
 	public static final EmiRecipeCategory PRODUCE_CATEGORY = new EmiRecipeCategory(ResourceLocation.fromNamespaceAndPath("agricraft", "produce"), WOODEN_CROP_STICK);
 	public static final EmiRecipeCategory CLIPPING_CATEGORY = new EmiRecipeCategory(ResourceLocation.fromNamespaceAndPath("agricraft", "clipping"), CLIPPER);
 	public static final EmiRecipeCategory REQUIREMENT_CATEGORY = new EmiRecipeCategory(ResourceLocation.fromNamespaceAndPath("agricraft", "requirement"), FARMLAND);
+
+	public static final Comparison COMPARE_SEEDS = Comparison.compareData(stack -> {
+		var genome = stack.get(AgriDataComponents.GENOME.get());
+		if (genome != null) {
+			return genome.species().trait();
+		} else {
+			return "unknown";
+		}
+	});
+
+	public static Comparison compareSeeds() {
+		return COMPARE_SEEDS;
+	}
 
 	public static <T> ResourceLocation prefixedId(ResourceKey<T> key, String prefix) {
 		return ResourceLocation.fromNamespaceAndPath("agricraft", "/" + prefix + "/" + key.location().toString().replace(":", "/"));

@@ -1,11 +1,11 @@
 package com.agricraft.agricraft.compat.wthit;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.codecs.AgriSoil;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.requirement.AgriGrowthResponse;
 import com.agricraft.agricraft.common.block.CropBlock;
-import com.agricraft.agricraft.api.LangUtils;
 import mcp.mobius.waila.api.IBlockAccessor;
 import mcp.mobius.waila.api.IBlockComponentProvider;
 import mcp.mobius.waila.api.IPluginConfig;

@@ -6,7 +6,10 @@ public final class AgriCraftConfig {
 
 	private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-	public static final ModConfigSpec.BooleanValue PLANT_OFF_CROP_STICKS = BUILDER.push("core")
+	public static final ModConfigSpec.BooleanValue REGISTER_PACKS_BY_DEFAULT = BUILDER.push("core")
+			.comment("Set to false to prevent AgriCraft from enabling its mod compatibility datapacks / resourcepacks by default")
+			.define("register_packs_by_default", true);
+	public static final ModConfigSpec.BooleanValue PLANT_OFF_CROP_STICKS = BUILDER
 			.comment("Set to false to disable planting of (agricraft) seeds outside crop sticks")
 			.define("plant_off_crop_sticks", true);
 	public static final ModConfigSpec.BooleanValue CROP_STICKS_COLLIDE = BUILDER

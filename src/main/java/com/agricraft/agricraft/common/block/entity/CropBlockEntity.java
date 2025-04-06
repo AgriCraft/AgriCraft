@@ -464,9 +464,24 @@ public class CropBlockEntity extends BlockEntity implements AgriCrop, Magnifying
 			if (isPlayerSneaking) {
 				tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.growth", this.growthStage.index() + 1, this.growthStage.total())));
 			}
+			// TODO: @unilock is this still necessary?
+			if (this.level.isClientSide) {
+				// somehow the sky brightness is not updated on tick on the client level
+				this.level.updateSkyBrightness();
+			}
 			// crop fertility
 			AgriGrowthResponse response = this.getFertilityResponse();
 			tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.magnifying.requirement." + (response.isLethal() ? "lethal" : response.isFertile() ? "fertile" : "not_fertile"))));
+			if (!response.isFertile()) {
+				// crop conditions
+				if (!this.checkGrowthSpace(this.plant.value().getPlantHeight(this.growthStage))) {
+					tooltip.add(Component.literal("  ").append(Component.translatable("agricraft.tooltip.condition.growth_space")));
+				}
+				int strength = this.genome.getStrength().trait();
+				AgriApi.get().getGrowthConditionRegistry().stream()
+						.filter(condition -> !condition.check(this, this.level, this.getBlockPos(), strength).isFertile())
+						.forEach(condition -> condition.notMetDescription(component ->tooltip.add(Component.literal("  ").append(component))));
+			}
 		} else {
 			tooltip.add(Component.translatable("agricraft.tooltip.magnifying.no_plant"));
 		}

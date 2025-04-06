@@ -2,9 +2,9 @@ package com.agricraft.agricraft.compat.emi;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.AgriClientApi;
+import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.common.item.AgriSeedItem;
-import com.agricraft.agricraft.api.LangUtils;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -30,7 +30,7 @@ public class CropProduceRecipe implements EmiRecipe {
 
 	public CropProduceRecipe(ResourceLocation id, AgriPlant plant) {
 		this.id = id;
-		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(Comparison.compareComponents()));
+		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(AgriCraftEmiPlugin.compareSeeds()));
 		this.plant = plant;
 		output = new ArrayList<>();
 		plant.getAllPossibleProducts(product -> output.add(EmiStack.of(product).comparison(Comparison.compareComponents())));

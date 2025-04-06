@@ -1,12 +1,12 @@
 package com.agricraft.agricraft.api.plant;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.TagUtils;
 import com.agricraft.agricraft.api.codecs.AgriProduct;
 import com.agricraft.agricraft.api.codecs.AgriRequirement;
 import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.crop.AgriGrowthStage;
-import com.agricraft.agricraft.api.TagUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
@@ -36,7 +36,7 @@ public class AgriWeed {
 			Codec.DOUBLE.fieldOf("growth_chance").forGetter(weed -> weed.growthChance),
 			Codec.BOOL.fieldOf("aggressive").forGetter(weed -> weed.aggressive),
 			Codec.BOOL.fieldOf("lethal").forGetter(weed -> weed.lethal),
-			AgriProduct.CODEC.listOf().optionalFieldOf("rake_products").forGetter(weed -> weed.rakeProducts.isEmpty() ? Optional.empty() : Optional.of(weed.rakeProducts)),
+			AgriProduct.CODEC.listOf().optionalFieldOf("rake_products", List.of()).forGetter(weed -> weed.rakeProducts),
 			AgriRequirement.CODEC.fieldOf("requirement").forGetter(weed -> weed.requirement)
 	).apply(instance, AgriWeed::new));
 

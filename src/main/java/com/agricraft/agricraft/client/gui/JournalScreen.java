@@ -52,7 +52,6 @@ public class JournalScreen extends Screen {
 		int journalX = (this.width - PAGE_WIDTH) / 2;
 		int journalY = (this.height - PAGE_HEIGHT) / 2;
 //		Lighting.setupForFlatItems();
-//		guiGraphics.blit(PAGE_BACKGROUND, journalX, journalY, 0, 0, PAGE_WIDTH, PAGE_HEIGHT, 292, 292);
 		JournalPage page = this.journalData.getPage(this.index);
 		AgriClientApi.get().getJournalPageDrawer(page).drawLeftSheet(guiGraphics, page, journalX + OFFSET_LEFT_PAGE, journalY, this.journalData);
 		AgriClientApi.get().getJournalPageDrawer(page).drawRightSheet(guiGraphics, page, journalX + OFFSET_RIGHT_PAGE, journalY, this.journalData);

@@ -69,7 +69,7 @@ public class CropRequirementRecipe implements EmiRecipe {
 
 	public CropRequirementRecipe(ResourceLocation id, AgriPlant plant) {
 		this.id = id;
-		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(Comparison.compareComponents()));
+		input = List.of(EmiStack.of(AgriSeedItem.toStack(plant)).comparison(AgriCraftEmiPlugin.compareSeeds()));
 		this.plant = plant;
 		output = new ArrayList<>();
 		this.plantId = plant.getId().map(ResourceLocation::toString).orElse("");

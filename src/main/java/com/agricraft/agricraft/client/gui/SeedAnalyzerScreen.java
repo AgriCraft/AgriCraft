@@ -1,11 +1,11 @@
 package com.agricraft.agricraft.client.gui;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.genetic.Chromosome;
-import com.agricraft.agricraft.api.genetic.AgriGenome;
-import com.agricraft.agricraft.common.registry.AgriRegistries;
-import com.agricraft.agricraft.common.inventory.container.SeedAnalyzerMenu;
 import com.agricraft.agricraft.api.LangUtils;
+import com.agricraft.agricraft.api.genetic.AgriGenome;
+import com.agricraft.agricraft.api.genetic.Chromosome;
+import com.agricraft.agricraft.common.inventory.container.SeedAnalyzerMenu;
+import com.agricraft.agricraft.common.registry.AgriRegistries;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

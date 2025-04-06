@@ -3,38 +3,38 @@ plugins {
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.neoforged.gradle.userdev' version '7.0.154'
+	id 'net.neoforged.gradle.userdev' version '7.0.171'
 }
 
 repositories {
 	mavenLocal()
 	maven {
-		name = "Jared's maven"
+		name = "BlameJared" // JEI
 		url = "https://maven.blamejared.com/"
-	}
-	maven {
-		url "https://cursemaven.com"
 		content {
-			includeGroup "curse.maven"
+			includeGroup "mezz.jei"
 		}
 	}
 	maven {
-		name = "TerraformersMC"  // EMI
+		name = "TerraformersMC" // EMI
 		url = "https://maven.terraformersmc.com/"
+		content {
+			includeGroup "dev.emi"
+		}
 	}
 	maven {
-		name = "WTHIT's maven"
-		url "https://maven2.bai.lol"
+		name = "BadAsIntended" // WTHIT
+		url "https://maven2.bai.lol/"
 		content {
 			includeGroup "lol.bai"
 			includeGroup "mcp.mobius.waila"
 		}
 	}
 	maven {
-		name = "Blay09's maven"
-		url "https://maven.twelveiterations.com/repository/maven-public/"
+		name = "CurseForge"
+		url = "https://cursemaven.com"
 		content {
-			includeGroup "net.blay09.mods"
+			includeGroup "curse.maven"
 		}
 	}
 }
@@ -121,14 +121,6 @@ dependencies {
 
 	implementation "curse.maven:mystical_agriculture-246640:5663085"  // MysticalAgriculture-1.21.1-8.0.4
 	implementation "curse.maven:cucumber-272335:5663120"  // Cucumber-1.21.1-8.0.3 (Mystical Agriculture dep)
-
-}
-
-subsystems {
-	parchment {
-		minecraftVersion = "${minecraft_version}"
-		mappingsVersion = "${parchment_version}"
-	}
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -137,8 +129,6 @@ subsystems {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.withType(ProcessResources).configureEach {
 	var replaceProperties = [
-			minecraft_version : minecraft_version,
-			neoforge_version  : neoforge_version,
 			version           : version,
 	]
 	inputs.properties replaceProperties

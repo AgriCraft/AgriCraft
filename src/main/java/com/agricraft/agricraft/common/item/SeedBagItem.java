@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.genetic.AgriGenome;
@@ -11,7 +12,6 @@ import com.agricraft.agricraft.common.block.CropBlock;
 import com.agricraft.agricraft.common.block.CropState;
 import com.agricraft.agricraft.common.registry.AgriBlocks;
 import com.agricraft.agricraft.common.registry.AgriDataComponents;
-import com.agricraft.agricraft.api.LangUtils;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

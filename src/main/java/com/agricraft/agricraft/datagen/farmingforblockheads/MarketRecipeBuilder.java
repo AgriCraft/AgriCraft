@@ -1,7 +1,5 @@
 package com.agricraft.agricraft.datagen.farmingforblockheads;
 
-import com.agricraft.agricraft.AgriCraft;
-import net.blay09.mods.farmingforblockheads.api.Payment;
 import net.blay09.mods.farmingforblockheads.recipe.MarketRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;

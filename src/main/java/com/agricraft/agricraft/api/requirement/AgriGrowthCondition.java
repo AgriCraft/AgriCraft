@@ -1,13 +1,16 @@
 package com.agricraft.agricraft.api.requirement;
 
 import com.agricraft.agricraft.api.AgriApi;
-import com.agricraft.agricraft.api.plant.AgriPlant;
 import com.agricraft.agricraft.api.crop.AgriCrop;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+
+import java.util.function.Consumer;
 
 public interface AgriGrowthCondition<T> {
 
@@ -34,6 +37,11 @@ public interface AgriGrowthCondition<T> {
 	 */
 	AgriGrowthResponse apply(AgriPlant plant, int strength, T value);
 
-	// TODO: @Ketheroth void notMetDescription(Consumer<Component> consumer);
+	/**
+	 * Adds a detailed description of the condition when it is not met to the list.
+	 *
+	 * @param consumer a consumer accepting the lines of text for a tooltip when the condition is not met.
+	 */
+	void notMetDescription(Consumer<Component> consumer);
 
 }

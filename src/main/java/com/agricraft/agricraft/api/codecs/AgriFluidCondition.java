@@ -15,7 +15,7 @@ public record AgriFluidCondition(ExtraCodecs.TagOrElementLocation fluid, List<St
 
 	public static final Codec<AgriFluidCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			ExtraCodecs.TAG_OR_ELEMENT_ID.fieldOf("fluid").forGetter(stateCondition -> stateCondition.fluid),
-			Codec.STRING.listOf().comapFlatMap(AgriFluidCondition::readStates, list -> list).optionalFieldOf("states").forGetter(stateCondition -> stateCondition.states.isEmpty() ? Optional.empty() : Optional.of(stateCondition.states))
+			Codec.STRING.listOf().comapFlatMap(AgriFluidCondition::readStates, list -> list).optionalFieldOf("states", List.of()).forGetter(stateCondition -> stateCondition.states)
 	).apply(instance, AgriFluidCondition::new));
 
 	public static final AgriFluidCondition EMPTY = new AgriFluidCondition(new ExtraCodecs.TagOrElementLocation(ResourceLocation.withDefaultNamespace("empty"), false), new ArrayList<>());

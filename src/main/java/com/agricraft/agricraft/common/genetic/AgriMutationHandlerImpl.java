@@ -2,8 +2,8 @@ package com.agricraft.agricraft.common.genetic;
 
 import com.agricraft.agricraft.api.AgriApi;
 import com.agricraft.agricraft.api.codecs.AgriMutation;
-import com.agricraft.agricraft.api.genetic.AgriGeneMutator;
 import com.agricraft.agricraft.api.genetic.AgriCrossBreedEngine;
+import com.agricraft.agricraft.api.genetic.AgriGeneMutator;
 import com.agricraft.agricraft.api.genetic.AgriMutationHandler;
 import com.google.common.collect.Sets;
 import net.minecraft.core.Registry;

@@ -1,12 +1,12 @@
 package com.agricraft.agricraft.client.tools.journal.drawers;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.LangUtils;
 import com.agricraft.agricraft.api.config.AgriCraftConfig;
 import com.agricraft.agricraft.api.registries.AgriCraftStats;
 import com.agricraft.agricraft.api.tools.journal.JournalData;
 import com.agricraft.agricraft.api.tools.journal.JournalPageDrawer;
 import com.agricraft.agricraft.common.item.journal.GeneticsPage;
-import com.agricraft.agricraft.api.LangUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

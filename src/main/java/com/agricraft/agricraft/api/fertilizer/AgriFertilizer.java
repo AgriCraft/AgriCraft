@@ -1,9 +1,9 @@
 package com.agricraft.agricraft.api.fertilizer;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.TagUtils;
 import com.agricraft.agricraft.api.crop.AgriCrop;
 import com.agricraft.agricraft.api.crop.AgriGrowthStage;
-import com.agricraft.agricraft.api.TagUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
