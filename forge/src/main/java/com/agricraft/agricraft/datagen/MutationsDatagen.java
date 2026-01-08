@@ -161,7 +161,7 @@ public class MutationsDatagen {
 		pamhc2crops(context, "barrelcactus", "minecraft:cactus", "pamhc2crops:cactusfruit");
 		pamhc2crops(context, "canola", "minecraft:wheat", "pamhc2crops:millet");
 		pamhc2crops(context, "cattail", "minecraft:seagrass", "minecraft:wheat");
-		pamhc2crops(context, "chia", "minecraft:millet", "pamhc2crops:canola");
+		pamhc2crops(context, "chia", "pamhc2crops:millet", "pamhc2crops:canola");
 		pamhc2crops(context, "cloudberry", "minecraft:sweet_berries", "pamhc2crops:mulberry");
 		pamhc2crops(context, "lotus", "minecraft:seagrass", "minecraft:pink_tulip");
 		pamhc2crops(context, "nettles", "pamhc2crops:tealeaf", "pamhc2crops:spinach");
