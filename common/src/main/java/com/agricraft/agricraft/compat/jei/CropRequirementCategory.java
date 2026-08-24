@@ -38,6 +38,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -175,12 +176,20 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		PoseStack stack = guiGraphics.pose();
 		stack.pushPose();
 		Lighting.setupForFlatItems();
-		stack.translate(56, 53, 0);
+		stack.translate(56, 60, 0);
 		stack.translate(-4, 12, 0);
 		stack.scale(16, -16, 1);
 		stack.mulPose(Axis.XP.rotationDegrees(45));
 		stack.mulPose(Axis.YP.rotationDegrees(45));
 		MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+
+		// render block below requirement
+		if (!recipe.blocksBelow.isEmpty() && recipe.blockBelow < recipe.blocksBelow.size()) {
+			stack.pushPose();
+			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(recipe.blocksBelow.get(recipe.blockBelow), stack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+			stack.popPose();
+		}
+		stack.translate(0, 1, 0);
 		// render soil
 		if (!recipe.soils.isEmpty() && recipe.soil < recipe.soils.size()) {
 			stack.pushPose();
@@ -193,7 +202,6 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		stack.translate(0, 1, 0);
 		Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), guiGraphics.bufferSource().getBuffer(RenderType.cutoutMipped()), null, model, 1, 1, 1, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 		stack.popPose();
-		// TODO: @ketheroth display block below requirement
 		bufferSource.endBatch();
 		stack.popPose();
 	}
@@ -266,13 +274,19 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 				offset += NUTRIENTS_OFFSETS[i];
 			}
 		}
-		if (50 <= mouseX && mouseX <= 76 && 34 <= mouseY && mouseY <= 58) {
+		if (50 <= mouseX && mouseX <= 76 && 20 <= mouseY && mouseY <= 44) {
 			Component desc = LangUtils.plantDescription(recipe.plantId);
 			return desc == null ? List.of(LangUtils.plantName(recipe.plantId)) : List.of(LangUtils.plantName(recipe.plantId), desc);
 		}
-		if (50 <= mouseX && mouseX <= 76 && 58 <= mouseY && mouseY <= 74) {
+		if (50 <= mouseX && mouseX <= 76 && 44 <= mouseY && mouseY <= 60) {
 			return Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(recipe.soils.get(recipe.soil)));
 		}
+		if (50 <= mouseX && mouseX <= 76 && 60 <= mouseY && mouseY <= 76 && !recipe.blocksBelow.isEmpty()) {
+			return Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(
+					recipe.blocksBelow.get(recipe.blockBelow).getBlock().asItem()
+			));
+		}
+
 		if (AgriApi.getSeasonLogic().isActive()) {
 			if (17 <= mouseX && mouseX <= 29 && 24 <= mouseY && mouseY <= 36) {
 				return List.of(LangUtils.seasonName(AgriSeason.SPRING));
@@ -302,6 +316,8 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 		private AgriGrowthStage currentStage;
 		private List<Block> soils;
 		private int soil;
+		private List<BlockState> blocksBelow;
+		private int blockBelow;
 
 		public Recipe(AgriPlant plant) {
 			this.plant = plant;
@@ -312,17 +328,30 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			this.incStageButton = new Btn(92, 10, 9, 9, this::incrementStage, true);
 			this.decStageButton = new Btn(92, 71, 9, 9, this::decrementStage, false);
 			this.updateSoils();
+			this.updateBlocks();
+		}
+
+		private void updateBlocks() {
+			this.blocksBelow = plant.getGrowthRequirements().blockConditions().stream()
+				.filter(bc -> bc.strength() > this.currentStrength)
+				.flatMap(bc -> Platform.get().getBlocksFromLocation(bc.block()).stream()
+					.map(Block::defaultBlockState)) //TODO: apply block states as given in c.states() (whenever blockstates work)
+				.distinct()
+				.toList();
+			this.blockBelow = 0;
 		}
 
 		public boolean incrementStrength() {
 			this.currentStrength = Math.min(AgriApi.getStatRegistry().strengthStat().getMax(), currentStrength + 1);
 			this.updateSoils();
+			this.updateBlocks();
 			return true;
 		}
 
 		public boolean decrementStrength() {
 			this.currentStrength = Math.max(AgriApi.getStatRegistry().strengthStat().getMin(), currentStrength - 1);
 			this.updateSoils();
+			this.updateBlocks();
 			return true;
 		}
 
@@ -355,6 +384,10 @@ public class CropRequirementCategory implements IRecipeCategory<CropRequirementC
 			this.soil++;
 			if (this.soil >= this.soils.size()) {
 				this.soil = 0;
+			}
+			this.blockBelow++;
+			if (this.blockBelow >= this.blocksBelow.size()){
+				this.blockBelow = 0;
 			}
 		}
 
