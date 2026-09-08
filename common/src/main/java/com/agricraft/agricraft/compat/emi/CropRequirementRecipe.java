@@ -33,6 +33,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -65,6 +66,8 @@ public class CropRequirementRecipe implements EmiRecipe {
 	private AgriGrowthStage currentStage;
 	private List<Block> soils;
 	private int soil;
+	private List<BlockState> blocksBelow;
+	private int blockBelow;
 
 	public long lastTime;
 
@@ -80,6 +83,7 @@ public class CropRequirementRecipe implements EmiRecipe {
 		this.incStageButton = new Btn(92, 10, 9, 9, this::incrementStage, true);
 		this.decStageButton = new Btn(92, 71, 9, 9, this::decrementStage, false);
 		this.updateSoils();
+		this.updateBlocks();
 		lastTime = System.currentTimeMillis();
 	}
 
@@ -198,17 +202,28 @@ public class CropRequirementRecipe implements EmiRecipe {
 				if (this.soil >= this.soils.size()) {
 					this.soil = 0;
 				}
+				this.blockBelow++;
+				if (this.blockBelow >= this.blocksBelow.size()) {
+					this.blockBelow = 0;
+				}
 				lastTime = l;
 			}
 			PoseStack stack = guiGraphics.pose();
 			stack.pushPose();
 			Lighting.setupForFlatItems();
-			stack.translate(56, 53, 0);
+			stack.translate(56, 60, 0);
 			stack.translate(-4, 12, 0);
 			stack.scale(16, -16, 1);
 			stack.mulPose(Axis.XP.rotationDegrees(45));
 			stack.mulPose(Axis.YP.rotationDegrees(45));
 			MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+			// render block below
+			if (!blocksBelow.isEmpty() && blockBelow < blocksBelow.size()) {
+				stack.pushPose();
+				Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blocksBelow.get(blockBelow), stack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
+				stack.popPose();
+			}
+			stack.translate(0, 1, 0);
 			// render soil
 			if (!soils.isEmpty() && soil < soils.size()) {
 				stack.pushPose();
@@ -221,7 +236,6 @@ public class CropRequirementRecipe implements EmiRecipe {
 			stack.translate(0, 1, 0);
 			Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), guiGraphics.bufferSource().getBuffer(RenderType.cutoutMipped()), null, model, 1, 1, 1, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 			stack.popPose();
-			// TODO: @ketheroth display block below requirement
 			bufferSource.endBatch();
 			stack.popPose();
 		});
@@ -264,10 +278,15 @@ public class CropRequirementRecipe implements EmiRecipe {
 			return List.of();
 		}, 37, 109, 6+8+9+9+11+10, 12);
 		Component desc = LangUtils.plantDescription(plantId);
-		widgets.addTooltipText(desc == null ? List.of(LangUtils.plantName(plantId)) : List.of(LangUtils.plantName(plantId), desc), 50, 30, 26, 24);
+		widgets.addTooltipText(desc == null ? List.of(LangUtils.plantName(plantId)) : List.of(LangUtils.plantName(plantId), desc), 50, 22, 26, 24);
 		if (!soils.isEmpty() && soil < soils.size()) {
-			widgets.addTooltip((mouseX, mouseY) -> Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(soils.get(soil))).stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList(), 50, 58, 26, 16);
+			widgets.addTooltip((mouseX, mouseY) -> Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(soils.get(soil))).stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList(), 50, 42, 26, 16);
 		}
+		if (!this.blocksBelow.isEmpty()) {
+			widgets.addTooltip((mouseX, mouseY) -> Screen.getTooltipFromItem(Minecraft.getInstance(), new ItemStack(blocksBelow.get(blockBelow).getBlock())).stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).toList(), 50, 58, 26, 16);
+		}
+
+
 		if (AgriApi.getSeasonLogic().isActive()) {
 			widgets.addTooltipText(List.of(LangUtils.seasonName(AgriSeason.SPRING)), 17, 24, 12, 12);
 			widgets.addTooltipText(List.of(LangUtils.seasonName(AgriSeason.SUMMER)), 17, 37, 12, 12);
@@ -279,12 +298,14 @@ public class CropRequirementRecipe implements EmiRecipe {
 	public boolean incrementStrength() {
 		this.currentStrength = Math.min(AgriApi.getStatRegistry().strengthStat().getMax(), currentStrength + 1);
 		this.updateSoils();
+		this.updateBlocks();
 		return true;
 	}
 
 	public boolean decrementStrength() {
 		this.currentStrength = Math.max(AgriApi.getStatRegistry().strengthStat().getMin(), currentStrength - 1);
 		this.updateSoils();
+		this.updateBlocks();
 		return true;
 	}
 
@@ -296,6 +317,16 @@ public class CropRequirementRecipe implements EmiRecipe {
 	public boolean decrementStage() {
 		this.currentStage = this.currentStage.getPrevious(null, null);
 		return true;
+	}
+
+	private void updateBlocks() {
+		this.blocksBelow = plant.getGrowthRequirements().blockConditions().stream()
+				.filter(bc -> bc.strength() > this.currentStrength)
+				.flatMap(bc -> Platform.get().getBlocksFromLocation(bc.block()).stream()
+						.map(Block::defaultBlockState)) //TODO: apply block states as given in c.states() (whenever blockstates work)
+				.distinct()
+				.toList();
+		this.blockBelow = 0;
 	}
 
 	public void updateSoils() {
