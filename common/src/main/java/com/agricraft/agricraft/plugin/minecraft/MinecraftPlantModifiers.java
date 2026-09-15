@@ -132,13 +132,13 @@ public class MinecraftPlantModifiers {
 			Level level = crop.getLevel();
 			if (stack.isEmpty()
 					|| stack.getItem() != Items.BONE_MEAL
-					|| crop.getLevel() == null
 					|| !crop.canBeHarvested()
+					|| !(level instanceof ServerLevel serverLevel)
 					|| !fungus.isValidBonemealTarget(level, crop.getBlockPos(), crop.getBlockState(), level.isClientSide)) {
 				return Optional.empty();
 			}
 			if (fungus.isBonemealSuccess(level, level.random, crop.getBlockPos(), crop.getBlockState())) {
-				fungus.performBonemeal(((ServerLevel) level), level.random, crop.getBlockPos(), crop.getBlockState());
+				fungus.performBonemeal(serverLevel, level.random, crop.getBlockPos(), crop.getBlockState());
 				level.levelEvent(2005, crop.getBlockPos(), 0);
 			}
 			stack.shrink(1);
@@ -222,7 +222,6 @@ public class MinecraftPlantModifiers {
 			Level level = crop.getLevel();
 			if (stack.isEmpty()
 					|| stack.getItem() != Items.BONE_MEAL
-					|| crop.getLevel() == null
 					|| !crop.canBeHarvested()
 					|| !(level instanceof ServerLevel serverLevel)
 					|| !sapling.isValidBonemealTarget(level, crop.getBlockPos(), crop.getBlockState(), level.isClientSide)) {
