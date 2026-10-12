@@ -83,12 +83,13 @@ public class AgriSeedItem extends BlockItem {
 
 	@Override
 	public InteractionResult place(BlockPlaceContext context) {
+		// read the genome before placing: placing uses up the seed, and an emptied stack has no components
+		AgriGenome genome = context.getItemInHand().get(AgriDataComponents.GENOME);
 		InteractionResult result = super.place(context);
 		Level level = context.getLevel();
 		if (result.consumesAction()) {
 			BlockPos pos = context.getClickedPos();
 			AgriApi.get().getCrop(level, pos).ifPresent(crop -> {
-				AgriGenome genome = context.getItemInHand().get(AgriDataComponents.GENOME);
 				if (genome != null) {
 					crop.plantGenome(genome);
 					level.setBlockAndUpdate(pos, level.getBlockState(pos).setValue(CropBlock.CROP_STATE, CropState.PLANT));
@@ -110,22 +111,27 @@ public class AgriSeedItem extends BlockItem {
 				return InteractionResult.PASS;
 			}
 			plantSeed(context.getPlayer(), crop, heldItem);
-			return InteractionResult.CONSUME;
+			return InteractionResult.sidedSuccess(level.isClientSide());
 		}
 		// if a seed analyzer was clicked, insert the seed inside
 		if (level.getBlockEntity(context.getClickedPos()) instanceof SeedAnalyzerBlockEntity seedAnalyzer) {
 			return seedAnalyzer.insertSeed(heldItem, context.getPlayer()) ? InteractionResult.SUCCESS : InteractionResult.PASS;
 		}
-		// if a soil was clicked, check the block above and handle accordingly
-		return AgriApi.get().getSoil(level, context.getClickedPos()).map(soil -> AgriApi.get().getCrop(level, context.getClickedPos().above()).map(crop -> {
-			// there is a crop with a plant or is a cross crop stick, do nothing
-			if (crop.hasPlant() || crop.isCrossCropSticks()) {
-				return InteractionResult.PASS;
+		// if a soil with a crop above was clicked, plant the seed in that crop
+		if (AgriApi.get().getSoil(level, context.getClickedPos()).isPresent()) {
+			Optional<AgriCrop> cropAbove = AgriApi.get().getCrop(level, context.getClickedPos().above());
+			if (cropAbove.isPresent()) {
+				AgriCrop crop = cropAbove.get();
+				// there is a crop with a plant or is a cross crop stick, do nothing
+				if (crop.hasPlant() || crop.isCrossCropSticks()) {
+					return InteractionResult.PASS;
+				}
+				plantSeed(context.getPlayer(), crop, heldItem);
+				return InteractionResult.sidedSuccess(level.isClientSide());
 			}
-			// there is a crop without a plant, plant the seed in the crop
-			plantSeed(context.getPlayer(), crop, heldItem);
-			return InteractionResult.CONSUME;
-		}).orElse(InteractionResult.PASS)).orElse(super.useOn(context));
+		}
+		// otherwise place the seed as a plant on its own (the result tells the client to swing the hand)
+		return super.useOn(context);
 	}
 
 	private void plantSeed(Player player, AgriCrop crop, ItemStack seed) {

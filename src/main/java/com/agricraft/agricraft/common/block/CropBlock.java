@@ -73,6 +73,12 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			Block.box(2, 11, 0, 3, 12, 16),
 			Block.box(13, 11, 0, 14, 12, 16)
 	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+	public static final VoxelShape CROP_STICKS = Stream.of(
+			Block.box(2, 0, 2, 3, 14, 3),
+			Block.box(13, 0, 2, 14, 14, 3),
+			Block.box(2, 0, 13, 3, 14, 14),
+			Block.box(13, 0, 13, 14, 14, 14)
+	).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 	public static final EnumProperty<CropStickVariant> STICK_VARIANT = EnumProperty.create("variant", CropStickVariant.class, CropStickVariant.values());
 	public static final EnumProperty<CropState> CROP_STATE = EnumProperty.create("crop", CropState.class, CropState.values());
 	public static final IntegerProperty LIGHT = IntegerProperty.create("light", 0, 16);
@@ -179,7 +185,7 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 				return SINGLE_STICKS;
 			}
 			// shape is dependant of the plant and the weed
-			return cropState.hasSticks() ? Shapes.join(SINGLE_STICKS, cbe.getShape(), BooleanOp.OR) : cbe.getShape();
+			return cropState.hasSticks() ? Shapes.join(CROP_STICKS, cbe.getShape(), BooleanOp.OR) : cbe.getShape();
 		}
 		return super.getShape(state, level, pos, context);
 	}
@@ -513,11 +519,12 @@ public class CropBlock extends Block implements EntityBlock, BonemealableBlock, 
 			// we handle the break particles ourselves to mimic the used model and spawn their particles instead of ours
 			CropState cropState = state.getValue(CROP_STATE);
 			if (cropState.hasSticks()) {
-				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos);
+				VoxelShape sticksShape = cropState == CropState.DOUBLE_STICKS ? CROSS_STICKS : SINGLE_STICKS;
+				ClientUtil.spawnParticlesForSticks(state.getValue(STICK_VARIANT), level, state, pos, sticksShape);
 			}
-			if (crop.hasPlant()) {
+			if (crop.hasPlant() && crop instanceof CropBlockEntity cbe) {
 				String plantModelId = crop.getPlantId().toString().replace(":", ":crop/") + "_stage" + crop.getGrowthStage().index();
-				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos);
+				ClientUtil.spawnParticlesForPlant(plantModelId, level, state, pos, cbe.getShape());
 			}
 		}
 	}

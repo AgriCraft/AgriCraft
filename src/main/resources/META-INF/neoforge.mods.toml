@@ -21,7 +21,7 @@ config="agricraft.mixins.json"
 [[dependencies.agricraft]]
 modId="neoforge"
 type="required"
-versionRange="[21.0.0-beta,)"
+versionRange="[21.1.0,)"
 ordering="NONE"
 side="BOTH"
 

@@ -3,7 +3,7 @@ plugins {
 	id 'eclipse'
 	id 'idea'
 	id 'maven-publish'
-	id 'net.neoforged.gradle.userdev' version '7.0.171'
+	id 'net.neoforged.gradle.userdev' version '7.0.192'
 }
 
 repositories {
@@ -28,6 +28,13 @@ repositories {
 		content {
 			includeGroup "lol.bai"
 			includeGroup "mcp.mobius.waila"
+		}
+	}
+	maven {
+		name = "Create"
+		url = "https://maven.createmod.net"
+		content {
+			includeGroup "com.simibubi.create"
 		}
 	}
 	maven {
@@ -60,7 +67,7 @@ runs {
 
 	server {
 		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-		programArgument '--nogui'
+		argument '--nogui'
 	}
 
 	gameTestServer {
@@ -68,7 +75,7 @@ runs {
 	}
 
 	data {
-		programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(),
+		arguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(),
 				'--existing', file('src/main/resources/').getAbsolutePath(),
 				'--existing-mod', 'biomesoplenty',
 				'--existing-mod', 'pamhc2crops',
@@ -100,6 +107,8 @@ dependencies {
 
 	compileOnly "curse.maven:pamhc2crops-361385:5581644"  // pamhc2crops-NEOFORGE-1.21.0-1.0.0
 	localRuntime "curse.maven:pamhc2crops-361385:5581644"  // pamhc2crops-NEOFORGE-1.21.0-1.0.0
+
+	compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }  // mechanical harvester compat
 
 	compileOnly "mcp.mobius.waila:wthit-api:neo-${wthit_version}"  // What The Hell Is That
 //	localRuntime "mcp.mobius.waila:wthit:neo-${wthit_version}"

@@ -38,6 +38,7 @@ import net.neoforged.neoforgespi.language.IModInfo;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -93,11 +94,14 @@ public class AgriCraft {
 	}
 
 	public static void addPack(String type, String modid, IModFileInfo agricraft, PackType packType, AddPackFindersEvent event) {
+		Path resourcePath = agricraft.getFile().findResource(type, modid);
+		if (!Files.exists(resourcePath)) {
+			return;
+		}
 		PackLocationInfo packLocationInfo = new PackLocationInfo("mod/agricraft_" + type + "_" + modid,
 				Component.translatable("agricraft." + type + "." + modid),
 				PackSource.BUILT_IN,
 				Optional.of(new KnownPack("agricraft", "mod/agricraft_" + type + "_" + modid, agricraft.versionString())));
-		Path resourcePath = agricraft.getFile().findResource(type, modid);
 		Pack.ResourcesSupplier resources = BuiltInPackSource.fromName(path -> new PathPackResources(path, resourcePath));
 		try (PackResources packresources = resources.openPrimary(packLocationInfo)) {
 			PackMetadataSection packmetadatasection = packresources.getMetadataSection(PackMetadataSection.TYPE);
@@ -105,6 +109,7 @@ public class AgriCraft {
 				return;
 			}
 		} catch (IOException ignored) {
+			return;
 		}
 		Pack pack = Pack.readMetaAndCreate(packLocationInfo, resources, packType, new PackSelectionConfig(AgriCraftConfig.REGISTER_PACKS_BY_DEFAULT.get(), Pack.Position.TOP, false));
 		if (pack != null) {

@@ -27,22 +27,21 @@ public class ClientUtil {
 		};
 	}
 
-	public static void spawnParticlesForPlant(String plantModelId, LevelAccessor level, BlockState state, BlockPos pos) {
+	public static void spawnParticlesForPlant(String plantModelId, LevelAccessor level, BlockState state, BlockPos pos, VoxelShape voxelShape) {
 		BakedModel model = Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.standalone(ResourceLocation.parse(plantModelId)));
-		spawnParticlesForModel(model, level, state, pos);
+		spawnParticlesForShape(model, level, state, pos, voxelShape);
 	}
 
-	public static void spawnParticlesForSticks(CropStickVariant variant, LevelAccessor level, BlockState state, BlockPos pos) {
+	public static void spawnParticlesForSticks(CropStickVariant variant, LevelAccessor level, BlockState state, BlockPos pos, VoxelShape voxelShape) {
 		String modelId = getModelForSticks(variant);
-		spawnParticlesForPlant(modelId, level, state, pos);
+		spawnParticlesForPlant(modelId, level, state, pos, voxelShape);
 	}
 
-	public static void spawnParticlesForModel(BakedModel model, LevelAccessor level, BlockState state, BlockPos pos) {
+	public static void spawnParticlesForShape(BakedModel model, LevelAccessor level, BlockState state, BlockPos pos, VoxelShape voxelShape) {
 		if (model == null) {
 			return;
 		}
 		TextureAtlasSprite particleIcon = model.getParticleIcon();
-		VoxelShape voxelShape = state.getShape(level, pos);
 		voxelShape.forAllBoxes((startX, startY, startZ, endX, endY, endZ) -> {
 			double xBoxes = Math.min(1.0, endX - startX);
 			double yBoxes = Math.min(1.0, endY - startY);

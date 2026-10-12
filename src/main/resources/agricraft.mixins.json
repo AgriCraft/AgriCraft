@@ -4,6 +4,7 @@
   "package": "com.agricraft.agricraft.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CreateHarvesterMixin",
     "FarmersDelightMixin",
     "ItemEntityMixin"
   ],

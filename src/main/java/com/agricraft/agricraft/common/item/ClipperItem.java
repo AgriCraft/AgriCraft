@@ -1,6 +1,7 @@
 package com.agricraft.agricraft.common.item;
 
 import com.agricraft.agricraft.api.AgriApi;
+import com.agricraft.agricraft.api.plant.AgriPlant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,11 @@ public class ClipperItem extends Item {
 		BlockPos pos = context.getClickedPos();
 		Player player = context.getPlayer();
 		return AgriApi.get().getCrop(level, pos).map(crop -> {
-			if (!crop.getPlant().allowsClipping(crop.getGrowthStage(), context.getItemInHand(), player)) {
+			AgriPlant plant = crop.getPlant();
+			if (plant == null) { // can happen if clipper is being automated (eg: in create deployer against empty crop sticks)
+				return InteractionResult.FAIL;
+			}
+			if (!plant.allowsClipping(crop.getGrowthStage(), context.getItemInHand(), player)) {
 				if (player != null) {
 					player.sendSystemMessage(Component.translatable("agricraft.message.clipping_impossible"));
 				}
@@ -39,11 +44,11 @@ public class ClipperItem extends Item {
 			}
 			List<ItemStack> drops = new ArrayList<>();
 			crop.getClippingProducts(drops::add, context.getItemInHand());
-			crop.setGrowthStage(crop.getPlant().getInitialGrowthStage());
+			crop.setGrowthStage(plant.getInitialGrowthStage());
 			for (ItemStack drop : drops) {
 				level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop));
 			}
-			crop.getPlant().onClipped(crop, context.getItemInHand(), player);
+			plant.onClipped(crop, context.getItemInHand(), player);
 			return InteractionResult.SUCCESS;
 		}).orElse(InteractionResult.FAIL);
 	}
